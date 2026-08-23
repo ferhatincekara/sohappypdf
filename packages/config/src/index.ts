@@ -15,6 +15,14 @@ export { getOptionalEnv, getRequiredEnv } from "./env.js";
 export { loadEnvFile } from "./env-file.js";
 export type { QueueConfig } from "./queue-config.js";
 export { loadQueueConfig } from "./queue-config.js";
+export type {
+  RateLimitConfig,
+  RateLimitRedisConfig,
+} from "./rate-limit-config.js";
+export {
+  DEFAULT_RATE_LIMIT_CONFIG,
+  loadRateLimitConfig,
+} from "./rate-limit-config.js";
 export type { StorageConfig } from "./storage-config.js";
 export { loadStorageConfig } from "./storage-config.js";
 export type { WorkerConfig } from "./worker-config.js";

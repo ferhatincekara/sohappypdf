@@ -14,6 +14,7 @@
     "@repo/config": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/logger": "workspace:*",
+    "@repo/rate-limit": "workspace:*",
     "hono": "^4.13.3"
   },
   "devDependencies": {

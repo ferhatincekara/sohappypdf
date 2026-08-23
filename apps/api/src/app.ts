@@ -8,6 +8,10 @@ import {
 } from "./auth/request-identity.js";
 import { corsMiddleware } from "./middleware/cors.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
+import {
+  type CheckRateLimit,
+  rateLimitMiddleware,
+} from "./middleware/rate-limit.js";
 import { requestIdMiddleware } from "./middleware/request-id.js";
 import { requestIdentityMiddleware } from "./middleware/request-identity.js";
 import { requestLogMiddleware } from "./middleware/request-log.js";
@@ -18,6 +22,7 @@ export type CreateAppOptions = {
   config?: ApiConfig;
   logger?: Logger;
   resolveIdentity?: ResolveRequestIdentity;
+  checkRateLimit?: CheckRateLimit;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -42,6 +47,12 @@ export function createApp(options: CreateAppOptions = {}) {
   app.use("*", requestLogMiddleware(logger));
   app.use("*", corsMiddleware(config));
   app.use("*", requestIdentityMiddleware(resolveIdentity));
+
+  if (options.checkRateLimit !== undefined) {
+    // Applied to /api/v1/* so routes can share identity-based limiters.
+    // /health and /api/v1/health are exempt inside the middleware.
+    app.use("/api/v1/*", rateLimitMiddleware(options.checkRateLimit));
+  }
 
   app.route("/", healthRoutes);
   app.route("/api/v1", createV1Routes());
