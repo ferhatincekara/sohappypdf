@@ -1,0 +1,185 @@
+---
+description: Frontend development rules for SohappyPDF
+globs:
+  - "apps/web/**/*.{ts,tsx}"
+  - "apps/admin/**/*.{ts,tsx}"
+  - "packages/ui/**/*.{ts,tsx}"
+---
+
+# Frontend Rules
+
+## Stack
+
+Use:
+
+- Next.js
+- React
+- TypeScript
+- React Query
+- Axios
+- React Hook Form
+- Zod
+- shadcn/ui
+- next-intl
+
+Do not introduce another library that duplicates an existing responsibility.
+
+## Architecture
+
+Use feature-based architecture.
+
+Example:
+
+features/conversions/
+├── components/
+├── hooks/
+├── api/
+├── schemas/
+├── types/
+└── index.ts
+
+Keep feature-specific UI inside the feature.
+
+Shared primitives belong in packages/ui.
+
+## Server State
+
+Use React Query for server state.
+
+Do not manually synchronize server state with local React state when React Query is appropriate.
+
+Use query keys consistently.
+
+Invalidate or update relevant queries after mutations.
+
+Do not duplicate API state inside Zustand or arbitrary global state.
+
+## HTTP
+
+Use the shared Axios API client.
+
+Preferred:
+
+Component
+↓
+Feature hook
+↓
+React Query
+↓
+API client
+↓
+Axios
+↓
+Hono API
+
+Do not make raw fetch/Axios requests directly inside UI components.
+
+## Forms
+
+Use React Hook Form for non-trivial forms.
+
+Use Zod for validation.
+
+Keep schemas close to the owning feature unless they are genuinely shared.
+
+Prefer:
+
+useForm +
+zodResolver +
+Zod schema
+
+Do not duplicate validation rules between form components.
+
+## Components
+
+Use shadcn/ui primitives.
+
+Shared UI primitives belong in packages/ui.
+
+Feature-specific components remain inside their feature.
+
+Do not create huge components.
+
+Prefer composition.
+
+If a component becomes difficult to understand, split it by responsibility.
+
+## Server vs Client Components
+
+Prefer Server Components by default.
+
+Use Client Components only when client-side interactivity or browser APIs are required.
+
+Do not mark entire routes as client components unnecessarily.
+
+Keep data fetching and sensitive operations on the server where appropriate.
+
+## Loading and Error States
+
+Every asynchronous feature should consider:
+
+- Loading state
+- Empty state
+- Error state
+- Success state
+
+Do not leave users with blank screens while requests are pending.
+
+## Internationalization
+
+Use next-intl.
+
+All user-facing strings must be translatable.
+
+Do not hardcode user-facing strings unnecessarily.
+
+Keep translation keys organized by feature.
+
+## Accessibility
+
+Use semantic HTML.
+
+Use accessible labels.
+
+Ensure keyboard interaction works.
+
+Do not rely only on color to communicate state.
+
+Use shadcn/ui accessibility patterns where applicable.
+
+## Styling
+
+Use the existing design system and Tailwind conventions.
+
+Do not introduce another styling solution without a strong reason.
+
+Avoid arbitrary one-off styles when an existing design token or component can be used.
+
+## Performance
+
+Avoid unnecessary client components.
+
+Avoid unnecessary re-renders.
+
+Use React Query caching appropriately.
+
+Do not download large files through the application server when direct S3 uploads/downloads are possible.
+
+For file uploads:
+
+Browser
+↓
+Presigned S3 URL
+↓
+S3
+
+## Security
+
+Never expose:
+
+- API secrets
+- S3 credentials
+- Better Auth secrets
+- Polar credentials
+
+The frontend must never be the source of truth for authorization or plan enforcement.

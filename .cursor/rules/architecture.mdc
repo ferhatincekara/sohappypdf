@@ -1,0 +1,211 @@
+---
+description: SohappyPDF monorepo architecture and project structure rules
+alwaysApply: true
+---
+
+# Architecture Rules
+
+## Project
+
+SohappyPDF is a SaaS platform for PDF conversion, file processing, OCR, and a public API.
+
+The repository is a Turborepo monorepo.
+
+Use Bun as the only package manager.
+
+Do not introduce npm, pnpm, or yarn.
+
+## Monorepo Structure
+
+apps/
+
+- web: Main customer-facing Next.js application
+- api: Public Hono API
+- worker: Background conversion worker
+- admin: Internal administration application
+
+packages/
+
+- core: Shared domain primitives and application errors
+- utils: Generic reusable utilities
+- validation: Shared Zod validation
+- logger: Structured logging
+- config: Environment and application configuration
+- db: Drizzle ORM and database schema
+- auth: Better Auth configuration
+- storage: S3 abstraction
+- queue: BullMQ configuration and jobs
+- rate-limit: Upstash rate limiting
+- conversions: Conversion contracts and definitions
+- billing: Polar.sh integration
+- api-client: Typed Axios client
+- ui: Shared shadcn/ui primitives
+
+## Application Boundaries
+
+Applications must not import source code from another application.
+
+Bad:
+
+apps/web importing from apps/api/src/...
+
+Good:
+
+apps/web importing from packages/api-client.
+
+Shared functionality belongs in packages.
+
+Do not create circular dependencies between packages.
+
+## Dependency Direction
+
+Preferred dependency direction:
+
+Application
+↓
+Feature
+↓
+Shared/domain package
+↓
+Infrastructure
+
+Infrastructure packages should not depend on applications.
+
+Worker code must not depend on Next.js or frontend code.
+
+UI packages must not contain backend infrastructure logic.
+
+## Feature-Based Architecture
+
+Feature-based architecture is the default.
+
+Feature-specific code should live inside its feature.
+
+Example:
+
+features/conversions/
+├── components/
+├── hooks/
+├── api/
+├── schemas/
+├── types/
+└── index.ts
+
+Do not create large global folders containing unrelated feature logic.
+
+Avoid:
+
+components/
+├── pdf-merge.tsx
+├── billing.tsx
+├── conversion-history.tsx
+├── api-key-form.tsx
+└── ...
+
+Prefer placing those components inside their owning features.
+
+## Shared Code
+
+Only extract code into a shared package when it represents a stable reusable concept.
+
+Do not extract code simply because two files currently look similar.
+
+Before creating a new utility or shared component:
+
+1. Search the repository.
+2. Check whether an existing implementation can be reused.
+3. Check whether the concept is truly generic.
+4. Avoid creating duplicate abstractions.
+
+## Utilities
+
+Do not create generic dumping-ground files such as:
+
+utils.ts
+helpers.ts
+common.ts
+misc.ts
+
+Generic utilities belong in packages/utils and should be organized by purpose.
+
+Domain-specific helpers should remain inside their domain.
+
+## Naming
+
+Use kebab-case for files and directories.
+
+Examples:
+
+conversion-service.ts
+pdf-merge.ts
+api-client.ts
+rate-limit.ts
+
+Use camelCase for variables and functions.
+
+Use PascalCase for React components, classes, and types where appropriate.
+
+## TypeScript
+
+TypeScript strict mode is required.
+
+Do not use any.
+
+Prefer unknown when the type is genuinely unknown and narrow it safely.
+
+Do not use unsafe type assertions unless there is a clear reason.
+
+Prefer const.
+
+Use let only when reassignment is necessary.
+
+Never use var.
+
+## Package Installation
+
+Use Bun only.
+
+Example:
+
+bun add package-name
+bun remove package-name
+bun install
+
+Do not introduce alternative package managers.
+
+## Code Quality
+
+Prefer simple code over clever abstractions.
+
+Prefer explicit data flow.
+
+Avoid premature abstraction.
+
+Avoid unnecessary indirection.
+
+Do not refactor unrelated code while implementing a feature.
+
+## Security
+
+Treat all user input as untrusted.
+
+Validate external input.
+
+Enforce authorization server-side.
+
+Never trust client-side permissions.
+
+Never expose secrets.
+
+Do not log credentials, API keys, access tokens, or signed URLs.
+
+## Changes
+
+Before implementing a feature:
+
+1. Inspect the existing structure.
+2. Search for reusable code.
+3. Identify the correct owning feature/package.
+4. Respect application and package boundaries.
+5. Implement the smallest clean change.
+6. Run relevant checks.

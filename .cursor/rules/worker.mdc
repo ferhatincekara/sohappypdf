@@ -1,0 +1,211 @@
+---
+description: Background conversion worker rules for SohappyPDF
+globs:
+  - "apps/worker/**/*.ts"
+  - "docker/worker/**/*"
+  - "packages/conversions/**/*.ts"
+  - "packages/queue/**/*.ts"
+---
+
+# Worker Rules
+
+## Purpose
+
+The worker performs long-running and CPU-intensive PDF operations.
+
+Never move heavy conversion processing into the Next.js application or Hono API.
+
+## Stack
+
+Use:
+
+- Node.js
+- TypeScript
+- BullMQ
+- Redis
+- AWS S3
+- Drizzle
+- Neon
+- Docker
+
+Conversion engines may include:
+
+- qpdf
+- pdf-lib
+- MuPDF
+- Ghostscript
+- LibreOffice
+- Tesseract
+- OCRmyPDF
+
+## Job Flow
+
+Preferred flow:
+
+BullMQ Job
+↓
+Validate Payload
+↓
+Load Conversion
+↓
+Verify State
+↓
+Download Input from S3
+↓
+Process Locally
+↓
+Upload Output to S3
+↓
+Update Database
+↓
+Record Usage
+↓
+Cleanup Temporary Files
+
+## Queue Payloads
+
+Do not put binary file contents inside Redis.
+
+Queue payloads should contain IDs and object keys.
+
+Example:
+
+{
+conversionId,
+inputObjectKey
+}
+
+Keep queue payloads small.
+
+## Idempotency
+
+Jobs may be delivered more than once.
+
+Workers must be safe against duplicate execution.
+
+Before processing:
+
+- Check conversion state.
+- Verify whether output already exists when appropriate.
+- Avoid overwriting valid completed results unnecessarily.
+
+## Retries
+
+Differentiate between:
+
+- Transient errors
+- Permanent conversion errors
+
+Retry transient failures.
+
+Do not retry invalid files indefinitely.
+
+Do not create infinite retry loops.
+
+## Temporary Files
+
+Worker temporary files must be isolated.
+
+Use controlled temporary directories.
+
+Always clean up temporary files after processing.
+
+Cleanup must happen on:
+
+- Success
+- Failure
+- Cancellation when supported
+
+## File Security
+
+User files are untrusted.
+
+Never:
+
+- Execute arbitrary user commands.
+- Accept arbitrary executable paths.
+- Accept arbitrary filesystem paths.
+- Build shell commands from unsanitized input.
+
+Prefer argument arrays over shell command strings.
+
+Validate conversion options before executing native tools.
+
+## Conversion Engines
+
+Keep engine-specific implementations isolated.
+
+Example:
+
+converters/
+├── qpdf/
+├── ghostscript/
+├── libreoffice/
+├── mupdf/
+└── ocr/
+
+The conversion registry should determine which engine handles a conversion.
+
+Do not scatter engine selection logic across the worker.
+
+## Database State
+
+Conversion state should be explicit.
+
+Example:
+
+created
+queued
+processing
+completed
+failed
+
+Do not silently change state.
+
+Failed jobs should preserve useful failure metadata without exposing sensitive internals to users.
+
+## Usage
+
+Usage must be recorded durably in PostgreSQL.
+
+Do not use Redis as the permanent usage ledger.
+
+Usage recording must account for retries and duplicate jobs.
+
+## S3
+
+Use S3 for input and output objects.
+
+Never store binary files in PostgreSQL.
+
+Never put binary files in Redis.
+
+Use controlled object keys.
+
+## Scaling
+
+Workers must be horizontally scalable.
+
+Do not depend on:
+
+- Global memory
+- Local process state
+- A single worker instance
+
+Durable state belongs in PostgreSQL/S3.
+
+Queue state belongs in Redis/BullMQ.
+
+## Docker
+
+The worker must run inside Docker.
+
+Keep the image deterministic.
+
+Install only required system dependencies.
+
+Run with the least privileges possible.
+
+Do not depend on a specific hosting provider.
+
+The worker should be deployable to Railway or another container platform.

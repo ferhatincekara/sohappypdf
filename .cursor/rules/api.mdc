@@ -1,0 +1,296 @@
+---
+description: Public API design and API contract rules for SohappyPDF
+globs:
+  - "apps/api/**/*.ts"
+  - "docs/api/**/*"
+---
+
+# API Rules
+
+## API Versioning
+
+The public API must be versioned.
+
+Initial version:
+
+/v1
+
+Examples:
+
+POST /v1/files
+GET /v1/files/:id
+
+POST /v1/conversions
+GET /v1/conversions/:id
+
+GET /v1/usage
+
+POST /v1/api-keys
+GET /v1/api-keys
+DELETE /v1/api-keys/:id
+
+Do not introduce breaking changes into an existing API version.
+
+## Authentication
+
+Support API key authentication for programmatic usage.
+
+API keys must identify:
+
+- Account
+- User where applicable
+- Key permissions
+- Plan
+- Rate-limit identity
+
+Never accept API keys through query parameters.
+
+Prefer the Authorization header.
+
+Example:
+
+Authorization: Bearer shpdf_live_...
+
+## Request Validation
+
+Every external request must be validated.
+
+Use Zod.
+
+Validate:
+
+- Body
+- Query
+- Params
+- Relevant headers
+
+Do not trust client-provided types or values.
+
+## Authorization
+
+Authentication is not authorization.
+
+After authenticating a request, verify that the requester has permission to access the requested resource.
+
+Example:
+
+API key
+↓
+Account
+↓
+Resource ownership
+↓
+Permission
+↓
+Operation
+
+## Rate Limiting
+
+All public endpoints must have appropriate rate limits.
+
+Use Upstash Redis.
+
+Rate limits may depend on:
+
+- IP
+- User
+- API key
+- Plan
+
+Rate-limit responses should be predictable.
+
+Use HTTP 429 when a request exceeds its limit.
+
+## Plan Enforcement
+
+Free and Pro limits must be enforced by the API.
+
+Examples:
+
+- File size
+- Monthly conversions
+- API access
+- Rate limits
+- Available features
+
+Never trust the frontend to enforce these restrictions.
+
+## File Uploads
+
+Do not upload large files through the API server unnecessarily.
+
+Preferred:
+
+POST /v1/files
+↓
+API returns presigned S3 upload URL
+↓
+Client uploads directly to S3
+↓
+Client creates conversion
+↓
+API creates BullMQ job
+
+The API should not hold large files in memory.
+
+## Conversion Creation
+
+Conversion creation should:
+
+1. Authenticate request.
+2. Validate input.
+3. Verify file ownership.
+4. Verify file status.
+5. Verify plan entitlement.
+6. Apply rate limit.
+7. Create conversion record.
+8. Enqueue conversion job.
+9. Return conversion ID.
+
+Do not perform the conversion synchronously inside the HTTP request.
+
+## Idempotency
+
+Support idempotency for operations where duplicate requests could create duplicate work.
+
+Especially:
+
+- Conversion creation
+- Billing/webhook operations
+
+An idempotent request must not create duplicate conversion jobs.
+
+## Responses
+
+Use predictable JSON response shapes.
+
+Success responses should contain the requested resource or relevant data.
+
+Errors should contain a stable structure.
+
+Example:
+
+{
+"error": {
+"code": "FILE_NOT_FOUND",
+"message": "The requested file could not be found."
+}
+}
+
+Do not expose internal errors.
+
+## HTTP Status Codes
+
+Use appropriate status codes.
+
+Examples:
+
+200 - Successful request
+201 - Resource created
+202 - Accepted asynchronous job
+204 - Successful request without response body
+400 - Invalid request
+401 - Missing/invalid authentication
+403 - Authenticated but not authorized
+404 - Resource not found
+409 - Conflict
+413 - Payload/file too large
+422 - Validation failure when appropriate
+429 - Rate limited
+500 - Internal server error
+503 - Temporary service unavailability
+
+## API Errors
+
+Use stable error codes.
+
+Examples:
+
+AUTHENTICATION_REQUIRED
+INVALID_API_KEY
+FORBIDDEN
+FILE_NOT_FOUND
+FILE_EXPIRED
+FILE_TOO_LARGE
+UNSUPPORTED_FORMAT
+CONVERSION_NOT_FOUND
+CONVERSION_FAILED
+PLAN_LIMIT_REACHED
+RATE_LIMIT_EXCEEDED
+
+Do not expose implementation-specific error messages.
+
+## API Documentation
+
+Document the public API using OpenAPI.
+
+Use Scalar for interactive API documentation.
+
+Every public endpoint should document:
+
+- Authentication
+- Request
+- Response
+- Errors
+- Rate limits
+- Plan requirements
+- Examples
+
+Keep documentation synchronized with implementation.
+
+## API Keys
+
+API keys are secrets.
+
+Never:
+
+- Log them.
+- Store them in plaintext unnecessarily.
+- Put them in URLs.
+- Return them after creation unless required.
+
+Support:
+
+- Creation
+- Listing metadata
+- Revocation
+- Last-used tracking
+
+## Backward Compatibility
+
+Do not make breaking changes inside /v1.
+
+If a breaking change is required:
+
+1. Introduce a new API version.
+2. Document migration requirements.
+3. Keep the old version available according to the project's deprecation policy.
+
+## API Performance
+
+API requests should remain short-lived.
+
+Do not perform:
+
+- PDF conversion
+- OCR
+- Large file processing
+- Long-running external operations
+
+inside normal API requests.
+
+Use BullMQ and the worker for long-running operations.
+
+## Security
+
+Never expose:
+
+- DATABASE_URL
+- AWS credentials
+- Better Auth secrets
+- Polar credentials
+- Internal filesystem paths
+- Worker details
+- Raw conversion command output
+
+Treat every API request as untrusted.

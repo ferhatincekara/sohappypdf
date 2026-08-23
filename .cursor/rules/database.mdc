@@ -1,0 +1,168 @@
+---
+description: Database and Drizzle ORM rules for SohappyPDF
+globs:
+  - "packages/db/**/*.{ts,sql}"
+---
+
+# Database Rules
+
+## Stack
+
+Use:
+
+- Drizzle ORM
+- Neon PostgreSQL
+
+Do not introduce another ORM.
+
+## Schema Organization
+
+Organize schemas by domain.
+
+Example:
+
+schema/
+├── users.ts
+├── files.ts
+├── conversions.ts
+├── api-keys.ts
+├── subscriptions.ts
+├── usage.ts
+└── webhook-events.ts
+
+Keep related tables together.
+
+## Naming
+
+Use clear database names.
+
+Prefer descriptive names over abbreviations.
+
+Keep naming consistent across:
+
+- Tables
+- Columns
+- Relations
+- Indexes
+
+## IDs
+
+Use stable IDs suitable for public references.
+
+Do not expose sequential database IDs if they create an enumeration/security concern.
+
+Public resource identifiers should not reveal internal database structure.
+
+## Relations
+
+Define Drizzle relations explicitly where useful.
+
+Do not duplicate relation logic across applications.
+
+## Indexes
+
+Add indexes based on actual query patterns.
+
+Common indexed fields may include:
+
+- user/account IDs
+- conversion IDs
+- status
+- createdAt
+- expiration timestamps
+- API key lookup hashes
+
+Do not add indexes blindly.
+
+## Queries
+
+Never perform unbounded queries against large tables.
+
+Use pagination.
+
+Prefer selecting only required columns.
+
+Avoid N+1 query patterns.
+
+## Transactions
+
+Use transactions when multiple writes must succeed or fail together.
+
+Examples:
+
+- Creating related records
+- Usage accounting
+- State transitions
+- Billing state updates
+
+## Concurrency
+
+Consider concurrent requests and worker execution.
+
+Do not assume a database read followed by a write is automatically safe.
+
+Use:
+
+- Transactions
+- Unique constraints
+- Atomic updates
+- Appropriate locking strategies
+
+when necessary.
+
+## Usage
+
+Usage records must be durable.
+
+Do not treat Redis as the source of truth for billing or usage.
+
+Usage operations should be designed to handle duplicate worker execution safely.
+
+## Webhooks
+
+Webhook events must be idempotent.
+
+Store provider event IDs when necessary.
+
+Do not process the same billing event multiple times.
+
+## Migrations
+
+Use Drizzle migrations.
+
+Never manually modify production schema without a migration.
+
+Do not delete or rewrite historical migrations casually.
+
+## Data Integrity
+
+Use database constraints where appropriate.
+
+Examples:
+
+- Unique constraints
+- Foreign keys
+- Not-null constraints
+- Check constraints where supported
+
+Do not rely solely on application-level validation for critical invariants.
+
+## Security
+
+Never store:
+
+- Raw passwords
+- Raw API keys
+- Access tokens
+- AWS credentials
+- Polar secrets
+
+Sensitive values should use appropriate hashing/encryption strategies.
+
+## Database Access
+
+Database access belongs in packages/db or appropriate domain data-access modules.
+
+Frontend applications must never connect directly to Neon.
+
+The browser must never receive DATABASE_URL.

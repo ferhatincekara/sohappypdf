@@ -1,0 +1,213 @@
+---
+description: Backend and Hono API development rules for SohappyPDF
+globs:
+  - "apps/api/**/*.ts"
+  - "packages/core/**/*.ts"
+  - "packages/auth/**/*.ts"
+  - "packages/storage/**/*.ts"
+  - "packages/queue/**/*.ts"
+  - "packages/rate-limit/**/*.ts"
+  - "packages/billing/**/*.ts"
+---
+
+# Backend Rules
+
+## Stack
+
+Use:
+
+- Hono
+- TypeScript
+- Zod
+- Drizzle ORM
+- Neon PostgreSQL
+- Better Auth
+- AWS S3
+- Upstash Redis
+- BullMQ
+- Polar.sh
+
+## API Architecture
+
+Keep routes thin.
+
+Preferred flow:
+
+Route
+↓
+Validation
+↓
+Authentication
+↓
+Authorization
+↓
+Rate Limit
+↓
+Service
+↓
+Repository / Infrastructure
+↓
+Response
+
+Do not put substantial business logic directly inside route handlers.
+
+## Validation
+
+Validate all external input with Zod.
+
+Validate:
+
+- Request body
+- Query parameters
+- Path parameters
+- Headers when necessary
+- API payloads
+
+Never trust client-provided values.
+
+## Authentication
+
+Use Better Auth for user authentication.
+
+API keys are used for programmatic API access.
+
+Authentication and authorization are separate concerns.
+
+Authentication answers:
+
+"Who is this?"
+
+Authorization answers:
+
+"Can this user perform this operation?"
+
+Always perform authorization checks on the server.
+
+## Resource Ownership
+
+Before accessing a resource:
+
+1. Authenticate the requester.
+2. Resolve the account/user.
+3. Verify resource ownership.
+4. Perform the operation.
+
+Never assume that possession of an ID means permission to access the resource.
+
+## Errors
+
+Use structured application errors.
+
+Errors should have:
+
+- Stable error code
+- HTTP status
+- Safe message
+
+Do not expose internal implementation details.
+
+Never return:
+
+- Stack traces
+- Database errors
+- Filesystem paths
+- Secrets
+- Raw command output
+
+## Services
+
+Business logic should live in services or domain modules.
+
+Services should not depend on HTTP-specific objects unless necessary.
+
+This allows the same business logic to be reused by:
+
+- API
+- Worker
+- Admin
+- Background jobs
+
+## Database
+
+Do not access the database directly from route handlers when business logic is involved.
+
+Use repositories or dedicated data-access modules where appropriate.
+
+Use Drizzle ORM.
+
+Use transactions for operations that require atomicity.
+
+## Rate Limiting
+
+Public API endpoints must be rate limited.
+
+Use Upstash Redis.
+
+Rate-limit identity may be:
+
+- IP
+- User
+- API key
+
+Rate limits must be plan-aware.
+
+Rate limiting is not usage accounting.
+
+## API Keys
+
+API keys must:
+
+- Be generated securely.
+- Be stored safely.
+- Be revocable.
+- Be associated with an account.
+- Never be logged.
+- Never be returned unnecessarily.
+
+Use a recognizable prefix.
+
+Never store raw API keys when a secure hash-based verification approach is sufficient.
+
+## File Operations
+
+Large files should use direct S3 uploads.
+
+Do not proxy large binary uploads through the API unless necessary.
+
+The API should generate presigned URLs.
+
+S3 credentials must never reach the client.
+
+## Idempotency
+
+Operations that can be retried must be safe against duplicate execution.
+
+Important examples:
+
+- Conversion creation
+- Webhooks
+- Queue jobs
+- Cleanup operations
+- Usage recording
+
+## API Responses
+
+Use consistent response structures.
+
+Use correct HTTP status codes.
+
+Do not return inconsistent error shapes across endpoints.
+
+## Security
+
+Never trust:
+
+- User IDs
+- File IDs
+- Account IDs
+- Plan IDs
+- File names
+- MIME types
+- Client-provided usage information
+
+Resolve authoritative values from the server/database whenever possible.
