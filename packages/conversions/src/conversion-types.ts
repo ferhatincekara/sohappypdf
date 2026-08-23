@@ -3,6 +3,9 @@ import type { ConversionOptions } from "./conversion-options.js";
 import type { ConversionStatus } from "./conversion-status.js";
 import type { ConversionType } from "./conversion-type.js";
 
+export const DEFAULT_CONVERSION_LIST_LIMIT = 20;
+export const MAX_CONVERSION_LIST_LIMIT = 50;
+
 export const CONVERSION_FAILURE_CODES = [
   "unsupported_conversion",
   "invalid_source_format",
@@ -24,6 +27,7 @@ export function isConversionFailureCode(
 
 export type ConversionRecord = {
   id: string;
+  ownerId: string;
   sourceFileId: string;
   outputFileId: string | null;
   type: ConversionType;
@@ -42,12 +46,34 @@ export type ConversionRecord = {
 };
 
 export type CreateConversionInput = {
+  ownerId: string;
   sourceFileId: string;
   type: ConversionType;
   sourceFormat: string;
   targetFormat: string;
   options?: unknown;
   idempotencyKey?: string;
+};
+
+export type CreateOwnedConversionInput = {
+  ownerId: string;
+  sourceFileId: string;
+  targetFormat: string;
+  type?: string;
+  idempotencyKey?: string;
+};
+
+export type ConversionListQuery = {
+  ownerId: string;
+  limit?: number;
+  cursor?: string;
+  status?: ConversionStatus;
+  targetFormat?: string;
+};
+
+export type ConversionListResult = {
+  conversions: ConversionRecord[];
+  nextCursor: string | null;
 };
 
 export type MarkConversionFailedInput = {

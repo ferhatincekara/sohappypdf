@@ -9,6 +9,7 @@ import {
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const OWNER_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const MAX_IDEMPOTENCY_KEY_LENGTH = 128;
 const MAX_ERROR_MESSAGE_LENGTH = 200;
 const USABLE_SOURCE_FILE_STATUSES = new Set([
@@ -42,6 +43,17 @@ export function assertUuid(id: string, message: string): string {
 
 export function assertConversionId(id: string): string {
   return assertUuid(id, "Invalid conversion id");
+}
+
+export function assertConversionOwnerId(ownerId: string): string {
+  if (!OWNER_ID_PATTERN.test(ownerId)) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Invalid conversion owner",
+    });
+  }
+
+  return ownerId;
 }
 
 export function assertFileReferenceId(id: string): string {
@@ -135,6 +147,33 @@ export function assertSourceFileAvailable(
     isFileExpired(file, now) ||
     !USABLE_SOURCE_FILE_STATUSES.has(file.status)
   ) {
+    throw new AppError({
+      code: APP_ERROR_CODES.CONFLICT,
+      message: "Source file unavailable",
+    });
+  }
+
+  return file;
+}
+
+export function assertOwnedSourceFile(
+  file: FileRecord | undefined,
+  ownerId: string,
+  now: Date,
+): FileRecord {
+  if (
+    file === undefined ||
+    file.ownerId !== ownerId ||
+    file.deletedAt !== null ||
+    isFileExpired(file, now)
+  ) {
+    throw new AppError({
+      code: APP_ERROR_CODES.NOT_FOUND,
+      message: "File not found",
+    });
+  }
+
+  if (!USABLE_SOURCE_FILE_STATUSES.has(file.status)) {
     throw new AppError({
       code: APP_ERROR_CODES.CONFLICT,
       message: "Source file unavailable",

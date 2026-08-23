@@ -16,7 +16,7 @@ function createFile(overrides: Partial<FileRecord> = {}): FileRecord {
     status: "uploaded",
     createdAt: new Date("2026-08-23T18:00:00.000Z"),
     updatedAt: new Date("2026-08-23T18:00:00.000Z"),
-    expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+    expiresAt: new Date("2026-12-31T00:00:00.000Z"),
     deletedAt: null,
     ...overrides,
   };
@@ -38,11 +38,55 @@ function createMemoryRepository(
       const conversion = records.get(id);
       return conversion === undefined ? undefined : { ...conversion };
     },
-    async findByIdempotencyKey(key) {
+    async findByIdempotencyKey(ownerId, key) {
       const conversion = [...records.values()].find(
-        (item) => item.idempotencyKey === key,
+        (item) => item.ownerId === ownerId && item.idempotencyKey === key,
       );
       return conversion === undefined ? undefined : { ...conversion };
+    },
+    async listByOwner(input) {
+      return [...records.values()]
+        .filter((conversion) => {
+          if (conversion.ownerId !== input.ownerId) {
+            return false;
+          }
+
+          if (
+            input.status !== undefined &&
+            conversion.status !== input.status
+          ) {
+            return false;
+          }
+
+          if (
+            input.targetFormat !== undefined &&
+            conversion.targetFormat !== input.targetFormat
+          ) {
+            return false;
+          }
+
+          if (input.cursor === undefined) {
+            return true;
+          }
+
+          if (
+            conversion.createdAt.getTime() < input.cursor.createdAt.getTime()
+          ) {
+            return true;
+          }
+
+          return (
+            conversion.createdAt.getTime() ===
+              input.cursor.createdAt.getTime() &&
+            conversion.id < input.cursor.id
+          );
+        })
+        .sort((left, right) => {
+          const created = right.createdAt.getTime() - left.createdAt.getTime();
+          return created === 0 ? right.id.localeCompare(left.id) : created;
+        })
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
     },
     async updateStatus(input) {
       const conversion = records.get(input.id);
@@ -111,6 +155,7 @@ describe("conversion service", () => {
     });
 
     const conversion = await service.createConversion({
+      ownerId: sourceFile.ownerId,
       sourceFileId: sourceFile.id,
       type: "pdf-to-jpg",
       sourceFormat: "pdf",
@@ -137,6 +182,7 @@ describe("conversion service", () => {
 
     try {
       await service.createConversion({
+        ownerId: sourceFile.ownerId,
         sourceFileId: sourceFile.id,
         type: "pdf-to-jpg",
         sourceFormat: "pdf",
@@ -164,6 +210,7 @@ describe("conversion service", () => {
 
     try {
       await service.createConversion({
+        ownerId: sourceFile.ownerId,
         sourceFileId: sourceFile.id,
         type: "pdf-to-jpg",
         sourceFormat: "pdf",
@@ -186,6 +233,7 @@ describe("conversion service", () => {
       now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
     const input = {
+      ownerId: sourceFile.ownerId,
       sourceFileId: sourceFile.id,
       type: "compress-pdf" as const,
       sourceFormat: "pdf",
@@ -206,6 +254,7 @@ describe("conversion service", () => {
       now: () => new Date("2026-08-23T18:40:00.000Z"),
     });
     const created = await service.createConversion({
+      ownerId: sourceFile.ownerId,
       sourceFileId: sourceFile.id,
       type: "png-to-pdf",
       sourceFormat: "png",
@@ -234,6 +283,7 @@ describe("conversion service", () => {
       now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
     const created = await service.createConversion({
+      ownerId: sourceFile.ownerId,
       sourceFileId: sourceFile.id,
       type: "pdf-to-word",
       sourceFormat: "pdf",
@@ -258,6 +308,7 @@ describe("conversion service", () => {
       now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
     const created = await service.createConversion({
+      ownerId: sourceFile.ownerId,
       sourceFileId: sourceFile.id,
       type: "merge-pdf",
       sourceFormat: "pdf",
@@ -268,5 +319,203 @@ describe("conversion service", () => {
     const cancelled = await service.cancelConversion(created.id);
     expect(cancelled.status).toBe("cancelled");
     expect(cancelled.errorCode).toBe("cancelled");
+  });
+
+  test("hides another user's source file during creation", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+    });
+
+    try {
+      await service.createOwnedConversion({
+        ownerId: "user_2",
+        sourceFileId: sourceFile.id,
+        targetFormat: "jpg",
+      });
+      throw new Error("expected foreign file to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
+        expect(error.message).toBe("File not found");
+      }
+    }
+  });
+
+  test("rejects expired and deleted source files as not found", async () => {
+    const expired = createFile({
+      expiresAt: new Date("2026-08-23T18:00:00.000Z"),
+    });
+    const deleted = createFile({
+      id: "550e8400-e29b-41d4-a716-446655440003",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440003/original",
+      deletedAt: new Date("2026-08-23T18:10:00.000Z"),
+      status: "deleted",
+    });
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([expired, deleted]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+
+    for (const sourceFileId of [expired.id, deleted.id]) {
+      try {
+        await service.createOwnedConversion({
+          ownerId: sourceFile.ownerId,
+          sourceFileId,
+          targetFormat: "jpg",
+        });
+        throw new Error("expected unavailable file to fail");
+      } catch (error) {
+        expect(isAppError(error)).toBe(true);
+        if (isAppError(error)) {
+          expect(error.code).toBe("NOT_FOUND");
+        }
+      }
+    }
+  });
+
+  test("derives an implemented conversion type from the source file", async () => {
+    const png = createFile({
+      id: "550e8400-e29b-41d4-a716-446655440004",
+      originalFilename: "image.png",
+      mimeType: "image/png",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440004/original",
+    });
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([png]),
+    });
+
+    const conversion = await service.createOwnedConversion({
+      ownerId: png.ownerId,
+      sourceFileId: png.id,
+      targetFormat: "pdf",
+    });
+
+    expect(conversion.ownerId).toBe(png.ownerId);
+    expect(conversion.type).toBe("png-to-pdf");
+    expect(conversion.sourceFormat).toBe("png");
+    expect(conversion.status).toBe("pending");
+  });
+
+  test("requires a type when multiple implemented conversions match", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+    });
+
+    try {
+      await service.createOwnedConversion({
+        ownerId: sourceFile.ownerId,
+        sourceFileId: sourceFile.id,
+        targetFormat: "pdf",
+      });
+      throw new Error("expected ambiguous conversion to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("VALIDATION_ERROR");
+        expect(error.message).toBe("Unsupported conversion");
+      }
+    }
+
+    const conversion = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "pdf",
+      type: "compress-pdf",
+    });
+
+    expect(conversion.type).toBe("compress-pdf");
+  });
+
+  test("keeps idempotency keys scoped to the owner", async () => {
+    const otherFile = createFile({
+      id: "550e8400-e29b-41d4-a716-446655440005",
+      ownerId: "user_2",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440005/original",
+    });
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile, otherFile]),
+    });
+
+    const first = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+      idempotencyKey: "convert-1",
+    });
+    const second = await service.createOwnedConversion({
+      ownerId: otherFile.ownerId,
+      sourceFileId: otherFile.id,
+      targetFormat: "jpg",
+      idempotencyKey: "convert-1",
+    });
+
+    expect(second.id).not.toBe(first.id);
+    expect(second.ownerId).toBe("user_2");
+  });
+
+  test("lists only the owner's conversions and hides others on get", async () => {
+    const otherFile = createFile({
+      id: "550e8400-e29b-41d4-a716-446655440006",
+      ownerId: "user_2",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440006/original",
+    });
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile, otherFile]),
+    });
+    const owned = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+    });
+    await service.createOwnedConversion({
+      ownerId: otherFile.ownerId,
+      sourceFileId: otherFile.id,
+      targetFormat: "jpg",
+    });
+
+    const listed = await service.listOwnedConversions({
+      ownerId: sourceFile.ownerId,
+      limit: 20,
+    });
+
+    expect(listed.conversions.map((item) => item.id)).toEqual([owned.id]);
+    expect(listed.nextCursor).toBeNull();
+
+    try {
+      await service.getOwnedConversion(owned.id, "user_2");
+      throw new Error("expected foreign conversion to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
+      }
+    }
+  });
+
+  test("marks a pending conversion failed when queueing cannot proceed", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+    });
+    const created = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+    });
+
+    const failed = await service.markFailed(created.id, {
+      errorCode: "processing_failed",
+      errorMessage: "Conversion could not be queued",
+    });
+
+    expect(failed.status).toBe("failed");
+    expect(failed.errorCode).toBe("processing_failed");
   });
 });

@@ -20,6 +20,7 @@ describe("conversion status", () => {
     expect(canTransitionConversionStatus("processing", "completed")).toBe(true);
     expect(canTransitionConversionStatus("processing", "failed")).toBe(true);
     expect(canTransitionConversionStatus("queued", "failed")).toBe(true);
+    expect(canTransitionConversionStatus("pending", "failed")).toBe(true);
     expect(canTransitionConversionStatus("pending", "cancelled")).toBe(true);
     expect(canTransitionConversionStatus("queued", "cancelled")).toBe(true);
   });

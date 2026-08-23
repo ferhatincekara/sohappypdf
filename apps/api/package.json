@@ -17,6 +17,7 @@
     "@repo/core": "workspace:*",
     "@repo/files": "workspace:*",
     "@repo/logger": "workspace:*",
+    "@repo/queue": "workspace:*",
     "@repo/rate-limit": "workspace:*",
     "hono": "^4.13.3",
     "zod": "^3.25.76"

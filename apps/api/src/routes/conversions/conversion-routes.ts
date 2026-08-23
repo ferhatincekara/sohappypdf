@@ -1,0 +1,106 @@
+import type { ConversionService } from "@repo/conversions";
+import type { FileService } from "@repo/files";
+import type { ConversionJobData } from "@repo/queue";
+import { Hono } from "hono";
+import type { AppEnv } from "../../app-env.js";
+import { requireAuthenticatedIdentity } from "../../auth/request-identity.js";
+import { requireAuthMiddleware } from "../../middleware/require-auth.js";
+import { toPublicConversion } from "./conversion-presenter.js";
+import {
+  parseConversionId,
+  parseCreateConversion,
+  parseIdempotencyKey,
+  parseListConversionsQuery,
+  readJsonBody,
+} from "./conversion-schemas.js";
+import { enqueueCreatedConversion } from "./enqueue-created-conversion.js";
+
+export type ConversionRoutesOptions = {
+  getConversionService: () => ConversionService;
+  getFileService: () => FileService;
+  enqueueConversion: (input: ConversionJobData) => Promise<unknown>;
+};
+
+export function createConversionRoutes(options: ConversionRoutesOptions) {
+  const conversions = new Hono<AppEnv>();
+
+  conversions.use("*", requireAuthMiddleware());
+
+  conversions.post("/", async (c) => {
+    // Future billing/usage: authenticate → plan → usage policy → rate limit → conversion.
+    const identity = requireAuthenticatedIdentity(c.get("identity"));
+    const body = parseCreateConversion(await readJsonBody(c.req.raw));
+    const conversion = await enqueueCreatedConversion({
+      conversions: options.getConversionService(),
+      findFileById: (id) => options.getFileService().findFileById(id),
+      enqueue: options.enqueueConversion,
+      logger: c.get("logger"),
+      input: {
+        ownerId: identity.userId,
+        sourceFileId: body.sourceFileId,
+        targetFormat: body.targetFormat,
+        type: body.type,
+        idempotencyKey: parseIdempotencyKey(c.req.header("Idempotency-Key")),
+      },
+    });
+
+    c.get("logger").info("conversion created", {
+      conversionId: conversion.id,
+      sourceFileId: conversion.sourceFileId,
+      userId: identity.userId,
+      targetFormat: conversion.targetFormat,
+    });
+
+    return c.json({ conversion: toPublicConversion(conversion) }, 201);
+  });
+
+  conversions.get("/", async (c) => {
+    const identity = requireAuthenticatedIdentity(c.get("identity"));
+    const query = parseListConversionsQuery(c.req.query());
+    const result = await options.getConversionService().listOwnedConversions({
+      ownerId: identity.userId,
+      limit: query.limit,
+      cursor: query.cursor,
+      status: query.status,
+      targetFormat: query.targetFormat,
+    });
+
+    return c.json({
+      conversions: result.conversions.map((conversion) =>
+        toPublicConversion(conversion),
+      ),
+      nextCursor: result.nextCursor,
+    });
+  });
+
+  conversions.get("/:id", async (c) => {
+    const identity = requireAuthenticatedIdentity(c.get("identity"));
+    const conversion = await options
+      .getConversionService()
+      .getOwnedConversion(
+        parseConversionId(c.req.param("id")),
+        identity.userId,
+      );
+
+    return c.json({ conversion: toPublicConversion(conversion) });
+  });
+
+  conversions.post("/:id/cancel", async (c) => {
+    const identity = requireAuthenticatedIdentity(c.get("identity"));
+    const conversion = await options
+      .getConversionService()
+      .cancelOwnedConversion(
+        parseConversionId(c.req.param("id")),
+        identity.userId,
+      );
+
+    c.get("logger").info("conversion cancelled", {
+      conversionId: conversion.id,
+      userId: identity.userId,
+    });
+
+    return c.json({ conversion: toPublicConversion(conversion) });
+  });
+
+  return conversions;
+}

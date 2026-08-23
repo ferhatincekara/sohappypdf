@@ -5,6 +5,7 @@ assertServerOnly("@repo/conversions");
 export type { ConversionCapability } from "./conversion-capability.js";
 export {
   findConversionTypes,
+  findImplementedConversionTypes,
   getConversionCapability,
   isConversionImplemented,
   isConversionSupported,
@@ -40,7 +41,14 @@ export {
   parseConversionOptions,
   ROTATION_DEGREES,
 } from "./conversion-options.js";
+export type { ConversionListCursor } from "./conversion-pagination.js";
+export {
+  assertConversionListLimit,
+  decodeConversionListCursor,
+  encodeConversionListCursor,
+} from "./conversion-pagination.js";
 export type {
+  ConversionOwnerListInput,
   ConversionRepository,
   ConversionStatusUpdate,
 } from "./conversion-repository.js";
@@ -63,14 +71,19 @@ export type { ConversionType } from "./conversion-type.js";
 export { CONVERSION_TYPES, isConversionType } from "./conversion-type.js";
 export type {
   ConversionFailureCode,
+  ConversionListQuery,
+  ConversionListResult,
   ConversionRecord,
   CreateConversionInput,
+  CreateOwnedConversionInput,
   MarkConversionCompletedInput,
   MarkConversionFailedInput,
 } from "./conversion-types.js";
 export {
   CONVERSION_FAILURE_CODES,
+  DEFAULT_CONVERSION_LIST_LIMIT,
   isConversionFailureCode,
+  MAX_CONVERSION_LIST_LIMIT,
 } from "./conversion-types.js";
 export {
   fileFormatFromMimeType,
@@ -79,3 +92,4 @@ export {
   listSupportedUploadMimeTypes,
   normalizeContentType,
 } from "./file-format-mime.js";
+export { resolveImplementedConversionType } from "./resolve-conversion-type.js";

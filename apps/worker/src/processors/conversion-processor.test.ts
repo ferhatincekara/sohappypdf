@@ -19,6 +19,7 @@ function createConversion(
   const now = new Date("2026-08-23T18:00:00.000Z");
   return {
     id: conversionId,
+    ownerId: "user_1",
     sourceFileId,
     outputFileId: null,
     type: "png-to-pdf",

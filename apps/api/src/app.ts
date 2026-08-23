@@ -4,8 +4,13 @@ import {
   loadAppConfig,
   loadFileConfig,
 } from "@repo/config";
+import {
+  type ConversionService,
+  getConversionService,
+} from "@repo/conversions";
 import { type FileService, getFileService } from "@repo/files";
 import { createLogger, type Logger } from "@repo/logger";
+import { type ConversionJobData, enqueueConversion } from "@repo/queue";
 import { Hono } from "hono";
 import type { AppEnv } from "./app-env.js";
 import {
@@ -30,6 +35,8 @@ export type CreateAppOptions = {
   resolveIdentity?: ResolveRequestIdentity;
   checkRateLimit?: CheckRateLimit;
   fileService?: FileService;
+  conversionService?: ConversionService;
+  enqueueConversion?: (input: ConversionJobData) => Promise<unknown>;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -66,6 +73,12 @@ export function createApp(options: CreateAppOptions = {}) {
     "/api/v1",
     createV1Routes({
       getFileService: () => options.fileService ?? getFileService(),
+      getConversionService: () =>
+        options.conversionService ?? getConversionService(),
+      enqueueConversion: (input) =>
+        options.enqueueConversion === undefined
+          ? enqueueConversion(input)
+          : options.enqueueConversion(input),
       maxUploadFileSizeBytes: loadFileConfig().maxUploadFileSizeBytes,
     }),
   );

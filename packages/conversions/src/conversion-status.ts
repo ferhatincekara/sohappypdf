@@ -15,7 +15,7 @@ const CONVERSION_STATUS_TRANSITIONS: Record<
   ConversionStatus,
   readonly ConversionStatus[]
 > = {
-  pending: ["queued", "cancelled"],
+  pending: ["queued", "cancelled", "failed"],
   queued: ["processing", "cancelled", "failed"],
   processing: ["completed", "failed"],
   completed: [],

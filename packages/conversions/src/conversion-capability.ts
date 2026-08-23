@@ -178,3 +178,12 @@ export function findConversionTypes(
     )
     .map((capability) => capability.type);
 }
+
+export function findImplementedConversionTypes(
+  sourceFormat: FileFormat,
+  targetFormat: FileFormat,
+): ConversionType[] {
+  return findConversionTypes(sourceFormat, targetFormat).filter(
+    isConversionImplemented,
+  );
+}

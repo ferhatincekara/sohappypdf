@@ -8,27 +8,38 @@ import {
 import type { FileFormat } from "./conversion-format.js";
 import type { ConversionOptions } from "./conversion-options.js";
 import { parseConversionOptions } from "./conversion-options.js";
+import {
+  assertConversionListLimit,
+  decodeConversionListCursor,
+  encodeConversionListCursor,
+} from "./conversion-pagination.js";
 import type { ConversionRepository } from "./conversion-repository.js";
 import {
   assertConversionStatusTransition,
   type ConversionStatus,
 } from "./conversion-status.js";
 import type {
+  ConversionListQuery,
+  ConversionListResult,
   ConversionRecord,
   CreateConversionInput,
+  CreateOwnedConversionInput,
   MarkConversionCompletedInput,
   MarkConversionFailedInput,
 } from "./conversion-types.js";
 import {
   assertConversionFailureCode,
   assertConversionId,
+  assertConversionOwnerId,
   assertConversionType,
   assertFileFormat,
   assertFileReferenceId,
   assertIdempotencyKey,
+  assertOwnedSourceFile,
   assertSafeErrorMessage,
-  assertSourceFileAvailable,
 } from "./conversion-validation.js";
+import { fileFormatFromMimeType } from "./file-format-mime.js";
+import { resolveImplementedConversionType } from "./resolve-conversion-type.js";
 
 export type ConversionFileLookup = {
   findFileById(id: string): Promise<FileRecord | undefined>;
@@ -42,7 +53,14 @@ export type ConversionServiceOptions = {
 
 export type ConversionService = {
   createConversion(input: CreateConversionInput): Promise<ConversionRecord>;
+  createOwnedConversion(
+    input: CreateOwnedConversionInput,
+  ): Promise<ConversionRecord>;
   getConversion(id: string): Promise<ConversionRecord>;
+  getOwnedConversion(id: string, ownerId: string): Promise<ConversionRecord>;
+  listOwnedConversions(
+    query: ConversionListQuery,
+  ): Promise<ConversionListResult>;
   updateConversionStatus(
     id: string,
     status: ConversionStatus,
@@ -58,6 +76,7 @@ export type ConversionService = {
     input: MarkConversionFailedInput,
   ): Promise<ConversionRecord>;
   cancelConversion(id: string): Promise<ConversionRecord>;
+  cancelOwnedConversion(id: string, ownerId: string): Promise<ConversionRecord>;
 };
 
 function requireConversion(
@@ -147,115 +166,215 @@ export function createConversionService(
     return requireConversion(updated);
   }
 
-  return {
-    async createConversion(input) {
-      const type = assertConversionType(input.type);
-      const sourceFileId = assertFileReferenceId(input.sourceFileId);
-      const sourceFormat = assertFileFormat(
-        input.sourceFormat,
-        "Invalid source format",
+  async function requireOwned(
+    id: string,
+    ownerId: string,
+  ): Promise<ConversionRecord> {
+    const conversion = await requireCurrent(id);
+
+    if (conversion.ownerId !== assertConversionOwnerId(ownerId)) {
+      throw new AppError({
+        code: APP_ERROR_CODES.NOT_FOUND,
+        message: "Conversion not found",
+      });
+    }
+
+    return conversion;
+  }
+
+  async function createConversion(
+    input: CreateConversionInput,
+  ): Promise<ConversionRecord> {
+    const ownerId = assertConversionOwnerId(input.ownerId);
+    const type = assertConversionType(input.type);
+    const sourceFileId = assertFileReferenceId(input.sourceFileId);
+    const sourceFormat = assertFileFormat(
+      input.sourceFormat,
+      "Invalid source format",
+    );
+    const targetFormat = assertFileFormat(
+      input.targetFormat,
+      "Invalid target format",
+    );
+    const idempotencyKey = assertIdempotencyKey(input.idempotencyKey);
+    const parsedOptions = parseConversionOptions(type, input.options, {
+      targetFormat,
+    });
+
+    if (!isConversionSupported(type, sourceFormat, targetFormat)) {
+      if (!isTargetFormatAccepted(type, targetFormat)) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid target format",
+        });
+      }
+
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Unsupported conversion",
+      });
+    }
+
+    assertOcrTargetAlignment(parsedOptions, targetFormat);
+
+    if (parsedOptions.type === "merge-pdf") {
+      if (parsedOptions.additionalFileIds.includes(sourceFileId)) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid conversion options",
+        });
+      }
+
+      for (const additionalFileId of parsedOptions.additionalFileIds) {
+        assertFileReferenceId(additionalFileId);
+      }
+    }
+
+    if (idempotencyKey !== undefined) {
+      const existing = await options.repository.findByIdempotencyKey(
+        ownerId,
+        idempotencyKey,
       );
+
+      if (existing !== undefined) {
+        if (
+          !isSameConversionRequest(existing, {
+            sourceFileId,
+            type,
+            sourceFormat,
+            targetFormat,
+            options: parsedOptions,
+          })
+        ) {
+          throw new AppError({
+            code: APP_ERROR_CODES.CONFLICT,
+            message: "Conversion request conflicts with an existing request",
+          });
+        }
+
+        return existing;
+      }
+    }
+
+    const createdAt = now();
+    const sourceFile = assertOwnedSourceFile(
+      await options.files.findFileById(sourceFileId),
+      ownerId,
+      createdAt,
+    );
+
+    if (parsedOptions.type === "merge-pdf") {
+      for (const additionalFileId of parsedOptions.additionalFileIds) {
+        assertOwnedSourceFile(
+          await options.files.findFileById(additionalFileId),
+          ownerId,
+          createdAt,
+        );
+      }
+    }
+
+    const conversion: ConversionRecord = {
+      id: randomUUID(),
+      ownerId,
+      sourceFileId: sourceFile.id,
+      outputFileId: null,
+      type,
+      sourceFormat,
+      targetFormat,
+      status: "pending",
+      options: parsedOptions,
+      errorCode: null,
+      errorMessage: null,
+      idempotencyKey: idempotencyKey ?? null,
+      createdAt,
+      updatedAt: createdAt,
+      queuedAt: null,
+      startedAt: null,
+      completedAt: null,
+    };
+
+    return options.repository.insert(conversion);
+  }
+
+  return {
+    createConversion,
+
+    async createOwnedConversion(input) {
+      const ownerId = assertConversionOwnerId(input.ownerId);
+      const sourceFileId = assertFileReferenceId(input.sourceFileId);
       const targetFormat = assertFileFormat(
         input.targetFormat,
         "Invalid target format",
       );
-      const idempotencyKey = assertIdempotencyKey(input.idempotencyKey);
-      const parsedOptions = parseConversionOptions(type, input.options, {
-        targetFormat,
-      });
+      const createdAt = now();
+      const sourceFile = assertOwnedSourceFile(
+        await options.files.findFileById(sourceFileId),
+        ownerId,
+        createdAt,
+      );
+      const sourceFormat = fileFormatFromMimeType(sourceFile.mimeType);
 
-      if (!isConversionSupported(type, sourceFormat, targetFormat)) {
-        if (!isTargetFormatAccepted(type, targetFormat)) {
-          throw new AppError({
-            code: APP_ERROR_CODES.VALIDATION_ERROR,
-            message: "Invalid target format",
-          });
-        }
-
+      if (sourceFormat === undefined) {
         throw new AppError({
           code: APP_ERROR_CODES.VALIDATION_ERROR,
           message: "Unsupported conversion",
         });
       }
 
-      assertOcrTargetAlignment(parsedOptions, targetFormat);
-
-      if (parsedOptions.type === "merge-pdf") {
-        if (parsedOptions.additionalFileIds.includes(sourceFileId)) {
-          throw new AppError({
-            code: APP_ERROR_CODES.VALIDATION_ERROR,
-            message: "Invalid conversion options",
-          });
-        }
-
-        for (const additionalFileId of parsedOptions.additionalFileIds) {
-          assertFileReferenceId(additionalFileId);
-        }
-      }
-
-      if (idempotencyKey !== undefined) {
-        const existing =
-          await options.repository.findByIdempotencyKey(idempotencyKey);
-
-        if (existing !== undefined) {
-          if (
-            !isSameConversionRequest(existing, {
-              sourceFileId,
-              type,
-              sourceFormat,
-              targetFormat,
-              options: parsedOptions,
-            })
-          ) {
-            throw new AppError({
-              code: APP_ERROR_CODES.CONFLICT,
-              message: "Conversion request conflicts with an existing request",
-            });
-          }
-
-          return existing;
-        }
-      }
-
-      const createdAt = now();
-      const sourceFile = assertSourceFileAvailable(
-        await options.files.findFileById(sourceFileId),
-        createdAt,
+      const type = resolveImplementedConversionType(
+        sourceFormat,
+        targetFormat,
+        input.type,
       );
 
-      if (parsedOptions.type === "merge-pdf") {
-        for (const additionalFileId of parsedOptions.additionalFileIds) {
-          assertSourceFileAvailable(
-            await options.files.findFileById(additionalFileId),
-            createdAt,
-          );
-        }
-      }
-
-      const conversion: ConversionRecord = {
-        id: randomUUID(),
+      return createConversion({
+        ownerId,
         sourceFileId: sourceFile.id,
-        outputFileId: null,
         type,
         sourceFormat,
         targetFormat,
-        status: "pending",
-        options: parsedOptions,
-        errorCode: null,
-        errorMessage: null,
-        idempotencyKey: idempotencyKey ?? null,
-        createdAt,
-        updatedAt: createdAt,
-        queuedAt: null,
-        startedAt: null,
-        completedAt: null,
-      };
-
-      return options.repository.insert(conversion);
+        idempotencyKey: input.idempotencyKey,
+      });
     },
 
     async getConversion(id) {
       return requireCurrent(id);
+    },
+
+    async getOwnedConversion(id, ownerId) {
+      return requireOwned(id, ownerId);
+    },
+
+    async listOwnedConversions(query) {
+      const ownerId = assertConversionOwnerId(query.ownerId);
+      const limit = assertConversionListLimit(query.limit);
+      const cursor =
+        query.cursor === undefined
+          ? undefined
+          : decodeConversionListCursor(query.cursor);
+      const status = query.status;
+      const targetFormat =
+        query.targetFormat === undefined
+          ? undefined
+          : assertFileFormat(query.targetFormat, "Invalid target format");
+      const records = await options.repository.listByOwner({
+        ownerId,
+        limit: limit + 1,
+        cursor,
+        status,
+        targetFormat,
+      });
+      const hasMore = records.length > limit;
+      const page = hasMore ? records.slice(0, limit) : records;
+      const last = page[page.length - 1];
+
+      return {
+        conversions: page,
+        nextCursor:
+          hasMore && last !== undefined
+            ? encodeConversionListCursor(last)
+            : null,
+      };
     },
 
     async updateConversionStatus(id, status) {
@@ -308,6 +427,13 @@ export function createConversionService(
 
     async cancelConversion(id) {
       return transition(await requireCurrent(id), "cancelled", {
+        errorCode: "cancelled",
+        errorMessage: "Conversion cancelled",
+      });
+    },
+
+    async cancelOwnedConversion(id, ownerId) {
+      return transition(await requireOwned(id, ownerId), "cancelled", {
         errorCode: "cancelled",
         errorMessage: "Conversion cancelled",
       });

@@ -9,6 +9,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { user } from "./auth.js";
 import { files } from "./files.js";
 
 export const conversionStatusEnum = pgEnum("conversion_status", [
@@ -24,6 +25,9 @@ export const conversions = pgTable(
   "conversions",
   {
     id: uuid("id").defaultRandom().primaryKey(),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
     sourceFileId: uuid("source_file_id")
       .notNull()
       .references(() => files.id),
@@ -55,8 +59,14 @@ export const conversions = pgTable(
   (table) => [
     index("conversions_source_file_id_idx").on(table.sourceFileId),
     index("conversions_status_idx").on(table.status),
-    uniqueIndex("conversions_idempotency_key_uidx")
-      .on(table.idempotencyKey)
+    index("conversions_owner_id_idx").on(table.ownerId),
+    index("conversions_owner_id_created_at_id_idx").on(
+      table.ownerId,
+      table.createdAt,
+      table.id,
+    ),
+    uniqueIndex("conversions_owner_id_idempotency_key_uidx")
+      .on(table.ownerId, table.idempotencyKey)
       .where(sql`${table.idempotencyKey} is not null`),
   ],
 );

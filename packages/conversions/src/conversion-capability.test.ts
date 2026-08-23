@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   findConversionTypes,
+  findImplementedConversionTypes,
   getConversionCapability,
   isConversionImplemented,
   isConversionSupported,
@@ -38,6 +39,10 @@ describe("conversion capabilities", () => {
     expect(findConversionTypes("pdf", "pdf")).toContain("merge-pdf");
     expect(findConversionTypes("pdf", "pdf")).toContain("compress-pdf");
     expect(findConversionTypes("webp", "pdf")).toEqual([]);
+    expect(findImplementedConversionTypes("pdf", "jpg")).toEqual([
+      "pdf-to-jpg",
+    ]);
+    expect(findImplementedConversionTypes("pdf", "xlsx")).toEqual([]);
   });
 
   test("distinguishes implemented engines from catalogued capabilities", () => {

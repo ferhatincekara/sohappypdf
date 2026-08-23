@@ -1,8 +1,9 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type ConversionRow, conversions, type Database } from "@repo/db";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, lt, or } from "drizzle-orm";
 import { normalizeFileFormat } from "./conversion-format.js";
 import { parseConversionOptions } from "./conversion-options.js";
+import type { ConversionListCursor } from "./conversion-pagination.js";
 import {
   type ConversionStatus,
   isConversionStatus,
@@ -13,6 +14,14 @@ import {
   type ConversionRecord,
   isConversionFailureCode,
 } from "./conversion-types.js";
+
+export type ConversionOwnerListInput = {
+  ownerId: string;
+  limit: number;
+  cursor?: ConversionListCursor;
+  status?: ConversionStatus;
+  targetFormat?: string;
+};
 
 export type ConversionStatusUpdate = {
   id: string;
@@ -27,7 +36,11 @@ export type ConversionStatusUpdate = {
 export type ConversionRepository = {
   insert(conversion: ConversionRecord): Promise<ConversionRecord>;
   findById(id: string): Promise<ConversionRecord | undefined>;
-  findByIdempotencyKey(key: string): Promise<ConversionRecord | undefined>;
+  findByIdempotencyKey(
+    ownerId: string,
+    key: string,
+  ): Promise<ConversionRecord | undefined>;
+  listByOwner(input: ConversionOwnerListInput): Promise<ConversionRecord[]>;
   updateStatus(
     input: ConversionStatusUpdate,
   ): Promise<ConversionRecord | undefined>;
@@ -75,6 +88,7 @@ function toConversionRecord(row: ConversionRow): ConversionRecord {
 
   return {
     id: row.id,
+    ownerId: row.ownerId,
     sourceFileId: row.sourceFileId,
     outputFileId: row.outputFileId,
     type: row.conversionType,
@@ -102,6 +116,7 @@ export function createConversionRepository(db: Database): ConversionRepository {
         .insert(conversions)
         .values({
           id: conversion.id,
+          ownerId: conversion.ownerId,
           sourceFileId: conversion.sourceFileId,
           outputFileId: conversion.outputFileId,
           conversionType: conversion.type,
@@ -144,11 +159,16 @@ export function createConversionRepository(db: Database): ConversionRepository {
       return toConversionRecord(row);
     },
 
-    async findByIdempotencyKey(key) {
+    async findByIdempotencyKey(ownerId, key) {
       const [row] = await db
         .select()
         .from(conversions)
-        .where(eq(conversions.idempotencyKey, key))
+        .where(
+          and(
+            eq(conversions.ownerId, ownerId),
+            eq(conversions.idempotencyKey, key),
+          ),
+        )
         .limit(1);
 
       if (row === undefined) {
@@ -156,6 +176,41 @@ export function createConversionRepository(db: Database): ConversionRepository {
       }
 
       return toConversionRecord(row);
+    },
+
+    async listByOwner(input) {
+      const conditions = [eq(conversions.ownerId, input.ownerId)];
+
+      if (input.status !== undefined) {
+        conditions.push(eq(conversions.status, input.status));
+      }
+
+      if (input.targetFormat !== undefined) {
+        conditions.push(eq(conversions.targetFormat, input.targetFormat));
+      }
+
+      if (input.cursor !== undefined) {
+        const cursorFilter = or(
+          lt(conversions.createdAt, input.cursor.createdAt),
+          and(
+            eq(conversions.createdAt, input.cursor.createdAt),
+            lt(conversions.id, input.cursor.id),
+          ),
+        );
+
+        if (cursorFilter !== undefined) {
+          conditions.push(cursorFilter);
+        }
+      }
+
+      const rows = await db
+        .select()
+        .from(conversions)
+        .where(and(...conditions))
+        .orderBy(desc(conversions.createdAt), desc(conversions.id))
+        .limit(input.limit);
+
+      return rows.map((row) => toConversionRecord(row));
     },
 
     async updateStatus(input) {
