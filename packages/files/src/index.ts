@@ -23,5 +23,6 @@ export type {
   CreateFileInput,
   CreateFileResult,
   FileRecord,
+  RegisterStoredFileInput,
 } from "./file-types.js";
 export { MAX_FILE_SIZE_BYTES } from "./file-validation.js";

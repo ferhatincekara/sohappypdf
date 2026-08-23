@@ -13,3 +13,5 @@ export type { QueueConfig } from "./queue-config.js";
 export { loadQueueConfig } from "./queue-config.js";
 export type { StorageConfig } from "./storage-config.js";
 export { loadStorageConfig } from "./storage-config.js";
+export type { WorkerConfig } from "./worker-config.js";
+export { DEFAULT_WORKER_CONFIG, loadWorkerConfig } from "./worker-config.js";

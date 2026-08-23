@@ -41,8 +41,22 @@ export type PresignedUrlResult = {
   url: string;
 };
 
+export type ObjectMetadata = {
+  key: string;
+  contentLength: number;
+  contentType?: string;
+};
+
+export type GetObjectResult = {
+  key: string;
+  body: Uint8Array;
+  contentType?: string;
+};
+
 export type Storage = {
   uploadObject(input: UploadObjectInput): Promise<UploadObjectResult>;
+  getObject(key: string): Promise<GetObjectResult>;
+  getObjectMetadata(key: string): Promise<ObjectMetadata | undefined>;
   createPresignedUploadUrl(
     input: PresignUploadInput,
   ): Promise<PresignedUrlResult>;
@@ -145,6 +159,66 @@ export function createStorage(config: StorageConfig): Storage {
       }
 
       return { key };
+    },
+
+    async getObject(key) {
+      const objectKey = assertValidObjectKey(key);
+
+      try {
+        const response = await client.send(
+          new GetObjectCommand({
+            Bucket: bucket,
+            Key: objectKey,
+          }),
+        );
+
+        if (response.Body === undefined) {
+          throw new AppError({
+            code: APP_ERROR_CODES.NOT_FOUND,
+            message: "Object not found",
+          });
+        }
+
+        return {
+          key: objectKey,
+          body: await response.Body.transformToByteArray(),
+          contentType: response.ContentType,
+        };
+      } catch (error) {
+        if (isS3NotFound(error)) {
+          throw new AppError({
+            code: APP_ERROR_CODES.NOT_FOUND,
+            message: "Object not found",
+          });
+        }
+
+        throw toStorageError(error);
+      }
+    },
+
+    async getObjectMetadata(key) {
+      const objectKey = assertValidObjectKey(key);
+
+      try {
+        const response = await client.send(
+          new HeadObjectCommand({
+            Bucket: bucket,
+            Key: objectKey,
+          }),
+        );
+
+        return {
+          key: objectKey,
+          contentLength: response.ContentLength ?? 0,
+          contentType: response.ContentType,
+        };
+      } catch (error) {
+        if (isS3NotFound(error)) {
+          return undefined;
+        }
+
+        throw toStorageError(error);
+      }
     },
 
     async createPresignedUploadUrl(input) {

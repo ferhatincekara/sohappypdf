@@ -1,5 +1,6 @@
 import { loadQueueConfig, type QueueConfig } from "@repo/config";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { Redis } from "ioredis";
 
 const UPSTASH_REDIS_PORT = 6379;
 
@@ -65,4 +66,32 @@ export function getQueueConnectionOptions(
   role: QueueConnectionRole = "producer",
 ): QueueConnectionOptions {
   return createQueueConnectionOptions(loadQueueConfig(), role);
+}
+
+let producerConnection: Redis | undefined;
+let workerConnection: Redis | undefined;
+
+export function createQueueConnection(
+  config: QueueConfig,
+  role: QueueConnectionRole = "producer",
+): Redis {
+  return new Redis(createQueueConnectionOptions(config, role));
+}
+
+export function getQueueConnection(
+  role: QueueConnectionRole = "producer",
+): Redis {
+  if (role === "worker") {
+    if (workerConnection === undefined) {
+      workerConnection = createQueueConnection(loadQueueConfig(), "worker");
+    }
+
+    return workerConnection;
+  }
+
+  if (producerConnection === undefined) {
+    producerConnection = createQueueConnection(loadQueueConfig(), "producer");
+  }
+
+  return producerConnection;
 }

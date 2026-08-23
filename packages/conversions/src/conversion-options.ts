@@ -37,7 +37,8 @@ export type OfficeConversionOptions = {
     | "excel-to-pdf"
     | "powerpoint-to-pdf"
     | "jpg-to-pdf"
-    | "png-to-pdf";
+    | "png-to-pdf"
+    | "pdf-to-txt";
 };
 
 export type MergePdfOptions = {
@@ -361,7 +362,8 @@ export function parseConversionOptions(
     case "excel-to-pdf":
     case "powerpoint-to-pdf":
     case "jpg-to-pdf":
-    case "png-to-pdf": {
+    case "png-to-pdf":
+    case "pdf-to-txt": {
       assertAllowedKeys(record, ["type"]);
       return { type };
     }

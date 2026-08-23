@@ -7,6 +7,7 @@ export const CONVERSION_TYPES = [
   "powerpoint-to-pdf",
   "pdf-to-jpg",
   "pdf-to-png",
+  "pdf-to-txt",
   "jpg-to-pdf",
   "png-to-pdf",
   "merge-pdf",

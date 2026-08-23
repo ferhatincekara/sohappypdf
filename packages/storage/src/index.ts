@@ -10,6 +10,8 @@ export {
   createObjectKey,
 } from "./object-key.js";
 export type {
+  GetObjectResult,
+  ObjectMetadata,
   PresignDownloadInput,
   PresignedUrlResult,
   PresignUploadInput,

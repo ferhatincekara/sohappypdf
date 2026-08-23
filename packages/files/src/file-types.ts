@@ -28,3 +28,12 @@ export type CreateFileResult = {
     url: string;
   };
 };
+
+export type RegisterStoredFileInput = {
+  id?: string;
+  originalFilename: string;
+  mimeType: string;
+  sizeBytes: number;
+  objectKey: string;
+  expiresInMs?: number;
+};

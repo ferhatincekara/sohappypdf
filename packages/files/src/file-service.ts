@@ -1,6 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { createFileOriginalKey, type Storage } from "@repo/storage";
+import {
+  assertValidObjectKey,
+  createFileOriginalKey,
+  type Storage,
+} from "@repo/storage";
 import { DEFAULT_FILE_TTL_MS } from "./file-expiration.js";
 import type { FileRepository } from "./file-repository.js";
 import { assertFileStatusTransition, type FileStatus } from "./file-status.js";
@@ -8,6 +12,7 @@ import type {
   CreateFileInput,
   CreateFileResult,
   FileRecord,
+  RegisterStoredFileInput,
 } from "./file-types.js";
 import {
   assertFileId,
@@ -28,6 +33,7 @@ export type FileServiceOptions = {
 
 export type FileService = {
   createFile(input: CreateFileInput): Promise<CreateFileResult>;
+  registerStoredFile(input: RegisterStoredFileInput): Promise<FileRecord>;
   findFileById(id: string): Promise<FileRecord | undefined>;
   markFileUploaded(id: string): Promise<FileRecord>;
   updateFileStatus(id: string, status: FileStatus): Promise<FileRecord>;
@@ -99,6 +105,51 @@ export function createFileService(options: FileServiceOptions): FileService {
         await options.repository.deleteById(created.id);
         throw error;
       }
+    },
+
+    async registerStoredFile(input) {
+      const id = input.id === undefined ? randomUUID() : assertFileId(input.id);
+      const existing = await options.repository.findById(id);
+
+      if (existing !== undefined) {
+        return existing;
+      }
+
+      const originalFilename = assertOriginalFilename(input.originalFilename);
+      const mimeType = assertMimeType(input.mimeType);
+      const sizeBytes = assertFileSizeBytes(input.sizeBytes);
+      const objectKey = assertValidObjectKey(input.objectKey);
+      const createdAt = now();
+      const expiresInMs = input.expiresInMs ?? fileTtlMs;
+
+      if (!Number.isInteger(expiresInMs) || expiresInMs < 1) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid file expiration",
+        });
+      }
+
+      const exists = await options.storage.objectExists(objectKey);
+
+      if (!exists) {
+        throw new AppError({
+          code: APP_ERROR_CODES.CONFLICT,
+          message: "File object was not uploaded",
+        });
+      }
+
+      return options.repository.insert({
+        id,
+        originalFilename,
+        mimeType,
+        sizeBytes,
+        objectKey,
+        status: "uploaded",
+        createdAt,
+        updatedAt: createdAt,
+        expiresAt: new Date(createdAt.getTime() + expiresInMs),
+        deletedAt: null,
+      });
     },
 
     async findFileById(id) {

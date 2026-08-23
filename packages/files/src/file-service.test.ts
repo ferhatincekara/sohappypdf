@@ -100,6 +100,20 @@ function createMemoryStorage(options?: {
     async objectExists(key) {
       return keys.has(key);
     },
+    async getObject(key) {
+      if (!keys.has(key)) {
+        throw new Error("object not found");
+      }
+
+      return { key, body: new Uint8Array() };
+    },
+    async getObjectMetadata(key) {
+      if (!keys.has(key)) {
+        return undefined;
+      }
+
+      return { key, contentLength: 1 };
+    },
   };
 }
 
@@ -130,6 +144,38 @@ describe("file service", () => {
     expect(result.upload.key).toBe(result.file.objectKey);
     expect(result.upload.url.startsWith("https://")).toBe(true);
     expect(result.file.objectKey.includes("report.pdf")).toBe(false);
+  });
+
+  test("registers an already stored object without creating an upload URL", async () => {
+    const storage = createMemoryStorage({
+      existingKeys: ["files/550e8400-e29b-41d4-a716-446655440099/output/job"],
+    });
+    const service = createFileService({
+      repository: createMemoryRepository(),
+      storage,
+    });
+
+    const file = await service.registerStoredFile({
+      id: "550e8400-e29b-41d4-a716-446655440099",
+      originalFilename: "output.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 128,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440099/output/job",
+    });
+
+    expect(file.status).toBe("uploaded");
+    expect(file.objectKey).toBe(
+      "files/550e8400-e29b-41d4-a716-446655440099/output/job",
+    );
+    expect(
+      await service.registerStoredFile({
+        id: file.id,
+        originalFilename: "output.pdf",
+        mimeType: "application/pdf",
+        sizeBytes: 128,
+        objectKey: file.objectKey,
+      }),
+    ).toEqual(file);
   });
 
   test("rejects path-like original filenames", async () => {

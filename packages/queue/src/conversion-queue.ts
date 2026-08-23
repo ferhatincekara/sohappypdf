@@ -3,7 +3,7 @@ import {
   type ConversionJobData,
   createConversionJob,
 } from "./conversion-job.js";
-import { getQueueConnectionOptions } from "./queue-connection.js";
+import { getQueueConnection } from "./queue-connection.js";
 import {
   CONVERSION_QUEUE_NAME,
   CONVERSION_QUEUE_SETTINGS,
@@ -33,7 +33,7 @@ let conversionQueue: Queue<ConversionJobData> | undefined;
 function getConversionQueue(): Queue<ConversionJobData> {
   if (conversionQueue === undefined) {
     conversionQueue = new Queue<ConversionJobData>(CONVERSION_QUEUE_NAME, {
-      connection: getQueueConnectionOptions("producer"),
+      connection: getQueueConnection("producer"),
       defaultJobOptions: {
         attempts: CONVERSION_QUEUE_SETTINGS.attempts,
         backoff: {

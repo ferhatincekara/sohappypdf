@@ -1,0 +1,28 @@
+{
+  "name": "@repo/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --env-file=../../.env run src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@repo/config": "workspace:*",
+    "@repo/conversions": "workspace:*",
+    "@repo/core": "workspace:*",
+    "@repo/files": "workspace:*",
+    "@repo/logger": "workspace:*",
+    "@repo/queue": "workspace:*",
+    "@repo/storage": "workspace:*",
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.18.0",
+    "typescript": "5.9.2"
+  }
+}

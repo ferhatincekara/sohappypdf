@@ -21,6 +21,13 @@ export {
   enqueueConversion,
 } from "./conversion-queue.js";
 export type {
+  ConversionJobProcessor,
+  ConversionWorker,
+  ConversionWorkerJob,
+  CreateConversionWorkerOptions,
+} from "./conversion-worker.js";
+export { createConversionWorker } from "./conversion-worker.js";
+export type {
   QueueConnectionOptions,
   QueueConnectionRole,
 } from "./queue-connection.js";

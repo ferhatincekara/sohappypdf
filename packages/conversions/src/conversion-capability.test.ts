@@ -34,13 +34,16 @@ describe("conversion capabilities", () => {
 
   test("looks up conversion types from a format pair", () => {
     expect(findConversionTypes("pdf", "jpg")).toEqual(["pdf-to-jpg"]);
+    expect(findConversionTypes("pdf", "txt")).toContain("pdf-to-txt");
     expect(findConversionTypes("pdf", "pdf")).toContain("merge-pdf");
     expect(findConversionTypes("pdf", "pdf")).toContain("compress-pdf");
     expect(findConversionTypes("webp", "pdf")).toEqual([]);
   });
 
-  test("marks catalogued conversions as supported but not implemented", () => {
-    expect(isConversionImplemented("pdf-to-jpg")).toBe(false);
+  test("distinguishes implemented engines from catalogued capabilities", () => {
+    expect(isConversionImplemented("pdf-to-jpg")).toBe(true);
+    expect(isConversionImplemented("pdf-to-txt")).toBe(true);
     expect(isConversionImplemented("ocr-pdf")).toBe(false);
+    expect(isConversionImplemented("rotate-pdf")).toBe(false);
   });
 });
