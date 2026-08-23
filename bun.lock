@@ -55,6 +55,20 @@
         "typescript": "5.9.2",
       },
     },
+    "packages/files": {
+      "name": "@repo/files",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+        "@repo/db": "workspace:*",
+        "@repo/storage": "workspace:*",
+        "drizzle-orm": "^0.45.2",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "typescript": "5.9.2",
+      },
+    },
     "packages/logger": {
       "name": "@repo/logger",
       "version": "0.0.0",
@@ -216,6 +230,8 @@
     "@repo/core": ["@repo/core@workspace:packages/core"],
 
     "@repo/db": ["@repo/db@workspace:packages/db"],
+
+    "@repo/files": ["@repo/files@workspace:packages/files"],
 
     "@repo/logger": ["@repo/logger@workspace:packages/logger"],
 
