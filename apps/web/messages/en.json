@@ -15,6 +15,45 @@
     "logout": "Log out",
     "loggingOut": "Logging out…"
   },
+  "appShell": {
+    "brand": "SohappyPDF",
+    "navigation": "Application",
+    "openNavigation": "Open navigation",
+    "closeNavigation": "Close navigation",
+    "breadcrumb": "Breadcrumb",
+    "userMenu": "Account menu",
+    "logout": "Log out",
+    "loggingOut": "Logging out…",
+    "nav": {
+      "overview": "Overview",
+      "files": "Files",
+      "conversions": "Conversions",
+      "apiKeys": "API Keys",
+      "settings": "Settings"
+    },
+    "pages": {
+      "overview": {
+        "title": "Overview",
+        "description": "Your workspace is ready. Product features will appear here."
+      },
+      "files": {
+        "title": "Files",
+        "description": "File management will live here."
+      },
+      "conversions": {
+        "title": "Conversions",
+        "description": "Conversion history will live here."
+      },
+      "apiKeys": {
+        "title": "API Keys",
+        "description": "API key management will live here."
+      },
+      "settings": {
+        "title": "Settings",
+        "description": "Account settings will live here."
+      }
+    }
+  },
   "auth": {
     "login": {
       "title": "Sign in",

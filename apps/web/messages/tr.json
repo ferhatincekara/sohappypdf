@@ -15,6 +15,45 @@
     "logout": "Çıkış yap",
     "loggingOut": "Çıkış yapılıyor…"
   },
+  "appShell": {
+    "brand": "SohappyPDF",
+    "navigation": "Uygulama",
+    "openNavigation": "Navigasyonu aç",
+    "closeNavigation": "Navigasyonu kapat",
+    "breadcrumb": "Sayfa yolu",
+    "userMenu": "Hesap menüsü",
+    "logout": "Çıkış yap",
+    "loggingOut": "Çıkış yapılıyor…",
+    "nav": {
+      "overview": "Genel bakış",
+      "files": "Dosyalar",
+      "conversions": "Dönüşümler",
+      "apiKeys": "API anahtarları",
+      "settings": "Ayarlar"
+    },
+    "pages": {
+      "overview": {
+        "title": "Genel bakış",
+        "description": "Çalışma alanınız hazır. Ürün özellikleri burada görünecek."
+      },
+      "files": {
+        "title": "Dosyalar",
+        "description": "Dosya yönetimi burada yer alacak."
+      },
+      "conversions": {
+        "title": "Dönüşümler",
+        "description": "Dönüşüm geçmişi burada yer alacak."
+      },
+      "apiKeys": {
+        "title": "API anahtarları",
+        "description": "API anahtarı yönetimi burada yer alacak."
+      },
+      "settings": {
+        "title": "Ayarlar",
+        "description": "Hesap ayarları burada yer alacak."
+      }
+    }
+  },
   "auth": {
     "login": {
       "title": "Giriş yap",
