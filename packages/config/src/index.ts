@@ -2,6 +2,8 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/config");
 
+export type { ApiConfig } from "./api-config.js";
+export { loadApiConfig } from "./api-config.js";
 export type { AppConfig, LogLevel, RuntimeEnv } from "./app-config.js";
 export { LOG_LEVELS, loadAppConfig, RUNTIME_ENVS } from "./app-config.js";
 export type { AuthConfig } from "./auth-config.js";
