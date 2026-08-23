@@ -23,6 +23,7 @@
       "name": "@repo/api",
       "version": "0.0.0",
       "dependencies": {
+        "@repo/api-keys": "workspace:*",
         "@repo/auth": "workspace:*",
         "@repo/config": "workspace:*",
         "@repo/core": "workspace:*",
@@ -52,6 +53,19 @@
       "devDependencies": {
         "@repo/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
+        "typescript": "5.9.2",
+      },
+    },
+    "packages/api-keys": {
+      "name": "@repo/api-keys",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+        "@repo/db": "workspace:*",
+        "drizzle-orm": "^0.45.2",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
@@ -361,6 +375,8 @@
     "@pdf-lib/upng": ["@pdf-lib/upng@1.0.1", "", { "dependencies": { "pako": "^1.0.10" } }, "sha512-dQK2FUMQtowVP00mtIksrlZhdFXQZPC+taih1q4CvPZ5vqdxR/LKBaFg0oAfzd1GlHZXXSPdQfzQnt+ViGvEIQ=="],
 
     "@repo/api": ["@repo/api@workspace:apps/api"],
+
+    "@repo/api-keys": ["@repo/api-keys@workspace:packages/api-keys"],
 
     "@repo/auth": ["@repo/auth@workspace:packages/auth"],
 

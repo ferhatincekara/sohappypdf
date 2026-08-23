@@ -19,6 +19,7 @@ export type {
 } from "./auth-identity.js";
 export {
   AUTH_IDENTITY_KINDS,
+  createApiKeyAuthIdentity,
   createSessionAuthIdentity,
   isAuthIdentityKind,
 } from "./auth-identity.js";

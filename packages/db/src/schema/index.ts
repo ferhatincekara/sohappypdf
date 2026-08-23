@@ -1,3 +1,5 @@
+export type { ApiKeyRow, NewApiKeyRow } from "./api-keys.js";
+export { apiKeyRelations, apiKeys } from "./api-keys.js";
 export type {
   AccountRow,
   NewAccountRow,

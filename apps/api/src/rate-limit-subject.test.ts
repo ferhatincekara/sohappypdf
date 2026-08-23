@@ -22,15 +22,16 @@ describe("toRateLimitSubject", () => {
   });
 
   test("maps API-key identity to a client subject", () => {
-    expect(
-      toRateLimitSubject(
-        { kind: "api-key", userId: "user_1", apiKeyId: "key_123" },
-        "203.0.113.10",
-      ),
-    ).toEqual({
+    const subject = toRateLimitSubject(
+      { kind: "api-key", userId: "user_1", apiKeyId: "key_123" },
+      "203.0.113.10",
+    );
+
+    expect(subject).toEqual({
       kind: "api-client",
       apiClientId: "key_123",
     });
+    expect(JSON.stringify(subject).includes("shpdf_")).toBe(false);
   });
 });
 

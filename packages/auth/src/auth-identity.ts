@@ -16,6 +16,17 @@ export type ApiKeyAuthIdentity = {
 
 export type AuthIdentity = SessionAuthIdentity | ApiKeyAuthIdentity;
 
+export function createApiKeyAuthIdentity(input: {
+  userId: string;
+  apiKeyId: string;
+}): ApiKeyAuthIdentity {
+  return {
+    kind: "api-key",
+    userId: input.userId,
+    apiKeyId: input.apiKeyId,
+  };
+}
+
 export function isAuthIdentityKind(value: string): value is AuthIdentityKind {
   for (const kind of AUTH_IDENTITY_KINDS) {
     if (kind === value) {

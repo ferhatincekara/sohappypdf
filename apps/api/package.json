@@ -10,6 +10,7 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@repo/api-keys": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/core": "workspace:*",
