@@ -1,6 +1,17 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type Database, files } from "@repo/db";
-import { and, desc, eq, gt, isNull, lt, lte, ne, or } from "drizzle-orm";
+import {
+  and,
+  desc,
+  eq,
+  gt,
+  isNotNull,
+  isNull,
+  lt,
+  lte,
+  ne,
+  or,
+} from "drizzle-orm";
 import type { FileListCursor } from "./file-pagination.js";
 import type { FileStatus } from "./file-status.js";
 import type { FileRecord } from "./file-types.js";
@@ -169,7 +180,11 @@ export function createFileRepository(db: Database): FileRepository {
         .select()
         .from(files)
         .where(
-          and(ne(files.status, "deleted"), lte(files.expiresAt, input.now)),
+          or(
+            isNotNull(files.deletedAt),
+            eq(files.status, "deleted"),
+            lte(files.expiresAt, input.now),
+          ),
         )
         .limit(input.limit);
 

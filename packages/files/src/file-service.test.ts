@@ -91,7 +91,8 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
       return [...records.values()]
         .filter(
           (file) =>
-            file.status !== "deleted" &&
+            file.status === "deleted" ||
+            file.deletedAt !== null ||
             file.expiresAt.getTime() <= input.now.getTime(),
         )
         .slice(0, input.limit)
@@ -462,5 +463,158 @@ describe("file service", () => {
 
     const eligible = await service.listFilesEligibleForCleanup();
     expect(eligible.map((file) => file.id)).toEqual([expired.id]);
+  });
+
+  test("assigns the default two-hour expiration when registering conversion output", async () => {
+    const storage = createMemoryStorage({
+      existingKeys: ["files/550e8400-e29b-41d4-a716-446655440099/output/job"],
+    });
+    const service = createFileService({
+      repository: createMemoryRepository(),
+      storage,
+      now: () => new Date("2026-08-23T18:00:00.000Z"),
+    });
+
+    const file = await service.registerStoredFile({
+      id: "550e8400-e29b-41d4-a716-446655440099",
+      ownerId: "user_1",
+      originalFilename: "output.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 128,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440099/output/job",
+    });
+
+    expect(file.expiresAt.toISOString()).toBe("2026-08-23T20:00:00.000Z");
+  });
+
+  test("does not create a download URL for an expired file", async () => {
+    let currentTime = new Date("2026-08-23T18:00:00.000Z");
+    const storage = createMemoryStorage();
+    const service = createFileService({
+      repository: createMemoryRepository(),
+      storage,
+      now: () => currentTime,
+      fileTtlMs: 60_000,
+    });
+    const { file } = await service.createUploadIntent(createInput);
+    await storeUploadedObject(storage, file);
+    await service.completeUpload(file.id, "user_1");
+    currentTime = new Date("2026-08-23T18:02:00.000Z");
+
+    try {
+      await service.createOwnedDownloadUrl(file.id, "user_1");
+      throw new Error("expected expired download to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
+      }
+    }
+  });
+
+  test("cleans expired files from S3 and the database", async () => {
+    const expired: FileRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      ownerId: "user_1",
+      originalFilename: "old.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 10,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440000/original",
+      status: "uploaded",
+      createdAt: new Date("2026-08-23T18:00:00.000Z"),
+      updatedAt: new Date("2026-08-23T18:00:00.000Z"),
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+      deletedAt: null,
+    };
+    const storage = createMemoryStorage({ existingKeys: [expired.objectKey] });
+    const service = createFileService({
+      repository: createMemoryRepository([expired]),
+      storage,
+      now: () => new Date("2026-08-23T21:00:00.000Z"),
+    });
+
+    const first = await service.cleanupExpiredFiles();
+    const second = await service.cleanupExpiredFiles();
+
+    expect(first).toEqual({
+      scanned: 1,
+      deleted: 1,
+      failed: 0,
+      failureFileIds: [],
+    });
+    expect(second.scanned).toBe(0);
+    expect(storage.objects.has(expired.objectKey)).toBe(false);
+    expect(await service.findFileById(expired.id)).toBeUndefined();
+  });
+
+  test("treats a missing S3 object as a successful cleanup", async () => {
+    const expired: FileRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      ownerId: "user_1",
+      originalFilename: "old.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 10,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440000/original",
+      status: "pending",
+      createdAt: new Date("2026-08-23T18:00:00.000Z"),
+      updatedAt: new Date("2026-08-23T18:00:00.000Z"),
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+      deletedAt: null,
+    };
+    const service = createFileService({
+      repository: createMemoryRepository([expired]),
+      storage: createMemoryStorage(),
+      now: () => new Date("2026-08-23T21:00:00.000Z"),
+    });
+
+    const result = await service.cleanupExpiredFiles();
+    expect(result.deleted).toBe(1);
+    expect(await service.findFileById(expired.id)).toBeUndefined();
+  });
+
+  test("continues a cleanup batch after one file fails", async () => {
+    const failing: FileRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440010",
+      ownerId: "user_1",
+      originalFilename: "bad.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 10,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440010/original",
+      status: "uploaded",
+      createdAt: new Date("2026-08-23T18:00:00.000Z"),
+      updatedAt: new Date("2026-08-23T18:00:00.000Z"),
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+      deletedAt: null,
+    };
+    const ok: FileRecord = {
+      ...failing,
+      id: "550e8400-e29b-41d4-a716-446655440011",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440011/original",
+    };
+    const storage = createMemoryStorage({
+      existingKeys: [failing.objectKey, ok.objectKey],
+    });
+    const originalDelete = storage.deleteObject.bind(storage);
+    storage.deleteObject = async (key) => {
+      if (key === failing.objectKey) {
+        throw new Error("storage delete failed");
+      }
+
+      return originalDelete(key);
+    };
+
+    const service = createFileService({
+      repository: createMemoryRepository([failing, ok]),
+      storage,
+      now: () => new Date("2026-08-23T21:00:00.000Z"),
+    });
+
+    const result = await service.cleanupExpiredFiles();
+    expect(result.scanned).toBe(2);
+    expect(result.deleted).toBe(1);
+    expect(result.failed).toBe(1);
+    expect(result.failureFileIds).toEqual([failing.id]);
+    expect(await service.findFileById(failing.id)).toBeDefined();
+    expect(await service.findFileById(ok.id)).toBeUndefined();
   });
 });

@@ -1,0 +1,1 @@
+CREATE INDEX "files_deleted_at_idx" ON "files" USING btree ("deleted_at");

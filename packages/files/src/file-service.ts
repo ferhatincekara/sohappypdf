@@ -5,7 +5,12 @@ import {
   createFileOriginalKey,
   type Storage,
 } from "@repo/storage";
-import { DEFAULT_FILE_TTL_MS, isFileExpired } from "./file-expiration.js";
+import {
+  DEFAULT_FILE_TTL_MS,
+  getFileExpirationDate,
+  isEligibleForCleanup,
+  isFileExpired,
+} from "./file-expiration.js";
 import {
   assertFileListLimit,
   decodeFileListCursor,
@@ -41,6 +46,19 @@ export type FileServiceOptions = {
   maxFileSizeBytes?: number;
 };
 
+export type FileCleanupSummary = {
+  scanned: number;
+  deleted: number;
+  failed: number;
+  failureFileIds: string[];
+};
+
+export type FileDownloadUrl = {
+  fileId: string;
+  expiresInSeconds: number;
+  url: string;
+};
+
 export type FileService = {
   createUploadIntent(input: CreateFileInput): Promise<CreateFileResult>;
   createFile(input: CreateFileInput): Promise<CreateFileResult>;
@@ -48,12 +66,14 @@ export type FileService = {
   registerStoredFile(input: RegisterStoredFileInput): Promise<FileRecord>;
   findFileById(id: string): Promise<FileRecord | undefined>;
   getOwnedFile(id: string, ownerId: string): Promise<FileRecord>;
+  createOwnedDownloadUrl(id: string, ownerId: string): Promise<FileDownloadUrl>;
   listOwnedFiles(query: FileListQuery): Promise<FileListResult>;
   markFileUploaded(id: string): Promise<FileRecord>;
   updateFileStatus(id: string, status: FileStatus): Promise<FileRecord>;
   deleteOwnedFile(id: string, ownerId: string): Promise<FileRecord>;
   deleteFile(id: string): Promise<FileRecord>;
   listFilesEligibleForCleanup(limit?: number): Promise<FileRecord[]>;
+  cleanupExpiredFiles(limit?: number): Promise<FileCleanupSummary>;
 };
 
 function requireFile(file: FileRecord | undefined): FileRecord {
@@ -114,15 +134,6 @@ export function createFileService(options: FileServiceOptions): FileService {
     const sizeBytes = assertFileSizeBytes(input.sizeBytes, maxFileSizeBytes);
     const ownerId = assertFileOwnerId(input.ownerId);
     const createdAt = now();
-    const expiresInMs = input.expiresInMs ?? fileTtlMs;
-
-    if (!Number.isInteger(expiresInMs) || expiresInMs < 1) {
-      throw new AppError({
-        code: APP_ERROR_CODES.VALIDATION_ERROR,
-        message: "Invalid file expiration",
-      });
-    }
-
     const id = randomUUID();
     const file: FileRecord = {
       id,
@@ -134,7 +145,10 @@ export function createFileService(options: FileServiceOptions): FileService {
       status: "pending",
       createdAt,
       updatedAt: createdAt,
-      expiresAt: new Date(createdAt.getTime() + expiresInMs),
+      expiresAt: getFileExpirationDate({
+        createdAt,
+        retentionMs: input.expiresInMs ?? fileTtlMs,
+      }),
       deletedAt: null,
     };
 
@@ -272,15 +286,6 @@ export function createFileService(options: FileServiceOptions): FileService {
       const objectKey = assertValidObjectKey(input.objectKey);
       const ownerId = assertFileOwnerId(input.ownerId);
       const createdAt = now();
-      const expiresInMs = input.expiresInMs ?? fileTtlMs;
-
-      if (!Number.isInteger(expiresInMs) || expiresInMs < 1) {
-        throw new AppError({
-          code: APP_ERROR_CODES.VALIDATION_ERROR,
-          message: "Invalid file expiration",
-        });
-      }
-
       const exists = await options.storage.objectExists(objectKey);
 
       if (!exists) {
@@ -300,7 +305,10 @@ export function createFileService(options: FileServiceOptions): FileService {
         status: "uploaded",
         createdAt,
         updatedAt: createdAt,
-        expiresAt: new Date(createdAt.getTime() + expiresInMs),
+        expiresAt: getFileExpirationDate({
+          createdAt,
+          retentionMs: input.expiresInMs ?? fileTtlMs,
+        }),
         deletedAt: null,
       });
     },
@@ -315,6 +323,31 @@ export function createFileService(options: FileServiceOptions): FileService {
         assertFileOwnerId(ownerId),
         now(),
       );
+    },
+
+    async createOwnedDownloadUrl(id, ownerId) {
+      const file = requireOwnedAccessibleFile(
+        await options.repository.findById(assertFileId(id)),
+        assertFileOwnerId(ownerId),
+        now(),
+      );
+
+      if (file.status === "pending" || file.status === "failed") {
+        throw new AppError({
+          code: APP_ERROR_CODES.CONFLICT,
+          message: "File object was not uploaded",
+        });
+      }
+
+      const download = await options.storage.createPresignedDownloadUrl({
+        key: file.objectKey,
+      });
+
+      return {
+        fileId: file.id,
+        expiresInSeconds: download.expiresInSeconds,
+        url: download.url,
+      };
     },
 
     async listOwnedFiles(query) {
@@ -393,6 +426,50 @@ export function createFileService(options: FileServiceOptions): FileService {
         now: now(),
         limit,
       });
+    },
+
+    async cleanupExpiredFiles(limit = DEFAULT_CLEANUP_LIMIT) {
+      if (!Number.isInteger(limit) || limit < 1 || limit > MAX_CLEANUP_LIMIT) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid cleanup limit",
+        });
+      }
+
+      const files = await options.repository.listEligibleForCleanup({
+        now: now(),
+        limit,
+      });
+      const summary: FileCleanupSummary = {
+        scanned: files.length,
+        deleted: 0,
+        failed: 0,
+        failureFileIds: [],
+      };
+
+      for (const file of files) {
+        try {
+          const current = await options.repository.findById(file.id);
+
+          if (current === undefined) {
+            summary.deleted += 1;
+            continue;
+          }
+
+          if (!isEligibleForCleanup(current, now())) {
+            continue;
+          }
+
+          await options.storage.deleteObject(current.objectKey);
+          await options.repository.deleteById(current.id);
+          summary.deleted += 1;
+        } catch {
+          summary.failed += 1;
+          summary.failureFileIds.push(file.id);
+        }
+      }
+
+      return summary;
     },
   };
 }

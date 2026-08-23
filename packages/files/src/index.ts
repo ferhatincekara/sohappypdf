@@ -3,7 +3,9 @@ import { assertServerOnly } from "@repo/core";
 assertServerOnly("@repo/files");
 
 export {
+  DEFAULT_FILE_RETENTION_MS,
   DEFAULT_FILE_TTL_MS,
+  getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
 } from "./file-expiration.js";
@@ -15,7 +17,12 @@ export {
 } from "./file-pagination.js";
 export type { FileRepository } from "./file-repository.js";
 export { createFileRepository } from "./file-repository.js";
-export type { FileService, FileServiceOptions } from "./file-service.js";
+export type {
+  FileCleanupSummary,
+  FileDownloadUrl,
+  FileService,
+  FileServiceOptions,
+} from "./file-service.js";
 export { createFileService } from "./file-service.js";
 export { getFileService } from "./file-service-factory.js";
 export type { FileStatus } from "./file-status.js";

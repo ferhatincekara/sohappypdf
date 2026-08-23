@@ -13,6 +13,7 @@ export function getFileService(): FileService {
       repository: createFileRepository(getDb()),
       storage: getStorage(),
       maxFileSizeBytes: fileConfig.maxUploadFileSizeBytes,
+      fileTtlMs: fileConfig.retentionMs,
     });
   }
 

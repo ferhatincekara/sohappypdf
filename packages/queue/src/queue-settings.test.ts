@@ -7,6 +7,9 @@ import {
   CONVERSION_JOB_NAME,
   CONVERSION_QUEUE_NAME,
   CONVERSION_QUEUE_SETTINGS,
+  FILE_CLEANUP_INTERVAL_MS,
+  FILE_CLEANUP_JOB_NAME,
+  FILE_CLEANUP_QUEUE_NAME,
 } from "./queue-settings.js";
 
 describe("queue settings", () => {
@@ -33,5 +36,11 @@ describe("queue settings", () => {
     expect(CONVERSION_FAILED_JOB_RETENTION.age).toBeGreaterThan(
       CONVERSION_COMPLETED_JOB_RETENTION.age,
     );
+  });
+
+  test("schedules file cleanup on a separate queue", () => {
+    expect(FILE_CLEANUP_QUEUE_NAME).toBe("file-cleanup");
+    expect(FILE_CLEANUP_JOB_NAME).toBe("cleanup-expired");
+    expect(FILE_CLEANUP_INTERVAL_MS).toBe(15 * 60 * 1000);
   });
 });

@@ -368,7 +368,13 @@ describe("file API", () => {
     currentTime = new Date("2026-08-23T21:00:00.000Z");
 
     const response = await app.request(`/api/v1/files/${createdBody.file.id}`);
+    const complete = await app.request(
+      `/api/v1/files/${createdBody.file.id}/complete`,
+      { method: "POST" },
+    );
+
     expect(response.status).toBe(404);
+    expect(complete.status).toBe(404);
   });
 
   test("lists only the authenticated user's files with bounded pagination", async () => {

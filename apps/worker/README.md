@@ -148,6 +148,24 @@ docker build -f apps/worker/Dockerfile -t sohappypdf-worker .
 
 The image runs as the non-root `bun` user. Temporary files live under `/tmp/sohappypdf-worker` and are removed after every job.
 
+## File cleanup
+
+The same worker process also consumes the `file-cleanup` queue.
+
+On startup it registers a repeatable BullMQ job (`cleanup-expired`) every 15 minutes. The job is empty: the worker queries expired and soft-deleted files from the database in batches of 100.
+
+Cleanup is eventually consistent. Files become inaccessible at `expiresAt` even if the S3 object is still present. Physical deletion happens on the next successful cleanup run.
+
+Default retention is 2 hours (`FILE_RETENTION_HOURS`). Changing that value updates `expiresAt` for newly created source and output files. Existing rows keep the timestamp written at create time.
+
+### S3 lifecycle safety net
+
+Do not configure the bucket to delete every object after 2 hours. Application `expiresAt` is authoritative, and future plans may use longer retention.
+
+A safe infrastructure fallback is an S3 lifecycle rule scoped to the `files/` prefix that expires objects after **7 days**. That only covers orphans the application never recorded or failed to delete. It is not a substitute for the cleanup job.
+
+Full bucket reconciliation is not implemented. Object keys are `files/{fileId}/original` and `files/{fileId}/output/{conversionId}`, so every upload creates a database row first. Abandoned uploads expire with that row.
+
 ## Limitations
 
 - There is no OS-level sandbox beyond argument-array process execution, allowlisted binaries, size limits, and job-scoped temp directories.

@@ -36,3 +36,10 @@ export const CONVERSION_QUEUE_SETTINGS: ConversionQueueSettings = {
   removeOnComplete: CONVERSION_COMPLETED_JOB_RETENTION,
   removeOnFail: CONVERSION_FAILED_JOB_RETENTION,
 };
+
+export const FILE_CLEANUP_QUEUE_NAME = "file-cleanup";
+export const FILE_CLEANUP_JOB_NAME = "cleanup-expired";
+export const FILE_CLEANUP_SCHEDULER_ID = "file-cleanup-expired";
+export const FILE_CLEANUP_INTERVAL_MS = 15 * 60 * 1000;
+export const FILE_CLEANUP_JOB_ATTEMPTS = 5;
+export const FILE_CLEANUP_MAX_BATCHES_PER_JOB = 10;

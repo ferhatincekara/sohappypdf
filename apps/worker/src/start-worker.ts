@@ -1,4 +1,8 @@
-import type { EnvSource, WorkerConfig } from "@repo/config";
+import {
+  type EnvSource,
+  loadFileConfig,
+  type WorkerConfig,
+} from "@repo/config";
 import {
   createEngineRegistry,
   type NativeBinaryProbe,
@@ -12,8 +16,12 @@ import {
   CONVERSION_QUEUE_NAME,
   type ConversionJobProcessor,
   type ConversionWorker,
-  closeQueueConnections,
+  closeQueues,
   createConversionWorker,
+  createFileCleanupWorker,
+  FILE_CLEANUP_INTERVAL_MS,
+  FILE_CLEANUP_QUEUE_NAME,
+  scheduleFileCleanup,
 } from "@repo/queue";
 import { getStorage } from "@repo/storage";
 import {
@@ -23,6 +31,7 @@ import {
 } from "./health-server.js";
 import { loadWorkerRuntimeConfig } from "./load-runtime-config.js";
 import { createConversionProcessor } from "./processors/conversion-processor.js";
+import { createFileCleanupProcessor } from "./processors/file-cleanup-processor.js";
 import { createWorkerShutdown } from "./shutdown.js";
 import {
   createWorkerEnvironmentChecks,
@@ -42,6 +51,7 @@ export type StartConversionWorkerRuntimeOptions = {
     logger: Logger;
   }) => ConversionJobProcessor;
   createQueueWorker?: typeof createConversionWorker;
+  enableFileCleanup?: boolean;
   listenHealth?: boolean;
 };
 
@@ -95,21 +105,23 @@ export async function startConversionWorkerRuntime(
   let status: WorkerHealthStatus = "starting";
   const shutdownController = createWorkerShutdown({
     async closeWorker(force) {
-      if (worker !== undefined) {
-        await worker.close(force);
-      }
+      await Promise.all([
+        worker?.close(force) ?? Promise.resolve(),
+        cleanupWorker?.close(force) ?? Promise.resolve(),
+      ]);
     },
     async closeHealth() {
       if (health !== undefined) {
         await health.close();
       }
     },
-    closeQueue: closeQueueConnections,
+    closeQueue: closeQueues,
     timeoutMs: runtimeConfig.worker.shutdownTimeoutMs,
     logger,
   });
   let health: WorkerHealthServer | undefined;
   let worker: ConversionWorker | undefined;
+  let cleanupWorker: ConversionWorker | undefined;
 
   logger.info("worker starting");
 
@@ -175,6 +187,41 @@ export async function startConversionWorkerRuntime(
       },
     });
 
+    if (options.enableFileCleanup !== false) {
+      const fileConfig = loadFileConfig(options.env);
+      cleanupWorker = createFileCleanupWorker({
+        processJob: createFileCleanupProcessor({
+          files: getFileService(),
+          logger,
+          batchSize: fileConfig.cleanupBatchSize,
+        }),
+        hooks: {
+          onReady() {
+            logger.info("queue connected", {
+              queueName: FILE_CLEANUP_QUEUE_NAME,
+            });
+          },
+          onCompleted(job) {
+            logger.info("file cleanup job completed", { jobId: job.id });
+          },
+          onFailed(job) {
+            logger.warn("file cleanup job retrying", {
+              jobId: job.id,
+              attemptsMade: job.attemptsMade,
+            });
+          },
+          onError() {
+            logger.error("file cleanup worker error");
+          },
+        },
+      });
+      await scheduleFileCleanup();
+      logger.info("file cleanup scheduled", {
+        intervalMs: FILE_CLEANUP_INTERVAL_MS,
+        batchSize: fileConfig.cleanupBatchSize,
+      });
+    }
+
     status = "ready";
     logger.info("worker started", {
       concurrency: runtimeConfig.worker.concurrency,
@@ -193,7 +240,7 @@ export async function startConversionWorkerRuntime(
       await health.close();
     }
 
-    await closeQueueConnections();
+    await closeQueues();
     throw error;
   }
 }

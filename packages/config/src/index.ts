@@ -14,7 +14,14 @@ export type { EnvSource } from "./env.js";
 export { getOptionalEnv, getRequiredEnv } from "./env.js";
 export { loadEnvFile } from "./env-file.js";
 export type { FileConfig } from "./file-config.js";
-export { DEFAULT_FILE_CONFIG, loadFileConfig } from "./file-config.js";
+export {
+  DEFAULT_FILE_CLEANUP_BATCH_SIZE,
+  DEFAULT_FILE_CONFIG,
+  DEFAULT_FILE_RETENTION_HOURS,
+  DEFAULT_FILE_RETENTION_MS,
+  loadFileConfig,
+  MAX_FILE_CLEANUP_BATCH_SIZE,
+} from "./file-config.js";
 export type { QueueConfig } from "./queue-config.js";
 export { loadQueueConfig } from "./queue-config.js";
 export type {

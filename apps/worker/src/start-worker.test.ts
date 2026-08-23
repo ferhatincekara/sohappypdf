@@ -20,6 +20,7 @@ describe("startConversionWorkerRuntime", () => {
     const runtime = await startConversionWorkerRuntime({
       env: validEnv,
       listenHealth: false,
+      enableFileCleanup: false,
       checks: {
         probeBinaries() {
           return [{ command: "soffice", available: true, version: "24.2" }];
@@ -48,6 +49,7 @@ describe("startConversionWorkerRuntime", () => {
       await startConversionWorkerRuntime({
         env: validEnv,
         listenHealth: false,
+        enableFileCleanup: false,
         checks: {
           probeBinaries() {
             return [{ command: "soffice", available: true }];

@@ -49,6 +49,7 @@ export const files = pgTable(
     uniqueIndex("files_object_key_uidx").on(table.objectKey),
     index("files_status_idx").on(table.status),
     index("files_expires_at_idx").on(table.expiresAt),
+    index("files_deleted_at_idx").on(table.deletedAt),
     index("files_owner_id_idx").on(table.ownerId),
     index("files_owner_id_created_at_id_idx").on(
       table.ownerId,

@@ -74,3 +74,13 @@ export async function enqueueConversion(
 ): Promise<EnqueueConversionResult> {
   return createConversionEnqueue(getConversionQueue())(input);
 }
+
+export async function closeConversionQueue(): Promise<void> {
+  if (conversionQueue === undefined) {
+    return;
+  }
+
+  const queue = conversionQueue;
+  conversionQueue = undefined;
+  await queue.close();
+}
