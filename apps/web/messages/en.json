@@ -46,7 +46,7 @@
       },
       "apiKeys": {
         "title": "API Keys",
-        "description": "API key management will live here."
+        "description": "Create and revoke keys for programmatic access."
       },
       "settings": {
         "title": "Settings",
@@ -327,6 +327,80 @@
       "output_file_unavailable": "The converted file is not available.",
       "processing_failed": "The conversion could not be completed.",
       "cancelled": "The conversion was cancelled."
+    }
+  },
+  "apiKeys": {
+    "title": "API Keys",
+    "description": "Create keys to call the SohappyPDF API. The raw key is shown only once.",
+    "actions": {
+      "create": "Create API key",
+      "revoke": "Revoke",
+      "revokeNamed": "Revoke {name}"
+    },
+    "list": {
+      "title": "Your API keys",
+      "description": "Active keys can authenticate API requests. Revoked keys stop working immediately.",
+      "loading": "Loading API keys…",
+      "empty": "No API keys yet.",
+      "emptyHint": "Create an API key to start using SohappyPDF programmatically.",
+      "createCta": "Create API key",
+      "retry": "Try again",
+      "created": "Created {date}",
+      "lastUsed": "Last used {date}",
+      "neverUsed": "Never used",
+      "expires": "Expires {date}",
+      "status": {
+        "active": "Active",
+        "revoked": "Revoked",
+        "expired": "Expired"
+      }
+    },
+    "create": {
+      "title": "Create API key",
+      "description": "Give the key a name you will recognize later.",
+      "close": "Close create API key",
+      "name": "Key name",
+      "namePlaceholder": "Production",
+      "submit": "Create API key",
+      "submitting": "Creating key…"
+    },
+    "created": {
+      "title": "API key created",
+      "warning": "This key will only be shown once.",
+      "store": "Copy it now and store it securely. You cannot recover it later.",
+      "label": "Raw key for {name}",
+      "copy": "Copy",
+      "copied": "API key copied",
+      "copyFailed": "The key could not be copied. Select it and copy it manually.",
+      "done": "Done",
+      "close": "Close created API key"
+    },
+    "revoke": {
+      "title": "Revoke API key",
+      "description": "{name} will stop working immediately. This cannot be undone.",
+      "confirm": "Revoke key",
+      "revoking": "Revoking…",
+      "cancel": "Cancel",
+      "success": "The API key was revoked."
+    },
+    "usage": {
+      "title": "Using an API key",
+      "description": "Send the key in the Authorization header. Do not put it in query parameters.",
+      "docsHint": "API documentation will be published separately."
+    },
+    "validation": {
+      "nameRequired": "Enter a key name.",
+      "nameTooLong": "Use 80 characters or fewer.",
+      "nameInvalid": "That key name cannot be used."
+    },
+    "errors": {
+      "invalidName": "That key name cannot be used.",
+      "unauthorized": "Sign in again to manage API keys.",
+      "forbidden": "API keys cannot manage other API keys.",
+      "notFound": "That API key could not be found.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "networkFailure": "The request could not be completed. Try again.",
+      "unexpected": "Something went wrong. Try again."
     }
   }
 }

@@ -46,7 +46,7 @@
       },
       "apiKeys": {
         "title": "API anahtarları",
-        "description": "API anahtarı yönetimi burada yer alacak."
+        "description": "Programatik erişim için anahtar oluşturun ve iptal edin."
       },
       "settings": {
         "title": "Ayarlar",
@@ -327,6 +327,80 @@
       "output_file_unavailable": "Dönüştürülen dosya kullanılamıyor.",
       "processing_failed": "Dönüşüm tamamlanamadı.",
       "cancelled": "Dönüşüm iptal edildi."
+    }
+  },
+  "apiKeys": {
+    "title": "API anahtarları",
+    "description": "SohappyPDF API’sini çağırmak için anahtar oluşturun. Ham anahtar yalnızca bir kez gösterilir.",
+    "actions": {
+      "create": "API anahtarı oluştur",
+      "revoke": "İptal et",
+      "revokeNamed": "{name} anahtarını iptal et"
+    },
+    "list": {
+      "title": "API anahtarlarınız",
+      "description": "Aktif anahtarlar API isteklerini doğrular. İptal edilen anahtarlar hemen çalışmayı durdurur.",
+      "loading": "API anahtarları yükleniyor…",
+      "empty": "Henüz API anahtarı yok.",
+      "emptyHint": "SohappyPDF’i programatik kullanmaya başlamak için bir API anahtarı oluşturun.",
+      "createCta": "API anahtarı oluştur",
+      "retry": "Tekrar dene",
+      "created": "Oluşturuldu {date}",
+      "lastUsed": "Son kullanım {date}",
+      "neverUsed": "Hiç kullanılmadı",
+      "expires": "Süre {date}",
+      "status": {
+        "active": "Aktif",
+        "revoked": "İptal edildi",
+        "expired": "Süresi doldu"
+      }
+    },
+    "create": {
+      "title": "API anahtarı oluştur",
+      "description": "Daha sonra tanıyacağınız bir ad verin.",
+      "close": "API anahtarı oluşturmayı kapat",
+      "name": "Anahtar adı",
+      "namePlaceholder": "Production",
+      "submit": "API anahtarı oluştur",
+      "submitting": "Anahtar oluşturuluyor…"
+    },
+    "created": {
+      "title": "API anahtarı oluşturuldu",
+      "warning": "Bu anahtar yalnızca bir kez gösterilecek.",
+      "store": "Şimdi kopyalayıp güvenli saklayın. Daha sonra kurtarılamaz.",
+      "label": "{name} için ham anahtar",
+      "copy": "Kopyala",
+      "copied": "API anahtarı kopyalandı",
+      "copyFailed": "Anahtar kopyalanamadı. Seçip elle kopyalayın.",
+      "done": "Tamam",
+      "close": "Oluşturulan API anahtarını kapat"
+    },
+    "revoke": {
+      "title": "API anahtarını iptal et",
+      "description": "{name} hemen çalışmayı durduracak. Bu işlem geri alınamaz.",
+      "confirm": "Anahtarı iptal et",
+      "revoking": "İptal ediliyor…",
+      "cancel": "Vazgeç",
+      "success": "API anahtarı iptal edildi."
+    },
+    "usage": {
+      "title": "API anahtarı kullanımı",
+      "description": "Anahtarı Authorization başlığında gönderin. Sorgu parametrelerine koymayın.",
+      "docsHint": "API belgelendirmesi ayrı olarak yayınlanacak."
+    },
+    "validation": {
+      "nameRequired": "Bir anahtar adı girin.",
+      "nameTooLong": "En fazla 80 karakter kullanın.",
+      "nameInvalid": "Bu anahtar adı kullanılamaz."
+    },
+    "errors": {
+      "invalidName": "Bu anahtar adı kullanılamaz.",
+      "unauthorized": "API anahtarlarını yönetmek için tekrar oturum açın.",
+      "forbidden": "API anahtarları başka API anahtarlarını yönetemez.",
+      "notFound": "Bu API anahtarı bulunamadı.",
+      "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
+      "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     }
   }
 }

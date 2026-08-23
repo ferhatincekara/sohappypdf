@@ -1,3 +1,4 @@
+import { type ApiKeyService, getApiKeyService } from "@repo/api-keys";
 import { getAuth } from "@repo/auth";
 import {
   type ApiConfig,
@@ -38,6 +39,7 @@ export type CreateAppOptions = {
   checkRateLimit?: CheckRateLimit;
   fileService?: FileService;
   conversionService?: ConversionService;
+  apiKeyService?: ApiKeyService;
   enqueueConversion?: (input: ConversionJobData) => Promise<unknown>;
   handleAuth?: HandleAuthRequest;
 };
@@ -81,6 +83,7 @@ export function createApp(options: CreateAppOptions = {}) {
       getFileService: () => options.fileService ?? getFileService(),
       getConversionService: () =>
         options.conversionService ?? getConversionService(),
+      getApiKeyService: () => options.apiKeyService ?? getApiKeyService(),
       enqueueConversion: (input) =>
         options.enqueueConversion === undefined
           ? enqueueConversion(input)

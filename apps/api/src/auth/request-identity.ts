@@ -5,6 +5,7 @@ import {
   createApiKeyAuthIdentity,
   getAuth,
   getAuthSession,
+  type SessionAuthIdentity,
   toSessionAuthIdentity,
 } from "@repo/auth";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
@@ -105,4 +106,19 @@ export function requireAuthenticatedIdentity(
   }
 
   return identity;
+}
+
+export function requireSessionIdentity(
+  identity: RequestIdentity,
+): SessionAuthIdentity {
+  const authenticated = requireAuthenticatedIdentity(identity);
+
+  if (authenticated.kind !== "session") {
+    throw new AppError({
+      code: APP_ERROR_CODES.FORBIDDEN,
+      message: "Session authentication required",
+    });
+  }
+
+  return authenticated;
 }

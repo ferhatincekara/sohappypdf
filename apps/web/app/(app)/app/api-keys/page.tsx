@@ -1,5 +1,5 @@
-import { AppSectionPlaceholder } from "@/features/app-shell";
+import { ApiKeysPageContent } from "@/features/api-keys";
 
 export default function ApiKeysPage() {
-  return <AppSectionPlaceholder section="apiKeys" />;
+  return <ApiKeysPageContent />;
 }

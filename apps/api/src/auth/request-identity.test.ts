@@ -7,6 +7,7 @@ import {
   createDefaultIdentityResolver,
   hasAuthenticationHints,
   requireAuthenticatedIdentity,
+  requireSessionIdentity,
 } from "./request-identity.js";
 
 const silentLogger: Logger = {
@@ -29,6 +30,34 @@ describe("request identity", () => {
     expect(
       hasAuthenticationHints(new Headers({ authorization: "Bearer key" })),
     ).toBe(true);
+  });
+
+  test("requires a session identity for API key management", () => {
+    expect(
+      requireSessionIdentity({
+        kind: "session",
+        userId: "user_1",
+        sessionId: "session_1",
+      }),
+    ).toEqual({
+      kind: "session",
+      userId: "user_1",
+      sessionId: "session_1",
+    });
+
+    try {
+      requireSessionIdentity({
+        kind: "api-key",
+        userId: "user_1",
+        apiKeyId: "key_1",
+      });
+      throw new Error("expected session requirement to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("FORBIDDEN");
+      }
+    }
   });
 
   test("requires a resolved identity for protected work", () => {
