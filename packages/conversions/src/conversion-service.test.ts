@@ -8,6 +8,7 @@ import type { ConversionRecord } from "./conversion-types.js";
 function createFile(overrides: Partial<FileRecord> = {}): FileRecord {
   return {
     id: "550e8400-e29b-41d4-a716-446655440000",
+    ownerId: "user_1",
     originalFilename: "report.pdf",
     mimeType: "application/pdf",
     sizeBytes: 2048,
@@ -182,6 +183,7 @@ describe("conversion service", () => {
     const service = createConversionService({
       repository: createMemoryRepository(),
       files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
     const input = {
       sourceFileId: sourceFile.id,
@@ -229,6 +231,7 @@ describe("conversion service", () => {
     const service = createConversionService({
       repository: createMemoryRepository(),
       files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
     const created = await service.createConversion({
       sourceFileId: sourceFile.id,
@@ -252,6 +255,7 @@ describe("conversion service", () => {
     const service = createConversionService({
       repository: createMemoryRepository(),
       files: createFileLookup([sourceFile, additionalFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
     const created = await service.createConversion({
       sourceFileId: sourceFile.id,

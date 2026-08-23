@@ -1,8 +1,10 @@
+import { DEFAULT_FILE_CONFIG } from "@repo/config";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 
 const MAX_FILENAME_LENGTH = 255;
 const MAX_MIME_TYPE_LENGTH = 200;
-export const MAX_FILE_SIZE_BYTES = 512 * 1024 * 1024;
+export const MAX_FILE_SIZE_BYTES = DEFAULT_FILE_CONFIG.maxUploadFileSizeBytes;
+const OWNER_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -16,6 +18,17 @@ function hasControlCharacter(value: string): boolean {
   }
 
   return false;
+}
+
+export function assertFileOwnerId(ownerId: string): string {
+  if (!OWNER_ID_PATTERN.test(ownerId)) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Invalid file owner",
+    });
+  }
+
+  return ownerId;
 }
 
 export function assertFileId(id: string): string {
@@ -64,11 +77,14 @@ export function assertMimeType(mimeType: string): string {
   return mimeType;
 }
 
-export function assertFileSizeBytes(sizeBytes: number): number {
+export function assertFileSizeBytes(
+  sizeBytes: number,
+  maxFileSizeBytes = MAX_FILE_SIZE_BYTES,
+): number {
   if (
     !Number.isInteger(sizeBytes) ||
     sizeBytes < 1 ||
-    sizeBytes > MAX_FILE_SIZE_BYTES
+    sizeBytes > maxFileSizeBytes
   ) {
     throw new AppError({
       code: APP_ERROR_CODES.VALIDATION_ERROR,

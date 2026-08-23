@@ -7,6 +7,7 @@ function createFile(overrides: Partial<FileRecord> = {}): FileRecord {
 
   return {
     id: "550e8400-e29b-41d4-a716-446655440000",
+    ownerId: "user_1",
     originalFilename: "report.pdf",
     mimeType: "application/pdf",
     sizeBytes: 1024,

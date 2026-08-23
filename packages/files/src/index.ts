@@ -7,6 +7,12 @@ export {
   isEligibleForCleanup,
   isFileExpired,
 } from "./file-expiration.js";
+export {
+  DEFAULT_FILE_LIST_LIMIT,
+  decodeFileListCursor,
+  encodeFileListCursor,
+  MAX_FILE_LIST_LIMIT,
+} from "./file-pagination.js";
 export type { FileRepository } from "./file-repository.js";
 export { createFileRepository } from "./file-repository.js";
 export type { FileService, FileServiceOptions } from "./file-service.js";
@@ -22,6 +28,8 @@ export {
 export type {
   CreateFileInput,
   CreateFileResult,
+  FileListQuery,
+  FileListResult,
   FileRecord,
   RegisterStoredFileInput,
 } from "./file-types.js";

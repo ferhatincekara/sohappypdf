@@ -1,4 +1,10 @@
-import { type ApiConfig, loadApiConfig, loadAppConfig } from "@repo/config";
+import {
+  type ApiConfig,
+  loadApiConfig,
+  loadAppConfig,
+  loadFileConfig,
+} from "@repo/config";
+import { type FileService, getFileService } from "@repo/files";
 import { createLogger, type Logger } from "@repo/logger";
 import { Hono } from "hono";
 import type { AppEnv } from "./app-env.js";
@@ -23,6 +29,7 @@ export type CreateAppOptions = {
   logger?: Logger;
   resolveIdentity?: ResolveRequestIdentity;
   checkRateLimit?: CheckRateLimit;
+  fileService?: FileService;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -55,7 +62,13 @@ export function createApp(options: CreateAppOptions = {}) {
   }
 
   app.route("/", healthRoutes);
-  app.route("/api/v1", createV1Routes());
+  app.route(
+    "/api/v1",
+    createV1Routes({
+      getFileService: () => options.fileService ?? getFileService(),
+      maxUploadFileSizeBytes: loadFileConfig().maxUploadFileSizeBytes,
+    }),
+  );
 
   return app;
 }

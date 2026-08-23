@@ -2,6 +2,7 @@ import type { FileStatus } from "./file-status.js";
 
 export type FileRecord = {
   id: string;
+  ownerId: string;
   originalFilename: string;
   mimeType: string;
   sizeBytes: number;
@@ -14,6 +15,7 @@ export type FileRecord = {
 };
 
 export type CreateFileInput = {
+  ownerId: string;
   originalFilename: string;
   mimeType: string;
   sizeBytes: number;
@@ -31,9 +33,21 @@ export type CreateFileResult = {
 
 export type RegisterStoredFileInput = {
   id?: string;
+  ownerId: string;
   originalFilename: string;
   mimeType: string;
   sizeBytes: number;
   objectKey: string;
   expiresInMs?: number;
+};
+
+export type FileListQuery = {
+  ownerId: string;
+  limit?: number;
+  cursor?: string;
+};
+
+export type FileListResult = {
+  files: FileRecord[];
+  nextCursor: string | null;
 };

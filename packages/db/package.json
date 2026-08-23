@@ -13,7 +13,7 @@
     "build": "tsc",
     "check-types": "tsc --noEmit",
     "db:generate": "bun --env-file=../../.env drizzle-kit generate",
-    "db:migrate": "bun --env-file=../../.env drizzle-kit migrate"
+    "db:migrate": "bun --env-file=../../.env run src/migrate.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

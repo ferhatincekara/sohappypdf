@@ -13,10 +13,13 @@
     "@repo/api-keys": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/config": "workspace:*",
+    "@repo/conversions": "workspace:*",
     "@repo/core": "workspace:*",
+    "@repo/files": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/rate-limit": "workspace:*",
-    "hono": "^4.13.3"
+    "hono": "^4.13.3",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

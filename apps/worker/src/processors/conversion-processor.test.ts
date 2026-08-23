@@ -42,6 +42,7 @@ function createFile(overrides: Partial<FileRecord> = {}): FileRecord {
   const now = new Date("2026-08-23T18:00:00.000Z");
   return {
     id: sourceFileId,
+    ownerId: "user_1",
     originalFilename: "image.png",
     mimeType: "image/png",
     sizeBytes: 32,

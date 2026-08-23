@@ -5,20 +5,29 @@ import {
   createFileOriginalKey,
   type Storage,
 } from "@repo/storage";
-import { DEFAULT_FILE_TTL_MS } from "./file-expiration.js";
+import { DEFAULT_FILE_TTL_MS, isFileExpired } from "./file-expiration.js";
+import {
+  assertFileListLimit,
+  decodeFileListCursor,
+  encodeFileListCursor,
+} from "./file-pagination.js";
 import type { FileRepository } from "./file-repository.js";
 import { assertFileStatusTransition, type FileStatus } from "./file-status.js";
 import type {
   CreateFileInput,
   CreateFileResult,
+  FileListQuery,
+  FileListResult,
   FileRecord,
   RegisterStoredFileInput,
 } from "./file-types.js";
 import {
   assertFileId,
+  assertFileOwnerId,
   assertFileSizeBytes,
   assertMimeType,
   assertOriginalFilename,
+  MAX_FILE_SIZE_BYTES,
 } from "./file-validation.js";
 
 const DEFAULT_CLEANUP_LIMIT = 100;
@@ -29,14 +38,20 @@ export type FileServiceOptions = {
   storage: Storage;
   now?: () => Date;
   fileTtlMs?: number;
+  maxFileSizeBytes?: number;
 };
 
 export type FileService = {
+  createUploadIntent(input: CreateFileInput): Promise<CreateFileResult>;
   createFile(input: CreateFileInput): Promise<CreateFileResult>;
+  completeUpload(id: string, ownerId: string): Promise<FileRecord>;
   registerStoredFile(input: RegisterStoredFileInput): Promise<FileRecord>;
   findFileById(id: string): Promise<FileRecord | undefined>;
+  getOwnedFile(id: string, ownerId: string): Promise<FileRecord>;
+  listOwnedFiles(query: FileListQuery): Promise<FileListResult>;
   markFileUploaded(id: string): Promise<FileRecord>;
   updateFileStatus(id: string, status: FileStatus): Promise<FileRecord>;
+  deleteOwnedFile(id: string, ownerId: string): Promise<FileRecord>;
   deleteFile(id: string): Promise<FileRecord>;
   listFilesEligibleForCleanup(limit?: number): Promise<FileRecord[]>;
 };
@@ -52,59 +67,195 @@ function requireFile(file: FileRecord | undefined): FileRecord {
   return file;
 }
 
+function normalizeMimeType(value: string): string {
+  const [mediaType] = value.split(";");
+  return mediaType?.trim().toLowerCase() ?? "";
+}
+
+function isOwnedBy(file: FileRecord, ownerId: string): boolean {
+  return file.ownerId === ownerId;
+}
+
+function isUnavailable(file: FileRecord, now: Date): boolean {
+  return (
+    file.status === "deleted" ||
+    file.deletedAt !== null ||
+    isFileExpired(file, now)
+  );
+}
+
+function requireOwnedAccessibleFile(
+  file: FileRecord | undefined,
+  ownerId: string,
+  now: Date,
+): FileRecord {
+  const found = requireFile(file);
+
+  if (!isOwnedBy(found, ownerId) || isUnavailable(found, now)) {
+    throw new AppError({
+      code: APP_ERROR_CODES.NOT_FOUND,
+      message: "File not found",
+    });
+  }
+
+  return found;
+}
+
 export function createFileService(options: FileServiceOptions): FileService {
   const now = options.now ?? (() => new Date());
   const fileTtlMs = options.fileTtlMs ?? DEFAULT_FILE_TTL_MS;
+  const maxFileSizeBytes = options.maxFileSizeBytes ?? MAX_FILE_SIZE_BYTES;
+
+  async function createUploadIntent(
+    input: CreateFileInput,
+  ): Promise<CreateFileResult> {
+    const originalFilename = assertOriginalFilename(input.originalFilename);
+    const mimeType = assertMimeType(input.mimeType);
+    const sizeBytes = assertFileSizeBytes(input.sizeBytes, maxFileSizeBytes);
+    const ownerId = assertFileOwnerId(input.ownerId);
+    const createdAt = now();
+    const expiresInMs = input.expiresInMs ?? fileTtlMs;
+
+    if (!Number.isInteger(expiresInMs) || expiresInMs < 1) {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid file expiration",
+      });
+    }
+
+    const id = randomUUID();
+    const file: FileRecord = {
+      id,
+      ownerId,
+      originalFilename,
+      mimeType,
+      sizeBytes,
+      objectKey: createFileOriginalKey(id),
+      status: "pending",
+      createdAt,
+      updatedAt: createdAt,
+      expiresAt: new Date(createdAt.getTime() + expiresInMs),
+      deletedAt: null,
+    };
+
+    const created = await options.repository.insert(file);
+
+    try {
+      const upload = await options.storage.createPresignedUploadUrl({
+        key: created.objectKey,
+        contentType: created.mimeType,
+      });
+
+      return {
+        file: created,
+        upload: {
+          key: upload.key,
+          expiresInSeconds: upload.expiresInSeconds,
+          url: upload.url,
+        },
+      };
+    } catch (error) {
+      await options.repository.deleteById(created.id);
+      throw error;
+    }
+  }
+
+  async function verifyUploadedObject(file: FileRecord): Promise<boolean> {
+    const metadata = await options.storage.getObjectMetadata(file.objectKey);
+
+    if (metadata === undefined) {
+      return false;
+    }
+
+    if (metadata.contentLength !== file.sizeBytes) {
+      return false;
+    }
+
+    if (
+      metadata.contentType !== undefined &&
+      normalizeMimeType(metadata.contentType) !==
+        normalizeMimeType(file.mimeType)
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  async function markFileUploaded(id: string): Promise<FileRecord> {
+    const file = requireFile(
+      await options.repository.findById(assertFileId(id)),
+    );
+
+    if (
+      file.status === "uploaded" ||
+      file.status === "processing" ||
+      file.status === "completed"
+    ) {
+      return file;
+    }
+
+    assertFileStatusTransition(file.status, "uploaded");
+
+    const verified = await verifyUploadedObject(file);
+
+    if (!verified) {
+      const failed = await options.repository.updateStatus({
+        id: file.id,
+        from: file.status,
+        to: "failed",
+        now: now(),
+      });
+
+      throw new AppError({
+        code: APP_ERROR_CODES.CONFLICT,
+        message: "File object was not uploaded",
+        cause: failed,
+      });
+    }
+
+    const updated = await options.repository.updateStatus({
+      id: file.id,
+      from: file.status,
+      to: "uploaded",
+      now: now(),
+    });
+
+    return requireFile(updated);
+  }
+
+  async function deleteFile(id: string): Promise<FileRecord> {
+    const file = requireFile(
+      await options.repository.findById(assertFileId(id)),
+    );
+
+    if (file.status === "deleted") {
+      return file;
+    }
+
+    const deleted = requireFile(
+      await options.repository.markDeleted({
+        id: file.id,
+        now: now(),
+      }),
+    );
+
+    await options.storage.deleteObject(file.objectKey);
+    return deleted;
+  }
 
   return {
-    async createFile(input) {
-      const originalFilename = assertOriginalFilename(input.originalFilename);
-      const mimeType = assertMimeType(input.mimeType);
-      const sizeBytes = assertFileSizeBytes(input.sizeBytes);
-      const createdAt = now();
-      const expiresInMs = input.expiresInMs ?? fileTtlMs;
+    createUploadIntent,
+    createFile: createUploadIntent,
 
-      if (!Number.isInteger(expiresInMs) || expiresInMs < 1) {
-        throw new AppError({
-          code: APP_ERROR_CODES.VALIDATION_ERROR,
-          message: "Invalid file expiration",
-        });
-      }
+    async completeUpload(id, ownerId) {
+      const file = requireOwnedAccessibleFile(
+        await options.repository.findById(assertFileId(id)),
+        assertFileOwnerId(ownerId),
+        now(),
+      );
 
-      const id = randomUUID();
-      const file: FileRecord = {
-        id,
-        originalFilename,
-        mimeType,
-        sizeBytes,
-        objectKey: createFileOriginalKey(id),
-        status: "pending",
-        createdAt,
-        updatedAt: createdAt,
-        expiresAt: new Date(createdAt.getTime() + expiresInMs),
-        deletedAt: null,
-      };
-
-      const created = await options.repository.insert(file);
-
-      try {
-        const upload = await options.storage.createPresignedUploadUrl({
-          key: created.objectKey,
-          contentType: created.mimeType,
-        });
-
-        return {
-          file: created,
-          upload: {
-            key: upload.key,
-            expiresInSeconds: upload.expiresInSeconds,
-            url: upload.url,
-          },
-        };
-      } catch (error) {
-        await options.repository.deleteById(created.id);
-        throw error;
-      }
+      return markFileUploaded(file.id);
     },
 
     async registerStoredFile(input) {
@@ -117,8 +268,9 @@ export function createFileService(options: FileServiceOptions): FileService {
 
       const originalFilename = assertOriginalFilename(input.originalFilename);
       const mimeType = assertMimeType(input.mimeType);
-      const sizeBytes = assertFileSizeBytes(input.sizeBytes);
+      const sizeBytes = assertFileSizeBytes(input.sizeBytes, maxFileSizeBytes);
       const objectKey = assertValidObjectKey(input.objectKey);
+      const ownerId = assertFileOwnerId(input.ownerId);
       const createdAt = now();
       const expiresInMs = input.expiresInMs ?? fileTtlMs;
 
@@ -140,6 +292,7 @@ export function createFileService(options: FileServiceOptions): FileService {
 
       return options.repository.insert({
         id,
+        ownerId,
         originalFilename,
         mimeType,
         sizeBytes,
@@ -156,47 +309,39 @@ export function createFileService(options: FileServiceOptions): FileService {
       return options.repository.findById(assertFileId(id));
     },
 
-    async markFileUploaded(id) {
-      const file = requireFile(
+    async getOwnedFile(id, ownerId) {
+      return requireOwnedAccessibleFile(
         await options.repository.findById(assertFileId(id)),
+        assertFileOwnerId(ownerId),
+        now(),
       );
-
-      if (
-        file.status === "uploaded" ||
-        file.status === "processing" ||
-        file.status === "completed"
-      ) {
-        return file;
-      }
-
-      assertFileStatusTransition(file.status, "uploaded");
-
-      const exists = await options.storage.objectExists(file.objectKey);
-
-      if (!exists) {
-        const failed = await options.repository.updateStatus({
-          id: file.id,
-          from: file.status,
-          to: "failed",
-          now: now(),
-        });
-
-        throw new AppError({
-          code: APP_ERROR_CODES.CONFLICT,
-          message: "File object was not uploaded",
-          cause: failed,
-        });
-      }
-
-      const updated = await options.repository.updateStatus({
-        id: file.id,
-        from: file.status,
-        to: "uploaded",
-        now: now(),
-      });
-
-      return requireFile(updated);
     },
+
+    async listOwnedFiles(query) {
+      const ownerId = assertFileOwnerId(query.ownerId);
+      const limit = assertFileListLimit(query.limit);
+      const cursor =
+        query.cursor === undefined
+          ? undefined
+          : decodeFileListCursor(query.cursor);
+      const records = await options.repository.listByOwner({
+        ownerId,
+        now: now(),
+        limit: limit + 1,
+        cursor,
+      });
+      const hasMore = records.length > limit;
+      const page = hasMore ? records.slice(0, limit) : records;
+      const last = page[page.length - 1];
+
+      return {
+        files: page,
+        nextCursor:
+          hasMore && last !== undefined ? encodeFileListCursor(last) : null,
+      };
+    },
+
+    markFileUploaded,
 
     async updateFileStatus(id, status) {
       const file = requireFile(
@@ -219,20 +364,22 @@ export function createFileService(options: FileServiceOptions): FileService {
       return requireFile(updated);
     },
 
-    async deleteFile(id) {
+    async deleteOwnedFile(id, ownerId) {
       const file = requireFile(
         await options.repository.findById(assertFileId(id)),
       );
 
-      await options.storage.deleteObject(file.objectKey);
+      if (!isOwnedBy(file, assertFileOwnerId(ownerId))) {
+        throw new AppError({
+          code: APP_ERROR_CODES.NOT_FOUND,
+          message: "File not found",
+        });
+      }
 
-      const deleted = await options.repository.markDeleted({
-        id: file.id,
-        now: now(),
-      });
-
-      return requireFile(deleted);
+      return deleteFile(file.id);
     },
+
+    deleteFile,
 
     async listFilesEligibleForCleanup(limit = DEFAULT_CLEANUP_LIMIT) {
       if (!Number.isInteger(limit) || limit < 1 || limit > MAX_CLEANUP_LIMIT) {

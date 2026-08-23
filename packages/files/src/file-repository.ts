@@ -1,12 +1,21 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type Database, files } from "@repo/db";
-import { and, eq, lte, ne } from "drizzle-orm";
+import { and, desc, eq, gt, isNull, lt, lte, ne, or } from "drizzle-orm";
+import type { FileListCursor } from "./file-pagination.js";
 import type { FileStatus } from "./file-status.js";
 import type { FileRecord } from "./file-types.js";
+
+export type ApiFileListInput = {
+  ownerId: string;
+  now: Date;
+  limit: number;
+  cursor?: FileListCursor;
+};
 
 export type FileRepository = {
   insert(file: FileRecord): Promise<FileRecord>;
   findById(id: string): Promise<FileRecord | undefined>;
+  listByOwner(input: ApiFileListInput): Promise<FileRecord[]>;
   updateStatus(input: {
     id: string;
     from: FileStatus;
@@ -27,6 +36,7 @@ export type FileRepository = {
 function toFileRecord(row: typeof files.$inferSelect): FileRecord {
   return {
     id: row.id,
+    ownerId: row.ownerId,
     originalFilename: row.originalFilename,
     mimeType: row.mimeType,
     sizeBytes: row.sizeBytes,
@@ -46,6 +56,7 @@ export function createFileRepository(db: Database): FileRepository {
         .insert(files)
         .values({
           id: file.id,
+          ownerId: file.ownerId,
           originalFilename: file.originalFilename,
           mimeType: file.mimeType,
           sizeBytes: file.sizeBytes,
@@ -80,6 +91,38 @@ export function createFileRepository(db: Database): FileRepository {
       }
 
       return toFileRecord(row);
+    },
+
+    async listByOwner(input) {
+      const conditions = [
+        eq(files.ownerId, input.ownerId),
+        isNull(files.deletedAt),
+        ne(files.status, "deleted"),
+        gt(files.expiresAt, input.now),
+      ];
+
+      if (input.cursor !== undefined) {
+        const cursorFilter = or(
+          lt(files.createdAt, input.cursor.createdAt),
+          and(
+            eq(files.createdAt, input.cursor.createdAt),
+            lt(files.id, input.cursor.id),
+          ),
+        );
+
+        if (cursorFilter !== undefined) {
+          conditions.push(cursorFilter);
+        }
+      }
+
+      const rows = await db
+        .select()
+        .from(files)
+        .where(and(...conditions))
+        .orderBy(desc(files.createdAt), desc(files.id))
+        .limit(input.limit);
+
+      return rows.map((row) => toFileRecord(row));
     },
 
     async updateStatus(input) {

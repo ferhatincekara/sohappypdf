@@ -248,6 +248,7 @@ export function createConversionProcessor(
 
       const outputFile = await dependencies.files.registerStoredFile({
         id: current.id,
+        ownerId: sourceFile.ownerId,
         originalFilename: result.filename,
         mimeType: result.mimeType,
         sizeBytes: outputStat.size,

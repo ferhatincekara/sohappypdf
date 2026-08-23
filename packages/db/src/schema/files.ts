@@ -10,6 +10,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { user } from "./auth.js";
 
 export const fileStatusEnum = pgEnum("file_status", [
   "pending",
@@ -24,6 +25,9 @@ export const files = pgTable(
   "files",
   {
     id: uuid("id").defaultRandom().primaryKey(),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
     originalFilename: text("original_filename").notNull(),
     mimeType: text("mime_type").notNull(),
     sizeBytes: bigint("size_bytes", { mode: "number" }).notNull(),
@@ -45,6 +49,12 @@ export const files = pgTable(
     uniqueIndex("files_object_key_uidx").on(table.objectKey),
     index("files_status_idx").on(table.status),
     index("files_expires_at_idx").on(table.expiresAt),
+    index("files_owner_id_idx").on(table.ownerId),
+    index("files_owner_id_created_at_id_idx").on(
+      table.ownerId,
+      table.createdAt,
+      table.id,
+    ),
     check("files_size_bytes_positive", sql`${table.sizeBytes} > 0`),
   ],
 );

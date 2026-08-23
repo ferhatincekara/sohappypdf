@@ -72,3 +72,10 @@ export {
   CONVERSION_FAILURE_CODES,
   isConversionFailureCode,
 } from "./conversion-types.js";
+export {
+  fileFormatFromMimeType,
+  isSupportedUploadMimeType,
+  listSourceFileFormats,
+  listSupportedUploadMimeTypes,
+  normalizeContentType,
+} from "./file-format-mime.js";
