@@ -6,11 +6,11 @@ This repository is a Turborepo monorepo managed with Bun.
 
 ## Scripts
 
-- `bun run build` — build all workspaces
 - `bun run dev` — start development tasks
-- `bun run lint` — run Biome checks
-- `bun run format` — apply Biome formatting
-- `bun run check-types` — run TypeScript checks
+- `bun run build` — build all workspaces
+- `bun run lint` — check linting, formatting, and import organization
+- `bun run format` — apply Biome formatting, lint fixes, and import organization
+- `bun run check-types` / `bun run typecheck` — run TypeScript checks
 
 ## Tooling
 

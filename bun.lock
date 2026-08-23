@@ -6,6 +6,7 @@
       "name": "sohappypdf",
       "devDependencies": {
         "@biomejs/biome": "2.5.10",
+        "@repo/typescript-config": "workspace:*",
         "turbo": "^2.10.11",
         "typescript": "5.9.2",
       },
