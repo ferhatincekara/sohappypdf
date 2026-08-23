@@ -1,10 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { readFile, writeFile } from "node:fs/promises";
-import {
-  createJobTempDirectory,
-  joinJobPath,
-  removeJobTempDirectory,
-} from "../temp/job-temp-directory.js";
+import { createConversionWorkspace } from "../../workspace/temp-workspace.js";
 import { createImagePdfEngine } from "./image-pdf-engine.js";
 
 const ONE_PIXEL_PNG = Uint8Array.from([
@@ -16,17 +12,17 @@ const ONE_PIXEL_PNG = Uint8Array.from([
 
 describe("image PDF engine", () => {
   test("embeds a PNG into a PDF without system binaries", async () => {
-    const directory = await createJobTempDirectory(
+    const workspace = await createConversionWorkspace(
       "550e8400-e29b-41d4-a716-446655440200",
     );
 
     try {
-      const sourcePath = joinJobPath(directory, "source.png");
+      const sourcePath = workspace.join("source.png");
       await writeFile(sourcePath, ONE_PIXEL_PNG);
       const result = await createImagePdfEngine().convert({
         type: "png-to-pdf",
         sourcePath,
-        outputDirectory: directory,
+        outputDirectory: workspace.directory,
         sourceFormat: "png",
         targetFormat: "pdf",
         options: { type: "png-to-pdf" },
@@ -37,7 +33,7 @@ describe("image PDF engine", () => {
       expect(result.filename).toBe("output.pdf");
       expect(output.subarray(0, 4).toString()).toBe("%PDF");
     } finally {
-      await removeJobTempDirectory(directory);
+      await workspace.cleanup();
     }
   });
 });

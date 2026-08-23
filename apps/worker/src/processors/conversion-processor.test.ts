@@ -1,12 +1,14 @@
 import { describe, expect, test } from "bun:test";
 import { DEFAULT_WORKER_CONFIG } from "@repo/config";
+import type {
+  ConversionEngine,
+  EngineRegistry,
+} from "@repo/conversion-engines";
 import type { ConversionRecord, ConversionService } from "@repo/conversions";
 import type { FileRecord, FileService } from "@repo/files";
 import { createLogger } from "@repo/logger";
 import type { ConversionJobData } from "@repo/queue";
 import type { Storage } from "@repo/storage";
-import type { ConversionEngine } from "../engines/conversion-engine.js";
-import type { EngineRegistry } from "../engines/engine-registry.js";
 import { PermanentConversionError } from "../job-errors.js";
 import { createConversionProcessor } from "./conversion-processor.js";
 
@@ -191,7 +193,11 @@ describe("conversion processor", () => {
         resolve() {
           return {
             name: "image-pdf",
+            types: ["png-to-pdf"],
             canHandle() {
+              return true;
+            },
+            supports() {
               return true;
             },
             async convert() {

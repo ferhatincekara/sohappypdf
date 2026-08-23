@@ -90,6 +90,7 @@ export {
   isSupportedUploadMimeType,
   listSourceFileFormats,
   listSupportedUploadMimeTypes,
+  mimeTypeForFileFormat,
   normalizeContentType,
 } from "./file-format-mime.js";
 export { resolveImplementedConversionType } from "./resolve-conversion-type.js";

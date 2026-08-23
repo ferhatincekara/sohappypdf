@@ -8,6 +8,12 @@ const TEMP_ROOT_NAME = "sohappypdf-worker";
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+export type ConversionWorkspace = {
+  directory: string;
+  join(...segments: string[]): string;
+  cleanup(): Promise<void>;
+};
+
 export function getWorkerTempRoot(): string {
   return join(tmpdir(), TEMP_ROOT_NAME);
 }
@@ -78,4 +84,20 @@ export function joinJobPath(directory: string, ...segments: string[]): string {
   }
 
   return assertPathInside(directory, join(directory, ...segments));
+}
+
+export async function createConversionWorkspace(
+  conversionId: string,
+): Promise<ConversionWorkspace> {
+  const directory = await createJobTempDirectory(conversionId);
+
+  return {
+    directory,
+    join(...segments: string[]) {
+      return joinJobPath(directory, ...segments);
+    },
+    async cleanup() {
+      await removeJobTempDirectory(directory);
+    },
+  };
 }

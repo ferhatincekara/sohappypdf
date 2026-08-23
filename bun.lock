@@ -46,13 +46,13 @@
       "version": "0.0.0",
       "dependencies": {
         "@repo/config": "workspace:*",
+        "@repo/conversion-engines": "workspace:*",
         "@repo/conversions": "workspace:*",
         "@repo/core": "workspace:*",
         "@repo/files": "workspace:*",
         "@repo/logger": "workspace:*",
         "@repo/queue": "workspace:*",
         "@repo/storage": "workspace:*",
-        "pdf-lib": "^1.17.1",
       },
       "devDependencies": {
         "@repo/typescript-config": "workspace:*",
@@ -97,6 +97,19 @@
       "devDependencies": {
         "@repo/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
+        "typescript": "5.9.2",
+      },
+    },
+    "packages/conversion-engines": {
+      "name": "@repo/conversion-engines",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/conversions": "workspace:*",
+        "@repo/core": "workspace:*",
+        "pdf-lib": "^1.17.1",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
@@ -386,6 +399,8 @@
     "@repo/auth": ["@repo/auth@workspace:packages/auth"],
 
     "@repo/config": ["@repo/config@workspace:packages/config"],
+
+    "@repo/conversion-engines": ["@repo/conversion-engines@workspace:packages/conversion-engines"],
 
     "@repo/conversions": ["@repo/conversions@workspace:packages/conversions"],
 

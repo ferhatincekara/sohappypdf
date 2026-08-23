@@ -1,12 +1,30 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { WorkerConfig } from "@repo/config";
 import type { CompressionLevel } from "@repo/conversions";
+import { type ConversionType, isConversionSupported } from "@repo/conversions";
 import { PDFDocument } from "pdf-lib";
-import { PermanentConversionError } from "../job-errors.js";
-import { runAllowedCommand } from "../process/run-command.js";
-import { joinJobPath } from "../temp/job-temp-directory.js";
-import type { ConversionEngine } from "./conversion-engine.js";
-import { OUTPUT_MIME_TYPES } from "./conversion-engine.js";
+import type { ConversionEngine } from "../../engine.js";
+import { outputFilename, outputMimeType } from "../../engine.js";
+import type { ConversionEngineConfig } from "../../engine-config.js";
+import {
+  invalidInputError,
+  PermanentConversionError,
+  unsupportedConversionError,
+} from "../../errors.js";
+import { validateConversionOutput } from "../../output-validation.js";
+import {
+  type RunAllowedCommand,
+  runAllowedCommand,
+} from "../../process/run-process.js";
+import {
+  assertPathInside,
+  joinJobPath,
+} from "../../workspace/temp-workspace.js";
+
+const TYPES = [
+  "merge-pdf",
+  "split-pdf",
+  "compress-pdf",
+] as const satisfies readonly ConversionType[];
 
 const GHOSTSCRIPT_QUALITY: Record<CompressionLevel, string> = {
   low: "/printer",
@@ -15,13 +33,25 @@ const GHOSTSCRIPT_QUALITY: Record<CompressionLevel, string> = {
 };
 
 export function createPdfManipulateEngine(
-  config: WorkerConfig,
+  config: ConversionEngineConfig,
+  options: { runCommand?: RunAllowedCommand } = {},
 ): ConversionEngine {
+  const runCommand = options.runCommand ?? runAllowedCommand;
+
   return {
     name: "pdf-manipulate",
+    types: TYPES,
     canHandle(type) {
+      return TYPES.some((supported) => supported === type);
+    },
+    supports(query) {
       return (
-        type === "merge-pdf" || type === "split-pdf" || type === "compress-pdf"
+        this.canHandle(query.type) &&
+        isConversionSupported(
+          query.type,
+          query.sourceFormat,
+          query.targetFormat,
+        )
       );
     },
     async convert(input) {
@@ -37,22 +67,26 @@ export function createPdfManipulateEngine(
       } else if (input.options.type === "compress-pdf") {
         await compressPdf({
           config,
+          runCommand,
           sourcePath: input.sourcePath,
           outputPath,
           cwd: input.outputDirectory,
           level: input.options.level,
         });
       } else {
-        throw new PermanentConversionError(
-          "unsupported_conversion",
-          "Unsupported conversion",
-        );
+        throw unsupportedConversionError();
       }
+
+      await validateConversionOutput({
+        outputPath,
+        expectedFormat: "pdf",
+        maxBytes: config.maxOutputFileSizeBytes,
+      });
 
       return {
         outputPath,
-        mimeType: OUTPUT_MIME_TYPES.pdf,
-        filename: "output.pdf",
+        mimeType: outputMimeType("pdf"),
+        filename: outputFilename("pdf"),
       };
     },
   };
@@ -62,10 +96,7 @@ async function loadPdf(path: string): Promise<PDFDocument> {
   try {
     return await PDFDocument.load(await readFile(path));
   } catch {
-    throw new PermanentConversionError(
-      "processing_failed",
-      "Invalid source file",
-    );
+    throw invalidInputError();
   }
 }
 
@@ -113,10 +144,7 @@ async function splitPdf(
       const [page] = await output.copyPages(source, [pageNumber - 1]);
 
       if (page === undefined) {
-        throw new PermanentConversionError(
-          "processing_failed",
-          "Invalid source file",
-        );
+        throw invalidInputError();
       }
 
       output.addPage(page);
@@ -127,13 +155,16 @@ async function splitPdf(
 }
 
 async function compressPdf(input: {
-  config: WorkerConfig;
+  config: ConversionEngineConfig;
+  runCommand: RunAllowedCommand;
   sourcePath: string;
   outputPath: string;
   cwd: string;
   level: CompressionLevel;
 }): Promise<void> {
-  await runAllowedCommand({
+  const outputPath = assertPathInside(input.cwd, input.outputPath);
+
+  await input.runCommand({
     command: input.config.ghostscriptBin,
     args: [
       "-dSAFER",
@@ -143,7 +174,7 @@ async function compressPdf(input: {
       "-sDEVICE=pdfwrite",
       "-dCompatibilityLevel=1.4",
       `-dPDFSETTINGS=${GHOSTSCRIPT_QUALITY[input.level]}`,
-      `-sOutputFile=${input.outputPath}`,
+      `-sOutputFile=${outputPath}`,
       input.sourcePath,
     ],
     cwd: input.cwd,

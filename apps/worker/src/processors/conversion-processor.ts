@@ -1,5 +1,13 @@
-import { readFile, stat, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import type { WorkerConfig } from "@repo/config";
+import type { EngineRegistry } from "@repo/conversion-engines";
+import {
+  createConversionWorkspace,
+  isPermanentConversionError,
+  PermanentConversionError,
+  toSafeFailure,
+  validateConversionOutput,
+} from "@repo/conversion-engines";
 import {
   type ConversionService,
   isConversionImplemented,
@@ -10,17 +18,6 @@ import type { FileService } from "@repo/files";
 import type { Logger } from "@repo/logger";
 import type { ConversionWorkerJob } from "@repo/queue";
 import { createFileOutputKey, type Storage } from "@repo/storage";
-import type { EngineRegistry } from "../engines/engine-registry.js";
-import {
-  isPermanentConversionError,
-  PermanentConversionError,
-  toSafeFailure,
-} from "../job-errors.js";
-import {
-  createJobTempDirectory,
-  joinJobPath,
-  removeJobTempDirectory,
-} from "../temp/job-temp-directory.js";
 
 export type ConversionProcessorDependencies = {
   conversions: ConversionService;
@@ -124,7 +121,7 @@ export function createConversionProcessor(
       }
     }
 
-    const tempDirectory = await createJobTempDirectory(current.id);
+    const workspace = await createConversionWorkspace(current.id);
 
     try {
       if (!isConversionType(job.data.conversionType)) {
@@ -146,7 +143,11 @@ export function createConversionProcessor(
         job.data.options,
         { targetFormat: conversion.targetFormat },
       );
-      const engine = dependencies.engines.resolve(job.data.conversionType);
+      const engine = dependencies.engines.resolve({
+        type: job.data.conversionType,
+        sourceFormat: conversion.sourceFormat,
+        targetFormat: conversion.targetFormat,
+      });
       const sourceFile = await dependencies.files.findFileById(
         current.sourceFileId,
       );
@@ -161,10 +162,7 @@ export function createConversionProcessor(
         );
       }
 
-      const sourcePath = joinJobPath(
-        tempDirectory,
-        `source.${conversion.sourceFormat}`,
-      );
+      const sourcePath = workspace.join(`source.${conversion.sourceFormat}`);
       let writtenBytes = await downloadToFile({
         storage: dependencies.storage,
         objectKey: sourceFile.objectKey,
@@ -188,10 +186,7 @@ export function createConversionProcessor(
             );
           }
 
-          const additionalPath = joinJobPath(
-            tempDirectory,
-            `additional-${index}.pdf`,
-          );
+          const additionalPath = workspace.join(`additional-${index}.pdf`);
           writtenBytes += await downloadToFile({
             storage: dependencies.storage,
             objectKey: additional.objectKey,
@@ -214,28 +209,18 @@ export function createConversionProcessor(
       const result = await engine.convert({
         type: job.data.conversionType,
         sourcePath,
-        outputDirectory: tempDirectory,
+        outputDirectory: workspace.directory,
         sourceFormat: conversion.sourceFormat,
         targetFormat: conversion.targetFormat,
         options: parsedOptions,
         additionalSourcePaths,
       });
 
-      const outputStat = await stat(result.outputPath);
-
-      if (outputStat.size < 1) {
-        throw new PermanentConversionError(
-          "processing_failed",
-          "Conversion produced no output",
-        );
-      }
-
-      if (outputStat.size > dependencies.config.maxOutputFileSizeBytes) {
-        throw new PermanentConversionError(
-          "processing_failed",
-          "Output file exceeds the worker size limit",
-        );
-      }
+      const output = await validateConversionOutput({
+        outputPath: result.outputPath,
+        expectedFormat: conversion.targetFormat,
+        maxBytes: dependencies.config.maxOutputFileSizeBytes,
+      });
 
       const outputKey = createFileOutputKey(current.sourceFileId, current.id);
       const outputBytes = new Uint8Array(await readFile(result.outputPath));
@@ -251,7 +236,7 @@ export function createConversionProcessor(
         ownerId: sourceFile.ownerId,
         originalFilename: result.filename,
         mimeType: result.mimeType,
-        sizeBytes: outputStat.size,
+        sizeBytes: output.sizeBytes,
         objectKey: outputKey,
       });
 
@@ -262,6 +247,7 @@ export function createConversionProcessor(
       logger.info("conversion completed", {
         durationMs: Date.now() - startedAt,
         engine: engine.name,
+        outputBytes: output.sizeBytes,
       });
     } catch (error) {
       if (isPermanentConversionError(error)) {
@@ -280,7 +266,7 @@ export function createConversionProcessor(
 
       throw error;
     } finally {
-      await removeJobTempDirectory(tempDirectory);
+      await workspace.cleanup();
     }
   };
 }

@@ -3,6 +3,7 @@ import {
   fileFormatFromMimeType,
   isSupportedUploadMimeType,
   listSupportedUploadMimeTypes,
+  mimeTypeForFileFormat,
 } from "./file-format-mime.js";
 
 describe("upload MIME types", () => {
@@ -17,5 +18,10 @@ describe("upload MIME types", () => {
     expect(isSupportedUploadMimeType("application/pdf")).toBe(true);
     expect(isSupportedUploadMimeType("image/webp")).toBe(false);
     expect(fileFormatFromMimeType("image/jpeg")).toBe("jpg");
+    expect(mimeTypeForFileFormat("jpg")).toBe("image/jpeg");
+    expect(mimeTypeForFileFormat("pdf")).toBe("application/pdf");
+    expect(mimeTypeForFileFormat("docx")).toBe(
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    );
   });
 });

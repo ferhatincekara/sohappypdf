@@ -67,3 +67,14 @@ export function fileFormatFromMimeType(value: string): FileFormat | undefined {
 
   return undefined;
 }
+
+export function mimeTypeForFileFormat(format: FileFormat): string {
+  const normalized = normalizeFileFormat(format) ?? format;
+  const mimeType = FILE_FORMAT_MIME_TYPES[normalized][0];
+
+  if (mimeType === undefined) {
+    return "application/octet-stream";
+  }
+
+  return mimeType;
+}

@@ -12,13 +12,13 @@
   },
   "dependencies": {
     "@repo/config": "workspace:*",
+    "@repo/conversion-engines": "workspace:*",
     "@repo/conversions": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/files": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/queue": "workspace:*",
-    "@repo/storage": "workspace:*",
-    "pdf-lib": "^1.17.1"
+    "@repo/storage": "workspace:*"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

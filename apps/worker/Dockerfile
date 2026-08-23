@@ -1,3 +1,5 @@
+# Worker-only image. Native conversion binaries stay here, never in apps/api.
+# Required tools: LibreOffice (soffice), Poppler (pdftoppm, pdftotext), Ghostscript (gs).
 # Build from the repository root:
 # docker build -f apps/worker/Dockerfile .
 FROM oven/bun:1.3-debian

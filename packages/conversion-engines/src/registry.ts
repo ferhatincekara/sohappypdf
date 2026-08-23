@@ -1,0 +1,69 @@
+import type { ConversionType } from "@repo/conversions";
+import type { ConversionEngine, ConversionEngineQuery } from "./engine.js";
+import type { ConversionEngineConfig } from "./engine-config.js";
+import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
+import { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
+import { createPdfImageEngine } from "./engines/pdf/pdf-image-engine.js";
+import { createPdfManipulateEngine } from "./engines/pdf/pdf-manipulate-engine.js";
+import { createPdfTextEngine } from "./engines/pdf/pdf-text-engine.js";
+import { unsupportedConversionError } from "./errors.js";
+
+export type EngineResolveInput = ConversionEngineQuery | ConversionType;
+
+export type EngineRegistry = {
+  resolve(query: EngineResolveInput): ConversionEngine;
+};
+
+function toResolveQuery(query: EngineResolveInput): {
+  type: ConversionType;
+  sourceFormat?: ConversionEngineQuery["sourceFormat"];
+  targetFormat?: ConversionEngineQuery["targetFormat"];
+} {
+  if (typeof query === "string") {
+    return { type: query };
+  }
+
+  return query;
+}
+
+export function createEngineRegistry(
+  config: ConversionEngineConfig,
+): EngineRegistry {
+  const engines: readonly ConversionEngine[] = [
+    createOfficeEngine(config),
+    createPdfImageEngine(config),
+    createPdfTextEngine(config),
+    createImagePdfEngine(),
+    createPdfManipulateEngine(config),
+  ];
+
+  return {
+    resolve(query) {
+      const request = toResolveQuery(query);
+      const engine = engines.find((item) => {
+        if (!item.canHandle(request.type)) {
+          return false;
+        }
+
+        if (
+          request.sourceFormat === undefined ||
+          request.targetFormat === undefined
+        ) {
+          return true;
+        }
+
+        return item.supports({
+          type: request.type,
+          sourceFormat: request.sourceFormat,
+          targetFormat: request.targetFormat,
+        });
+      });
+
+      if (engine === undefined) {
+        throw unsupportedConversionError();
+      }
+
+      return engine;
+    },
+  };
+}

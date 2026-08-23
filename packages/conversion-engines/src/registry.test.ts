@@ -1,14 +1,20 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_WORKER_CONFIG } from "@repo/config";
-import { isPermanentConversionError } from "../job-errors.js";
-import { createEngineRegistry } from "./engine-registry.js";
+import { DEFAULT_CONVERSION_ENGINE_CONFIG } from "./engine-config.js";
+import { isPermanentConversionError } from "./errors.js";
+import { createEngineRegistry } from "./registry.js";
 
 describe("engine registry", () => {
-  const registry = createEngineRegistry(DEFAULT_WORKER_CONFIG);
+  const registry = createEngineRegistry(DEFAULT_CONVERSION_ENGINE_CONFIG);
 
   test("selects engines for the implemented first conversions", () => {
     expect(registry.resolve("pdf-to-word").name).toBe("office");
-    expect(registry.resolve("pdf-to-jpg").name).toBe("pdf-image");
+    expect(
+      registry.resolve({
+        type: "pdf-to-jpg",
+        sourceFormat: "pdf",
+        targetFormat: "jpg",
+      }).name,
+    ).toBe("pdf-image");
     expect(registry.resolve("pdf-to-png").name).toBe("pdf-image");
     expect(registry.resolve("pdf-to-txt").name).toBe("pdf-text");
     expect(registry.resolve("jpg-to-pdf").name).toBe("image-pdf");
@@ -21,6 +27,19 @@ describe("engine registry", () => {
   test("rejects conversions without an engine", () => {
     try {
       registry.resolve("ocr-pdf");
+      throw new Error("expected unsupported conversion");
+    } catch (error) {
+      expect(isPermanentConversionError(error)).toBe(true);
+    }
+  });
+
+  test("rejects a type that does not match the requested formats", () => {
+    try {
+      registry.resolve({
+        type: "pdf-to-jpg",
+        sourceFormat: "pdf",
+        targetFormat: "png",
+      });
       throw new Error("expected unsupported conversion");
     } catch (error) {
       expect(isPermanentConversionError(error)).toBe(true);
