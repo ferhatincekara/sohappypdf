@@ -4,6 +4,8 @@ assertServerOnly("@repo/config");
 
 export type { AppConfig, LogLevel, RuntimeEnv } from "./app-config.js";
 export { LOG_LEVELS, loadAppConfig, RUNTIME_ENVS } from "./app-config.js";
+export type { AuthConfig } from "./auth-config.js";
+export { loadAuthConfig } from "./auth-config.js";
 export type { DatabaseConfig } from "./database-config.js";
 export { loadDatabaseConfig } from "./database-config.js";
 export type { EnvSource } from "./env.js";

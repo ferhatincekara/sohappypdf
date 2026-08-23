@@ -1,3 +1,22 @@
+export type {
+  AccountRow,
+  NewAccountRow,
+  NewSessionRow,
+  NewUserRow,
+  NewVerificationRow,
+  SessionRow,
+  UserRow,
+  VerificationRow,
+} from "./auth.js";
+export {
+  account,
+  accountRelations,
+  session,
+  sessionRelations,
+  user,
+  userRelations,
+  verification,
+} from "./auth.js";
 export type { ConversionRow, NewConversionRow } from "./conversions.js";
 export { conversionStatusEnum, conversions } from "./conversions.js";
 export type { FileRow, NewFileRow } from "./files.js";
