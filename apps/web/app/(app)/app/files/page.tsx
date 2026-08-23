@@ -1,5 +1,5 @@
-import { AppSectionPlaceholder } from "@/features/app-shell";
+import { FilesPageContent } from "@/features/files";
 
 export default function FilesPage() {
-  return <AppSectionPlaceholder section="files" />;
+  return <FilesPageContent />;
 }

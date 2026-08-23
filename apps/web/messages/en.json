@@ -38,7 +38,7 @@
       },
       "files": {
         "title": "Files",
-        "description": "File management will live here."
+        "description": "Upload a file to start working with it."
       },
       "conversions": {
         "title": "Conversions",
@@ -114,5 +114,64 @@
     "notFound": "This page could not be found.",
     "generic": "Something went wrong.",
     "loading": "Loading"
+  },
+  "files": {
+    "title": "Files",
+    "description": "Upload a supported file. Conversion will be available after the file is stored.",
+    "upload": {
+      "title": "Upload",
+      "description": "Choose one file at a time. The file is sent directly to storage.",
+      "dropzoneTitle": "Choose a file",
+      "dropzoneHint": "Click to browse or drag and drop. PDF, Word, Excel, PowerPoint, JPG, and PNG are supported.",
+      "preparing": "Preparing upload…",
+      "uploading": "Uploading",
+      "finalizing": "Finishing upload…",
+      "complete": "Upload complete",
+      "cancelled": "Upload cancelled",
+      "percent": "{value}%",
+      "cancel": "Cancel",
+      "retry": "Retry",
+      "chooseAnother": "Choose another file"
+    },
+    "list": {
+      "title": "Uploaded files",
+      "description": "Files already stored for your account.",
+      "loading": "Loading files…",
+      "empty": "No files uploaded yet.",
+      "status": {
+        "pending": "Pending",
+        "uploaded": "Uploaded",
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed",
+        "deleted": "Deleted"
+      }
+    },
+    "status": {
+      "idle": "Ready to upload a file.",
+      "selecting": "File picker opened.",
+      "preparing": "Preparing upload.",
+      "uploading": "Uploading file.",
+      "finalizing": "Finishing upload.",
+      "completed": "Upload complete.",
+      "failed": "Upload failed.",
+      "cancelled": "Upload cancelled."
+    },
+    "errors": {
+      "missingFile": "Choose a file to upload.",
+      "multipleFiles": "Upload one file at a time.",
+      "invalidFilename": "That filename cannot be used.",
+      "unsupportedType": "That file type is not supported.",
+      "emptyFile": "The selected file is empty.",
+      "fileTooLarge": "The file is larger than {maxSize}.",
+      "expiredUpload": "The upload session expired. Try again.",
+      "objectNotUploaded": "The file could not be confirmed. Try again.",
+      "fileNotFound": "The upload is no longer available. Try again.",
+      "unauthorized": "Sign in again to upload files.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "networkFailure": "The request could not be completed. Try again.",
+      "cancelled": "Upload cancelled.",
+      "unexpected": "Something went wrong. Try again."
+    }
   }
 }

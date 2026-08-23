@@ -38,7 +38,7 @@
       },
       "files": {
         "title": "Dosyalar",
-        "description": "Dosya yönetimi burada yer alacak."
+        "description": "Çalışmaya başlamak için bir dosya yükleyin."
       },
       "conversions": {
         "title": "Dönüşümler",
@@ -114,5 +114,64 @@
     "notFound": "Bu sayfa bulunamadı.",
     "generic": "Bir şeyler ters gitti.",
     "loading": "Yükleniyor"
+  },
+  "files": {
+    "title": "Dosyalar",
+    "description": "Desteklenen bir dosya yükleyin. Dönüştürme, dosya saklandıktan sonra kullanılabilir olacak.",
+    "upload": {
+      "title": "Yükleme",
+      "description": "Her seferinde bir dosya seçin. Dosya doğrudan depolamaya gönderilir.",
+      "dropzoneTitle": "Dosya seçin",
+      "dropzoneHint": "Tıklayarak seçin veya sürükleyip bırakın. PDF, Word, Excel, PowerPoint, JPG ve PNG desteklenir.",
+      "preparing": "Yükleme hazırlanıyor…",
+      "uploading": "Yükleniyor",
+      "finalizing": "Yükleme tamamlanıyor…",
+      "complete": "Yükleme tamamlandı",
+      "cancelled": "Yükleme iptal edildi",
+      "percent": "%{value}",
+      "cancel": "İptal",
+      "retry": "Yeniden dene",
+      "chooseAnother": "Başka bir dosya seç"
+    },
+    "list": {
+      "title": "Yüklenen dosyalar",
+      "description": "Hesabınızda saklanan dosyalar.",
+      "loading": "Dosyalar yükleniyor…",
+      "empty": "Henüz yüklenmiş dosya yok.",
+      "status": {
+        "pending": "Bekliyor",
+        "uploaded": "Yüklendi",
+        "processing": "İşleniyor",
+        "completed": "Tamamlandı",
+        "failed": "Başarısız",
+        "deleted": "Silindi"
+      }
+    },
+    "status": {
+      "idle": "Dosya yüklemeye hazır.",
+      "selecting": "Dosya seçici açıldı.",
+      "preparing": "Yükleme hazırlanıyor.",
+      "uploading": "Dosya yükleniyor.",
+      "finalizing": "Yükleme tamamlanıyor.",
+      "completed": "Yükleme tamamlandı.",
+      "failed": "Yükleme başarısız oldu.",
+      "cancelled": "Yükleme iptal edildi."
+    },
+    "errors": {
+      "missingFile": "Yüklemek için bir dosya seçin.",
+      "multipleFiles": "Her seferinde bir dosya yükleyin.",
+      "invalidFilename": "Bu dosya adı kullanılamaz.",
+      "unsupportedType": "Bu dosya türü desteklenmiyor.",
+      "emptyFile": "Seçilen dosya boş.",
+      "fileTooLarge": "Dosya {maxSize} sınırından büyük.",
+      "expiredUpload": "Yükleme oturumunun süresi doldu. Tekrar deneyin.",
+      "objectNotUploaded": "Dosya doğrulanamadı. Tekrar deneyin.",
+      "fileNotFound": "Yükleme artık kullanılamıyor. Tekrar deneyin.",
+      "unauthorized": "Dosya yüklemek için tekrar oturum açın.",
+      "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
+      "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "cancelled": "Yükleme iptal edildi.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
   }
 }
