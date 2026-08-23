@@ -1,3 +1,4 @@
+import { getAuth } from "@repo/auth";
 import {
   type ApiConfig,
   loadApiConfig,
@@ -26,6 +27,7 @@ import {
 import { requestIdMiddleware } from "./middleware/request-id.js";
 import { requestIdentityMiddleware } from "./middleware/request-identity.js";
 import { requestLogMiddleware } from "./middleware/request-log.js";
+import { createAuthRoutes, type HandleAuthRequest } from "./routes/auth.js";
 import { healthRoutes } from "./routes/health.js";
 import { createV1Routes } from "./routes/v1.js";
 
@@ -37,6 +39,7 @@ export type CreateAppOptions = {
   fileService?: FileService;
   conversionService?: ConversionService;
   enqueueConversion?: (input: ConversionJobData) => Promise<unknown>;
+  handleAuth?: HandleAuthRequest;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -51,6 +54,8 @@ export function createApp(options: CreateAppOptions = {}) {
     });
   const resolveIdentity =
     options.resolveIdentity ?? createDefaultIdentityResolver();
+  const handleAuth =
+    options.handleAuth ?? ((request) => getAuth().handler(request));
 
   const app = new Hono<AppEnv>();
 
@@ -69,6 +74,7 @@ export function createApp(options: CreateAppOptions = {}) {
   }
 
   app.route("/", healthRoutes);
+  app.route("/api/auth", createAuthRoutes(handleAuth));
   app.route(
     "/api/v1",
     createV1Routes({

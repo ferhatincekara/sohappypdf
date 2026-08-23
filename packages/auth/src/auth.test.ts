@@ -41,6 +41,30 @@ describe("createAuth", () => {
     expect(auth.options.advanced?.useSecureCookies).toBe(false);
     expect(auth.options.advanced?.defaultCookieAttributes?.httpOnly).toBe(true);
     expect(auth.options.telemetry?.enabled).toBe(false);
+    expect(auth.options.trustedOrigins).toEqual(["http://localhost:3000"]);
+  });
+
+  test("trusts additional browser origins for cross-origin cookie auth", () => {
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "http://localhost:3001",
+        runtimeEnv: "test",
+        useSecureCookies: false,
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+      trustedOrigins: ["http://localhost:3000", "http://localhost:3001"],
+    });
+
+    expect(auth.options.trustedOrigins).toEqual([
+      "http://localhost:3001",
+      "http://localhost:3000",
+    ]);
   });
 
   test("creates a user with a hashed credential and a server session", async () => {

@@ -11,9 +11,14 @@ const SESSION_UPDATE_AGE_SECONDS = 60 * 60 * 24;
 export type CreateAuthOptions = {
   config: AuthConfig;
   database: NonNullable<BetterAuthOptions["database"]>;
+  trustedOrigins?: readonly string[];
   sendVerificationEmail?: SendAuthEmail;
   sendResetPassword?: SendAuthEmail;
 };
+
+function uniqueOrigins(origins: readonly string[]): string[] {
+  return [...new Set(origins.filter((origin) => origin.length > 0))];
+}
 
 export function createAuth(options: CreateAuthOptions) {
   const sendVerificationEmail =
@@ -25,7 +30,10 @@ export function createAuth(options: CreateAuthOptions) {
     database: options.database,
     secret: options.config.secret,
     baseURL: options.config.baseUrl,
-    trustedOrigins: [new URL(options.config.baseUrl).origin],
+    trustedOrigins: uniqueOrigins([
+      new URL(options.config.baseUrl).origin,
+      ...(options.trustedOrigins ?? []),
+    ]),
     telemetry: {
       enabled: false,
     },

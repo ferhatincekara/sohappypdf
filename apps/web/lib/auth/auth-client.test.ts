@@ -8,5 +8,6 @@ describe("auth client", () => {
     expect(typeof client.signIn).toBe("function");
     expect(typeof client.signOut).toBe("function");
     expect(typeof client.useSession).toBe("function");
+    expect(typeof client.getSession).toBe("function");
   });
 });

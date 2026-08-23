@@ -9,7 +9,67 @@
     "openApp": "Uygulamayı aç"
   },
   "app": {
-    "title": "Uygulama"
+    "title": "Uygulama",
+    "authenticated": "Oturum açık",
+    "signedInAs": "{email} olarak oturum açıldı",
+    "logout": "Çıkış yap",
+    "loggingOut": "Çıkış yapılıyor…"
+  },
+  "auth": {
+    "login": {
+      "title": "Giriş yap",
+      "description": "Devam etmek için e-posta ve şifrenizi kullanın.",
+      "email": "E-posta",
+      "password": "Şifre",
+      "submit": "Giriş yap",
+      "submitting": "Giriş yapılıyor…",
+      "registerLink": "Hesap oluştur",
+      "forgotLink": "Şifrenizi mi unuttunuz?"
+    },
+    "register": {
+      "title": "Hesap oluştur",
+      "description": "E-posta ve bir şifre ile kayıt olun.",
+      "email": "E-posta",
+      "password": "Şifre",
+      "confirmPassword": "Şifreyi doğrula",
+      "submit": "Hesap oluştur",
+      "submitting": "Hesap oluşturuluyor…",
+      "loginLink": "Zaten hesabınız var mı? Giriş yapın"
+    },
+    "forgotPassword": {
+      "title": "Şifremi unuttum",
+      "description": "E-postanızı girin. Hesap varsa sıfırlama talimatları gönderilir.",
+      "email": "E-posta",
+      "submit": "Sıfırlama talimatı gönder",
+      "submitting": "Gönderiliyor…",
+      "success": "Bu e-posta ile bir hesap varsa şifre sıfırlama talimatları gönderildi.",
+      "loginLink": "Girişe dön"
+    },
+    "resetPassword": {
+      "title": "Şifreyi sıfırla",
+      "description": "Hesabınız için yeni bir şifre seçin.",
+      "password": "Yeni şifre",
+      "confirmPassword": "Yeni şifreyi doğrula",
+      "submit": "Şifreyi güncelle",
+      "submitting": "Şifre güncelleniyor…",
+      "invalidToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir bağlantı isteyin."
+    },
+    "validation": {
+      "required": "Bu alan zorunludur.",
+      "invalidEmail": "Geçerli bir e-posta adresi girin.",
+      "passwordMin": "Şifre en az 8 karakter olmalıdır.",
+      "passwordMax": "Şifre en fazla 128 karakter olabilir.",
+      "passwordMismatch": "Şifreler eşleşmiyor."
+    },
+    "errors": {
+      "invalidCredentials": "E-posta veya şifre geçersiz.",
+      "existingAccount": "Bu e-posta ile bir hesap zaten var.",
+      "invalidEmail": "Geçerli bir e-posta adresi girin.",
+      "weakPassword": "Daha güçlü bir şifre seçin.",
+      "expiredResetToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
+      "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
   },
   "errors": {
     "notFound": "Bu sayfa bulunamadı.",
