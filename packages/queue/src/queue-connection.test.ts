@@ -40,3 +40,10 @@ describe("queue connection", () => {
     }
   });
 });
+
+describe("closeQueueConnections", () => {
+  test("is a no-op when no Redis connections were created", async () => {
+    const { closeQueueConnections } = await import("./queue-connection.js");
+    await closeQueueConnections();
+  });
+});

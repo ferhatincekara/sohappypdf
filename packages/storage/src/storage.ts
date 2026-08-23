@@ -1,6 +1,9 @@
+import { createReadStream } from "node:fs";
+import { open, stat, unlink } from "node:fs/promises";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadBucketCommand,
   HeadObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
@@ -8,6 +11,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
 import { createS3Client } from "./client.js";
 import { getStorageConfig, type StorageConfig } from "./config.js";
+import { assertObjectByteLimit } from "./object-byte-limit.js";
 import { assertValidObjectKey } from "./object-key.js";
 
 export const DEFAULT_PRESIGN_EXPIRES_IN_SECONDS = 15 * 60;
@@ -53,9 +57,33 @@ export type GetObjectResult = {
   contentType?: string;
 };
 
+export type DownloadObjectToFileInput = {
+  key: string;
+  destination: string;
+  maxBytes: number;
+};
+
+export type DownloadObjectToFileResult = {
+  key: string;
+  sizeBytes: number;
+  contentType?: string;
+};
+
+export type UploadObjectFromFileInput = {
+  key: string;
+  filePath: string;
+  contentType?: string;
+};
+
 export type Storage = {
   uploadObject(input: UploadObjectInput): Promise<UploadObjectResult>;
+  uploadObjectFromFile(
+    input: UploadObjectFromFileInput,
+  ): Promise<UploadObjectResult>;
   getObject(key: string): Promise<GetObjectResult>;
+  downloadObjectToFile(
+    input: DownloadObjectToFileInput,
+  ): Promise<DownloadObjectToFileResult>;
   getObjectMetadata(key: string): Promise<ObjectMetadata | undefined>;
   createPresignedUploadUrl(
     input: PresignUploadInput,
@@ -65,6 +93,7 @@ export type Storage = {
   ): Promise<PresignedUrlResult>;
   deleteObject(key: string): Promise<void>;
   objectExists(key: string): Promise<boolean>;
+  ping(): Promise<void>;
 };
 
 function assertSafeContentType(contentType: string): void {
@@ -161,6 +190,32 @@ export function createStorage(config: StorageConfig): Storage {
       return { key };
     },
 
+    async uploadObjectFromFile(input) {
+      const key = assertValidObjectKey(input.key);
+
+      if (input.contentType !== undefined) {
+        assertSafeContentType(input.contentType);
+      }
+
+      try {
+        const fileStat = await stat(input.filePath);
+
+        await client.send(
+          new PutObjectCommand({
+            Bucket: bucket,
+            Key: key,
+            Body: createReadStream(input.filePath),
+            ContentType: input.contentType,
+            ContentLength: fileStat.size,
+          }),
+        );
+      } catch (error) {
+        throw toStorageError(error);
+      }
+
+      return { key };
+    },
+
     async getObject(key) {
       const objectKey = assertValidObjectKey(key);
 
@@ -182,6 +237,70 @@ export function createStorage(config: StorageConfig): Storage {
         return {
           key: objectKey,
           body: await response.Body.transformToByteArray(),
+          contentType: response.ContentType,
+        };
+      } catch (error) {
+        if (isS3NotFound(error)) {
+          throw new AppError({
+            code: APP_ERROR_CODES.NOT_FOUND,
+            message: "Object not found",
+          });
+        }
+
+        throw toStorageError(error);
+      }
+    },
+
+    async downloadObjectToFile(input) {
+      const objectKey = assertValidObjectKey(input.key);
+
+      try {
+        const response = await client.send(
+          new GetObjectCommand({
+            Bucket: bucket,
+            Key: objectKey,
+          }),
+        );
+
+        if (response.Body === undefined) {
+          throw new AppError({
+            code: APP_ERROR_CODES.NOT_FOUND,
+            message: "Object not found",
+          });
+        }
+
+        const handle = await open(input.destination, "w");
+        const reader = response.Body.transformToWebStream().getReader();
+        let sizeBytes = 0;
+
+        try {
+          for (;;) {
+            const { done, value } = await reader.read();
+
+            if (done) {
+              break;
+            }
+
+            if (value === undefined) {
+              continue;
+            }
+
+            sizeBytes += value.byteLength;
+            assertObjectByteLimit(sizeBytes, input.maxBytes);
+            await handle.write(value);
+          }
+        } catch (error) {
+          await reader.cancel().catch(() => undefined);
+          await handle.close();
+          await unlink(input.destination).catch(() => undefined);
+          throw error;
+        }
+
+        await handle.close();
+
+        return {
+          key: objectKey,
+          sizeBytes,
           contentType: response.ContentType,
         };
       } catch (error) {
@@ -297,6 +416,18 @@ export function createStorage(config: StorageConfig): Storage {
           return false;
         }
 
+        throw toStorageError(error);
+      }
+    },
+
+    async ping() {
+      try {
+        await client.send(
+          new HeadBucketCommand({
+            Bucket: bucket,
+          }),
+        );
+      } catch (error) {
         throw toStorageError(error);
       }
     },

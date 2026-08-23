@@ -4,6 +4,7 @@ assertServerOnly("@repo/db");
 
 export type { CreateDatabaseOptions, Database } from "./client.js";
 export { createDatabase, getDb } from "./client.js";
+export { pingDatabase } from "./ping.js";
 export type { ApiKeyRow, NewApiKeyRow } from "./schema/api-keys.js";
 export { apiKeyRelations, apiKeys } from "./schema/api-keys.js";
 export type {

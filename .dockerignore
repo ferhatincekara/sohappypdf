@@ -5,3 +5,6 @@
 **/dist
 **/*.md
 packages/db/drizzle
+apps/api
+apps/docs
+**/*.test.ts

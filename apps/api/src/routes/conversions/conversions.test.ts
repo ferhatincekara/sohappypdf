@@ -89,6 +89,14 @@ function createMemoryStorage(): Storage {
       objects.set(input.key, { contentLength: input.body.byteLength });
       return { key: input.key };
     },
+    async uploadObjectFromFile(input) {
+      objects.set(input.key, { contentLength: 1 });
+      return { key: input.key };
+    },
+    async downloadObjectToFile(input) {
+      return { key: input.key, sizeBytes: 0 };
+    },
+    async ping() {},
     async createPresignedUploadUrl(input) {
       return {
         key: input.key,

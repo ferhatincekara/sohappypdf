@@ -95,3 +95,30 @@ export function getQueueConnection(
 
   return producerConnection;
 }
+
+export async function pingQueueConnection(
+  role: QueueConnectionRole = "worker",
+): Promise<void> {
+  const result = await getQueueConnection(role).ping();
+
+  if (result !== "PONG") {
+    throw new AppError({
+      code: APP_ERROR_CODES.INTERNAL_ERROR,
+      message: "Queue connection failed",
+    });
+  }
+}
+
+export async function closeQueueConnections(): Promise<void> {
+  const connections = [producerConnection, workerConnection].filter(
+    (connection): connection is Redis => connection !== undefined,
+  );
+  producerConnection = undefined;
+  workerConnection = undefined;
+
+  await Promise.all(
+    connections.map(async (connection) => {
+      await connection.quit();
+    }),
+  );
+}

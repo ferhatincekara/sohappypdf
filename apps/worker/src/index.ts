@@ -1,17 +1,31 @@
 import process from "node:process";
-import { startConversionWorker } from "./start-worker.js";
+import { isAppError } from "@repo/core";
+import { createLogger } from "@repo/logger";
+import { startConversionWorkerRuntime } from "./start-worker.js";
 
-const worker = startConversionWorker();
-
-const shutdown = async (): Promise<void> => {
-  await worker.close();
-  process.exit(0);
-};
-
-process.on("SIGTERM", () => {
-  void shutdown();
+const logger = createLogger({
+  name: "worker",
+  format: "json",
 });
 
-process.on("SIGINT", () => {
-  void shutdown();
-});
+try {
+  const runtime = await startConversionWorkerRuntime();
+
+  const onSignal = (signal: NodeJS.Signals): void => {
+    void runtime.shutdown(signal).then((code) => {
+      process.exit(code);
+    });
+  };
+
+  process.on("SIGTERM", () => {
+    onSignal("SIGTERM");
+  });
+  process.on("SIGINT", () => {
+    onSignal("SIGINT");
+  });
+} catch (error) {
+  logger.error("worker startup failed", {
+    code: isAppError(error) ? error.code : "INTERNAL_ERROR",
+  });
+  process.exit(1);
+}

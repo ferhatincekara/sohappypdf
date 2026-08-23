@@ -120,6 +120,27 @@ function createMemoryStorage(options?: {
       });
       return { key: input.key };
     },
+    async uploadObjectFromFile(input) {
+      objects.set(input.key, {
+        contentLength: 1,
+        contentType: input.contentType,
+      });
+      return { key: input.key };
+    },
+    async downloadObjectToFile(input) {
+      const object = objects.get(input.key);
+
+      if (object === undefined) {
+        throw new Error("object not found");
+      }
+
+      return {
+        key: input.key,
+        sizeBytes: object.contentLength,
+        contentType: object.contentType,
+      };
+    },
+    async ping() {},
     async createPresignedUploadUrl(input) {
       return {
         key: input.key,

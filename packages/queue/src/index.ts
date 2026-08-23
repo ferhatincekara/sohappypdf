@@ -23,6 +23,7 @@ export {
 export type {
   ConversionJobProcessor,
   ConversionWorker,
+  ConversionWorkerHooks,
   ConversionWorkerJob,
   CreateConversionWorkerOptions,
 } from "./conversion-worker.js";
@@ -32,8 +33,11 @@ export type {
   QueueConnectionRole,
 } from "./queue-connection.js";
 export {
+  closeQueueConnections,
   createQueueConnectionOptions,
+  getQueueConnection,
   getQueueConnectionOptions,
+  pingQueueConnection,
 } from "./queue-connection.js";
 export type { ConversionQueueSettings } from "./queue-settings.js";
 export {

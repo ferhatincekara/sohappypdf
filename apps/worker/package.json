@@ -15,6 +15,7 @@
     "@repo/conversion-engines": "workspace:*",
     "@repo/conversions": "workspace:*",
     "@repo/core": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/files": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/queue": "workspace:*",

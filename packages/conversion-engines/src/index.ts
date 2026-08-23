@@ -30,7 +30,14 @@ export {
   toSafeFailure,
   unsupportedConversionError,
 } from "./errors.js";
-export { isConversionBinaryAvailable } from "./native-binary.js";
+export type { NativeBinaryProbe } from "./native-binary.js";
+export {
+  assertRequiredConversionBinaries,
+  isConversionBinaryAvailable,
+  probeConversionBinary,
+  requiredConversionBinaries,
+  versionArgsForBinary,
+} from "./native-binary.js";
 export { validateConversionOutput } from "./output-validation.js";
 export type {
   RunAllowedCommand,

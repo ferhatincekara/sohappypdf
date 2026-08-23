@@ -18,13 +18,26 @@ export type ConversionJobProcessor = (
 ) => Promise<void>;
 
 export type ConversionWorker = {
-  close(): Promise<void>;
+  close(force?: boolean): Promise<void>;
+};
+
+export type ConversionWorkerHooks = {
+  onReady?(): void;
+  onCompleted?(job: { id: string; conversionId: string }): void;
+  onFailed?(job: {
+    id: string;
+    conversionId: string;
+    attemptsMade: number;
+    permanent: boolean;
+  }): void;
+  onError?(): void;
 };
 
 export type CreateConversionWorkerOptions = {
   processJob: ConversionJobProcessor;
   concurrency: number;
   lockDurationMs: number;
+  hooks?: ConversionWorkerHooks;
 };
 
 function isPermanentJobError(error: unknown): boolean {
@@ -69,9 +82,37 @@ export function createConversionWorker(
     },
   );
 
+  worker.on("ready", () => {
+    options.hooks?.onReady?.();
+  });
+
+  worker.on("completed", (job) => {
+    options.hooks?.onCompleted?.({
+      id: job.id ?? job.data.conversionId,
+      conversionId: job.data.conversionId,
+    });
+  });
+
+  worker.on("failed", (job, error) => {
+    if (job === undefined) {
+      return;
+    }
+
+    options.hooks?.onFailed?.({
+      id: job.id ?? job.data.conversionId,
+      conversionId: job.data.conversionId,
+      attemptsMade: job.attemptsMade,
+      permanent: error instanceof UnrecoverableError,
+    });
+  });
+
+  worker.on("error", () => {
+    options.hooks?.onError?.();
+  });
+
   return {
-    async close() {
-      await worker.close();
+    async close(force = false) {
+      await worker.close(force);
     },
   };
 }

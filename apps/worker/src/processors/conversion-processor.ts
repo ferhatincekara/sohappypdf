@@ -1,4 +1,3 @@
-import { readFile, writeFile } from "node:fs/promises";
 import type { WorkerConfig } from "@repo/config";
 import type { EngineRegistry } from "@repo/conversion-engines";
 import {
@@ -50,9 +49,12 @@ async function downloadToFile(input: {
     );
   }
 
-  const object = await input.storage.getObject(input.objectKey);
-  await writeFile(input.destination, object.body);
-  return object.body.byteLength;
+  const downloaded = await input.storage.downloadObjectToFile({
+    key: input.objectKey,
+    destination: input.destination,
+    maxBytes: input.maxBytes,
+  });
+  return downloaded.sizeBytes;
 }
 
 export function createConversionProcessor(
@@ -61,6 +63,7 @@ export function createConversionProcessor(
   return async (job) => {
     const startedAt = Date.now();
     const logger = dependencies.logger.child({
+      jobId: job.id,
       conversionId: job.data.conversionId,
     });
     logger.info("job received");
@@ -69,8 +72,10 @@ export function createConversionProcessor(
       job.data.conversionId,
     );
 
+    const jobLogger = logger.child({ ownerId: conversion.ownerId });
+
     if (conversion.status === "completed") {
-      logger.info("conversion already completed");
+      jobLogger.info("conversion already completed");
       return;
     }
 
@@ -116,7 +121,7 @@ export function createConversionProcessor(
           });
         }
 
-        logger.info("conversion already completed");
+        jobLogger.info("conversion already completed");
         return;
       }
     }
@@ -204,7 +209,7 @@ export function createConversionProcessor(
         );
       }
 
-      logger.info("conversion started", { engine: engine.name });
+      jobLogger.info("conversion started", { engine: engine.name });
 
       const result = await engine.convert({
         type: job.data.conversionType,
@@ -223,11 +228,10 @@ export function createConversionProcessor(
       });
 
       const outputKey = createFileOutputKey(current.sourceFileId, current.id);
-      const outputBytes = new Uint8Array(await readFile(result.outputPath));
 
-      await dependencies.storage.uploadObject({
+      await dependencies.storage.uploadObjectFromFile({
         key: outputKey,
-        body: outputBytes,
+        filePath: result.outputPath,
         contentType: result.mimeType,
       });
 
@@ -244,7 +248,7 @@ export function createConversionProcessor(
         outputFileId: outputFile.id,
       });
 
-      logger.info("conversion completed", {
+      jobLogger.info("conversion completed", {
         durationMs: Date.now() - startedAt,
         engine: engine.name,
         outputBytes: output.sizeBytes,
@@ -255,11 +259,11 @@ export function createConversionProcessor(
           current.id,
           toSafeFailure(error),
         );
-        logger.warn("conversion failed", {
+        jobLogger.warn("conversion failed", {
           durationMs: Date.now() - startedAt,
         });
       } else {
-        logger.error("conversion failed", {
+        jobLogger.error("conversion failed", {
           durationMs: Date.now() - startedAt,
         });
       }

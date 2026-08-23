@@ -3,6 +3,7 @@ import { assertServerOnly } from "@repo/core";
 assertServerOnly("@repo/storage");
 
 export type { StorageConfig } from "./config.js";
+export { getStorageConfig } from "./config.js";
 export {
   assertValidObjectKey,
   createFileOriginalKey,
@@ -10,12 +11,15 @@ export {
   createObjectKey,
 } from "./object-key.js";
 export type {
+  DownloadObjectToFileInput,
+  DownloadObjectToFileResult,
   GetObjectResult,
   ObjectMetadata,
   PresignDownloadInput,
   PresignedUrlResult,
   PresignUploadInput,
   Storage,
+  UploadObjectFromFileInput,
   UploadObjectInput,
   UploadObjectResult,
 } from "./storage.js";

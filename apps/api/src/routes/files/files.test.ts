@@ -123,6 +123,17 @@ function createMemoryStorage(): Storage & {
       });
       return { key: input.key };
     },
+    async uploadObjectFromFile(input) {
+      objects.set(input.key, {
+        contentLength: 1,
+        contentType: input.contentType,
+      });
+      return { key: input.key };
+    },
+    async downloadObjectToFile(input) {
+      return { key: input.key, sizeBytes: 0 };
+    },
+    async ping() {},
     async createPresignedUploadUrl(input) {
       return {
         key: input.key,
