@@ -145,7 +145,10 @@ function createMemoryStorage(): Storage & {
       return {
         key: input.key,
         expiresInSeconds: 900,
-        url: `https://example.invalid/${input.key}`,
+        url:
+          input.filename === undefined
+            ? `https://example.invalid/${input.key}`
+            : `https://example.invalid/${input.key}?filename=${encodeURIComponent(input.filename)}`,
       };
     },
     async deleteObject(key) {
@@ -305,6 +308,72 @@ describe("file API", () => {
     expect(await completed.json()).toMatchObject({
       file: { id: createdBody.file.id, status: "uploaded" },
     });
+  });
+
+  test("creates a presigned download URL for an uploaded owned file", async () => {
+    const { fileService, storage } = createTestFileService();
+    const app = createFileApp({ identity: sessionIdentity, fileService });
+    const created = await app.request("/api/v1/files/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(uploadBody),
+    });
+    const createdBody = await created.json();
+    const file = await fileService.getOwnedFile(createdBody.file.id, "user_1");
+    await storage.uploadObject({
+      key: file.objectKey,
+      body: new Uint8Array(file.sizeBytes),
+      contentType: file.mimeType,
+    });
+    await app.request(`/api/v1/files/${createdBody.file.id}/complete`, {
+      method: "POST",
+    });
+
+    const response = await app.request(
+      `/api/v1/files/${createdBody.file.id}/download`,
+      { method: "POST" },
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.download.url.startsWith("https://")).toBe(true);
+    expect(body.download.expiresInSeconds).toBeGreaterThan(0);
+    expect(JSON.stringify(body).includes("objectKey")).toBe(false);
+  });
+
+  test("hides another user's download URL", async () => {
+    const { fileService, storage } = createTestFileService();
+    const ownerApp = createFileApp({ identity: sessionIdentity, fileService });
+    const created = await ownerApp.request("/api/v1/files/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(uploadBody),
+    });
+    const createdBody = await created.json();
+    const file = await fileService.getOwnedFile(createdBody.file.id, "user_1");
+    await storage.uploadObject({
+      key: file.objectKey,
+      body: new Uint8Array(file.sizeBytes),
+      contentType: file.mimeType,
+    });
+    await ownerApp.request(`/api/v1/files/${createdBody.file.id}/complete`, {
+      method: "POST",
+    });
+    const otherApp = createFileApp({
+      identity: {
+        kind: "session",
+        userId: "user_2",
+        sessionId: "session_2",
+      },
+      fileService,
+    });
+
+    const response = await otherApp.request(
+      `/api/v1/files/${createdBody.file.id}/download`,
+      { method: "POST" },
+    );
+
+    expect(response.status).toBe(404);
   });
 
   test("does not complete an upload when the object is missing", async () => {

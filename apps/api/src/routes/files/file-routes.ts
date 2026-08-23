@@ -59,6 +59,28 @@ export function createFileRoutes(options: FileRoutesOptions) {
     return c.json({ file: toPublicFile(file) });
   });
 
+  files.post("/:id/download", async (c) => {
+    const identity = requireAuthenticatedIdentity(c.get("identity"));
+    const download = await options
+      .getFileService()
+      .createOwnedDownloadUrl(
+        schemas.parseFileId(c.req.param("id")),
+        identity.userId,
+      );
+
+    c.get("logger").info("file download url created", {
+      fileId: download.fileId,
+      userId: identity.userId,
+    });
+
+    return c.json({
+      download: {
+        url: download.url,
+        expiresInSeconds: download.expiresInSeconds,
+      },
+    });
+  });
+
   files.post("/:id/complete", async (c) => {
     const identity = requireAuthenticatedIdentity(c.get("identity"));
     const file = await options

@@ -341,6 +341,7 @@ export function createFileService(options: FileServiceOptions): FileService {
 
       const download = await options.storage.createPresignedDownloadUrl({
         key: file.objectKey,
+        filename: file.originalFilename,
       });
 
       return {

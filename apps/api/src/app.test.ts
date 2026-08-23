@@ -164,6 +164,27 @@ describe("createApp", () => {
     );
   });
 
+  test("allows the conversion Idempotency-Key header in CORS preflight", async () => {
+    const app = createApp({
+      config: { corsOrigins: ["http://localhost:3000"] },
+      logger: silentLogger,
+      resolveIdentity: async () => ({ kind: "anonymous" }),
+    });
+    const response = await app.request("/api/v1/conversions", {
+      method: "OPTIONS",
+      headers: {
+        Origin: "http://localhost:3000",
+        "Access-Control-Request-Method": "POST",
+        "Access-Control-Request-Headers": "content-type,idempotency-key",
+      },
+    });
+
+    expect(response.status).toBe(204);
+    expect(response.headers.get("Access-Control-Allow-Headers")).toMatch(
+      /Idempotency-Key/i,
+    );
+  });
+
   test("attaches resolved identity without trusting request bodies", async () => {
     const app = createTestApp({
       kind: "session",

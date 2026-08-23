@@ -1,5 +1,5 @@
-import { AppSectionPlaceholder } from "@/features/app-shell";
+import { ConversionsLanding } from "@/features/conversions";
 
 export default function ConversionsPage() {
-  return <AppSectionPlaceholder section="conversions" />;
+  return <ConversionsLanding />;
 }

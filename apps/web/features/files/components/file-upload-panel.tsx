@@ -4,11 +4,16 @@ import { useTranslations } from "next-intl";
 import { getPublicWebEnv } from "@/config/public-env";
 import { useFileUpload } from "../hooks/use-file-upload";
 import { formatFileSize } from "../lib/format-file-size";
+import type { PublicFile } from "../types/file";
 import { FileUploadDropzone } from "./file-upload-dropzone";
 import { FileUploadError } from "./file-upload-error";
 import { FileUploadItem } from "./file-upload-item";
 
-export function FileUploadPanel() {
+export function FileUploadPanel({
+  onConvert,
+}: {
+  onConvert?: (file: PublicFile) => void;
+}) {
   const t = useTranslations("files.upload");
   const tErrors = useTranslations("files.errors");
   const tStatus = useTranslations("files.status");
@@ -66,6 +71,7 @@ export function FileUploadPanel() {
           onCancel={cancel}
           onRetry={retry}
           onReset={reset}
+          onConvert={onConvert}
         />
       )}
 

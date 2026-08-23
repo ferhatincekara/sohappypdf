@@ -6,7 +6,12 @@ export function corsMiddleware(config: ApiConfig) {
     origin: [...config.corsOrigins],
     credentials: true,
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization", "X-Request-Id"],
+    allowHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Request-Id",
+      "Idempotency-Key",
+    ],
     exposeHeaders: ["X-Request-Id"],
   });
 }

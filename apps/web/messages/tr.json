@@ -42,7 +42,7 @@
       },
       "conversions": {
         "title": "Dönüşümler",
-        "description": "Dönüşüm geçmişi burada yer alacak."
+        "description": "Yüklenen bir dosyadan dönüşüm başlatın."
       },
       "apiKeys": {
         "title": "API anahtarları",
@@ -118,6 +118,10 @@
   "files": {
     "title": "Dosyalar",
     "description": "Desteklenen bir dosya yükleyin. Dönüştürme, dosya saklandıktan sonra kullanılabilir olacak.",
+    "actions": {
+      "download": "İndir",
+      "downloading": "İndirme hazırlanıyor…"
+    },
     "upload": {
       "title": "Yükleme",
       "description": "Her seferinde bir dosya seçin. Dosya doğrudan depolamaya gönderilir.",
@@ -172,6 +176,103 @@
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "cancelled": "Yükleme iptal edildi.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
+  },
+  "conversions": {
+    "actions": {
+      "convert": "Dönüştür"
+    },
+    "landing": {
+      "title": "Dönüşümler",
+      "description": "Yüklenen bir dosyadan dönüşüm başlatın. Durum sayfası, dönüşüm oluşturulduktan sonra kullanılabilir.",
+      "openFiles": "Dosyalara git"
+    },
+    "form": {
+      "title": "Dönüşüm oluştur",
+      "description": "Bir çıktı formatı seçin. Dönüşüm arka planda çalışır.",
+      "close": "Dönüşüm formunu kapat",
+      "sourceFile": "Dosya: {filename}",
+      "targetFormat": "Çıktı formatı",
+      "conversionType": "Dönüşüm türü",
+      "conversionTypeHint": "Bu çıktı formatı birden fazla şekilde oluşturulabilir.",
+      "submit": "Dönüşüm oluştur",
+      "submitting": "Dönüşüm oluşturuluyor…",
+      "formats": {
+        "pdf": "PDF",
+        "docx": "DOCX",
+        "xlsx": "XLSX",
+        "pptx": "PPTX",
+        "jpg": "JPG",
+        "png": "PNG",
+        "txt": "TXT"
+      },
+      "types": {
+        "pdf-to-word": "PDF'den Word'e",
+        "pdf-to-excel": "PDF'den Excel'e",
+        "pdf-to-powerpoint": "PDF'den PowerPoint'e",
+        "word-to-pdf": "Word'den PDF'e",
+        "excel-to-pdf": "Excel'den PDF'e",
+        "powerpoint-to-pdf": "PowerPoint'ten PDF'e",
+        "pdf-to-jpg": "PDF'den JPG'ye",
+        "pdf-to-png": "PDF'den PNG'ye",
+        "pdf-to-txt": "PDF'den metne",
+        "jpg-to-pdf": "JPG'den PDF'e",
+        "png-to-pdf": "PNG'den PDF'e",
+        "merge-pdf": "PDF birleştir",
+        "split-pdf": "PDF böl",
+        "compress-pdf": "PDF sıkıştır",
+        "rotate-pdf": "PDF döndür",
+        "protect-pdf": "PDF koru",
+        "unlock-pdf": "PDF kilidini aç",
+        "ocr-pdf": "PDF OCR",
+        "ocr-image": "Görüntü OCR"
+      }
+    },
+    "validation": {
+      "invalidFile": "Bu dosya dönüştürülemez.",
+      "targetRequired": "Bir çıktı formatı seçin.",
+      "typeRequired": "Bir dönüşüm türü seçin.",
+      "unsupportedConversion": "Bu dönüşüm desteklenmiyor.",
+      "invalidTargetFormat": "Bu çıktı formatı desteklenmiyor."
+    },
+    "errors": {
+      "invalidFile": "Bu dosya dönüştürülemez.",
+      "targetRequired": "Bir çıktı formatı seçin.",
+      "typeRequired": "Bir dönüşüm türü seçin.",
+      "unsupportedConversion": "Bu dönüşüm desteklenmiyor.",
+      "invalidTargetFormat": "Bu çıktı formatı desteklenmiyor.",
+      "notFound": "Bu dönüşüm bulunamadı.",
+      "sourceUnavailable": "Bu dosya henüz dönüştürmeye hazır değil.",
+      "conflict": "Bu dönüşüm isteği tamamlanamadı.",
+      "unauthorized": "Dönüşüm oluşturmak için tekrar oturum açın.",
+      "rateLimited": "Çok fazla istek gönderildi. Kısa bir süre sonra tekrar deneyin.",
+      "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "status": {
+      "title": "Dönüşüm",
+      "description": "Bu sayfa dönüşümün güncel durumunu gösterir.",
+      "loading": "Dönüşüm yükleniyor…",
+      "pending": "Dönüşüm hazırlanıyor",
+      "queued": "Kuyrukta",
+      "processing": "İşleniyor",
+      "completed": "Tamamlandı",
+      "failed": "Başarısız",
+      "cancelled": "İptal edildi",
+      "complete": "Dönüşüm tamamlandı",
+      "inProgressHint": "Dönüşüm arka planda çalışıyor. Bu sayfa otomatik güncellenir.",
+      "summary": "{type} → {target}",
+      "backToFiles": "Dosyalara dön"
+    },
+    "failure": {
+      "unsupported_conversion": "Bu dönüşüm desteklenmiyor.",
+      "invalid_source_format": "Kaynak dosya formatı dönüştürülemez.",
+      "invalid_target_format": "Çıktı formatı bu dosya için geçerli değil.",
+      "invalid_options": "Dönüşüm ayarları geçerli değil.",
+      "source_file_unavailable": "Kaynak dosya artık kullanılamıyor.",
+      "output_file_unavailable": "Dönüştürülen dosya kullanılamıyor.",
+      "processing_failed": "Dönüşüm tamamlanamadı.",
+      "cancelled": "Dönüşüm iptal edildi."
     }
   }
 }

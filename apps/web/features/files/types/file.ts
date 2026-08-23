@@ -44,3 +44,10 @@ export type FileListResponse = {
   files: PublicFile[];
   nextCursor: string | null;
 };
+
+export type FileDownloadResponse = {
+  download: {
+    url: string;
+    expiresInSeconds: number;
+  };
+};

@@ -3,7 +3,9 @@
 import { FileIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { FileConvertButton } from "@/features/conversions/components/file-convert-button";
 import { formatFileSize } from "../lib/format-file-size";
+import type { PublicFile } from "../types/file";
 import type { FileUploadState } from "../types/upload-state";
 import { FileUploadProgress } from "./file-upload-progress";
 
@@ -14,6 +16,7 @@ export function FileUploadItem({
   onCancel,
   onRetry,
   onReset,
+  onConvert,
 }: {
   state: FileUploadState;
   canCancel: boolean;
@@ -21,6 +24,7 @@ export function FileUploadItem({
   onCancel: () => void;
   onRetry: () => void;
   onReset: () => void;
+  onConvert?: (file: PublicFile) => void;
 }) {
   const t = useTranslations("files.upload");
   const filename = state.publicFile?.filename ?? state.selectedFile?.name;
@@ -77,6 +81,11 @@ export function FileUploadItem({
           <Button type="button" size="sm" onClick={onRetry}>
             {t("retry")}
           </Button>
+        ) : null}
+        {state.status === "completed" &&
+        state.publicFile !== null &&
+        onConvert !== undefined ? (
+          <FileConvertButton file={state.publicFile} onConvert={onConvert} />
         ) : null}
         {state.status === "completed" ||
         state.status === "cancelled" ||

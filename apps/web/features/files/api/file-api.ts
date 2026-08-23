@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/client";
 import type {
   CreateUploadInput,
   CreateUploadResponse,
+  FileDownloadResponse,
   FileListResponse,
   PublicFile,
 } from "../types/file";
@@ -58,6 +59,23 @@ export async function completeUpload(
 export async function listFiles(): Promise<FileListResponse> {
   try {
     const response = await apiClient.get<FileListResponse>("/api/v1/files");
+    return response.data;
+  } catch (error) {
+    throw new FileApiRequestError(error);
+  }
+}
+
+export async function createDownloadUrl(
+  fileId: string,
+  options?: { signal?: AbortSignal },
+): Promise<FileDownloadResponse> {
+  try {
+    const response = await apiClient.post<FileDownloadResponse>(
+      `/api/v1/files/${fileId}/download`,
+      undefined,
+      { signal: options?.signal },
+    );
+
     return response.data;
   } catch (error) {
     throw new FileApiRequestError(error);

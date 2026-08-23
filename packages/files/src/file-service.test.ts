@@ -153,7 +153,10 @@ function createMemoryStorage(options?: {
       return {
         key: input.key,
         expiresInSeconds: input.expiresInSeconds ?? 900,
-        url: `https://example.invalid/${input.key}`,
+        url:
+          input.filename === undefined
+            ? `https://example.invalid/${input.key}`
+            : `https://example.invalid/${input.key}?filename=${encodeURIComponent(input.filename)}`,
       };
     },
     async deleteObject(key) {
@@ -485,6 +488,22 @@ describe("file service", () => {
     });
 
     expect(file.expiresAt.toISOString()).toBe("2026-08-23T20:00:00.000Z");
+  });
+
+  test("creates a download URL for an uploaded owned file", async () => {
+    const storage = createMemoryStorage();
+    const service = createFileService({
+      repository: createMemoryRepository(),
+      storage,
+    });
+    const { file } = await service.createUploadIntent(createInput);
+    await storeUploadedObject(storage, file);
+    await service.completeUpload(file.id, "user_1");
+
+    const download = await service.createOwnedDownloadUrl(file.id, "user_1");
+
+    expect(download.fileId).toBe(file.id);
+    expect(download.url).toContain("filename=report.pdf");
   });
 
   test("does not create a download URL for an expired file", async () => {

@@ -3,7 +3,6 @@ import { open, stat, unlink } from "node:fs/promises";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
-  HeadBucketCommand,
   HeadObjectCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
@@ -11,12 +10,14 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
 import { createS3Client } from "./client.js";
 import { getStorageConfig, type StorageConfig } from "./config.js";
+import { toAttachmentContentDisposition } from "./content-disposition.js";
 import { assertObjectByteLimit } from "./object-byte-limit.js";
 import { assertValidObjectKey } from "./object-key.js";
 
 export const DEFAULT_PRESIGN_EXPIRES_IN_SECONDS = 15 * 60;
 const MAX_PRESIGN_EXPIRES_IN_SECONDS = 7 * 24 * 60 * 60;
 const MAX_CONTENT_TYPE_LENGTH = 200;
+const HEALTH_OBJECT_KEY = "files/health/ping";
 
 export type UploadObjectInput = {
   key: string;
@@ -36,6 +37,7 @@ export type PresignUploadInput = {
 
 export type PresignDownloadInput = {
   key: string;
+  filename?: string;
   expiresInSeconds?: number;
 };
 
@@ -368,6 +370,10 @@ export function createStorage(config: StorageConfig): Storage {
     async createPresignedDownloadUrl(input) {
       const key = assertValidObjectKey(input.key);
       const expiresInSeconds = resolveExpiresInSeconds(input.expiresInSeconds);
+      const responseContentDisposition =
+        input.filename === undefined
+          ? undefined
+          : toAttachmentContentDisposition(input.filename);
 
       try {
         const url = await getSignedUrl(
@@ -375,6 +381,7 @@ export function createStorage(config: StorageConfig): Storage {
           new GetObjectCommand({
             Bucket: bucket,
             Key: key,
+            ResponseContentDisposition: responseContentDisposition,
           }),
           { expiresIn: expiresInSeconds },
         );
@@ -421,10 +428,40 @@ export function createStorage(config: StorageConfig): Storage {
     },
 
     async ping() {
+      const key = assertValidObjectKey(HEALTH_OBJECT_KEY);
+
       try {
         await client.send(
-          new HeadBucketCommand({
+          new PutObjectCommand({
             Bucket: bucket,
+            Key: key,
+            Body: new Uint8Array([1]),
+            ContentType: "application/octet-stream",
+          }),
+        );
+        await client.send(
+          new HeadObjectCommand({
+            Bucket: bucket,
+            Key: key,
+          }),
+        );
+      } catch (error) {
+        await client
+          .send(
+            new DeleteObjectCommand({
+              Bucket: bucket,
+              Key: key,
+            }),
+          )
+          .catch(() => undefined);
+        throw toStorageError(error);
+      }
+
+      try {
+        await client.send(
+          new DeleteObjectCommand({
+            Bucket: bucket,
+            Key: key,
           }),
         );
       } catch (error) {

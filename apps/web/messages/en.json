@@ -42,7 +42,7 @@
       },
       "conversions": {
         "title": "Conversions",
-        "description": "Conversion history will live here."
+        "description": "Start a conversion from an uploaded file."
       },
       "apiKeys": {
         "title": "API Keys",
@@ -118,6 +118,10 @@
   "files": {
     "title": "Files",
     "description": "Upload a supported file. Conversion will be available after the file is stored.",
+    "actions": {
+      "download": "Download",
+      "downloading": "Preparing download…"
+    },
     "upload": {
       "title": "Upload",
       "description": "Choose one file at a time. The file is sent directly to storage.",
@@ -172,6 +176,103 @@
       "networkFailure": "The request could not be completed. Try again.",
       "cancelled": "Upload cancelled.",
       "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "conversions": {
+    "actions": {
+      "convert": "Convert"
+    },
+    "landing": {
+      "title": "Conversions",
+      "description": "Start a conversion from an uploaded file. Status pages are available after a conversion is created.",
+      "openFiles": "Go to files"
+    },
+    "form": {
+      "title": "Create conversion",
+      "description": "Choose an output format. The conversion runs in the background.",
+      "close": "Close conversion form",
+      "sourceFile": "File: {filename}",
+      "targetFormat": "Output format",
+      "conversionType": "Conversion type",
+      "conversionTypeHint": "This output format can be created in more than one way.",
+      "submit": "Create conversion",
+      "submitting": "Creating conversion…",
+      "formats": {
+        "pdf": "PDF",
+        "docx": "DOCX",
+        "xlsx": "XLSX",
+        "pptx": "PPTX",
+        "jpg": "JPG",
+        "png": "PNG",
+        "txt": "TXT"
+      },
+      "types": {
+        "pdf-to-word": "PDF to Word",
+        "pdf-to-excel": "PDF to Excel",
+        "pdf-to-powerpoint": "PDF to PowerPoint",
+        "word-to-pdf": "Word to PDF",
+        "excel-to-pdf": "Excel to PDF",
+        "powerpoint-to-pdf": "PowerPoint to PDF",
+        "pdf-to-jpg": "PDF to JPG",
+        "pdf-to-png": "PDF to PNG",
+        "pdf-to-txt": "PDF to text",
+        "jpg-to-pdf": "JPG to PDF",
+        "png-to-pdf": "PNG to PDF",
+        "merge-pdf": "Merge PDF",
+        "split-pdf": "Split PDF",
+        "compress-pdf": "Compress PDF",
+        "rotate-pdf": "Rotate PDF",
+        "protect-pdf": "Protect PDF",
+        "unlock-pdf": "Unlock PDF",
+        "ocr-pdf": "OCR PDF",
+        "ocr-image": "OCR image"
+      }
+    },
+    "validation": {
+      "invalidFile": "This file cannot be converted.",
+      "targetRequired": "Choose an output format.",
+      "typeRequired": "Choose a conversion type.",
+      "unsupportedConversion": "That conversion is not supported.",
+      "invalidTargetFormat": "That output format is not supported."
+    },
+    "errors": {
+      "invalidFile": "This file cannot be converted.",
+      "targetRequired": "Choose an output format.",
+      "typeRequired": "Choose a conversion type.",
+      "unsupportedConversion": "That conversion is not supported.",
+      "invalidTargetFormat": "That output format is not supported.",
+      "notFound": "This conversion could not be found.",
+      "sourceUnavailable": "This file is not ready to convert yet.",
+      "conflict": "This conversion request could not be completed.",
+      "unauthorized": "Sign in again to create a conversion.",
+      "rateLimited": "Too many requests. Please try again shortly.",
+      "networkFailure": "The request could not be completed. Try again.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "status": {
+      "title": "Conversion",
+      "description": "This page shows the current backend status for the conversion.",
+      "loading": "Loading conversion…",
+      "pending": "Preparing conversion",
+      "queued": "Queued",
+      "processing": "Processing",
+      "completed": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "complete": "Conversion complete",
+      "inProgressHint": "The conversion is running in the background. This page updates automatically.",
+      "summary": "{type} → {target}",
+      "backToFiles": "Back to files"
+    },
+    "failure": {
+      "unsupported_conversion": "That conversion is not supported.",
+      "invalid_source_format": "The source file format cannot be converted.",
+      "invalid_target_format": "The output format is not valid for this file.",
+      "invalid_options": "The conversion settings are not valid.",
+      "source_file_unavailable": "The source file is no longer available.",
+      "output_file_unavailable": "The converted file is not available.",
+      "processing_failed": "The conversion could not be completed.",
+      "cancelled": "The conversion was cancelled."
     }
   }
 }
