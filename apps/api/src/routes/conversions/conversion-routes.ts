@@ -1,3 +1,4 @@
+import type { BillingService } from "@repo/billing";
 import type { ConversionService } from "@repo/conversions";
 import type { FileService } from "@repo/files";
 import type { ConversionJobData } from "@repo/queue";
@@ -18,6 +19,7 @@ import { enqueueCreatedConversion } from "./enqueue-created-conversion.js";
 export type ConversionRoutesOptions = {
   getConversionService: () => ConversionService;
   getFileService: () => FileService;
+  getBillingService: () => BillingService;
   enqueueConversion: (input: ConversionJobData) => Promise<unknown>;
 };
 
@@ -27,9 +29,22 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
   conversions.use("*", requireAuthMiddleware());
 
   conversions.post("/", async (c) => {
-    // Future billing/usage: authenticate → plan → usage policy → rate limit → conversion.
     const identity = requireAuthenticatedIdentity(c.get("identity"));
     const body = parseCreateConversion(await readJsonBody(c.req.raw));
+    const idempotencyKey = parseIdempotencyKey(c.req.header("Idempotency-Key"));
+    const existing =
+      idempotencyKey === undefined
+        ? undefined
+        : await options
+            .getConversionService()
+            .findOwnedByIdempotencyKey(identity.userId, idempotencyKey);
+
+    if (existing === undefined) {
+      await options
+        .getBillingService()
+        .assertCanCreateConversion(identity.userId);
+    }
+
     const conversion = await enqueueCreatedConversion({
       conversions: options.getConversionService(),
       findFileById: (id) => options.getFileService().findFileById(id),
@@ -40,9 +55,16 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         sourceFileId: body.sourceFileId,
         targetFormat: body.targetFormat,
         type: body.type,
-        idempotencyKey: parseIdempotencyKey(c.req.header("Idempotency-Key")),
+        idempotencyKey,
       },
     });
+
+    if (existing === undefined) {
+      await options.getBillingService().recordConversionUsage({
+        userId: identity.userId,
+        conversionId: conversion.id,
+      });
+    }
 
     c.get("logger").info("conversion created", {
       conversionId: conversion.id,

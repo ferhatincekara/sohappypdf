@@ -7,6 +7,7 @@ export const FILE_ERROR_KEYS = {
   unsupportedType: "unsupportedType",
   emptyFile: "emptyFile",
   fileTooLarge: "fileTooLarge",
+  storageLimitReached: "storageLimitReached",
   expiredUpload: "expiredUpload",
   objectNotUploaded: "objectNotUploaded",
   fileNotFound: "fileNotFound",
@@ -179,6 +180,14 @@ export function mapFileError(error: FileClientError | null): FileErrorKey {
 
   if (error.code === "RATE_LIMITED" || error.status === 429) {
     return FILE_ERROR_KEYS.rateLimited;
+  }
+
+  if (error.code === "FILE_TOO_LARGE" || error.status === 413) {
+    return FILE_ERROR_KEYS.fileTooLarge;
+  }
+
+  if (error.code === "STORAGE_LIMIT_REACHED") {
+    return FILE_ERROR_KEYS.storageLimitReached;
   }
 
   return FILE_ERROR_KEYS.unexpected;

@@ -1,3 +1,4 @@
+import type { BillingService } from "@repo/billing";
 import type { FileService } from "@repo/files";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
@@ -8,6 +9,7 @@ import { createFileSchemas, readJsonBody } from "./file-schemas.js";
 
 export type FileRoutesOptions = {
   getFileService: () => FileService;
+  getBillingService: () => BillingService;
   maxUploadFileSizeBytes?: number;
 };
 
@@ -20,6 +22,14 @@ export function createFileRoutes(options: FileRoutesOptions) {
   files.post("/upload", async (c) => {
     const identity = requireAuthenticatedIdentity(c.get("identity"));
     const body = schemas.parseUploadIntent(await readJsonBody(c.req.raw));
+    const storageUsedBytes = await options
+      .getFileService()
+      .sumActiveStorageBytes(identity.userId);
+    await options.getBillingService().assertCanUploadFile({
+      userId: identity.userId,
+      sizeBytes: body.size,
+      storageUsedBytes,
+    });
     const result = await options.getFileService().createUploadIntent({
       ownerId: identity.userId,
       originalFilename: body.filename,

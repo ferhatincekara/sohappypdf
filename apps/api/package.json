@@ -12,6 +12,7 @@
   "dependencies": {
     "@repo/api-keys": "workspace:*",
     "@repo/auth": "workspace:*",
+    "@repo/billing": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/conversions": "workspace:*",
     "@repo/core": "workspace:*",

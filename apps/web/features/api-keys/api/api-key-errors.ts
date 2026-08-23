@@ -6,6 +6,7 @@ export const API_KEY_ERROR_KEYS = {
   forbidden: "forbidden",
   notFound: "notFound",
   rateLimited: "rateLimited",
+  apiKeyLimitReached: "apiKeyLimitReached",
   networkFailure: "networkFailure",
   unexpected: "unexpected",
 } as const;
@@ -91,6 +92,10 @@ export function mapApiKeyError(
 
   if (error.code === "RATE_LIMITED" || error.status === 429) {
     return API_KEY_ERROR_KEYS.rateLimited;
+  }
+
+  if (error.code === "API_KEY_LIMIT_REACHED") {
+    return API_KEY_ERROR_KEYS.apiKeyLimitReached;
   }
 
   return API_KEY_ERROR_KEYS.unexpected;

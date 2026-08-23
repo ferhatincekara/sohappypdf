@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { getPublicWebEnv } from "@/config/public-env";
+import { useBillingStatus } from "@/features/billing";
+import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
 import { useFileUpload } from "../hooks/use-file-upload";
 import { formatFileSize } from "../lib/format-file-size";
 import type { PublicFile } from "../types/file";
@@ -17,7 +19,10 @@ export function FileUploadPanel({
   const t = useTranslations("files.upload");
   const tErrors = useTranslations("files.errors");
   const tStatus = useTranslations("files.status");
-  const { maxUploadFileSizeBytes } = getPublicWebEnv();
+  const publicMaxUploadFileSizeBytes = getPublicWebEnv().maxUploadFileSizeBytes;
+  const { billing } = useBillingStatus();
+  const maxUploadFileSizeBytes =
+    billing?.limits.maxFileSizeBytes ?? publicMaxUploadFileSizeBytes;
   const {
     state,
     isBusy,
@@ -28,7 +33,7 @@ export function FileUploadPanel({
     cancel,
     retry,
     reset,
-  } = useFileUpload();
+  } = useFileUpload(maxUploadFileSizeBytes);
 
   const errorMessage =
     state.errorKey === null
@@ -76,7 +81,15 @@ export function FileUploadPanel({
         />
       )}
 
-      <FileUploadError message={errorMessage} />
+      <FileUploadError
+        message={errorMessage}
+        upgradeLink={
+          state.errorKey === "fileTooLarge" ||
+          state.errorKey === "storageLimitReached" ? (
+            <BillingUpgradeLink />
+          ) : null
+        }
+      />
     </section>
   );
 }

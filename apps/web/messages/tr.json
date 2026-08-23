@@ -50,7 +50,7 @@
       },
       "settings": {
         "title": "Ayarlar",
-        "description": "Hesap ayarları burada yer alacak."
+        "description": "Hesabınızı ve faturalandırmayı yönetin."
       }
     }
   },
@@ -197,6 +197,7 @@
       "unsupportedType": "Bu dosya türü desteklenmiyor.",
       "emptyFile": "Seçilen dosya boş.",
       "fileTooLarge": "Dosya {maxSize} sınırından büyük.",
+      "storageLimitReached": "Bu yükleme depolama kotanızı aşar.",
       "expiredUpload": "Yükleme oturumunun süresi doldu. Tekrar deneyin.",
       "objectNotUploaded": "Dosya doğrulanamadı. Tekrar deneyin.",
       "fileNotFound": "Bu dosya artık kullanılamıyor.",
@@ -299,6 +300,7 @@
       "conflict": "Bu dönüşüm isteği tamamlanamadı.",
       "unauthorized": "Dönüşüm oluşturmak için tekrar oturum açın.",
       "rateLimited": "Çok fazla istek gönderildi. Kısa bir süre sonra tekrar deneyin.",
+      "planLimitReached": "Bu ayki dönüşüm limitinize ulaştınız.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     },
@@ -398,6 +400,59 @@
       "unauthorized": "API anahtarlarını yönetmek için tekrar oturum açın.",
       "forbidden": "API anahtarları başka API anahtarlarını yönetemez.",
       "notFound": "Bu API anahtarı bulunamadı.",
+      "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
+      "apiKeyLimitReached": "Planınızdaki API anahtarı limitine ulaştınız.",
+      "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "description": "Hesabınızı ve aboneliğinizi yönetin.",
+    "billing": {
+      "title": "Faturalandırma",
+      "description": "Mevcut planınızı, kullanımınızı ve aboneliğinizi inceleyin.",
+      "open": "Faturalandırmayı aç"
+    }
+  },
+  "billing": {
+    "title": "Faturalandırma",
+    "description": "Mevcut planınız ve kullanımınız. Yükseltmeler Polar ödemesinden sonra onaylanır.",
+    "currentPlan": "Mevcut plan",
+    "usage": "Kullanım",
+    "upgrade": "Yükselt",
+    "upgrading": "Ödemeye yönlendiriliyor…",
+    "manage": "Aboneliği yönet",
+    "openingPortal": "Portal açılıyor…",
+    "activating": "Aboneliğiniz etkinleştiriliyor.",
+    "noSubscription": "Ücretli abonelik yok",
+    "cancelsOn": "{date} tarihinde iptal edilir",
+    "backToSettings": "Ayarlara dön",
+    "period": "UTC dönemi {start} – {end}",
+    "plans": {
+      "free": "Ücretsiz",
+      "pro": "Pro"
+    },
+    "subscriptionStatus": {
+      "incomplete": "Eksik",
+      "incomplete_expired": "Süresi doldu",
+      "trialing": "Deneme",
+      "active": "Abonelik aktif",
+      "past_due": "Ödeme gecikti",
+      "canceled": "Abonelik iptal edildi",
+      "unpaid": "Ödenmedi",
+      "revoked": "İptal edildi",
+      "paused": "Duraklatıldı"
+    },
+    "usageItems": {
+      "conversions": "Bu ayki dönüşümler",
+      "storage": "Depolama",
+      "apiKeys": "API anahtarları"
+    },
+    "errors": {
+      "unauthorized": "Faturalandırmayı yönetmek için tekrar oturum açın.",
+      "conflict": "Planınız bu aboneliği zaten içeriyor.",
+      "configuration": "Faturalandırma henüz yapılandırılmadı.",
       "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."

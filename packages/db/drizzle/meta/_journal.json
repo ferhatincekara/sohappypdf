@@ -50,6 +50,13 @@
       "when": 1787521636082,
       "tag": "0006_exotic_scream",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1787529218292,
+      "tag": "0007_rare_mad_thinker",
+      "breakpoints": true
     }
   ]
 }

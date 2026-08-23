@@ -11,6 +11,7 @@ export const CONVERSION_ERROR_KEYS = {
   conflict: "conflict",
   unauthorized: "unauthorized",
   rateLimited: "rateLimited",
+  planLimitReached: "planLimitReached",
   networkFailure: "networkFailure",
   unexpected: "unexpected",
 } as const;
@@ -112,6 +113,10 @@ export function mapConversionError(
 
   if (error.code === "RATE_LIMITED" || error.status === 429) {
     return CONVERSION_ERROR_KEYS.rateLimited;
+  }
+
+  if (error.code === "PLAN_LIMIT_REACHED") {
+    return CONVERSION_ERROR_KEYS.planLimitReached;
   }
 
   return CONVERSION_ERROR_KEYS.unexpected;

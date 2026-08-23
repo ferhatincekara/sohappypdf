@@ -74,6 +74,7 @@ export type FileService = {
   deleteFile(id: string): Promise<FileRecord>;
   listFilesEligibleForCleanup(limit?: number): Promise<FileRecord[]>;
   cleanupExpiredFiles(limit?: number): Promise<FileCleanupSummary>;
+  sumActiveStorageBytes(ownerId: string): Promise<number>;
 };
 
 function requireFile(file: FileRecord | undefined): FileRecord {
@@ -414,6 +415,13 @@ export function createFileService(options: FileServiceOptions): FileService {
     },
 
     deleteFile,
+
+    async sumActiveStorageBytes(ownerId) {
+      return options.repository.sumActiveStorageBytes(
+        assertFileOwnerId(ownerId),
+        now(),
+      );
+    },
 
     async listFilesEligibleForCleanup(limit = DEFAULT_CLEANUP_LIMIT) {
       if (!Number.isInteger(limit) || limit < 1 || limit > MAX_CLEANUP_LIMIT) {

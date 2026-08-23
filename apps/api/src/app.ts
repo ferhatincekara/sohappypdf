@@ -1,5 +1,6 @@
 import { type ApiKeyService, getApiKeyService } from "@repo/api-keys";
 import { getAuth } from "@repo/auth";
+import { type BillingService, getBillingService } from "@repo/billing";
 import {
   type ApiConfig,
   loadApiConfig,
@@ -40,6 +41,7 @@ export type CreateAppOptions = {
   fileService?: FileService;
   conversionService?: ConversionService;
   apiKeyService?: ApiKeyService;
+  billingService?: BillingService;
   enqueueConversion?: (input: ConversionJobData) => Promise<unknown>;
   handleAuth?: HandleAuthRequest;
 };
@@ -58,6 +60,8 @@ export function createApp(options: CreateAppOptions = {}) {
     options.resolveIdentity ?? createDefaultIdentityResolver();
   const handleAuth =
     options.handleAuth ?? ((request) => getAuth().handler(request));
+  const resolveBillingService = () =>
+    options.billingService ?? getBillingService();
 
   const app = new Hono<AppEnv>();
 
@@ -84,6 +88,7 @@ export function createApp(options: CreateAppOptions = {}) {
       getConversionService: () =>
         options.conversionService ?? getConversionService(),
       getApiKeyService: () => options.apiKeyService ?? getApiKeyService(),
+      getBillingService: resolveBillingService,
       enqueueConversion: (input) =>
         options.enqueueConversion === undefined
           ? enqueueConversion(input)

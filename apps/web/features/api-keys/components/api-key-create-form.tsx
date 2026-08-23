@@ -12,6 +12,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
 import { useCreateApiKey } from "../hooks/use-create-api-key";
 import type { CreatedApiKeySecret } from "../lib/created-api-key-secret";
 import { takeCreatedApiKeySecret } from "../lib/created-api-key-secret";
@@ -49,7 +50,14 @@ export function ApiKeyCreateForm({
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
       {errorKey === null ? null : (
         <Alert variant="destructive">
-          <AlertDescription>{tErrors(errorKey)}</AlertDescription>
+          <AlertDescription>
+            {tErrors(errorKey)}
+            {errorKey === "apiKeyLimitReached" ? (
+              <span className="ml-1">
+                <BillingUpgradeLink />
+              </span>
+            ) : null}
+          </AlertDescription>
         </Alert>
       )}
       <FieldGroup>

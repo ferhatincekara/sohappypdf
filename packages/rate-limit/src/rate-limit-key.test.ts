@@ -18,7 +18,11 @@ describe("createRateLimitKey", () => {
 
   test("keys API clients by client ID rather than a raw token", () => {
     expect(
-      createRateLimitKey({ kind: "api-client", apiClientId: "key_123" }),
+      createRateLimitKey({
+        kind: "api-client",
+        apiClientId: "key_123",
+        userId: "user_1",
+      }),
     ).toBe("api:key_123");
   });
 
@@ -44,7 +48,11 @@ describe("selectRateLimitKind", () => {
       "authenticated",
     );
     expect(
-      selectRateLimitKind({ kind: "api-client", apiClientId: "key_123" }),
+      selectRateLimitKind({
+        kind: "api-client",
+        apiClientId: "key_123",
+        userId: "user_1",
+      }),
     ).toBe("api");
   });
 });

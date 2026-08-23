@@ -4,6 +4,7 @@ import type { Storage } from "@repo/storage";
 import { createFileOriginalKey } from "@repo/storage";
 import type { FileRepository } from "./file-repository.js";
 import { createFileService } from "./file-service.js";
+import { sumActiveStorageBytesForOwner } from "./file-storage-usage.js";
 import type { FileRecord } from "./file-types.js";
 
 type StoredObject = {
@@ -86,6 +87,9 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
     },
     async deleteById(id) {
       records.delete(id);
+    },
+    async sumActiveStorageBytes(ownerId, now) {
+      return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
     },
     async listEligibleForCleanup(input) {
       return [...records.values()]

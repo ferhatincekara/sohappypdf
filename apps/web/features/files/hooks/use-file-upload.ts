@@ -14,7 +14,7 @@ import {
   type FileUploadState,
 } from "../types/upload-state";
 
-export function useFileUpload() {
+export function useFileUpload(maxUploadFileSizeBytes?: number) {
   const queryClient = useQueryClient();
   const [state, setState] = useState<FileUploadState>(createInitialUploadState);
   const workflowRef = useRef<FileUploadWorkflow | null>(null);
@@ -42,7 +42,7 @@ export function useFileUpload() {
   }, [queryClient]);
 
   function selectFiles(files: FileList | File[] | null | undefined) {
-    const result = validateSelectedFiles(files);
+    const result = validateSelectedFiles(files, maxUploadFileSizeBytes);
 
     if (!result.ok) {
       workflowRef.current?.failValidation(result.errorKey);

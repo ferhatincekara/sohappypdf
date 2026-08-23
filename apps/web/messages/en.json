@@ -50,7 +50,7 @@
       },
       "settings": {
         "title": "Settings",
-        "description": "Account settings will live here."
+        "description": "Manage your account and billing."
       }
     }
   },
@@ -197,6 +197,7 @@
       "unsupportedType": "That file type is not supported.",
       "emptyFile": "The selected file is empty.",
       "fileTooLarge": "The file is larger than {maxSize}.",
+      "storageLimitReached": "This upload would exceed your storage limit.",
       "expiredUpload": "The upload session expired. Try again.",
       "objectNotUploaded": "The file could not be confirmed. Try again.",
       "fileNotFound": "That file is no longer available.",
@@ -299,6 +300,7 @@
       "conflict": "This conversion request could not be completed.",
       "unauthorized": "Sign in again to create a conversion.",
       "rateLimited": "Too many requests. Please try again shortly.",
+      "planLimitReached": "You have reached this month’s conversion limit.",
       "networkFailure": "The request could not be completed. Try again.",
       "unexpected": "Something went wrong. Try again."
     },
@@ -398,6 +400,59 @@
       "unauthorized": "Sign in again to manage API keys.",
       "forbidden": "API keys cannot manage other API keys.",
       "notFound": "That API key could not be found.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "apiKeyLimitReached": "You have reached the API key limit for your plan.",
+      "networkFailure": "The request could not be completed. Try again.",
+      "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account and subscription.",
+    "billing": {
+      "title": "Billing",
+      "description": "Review your current plan, usage, and subscription.",
+      "open": "Open billing"
+    }
+  },
+  "billing": {
+    "title": "Billing",
+    "description": "Your current plan and usage. Upgrades are confirmed after Polar payment.",
+    "currentPlan": "Current plan",
+    "usage": "Usage",
+    "upgrade": "Upgrade",
+    "upgrading": "Redirecting to checkout…",
+    "manage": "Manage subscription",
+    "openingPortal": "Opening portal…",
+    "activating": "Your subscription is being activated.",
+    "noSubscription": "No paid subscription",
+    "cancelsOn": "Cancels on {date}",
+    "backToSettings": "Back to settings",
+    "period": "UTC period {start} – {end}",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "subscriptionStatus": {
+      "incomplete": "Incomplete",
+      "incomplete_expired": "Expired",
+      "trialing": "Trialing",
+      "active": "Subscription active",
+      "past_due": "Past due",
+      "canceled": "Subscription canceled",
+      "unpaid": "Unpaid",
+      "revoked": "Revoked",
+      "paused": "Paused"
+    },
+    "usageItems": {
+      "conversions": "Conversions this month",
+      "storage": "Storage",
+      "apiKeys": "API keys"
+    },
+    "errors": {
+      "unauthorized": "Sign in again to manage billing.",
+      "conflict": "Your plan already includes this subscription.",
+      "configuration": "Billing is not configured yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "The request could not be completed. Try again.",
       "unexpected": "Something went wrong. Try again."

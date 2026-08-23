@@ -1,10 +1,12 @@
 import { describe, expect, test } from "bun:test";
+import { createTestBillingService, DEFAULT_PLAN_LIMITS } from "@repo/billing";
 import { APP_ERROR_CODES } from "@repo/core";
 import {
   createFileService,
   type FileRecord,
   type FileRepository,
   type FileService,
+  sumActiveStorageBytesForOwner,
 } from "@repo/files";
 import type { Logger } from "@repo/logger";
 import type { Storage } from "@repo/storage";
@@ -106,6 +108,9 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
     async listEligibleForCleanup() {
       return [];
     },
+    async sumActiveStorageBytes(ownerId, now) {
+      return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
+    },
   };
 }
 
@@ -191,12 +196,14 @@ function createTestFileService(now?: () => Date): {
 function createFileApp(options: {
   identity: RequestIdentity;
   fileService: FileService;
+  billingService?: ReturnType<typeof createTestBillingService>;
 }) {
   return createApp({
     config: { corsOrigins: [] },
     logger: silentLogger,
     resolveIdentity: async () => options.identity,
     fileService: options.fileService,
+    billingService: options.billingService ?? createTestBillingService(),
   });
 }
 
@@ -496,5 +503,65 @@ describe("file API", () => {
     expect(
       (await app.request(`/api/v1/files/${createdBody.file.id}`)).status,
     ).toBe(404);
+  });
+
+  test("rejects uploads that exceed the current plan file size", async () => {
+    const { fileService } = createTestFileService();
+    const app = createFileApp({ identity: sessionIdentity, fileService });
+
+    const response = await app.request("/api/v1/files/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        ...uploadBody,
+        size: 21 * 1024 * 1024,
+      }),
+    });
+
+    expect(response.status).toBe(413);
+    expect(await response.json()).toMatchObject({
+      error: { code: APP_ERROR_CODES.FILE_TOO_LARGE },
+    });
+  });
+
+  test("rejects uploads that exceed remaining storage", async () => {
+    const { fileService } = createTestFileService();
+    const app = createFileApp({
+      identity: sessionIdentity,
+      fileService,
+      billingService: createTestBillingService({
+        planCatalog: {
+          ...DEFAULT_PLAN_LIMITS,
+          free: {
+            ...DEFAULT_PLAN_LIMITS.free,
+            storageBytes: 1000,
+          },
+        },
+      }),
+    });
+
+    const first = await app.request("/api/v1/files/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        ...uploadBody,
+        size: 800,
+      }),
+    });
+    const second = await app.request("/api/v1/files/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        ...uploadBody,
+        filename: "extra.pdf",
+        size: 400,
+      }),
+    });
+
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(403);
+    expect(await second.json()).toMatchObject({
+      error: { code: APP_ERROR_CODES.STORAGE_LIMIT_REACHED },
+    });
   });
 });

@@ -15,6 +15,7 @@ export type UserRateLimitSubject = {
 export type ApiClientRateLimitSubject = {
   kind: "api-client";
   apiClientId: string;
+  userId: string;
 };
 
 export type RateLimitSubject =

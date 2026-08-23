@@ -14,5 +14,8 @@ describe("isNavItemActive", () => {
     expect(isNavItemActive("/app/files/upload", APP_PATHS.files)).toBe(true);
     expect(isNavItemActive("/app/conversions", APP_PATHS.files)).toBe(false);
     expect(isNavItemActive("/app", APP_PATHS.files)).toBe(false);
+    expect(isNavItemActive("/app/settings/billing", APP_PATHS.settings)).toBe(
+      true,
+    );
   });
 });

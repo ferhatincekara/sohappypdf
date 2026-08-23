@@ -6,6 +6,11 @@ import {
   isApiKeyFormat,
   type StoredApiKeyRecord,
 } from "@repo/api-keys";
+import {
+  type BillingService,
+  createTestBillingService,
+  DEFAULT_PLAN_LIMITS,
+} from "@repo/billing";
 import { APP_ERROR_CODES } from "@repo/core";
 import type { Logger } from "@repo/logger";
 import { createApp } from "../../app.js";
@@ -83,6 +88,7 @@ function createMemoryRepository(
 function createApiKeyApp(options: {
   identity: RequestIdentity;
   apiKeyService?: ApiKeyService;
+  billingService?: BillingService;
 }) {
   return createApp({
     config: { corsOrigins: [] },
@@ -93,6 +99,7 @@ function createApiKeyApp(options: {
       createApiKeyService({
         repository: createMemoryRepository(),
       }),
+    billingService: options.billingService ?? createTestBillingService(),
   });
 }
 
@@ -255,5 +262,41 @@ describe("API key management API", () => {
     expect(revoked.status).toBe(200);
     expect(revokedBody.apiKey.status).toBe("revoked");
     expect(revokedBody.apiKey).not.toHaveProperty("secret");
+  });
+
+  test("rejects extra API keys after the current plan limit", async () => {
+    const apiKeyService = createApiKeyService({
+      repository: createMemoryRepository(),
+    });
+    const app = createApiKeyApp({
+      identity: sessionIdentity,
+      apiKeyService,
+      billingService: createTestBillingService({
+        planCatalog: {
+          ...DEFAULT_PLAN_LIMITS,
+          free: {
+            ...DEFAULT_PLAN_LIMITS.free,
+            maxApiKeys: 1,
+          },
+        },
+      }),
+    });
+
+    const first = await app.request("/api/v1/api-keys", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "First" }),
+    });
+    const second = await app.request("/api/v1/api-keys", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "Second" }),
+    });
+
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(403);
+    expect(await second.json()).toMatchObject({
+      error: { code: APP_ERROR_CODES.API_KEY_LIMIT_REACHED },
+    });
   });
 });

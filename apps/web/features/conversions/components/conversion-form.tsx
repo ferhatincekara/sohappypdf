@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
+import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
 import type { PublicFile } from "@/features/files/types/file";
 import { useCreateConversion } from "../hooks/use-create-conversion";
 import {
@@ -103,7 +104,14 @@ export function ConversionForm({
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
       {errorKey === null ? null : (
         <Alert variant="destructive">
-          <AlertDescription>{tErrors(errorKey)}</AlertDescription>
+          <AlertDescription>
+            {tErrors(errorKey)}
+            {errorKey === "planLimitReached" ? (
+              <span className="ml-1">
+                <BillingUpgradeLink />
+              </span>
+            ) : null}
+          </AlertDescription>
         </Alert>
       )}
 

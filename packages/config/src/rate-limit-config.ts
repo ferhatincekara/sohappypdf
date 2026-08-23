@@ -11,12 +11,16 @@ export type RateLimitConfig = {
   anonymousPerMinute: number;
   authenticatedPerMinute: number;
   apiPerMinute: number;
+  freeAuthenticatedPerMinute: number;
+  freeApiPerMinute: number;
 };
 
 export const DEFAULT_RATE_LIMIT_CONFIG = {
   anonymousPerMinute: 30,
   authenticatedPerMinute: 120,
   apiPerMinute: 60,
+  freeAuthenticatedPerMinute: 60,
+  freeApiPerMinute: 30,
 } as const;
 
 function parsePositiveInteger(
@@ -98,6 +102,16 @@ export function loadRateLimitConfig(
       "RATE_LIMIT_API_PER_MINUTE",
       getOptionalEnv("RATE_LIMIT_API_PER_MINUTE", source),
       DEFAULT_RATE_LIMIT_CONFIG.apiPerMinute,
+    ),
+    freeAuthenticatedPerMinute: parsePositiveInteger(
+      "RATE_LIMIT_FREE_AUTHENTICATED_PER_MINUTE",
+      getOptionalEnv("RATE_LIMIT_FREE_AUTHENTICATED_PER_MINUTE", source),
+      DEFAULT_RATE_LIMIT_CONFIG.freeAuthenticatedPerMinute,
+    ),
+    freeApiPerMinute: parsePositiveInteger(
+      "RATE_LIMIT_FREE_API_PER_MINUTE",
+      getOptionalEnv("RATE_LIMIT_FREE_API_PER_MINUTE", source),
+      DEFAULT_RATE_LIMIT_CONFIG.freeApiPerMinute,
     ),
   };
 }

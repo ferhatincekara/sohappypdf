@@ -16,6 +16,7 @@ export function toRateLimitSubject(
     return {
       kind: "api-client",
       apiClientId: identity.apiKeyId,
+      userId: identity.userId,
     };
   }
 
@@ -31,4 +32,8 @@ export function toRateLimitSubject(
  */
 export function isHealthPath(path: string): boolean {
   return path === "/health" || path === "/api/v1/health";
+}
+
+export function isRateLimitExemptPath(path: string): boolean {
+  return isHealthPath(path) || path === "/api/v1/billing/webhooks";
 }

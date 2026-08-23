@@ -32,6 +32,10 @@ export {
   FILE_STATUSES,
   isFileStatus,
 } from "./file-status.js";
+export {
+  isActiveStorageFile,
+  sumActiveStorageBytesForOwner,
+} from "./file-storage-usage.js";
 export type {
   CreateFileInput,
   CreateFileResult,

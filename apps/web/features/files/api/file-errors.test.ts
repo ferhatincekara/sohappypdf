@@ -31,6 +31,20 @@ describe("file error mapping", () => {
         message: "AccessDenied: stack trace",
       }),
     ).toBe(FILE_ERROR_KEYS.unexpected);
+    expect(
+      mapFileError({
+        kind: "api",
+        code: "FILE_TOO_LARGE",
+        status: 413,
+      }),
+    ).toBe(FILE_ERROR_KEYS.fileTooLarge);
+    expect(
+      mapFileError({
+        kind: "api",
+        code: "STORAGE_LIMIT_REACHED",
+        status: 403,
+      }),
+    ).toBe(FILE_ERROR_KEYS.storageLimitReached);
   });
 
   test("does not surface AWS or storage details from Axios errors", () => {

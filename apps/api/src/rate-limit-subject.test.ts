@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { isHealthPath, toRateLimitSubject } from "./rate-limit-subject.js";
+import {
+  isHealthPath,
+  isRateLimitExemptPath,
+  toRateLimitSubject,
+} from "./rate-limit-subject.js";
 
 describe("toRateLimitSubject", () => {
   test("maps anonymous requests to an IP subject", () => {
@@ -30,6 +34,7 @@ describe("toRateLimitSubject", () => {
     expect(subject).toEqual({
       kind: "api-client",
       apiClientId: "key_123",
+      userId: "user_1",
     });
     expect(JSON.stringify(subject).includes("shpdf_")).toBe(false);
   });
@@ -40,5 +45,12 @@ describe("isHealthPath", () => {
     expect(isHealthPath("/health")).toBe(true);
     expect(isHealthPath("/api/v1/health")).toBe(true);
     expect(isHealthPath("/api/v1/files")).toBe(false);
+  });
+});
+
+describe("isRateLimitExemptPath", () => {
+  test("exempts Polar webhook delivery", () => {
+    expect(isRateLimitExemptPath("/api/v1/billing/webhooks")).toBe(true);
+    expect(isRateLimitExemptPath("/api/v1/billing")).toBe(false);
   });
 });

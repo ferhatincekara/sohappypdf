@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import {
+  type BillingService,
+  createTestBillingService,
+  DEFAULT_PLAN_LIMITS,
+} from "@repo/billing";
+import {
   type ConversionRecord,
   type ConversionRepository,
   createConversionService,
@@ -10,6 +15,7 @@ import {
   type FileRecord,
   type FileRepository,
   type FileService,
+  sumActiveStorageBytesForOwner,
 } from "@repo/files";
 import type { Logger } from "@repo/logger";
 import type { ConversionJobData } from "@repo/queue";
@@ -77,6 +83,9 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
     },
     async listEligibleForCleanup() {
       return [];
+    },
+    async sumActiveStorageBytes(ownerId, now) {
+      return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
     },
   };
 }
@@ -241,7 +250,10 @@ type TestServices = {
   createAppFor(identity: RequestIdentity): ReturnType<typeof createApp>;
 };
 
-function createConversionServices(now?: () => Date): TestServices {
+function createConversionServices(
+  now?: () => Date,
+  billingService?: BillingService,
+): TestServices {
   const jobs: ConversionJobData[] = [];
   const storage = createMemoryStorage();
   const fileService = createFileService({
@@ -266,6 +278,7 @@ function createConversionServices(now?: () => Date): TestServices {
         resolveIdentity: async () => identity,
         fileService,
         conversionService,
+        billingService: billingService ?? createTestBillingService(),
         enqueueConversion: async (input) => {
           if (services.failEnqueue) {
             throw new Error("redis unavailable");
@@ -287,8 +300,12 @@ function createConversionServices(now?: () => Date): TestServices {
 function createConversionApp(options: {
   identity: RequestIdentity;
   now?: () => Date;
+  billingService?: BillingService;
 }) {
-  const services = createConversionServices(options.now);
+  const services = createConversionServices(
+    options.now,
+    options.billingService,
+  );
   return Object.assign(services, {
     app: services.createAppFor(options.identity),
   });
@@ -735,6 +752,45 @@ describe("conversion API", () => {
         status: "cancelled",
         error: { code: "cancelled" },
       },
+    });
+  });
+
+  test("rejects a new conversion after the monthly plan limit", async () => {
+    const context = createConversionApp({
+      identity: sessionIdentity,
+      billingService: createTestBillingService({
+        planCatalog: {
+          ...DEFAULT_PLAN_LIMITS,
+          free: {
+            ...DEFAULT_PLAN_LIMITS.free,
+            monthlyConversions: 1,
+          },
+        },
+      }),
+    });
+    const file = await createReadyFile(context, { ownerId: "user_1" });
+
+    const first = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "jpg",
+      }),
+    });
+    const second = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "png",
+      }),
+    });
+
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(403);
+    expect(await second.json()).toMatchObject({
+      error: { code: APP_ERROR_CODES.PLAN_LIMIT_REACHED },
     });
   });
 });

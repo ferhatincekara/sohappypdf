@@ -7,7 +7,10 @@ import {
 import type { Context, MiddlewareHandler } from "hono";
 import type { AppEnv } from "../app-env.js";
 import { getClientIp } from "../client-ip.js";
-import { isHealthPath, toRateLimitSubject } from "../rate-limit-subject.js";
+import {
+  isRateLimitExemptPath,
+  toRateLimitSubject,
+} from "../rate-limit-subject.js";
 
 export type CheckRateLimit = (
   subject: RateLimitSubject,
@@ -52,7 +55,7 @@ export function rateLimitMiddleware(
   checkRateLimit: CheckRateLimit,
 ): MiddlewareHandler<AppEnv> {
   return async (c, next) => {
-    if (isHealthPath(c.req.path)) {
+    if (isRateLimitExemptPath(c.req.path)) {
       await next();
       return;
     }

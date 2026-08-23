@@ -58,7 +58,7 @@ function jsonError(
   c: Context<AppEnv>,
   code: AppErrorCode,
   message: string,
-  status: 400 | 401 | 403 | 404 | 409 | 429 | 500,
+  status: 400 | 401 | 403 | 404 | 409 | 413 | 429 | 500,
 ) {
   return c.json(createErrorBody(c, code, message), status);
 }
@@ -82,7 +82,12 @@ export function errorHandler(error: Error, c: Context<AppEnv>) {
     case APP_ERROR_CODES.UNAUTHORIZED:
       return jsonError(c, publicError.code, publicError.message, 401);
     case APP_ERROR_CODES.FORBIDDEN:
+    case APP_ERROR_CODES.PLAN_LIMIT_REACHED:
+    case APP_ERROR_CODES.STORAGE_LIMIT_REACHED:
+    case APP_ERROR_CODES.API_KEY_LIMIT_REACHED:
       return jsonError(c, publicError.code, publicError.message, 403);
+    case APP_ERROR_CODES.FILE_TOO_LARGE:
+      return jsonError(c, publicError.code, publicError.message, 413);
     case APP_ERROR_CODES.NOT_FOUND:
       return jsonError(c, publicError.code, publicError.message, 404);
     case APP_ERROR_CODES.CONFLICT:

@@ -58,6 +58,10 @@ export type ConversionService = {
   ): Promise<ConversionRecord>;
   getConversion(id: string): Promise<ConversionRecord>;
   getOwnedConversion(id: string, ownerId: string): Promise<ConversionRecord>;
+  findOwnedByIdempotencyKey(
+    ownerId: string,
+    idempotencyKey: string,
+  ): Promise<ConversionRecord | undefined>;
   listOwnedConversions(
     query: ConversionListQuery,
   ): Promise<ConversionListResult>;
@@ -343,6 +347,19 @@ export function createConversionService(
 
     async getOwnedConversion(id, ownerId) {
       return requireOwned(id, ownerId);
+    },
+
+    async findOwnedByIdempotencyKey(ownerId, idempotencyKey) {
+      const key = assertIdempotencyKey(idempotencyKey);
+
+      if (key === undefined) {
+        return undefined;
+      }
+
+      return options.repository.findByIdempotencyKey(
+        assertConversionOwnerId(ownerId),
+        key,
+      );
     },
 
     async listOwnedConversions(query) {

@@ -1,4 +1,5 @@
 import type { ApiKeyService } from "@repo/api-keys";
+import type { BillingService } from "@repo/billing";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireSessionIdentity } from "../../auth/request-identity.js";
@@ -15,6 +16,7 @@ import {
 
 export type ApiKeyRoutesOptions = {
   getApiKeyService: () => ApiKeyService;
+  getBillingService: () => BillingService;
 };
 
 export function createApiKeyRoutes(options: ApiKeyRoutesOptions) {
@@ -25,6 +27,13 @@ export function createApiKeyRoutes(options: ApiKeyRoutesOptions) {
   apiKeys.post("/", async (c) => {
     const identity = requireSessionIdentity(c.get("identity"));
     const body = parseCreateApiKey(await readJsonBody(c.req.raw));
+    const existing = await options
+      .getApiKeyService()
+      .listByUserId(identity.userId);
+    await options.getBillingService().assertCanCreateApiKey({
+      userId: identity.userId,
+      used: existing.filter((key) => key.revokedAt === null).length,
+    });
     const created = await options.getApiKeyService().create({
       userId: identity.userId,
       name: body.name,

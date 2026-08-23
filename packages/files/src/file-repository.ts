@@ -11,6 +11,7 @@ import {
   lte,
   ne,
   or,
+  sql,
 } from "drizzle-orm";
 import type { FileListCursor } from "./file-pagination.js";
 import type { FileStatus } from "./file-status.js";
@@ -42,6 +43,7 @@ export type FileRepository = {
     now: Date;
     limit: number;
   }): Promise<FileRecord[]>;
+  sumActiveStorageBytes(ownerId: string, now: Date): Promise<number>;
 };
 
 function toFileRecord(row: typeof files.$inferSelect): FileRecord {
@@ -173,6 +175,24 @@ export function createFileRepository(db: Database): FileRepository {
 
     async deleteById(id) {
       await db.delete(files).where(eq(files.id, id));
+    },
+
+    async sumActiveStorageBytes(ownerId, now) {
+      const [row] = await db
+        .select({
+          total: sql<string>`coalesce(sum(${files.sizeBytes}), 0)`,
+        })
+        .from(files)
+        .where(
+          and(
+            eq(files.ownerId, ownerId),
+            isNull(files.deletedAt),
+            ne(files.status, "deleted"),
+            gt(files.expiresAt, now),
+          ),
+        );
+
+      return Number(row?.total ?? 0);
     },
 
     async listEligibleForCleanup(input) {

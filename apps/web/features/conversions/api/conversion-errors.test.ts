@@ -36,6 +36,16 @@ describe("conversion error mapping", () => {
     ).toBe(CONVERSION_ERROR_KEYS.sourceUnavailable);
   });
 
+  test("maps a monthly conversion limit", () => {
+    expect(
+      mapConversionError({
+        kind: "api",
+        code: "PLAN_LIMIT_REACHED",
+        status: 403,
+      }),
+    ).toBe(CONVERSION_ERROR_KEYS.planLimitReached);
+  });
+
   test("maps a rate-limit response", () => {
     expect(
       mapConversionError({
