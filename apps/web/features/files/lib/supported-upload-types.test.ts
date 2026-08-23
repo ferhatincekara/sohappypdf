@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+  formatFromPublicFile,
   getFileInputAccept,
   isSupportedUploadExtension,
   isSupportedUploadMimeType,
@@ -63,5 +64,20 @@ describe("supported upload types", () => {
     expect(isSupportedUploadMimeType("application/pdf; charset=binary")).toBe(
       true,
     );
+  });
+
+  test("resolves a safe file type label from MIME or extension", () => {
+    expect(
+      formatFromPublicFile({
+        contentType: "application/pdf",
+        filename: "notes.bin",
+      }),
+    ).toBe("pdf");
+    expect(
+      formatFromPublicFile({
+        contentType: "application/octet-stream",
+        filename: "photo.JPEG",
+      }),
+    ).toBe("jpg");
   });
 });

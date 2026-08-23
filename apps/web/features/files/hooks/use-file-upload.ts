@@ -34,7 +34,9 @@ export function useFileUpload() {
       setState(next);
 
       if (next.status === "completed") {
-        void queryClient.invalidateQueries({ queryKey: filesQueryKeys.list() });
+        void queryClient.invalidateQueries({
+          queryKey: filesQueryKeys.lists(),
+        });
       }
     });
   }, [queryClient]);

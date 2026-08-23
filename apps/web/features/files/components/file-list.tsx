@@ -1,91 +1,122 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
-import { FileConvertButton } from "@/features/conversions/components/file-convert-button";
-import { formatFileSize } from "../lib/format-file-size";
-import { isFileDownloadable } from "../lib/is-file-downloadable";
-import {
-  PUBLIC_FILE_STATUSES,
-  type PublicFile,
-  type PublicFileStatus,
-} from "../types/file";
-import { FileDownloadButton } from "./file-download-button";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/i18n/navigation";
+import { fileListHref } from "../lib/file-list-params";
+import { fileListView } from "../lib/file-list-view";
+import type { PublicFile } from "../types/file";
+import { FileListItem } from "./file-list-item";
 
 export function FileList({
   files,
+  cursor,
+  nextCursor,
   isLoading,
   isError,
   errorMessage,
   onConvert,
+  onDelete,
+  onRetry,
 }: {
   files: PublicFile[];
+  cursor?: string;
+  nextCursor: string | null;
   isLoading: boolean;
   isError: boolean;
   errorMessage: string;
   onConvert: (file: PublicFile) => void;
+  onDelete: (file: PublicFile) => void;
+  onRetry: () => void;
 }) {
   const t = useTranslations("files.list");
+  const view = fileListView({
+    isLoading,
+    isError,
+    itemCount: files.length,
+  });
 
-  if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t("loading")}</p>;
+  if (view === "loading") {
+    return (
+      <div className="flex flex-col gap-3" aria-busy="true">
+        <p className="sr-only">{t("loading")}</p>
+        <FileListSkeleton />
+      </div>
+    );
   }
 
-  if (isError) {
-    return <p className="text-sm text-destructive">{errorMessage}</p>;
+  if (view === "error") {
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <p className="text-sm text-destructive">{errorMessage}</p>
+        <Button type="button" size="sm" variant="outline" onClick={onRetry}>
+          {t("retry")}
+        </Button>
+      </div>
+    );
   }
 
-  if (files.length === 0) {
-    return <p className="text-sm text-muted-foreground">{t("empty")}</p>;
+  if (view === "empty") {
+    return (
+      <div className="flex flex-col items-start gap-3 rounded-xl border border-dashed border-border px-4 py-8">
+        <p className="text-sm text-muted-foreground">{t("empty")}</p>
+        <p className="text-sm text-muted-foreground">{t("emptyHint")}</p>
+        <a
+          href="#file-upload"
+          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+        >
+          {t("uploadCta")}
+        </a>
+      </div>
+    );
   }
 
   return (
-    <ul className="divide-y divide-border rounded-xl border border-border bg-card">
-      {files.map((file) => (
-        <FileListItem key={file.id} file={file} onConvert={onConvert} />
+    <div className="flex flex-col gap-4">
+      <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+        {files.map((file) => (
+          <FileListItem
+            key={file.id}
+            file={file}
+            onConvert={onConvert}
+            onDelete={onDelete}
+          />
+        ))}
+      </ul>
+      {cursor === undefined && nextCursor === null ? null : (
+        <div className="flex flex-wrap items-center gap-3">
+          {cursor === undefined ? null : (
+            <Link
+              href={fileListHref({})}
+              className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              {t("firstPage")}
+            </Link>
+          )}
+          {nextCursor === null ? null : (
+            <Link
+              href={fileListHref({ cursor: nextCursor })}
+              className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              {t("nextPage")}
+            </Link>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FileListSkeleton() {
+  return (
+    <div className="divide-y divide-border rounded-xl border border-border bg-card">
+      {["one", "two", "three"].map((row) => (
+        <div key={row} className="flex flex-col gap-2 px-4 py-3">
+          <Skeleton className="h-4 w-48" />
+          <Skeleton className="h-3 w-64" />
+        </div>
       ))}
-    </ul>
+    </div>
   );
-}
-
-function FileListItem({
-  file,
-  onConvert,
-}: {
-  file: PublicFile;
-  onConvert: (file: PublicFile) => void;
-}) {
-  const t = useTranslations("files.list");
-  const formatter = useFormatter();
-  const status = isPublicFileStatus(file.status) ? file.status : "pending";
-
-  return (
-    <li className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">
-          {file.filename}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {formatFileSize(file.size)}
-          <span aria-hidden="true"> · </span>
-          {formatter.dateTime(new Date(file.createdAt), {
-            dateStyle: "medium",
-            timeStyle: "short",
-          })}
-        </p>
-      </div>
-      <div className="flex shrink-0 items-center gap-3">
-        <p className="text-xs font-medium text-muted-foreground">
-          {t(`status.${status}`)}
-        </p>
-        {isFileDownloadable(file) ? (
-          <FileDownloadButton fileId={file.id} variant="outline" />
-        ) : null}
-        <FileConvertButton file={file} onConvert={onConvert} />
-      </div>
-    </li>
-  );
-}
-
-function isPublicFileStatus(value: string): value is PublicFileStatus {
-  return PUBLIC_FILE_STATUSES.some((status) => status === value);
 }

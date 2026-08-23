@@ -40,6 +40,11 @@ export type CreateUploadResponse = {
   upload: PresignedUpload;
 };
 
+export type FileListQuery = {
+  cursor?: string;
+  limit?: number;
+};
+
 export type FileListResponse = {
   files: PublicFile[];
   nextCursor: string | null;

@@ -51,7 +51,17 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
       targetFormat: conversion.targetFormat,
     });
 
-    return c.json({ conversion: toPublicConversion(conversion) }, 201);
+    return c.json(
+      {
+        conversion: toPublicConversion(conversion, {
+          sourceFilename: await resolveSourceFilename(
+            options.getFileService(),
+            conversion.sourceFileId,
+          ),
+        }),
+      },
+      201,
+    );
   });
 
   conversions.get("/", async (c) => {
@@ -64,10 +74,16 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
       status: query.status,
       targetFormat: query.targetFormat,
     });
+    const sourceFilenames = await resolveSourceFilenames(
+      options.getFileService(),
+      result.conversions.map((conversion) => conversion.sourceFileId),
+    );
 
     return c.json({
       conversions: result.conversions.map((conversion) =>
-        toPublicConversion(conversion),
+        toPublicConversion(conversion, {
+          sourceFilename: sourceFilenames.get(conversion.sourceFileId) ?? null,
+        }),
       ),
       nextCursor: result.nextCursor,
     });
@@ -82,7 +98,14 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         identity.userId,
       );
 
-    return c.json({ conversion: toPublicConversion(conversion) });
+    return c.json({
+      conversion: toPublicConversion(conversion, {
+        sourceFilename: await resolveSourceFilename(
+          options.getFileService(),
+          conversion.sourceFileId,
+        ),
+      }),
+    });
   });
 
   conversions.post("/:id/cancel", async (c) => {
@@ -99,8 +122,38 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
       userId: identity.userId,
     });
 
-    return c.json({ conversion: toPublicConversion(conversion) });
+    return c.json({
+      conversion: toPublicConversion(conversion, {
+        sourceFilename: await resolveSourceFilename(
+          options.getFileService(),
+          conversion.sourceFileId,
+        ),
+      }),
+    });
   });
 
   return conversions;
+}
+
+async function resolveSourceFilename(
+  files: FileService,
+  sourceFileId: string,
+): Promise<string | null> {
+  const file = await files.findFileById(sourceFileId);
+  return file?.originalFilename ?? null;
+}
+
+async function resolveSourceFilenames(
+  files: FileService,
+  sourceFileIds: readonly string[],
+): Promise<Map<string, string | null>> {
+  const uniqueIds = [...new Set(sourceFileIds)];
+  const resolved = await Promise.all(
+    uniqueIds.map(async (id) => {
+      const filename = await resolveSourceFilename(files, id);
+      return [id, filename] as const;
+    }),
+  );
+
+  return new Map(resolved);
 }

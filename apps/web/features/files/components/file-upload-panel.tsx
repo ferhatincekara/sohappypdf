@@ -39,6 +39,7 @@ export function FileUploadPanel({
 
   return (
     <section
+      id="file-upload"
       className="flex flex-col gap-4"
       aria-labelledby="file-upload-heading"
     >

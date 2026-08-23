@@ -32,12 +32,20 @@ export function ConversionStatusPageContent({
           <p className="text-sm text-destructive">
             {tErrors(errorKey ?? "notFound")}
           </p>
-          <Link
-            href={APP_PATHS.files}
-            className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
-          >
-            {t("backToFiles")}
-          </Link>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href={APP_PATHS.conversions}
+              className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              {t("backToHistory")}
+            </Link>
+            <Link
+              href={APP_PATHS.files}
+              className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              {t("backToFiles")}
+            </Link>
+          </div>
         </div>
       ) : isLoading || conversion === undefined ? (
         <p className="text-sm text-muted-foreground">{t("loading")}</p>

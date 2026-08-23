@@ -38,11 +38,11 @@
       },
       "files": {
         "title": "Files",
-        "description": "Upload a file to start working with it."
+        "description": "Upload files, review their status, and start conversions."
       },
       "conversions": {
         "title": "Conversions",
-        "description": "Start a conversion from an uploaded file."
+        "description": "Review conversion history and download completed results."
       },
       "apiKeys": {
         "title": "API Keys",
@@ -120,7 +120,28 @@
     "description": "Upload a supported file. Conversion will be available after the file is stored.",
     "actions": {
       "download": "Download",
-      "downloading": "Preparing download…"
+      "downloading": "Preparing download…",
+      "delete": "Delete",
+      "deleteNamed": "Delete {filename}"
+    },
+    "formats": {
+      "pdf": "PDF",
+      "doc": "DOC",
+      "docx": "DOCX",
+      "xls": "XLS",
+      "xlsx": "XLSX",
+      "ppt": "PPT",
+      "pptx": "PPTX",
+      "jpg": "JPG",
+      "png": "PNG"
+    },
+    "delete": {
+      "title": "Delete file",
+      "description": "This will permanently remove {filename} from your account.",
+      "confirm": "Delete file",
+      "deleting": "Deleting…",
+      "cancel": "Cancel",
+      "success": "The file was deleted."
     },
     "upload": {
       "title": "Upload",
@@ -141,7 +162,15 @@
       "title": "Uploaded files",
       "description": "Files already stored for your account.",
       "loading": "Loading files…",
-      "empty": "No files uploaded yet.",
+      "empty": "No files yet.",
+      "emptyHint": "Upload your first file to get started.",
+      "uploadCta": "Upload file",
+      "retry": "Try again",
+      "unknownType": "File",
+      "created": "Added {date}",
+      "expires": "Expires {date}",
+      "firstPage": "Newest",
+      "nextPage": "Older files",
       "status": {
         "pending": "Pending",
         "uploaded": "Uploaded",
@@ -170,8 +199,8 @@
       "fileTooLarge": "The file is larger than {maxSize}.",
       "expiredUpload": "The upload session expired. Try again.",
       "objectNotUploaded": "The file could not be confirmed. Try again.",
-      "fileNotFound": "The upload is no longer available. Try again.",
-      "unauthorized": "Sign in again to upload files.",
+      "fileNotFound": "That file is no longer available.",
+      "unauthorized": "Sign in again to manage files.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "The request could not be completed. Try again.",
       "cancelled": "Upload cancelled.",
@@ -182,10 +211,31 @@
     "actions": {
       "convert": "Convert"
     },
-    "landing": {
+    "history": {
       "title": "Conversions",
-      "description": "Start a conversion from an uploaded file. Status pages are available after a conversion is created.",
-      "openFiles": "Go to files"
+      "description": "Your conversion history. Open a conversion to see the current status or download a completed result.",
+      "loading": "Loading conversions…",
+      "empty": "No conversions yet.",
+      "emptyHint": "Upload a file and start a conversion to see it here.",
+      "emptyFiltered": "No conversions match this filter.",
+      "emptyFilteredHint": "Try another status or view all conversions.",
+      "openFiles": "Upload a file",
+      "retry": "Try again",
+      "view": "View",
+      "unnamedSource": "Source file",
+      "summary": "{source} → {target}",
+      "created": "Started {date}",
+      "completed": "Finished {date}",
+      "firstPage": "Newest",
+      "nextPage": "Older conversions",
+      "filters": {
+        "label": "Filter conversions",
+        "all": "All",
+        "queued": "Queued",
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed"
+      }
     },
     "form": {
       "title": "Create conversion",
@@ -199,8 +249,11 @@
       "submitting": "Creating conversion…",
       "formats": {
         "pdf": "PDF",
+        "doc": "DOC",
         "docx": "DOCX",
+        "xls": "XLS",
         "xlsx": "XLSX",
+        "ppt": "PPT",
         "pptx": "PPTX",
         "jpg": "JPG",
         "png": "PNG",
@@ -262,6 +315,7 @@
       "complete": "Conversion complete",
       "inProgressHint": "The conversion is running in the background. This page updates automatically.",
       "summary": "{type} → {target}",
+      "backToHistory": "Back to conversions",
       "backToFiles": "Back to files"
     },
     "failure": {

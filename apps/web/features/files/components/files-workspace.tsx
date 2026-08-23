@@ -3,16 +3,28 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ConversionCreateDialog } from "@/features/conversions/components/conversion-create-dialog";
+import { useDeleteFile } from "../hooks/use-delete-file";
 import { useFiles } from "../hooks/use-files";
 import type { PublicFile } from "../types/file";
+import { FileDeleteDialog } from "./file-delete-dialog";
 import { FileList } from "./file-list";
 import { FileUploadPanel } from "./file-upload-panel";
 
 export function FilesWorkspace() {
   const t = useTranslations("files.list");
   const tErrors = useTranslations("files.errors");
-  const { files, isLoading, isError, errorKey } = useFiles();
+  const tDelete = useTranslations("files.delete");
+  const { files, nextCursor, params, isLoading, isError, errorKey, refetch } =
+    useFiles();
+  const {
+    deleteFile,
+    isPending,
+    errorKey: deleteErrorKey,
+    reset,
+  } = useDeleteFile();
   const [fileToConvert, setFileToConvert] = useState<PublicFile | null>(null);
+  const [fileToDelete, setFileToDelete] = useState<PublicFile | null>(null);
+  const [deleteSucceeded, setDeleteSucceeded] = useState(false);
 
   return (
     <div className="flex flex-col gap-8">
@@ -30,19 +42,56 @@ export function FilesWorkspace() {
           </h2>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
+        <div aria-live="polite" className="sr-only">
+          {deleteSucceeded ? tDelete("success") : ""}
+        </div>
+        {deleteSucceeded ? (
+          <p className="text-sm text-foreground">{tDelete("success")}</p>
+        ) : null}
         <FileList
           files={files}
+          cursor={params.cursor}
+          nextCursor={nextCursor}
           isLoading={isLoading}
           isError={isError}
           errorMessage={
             errorKey === null ? tErrors("unexpected") : tErrors(errorKey)
           }
           onConvert={setFileToConvert}
+          onDelete={(file) => {
+            reset();
+            setDeleteSucceeded(false);
+            setFileToDelete(file);
+          }}
+          onRetry={() => {
+            void refetch();
+          }}
         />
       </section>
       <ConversionCreateDialog
         file={fileToConvert}
         onClose={() => setFileToConvert(null)}
+      />
+      <FileDeleteDialog
+        file={fileToDelete}
+        isPending={isPending}
+        errorMessage={deleteErrorKey === null ? null : tErrors(deleteErrorKey)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setFileToDelete(null);
+            reset();
+          }
+        }}
+        onConfirm={() => {
+          if (fileToDelete === null) {
+            return;
+          }
+
+          void deleteFile(fileToDelete.id).then(() => {
+            setFileToDelete(null);
+            setDeleteSucceeded(true);
+          });
+        }}
       />
     </div>
   );

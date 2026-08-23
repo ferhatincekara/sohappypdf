@@ -6,6 +6,7 @@ import { APP_PATHS } from "@/features/app-shell";
 import { FileDownloadButton } from "@/features/files/components/file-download-button";
 import { Link } from "@/lib/i18n/navigation";
 import { safeConversionFailureKey } from "../lib/conversion-failure";
+import { conversionFormatLabel } from "../lib/format-label";
 import type { PublicConversion } from "../types/conversion";
 
 export function ConversionStatus({
@@ -14,6 +15,7 @@ export function ConversionStatus({
   conversion: PublicConversion;
 }) {
   const t = useTranslations("conversions.status");
+  const tHistory = useTranslations("conversions.history");
   const tTypes = useTranslations("conversions.form.types");
   const tFormats = useTranslations("conversions.form.formats");
   const tFailure = useTranslations("conversions.failure");
@@ -29,10 +31,13 @@ export function ConversionStatus({
         <p className="text-sm font-medium text-foreground">
           {t(conversion.status)}
         </p>
+        <p className="truncate text-sm text-foreground">
+          {conversion.sourceFilename ?? tHistory("unnamedSource")}
+        </p>
         <p className="text-sm text-muted-foreground">
           {t("summary", {
             type: tTypes(conversion.type),
-            target: tFormats(conversion.targetFormat),
+            target: conversionFormatLabel(conversion.targetFormat, tFormats),
           })}
         </p>
         <p className="text-xs text-muted-foreground">
@@ -66,12 +71,20 @@ export function ConversionStatus({
         <p className="text-sm text-muted-foreground">{t("inProgressHint")}</p>
       ) : null}
 
-      <Link
-        href={APP_PATHS.files}
-        className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
-      >
-        {t("backToFiles")}
-      </Link>
+      <div className="flex flex-wrap gap-4">
+        <Link
+          href={APP_PATHS.conversions}
+          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+        >
+          {t("backToHistory")}
+        </Link>
+        <Link
+          href={APP_PATHS.files}
+          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+        >
+          {t("backToFiles")}
+        </Link>
+      </div>
     </div>
   );
 }

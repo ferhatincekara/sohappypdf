@@ -68,6 +68,7 @@ export type PublicConversion = {
   id: string;
   status: ConversionStatus;
   sourceFileId: string;
+  sourceFilename: string | null;
   outputFileId: string | null;
   type: ConversionType;
   sourceFormat: string;
@@ -93,4 +94,15 @@ export type CreateConversionResponse = {
 
 export type GetConversionResponse = {
   conversion: PublicConversion;
+};
+
+export type ConversionListQuery = {
+  cursor?: string;
+  limit?: number;
+  status?: ConversionStatus;
+};
+
+export type ConversionListResponse = {
+  conversions: PublicConversion[];
+  nextCursor: string | null;
 };

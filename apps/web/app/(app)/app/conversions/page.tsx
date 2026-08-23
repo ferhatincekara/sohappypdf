@@ -1,5 +1,5 @@
-import { ConversionsLanding } from "@/features/conversions";
+import { ConversionHistoryPageContent } from "@/features/conversions";
 
 export default function ConversionsPage() {
-  return <ConversionsLanding />;
+  return <ConversionHistoryPageContent />;
 }

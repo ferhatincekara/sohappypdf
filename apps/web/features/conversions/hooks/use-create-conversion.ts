@@ -22,6 +22,9 @@ export function useCreateConversion() {
         conversionQueryKeys.detail(conversion.id),
         conversion,
       );
+      void queryClient.invalidateQueries({
+        queryKey: conversionQueryKeys.lists(),
+      });
     },
   });
 

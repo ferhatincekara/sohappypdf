@@ -9,6 +9,7 @@ export type PublicConversion = {
   id: string;
   status: ConversionRecord["status"];
   sourceFileId: string;
+  sourceFilename: string | null;
   outputFileId: string | null;
   type: ConversionRecord["type"];
   sourceFormat: ConversionRecord["sourceFormat"];
@@ -23,11 +24,13 @@ export type PublicConversion = {
 
 export function toPublicConversion(
   conversion: ConversionRecord,
+  extras?: { sourceFilename?: string | null },
 ): PublicConversion {
   return {
     id: conversion.id,
     status: conversion.status,
     sourceFileId: conversion.sourceFileId,
+    sourceFilename: extras?.sourceFilename ?? null,
     outputFileId: conversion.outputFileId,
     type: conversion.type,
     sourceFormat: conversion.sourceFormat,

@@ -364,6 +364,7 @@ describe("conversion API", () => {
     expect(response.status).toBe(201);
     expect(body.conversion.status).toBe("queued");
     expect(body.conversion.sourceFileId).toBe(file.id);
+    expect(body.conversion.sourceFilename).toBe(file.originalFilename);
     expect(body.conversion.targetFormat).toBe("jpg");
     expect(body.conversion.type).toBe("pdf-to-jpg");
     expect(JSON.stringify(body)).not.toContain("objectKey");
@@ -668,6 +669,7 @@ describe("conversion API", () => {
     expect(listed.status).toBe(200);
     expect(listedBody.conversions).toHaveLength(1);
     expect(listedBody.conversions[0].id).toBe(createdBody.conversion.id);
+    expect(listedBody.conversions[0].sourceFilename).toBeString();
   });
 
   test("paginates conversion lists and rejects oversized pages", async () => {

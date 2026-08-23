@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   CONVERSION_POLL_INTERVAL_MS,
+  conversionListRefetchInterval,
   conversionRefetchInterval,
   isActiveConversionStatus,
 } from "./conversion-polling";
@@ -22,5 +23,12 @@ describe("conversion polling", () => {
     expect(conversionRefetchInterval("completed")).toBe(false);
     expect(conversionRefetchInterval("failed")).toBe(false);
     expect(conversionRefetchInterval(undefined)).toBe(false);
+  });
+
+  test("polls a history page only when it contains an active conversion", () => {
+    expect(conversionListRefetchInterval(["completed", "failed"])).toBe(false);
+    expect(conversionListRefetchInterval(["completed", "queued"])).toBe(
+      CONVERSION_POLL_INTERVAL_MS,
+    );
   });
 });

@@ -1,8 +1,10 @@
+import type { AxiosInstance } from "axios";
 import { apiClient } from "@/lib/api/client";
 import type {
   CreateUploadInput,
   CreateUploadResponse,
   FileDownloadResponse,
+  FileListQuery,
   FileListResponse,
   PublicFile,
 } from "../types/file";
@@ -56,13 +58,65 @@ export async function completeUpload(
   }
 }
 
-export async function listFiles(): Promise<FileListResponse> {
-  try {
-    const response = await apiClient.get<FileListResponse>("/api/v1/files");
-    return response.data;
-  } catch (error) {
-    throw new FileApiRequestError(error);
-  }
+export type FileListApi = {
+  list: (
+    query?: FileListQuery,
+    options?: { signal?: AbortSignal },
+  ) => Promise<FileListResponse>;
+  delete: (
+    fileId: string,
+    options?: { signal?: AbortSignal },
+  ) => Promise<PublicFile>;
+};
+
+export function createFileListApi(
+  client: AxiosInstance = apiClient,
+): FileListApi {
+  return {
+    async list(query = {}, options) {
+      try {
+        const response = await client.get<FileListResponse>("/api/v1/files", {
+          params: {
+            ...(query.cursor === undefined ? {} : { cursor: query.cursor }),
+            ...(query.limit === undefined ? {} : { limit: query.limit }),
+          },
+          signal: options?.signal,
+        });
+        return response.data;
+      } catch (error) {
+        throw new FileApiRequestError(error);
+      }
+    },
+
+    async delete(fileId, options) {
+      try {
+        const response = await client.delete<{ file: PublicFile }>(
+          `/api/v1/files/${fileId}`,
+          { signal: options?.signal },
+        );
+
+        return response.data.file;
+      } catch (error) {
+        throw new FileApiRequestError(error);
+      }
+    },
+  };
+}
+
+export const fileListApi = createFileListApi();
+
+export async function listFiles(
+  query: FileListQuery = {},
+  options?: { signal?: AbortSignal },
+): Promise<FileListResponse> {
+  return fileListApi.list(query, options);
+}
+
+export async function deleteFile(
+  fileId: string,
+  options?: { signal?: AbortSignal },
+): Promise<PublicFile> {
+  return fileListApi.delete(fileId, options);
 }
 
 export async function createDownloadUrl(

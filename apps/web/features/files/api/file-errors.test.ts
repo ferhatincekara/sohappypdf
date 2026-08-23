@@ -60,6 +60,21 @@ describe("file error mapping", () => {
     expect(JSON.stringify(error)).not.toContain("secret-key");
   });
 
+  test("maps delete failures to safe keys", () => {
+    expect(
+      mapFileError({ kind: "api", code: "UNAUTHORIZED", status: 401 }),
+    ).toBe(FILE_ERROR_KEYS.unauthorized);
+    expect(mapFileError({ kind: "api", code: "NOT_FOUND", status: 404 })).toBe(
+      FILE_ERROR_KEYS.fileNotFound,
+    );
+    expect(
+      mapFileError({ kind: "api", code: "RATE_LIMITED", status: 429 }),
+    ).toBe(FILE_ERROR_KEYS.rateLimited);
+    expect(mapFileError({ kind: "network", status: 0 })).toBe(
+      FILE_ERROR_KEYS.networkFailure,
+    );
+  });
+
   test("maps storage and network failures", () => {
     expect(mapUnknownUploadError(new StorageUploadError("network"))).toBe(
       FILE_ERROR_KEYS.networkFailure,

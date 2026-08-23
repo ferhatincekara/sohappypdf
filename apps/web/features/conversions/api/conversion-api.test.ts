@@ -11,6 +11,7 @@ function createConversion(): PublicConversion {
     id: "22222222-2222-4222-8222-222222222222",
     status: "queued",
     sourceFileId: "11111111-1111-4111-8111-111111111111",
+    sourceFilename: "report.pdf",
     outputFileId: null,
     type: "pdf-to-jpg",
     sourceFormat: "pdf",
@@ -78,6 +79,33 @@ describe("conversion api", () => {
 
     const conversion = await api.get("22222222-2222-4222-8222-222222222222");
     expect(conversion.id).toBe("22222222-2222-4222-8222-222222222222");
+  });
+
+  test("lists conversions with status and cursor query params", async () => {
+    const received: unknown[] = [];
+    const api = createConversionApi(
+      createClient({
+        get: (async (url, config) => {
+          received.push({ url, params: config?.params });
+          return {
+            data: {
+              conversions: [createConversion()],
+              nextCursor: null,
+            },
+          };
+        }) as AxiosInstance["get"],
+      }),
+    );
+
+    const result = await api.list({ status: "completed", cursor: "next-1" });
+
+    expect(result.conversions).toHaveLength(1);
+    expect(received).toEqual([
+      {
+        url: "/api/v1/conversions",
+        params: { cursor: "next-1", status: "completed" },
+      },
+    ]);
   });
 
   test("wraps API errors without leaking internals", async () => {

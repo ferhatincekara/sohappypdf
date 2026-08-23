@@ -38,11 +38,11 @@
       },
       "files": {
         "title": "Dosyalar",
-        "description": "Çalışmaya başlamak için bir dosya yükleyin."
+        "description": "Dosya yükleyin, durumlarını görün ve dönüşüm başlatın."
       },
       "conversions": {
         "title": "Dönüşümler",
-        "description": "Yüklenen bir dosyadan dönüşüm başlatın."
+        "description": "Dönüşüm geçmişini inceleyin ve tamamlanan sonuçları indirin."
       },
       "apiKeys": {
         "title": "API anahtarları",
@@ -120,7 +120,28 @@
     "description": "Desteklenen bir dosya yükleyin. Dönüştürme, dosya saklandıktan sonra kullanılabilir olacak.",
     "actions": {
       "download": "İndir",
-      "downloading": "İndirme hazırlanıyor…"
+      "downloading": "İndirme hazırlanıyor…",
+      "delete": "Sil",
+      "deleteNamed": "{filename} dosyasını sil"
+    },
+    "formats": {
+      "pdf": "PDF",
+      "doc": "DOC",
+      "docx": "DOCX",
+      "xls": "XLS",
+      "xlsx": "XLSX",
+      "ppt": "PPT",
+      "pptx": "PPTX",
+      "jpg": "JPG",
+      "png": "PNG"
+    },
+    "delete": {
+      "title": "Dosyayı sil",
+      "description": "{filename} hesabınızdan kalıcı olarak kaldırılacak.",
+      "confirm": "Dosyayı sil",
+      "deleting": "Siliniyor…",
+      "cancel": "İptal",
+      "success": "Dosya silindi."
     },
     "upload": {
       "title": "Yükleme",
@@ -141,7 +162,15 @@
       "title": "Yüklenen dosyalar",
       "description": "Hesabınızda saklanan dosyalar.",
       "loading": "Dosyalar yükleniyor…",
-      "empty": "Henüz yüklenmiş dosya yok.",
+      "empty": "Henüz dosya yok.",
+      "emptyHint": "Başlamak için ilk dosyanızı yükleyin.",
+      "uploadCta": "Dosya yükle",
+      "retry": "Tekrar dene",
+      "unknownType": "Dosya",
+      "created": "Eklendi {date}",
+      "expires": "Süre {date}",
+      "firstPage": "En yeni",
+      "nextPage": "Daha eski dosyalar",
       "status": {
         "pending": "Bekliyor",
         "uploaded": "Yüklendi",
@@ -170,8 +199,8 @@
       "fileTooLarge": "Dosya {maxSize} sınırından büyük.",
       "expiredUpload": "Yükleme oturumunun süresi doldu. Tekrar deneyin.",
       "objectNotUploaded": "Dosya doğrulanamadı. Tekrar deneyin.",
-      "fileNotFound": "Yükleme artık kullanılamıyor. Tekrar deneyin.",
-      "unauthorized": "Dosya yüklemek için tekrar oturum açın.",
+      "fileNotFound": "Bu dosya artık kullanılamıyor.",
+      "unauthorized": "Dosyaları yönetmek için tekrar oturum açın.",
       "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "cancelled": "Yükleme iptal edildi.",
@@ -182,10 +211,31 @@
     "actions": {
       "convert": "Dönüştür"
     },
-    "landing": {
+    "history": {
       "title": "Dönüşümler",
-      "description": "Yüklenen bir dosyadan dönüşüm başlatın. Durum sayfası, dönüşüm oluşturulduktan sonra kullanılabilir.",
-      "openFiles": "Dosyalara git"
+      "description": "Dönüşüm geçmişiniz. Durumu görmek veya tamamlanan sonucu indirmek için bir dönüşüm açın.",
+      "loading": "Dönüşümler yükleniyor…",
+      "empty": "Henüz dönüşüm yok.",
+      "emptyHint": "Bir dosya yükleyip dönüşüm başlatınca burada görünür.",
+      "emptyFiltered": "Bu filtreyle eşleşen dönüşüm yok.",
+      "emptyFilteredHint": "Başka bir durum deneyin veya tüm dönüşümleri görüntüleyin.",
+      "openFiles": "Dosya yükle",
+      "retry": "Tekrar dene",
+      "view": "Görüntüle",
+      "unnamedSource": "Kaynak dosya",
+      "summary": "{source} → {target}",
+      "created": "Başladı {date}",
+      "completed": "Bitti {date}",
+      "firstPage": "En yeni",
+      "nextPage": "Daha eski dönüşümler",
+      "filters": {
+        "label": "Dönüşümleri filtrele",
+        "all": "Tümü",
+        "queued": "Kuyrukta",
+        "processing": "İşleniyor",
+        "completed": "Tamamlandı",
+        "failed": "Başarısız"
+      }
     },
     "form": {
       "title": "Dönüşüm oluştur",
@@ -199,8 +249,11 @@
       "submitting": "Dönüşüm oluşturuluyor…",
       "formats": {
         "pdf": "PDF",
+        "doc": "DOC",
         "docx": "DOCX",
+        "xls": "XLS",
         "xlsx": "XLSX",
+        "ppt": "PPT",
         "pptx": "PPTX",
         "jpg": "JPG",
         "png": "PNG",
@@ -262,6 +315,7 @@
       "complete": "Dönüşüm tamamlandı",
       "inProgressHint": "Dönüşüm arka planda çalışıyor. Bu sayfa otomatik güncellenir.",
       "summary": "{type} → {target}",
+      "backToHistory": "Dönüşümlere dön",
       "backToFiles": "Dosyalara dön"
     },
     "failure": {

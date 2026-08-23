@@ -29,3 +29,11 @@ export function conversionRefetchInterval(
 ): number | false {
   return isActiveConversionStatus(status) ? CONVERSION_POLL_INTERVAL_MS : false;
 }
+
+export function conversionListRefetchInterval(
+  statuses: readonly ConversionStatus[],
+): number | false {
+  return statuses.some((status) => isActiveConversionStatus(status))
+    ? CONVERSION_POLL_INTERVAL_MS
+    : false;
+}

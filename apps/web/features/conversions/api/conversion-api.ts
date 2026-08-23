@@ -1,6 +1,8 @@
 import type { AxiosInstance } from "axios";
 import { apiClient } from "@/lib/api/client";
 import type {
+  ConversionListQuery,
+  ConversionListResponse,
   CreateConversionInput,
   CreateConversionResponse,
   GetConversionResponse,
@@ -21,6 +23,7 @@ export class ConversionApiRequestError extends Error {
 export type ConversionApi = {
   create: (input: CreateConversionInput) => Promise<PublicConversion>;
   get: (id: string) => Promise<PublicConversion>;
+  list: (query?: ConversionListQuery) => Promise<ConversionListResponse>;
 };
 
 export function createConversionApi(
@@ -57,6 +60,25 @@ export function createConversionApi(
           `/api/v1/conversions/${id}`,
         );
         return response.data.conversion;
+      } catch (error) {
+        throw new ConversionApiRequestError(error);
+      }
+    },
+
+    async list(query = {}) {
+      try {
+        const response = await client.get<ConversionListResponse>(
+          "/api/v1/conversions",
+          {
+            params: {
+              ...(query.cursor === undefined ? {} : { cursor: query.cursor }),
+              ...(query.limit === undefined ? {} : { limit: query.limit }),
+              ...(query.status === undefined ? {} : { status: query.status }),
+            },
+          },
+        );
+
+        return response.data;
       } catch (error) {
         throw new ConversionApiRequestError(error);
       }

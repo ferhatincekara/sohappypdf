@@ -134,3 +134,27 @@ export function resolveUploadContentType(file: {
 
   return mimeTypeFromFilename(file.name);
 }
+
+export function formatFromPublicFile(file: {
+  contentType: string;
+  filename: string;
+}): SupportedUploadFormat | undefined {
+  const mimeType = normalizeContentType(file.contentType);
+  const byMime = SUPPORTED_UPLOAD_TYPES.find((type) =>
+    type.mimeTypes.some((supported) => supported === mimeType),
+  );
+
+  if (byMime !== undefined) {
+    return byMime.format;
+  }
+
+  const extension = extensionFromFilename(file.filename);
+
+  if (extension === undefined) {
+    return undefined;
+  }
+
+  return SUPPORTED_UPLOAD_TYPES.find((type) =>
+    type.extensions.some((supported) => supported === extension),
+  )?.format;
+}
