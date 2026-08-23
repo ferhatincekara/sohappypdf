@@ -7,11 +7,15 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "check-types": "turbo run check-types",
-    "typecheck": "turbo run check-types"
+    "typecheck": "turbo run check-types",
+    "db:generate": "bun --env-file=.env run --filter @repo/db db:generate",
+    "db:migrate": "bun --env-file=.env run --filter @repo/db db:migrate"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.10",
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.18.0",
+    "drizzle-kit": "^0.31.10",
     "turbo": "^2.10.11",
     "typescript": "5.9.2"
   },
@@ -27,5 +31,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "drizzle-orm": "^0.45.2"
+  }
 }

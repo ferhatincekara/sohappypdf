@@ -11,6 +11,8 @@ This repository is a Turborepo monorepo managed with Bun.
 - `bun run lint` — check linting, formatting, and import organization
 - `bun run format` — apply Biome formatting, lint fixes, and import organization
 - `bun run check-types` / `bun run typecheck` — run TypeScript checks
+- `bun run db:generate` — generate Drizzle migrations
+- `bun run db:migrate` — apply versioned Drizzle migrations
 
 ## Tooling
 
