@@ -6,5 +6,6 @@
 **/*.md
 packages/db/drizzle
 apps/api
+apps/web
 apps/docs
 **/*.test.ts

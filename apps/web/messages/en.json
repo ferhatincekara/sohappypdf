@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "title": "SohappyPDF",
+    "description": "Convert and process PDF files."
+  },
+  "home": {
+    "title": "SohappyPDF",
+    "tagline": "The web application foundation is ready.",
+    "openApp": "Open application"
+  },
+  "app": {
+    "title": "Application"
+  },
+  "errors": {
+    "notFound": "This page could not be found.",
+    "generic": "Something went wrong.",
+    "loading": "Loading"
+  }
+}

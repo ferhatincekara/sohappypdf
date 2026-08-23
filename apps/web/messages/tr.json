@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "title": "SohappyPDF",
+    "description": "PDF dosyalarını dönüştürün ve işleyin."
+  },
+  "home": {
+    "title": "SohappyPDF",
+    "tagline": "Web uygulaması temeli hazır.",
+    "openApp": "Uygulamayı aç"
+  },
+  "app": {
+    "title": "Uygulama"
+  },
+  "errors": {
+    "notFound": "Bu sayfa bulunamadı.",
+    "generic": "Bir şeyler ters gitti.",
+    "loading": "Yükleniyor"
+  }
+}

@@ -26,6 +26,7 @@ try {
 } catch (error) {
   logger.error("worker startup failed", {
     code: isAppError(error) ? error.code : "INTERNAL_ERROR",
+    reason: isAppError(error) ? error.message : "An unexpected error occurred",
   });
   process.exit(1);
 }

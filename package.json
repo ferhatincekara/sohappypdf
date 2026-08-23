@@ -2,7 +2,7 @@
   "name": "sohappypdf",
   "private": true,
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --continue --filter=@repo/web --filter=@repo/api --filter=@repo/worker",
     "build": "turbo run build",
     "lint": "biome check .",
     "format": "biome check --write .",
