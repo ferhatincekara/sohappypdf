@@ -31,6 +31,20 @@
         "typescript": "5.9.2",
       },
     },
+    "packages/conversions": {
+      "name": "@repo/conversions",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/core": "workspace:*",
+        "@repo/db": "workspace:*",
+        "@repo/files": "workspace:*",
+        "drizzle-orm": "^0.45.2",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "typescript": "5.9.2",
+      },
+    },
     "packages/core": {
       "name": "@repo/core",
       "version": "0.0.0",
@@ -226,6 +240,8 @@
     "@neondatabase/serverless": ["@neondatabase/serverless@1.1.0", "", {}, "sha512-r3ZZhRjEcfEdKIZnoB1RusNgvHuaBRqfCzV4Gi+5A9yUX0S4HTws/ASWqt13wL4y4I+0rqsWGdA2w7EQXHi3+Q=="],
 
     "@repo/config": ["@repo/config@workspace:packages/config"],
+
+    "@repo/conversions": ["@repo/conversions@workspace:packages/conversions"],
 
     "@repo/core": ["@repo/core@workspace:packages/core"],
 
