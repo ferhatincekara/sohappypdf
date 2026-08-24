@@ -39,6 +39,10 @@ const createConversionSchema = z.object({
       errorMap: () => ({ message: "Unsupported conversion" }),
     })
     .optional(),
+  additionalFileIds: z
+    .array(z.string().regex(FILE_ID_PATTERN, "Invalid file id"))
+    .max(20, "Invalid conversion options")
+    .optional(),
 });
 
 const conversionIdSchema = z

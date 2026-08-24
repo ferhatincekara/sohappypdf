@@ -1,3 +1,8 @@
+export type {
+  AnonymousSessionRow,
+  NewAnonymousSessionRow,
+} from "./anonymous-sessions.js";
+export { anonymousSessions } from "./anonymous-sessions.js";
 export type { ApiKeyRow, NewApiKeyRow } from "./api-keys.js";
 export { apiKeyRelations, apiKeys } from "./api-keys.js";
 export type {
@@ -43,3 +48,8 @@ export type { ConversionRow, NewConversionRow } from "./conversions.js";
 export { conversionStatusEnum, conversions } from "./conversions.js";
 export type { FileRow, NewFileRow } from "./files.js";
 export { fileStatusEnum, files } from "./files.js";
+export type { ResourceOwnerKind } from "./resource-owner.js";
+export {
+  RESOURCE_OWNER_KINDS,
+  resourceOwnerKindEnum,
+} from "./resource-owner.js";

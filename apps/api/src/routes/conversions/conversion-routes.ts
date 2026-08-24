@@ -56,6 +56,12 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         targetFormat: body.targetFormat,
         type: body.type,
         idempotencyKey,
+        options:
+          body.additionalFileIds === undefined
+            ? undefined
+            : {
+                additionalFileIds: body.additionalFileIds,
+              },
       },
     });
 

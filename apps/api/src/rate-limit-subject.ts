@@ -1,4 +1,5 @@
 import type { RateLimitSubject } from "@repo/rate-limit";
+import { fingerprintClientIp } from "./auth/ip-fingerprint.js";
 import type { RequestIdentity } from "./auth/request-identity.js";
 
 export function toRateLimitSubject(
@@ -22,7 +23,8 @@ export function toRateLimitSubject(
 
   return {
     kind: "anonymous",
-    ip,
+    sessionId: identity.sessionId ?? "unidentified",
+    ipFingerprint: fingerprintClientIp(ip),
   };
 }
 
@@ -40,4 +42,8 @@ export function isRateLimitExemptPath(path: string): boolean {
     path === "/api/v1/billing/webhooks" ||
     path === "/api/v1/openapi.json"
   );
+}
+
+export function isAnonymousApiPath(path: string): boolean {
+  return path === "/api/v1/anonymous" || path.startsWith("/api/v1/anonymous/");
 }

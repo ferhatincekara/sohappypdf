@@ -34,6 +34,7 @@ import {
   assertOriginalFilename,
   MAX_FILE_SIZE_BYTES,
 } from "./file-validation.js";
+import { DEFAULT_RESOURCE_OWNER_KIND } from "./resource-owner.js";
 
 const DEFAULT_CLEANUP_LIMIT = 100;
 const MAX_CLEANUP_LIMIT = 100;
@@ -139,6 +140,7 @@ export function createFileService(options: FileServiceOptions): FileService {
     const file: FileRecord = {
       id,
       ownerId,
+      ownerKind: input.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
       originalFilename,
       mimeType,
       sizeBytes,
@@ -299,6 +301,7 @@ export function createFileService(options: FileServiceOptions): FileService {
       return options.repository.insert({
         id,
         ownerId,
+        ownerKind: input.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
         originalFilename,
         mimeType,
         sizeBytes,

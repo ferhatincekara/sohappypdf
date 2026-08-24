@@ -1,11 +1,16 @@
 import type { RateLimitRedisConfig } from "@repo/config";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { combineAnonymousRateLimitDecisions } from "./anonymous-rate-limit.js";
 import {
+  type AnonymousRateLimitSubject,
   type RateLimitSubject,
   selectRateLimitKind,
 } from "./rate-limit-identity.js";
-import { createRateLimitKey } from "./rate-limit-key.js";
+import {
+  createAnonymousRateLimitKeys,
+  createRateLimitKey,
+} from "./rate-limit-key.js";
 import type {
   RateLimitPolicies,
   RateLimitPolicy,
@@ -14,14 +19,19 @@ import type { RateLimitDecision } from "./rate-limit-result.js";
 
 const RATE_LIMIT_PREFIX = "sohappypdf:ratelimit";
 const RATE_LIMIT_TIMEOUT_MS = 1_000;
+const RATE_LIMIT_HOUR_WINDOW = "1 h" as const;
 
 export type CreateRateLimitServiceOptions = {
   redis: RateLimitRedisConfig;
   policies: RateLimitPolicies;
+  anonymousHourlyLimit?: number;
 };
 
 export type RateLimitService = {
   consume(subject: RateLimitSubject): Promise<RateLimitDecision>;
+  consumeAnonymousOperation(
+    subject: AnonymousRateLimitSubject,
+  ): Promise<RateLimitDecision>;
 };
 
 function createRateLimitRedis(config: RateLimitRedisConfig): Redis {
@@ -72,6 +82,32 @@ function failOpenDecision(policy: RateLimitPolicy): RateLimitDecision {
   };
 }
 
+async function consumeKey(
+  limiter: Ratelimit,
+  policy: RateLimitPolicy,
+  key: string,
+): Promise<RateLimitDecision> {
+  try {
+    return toDecision(policy, await limiter.limit(key));
+  } catch {
+    return failOpenDecision(policy);
+  }
+}
+
+async function consumeAnonymousDual(
+  limiter: Ratelimit,
+  policy: RateLimitPolicy,
+  subject: AnonymousRateLimitSubject,
+): Promise<RateLimitDecision> {
+  const keys = createAnonymousRateLimitKeys(subject);
+  const [ipDecision, sessionDecision] = await Promise.all([
+    consumeKey(limiter, policy, keys.ip),
+    consumeKey(limiter, policy, keys.session),
+  ]);
+
+  return combineAnonymousRateLimitDecisions(ipDecision, sessionDecision);
+}
+
 /**
  * Fail open when Upstash times out or is unreachable so a Redis outage
  * does not take the API offline. Callers must log `failedOpen` without
@@ -86,19 +122,48 @@ export function createRateLimitService(
     authenticated: createLimiter(redis, options.policies.authenticated),
     api: createLimiter(redis, options.policies.api),
   };
+  const anonymousHourlyLimit = options.anonymousHourlyLimit;
+  const anonymousHourlyLimiter =
+    anonymousHourlyLimit === undefined
+      ? undefined
+      : new Ratelimit({
+          redis,
+          prefix: `${RATE_LIMIT_PREFIX}:anonymous-hourly`,
+          limiter: Ratelimit.slidingWindow(
+            anonymousHourlyLimit,
+            RATE_LIMIT_HOUR_WINDOW,
+          ),
+          timeout: RATE_LIMIT_TIMEOUT_MS,
+          analytics: false,
+        });
+  const anonymousHourlyPolicy: RateLimitPolicy = {
+    kind: "anonymous",
+    limit: anonymousHourlyLimit ?? options.policies.anonymous.limit,
+    window: options.policies.anonymous.window,
+  };
 
   return {
     async consume(subject) {
       const kind = selectRateLimitKind(subject);
       const policy = options.policies[kind];
-      const key = createRateLimitKey(subject);
 
-      try {
-        const result = await limiters[kind].limit(key);
-        return toDecision(policy, result);
-      } catch {
-        return failOpenDecision(policy);
+      if (subject.kind === "anonymous") {
+        return consumeAnonymousDual(limiters.anonymous, policy, subject);
       }
+
+      return consumeKey(limiters[kind], policy, createRateLimitKey(subject));
+    },
+
+    async consumeAnonymousOperation(subject) {
+      if (anonymousHourlyLimiter === undefined) {
+        return failOpenDecision(anonymousHourlyPolicy);
+      }
+
+      return consumeAnonymousDual(
+        anonymousHourlyLimiter,
+        anonymousHourlyPolicy,
+        subject,
+      );
     },
   };
 }

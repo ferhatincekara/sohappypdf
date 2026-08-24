@@ -235,6 +235,7 @@ describe("file service", () => {
     expect(result.file.expiresAt.toISOString()).toBe(
       "2026-08-23T20:00:00.000Z",
     );
+    expect(result.file.ownerKind).toBe("user");
     expect(result.upload.key).toBe(result.file.objectKey);
     expect(result.upload.url.startsWith("https://")).toBe(true);
     expect(result.file.objectKey.includes("report.pdf")).toBe(false);

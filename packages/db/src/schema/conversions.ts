@@ -9,8 +9,8 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { user } from "./auth.js";
 import { files } from "./files.js";
+import { resourceOwnerKindEnum } from "./resource-owner.js";
 
 export const conversionStatusEnum = pgEnum("conversion_status", [
   "pending",
@@ -25,9 +25,8 @@ export const conversions = pgTable(
   "conversions",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-    ownerId: text("owner_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+    ownerId: text("owner_id").notNull(),
+    ownerKind: resourceOwnerKindEnum("owner_kind").notNull().default("user"),
     sourceFileId: uuid("source_file_id")
       .notNull()
       .references(() => files.id),
@@ -55,11 +54,17 @@ export const conversions = pgTable(
       withTimezone: true,
       mode: "date",
     }),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     index("conversions_source_file_id_idx").on(table.sourceFileId),
     index("conversions_status_idx").on(table.status),
     index("conversions_owner_id_idx").on(table.ownerId),
+    index("conversions_owner_kind_owner_id_idx").on(
+      table.ownerKind,
+      table.ownerId,
+    ),
+    index("conversions_expires_at_idx").on(table.expiresAt),
     index("conversions_owner_id_created_at_id_idx").on(
       table.ownerId,
       table.createdAt,

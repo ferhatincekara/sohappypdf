@@ -8,5 +8,9 @@ export function createS3Client(config: StorageConfig): S3Client {
       accessKeyId: config.accessKeyId,
       secretAccessKey: config.secretAccessKey,
     },
+    // Browser PUT uploads cannot send the flexible checksum headers that
+    // AWS SDK v3 otherwise embeds in presigned URLs.
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    responseChecksumValidation: "WHEN_REQUIRED",
   });
 }

@@ -1,8 +1,10 @@
 import type { FileStatus } from "./file-status.js";
+import type { ResourceOwnerKind } from "./resource-owner.js";
 
 export type FileRecord = {
   id: string;
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   originalFilename: string;
   mimeType: string;
   sizeBytes: number;
@@ -16,6 +18,7 @@ export type FileRecord = {
 
 export type CreateFileInput = {
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   originalFilename: string;
   mimeType: string;
   sizeBytes: number;
@@ -34,6 +37,7 @@ export type CreateFileResult = {
 export type RegisterStoredFileInput = {
   id?: string;
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   originalFilename: string;
   mimeType: string;
   sizeBytes: number;

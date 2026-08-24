@@ -5,6 +5,11 @@ assertServerOnly("@repo/db");
 export type { CreateDatabaseOptions, Database } from "./client.js";
 export { createDatabase, getDb } from "./client.js";
 export { pingDatabase } from "./ping.js";
+export type {
+  AnonymousSessionRow,
+  NewAnonymousSessionRow,
+} from "./schema/anonymous-sessions.js";
+export { anonymousSessions } from "./schema/anonymous-sessions.js";
 export type { ApiKeyRow, NewApiKeyRow } from "./schema/api-keys.js";
 export { apiKeyRelations, apiKeys } from "./schema/api-keys.js";
 export type {
@@ -51,3 +56,8 @@ export { conversionStatusEnum, conversions } from "./schema/conversions.js";
 export type { FileRow, NewFileRow } from "./schema/files.js";
 export { fileStatusEnum, files } from "./schema/files.js";
 export * as schema from "./schema/index.js";
+export type { ResourceOwnerKind } from "./schema/resource-owner.js";
+export {
+  RESOURCE_OWNER_KINDS,
+  resourceOwnerKindEnum,
+} from "./schema/resource-owner.js";

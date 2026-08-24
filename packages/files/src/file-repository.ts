@@ -16,6 +16,7 @@ import {
 import type { FileListCursor } from "./file-pagination.js";
 import type { FileStatus } from "./file-status.js";
 import type { FileRecord } from "./file-types.js";
+import { DEFAULT_RESOURCE_OWNER_KIND } from "./resource-owner.js";
 
 export type ApiFileListInput = {
   ownerId: string;
@@ -50,6 +51,7 @@ function toFileRecord(row: typeof files.$inferSelect): FileRecord {
   return {
     id: row.id,
     ownerId: row.ownerId,
+    ownerKind: row.ownerKind,
     originalFilename: row.originalFilename,
     mimeType: row.mimeType,
     sizeBytes: row.sizeBytes,
@@ -70,6 +72,7 @@ export function createFileRepository(db: Database): FileRepository {
         .values({
           id: file.id,
           ownerId: file.ownerId,
+          ownerKind: file.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
           originalFilename: file.originalFilename,
           mimeType: file.mimeType,
           sizeBytes: file.sizeBytes,

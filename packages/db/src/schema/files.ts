@@ -10,7 +10,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { user } from "./auth.js";
+import { resourceOwnerKindEnum } from "./resource-owner.js";
 
 export const fileStatusEnum = pgEnum("file_status", [
   "pending",
@@ -25,9 +25,8 @@ export const files = pgTable(
   "files",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-    ownerId: text("owner_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+    ownerId: text("owner_id").notNull(),
+    ownerKind: resourceOwnerKindEnum("owner_kind").notNull().default("user"),
     originalFilename: text("original_filename").notNull(),
     mimeType: text("mime_type").notNull(),
     sizeBytes: bigint("size_bytes", { mode: "number" }).notNull(),
@@ -51,6 +50,7 @@ export const files = pgTable(
     index("files_expires_at_idx").on(table.expiresAt),
     index("files_deleted_at_idx").on(table.deletedAt),
     index("files_owner_id_idx").on(table.ownerId),
+    index("files_owner_kind_owner_id_idx").on(table.ownerKind, table.ownerId),
     index("files_owner_id_created_at_id_idx").on(
       table.ownerId,
       table.createdAt,

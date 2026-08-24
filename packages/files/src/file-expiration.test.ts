@@ -5,6 +5,7 @@ import {
   getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
+  remainingFileTtlMs,
 } from "./file-expiration.js";
 import type { FileRecord } from "./file-types.js";
 
@@ -80,5 +81,16 @@ describe("file expiration", () => {
     expect(isEligibleForCleanup(expired, now)).toBe(true);
     expect(isEligibleForCleanup(deleted, now)).toBe(true);
     expect(isEligibleForCleanup(createFile(), now)).toBe(false);
+  });
+
+  test("returns remaining TTL until expiry", () => {
+    const file = createFile();
+
+    expect(remainingFileTtlMs(file, new Date("2026-08-23T19:00:00.000Z"))).toBe(
+      60 * 60 * 1000,
+    );
+    expect(remainingFileTtlMs(file, new Date("2026-08-23T21:00:00.000Z"))).toBe(
+      1,
+    );
   });
 });

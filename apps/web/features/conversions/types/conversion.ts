@@ -85,6 +85,7 @@ export type CreateConversionInput = {
   sourceFileId: string;
   targetFormat: string;
   type?: ConversionType;
+  additionalFileIds?: string[];
   idempotencyKey?: string;
 };
 

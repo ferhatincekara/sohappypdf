@@ -13,6 +13,7 @@ import { getBearerToken } from "./bearer-token.js";
 
 export type AnonymousRequestIdentity = {
   kind: "anonymous";
+  sessionId?: string;
 };
 
 export type RequestIdentity = AnonymousRequestIdentity | AuthIdentity;
@@ -121,4 +122,28 @@ export function requireSessionIdentity(
   }
 
   return authenticated;
+}
+
+export function requireAnonymousIdentity(identity: RequestIdentity): {
+  kind: "anonymous";
+  sessionId: string;
+} {
+  if (identity.kind !== "anonymous") {
+    throw new AppError({
+      code: APP_ERROR_CODES.FORBIDDEN,
+      message: "Anonymous access only",
+    });
+  }
+
+  if (identity.sessionId === undefined || identity.sessionId.length === 0) {
+    throw new AppError({
+      code: APP_ERROR_CODES.UNAUTHORIZED,
+      message: "Anonymous session required",
+    });
+  }
+
+  return {
+    kind: "anonymous",
+    sessionId: identity.sessionId,
+  };
 }

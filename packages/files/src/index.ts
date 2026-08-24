@@ -8,6 +8,7 @@ export {
   getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
+  remainingFileTtlMs,
 } from "./file-expiration.js";
 export {
   DEFAULT_FILE_LIST_LIMIT,
@@ -45,3 +46,9 @@ export type {
   RegisterStoredFileInput,
 } from "./file-types.js";
 export { MAX_FILE_SIZE_BYTES } from "./file-validation.js";
+export type { ResourceOwnerKind } from "./resource-owner.js";
+export {
+  DEFAULT_RESOURCE_OWNER_KIND,
+  isResourceOwnerKind,
+  RESOURCE_OWNER_KINDS,
+} from "./resource-owner.js";

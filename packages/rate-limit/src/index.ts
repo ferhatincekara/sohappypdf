@@ -2,6 +2,7 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/rate-limit");
 
+export { combineAnonymousRateLimitDecisions } from "./anonymous-rate-limit.js";
 export type { RateLimitService } from "./create-rate-limit-service.js";
 export { createRateLimitService } from "./create-rate-limit-service.js";
 export type {
@@ -15,7 +16,11 @@ export {
   RATE_LIMIT_KINDS,
   selectRateLimitKind,
 } from "./rate-limit-identity.js";
-export { createRateLimitKey } from "./rate-limit-key.js";
+export type { AnonymousRateLimitKeys } from "./rate-limit-key.js";
+export {
+  createAnonymousRateLimitKeys,
+  createRateLimitKey,
+} from "./rate-limit-key.js";
 export type {
   RateLimitPolicies,
   RateLimitPolicy,

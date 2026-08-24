@@ -2,6 +2,16 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/config");
 
+export type { AnonymousConfig } from "./anonymous-config.js";
+export {
+  DEFAULT_ANONYMOUS_CONFIG,
+  DEFAULT_ANONYMOUS_MAX_FILE_SIZE_BYTES,
+  DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION,
+  DEFAULT_ANONYMOUS_OPERATIONS_PER_HOUR,
+  DEFAULT_ANONYMOUS_RETENTION_HOURS,
+  DEFAULT_ANONYMOUS_RETENTION_MS,
+  loadAnonymousConfig,
+} from "./anonymous-config.js";
 export type { ApiConfig } from "./api-config.js";
 export { loadApiConfig } from "./api-config.js";
 export type { AppConfig, LogLevel, RuntimeEnv } from "./app-config.js";

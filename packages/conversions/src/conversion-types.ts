@@ -1,3 +1,4 @@
+import type { ResourceOwnerKind } from "@repo/files";
 import type { FileFormat } from "./conversion-format.js";
 import type { ConversionOptions } from "./conversion-options.js";
 import type { ConversionStatus } from "./conversion-status.js";
@@ -28,6 +29,7 @@ export function isConversionFailureCode(
 export type ConversionRecord = {
   id: string;
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   sourceFileId: string;
   outputFileId: string | null;
   type: ConversionType;
@@ -43,24 +45,30 @@ export type ConversionRecord = {
   queuedAt: Date | null;
   startedAt: Date | null;
   completedAt: Date | null;
+  expiresAt?: Date | null;
 };
 
 export type CreateConversionInput = {
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   sourceFileId: string;
   type: ConversionType;
   sourceFormat: string;
   targetFormat: string;
   options?: unknown;
   idempotencyKey?: string;
+  expiresAt?: Date | null;
 };
 
 export type CreateOwnedConversionInput = {
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   sourceFileId: string;
   targetFormat: string;
   type?: string;
+  options?: unknown;
   idempotencyKey?: string;
+  expiresAt?: Date | null;
 };
 
 export type ConversionListQuery = {

@@ -518,4 +518,48 @@ describe("conversion service", () => {
     expect(failed.status).toBe("failed");
     expect(failed.errorCode).toBe("processing_failed");
   });
+
+  test("passes merge options through owned conversion creation", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile, additionalFile]),
+    });
+
+    const conversion = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "pdf",
+      type: "merge-pdf",
+      options: { additionalFileIds: [additionalFile.id] },
+    });
+
+    expect(conversion.options).toEqual({
+      type: "merge-pdf",
+      additionalFileIds: [additionalFile.id],
+    });
+  });
+
+  test("hides expired owned conversions", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+    const created = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+      expiresAt: new Date("2026-08-23T18:00:00.000Z"),
+    });
+
+    try {
+      await service.getOwnedConversion(created.id, sourceFile.ownerId);
+      throw new Error("expected expired conversion to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
+      }
+    }
+  });
 });

@@ -1,13 +1,27 @@
 import { describe, expect, test } from "bun:test";
 import { isAppError } from "@repo/core";
 import { selectRateLimitKind } from "./rate-limit-identity.js";
-import { createRateLimitKey } from "./rate-limit-key.js";
+import {
+  createAnonymousRateLimitKeys,
+  createRateLimitKey,
+} from "./rate-limit-key.js";
 
 describe("createRateLimitKey", () => {
-  test("keys anonymous traffic by IP", () => {
-    expect(createRateLimitKey({ kind: "anonymous", ip: "203.0.113.10" })).toBe(
-      "anonymous:ip:203.0.113.10",
+  test("keys anonymous traffic by hashed IP fingerprint and session", () => {
+    const subject = {
+      kind: "anonymous" as const,
+      sessionId: "550e8400-e29b-41d4-a716-446655440010",
+      ipFingerprint: "abc123def4567890",
+    };
+
+    expect(createAnonymousRateLimitKeys(subject)).toEqual({
+      ip: "anonymous:ip:abc123def4567890",
+      session: "anonymous:session:550e8400-e29b-41d4-a716-446655440010",
+    });
+    expect(createRateLimitKey(subject)).toBe(
+      "anonymous:session:550e8400-e29b-41d4-a716-446655440010",
     );
+    expect(createRateLimitKey(subject).includes("203.0.113.10")).toBe(false);
   });
 
   test("keys authenticated traffic by user ID", () => {
@@ -41,9 +55,13 @@ describe("createRateLimitKey", () => {
 
 describe("selectRateLimitKind", () => {
   test("selects the limiter class from the subject", () => {
-    expect(selectRateLimitKind({ kind: "anonymous", ip: "203.0.113.10" })).toBe(
-      "anonymous",
-    );
+    expect(
+      selectRateLimitKind({
+        kind: "anonymous",
+        sessionId: "unidentified",
+        ipFingerprint: "abc123def4567890",
+      }),
+    ).toBe("anonymous");
     expect(selectRateLimitKind({ kind: "user", userId: "user_1" })).toBe(
       "authenticated",
     );

@@ -38,6 +38,9 @@ export function createConversionApi(
             sourceFileId: input.sourceFileId,
             targetFormat: input.targetFormat,
             ...(input.type === undefined ? {} : { type: input.type }),
+            ...(input.additionalFileIds === undefined
+              ? {}
+              : { additionalFileIds: input.additionalFileIds }),
           },
           input.idempotencyKey === undefined
             ? undefined

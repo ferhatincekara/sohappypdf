@@ -14,7 +14,16 @@
       "open": "Menüyü aç",
       "close": "Menüyü kapat",
       "menu": "Site",
-      "skip": "İçeriğe geç"
+      "skip": "İçeriğe geç",
+      "tools": "Araçlar",
+      "categories": {
+        "convert": "Dönüştürme",
+        "organize": "Düzenleme",
+        "optimize": "Optimizasyon",
+        "edit": "Düzenle",
+        "secure": "Güvenlik",
+        "ai": "Yapay zeka"
+      }
     },
     "hero": {
       "eyebrow": "PDF dönüştürme",
@@ -616,6 +625,29 @@
       "configuration": "Faturalandırma henüz yapılandırılmadı.",
       "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
+  },
+  "publicTools": {
+    "metaTitle": "{tool}",
+    "description": "Bir dosya yükleyin, tarayıcıda işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
+    "selectFile": "Dosya seçin",
+    "selectFiles": "Dosyaları seçin",
+    "process": "İşle",
+    "processing": "İşleniyor…",
+    "download": "İndir",
+    "loading": "Yükleniyor…",
+    "status": "Durum: {status}",
+    "keepWorkspace": "Çalışma alanınızı ve geçmişinizi saklamak için ücretsiz bir hesap oluşturun.",
+    "createAccount": "Ücretsiz hesap oluştur",
+    "limits": "En fazla {files} dosya, her biri {sizeMb} MB. Dosyalar {hours} saat saklanır.",
+    "errors": {
+      "noFile": "İşlemek için bir dosya seçin.",
+      "tooManyFiles": "Bu araç için çok fazla dosya seçildi.",
+      "tooLarge": "Bu dosya geçerli boyut sınırının üzerinde.",
+      "unsupported": "Bu dosya bu araçla işlenemez.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "networkFailure": "Yükleme başarısız. Bağlantınızı kontrol edip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     }
   }

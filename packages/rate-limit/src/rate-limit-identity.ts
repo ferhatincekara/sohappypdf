@@ -4,7 +4,8 @@ export type RateLimitKind = (typeof RATE_LIMIT_KINDS)[number];
 
 export type AnonymousRateLimitSubject = {
   kind: "anonymous";
-  ip: string;
+  sessionId: string;
+  ipFingerprint: string;
 };
 
 export type UserRateLimitSubject = {

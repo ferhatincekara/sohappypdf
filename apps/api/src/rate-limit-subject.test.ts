@@ -1,16 +1,25 @@
 import { describe, expect, test } from "bun:test";
+import { fingerprintClientIp } from "./auth/ip-fingerprint.js";
 import {
+  isAnonymousApiPath,
   isHealthPath,
   isRateLimitExemptPath,
   toRateLimitSubject,
 } from "./rate-limit-subject.js";
 
 describe("toRateLimitSubject", () => {
-  test("maps anonymous requests to an IP subject", () => {
-    expect(toRateLimitSubject({ kind: "anonymous" }, "203.0.113.10")).toEqual({
+  test("maps anonymous requests to a session and IP fingerprint subject", () => {
+    const subject = toRateLimitSubject(
+      { kind: "anonymous", sessionId: "550e8400-e29b-41d4-a716-446655440010" },
+      "203.0.113.10",
+    );
+
+    expect(subject).toEqual({
       kind: "anonymous",
-      ip: "203.0.113.10",
+      sessionId: "550e8400-e29b-41d4-a716-446655440010",
+      ipFingerprint: fingerprintClientIp("203.0.113.10"),
     });
+    expect(JSON.stringify(subject).includes("203.0.113.10")).toBe(false);
   });
 
   test("maps session identity to a user subject", () => {
@@ -56,5 +65,12 @@ describe("isRateLimitExemptPath", () => {
 
   test("exempts the public OpenAPI document", () => {
     expect(isRateLimitExemptPath("/api/v1/openapi.json")).toBe(true);
+  });
+});
+
+describe("isAnonymousApiPath", () => {
+  test("identifies anonymous tool API routes", () => {
+    expect(isAnonymousApiPath("/api/v1/anonymous/files/upload")).toBe(true);
+    expect(isAnonymousApiPath("/api/v1/files/upload")).toBe(false);
   });
 });

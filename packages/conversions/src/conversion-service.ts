@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
-import type { FileRecord } from "@repo/files";
+import { DEFAULT_RESOURCE_OWNER_KIND, type FileRecord } from "@repo/files";
 import {
   isConversionSupported,
   isTargetFormatAccepted,
@@ -183,6 +183,16 @@ export function createConversionService(
       });
     }
 
+    if (
+      conversion.expiresAt != null &&
+      conversion.expiresAt.getTime() <= now().getTime()
+    ) {
+      throw new AppError({
+        code: APP_ERROR_CODES.NOT_FOUND,
+        message: "Conversion not found",
+      });
+    }
+
     return conversion;
   }
 
@@ -280,6 +290,7 @@ export function createConversionService(
     const conversion: ConversionRecord = {
       id: randomUUID(),
       ownerId,
+      ownerKind: input.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
       sourceFileId: sourceFile.id,
       outputFileId: null,
       type,
@@ -295,6 +306,7 @@ export function createConversionService(
       queuedAt: null,
       startedAt: null,
       completedAt: null,
+      expiresAt: input.expiresAt ?? null,
     };
 
     return options.repository.insert(conversion);
@@ -333,11 +345,14 @@ export function createConversionService(
 
       return createConversion({
         ownerId,
+        ownerKind: input.ownerKind,
         sourceFileId: sourceFile.id,
         type,
         sourceFormat,
         targetFormat,
+        options: input.options,
         idempotencyKey: input.idempotencyKey,
+        expiresAt: input.expiresAt,
       });
     },
 

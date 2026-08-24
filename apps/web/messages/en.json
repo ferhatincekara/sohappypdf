@@ -14,7 +14,16 @@
       "open": "Open menu",
       "close": "Close menu",
       "menu": "Site",
-      "skip": "Skip to content"
+      "skip": "Skip to content",
+      "tools": "Tools",
+      "categories": {
+        "convert": "Convert",
+        "organize": "Organize",
+        "optimize": "Optimize",
+        "edit": "Edit",
+        "secure": "Secure",
+        "ai": "AI"
+      }
     },
     "hero": {
       "eyebrow": "PDF conversion",
@@ -616,6 +625,29 @@
       "configuration": "Billing is not configured yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "The request could not be completed. Try again.",
+      "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "publicTools": {
+    "metaTitle": "{tool}",
+    "description": "Upload a file, process it in the browser, and download the result. No account required for basic processing.",
+    "selectFile": "Choose a file",
+    "selectFiles": "Choose files",
+    "process": "Process",
+    "processing": "Processing…",
+    "download": "Download",
+    "loading": "Loading…",
+    "status": "Status: {status}",
+    "keepWorkspace": "Create a free account to keep your workspace and history.",
+    "createAccount": "Create a free account",
+    "limits": "Up to {files} files, {sizeMb} MB each. Files are kept for {hours} hours.",
+    "errors": {
+      "noFile": "Choose a file to process.",
+      "tooManyFiles": "Too many files for this tool.",
+      "tooLarge": "That file is larger than the current limit.",
+      "unsupported": "That file cannot be processed with this tool.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "networkFailure": "Upload failed. Check your connection and try again.",
       "unexpected": "Something went wrong. Try again."
     }
   }

@@ -14,23 +14,29 @@ import {
 import { Link } from "@/lib/i18n/navigation";
 import { MARKETING_NAV_LINKS } from "../lib/marketing-nav";
 import { MARKETING_PATHS } from "../lib/marketing-paths";
+import type { MarketingToolNavGroup } from "../lib/marketing-tools";
 import {
   isMobileNavEscapeKey,
   resolveMobileNavOpen,
 } from "../lib/mobile-nav-state";
 
 export function MarketingMobileNav({
+  toolGroups,
   startHref,
   signInHref,
   startLabel,
   signInLabel,
+  isAuthenticated,
 }: {
+  toolGroups: readonly MarketingToolNavGroup[];
   startHref: string;
   signInHref: string;
   startLabel: string;
   signInLabel: string;
+  isAuthenticated: boolean;
 }) {
   const t = useTranslations("marketing.nav");
+  const tTypes = useTranslations("conversions.form.types");
   const [open, setOpen] = useState(false);
 
   function close(action: "close" | "escape" | "navigate") {
@@ -91,18 +97,47 @@ export function MarketingMobileNav({
               {t(item.id)}
             </Link>
           ))}
-          <Link
-            href={signInHref}
-            onClick={() => {
-              close("navigate");
-            }}
-            className={buttonVariants({
-              variant: "ghost",
-              className: "justify-start",
-            })}
-          >
-            {signInLabel}
-          </Link>
+          <div className="mt-2 flex flex-col gap-3 border-t border-border pt-4">
+            <p className="px-2 text-xs font-medium text-muted-foreground">
+              {t("tools")}
+            </p>
+            {toolGroups.map((group) => (
+              <div key={group.category} className="flex flex-col gap-1">
+                <p className="px-2 text-xs font-medium text-muted-foreground">
+                  {t(`categories.${group.category}`)}
+                </p>
+                {group.tools.map((tool) => (
+                  <Link
+                    key={tool.id}
+                    href={tool.href}
+                    onClick={() => {
+                      close("navigate");
+                    }}
+                    className={buttonVariants({
+                      variant: "ghost",
+                      className: "justify-start",
+                    })}
+                  >
+                    {tTypes(tool.id)}
+                  </Link>
+                ))}
+              </div>
+            ))}
+          </div>
+          {isAuthenticated ? null : (
+            <Link
+              href={signInHref}
+              onClick={() => {
+                close("navigate");
+              }}
+              className={buttonVariants({
+                variant: "ghost",
+                className: "justify-start",
+              })}
+            >
+              {signInLabel}
+            </Link>
+          )}
           <Link
             href={startHref}
             onClick={() => {

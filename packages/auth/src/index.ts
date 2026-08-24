@@ -2,6 +2,27 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/auth");
 
+export {
+  ANONYMOUS_SESSION_COOKIE_NAME,
+  createAnonymousSessionCookieOptions,
+} from "./anonymous-session-cookie.js";
+export { createMemoryAnonymousSessionRepository } from "./anonymous-session-memory.js";
+export { createAnonymousSessionRepository } from "./anonymous-session-repository.js";
+export { createAnonymousSessionService } from "./anonymous-session-service.js";
+export { getAnonymousSessionService } from "./anonymous-session-service-factory.js";
+export {
+  ANONYMOUS_SESSION_TOKEN_PREFIX,
+  generateAnonymousSessionToken,
+  hashAnonymousSessionToken,
+  isAnonymousSessionTokenFormat,
+} from "./anonymous-session-token.js";
+export type {
+  AnonymousSession,
+  AnonymousSessionRecord,
+  AnonymousSessionRepository,
+  AnonymousSessionService,
+  ResolveAnonymousSessionResult,
+} from "./anonymous-session-types.js";
 export type { Auth, CreateAuthOptions } from "./auth.js";
 export { createAuth } from "./auth.js";
 export {

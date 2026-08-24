@@ -1,8 +1,10 @@
 import { type ApiKeyService, getApiKeyService } from "@repo/api-keys";
-import { getAuth } from "@repo/auth";
+import { type AnonymousSessionService, getAuth } from "@repo/auth";
 import { type BillingService, getBillingService } from "@repo/billing";
 import {
+  type AnonymousConfig,
   type ApiConfig,
+  loadAnonymousConfig,
   loadApiConfig,
   loadAppConfig,
   loadFileConfig,
@@ -20,6 +22,7 @@ import {
   createDefaultIdentityResolver,
   type ResolveRequestIdentity,
 } from "./auth/request-identity.js";
+import { anonymousSessionMiddleware } from "./middleware/anonymous-session.js";
 import { corsMiddleware } from "./middleware/cors.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import {
@@ -38,6 +41,10 @@ export type CreateAppOptions = {
   logger?: Logger;
   resolveIdentity?: ResolveRequestIdentity;
   checkRateLimit?: CheckRateLimit;
+  checkAnonymousOperationRateLimit?: CheckRateLimit;
+  anonymousSessionService?: AnonymousSessionService;
+  anonymousConfig?: AnonymousConfig;
+  anonymousSessionCookieSecure?: boolean;
   fileService?: FileService;
   conversionService?: ConversionService;
   apiKeyService?: ApiKeyService;
@@ -49,6 +56,7 @@ export type CreateAppOptions = {
 export function createApp(options: CreateAppOptions = {}) {
   const appConfig = loadAppConfig();
   const config = options.config ?? loadApiConfig();
+  const anonymousConfig = options.anonymousConfig ?? loadAnonymousConfig();
   const logger =
     options.logger ??
     createLogger({
@@ -72,6 +80,14 @@ export function createApp(options: CreateAppOptions = {}) {
   app.use("*", requestLogMiddleware(logger));
   app.use("*", corsMiddleware(config));
   app.use("*", requestIdentityMiddleware(resolveIdentity));
+  app.use(
+    "/api/v1/*",
+    anonymousSessionMiddleware({
+      service: options.anonymousSessionService,
+      cookieSecure: options.anonymousSessionCookieSecure ?? false,
+      cookieMaxAgeSeconds: Math.ceil(anonymousConfig.retentionMs / 1000),
+    }),
+  );
 
   if (options.checkRateLimit !== undefined) {
     // Applied to /api/v1/* so routes can share identity-based limiters.
@@ -94,6 +110,9 @@ export function createApp(options: CreateAppOptions = {}) {
           ? enqueueConversion(input)
           : options.enqueueConversion(input),
       maxUploadFileSizeBytes: loadFileConfig().maxUploadFileSizeBytes,
+      anonymousConfig,
+      checkAnonymousOperationRateLimit:
+        options.checkAnonymousOperationRateLimit,
     }),
   );
 

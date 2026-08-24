@@ -13,7 +13,11 @@ import {
   isConversionType,
   parseConversionOptions,
 } from "@repo/conversions";
-import type { FileService } from "@repo/files";
+import {
+  DEFAULT_RESOURCE_OWNER_KIND,
+  type FileService,
+  remainingFileTtlMs,
+} from "@repo/files";
 import type { Logger } from "@repo/logger";
 import type { ConversionWorkerJob } from "@repo/queue";
 import { createFileOutputKey, type Storage } from "@repo/storage";
@@ -238,10 +242,12 @@ export function createConversionProcessor(
       const outputFile = await dependencies.files.registerStoredFile({
         id: current.id,
         ownerId: sourceFile.ownerId,
+        ownerKind: sourceFile.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
         originalFilename: result.filename,
         mimeType: result.mimeType,
         sizeBytes: output.sizeBytes,
         objectKey: outputKey,
+        expiresInMs: remainingFileTtlMs(sourceFile),
       });
 
       await dependencies.conversions.markCompleted(current.id, {

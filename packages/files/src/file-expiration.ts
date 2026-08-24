@@ -27,6 +27,13 @@ export function isFileExpired(
   return file.expiresAt.getTime() <= now.getTime();
 }
 
+export function remainingFileTtlMs(
+  file: FileRecord,
+  now: Date = new Date(),
+): number {
+  return Math.max(1, file.expiresAt.getTime() - now.getTime());
+}
+
 export function isEligibleForCleanup(
   file: FileRecord,
   now: Date = new Date(),

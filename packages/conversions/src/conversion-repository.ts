@@ -1,5 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type ConversionRow, conversions, type Database } from "@repo/db";
+import { DEFAULT_RESOURCE_OWNER_KIND } from "@repo/files";
 import { and, desc, eq, lt, or } from "drizzle-orm";
 import { normalizeFileFormat } from "./conversion-format.js";
 import { parseConversionOptions } from "./conversion-options.js";
@@ -89,6 +90,7 @@ function toConversionRecord(row: ConversionRow): ConversionRecord {
   return {
     id: row.id,
     ownerId: row.ownerId,
+    ownerKind: row.ownerKind,
     sourceFileId: row.sourceFileId,
     outputFileId: row.outputFileId,
     type: row.conversionType,
@@ -106,6 +108,7 @@ function toConversionRecord(row: ConversionRow): ConversionRecord {
     queuedAt: row.queuedAt,
     startedAt: row.startedAt,
     completedAt: row.completedAt,
+    expiresAt: row.expiresAt,
   };
 }
 
@@ -117,6 +120,7 @@ export function createConversionRepository(db: Database): ConversionRepository {
         .values({
           id: conversion.id,
           ownerId: conversion.ownerId,
+          ownerKind: conversion.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
           sourceFileId: conversion.sourceFileId,
           outputFileId: conversion.outputFileId,
           conversionType: conversion.type,
@@ -132,6 +136,7 @@ export function createConversionRepository(db: Database): ConversionRepository {
           queuedAt: conversion.queuedAt,
           startedAt: conversion.startedAt,
           completedAt: conversion.completedAt,
+          expiresAt: conversion.expiresAt ?? null,
         })
         .returning();
 
