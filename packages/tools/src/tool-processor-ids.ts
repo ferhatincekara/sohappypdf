@@ -19,6 +19,7 @@ export const LIVE_PROCESSOR_IDS = [
   "pdf-forms",
   "pdf-extract",
   "pdf-markdown",
+  "ai",
 ] as const;
 
 export type LiveProcessorId = (typeof LIVE_PROCESSOR_IDS)[number];

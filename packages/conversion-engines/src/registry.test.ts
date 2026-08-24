@@ -17,6 +17,8 @@ describe("engine registry", () => {
     expect(registry.resolve("pdf-to-word-ocr").name).toBe("office-ocr");
     expect(registry.resolve("pdf-to-excel-ocr").name).toBe("office-ocr");
     expect(registry.resolve("ocr-pdf").name).toBe("ocr");
+    expect(registry.resolve("ai-summarizer").name).toBe("ai");
+    expect(registry.resolve("translate-pdf").name).toBe("ai");
     expect(
       registry.resolve({
         type: "pdf-to-jpg",

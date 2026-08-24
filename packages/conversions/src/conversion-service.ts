@@ -136,15 +136,21 @@ function getAdditionalFileIds(
   return undefined;
 }
 
-function assertOcrTargetAlignment(
+function assertOutputModeAlignment(
   options: ConversionOptions,
   targetFormat: FileFormat,
 ): void {
-  if (options.type !== "ocr-pdf" && options.type !== "ocr-image") {
+  if (options.type === "ocr-pdf" || options.type === "ocr-image") {
+    if (options.outputMode !== targetFormat) {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid target format",
+      });
+    }
     return;
   }
 
-  if (options.outputMode !== targetFormat) {
+  if (options.type === "ai-summarizer" && options.outputMode !== targetFormat) {
     throw new AppError({
       code: APP_ERROR_CODES.VALIDATION_ERROR,
       message: "Invalid target format",
@@ -250,7 +256,7 @@ export function createConversionService(
       });
     }
 
-    assertOcrTargetAlignment(parsedOptions, targetFormat);
+    assertOutputModeAlignment(parsedOptions, targetFormat);
 
     const additionalFileIds = getAdditionalFileIds(parsedOptions);
 

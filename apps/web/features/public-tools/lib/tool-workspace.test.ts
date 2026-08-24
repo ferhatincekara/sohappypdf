@@ -65,5 +65,16 @@ describe("tool workspace helpers", () => {
         password: "secret",
       }),
     ).toEqual({ password: "secret" });
+
+    expect(
+      buildToolConversionOptions("ai-summarizer", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        outputFormat: "md",
+      }),
+    ).toEqual({ language: "eng", outputMode: "md" });
+
+    expect(
+      buildToolConversionOptions("translate-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
+    ).toEqual({ targetLanguage: "eng" });
   });
 });

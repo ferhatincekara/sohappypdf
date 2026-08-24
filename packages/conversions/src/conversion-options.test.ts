@@ -75,6 +75,44 @@ describe("conversion options", () => {
     });
   });
 
+  test("accepts AI summarizer and translate options", () => {
+    expect(parseConversionOptions("ai-summarizer", undefined)).toEqual({
+      type: "ai-summarizer",
+      language: "eng",
+      outputMode: "txt",
+    });
+
+    expect(
+      parseConversionOptions(
+        "ai-summarizer",
+        { language: "tr" },
+        { targetFormat: "md" },
+      ),
+    ).toEqual({
+      type: "ai-summarizer",
+      language: "tr",
+      outputMode: "md",
+    });
+
+    expect(
+      parseConversionOptions("translate-pdf", {
+        targetLanguage: "tr",
+        sourceLanguage: "en",
+      }),
+    ).toEqual({
+      type: "translate-pdf",
+      targetLanguage: "tr",
+      sourceLanguage: "en",
+    });
+
+    expectInvalidOptions(() =>
+      parseConversionOptions("translate-pdf", undefined),
+    );
+    expectInvalidOptions(() =>
+      parseConversionOptions("translate-pdf", { targetLanguage: "12" }),
+    );
+  });
+
   test("accepts office OCR conversion options", () => {
     expect(
       parseConversionOptions("pdf-to-word-ocr", { language: "eng" }),
@@ -92,9 +130,7 @@ describe("conversion options", () => {
   test("accepts advanced pdf tool options", () => {
     expect(
       parseConversionOptions("edit-pdf", {
-        operations: [
-          { kind: "text", page: 1, x: 10, y: 20, text: "Hello" },
-        ],
+        operations: [{ kind: "text", page: 1, x: 10, y: 20, text: "Hello" }],
       }),
     ).toEqual({
       type: "edit-pdf",

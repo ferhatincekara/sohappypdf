@@ -8,6 +8,7 @@ export type PublicPlanPresentation = {
   id: PublicPlanId;
   monthlyConversions: number;
   monthlyWebCredits: number;
+  monthlyAiCredits: number;
   storageBytes: number;
   maxFileSizeBytes: number;
   maxApiKeys: number;
@@ -26,6 +27,7 @@ export function presentPlan(
     id,
     monthlyConversions: limits.monthlyConversions,
     monthlyWebCredits: limits.monthlyWebCredits,
+    monthlyAiCredits: limits.monthlyAiCredits,
     storageBytes: limits.storageBytes,
     maxFileSizeBytes: limits.maxFileSizeBytes,
     maxApiKeys: limits.maxApiKeys,

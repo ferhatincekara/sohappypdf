@@ -155,6 +155,7 @@
       },
       "limits": {
         "webCredits": "Ayda {count} web araç kredisi",
+        "aiCredits": "Ayda {count} AI kredisi",
         "conversions": "Ayda {count} API dönüşümü",
         "storage": "{size} depolama",
         "fileSize": "Dosya başına en fazla {size}",
@@ -618,6 +619,7 @@
     },
     "usageItems": {
       "webCredits": "Web araç kredileri",
+      "aiCredits": "AI kredileri",
       "conversions": "Bu ayki dönüşümler",
       "storage": "Depolama",
       "apiKeys": "API anahtarları"
@@ -667,7 +669,9 @@
       "cropLeft": "Sol kenar boşluğu (pt)",
       "watermarkText": "Filigran metni",
       "pageNumberStart": "Numaralandırma başlangıcı",
-      "password": "Parola"
+      "password": "Parola",
+      "targetLanguage": "Hedef dil",
+      "outputFormat": "Çıktı formatı"
     },
     "errors": {
       "noFile": "İşlemek için bir dosya seçin.",
@@ -676,7 +680,7 @@
       "tooLarge": "Bu dosya geçerli boyut sınırının üzerinde.",
       "unsupported": "Bu dosya bu araçla işlenemez.",
       "invalidOptions": "Araç ayarlarını kontrol edip tekrar deneyin.",
-      "creditsExhausted": "Bu ayki web araç krediniz bitti. Pro'ya geçin veya yeni dönemi bekleyin.",
+      "creditsExhausted": "Bu ayki krediniz bitti. Pro'ya geçin veya yeni dönemi bekleyin.",
       "signInRequired": "Bu aracı kullanmak için giriş yapın.",
       "processingFailed": "İşlem başarısız oldu. Farklı bir dosyayla tekrar deneyin.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",

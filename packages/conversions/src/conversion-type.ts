@@ -37,6 +37,8 @@ export const CONVERSION_TYPES = [
   "pdf-to-markdown",
   "ocr-pdf",
   "ocr-image",
+  "ai-summarizer",
+  "translate-pdf",
 ] as const;
 
 export type ConversionType = (typeof CONVERSION_TYPES)[number];

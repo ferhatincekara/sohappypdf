@@ -1,6 +1,7 @@
 import type { ConversionType } from "@repo/conversions";
 import type { ConversionEngine, ConversionEngineQuery } from "./engine.js";
 import type { ConversionEngineConfig } from "./engine-config.js";
+import { createAiDocumentEngine } from "./engines/ai/ai-document-engine.js";
 import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 import { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
 import { createOfficeOcrEngine } from "./engines/libreoffice/office-ocr-engine.js";
@@ -44,6 +45,7 @@ export function createEngineRegistry(
     createOfficeEngine(config),
     createOfficeOcrEngine(config),
     createOcrEngine(config),
+    createAiDocumentEngine(config),
     createPdfImageEngine(config),
     createPdfTextEngine(config),
     createImagePdfEngine(),

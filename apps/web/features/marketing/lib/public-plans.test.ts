@@ -13,6 +13,7 @@ describe("public plans", () => {
 
       expect(plan.monthlyConversions).toBe(source.monthlyConversions);
       expect(plan.monthlyWebCredits).toBe(source.monthlyWebCredits);
+      expect(plan.monthlyAiCredits).toBe(source.monthlyAiCredits);
       expect(plan.storageBytes).toBe(source.storageBytes);
       expect(plan.maxFileSizeBytes).toBe(source.maxFileSizeBytes);
       expect(plan.maxApiKeys).toBe(source.maxApiKeys);

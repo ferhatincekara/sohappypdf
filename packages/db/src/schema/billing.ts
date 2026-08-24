@@ -105,6 +105,8 @@ export const usagePeriods = pgTable(
     conversionsUsed: integer("conversions_used").notNull().default(0),
     webCreditsGranted: integer("web_credits_granted").notNull().default(0),
     webCreditsUsed: integer("web_credits_used").notNull().default(0),
+    aiCreditsGranted: integer("ai_credits_granted").notNull().default(0),
+    aiCreditsUsed: integer("ai_credits_used").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
       .notNull()
       .defaultNow(),
@@ -132,6 +134,18 @@ export const usagePeriods = pgTable(
     check(
       "usage_periods_web_credits_used_lte_granted",
       sql`${table.webCreditsUsed} <= ${table.webCreditsGranted}`,
+    ),
+    check(
+      "usage_periods_ai_credits_granted_non_negative",
+      sql`${table.aiCreditsGranted} >= 0`,
+    ),
+    check(
+      "usage_periods_ai_credits_used_non_negative",
+      sql`${table.aiCreditsUsed} >= 0`,
+    ),
+    check(
+      "usage_periods_ai_credits_used_lte_granted",
+      sql`${table.aiCreditsUsed} <= ${table.aiCreditsGranted}`,
     ),
   ],
 );

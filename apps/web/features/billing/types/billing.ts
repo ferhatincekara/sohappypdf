@@ -27,6 +27,8 @@ export type PublicBillingStatus = {
   usage: {
     webCreditsUsed: number;
     webCreditsLimit: number;
+    aiCreditsUsed: number;
+    aiCreditsLimit: number;
     conversionsUsed: number;
     conversionsLimit: number;
     storageUsedBytes: number;

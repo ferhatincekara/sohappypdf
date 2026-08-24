@@ -36,6 +36,15 @@ describe("conversion capabilities", () => {
   test("looks up conversion types from a format pair", () => {
     expect(findConversionTypes("pdf", "jpg")).toEqual(["pdf-to-jpg"]);
     expect(findConversionTypes("pdf", "txt")).toContain("pdf-to-txt");
+    expect(findConversionTypes("pdf", "txt")).toContain("ai-summarizer");
+    expect(findConversionTypes("pdf", "md")).toContain("ai-summarizer");
+    expect(findConversionTypes("pdf", "pdf")).toContain("translate-pdf");
+    expect(findImplementedConversionTypes("pdf", "txt")).not.toContain(
+      "ai-summarizer",
+    );
+    expect(findImplementedConversionTypes("pdf", "md")).toEqual([
+      "pdf-to-markdown",
+    ]);
     expect(findConversionTypes("pdf", "pdf")).toContain("merge-pdf");
     expect(findConversionTypes("pdf", "pdf")).toContain("compress-pdf");
     expect(findConversionTypes("webp", "pdf")).toEqual([]);
@@ -57,6 +66,8 @@ describe("conversion capabilities", () => {
     expect(isConversionImplemented("pdf-to-word-ocr")).toBe(true);
     expect(isConversionImplemented("ocr-pdf")).toBe(true);
     expect(isConversionImplemented("redact-pdf")).toBe(true);
+    expect(isConversionImplemented("ai-summarizer")).toBe(true);
+    expect(isConversionImplemented("translate-pdf")).toBe(true);
     expect(isConversionImplemented("ocr-image")).toBe(false);
   });
 });

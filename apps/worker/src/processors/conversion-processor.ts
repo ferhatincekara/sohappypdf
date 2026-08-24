@@ -284,11 +284,16 @@ export function createConversionProcessor(
               conversionId: current.id,
               errorCode: failure.errorCode,
             });
+            await dependencies.billing.refundAiCreditsForFailure({
+              userId: conversion.ownerId,
+              conversionId: current.id,
+              errorCode: failure.errorCode,
+            });
           } catch (refundError) {
-            jobLogger.error("web credit refund failed", {
+            jobLogger.error("credit refund failed", {
               conversionId: current.id,
             });
-            jobLogger.debug("web credit refund error", {
+            jobLogger.debug("credit refund error", {
               conversionId: current.id,
               error:
                 refundError instanceof Error

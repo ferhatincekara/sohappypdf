@@ -155,6 +155,7 @@
       },
       "limits": {
         "webCredits": "{count} web tool credits per month",
+        "aiCredits": "{count} AI credits per month",
         "conversions": "{count} API conversions per month",
         "storage": "{size} storage",
         "fileSize": "Up to {size} per file",
@@ -618,6 +619,7 @@
     },
     "usageItems": {
       "webCredits": "Web tool credits",
+      "aiCredits": "AI credits",
       "conversions": "Conversions this month",
       "storage": "Storage",
       "apiKeys": "API keys"
@@ -667,7 +669,9 @@
       "cropLeft": "Left margin (pt)",
       "watermarkText": "Watermark text",
       "pageNumberStart": "Start numbering at",
-      "password": "Password"
+      "password": "Password",
+      "targetLanguage": "Target language",
+      "outputFormat": "Output format"
     },
     "errors": {
       "noFile": "Choose a file to process.",
@@ -676,7 +680,7 @@
       "tooLarge": "That file is larger than the current limit.",
       "unsupported": "That file cannot be processed with this tool.",
       "invalidOptions": "Check the tool settings and try again.",
-      "creditsExhausted": "You have used all web tool credits for this month. Upgrade to Pro or wait for the next billing period.",
+      "creditsExhausted": "You have used all credits for this month. Upgrade to Pro or wait for the next billing period.",
       "signInRequired": "Sign in to use this tool.",
       "processingFailed": "Processing failed. Try again with a different file.",
       "rateLimited": "Too many requests. Wait a moment and try again.",

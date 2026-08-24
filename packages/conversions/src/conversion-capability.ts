@@ -248,6 +248,20 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     targetFormats: ["pdf", "txt"],
     implemented: false,
   },
+  "ai-summarizer": {
+    type: "ai-summarizer",
+    sourceFormats: ["pdf"],
+    targetFormats: ["txt", "md"],
+    implemented: true,
+    requiresExplicitType: true,
+  },
+  "translate-pdf": {
+    type: "translate-pdf",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf", "txt"],
+    implemented: true,
+    requiresExplicitType: true,
+  },
 };
 
 export function listConversionCapabilities(): readonly ConversionCapability[] {

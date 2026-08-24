@@ -19,6 +19,8 @@ export type ToolWorkspaceState = {
   watermarkText: string;
   pageNumberStart: number;
   password: string;
+  targetLanguage: string;
+  outputFormat: string;
 };
 
 export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
@@ -36,6 +38,8 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   watermarkText: "CONFIDENTIAL",
   pageNumberStart: 1,
   password: "",
+  targetLanguage: "eng",
+  outputFormat: "",
 };
 
 export function parsePageListInput(value: string): number[] | undefined {
@@ -154,6 +158,15 @@ export function buildToolConversionOptions(
       return state.password.trim().length === 0
         ? undefined
         : { password: state.password };
+    case "ai-summarizer":
+      return {
+        language: "eng",
+        ...(state.outputFormat === "md" ? { outputMode: "md" } : {}),
+      };
+    case "translate-pdf":
+      return state.targetLanguage.trim().length === 0
+        ? undefined
+        : { targetLanguage: state.targetLanguage.trim() };
     default:
       return undefined;
   }

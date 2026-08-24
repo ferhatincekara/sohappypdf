@@ -4,6 +4,7 @@ import type { BillingSubscriptionRecord } from "./billing-types.js";
 import {
   assertCanCreateApiKey,
   assertCanCreateConversion,
+  assertCanSpendAiCredits,
   assertCanUploadFile,
   isProSubscription,
   resolvePlan,
@@ -132,6 +133,18 @@ describe("entitlement assertions", () => {
       expect(isAppError(error)).toBe(true);
       if (isAppError(error)) {
         expect(error.code).toBe(APP_ERROR_CODES.API_KEY_LIMIT_REACHED);
+      }
+    }
+  });
+
+  test("rejects AI spend when remaining credits are insufficient", () => {
+    try {
+      assertCanSpendAiCredits({ used: 0, granted: 0, amount: 10 });
+      throw new Error("expected AI credit limit to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
       }
     }
   });

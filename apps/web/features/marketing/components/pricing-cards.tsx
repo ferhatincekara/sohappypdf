@@ -43,6 +43,9 @@ export async function PricingCards({
                 {t("limits.webCredits", { count: plan.monthlyWebCredits })}
               </li>
               <li>
+                {t("limits.aiCredits", { count: plan.monthlyAiCredits })}
+              </li>
+              <li>
                 {t("limits.conversions", { count: plan.monthlyConversions })}
               </li>
               <li>{t("limits.storage", { size: plan.storageLabel })}</li>

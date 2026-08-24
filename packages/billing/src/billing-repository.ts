@@ -11,6 +11,7 @@ import {
 } from "@repo/db";
 import { and, desc, eq, sql } from "drizzle-orm";
 import type {
+  AiCreditBalance,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
   WebCreditBalance,
@@ -41,6 +42,8 @@ export type BillingRepository = {
     conversionsUsed: number;
     webCreditsGranted: number;
     webCreditsUsed: number;
+    aiCreditsGranted: number;
+    aiCreditsUsed: number;
   }>;
   ensureWebCreditGrant(input: {
     userId: string;
@@ -60,6 +63,29 @@ export type BillingRepository = {
     now: Date;
   }): Promise<boolean>;
   refundWebCredits(input: {
+    userId: string;
+    executionId: string;
+    reason: string;
+    now: Date;
+  }): Promise<boolean>;
+  ensureAiCreditGrant(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    grantAmount: number;
+    now: Date;
+  }): Promise<AiCreditBalance>;
+  consumeAiCredits(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    amount: number;
+    toolId: string;
+    executionId: string;
+    reason: string;
+    now: Date;
+  }): Promise<boolean>;
+  refundAiCredits(input: {
     userId: string;
     executionId: string;
     reason: string;
@@ -126,6 +152,17 @@ function toWebCreditBalance(input: {
     webCreditsGranted: input.webCreditsGranted,
     webCreditsUsed: input.webCreditsUsed,
     webCreditsRemaining: input.webCreditsGranted - input.webCreditsUsed,
+  };
+}
+
+function toAiCreditBalance(input: {
+  aiCreditsGranted: number;
+  aiCreditsUsed: number;
+}): AiCreditBalance {
+  return {
+    aiCreditsGranted: input.aiCreditsGranted,
+    aiCreditsUsed: input.aiCreditsUsed,
+    aiCreditsRemaining: input.aiCreditsGranted - input.aiCreditsUsed,
   };
 }
 
@@ -250,6 +287,8 @@ export function createBillingRepository(db: Database): BillingRepository {
           conversionsUsed: existing.conversionsUsed,
           webCreditsGranted: existing.webCreditsGranted,
           webCreditsUsed: existing.webCreditsUsed,
+          aiCreditsGranted: existing.aiCreditsGranted,
+          aiCreditsUsed: existing.aiCreditsUsed,
         };
       }
 
@@ -262,6 +301,8 @@ export function createBillingRepository(db: Database): BillingRepository {
           conversionsUsed: 0,
           webCreditsGranted: 0,
           webCreditsUsed: 0,
+          aiCreditsGranted: 0,
+          aiCreditsUsed: 0,
         })
         .onConflictDoNothing()
         .returning();
@@ -271,6 +312,8 @@ export function createBillingRepository(db: Database): BillingRepository {
           conversionsUsed: created.conversionsUsed,
           webCreditsGranted: created.webCreditsGranted,
           webCreditsUsed: created.webCreditsUsed,
+          aiCreditsGranted: created.aiCreditsGranted,
+          aiCreditsUsed: created.aiCreditsUsed,
         };
       }
 
@@ -289,6 +332,8 @@ export function createBillingRepository(db: Database): BillingRepository {
         conversionsUsed: retry?.conversionsUsed ?? 0,
         webCreditsGranted: retry?.webCreditsGranted ?? 0,
         webCreditsUsed: retry?.webCreditsUsed ?? 0,
+        aiCreditsGranted: retry?.aiCreditsGranted ?? 0,
+        aiCreditsUsed: retry?.aiCreditsUsed ?? 0,
       };
     },
 
@@ -303,6 +348,8 @@ export function createBillingRepository(db: Database): BillingRepository {
             conversionsUsed: 0,
             webCreditsGranted: 0,
             webCreditsUsed: 0,
+            aiCreditsGranted: 0,
+            aiCreditsUsed: 0,
           })
           .onConflictDoNothing();
 
@@ -461,6 +508,180 @@ export function createBillingRepository(db: Database): BillingRepository {
       });
     },
 
+    async ensureAiCreditGrant(input) {
+      return db.transaction(async (tx) => {
+        await tx
+          .insert(usagePeriods)
+          .values({
+            userId: input.userId,
+            periodStart: input.periodStart,
+            periodEnd: input.periodEnd,
+            conversionsUsed: 0,
+            webCreditsGranted: 0,
+            webCreditsUsed: 0,
+            aiCreditsGranted: 0,
+            aiCreditsUsed: 0,
+          })
+          .onConflictDoNothing();
+
+        if (input.grantAmount > 0) {
+          const insertedGrant = await tx
+            .insert(webCreditLedgerEntries)
+            .values({
+              userId: input.userId,
+              amount: input.grantAmount,
+              type: "grant",
+              source: "ai",
+              reason: "monthly_plan_grant",
+              periodStart: input.periodStart,
+              createdAt: input.now,
+            })
+            .onConflictDoNothing()
+            .returning();
+
+          if (insertedGrant.length > 0) {
+            await tx
+              .update(usagePeriods)
+              .set({
+                aiCreditsGranted: input.grantAmount,
+                updatedAt: input.now,
+              })
+              .where(
+                and(
+                  eq(usagePeriods.userId, input.userId),
+                  eq(usagePeriods.periodStart, input.periodStart),
+                ),
+              );
+          }
+        }
+
+        const [period] = await tx
+          .select({
+            aiCreditsGranted: usagePeriods.aiCreditsGranted,
+            aiCreditsUsed: usagePeriods.aiCreditsUsed,
+          })
+          .from(usagePeriods)
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+            ),
+          )
+          .limit(1);
+
+        return toAiCreditBalance({
+          aiCreditsGranted: period?.aiCreditsGranted ?? 0,
+          aiCreditsUsed: period?.aiCreditsUsed ?? 0,
+        });
+      });
+    },
+
+    async consumeAiCredits(input) {
+      return db.transaction(async (tx) => {
+        const inserted = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: input.amount,
+            type: "consume",
+            source: "ai",
+            reason: input.reason,
+            toolId: input.toolId,
+            executionId: input.executionId,
+            periodStart: input.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (inserted.length === 0) {
+          return false;
+        }
+
+        const updated = await tx
+          .update(usagePeriods)
+          .set({
+            aiCreditsUsed: sql`${usagePeriods.aiCreditsUsed} + ${input.amount}`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+              sql`${usagePeriods.aiCreditsUsed} + ${input.amount} <= ${usagePeriods.aiCreditsGranted}`,
+            ),
+          )
+          .returning();
+
+        if (updated.length === 0) {
+          throw new AppError({
+            code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+            message: "Monthly AI credit limit reached",
+          });
+        }
+
+        return true;
+      });
+    },
+
+    async refundAiCredits(input) {
+      return db.transaction(async (tx) => {
+        const [consumeEntry] = await tx
+          .select({
+            amount: webCreditLedgerEntries.amount,
+            periodStart: webCreditLedgerEntries.periodStart,
+          })
+          .from(webCreditLedgerEntries)
+          .where(
+            and(
+              eq(webCreditLedgerEntries.userId, input.userId),
+              eq(webCreditLedgerEntries.executionId, input.executionId),
+              eq(webCreditLedgerEntries.type, "consume"),
+              eq(webCreditLedgerEntries.source, "ai"),
+            ),
+          )
+          .limit(1);
+
+        if (consumeEntry === undefined) {
+          return false;
+        }
+
+        const insertedRefund = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: consumeEntry.amount,
+            type: "refund",
+            source: "ai",
+            reason: input.reason,
+            executionId: input.executionId,
+            periodStart: consumeEntry.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (insertedRefund.length === 0) {
+          return false;
+        }
+
+        await tx
+          .update(usagePeriods)
+          .set({
+            aiCreditsUsed: sql`GREATEST(0, ${usagePeriods.aiCreditsUsed} - ${consumeEntry.amount})`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, consumeEntry.periodStart),
+            ),
+          );
+
+        return true;
+      });
+    },
+
     async recordConversionUsage(input) {
       return db.transaction(async (tx) => {
         const inserted = await tx
@@ -486,6 +707,8 @@ export function createBillingRepository(db: Database): BillingRepository {
             conversionsUsed: 1,
             webCreditsGranted: 0,
             webCreditsUsed: 0,
+            aiCreditsGranted: 0,
+            aiCreditsUsed: 0,
           })
           .onConflictDoUpdate({
             target: [usagePeriods.userId, usagePeriods.periodStart],

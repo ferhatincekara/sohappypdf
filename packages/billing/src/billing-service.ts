@@ -1,8 +1,11 @@
 import { assertPolarCheckoutConfig, type BillingConfig } from "@repo/config";
 import { isConversionFailureCode } from "@repo/conversions";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
+import { shouldRefundAiCredits } from "./ai-credit-refund.js";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
+  AiCreditBalance,
   PolarClient,
   PublicBillingStatus,
   VerifyPolarWebhook,
@@ -11,6 +14,7 @@ import type {
 import {
   assertCanCreateApiKey,
   assertCanCreateConversion,
+  assertCanSpendAiCredits,
   assertCanSpendWebCredits,
   assertCanUploadFile,
   resolvePlan,
@@ -41,6 +45,7 @@ export type BillingService = {
   resolvePlan(userId: string): Promise<PlanId>;
   getConversionUsage(userId: string): Promise<{ conversionsUsed: number }>;
   getWebCreditBalance(userId: string): Promise<WebCreditBalance>;
+  getAiCreditBalance(userId: string): Promise<AiCreditBalance>;
   getBillingStatus(input: {
     userId: string;
     storageUsedBytes: number;
@@ -48,6 +53,11 @@ export type BillingService = {
   }): Promise<PublicBillingStatus>;
   assertCanCreateConversion(userId: string): Promise<void>;
   assertCanSpendWebCredits(input: {
+    userId: string;
+    toolId: string;
+    amount?: number;
+  }): Promise<void>;
+  assertCanSpendAiCredits(input: {
     userId: string;
     toolId: string;
     amount?: number;
@@ -73,6 +83,21 @@ export type BillingService = {
     reason: string;
   }): Promise<boolean>;
   refundWebCreditsForFailure(input: {
+    userId: string;
+    conversionId: string;
+    errorCode: string;
+  }): Promise<boolean>;
+  consumeAiCredits(input: {
+    userId: string;
+    conversionId: string;
+    toolId: string;
+  }): Promise<boolean>;
+  refundAiCredits(input: {
+    userId: string;
+    conversionId: string;
+    reason: string;
+  }): Promise<boolean>;
+  refundAiCreditsForFailure(input: {
     userId: string;
     conversionId: string;
     errorCode: string;
@@ -137,6 +162,20 @@ export function createBillingService(
       periodStart: period.start,
       periodEnd: period.end,
       grantAmount: entitlements.limits.monthlyWebCredits,
+      now: now(),
+    });
+  }
+
+  async function ensureAiCreditBalance(
+    userId: string,
+  ): Promise<AiCreditBalance> {
+    const { entitlements, period } = await resolveUsageContext(userId);
+
+    return options.repository.ensureAiCreditGrant({
+      userId,
+      periodStart: period.start,
+      periodEnd: period.end,
+      grantAmount: entitlements.limits.monthlyAiCredits,
       now: now(),
     });
   }
@@ -284,10 +323,15 @@ export function createBillingService(
       return ensureWebCreditBalance(userId);
     },
 
+    async getAiCreditBalance(userId) {
+      return ensureAiCreditBalance(userId);
+    },
+
     async getBillingStatus(input) {
       await reconcileFromPolar(input.userId);
       const { entitlements, period } = await resolveUsageContext(input.userId);
       const balance = await ensureWebCreditBalance(input.userId);
+      const aiBalance = await ensureAiCreditBalance(input.userId);
       const conversionPeriod = getUtcMonthPeriod(now());
       const conversionUsage = await options.repository.getOrCreateUsagePeriod({
         userId: input.userId,
@@ -308,6 +352,8 @@ export function createBillingService(
         usage: {
           webCreditsUsed: balance.webCreditsUsed,
           webCreditsLimit: entitlements.limits.monthlyWebCredits,
+          aiCreditsUsed: aiBalance.aiCreditsUsed,
+          aiCreditsLimit: entitlements.limits.monthlyAiCredits,
           conversionsUsed: conversionUsage.conversionsUsed,
           conversionsLimit: entitlements.limits.monthlyConversions,
           storageUsedBytes: input.storageUsedBytes,
@@ -339,6 +385,16 @@ export function createBillingService(
       assertCanSpendWebCredits({
         used: balance.webCreditsUsed,
         granted: balance.webCreditsGranted,
+        amount,
+      });
+    },
+
+    async assertCanSpendAiCredits(input) {
+      const balance = await ensureAiCreditBalance(input.userId);
+      const amount = input.amount ?? resolveAiCreditCost(input.toolId);
+      assertCanSpendAiCredits({
+        used: balance.aiCreditsUsed,
+        granted: balance.aiCreditsGranted,
         amount,
       });
     },
@@ -406,6 +462,52 @@ export function createBillingService(
       }
 
       return this.refundWebCredits({
+        userId: input.userId,
+        conversionId: input.conversionId,
+        reason: "execution_failed",
+      });
+    },
+
+    async consumeAiCredits(input) {
+      if (!usesAiCredits(input.toolId)) {
+        return false;
+      }
+
+      const { period } = await resolveUsageContext(input.userId);
+      await ensureAiCreditBalance(input.userId);
+      const amount = resolveAiCreditCost(input.toolId);
+
+      return options.repository.consumeAiCredits({
+        userId: input.userId,
+        periodStart: period.start,
+        periodEnd: period.end,
+        amount,
+        toolId: input.toolId,
+        executionId: input.conversionId,
+        reason: "tool_execution",
+        now: now(),
+      });
+    },
+
+    async refundAiCredits(input) {
+      return options.repository.refundAiCredits({
+        userId: input.userId,
+        executionId: input.conversionId,
+        reason: input.reason,
+        now: now(),
+      });
+    },
+
+    async refundAiCreditsForFailure(input) {
+      if (!isConversionFailureCode(input.errorCode)) {
+        return false;
+      }
+
+      if (!shouldRefundAiCredits(input.errorCode)) {
+        return false;
+      }
+
+      return this.refundAiCredits({
         userId: input.userId,
         conversionId: input.conversionId,
         reason: "execution_failed",

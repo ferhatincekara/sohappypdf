@@ -25,6 +25,10 @@ export type RotationDegrees = (typeof ROTATION_DEGREES)[number];
 export const OCR_OUTPUT_MODES = ["pdf", "txt"] as const;
 export type OcrOutputMode = (typeof OCR_OUTPUT_MODES)[number];
 
+export const AI_SUMMARIZER_OUTPUT_MODES = ["txt", "md"] as const;
+export type AiSummarizerOutputMode =
+  (typeof AI_SUMMARIZER_OUTPUT_MODES)[number];
+
 export type PdfPageImageOptions = {
   type: "pdf-to-jpg" | "pdf-to-png";
   page?: number;
@@ -218,6 +222,18 @@ export type PdfToMarkdownOptions = {
   type: "pdf-to-markdown";
 };
 
+export type AiSummarizerOptions = {
+  type: "ai-summarizer";
+  language: string;
+  outputMode: AiSummarizerOutputMode;
+};
+
+export type TranslatePdfOptions = {
+  type: "translate-pdf";
+  targetLanguage: string;
+  sourceLanguage?: string;
+};
+
 export type ConversionOptions =
   | PdfPageImageOptions
   | OfficeConversionOptions
@@ -244,7 +260,9 @@ export type ConversionOptions =
   | ScanToPdfOptions
   | PdfExtractOptions
   | PdfToMarkdownOptions
-  | OcrOptions;
+  | OcrOptions
+  | AiSummarizerOptions
+  | TranslatePdfOptions;
 
 export type ParseConversionOptionsContext = {
   targetFormat?: FileFormat;
@@ -403,7 +421,11 @@ function parsePositiveCoordinate(value: unknown): number {
 }
 
 function parseEditOperations(value: unknown): EditPdfOperation[] {
-  if (!Array.isArray(value) || value.length < 1 || value.length > MAX_EDIT_OPERATIONS) {
+  if (
+    !Array.isArray(value) ||
+    value.length < 1 ||
+    value.length > MAX_EDIT_OPERATIONS
+  ) {
     throw invalidOptions();
   }
 
@@ -473,7 +495,11 @@ function parseEditOperations(value: unknown): EditPdfOperation[] {
 }
 
 function parseRedactRegions(value: unknown): RedactPdfOptions["regions"] {
-  if (!Array.isArray(value) || value.length < 1 || value.length > MAX_REDACT_REGIONS) {
+  if (
+    !Array.isArray(value) ||
+    value.length < 1 ||
+    value.length > MAX_REDACT_REGIONS
+  ) {
     throw invalidOptions();
   }
 
@@ -643,6 +669,12 @@ function isOcrOutputMode(value: unknown): value is OcrOutputMode {
   return OCR_OUTPUT_MODES.some((mode) => mode === value);
 }
 
+function isAiSummarizerOutputMode(
+  value: unknown,
+): value is AiSummarizerOutputMode {
+  return AI_SUMMARIZER_OUTPUT_MODES.some((mode) => mode === value);
+}
+
 function resolveOcrOutputMode(
   value: unknown,
   targetFormat: FileFormat | undefined,
@@ -656,6 +688,25 @@ function resolveOcrOutputMode(
   }
 
   if (!isOcrOutputMode(value)) {
+    throw invalidOptions();
+  }
+
+  return value;
+}
+
+function resolveAiSummarizerOutputMode(
+  value: unknown,
+  targetFormat: FileFormat | undefined,
+): AiSummarizerOutputMode {
+  if (value === undefined) {
+    if (targetFormat === "md") {
+      return "md";
+    }
+
+    return "txt";
+  }
+
+  if (!isAiSummarizerOutputMode(value)) {
     throw invalidOptions();
   }
 
@@ -846,9 +897,7 @@ export function parseConversionOptions(
         1,
       );
       const text =
-        record.text === undefined
-          ? undefined
-          : parseWatermarkText(record.text);
+        record.text === undefined ? undefined : parseWatermarkText(record.text);
 
       if (additionalFileIds === undefined && text === undefined) {
         throw invalidOptions();
@@ -952,6 +1001,30 @@ export function parseConversionOptions(
       return {
         type,
         language: parseLanguage(record.language ?? "eng"),
+      };
+    }
+    case "ai-summarizer": {
+      assertAllowedKeys(record, ["type", "language", "outputMode"]);
+      return {
+        type,
+        language: parseLanguage(record.language ?? "eng"),
+        outputMode: resolveAiSummarizerOutputMode(
+          record.outputMode,
+          context.targetFormat,
+        ),
+      };
+    }
+    case "translate-pdf": {
+      assertAllowedKeys(record, ["type", "targetLanguage", "sourceLanguage"]);
+      const sourceLanguage =
+        record.sourceLanguage === undefined
+          ? undefined
+          : parseLanguage(record.sourceLanguage);
+
+      return {
+        type,
+        targetLanguage: parseLanguage(record.targetLanguage),
+        ...(sourceLanguage === undefined ? {} : { sourceLanguage }),
       };
     }
   }

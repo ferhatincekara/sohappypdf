@@ -1,6 +1,7 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
+  AiCreditBalance,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
   WebCreditBalance,
@@ -10,6 +11,8 @@ type UsageRecord = {
   conversionsUsed: number;
   webCreditsGranted: number;
   webCreditsUsed: number;
+  aiCreditsGranted: number;
+  aiCreditsUsed: number;
 };
 
 type LedgerEntry = {
@@ -56,6 +59,8 @@ export function createMemoryBillingRepository(options?: {
       conversionsUsed: 0,
       webCreditsGranted: 0,
       webCreditsUsed: 0,
+      aiCreditsGranted: 0,
+      aiCreditsUsed: 0,
     };
     usage.set(key, created);
     return created;
@@ -69,19 +74,37 @@ export function createMemoryBillingRepository(options?: {
     };
   }
 
-  function hasGrant(userId: string, periodStart: Date): boolean {
+  function toAiBalance(record: UsageRecord): AiCreditBalance {
+    return {
+      aiCreditsGranted: record.aiCreditsGranted,
+      aiCreditsUsed: record.aiCreditsUsed,
+      aiCreditsRemaining: record.aiCreditsGranted - record.aiCreditsUsed,
+    };
+  }
+
+  function hasGrant(
+    userId: string,
+    periodStart: Date,
+    source: LedgerEntry["source"],
+  ): boolean {
     return ledger.some(
       (entry) =>
         entry.userId === userId &&
         entry.type === "grant" &&
-        entry.source === "web" &&
+        entry.source === source &&
         entry.periodStart.getTime() === periodStart.getTime(),
     );
   }
 
-  function findConsumeEntry(executionId: string): LedgerEntry | undefined {
+  function findConsumeEntry(
+    executionId: string,
+    source: LedgerEntry["source"],
+  ): LedgerEntry | undefined {
     return ledger.find(
-      (entry) => entry.type === "consume" && entry.executionId === executionId,
+      (entry) =>
+        entry.type === "consume" &&
+        entry.source === source &&
+        entry.executionId === executionId,
     );
   }
 
@@ -143,7 +166,7 @@ export function createMemoryBillingRepository(options?: {
     async ensureWebCreditGrant(input) {
       const record = getUsageRecord(input.userId, input.periodStart);
 
-      if (!hasGrant(input.userId, input.periodStart)) {
+      if (!hasGrant(input.userId, input.periodStart, "web")) {
         ledger.push({
           userId: input.userId,
           amount: input.grantAmount,
@@ -163,7 +186,9 @@ export function createMemoryBillingRepository(options?: {
       if (
         ledger.some(
           (entry) =>
-            entry.type === "consume" && entry.executionId === input.executionId,
+            entry.type === "consume" &&
+            entry.source === "web" &&
+            entry.executionId === input.executionId,
         )
       ) {
         return false;
@@ -194,7 +219,7 @@ export function createMemoryBillingRepository(options?: {
     },
 
     async refundWebCredits(input) {
-      const consumeEntry = findConsumeEntry(input.executionId);
+      const consumeEntry = findConsumeEntry(input.executionId, "web");
 
       if (consumeEntry === undefined) {
         return false;
@@ -203,7 +228,9 @@ export function createMemoryBillingRepository(options?: {
       if (
         ledger.some(
           (entry) =>
-            entry.type === "refund" && entry.executionId === input.executionId,
+            entry.type === "refund" &&
+            entry.source === "web" &&
+            entry.executionId === input.executionId,
         )
       ) {
         return false;
@@ -223,6 +250,100 @@ export function createMemoryBillingRepository(options?: {
       record.webCreditsUsed = Math.max(
         0,
         record.webCreditsUsed - consumeEntry.amount,
+      );
+      return true;
+    },
+
+    async ensureAiCreditGrant(input) {
+      const record = getUsageRecord(input.userId, input.periodStart);
+
+      if (
+        input.grantAmount > 0 &&
+        !hasGrant(input.userId, input.periodStart, "ai")
+      ) {
+        ledger.push({
+          userId: input.userId,
+          amount: input.grantAmount,
+          type: "grant",
+          source: "ai",
+          reason: "monthly_plan_grant",
+          periodStart: input.periodStart,
+          createdAt: input.now,
+        });
+        record.aiCreditsGranted = input.grantAmount;
+      }
+
+      return toAiBalance(record);
+    },
+
+    async consumeAiCredits(input) {
+      if (
+        ledger.some(
+          (entry) =>
+            entry.type === "consume" &&
+            entry.source === "ai" &&
+            entry.executionId === input.executionId,
+        )
+      ) {
+        return false;
+      }
+
+      const record = getUsageRecord(input.userId, input.periodStart);
+
+      if (record.aiCreditsUsed + input.amount > record.aiCreditsGranted) {
+        throw new AppError({
+          code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+          message: "Monthly AI credit limit reached",
+        });
+      }
+
+      ledger.push({
+        userId: input.userId,
+        amount: input.amount,
+        type: "consume",
+        source: "ai",
+        reason: input.reason,
+        toolId: input.toolId,
+        executionId: input.executionId,
+        periodStart: input.periodStart,
+        createdAt: input.now,
+      });
+      record.aiCreditsUsed += input.amount;
+      return true;
+    },
+
+    async refundAiCredits(input) {
+      const consumeEntry = findConsumeEntry(input.executionId, "ai");
+
+      if (consumeEntry === undefined) {
+        return false;
+      }
+
+      if (
+        ledger.some(
+          (entry) =>
+            entry.type === "refund" &&
+            entry.source === "ai" &&
+            entry.executionId === input.executionId,
+        )
+      ) {
+        return false;
+      }
+
+      const record = getUsageRecord(input.userId, consumeEntry.periodStart);
+      ledger.push({
+        userId: input.userId,
+        amount: consumeEntry.amount,
+        type: "refund",
+        source: "ai",
+        reason: input.reason,
+        executionId: input.executionId,
+        periodStart: consumeEntry.periodStart,
+        createdAt: input.now,
+      });
+      record.aiCreditsUsed = Math.max(
+        0,
+        record.aiCreditsUsed - consumeEntry.amount,
       );
       return true;
     },

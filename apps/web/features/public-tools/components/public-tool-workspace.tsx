@@ -392,6 +392,59 @@ function ToolOptionsPanel({
           />
         </div>
       );
+    case "ai-summarizer":
+      return (
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="output-format">{t("outputFormat")}</Label>
+          <select
+            id="output-format"
+            className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+            value={state.outputFormat === "" ? "txt" : state.outputFormat}
+            onChange={(event) => {
+              onChange({ ...state, outputFormat: event.target.value });
+            }}
+          >
+            <option value="txt">TXT</option>
+            <option value="md">Markdown</option>
+          </select>
+        </div>
+      );
+    case "translate-pdf":
+      return (
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="target-language">{t("targetLanguage")}</Label>
+            <select
+              id="target-language"
+              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+              value={state.targetLanguage}
+              onChange={(event) => {
+                onChange({ ...state, targetLanguage: event.target.value });
+              }}
+            >
+              <option value="eng">English</option>
+              <option value="tur">Turkish</option>
+              <option value="deu">German</option>
+              <option value="fra">French</option>
+              <option value="spa">Spanish</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="translate-output-format">{t("outputFormat")}</Label>
+            <select
+              id="translate-output-format"
+              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+              value={state.outputFormat === "" ? "pdf" : state.outputFormat}
+              onChange={(event) => {
+                onChange({ ...state, outputFormat: event.target.value });
+              }}
+            >
+              <option value="pdf">PDF</option>
+              <option value="txt">TXT</option>
+            </select>
+          </div>
+        </div>
+      );
     default:
       return null;
   }
@@ -495,7 +548,15 @@ export function PublicToolWorkspace({ tool }: { tool: ToolDefinition }) {
       return;
     }
 
-    const targetFormat = tool.outputFormats[0];
+    const selectedOutput =
+      workspaceState.outputFormat.trim().length > 0
+        ? workspaceState.outputFormat.trim()
+        : undefined;
+    const targetFormat =
+      selectedOutput !== undefined &&
+      tool.outputFormats.some((format) => format === selectedOutput)
+        ? selectedOutput
+        : tool.outputFormats[0];
 
     if (targetFormat === undefined) {
       setErrorKey("unsupported");
@@ -513,7 +574,8 @@ export function PublicToolWorkspace({ tool }: { tool: ToolDefinition }) {
         tool.id === "remove-pages" ||
         tool.id === "watermark-pdf" ||
         tool.id === "protect-pdf" ||
-        tool.id === "unlock-pdf")
+        tool.id === "unlock-pdf" ||
+        tool.id === "translate-pdf")
     ) {
       setErrorKey("invalidOptions");
       return;

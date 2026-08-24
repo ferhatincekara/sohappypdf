@@ -1,4 +1,5 @@
 import type { BillingService } from "@repo/billing";
+import { usesAiCredits } from "@repo/billing";
 import { loadRetentionPolicy } from "@repo/config";
 import type { ConversionService } from "@repo/conversions";
 import {
@@ -105,10 +106,17 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
           targetFormat: body.targetFormat,
           type: body.type,
         });
-        await billing.assertCanSpendWebCredits({
-          userId: identity.userId,
-          toolId: conversionToolId,
-        });
+        if (usesAiCredits(conversionToolId)) {
+          await billing.assertCanSpendAiCredits({
+            userId: identity.userId,
+            toolId: conversionToolId,
+          });
+        } else {
+          await billing.assertCanSpendWebCredits({
+            userId: identity.userId,
+            toolId: conversionToolId,
+          });
+        }
       } else {
         await billing.assertCanCreateConversion(identity.userId);
       }
@@ -135,12 +143,21 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
 
     if (existing === undefined) {
       if (identity.kind === "session") {
+        const toolId = conversionToolId ?? conversion.type;
         try {
-          await billing.consumeWebCredits({
-            userId: identity.userId,
-            conversionId: conversion.id,
-            toolId: conversionToolId ?? conversion.type,
-          });
+          if (usesAiCredits(toolId)) {
+            await billing.consumeAiCredits({
+              userId: identity.userId,
+              conversionId: conversion.id,
+              toolId,
+            });
+          } else {
+            await billing.consumeWebCredits({
+              userId: identity.userId,
+              conversionId: conversion.id,
+              toolId,
+            });
+          }
         } catch (error) {
           if (
             isAppError(error) &&

@@ -2,6 +2,8 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/billing");
 
+export { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
+export { shouldRefundAiCredits } from "./ai-credit-refund.js";
 export type { BillingRepository } from "./billing-repository.js";
 export { createBillingRepository } from "./billing-repository.js";
 export type {
@@ -11,6 +13,7 @@ export type {
 export { createBillingService } from "./billing-service.js";
 export { getBillingService } from "./billing-service-factory.js";
 export type {
+  AiCreditBalance,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
   PolarClient,
@@ -23,6 +26,7 @@ export type {
 export {
   assertCanCreateApiKey,
   assertCanCreateConversion,
+  assertCanSpendAiCredits,
   assertCanSpendWebCredits,
   assertCanUploadFile,
   isProSubscription,

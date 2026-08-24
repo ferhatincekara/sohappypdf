@@ -71,5 +71,14 @@ export {
   DEFAULT_PRO_WEB_TOOL_CREDITS,
   loadWebCreditConfig,
 } from "./web-credit-config.js";
+export type { AiConfig, AiProviderKind } from "./ai-config.js";
+export {
+  DEFAULT_AI_MAX_EXTRACTED_CHARS,
+  DEFAULT_AI_MAX_PAGES,
+  DEFAULT_AI_MAX_REQUEST_CHARS,
+  DEFAULT_FREE_AI_CREDITS,
+  DEFAULT_PRO_AI_CREDITS,
+  loadAiConfig,
+} from "./ai-config.js";
 export type { WorkerConfig } from "./worker-config.js";
 export { DEFAULT_WORKER_CONFIG, loadWorkerConfig } from "./worker-config.js";

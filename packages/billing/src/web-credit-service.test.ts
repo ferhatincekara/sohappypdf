@@ -12,6 +12,7 @@ function createCatalog(overrides?: Partial<PlanCatalog["free"]>): PlanCatalog {
     free: {
       monthlyConversions: 20,
       monthlyWebCredits: 100,
+      monthlyAiCredits: 0,
       storageBytes: 500 * 1024 * 1024,
       maxFileSizeBytes: 20 * 1024 * 1024,
       maxApiKeys: 2,
@@ -23,6 +24,7 @@ function createCatalog(overrides?: Partial<PlanCatalog["free"]>): PlanCatalog {
     pro: {
       monthlyConversions: 500,
       monthlyWebCredits: 2_000,
+      monthlyAiCredits: 200,
       storageBytes: 10 * 1024 * 1024 * 1024,
       maxFileSizeBytes: 100 * 1024 * 1024,
       maxApiKeys: 20,

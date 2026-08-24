@@ -29,12 +29,20 @@ export type UsagePeriodRecord = {
   conversionsUsed: number;
   webCreditsGranted: number;
   webCreditsUsed: number;
+  aiCreditsGranted: number;
+  aiCreditsUsed: number;
 };
 
 export type WebCreditBalance = {
   webCreditsGranted: number;
   webCreditsUsed: number;
   webCreditsRemaining: number;
+};
+
+export type AiCreditBalance = {
+  aiCreditsGranted: number;
+  aiCreditsUsed: number;
+  aiCreditsRemaining: number;
 };
 
 export type PublicBillingStatus = {
@@ -47,6 +55,8 @@ export type PublicBillingStatus = {
   usage: {
     webCreditsUsed: number;
     webCreditsLimit: number;
+    aiCreditsUsed: number;
+    aiCreditsLimit: number;
     conversionsUsed: number;
     conversionsLimit: number;
     storageUsedBytes: number;

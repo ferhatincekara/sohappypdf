@@ -69,6 +69,7 @@ export type ToolDefinition = {
   maxInputCount: number;
   webCreditCost: number;
   apiCreditCost: number;
+  aiCreditCost: number;
   availability: ToolAvailability;
   processorId: string;
 };
@@ -123,18 +124,30 @@ export const TOOL_CREDIT_PRICING = {
   "pdf-extract": { webCreditCost: 10, apiCreditCost: 12 },
   "pdf-to-markdown": { webCreditCost: 5, apiCreditCost: 5 },
   "ocr-pdf": { webCreditCost: 5, apiCreditCost: 5 },
-  "ai-summarizer": { webCreditCost: 10, apiCreditCost: 12 },
-  "translate-pdf": { webCreditCost: 10, apiCreditCost: 12 },
+  "ai-summarizer": { webCreditCost: 0, apiCreditCost: 0, aiCreditCost: 10 },
+  "translate-pdf": { webCreditCost: 0, apiCreditCost: 0, aiCreditCost: 10 },
 } as const;
 
 export type PricedToolId = keyof typeof TOOL_CREDIT_PRICING;
 export type ToolCreditPricing = {
   webCreditCost: number;
   apiCreditCost: number;
+  aiCreditCost: number;
+};
+
+type ToolCreditPricingInput = {
+  webCreditCost: number;
+  apiCreditCost: number;
+  aiCreditCost?: number;
 };
 
 export function getToolCreditPricing(toolId: PricedToolId): ToolCreditPricing {
-  return TOOL_CREDIT_PRICING[toolId];
+  const pricing = TOOL_CREDIT_PRICING[toolId] as ToolCreditPricingInput;
+  return {
+    webCreditCost: pricing.webCreditCost,
+    apiCreditCost: pricing.apiCreditCost,
+    aiCreditCost: pricing.aiCreditCost ?? 0,
+  };
 }
 
 const ALL_PLANS = ["free", "pro"] as const satisfies readonly ToolPlanId[];
@@ -179,6 +192,7 @@ function defineTool<const Id extends PricedToolId>(
     maxInputCount: definition.maxInputCount,
     webCreditCost: pricing.webCreditCost,
     apiCreditCost: pricing.apiCreditCost,
+    aiCreditCost: pricing.aiCreditCost,
     availability: definition.availability,
     processorId: definition.processorId,
   };
@@ -716,7 +730,7 @@ export const TOOL_CATALOG = [
     requiresAuthentication: true,
     availableOnPlans: ["pro"],
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "ai",
   }),
   defineTool("translate-pdf", {
@@ -725,12 +739,12 @@ export const TOOL_CATALOG = [
     inputKind: "pdf",
     outputKind: "pdf",
     inputFormats: ["pdf"],
-    outputFormats: ["pdf"],
+    outputFormats: ["pdf", "txt"],
     allowsAnonymous: false,
     requiresAuthentication: true,
     availableOnPlans: ["pro"],
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "ai",
   }),
 ] as const satisfies readonly ToolDefinition[];

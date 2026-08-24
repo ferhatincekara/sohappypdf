@@ -14,6 +14,7 @@ export {
   CONVERSION_NATIVE_BINARIES,
   DEFAULT_CONVERSION_ENGINE_CONFIG,
 } from "./engine-config.js";
+export { createAiDocumentEngine } from "./engines/ai/ai-document-engine.js";
 export { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 export { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
 export { createOfficeOcrEngine } from "./engines/libreoffice/office-ocr-engine.js";

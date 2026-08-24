@@ -1,4 +1,4 @@
-import { type EnvSource, loadWebCreditConfig } from "@repo/config";
+import { type EnvSource, loadAiConfig, loadWebCreditConfig } from "@repo/config";
 import { DEFAULT_PLAN_LIMITS as catalog } from "./default-plan-limits.js";
 import type { PlanCatalog, PlanLimits } from "./plan-types.js";
 
@@ -6,15 +6,18 @@ export const DEFAULT_PLAN_LIMITS: PlanCatalog = catalog;
 
 export function buildPlanCatalog(source?: EnvSource): PlanCatalog {
   const webCredits = loadWebCreditConfig(source);
+  const aiCredits = loadAiConfig(source);
 
   return {
     free: {
       ...catalog.free,
       monthlyWebCredits: webCredits.freeMonthlyCredits,
+      monthlyAiCredits: aiCredits.freeMonthlyCredits,
     },
     pro: {
       ...catalog.pro,
       monthlyWebCredits: webCredits.proMonthlyCredits,
+      monthlyAiCredits: aiCredits.proMonthlyCredits,
     },
   };
 }

@@ -120,6 +120,10 @@ function BillingWorkspaceInner() {
           value={`${billing.usage.webCreditsUsed} / ${billing.usage.webCreditsLimit}`}
         />
         <UsageRow
+          label={t("usageItems.aiCredits")}
+          value={`${billing.usage.aiCreditsUsed} / ${billing.usage.aiCreditsLimit}`}
+        />
+        <UsageRow
           label={t("usageItems.storage")}
           value={`${formatBytes(billing.usage.storageUsedBytes)} / ${formatBytes(billing.usage.storageLimitBytes)}`}
         />

@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   findCatalogTool,
   findRegisteredTool,
+  getToolCreditPricing,
   groupCatalogToolsByCategory,
   isAnonymousToolAllowed,
   isExecutableTool,
@@ -75,6 +76,7 @@ describe("tool catalog", () => {
   test("registers only executable tools with live processors", () => {
     expect(REGISTERED_TOOLS.map((tool) => tool.id).sort()).toEqual(
       [
+        "ai-summarizer",
         "compare-pdf",
         "compress-pdf",
         "crop-pdf",
@@ -109,6 +111,7 @@ describe("tool catalog", () => {
         "scan-to-pdf",
         "sign-pdf",
         "split-pdf",
+        "translate-pdf",
         "unlock-pdf",
         "watermark-pdf",
         "word-to-pdf",
@@ -138,12 +141,14 @@ describe("tool catalog", () => {
 
   test("keeps web and api credit costs independent and configured", () => {
     for (const tool of TOOL_CATALOG) {
-      const pricing = TOOL_CREDIT_PRICING[tool.id];
+      const pricing = getToolCreditPricing(tool.id);
       expect(pricing).toBeDefined();
       expect(tool.webCreditCost).toBe(pricing.webCreditCost);
       expect(tool.apiCreditCost).toBe(pricing.apiCreditCost);
-      expect(tool.webCreditCost).toBeGreaterThan(0);
-      expect(tool.apiCreditCost).toBeGreaterThan(0);
+      expect(tool.aiCreditCost).toBe(pricing.aiCreditCost);
+      const hasWebOrApiCost = tool.webCreditCost > 0 || tool.apiCreditCost > 0;
+      const hasAiCost = tool.aiCreditCost > 0;
+      expect(hasWebOrApiCost || hasAiCost).toBe(true);
     }
 
     expect(TOOL_CREDIT_PRICING["pdf-to-word-ocr"].webCreditCost).not.toBe(
