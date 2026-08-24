@@ -924,7 +924,39 @@
         "hint": "Hasarlı dosyayı onarmayı deneyeceğiz. Onarım garanti değildir."
       },
       "rotate": {
-        "title": "Sayfaları döndür"
+        "title": "Döndürülecek sayfaları seçin",
+        "hint": "Sayfa seçin, ardından sola veya sağa döndürün. Önizleme, uygulamadan önce değişikliği gösterir.",
+        "rotateLeft": "Sola döndür",
+        "rotateRight": "Sağa döndür",
+        "selectPrompt": "Döndürmek için en az bir sayfa seçin.",
+        "output": "{count, plural, one {# sayfa} other {# sayfa}} {degrees}° dönecek.",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+        "previewFailed": "Bu PDF önizlenemedi.",
+        "processing": "PDF’niz döndürülüyor...",
+        "processingHint": "Seçtiğiniz sayfalara döndürme uygulanıyor.",
+        "successTitle": "PDF’niz hazır",
+        "successDescription": "Döndürülmüş PDF’i indirin.",
+        "download": "PDF’i indir",
+        "rotateAnother": "Başka bir PDF döndür",
+        "processingFailed": "Bu PDF döndürülemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF döndürün.",
+        "faqHow": "Bir PDF yükleyin, döndürülecek sayfaları seçin, sola veya sağa dönün ve uygulayın. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Döndürmek istediğiniz PDF’i sürükleyip bırakın."
+          },
+          "select": {
+            "title": "Sayfaları döndür",
+            "description": "Sayfa seçin ve sola veya sağa dönün."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Döndürülmüş PDF’i alın."
+          }
+        }
       },
       "organize": {
         "title": "Sayfalarınızı düzenleyin",

@@ -18,6 +18,8 @@ export function PdfPageWorkspace({
   passwordProtectedMessage,
   previewFailedMessage,
   renderPageOverlay,
+  mapPages,
+  toolbarChildren,
   children,
 }: {
   pdf: PdfDocumentState;
@@ -28,6 +30,8 @@ export function PdfPageWorkspace({
   passwordProtectedMessage?: string;
   previewFailedMessage?: string;
   renderPageOverlay?: (page: PdfPage) => ReactNode;
+  mapPages?: (pages: PdfPage[]) => PdfPage[];
+  toolbarChildren?: ReactNode;
   children?: ReactNode;
 }) {
   const t = useTranslations("publicTools.pages");
@@ -61,7 +65,9 @@ export function PdfPageWorkspace({
     return null;
   }
 
-  const pages = createPdfPages(pdf.pageCount, selection.selectedPages);
+  const pages = (mapPages ?? ((value: PdfPage[]) => value))(
+    createPdfPages(pdf.pageCount, selection.selectedPages),
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -72,7 +78,9 @@ export function PdfPageWorkspace({
         disabled={disabled}
         onSelectAll={selection.selectAll}
         onClear={selection.clear}
-      />
+      >
+        {toolbarChildren}
+      </PdfPageSelectionToolbar>
       <PdfPageGrid
         document={pdf.document}
         pages={pages}

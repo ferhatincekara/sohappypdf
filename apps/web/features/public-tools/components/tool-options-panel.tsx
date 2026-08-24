@@ -8,7 +8,6 @@ import type { ToolWorkspaceState } from "../lib/tool-workspace";
 
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
-    case "rotate-pdf":
     case "reorder-pages":
     case "remove-pages":
     case "crop-pdf":
@@ -56,30 +55,6 @@ export function ToolOptionsPanel({
             <option value="low">{t("compressionLow")}</option>
             <option value="medium">{t("compressionMedium")}</option>
             <option value="high">{t("compressionHigh")}</option>
-          </select>
-        </div>
-      );
-    case "rotate-pdf":
-      return (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="rotation">{t("rotation")}</Label>
-          <select
-            id="rotation"
-            className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-            value={state.rotationDegrees}
-            disabled={disabled}
-            onChange={(event) => {
-              onChange({
-                ...state,
-                rotationDegrees: Number(
-                  event.target.value,
-                ) as ToolWorkspaceState["rotationDegrees"],
-              });
-            }}
-          >
-            <option value={90}>90°</option>
-            <option value={180}>180°</option>
-            <option value={270}>270°</option>
           </select>
         </div>
       );

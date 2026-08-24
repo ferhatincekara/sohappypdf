@@ -5,6 +5,7 @@ import {
   parseOrganizeOrderInput,
   parseOrganizeRotationsInput,
   parsePageListInput,
+  parseSelectedPagesInput,
   parseSplitRangesInput,
 } from "./tool-workspace";
 
@@ -22,6 +23,8 @@ describe("tool workspace helpers", () => {
       { start: 5, end: 5 },
     ]);
     expect(parseSplitRangesInput("bad")).toBeUndefined();
+    expect(parseSelectedPagesInput("1-3, 5")).toEqual([1, 2, 3, 5]);
+    expect(parseSelectedPagesInput("")).toEqual([]);
   });
 
   test("builds conversion options per tool", () => {
@@ -31,7 +34,15 @@ describe("tool workspace helpers", () => {
 
     expect(
       buildToolConversionOptions("rotate-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
-    ).toEqual({ degrees: 90 });
+    ).toBeUndefined();
+
+    expect(
+      buildToolConversionOptions("rotate-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        pageSelection: "1-2",
+        rotationDegrees: 90,
+      }),
+    ).toEqual({ degrees: 90, pages: [1, 2] });
 
     expect(
       buildToolConversionOptions("split-pdf", {

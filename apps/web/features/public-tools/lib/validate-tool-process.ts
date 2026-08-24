@@ -14,6 +14,7 @@ const TOOLS_REQUIRING_OPTIONS = new Set([
   "organize-pdf",
   "reorder-pages",
   "remove-pages",
+  "rotate-pdf",
   "watermark-pdf",
   "protect-pdf",
   "unlock-pdf",

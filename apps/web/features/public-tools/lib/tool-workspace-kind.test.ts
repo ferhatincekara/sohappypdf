@@ -6,6 +6,7 @@ describe("resolveToolWorkspaceKind", () => {
     expect(resolveToolWorkspaceKind("split-pdf")).toBe("split");
     expect(resolveToolWorkspaceKind("organize-pdf")).toBe("organize");
     expect(resolveToolWorkspaceKind("merge-pdf")).toBe("merge");
+    expect(resolveToolWorkspaceKind("rotate-pdf")).toBe("rotate");
     expect(resolveToolWorkspaceKind("compress-pdf")).toBe("compress");
     expect(resolveToolWorkspaceKind("pdf-to-word")).toBe("convert");
     expect(resolveToolWorkspaceKind("protect-pdf")).toBe("password");

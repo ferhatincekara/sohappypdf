@@ -6,6 +6,7 @@ import {
   PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES,
   PUBLIC_ANONYMOUS_RETENTION_HOURS,
 } from "../lib/anonymous-limits";
+import { dedicatedHowToForTool } from "../lib/dedicated-tool-how-to";
 import { formatAcceptedFormats, formatLabel } from "../lib/format-labels";
 import type { PublicToolFaqItem } from "../lib/public-tool-json-ld";
 import { publicToolCanonicalUrl } from "../lib/public-tool-metadata";
@@ -50,6 +51,7 @@ export async function PublicToolPageContent({
     tool.outputFormats,
     t("upload.conjunction"),
   );
+  const howTo = dedicatedHowToForTool(tool.id);
   const faq: readonly PublicToolFaqItem[] = [
     {
       id: "what",
@@ -60,13 +62,9 @@ export async function PublicToolPageContent({
       id: "how",
       question: t("faq.how.question"),
       answer:
-        tool.id === "split-pdf"
-          ? t("workspaces.split.faqHow")
-          : tool.id === "organize-pdf"
-            ? t("workspaces.organize.faqHow")
-            : tool.id === "merge-pdf"
-              ? t("workspaces.merge.faqHow")
-              : t("faq.how.answer"),
+        howTo === null
+          ? t("faq.how.answer")
+          : t(`workspaces.${howTo.workspace}.faqHow`),
     },
     {
       id: "formats",
@@ -138,91 +136,47 @@ export async function PublicToolPageContent({
             {t("overview.howTitle")}
           </h2>
           <ol className="grid gap-3 sm:grid-cols-3">
-            {tool.id === "split-pdf"
-              ? (["upload", "select", "download"] as const).map(
-                  (step, index) => (
-                    <li
-                      key={step}
-                      className="rounded-lg border border-border bg-card p-4"
-                    >
-                      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                        {t("overview.step", { number: index + 1 })}
-                      </p>
-                      <p className="mt-1 text-sm font-medium text-foreground">
-                        {t(`workspaces.split.how.${step}.title`)}
-                      </p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`workspaces.split.how.${step}.description`)}
-                      </p>
-                    </li>
-                  ),
-                )
-              : tool.id === "organize-pdf"
-                ? (["upload", "arrange", "download"] as const).map(
-                    (step, index) => (
-                      <li
-                        key={step}
-                        className="rounded-lg border border-border bg-card p-4"
-                      >
-                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                          {t("overview.step", { number: index + 1 })}
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-foreground">
-                          {t(`workspaces.organize.how.${step}.title`)}
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {t(`workspaces.organize.how.${step}.description`)}
-                        </p>
-                      </li>
-                    ),
-                  )
-                : tool.id === "merge-pdf"
-                  ? (["upload", "arrange", "download"] as const).map(
-                      (step, index) => (
-                        <li
-                          key={step}
-                          className="rounded-lg border border-border bg-card p-4"
-                        >
-                          <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                            {t("overview.step", { number: index + 1 })}
-                          </p>
-                          <p className="mt-1 text-sm font-medium text-foreground">
-                            {t(`workspaces.merge.how.${step}.title`)}
-                          </p>
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            {t(`workspaces.merge.how.${step}.description`)}
-                          </p>
-                        </li>
-                      ),
-                    )
-                  : (
-                      [
-                        ["upload", formats],
-                        [
-                          "process",
-                          formatLabel(tool.outputFormats[0] ?? "pdf"),
-                        ],
-                        [
-                          "download",
-                          formatLabel(tool.outputFormats[0] ?? "pdf"),
-                        ],
-                      ] as const
-                    ).map(([step, detail], index) => (
-                      <li
-                        key={step}
-                        className="rounded-lg border border-border bg-card p-4"
-                      >
-                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                          {t("overview.step", { number: index + 1 })}
-                        </p>
-                        <p className="mt-1 text-sm font-medium text-foreground">
-                          {t(`overview.steps.${step}.title`)}
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {t(`overview.steps.${step}.description`, { detail })}
-                        </p>
-                      </li>
-                    ))}
+            {howTo === null
+              ? (
+                  [
+                    ["upload", formats],
+                    ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
+                    ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
+                  ] as const
+                ).map(([step, detail], index) => (
+                  <li
+                    key={step}
+                    className="rounded-lg border border-border bg-card p-4"
+                  >
+                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      {t("overview.step", { number: index + 1 })}
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-foreground">
+                      {t(`overview.steps.${step}.title`)}
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {t(`overview.steps.${step}.description`, { detail })}
+                    </p>
+                  </li>
+                ))
+              : howTo.steps.map((step, index) => (
+                  <li
+                    key={step}
+                    className="rounded-lg border border-border bg-card p-4"
+                  >
+                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      {t("overview.step", { number: index + 1 })}
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-foreground">
+                      {t(`workspaces.${howTo.workspace}.how.${step}.title`)}
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {t(
+                        `workspaces.${howTo.workspace}.how.${step}.description`,
+                      )}
+                    </p>
+                  </li>
+                ))}
           </ol>
         </section>
 

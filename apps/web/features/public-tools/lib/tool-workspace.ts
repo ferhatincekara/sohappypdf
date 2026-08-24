@@ -10,6 +10,7 @@ export type ToolWorkspaceState = {
   splitRanges: string;
   pageOrder: string;
   pageRotations: string;
+  pageSelection: string;
   pagesToRemove: string;
   cropMargins: {
     top: number;
@@ -30,6 +31,7 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   splitRanges: "",
   pageOrder: "",
   pageRotations: "",
+  pageSelection: "",
   pagesToRemove: "",
   cropMargins: {
     top: 36,
@@ -174,6 +176,32 @@ export function parseSplitRangesInput(
   return ranges.length === 0 ? undefined : ranges;
 }
 
+export function parseSelectedPagesInput(value: string): number[] | undefined {
+  const trimmed = value.trim();
+
+  if (trimmed.length === 0) {
+    return [];
+  }
+
+  const ranges = parseSplitRangesInput(trimmed);
+
+  if (ranges === undefined) {
+    return undefined;
+  }
+
+  const pages: number[] = [];
+
+  for (const range of ranges) {
+    for (let page = range.start; page <= range.end; page += 1) {
+      if (!pages.includes(page)) {
+        pages.push(page);
+      }
+    }
+  }
+
+  return pages.sort((left, right) => left - right);
+}
+
 export function buildToolConversionOptions(
   toolId: string,
   state: ToolWorkspaceState,
@@ -181,8 +209,15 @@ export function buildToolConversionOptions(
   switch (toolId) {
     case "compress-pdf":
       return { level: state.compressionLevel };
-    case "rotate-pdf":
-      return { degrees: state.rotationDegrees };
+    case "rotate-pdf": {
+      const pages = parseSelectedPagesInput(state.pageSelection);
+
+      if (pages === undefined || pages.length === 0) {
+        return undefined;
+      }
+
+      return { degrees: state.rotationDegrees, pages };
+    }
     case "split-pdf": {
       const ranges = parseSplitRangesInput(state.splitRanges);
       return ranges === undefined ? undefined : { ranges };

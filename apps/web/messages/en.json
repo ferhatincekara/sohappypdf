@@ -924,7 +924,39 @@
         "hint": "We will try to fix a damaged file. Repair is not guaranteed."
       },
       "rotate": {
-        "title": "Rotate pages"
+        "title": "Choose pages to rotate",
+        "hint": "Select pages, then rotate left or right. The preview shows the change before you apply it.",
+        "rotateLeft": "Rotate left",
+        "rotateRight": "Rotate right",
+        "selectPrompt": "Select at least one page to rotate.",
+        "output": "{count, plural, one {# page} other {# pages}} will rotate {degrees}°.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "processing": "Rotating your PDF...",
+        "processingHint": "Applying rotation to the pages you selected.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the rotated PDF.",
+        "download": "Download PDF",
+        "rotateAnother": "Rotate another PDF",
+        "processingFailed": "We couldn't rotate this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Rotate another PDF to continue.",
+        "faqHow": "Upload a PDF, select the pages to rotate, choose left or right, then rotate. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to rotate."
+          },
+          "select": {
+            "title": "Rotate pages",
+            "description": "Select pages and choose left or right."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get the rotated PDF."
+          }
+        }
       },
       "organize": {
         "title": "Arrange your pages",

@@ -287,6 +287,8 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
         splitRanges: "",
         pageOrder: "",
         pageRotations: "",
+        pageSelection: "",
+        pagesToRemove: "",
       }));
     }
 

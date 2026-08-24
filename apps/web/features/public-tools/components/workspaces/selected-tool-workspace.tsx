@@ -9,6 +9,7 @@ import { MergePdfWorkspace } from "./merge-pdf-workspace";
 import { OrganizePdfWorkspace } from "./organize-pdf-workspace";
 import { PasswordPdfWorkspace } from "./password-pdf-workspace";
 import { RepairPdfWorkspace } from "./repair-pdf-workspace";
+import { RotatePdfWorkspace } from "./rotate-pdf-workspace";
 import { SplitPdfWorkspace } from "./split-pdf-workspace";
 
 export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
@@ -19,6 +20,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <OrganizePdfWorkspace {...props} />;
     case "merge":
       return <MergePdfWorkspace {...props} />;
+    case "rotate":
+      return <RotatePdfWorkspace {...props} />;
     case "compress":
       return <CompressPdfWorkspace {...props} />;
     case "convert":

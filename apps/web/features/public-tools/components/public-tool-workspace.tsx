@@ -11,7 +11,10 @@ import { formatAcceptedFormats } from "../lib/format-labels";
 import type { PublicToolErrorKey } from "../lib/public-tool-errors";
 import { selectedPagesFromSplitRanges } from "../lib/split-selection";
 import { acceptForTool } from "../lib/tool-limits";
-import { parseOrganizeOrderInput } from "../lib/tool-workspace";
+import {
+  parseOrganizeOrderInput,
+  parseSelectedPagesInput,
+} from "../lib/tool-workspace";
 import type { ToolSelectedUxState } from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
@@ -53,6 +56,10 @@ export function PublicToolWorkspace({
     organizePageCount:
       parseOrganizeOrderInput(workspace.workspaceState.pageOrder)?.length ?? 0,
     mergeFileCount: workspace.files.length,
+    rotateSelectedCount:
+      parseSelectedPagesInput(workspace.workspaceState.pageSelection)?.length ??
+      0,
+    rotationDegrees: workspace.workspaceState.rotationDegrees,
     errorKey: ux.status === "error" ? ux.error.key : null,
     hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
   });
@@ -193,6 +200,8 @@ function dedicatedToolShellCopy({
   splitSelectedCount,
   organizePageCount,
   mergeFileCount,
+  rotateSelectedCount,
+  rotationDegrees,
   errorKey,
   hours,
 }: {
@@ -201,6 +210,8 @@ function dedicatedToolShellCopy({
   splitSelectedCount: number;
   organizePageCount: number;
   mergeFileCount: number;
+  rotateSelectedCount: number;
+  rotationDegrees: number;
   errorKey: PublicToolErrorKey | null;
   hours: number;
 }): {
@@ -280,6 +291,30 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "rotate-pdf") {
+    return {
+      processingTitle: t("workspaces.rotate.processing"),
+      processingHint: t("workspaces.rotate.processingHint"),
+      successTitle: t("workspaces.rotate.successTitle"),
+      successDescription: t("workspaces.rotate.successDescription"),
+      downloadLabel: t("workspaces.rotate.download"),
+      resetLabel: t("workspaces.rotate.rotateAnother"),
+      expiredTitle: t("workspaces.rotate.expiredTitle"),
+      expiredDescription: t("workspaces.rotate.expiredDescription", { hours }),
+      processHint:
+        rotateSelectedCount === 0
+          ? t("workspaces.rotate.selectPrompt")
+          : t("workspaces.rotate.output", {
+              count: rotateSelectedCount,
+              degrees: rotationDegrees,
+            }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveRotateErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -338,6 +373,26 @@ function resolveMergeErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.merge.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveRotateErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.rotate.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.rotate.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.rotate.expiredDescription", { hours });
   }
 
   return undefined;
