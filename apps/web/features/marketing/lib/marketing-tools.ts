@@ -1,16 +1,18 @@
 import {
+  groupCatalogToolsByCategory,
+  listCatalogTools,
   listRegisteredTools,
   type ToolDefinition,
-  toolPublicPath,
 } from "@repo/tools/catalog";
 
 export const MARKETING_TOOL_CATEGORY_ORDER = [
-  "convert",
   "organize",
   "optimize",
+  "convert",
   "edit",
-  "secure",
-  "ai",
+  "security",
+  "document",
+  "intelligence",
 ] as const;
 
 export type MarketingToolCategory =
@@ -18,8 +20,9 @@ export type MarketingToolCategory =
 
 export type MarketingToolNavItem = {
   id: ToolDefinition["id"];
-  href: ReturnType<typeof toolPublicPath>;
+  href: ToolDefinition["route"];
   category: ToolDefinition["category"];
+  availability: ToolDefinition["availability"];
 };
 
 export type MarketingToolNavGroup = {
@@ -27,12 +30,18 @@ export type MarketingToolNavGroup = {
   tools: readonly MarketingToolNavItem[];
 };
 
-export function getMarketingToolNavItems(): readonly MarketingToolNavItem[] {
-  return listRegisteredTools().map((tool) => ({
+function toNavItem(tool: ToolDefinition): MarketingToolNavItem {
+  return {
     id: tool.id,
-    href: toolPublicPath(tool.id),
+    href: tool.route,
     category: tool.category,
-  }));
+    availability: tool.availability,
+  };
+}
+
+/** Executable tools only — safe for live public routes. */
+export function getMarketingToolNavItems(): readonly MarketingToolNavItem[] {
+  return listRegisteredTools().map(toNavItem);
 }
 
 export function getMarketingToolNavGroups(): readonly MarketingToolNavGroup[] {
@@ -47,4 +56,16 @@ export function getMarketingToolNavGroups(): readonly MarketingToolNavGroup[] {
 
     return [{ category, tools }];
   });
+}
+
+/** Full metadata-driven directory, including planned tools. */
+export function getMarketingToolDirectoryItems(): readonly MarketingToolNavItem[] {
+  return listCatalogTools().map(toNavItem);
+}
+
+export function getMarketingToolDirectoryGroups(): readonly MarketingToolNavGroup[] {
+  return groupCatalogToolsByCategory().map((group) => ({
+    category: group.category,
+    tools: group.tools.map(toNavItem),
+  }));
 }

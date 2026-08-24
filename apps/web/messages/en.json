@@ -17,12 +17,13 @@
       "skip": "Skip to content",
       "tools": "Tools",
       "categories": {
-        "convert": "Convert",
         "organize": "Organize",
         "optimize": "Optimize",
+        "convert": "Convert",
         "edit": "Edit",
-        "secure": "Secure",
-        "ai": "AI"
+        "security": "Security",
+        "document": "Document",
+        "intelligence": "Intelligence"
       }
     },
     "hero": {
@@ -649,6 +650,172 @@
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "Upload failed. Check your connection and try again.",
       "unexpected": "Something went wrong. Try again."
+    }
+  },
+  "tools": {
+    "merge-pdf": {
+      "name": "Merge PDF",
+      "description": "Combine multiple PDFs into one file."
+    },
+    "split-pdf": {
+      "name": "Split PDF",
+      "description": "Extract pages or split a PDF into separate files."
+    },
+    "organize-pdf": {
+      "name": "Organize PDF",
+      "description": "Rearrange, rotate, and manage PDF pages in one place."
+    },
+    "remove-pages": {
+      "name": "Remove pages",
+      "description": "Delete unwanted pages from a PDF."
+    },
+    "reorder-pages": {
+      "name": "Reorder pages",
+      "description": "Change the page order of a PDF."
+    },
+    "rotate-pdf": {
+      "name": "Rotate PDF",
+      "description": "Rotate pages in a PDF document."
+    },
+    "crop-pdf": {
+      "name": "Crop PDF",
+      "description": "Crop page margins and content areas."
+    },
+    "compress-pdf": {
+      "name": "Compress PDF",
+      "description": "Reduce PDF file size while keeping quality usable."
+    },
+    "repair-pdf": {
+      "name": "Repair PDF",
+      "description": "Attempt to fix damaged or corrupted PDF files."
+    },
+    "pdf-to-pdfa": {
+      "name": "PDF to PDF/A",
+      "description": "Convert a PDF into an archival PDF/A format."
+    },
+    "pdf-to-word": {
+      "name": "PDF to Word",
+      "description": "Convert a PDF into an editable Word document."
+    },
+    "pdf-to-word-ocr": {
+      "name": "PDF to Word OCR",
+      "description": "Convert scanned PDFs to Word with OCR."
+    },
+    "pdf-to-powerpoint": {
+      "name": "PDF to PowerPoint",
+      "description": "Convert a PDF into a PowerPoint presentation."
+    },
+    "pdf-to-excel": {
+      "name": "PDF to Excel",
+      "description": "Convert a PDF into an Excel spreadsheet."
+    },
+    "pdf-to-excel-ocr": {
+      "name": "PDF to Excel OCR",
+      "description": "Convert scanned PDF tables to Excel with OCR."
+    },
+    "pdf-to-jpg": {
+      "name": "PDF to JPG",
+      "description": "Convert PDF pages into JPG images."
+    },
+    "pdf-to-png": {
+      "name": "PDF to PNG",
+      "description": "Convert PDF pages into PNG images."
+    },
+    "pdf-to-txt": {
+      "name": "PDF to text",
+      "description": "Extract plain text from a PDF."
+    },
+    "word-to-pdf": {
+      "name": "Word to PDF",
+      "description": "Convert Word documents into PDF."
+    },
+    "powerpoint-to-pdf": {
+      "name": "PowerPoint to PDF",
+      "description": "Convert PowerPoint presentations into PDF."
+    },
+    "excel-to-pdf": {
+      "name": "Excel to PDF",
+      "description": "Convert Excel spreadsheets into PDF."
+    },
+    "image-to-pdf": {
+      "name": "Image to PDF",
+      "description": "Combine images into a single PDF."
+    },
+    "jpg-to-pdf": {
+      "name": "JPG to PDF",
+      "description": "Convert a JPG image into a PDF."
+    },
+    "png-to-pdf": {
+      "name": "PNG to PDF",
+      "description": "Convert a PNG image into a PDF."
+    },
+    "office-to-pdf": {
+      "name": "Office to PDF",
+      "description": "Convert Office documents into PDF."
+    },
+    "edit-pdf": {
+      "name": "Edit PDF",
+      "description": "Make basic edits to PDF content."
+    },
+    "watermark-pdf": {
+      "name": "Watermark PDF",
+      "description": "Add a text or image watermark to a PDF."
+    },
+    "page-numbers-pdf": {
+      "name": "Page numbers",
+      "description": "Add page numbers to a PDF."
+    },
+    "protect-pdf": {
+      "name": "Protect PDF",
+      "description": "Add password protection to a PDF."
+    },
+    "unlock-pdf": {
+      "name": "Unlock PDF",
+      "description": "Remove password protection from a PDF you own."
+    },
+    "sign-pdf": {
+      "name": "Sign PDF",
+      "description": "Add a digital or visual signature to a PDF."
+    },
+    "redact-pdf": {
+      "name": "Redact PDF",
+      "description": "Permanently black out sensitive content."
+    },
+    "compare-pdf": {
+      "name": "Compare PDF",
+      "description": "Compare two PDF versions and highlight differences."
+    },
+    "pdf-forms": {
+      "name": "PDF forms",
+      "description": "Fill or prepare interactive PDF forms."
+    },
+    "web-to-pdf": {
+      "name": "Web to PDF",
+      "description": "Capture a web page as a PDF."
+    },
+    "scan-to-pdf": {
+      "name": "Scan to PDF",
+      "description": "Turn scanned images into a PDF."
+    },
+    "pdf-extract": {
+      "name": "PDF extract",
+      "description": "Extract structured content from a PDF."
+    },
+    "pdf-to-markdown": {
+      "name": "PDF to Markdown",
+      "description": "Convert PDF content into Markdown."
+    },
+    "ocr-pdf": {
+      "name": "OCR PDF",
+      "description": "Make scanned PDFs searchable with OCR."
+    },
+    "ai-summarizer": {
+      "name": "AI summarizer",
+      "description": "Summarize PDF content with AI."
+    },
+    "translate-pdf": {
+      "name": "Translate PDF",
+      "description": "Translate PDF content into another language."
     }
   }
 }

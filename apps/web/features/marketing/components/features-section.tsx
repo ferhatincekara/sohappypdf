@@ -1,12 +1,12 @@
+import { listRegisteredTools } from "@repo/tools/catalog";
 import { getTranslations } from "next-intl/server";
-import { listCreatableConversions } from "@/features/conversions/lib/conversion-capabilities";
 import { MARKETING_FEATURE_IDS } from "../lib/feature-ids";
 
 export async function FeaturesSection() {
   const t = await getTranslations("marketing.features");
-  const typeLabels = await getTranslations("conversions.form.types");
-  const conversionTypes = listCreatableConversions().map((capability) =>
-    typeLabels(capability.type),
+  const tTools = await getTranslations("tools");
+  const toolLabels = listRegisteredTools().map((tool) =>
+    tTools(`${tool.id}.name`),
   );
 
   return (
@@ -19,7 +19,7 @@ export async function FeaturesSection() {
           <p className="mt-2 text-muted-foreground">{t("description")}</p>
         </div>
         <ul className="flex flex-wrap gap-2">
-          {conversionTypes.map((label) => (
+          {toolLabels.map((label) => (
             <li
               key={label}
               className="rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium"

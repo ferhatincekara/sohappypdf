@@ -17,12 +17,13 @@
       "skip": "İçeriğe geç",
       "tools": "Araçlar",
       "categories": {
-        "convert": "Dönüştürme",
         "organize": "Düzenleme",
         "optimize": "Optimizasyon",
+        "convert": "Dönüştürme",
         "edit": "Düzenle",
-        "secure": "Güvenlik",
-        "ai": "Yapay zeka"
+        "security": "Güvenlik",
+        "document": "Belge",
+        "intelligence": "Zeka"
       }
     },
     "hero": {
@@ -649,6 +650,172 @@
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "Yükleme başarısız. Bağlantınızı kontrol edip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
+  },
+  "tools": {
+    "merge-pdf": {
+      "name": "PDF birleştir",
+      "description": "Birden fazla PDF dosyasını tek dosyada birleştirin."
+    },
+    "split-pdf": {
+      "name": "PDF böl",
+      "description": "Sayfaları ayırın veya PDF'yi ayrı dosyalara bölün."
+    },
+    "organize-pdf": {
+      "name": "PDF düzenle",
+      "description": "Sayfaları yeniden sıralayın, döndürün ve yönetin."
+    },
+    "remove-pages": {
+      "name": "Sayfa sil",
+      "description": "PDF'den istenmeyen sayfaları kaldırın."
+    },
+    "reorder-pages": {
+      "name": "Sayfa sırası",
+      "description": "PDF sayfalarının sırasını değiştirin."
+    },
+    "rotate-pdf": {
+      "name": "PDF döndür",
+      "description": "PDF sayfalarını döndürün."
+    },
+    "crop-pdf": {
+      "name": "PDF kırp",
+      "description": "Sayfa kenarlarını ve içerik alanlarını kırpın."
+    },
+    "compress-pdf": {
+      "name": "PDF sıkıştır",
+      "description": "PDF dosya boyutunu kullanılabilir kaliteyle küçültün."
+    },
+    "repair-pdf": {
+      "name": "PDF onar",
+      "description": "Hasarlı veya bozuk PDF dosyalarını onarmayı deneyin."
+    },
+    "pdf-to-pdfa": {
+      "name": "PDF'den PDF/A'ya",
+      "description": "PDF'yi arşiv PDF/A biçimine dönüştürün."
+    },
+    "pdf-to-word": {
+      "name": "PDF'den Word'e",
+      "description": "PDF'yi düzenlenebilir Word belgesine dönüştürün."
+    },
+    "pdf-to-word-ocr": {
+      "name": "PDF'den Word OCR",
+      "description": "Taranmış PDF'leri OCR ile Word'e dönüştürün."
+    },
+    "pdf-to-powerpoint": {
+      "name": "PDF'den PowerPoint'e",
+      "description": "PDF'yi PowerPoint sunumuna dönüştürün."
+    },
+    "pdf-to-excel": {
+      "name": "PDF'den Excel'e",
+      "description": "PDF'yi Excel tablosuna dönüştürün."
+    },
+    "pdf-to-excel-ocr": {
+      "name": "PDF'den Excel OCR",
+      "description": "Taranmış PDF tablolarını OCR ile Excel'e dönüştürün."
+    },
+    "pdf-to-jpg": {
+      "name": "PDF'den JPG'ye",
+      "description": "PDF sayfalarını JPG görüntülere dönüştürün."
+    },
+    "pdf-to-png": {
+      "name": "PDF'den PNG'ye",
+      "description": "PDF sayfalarını PNG görüntülere dönüştürün."
+    },
+    "pdf-to-txt": {
+      "name": "PDF'den metne",
+      "description": "PDF'den düz metin çıkarın."
+    },
+    "word-to-pdf": {
+      "name": "Word'den PDF'e",
+      "description": "Word belgelerini PDF'ye dönüştürün."
+    },
+    "powerpoint-to-pdf": {
+      "name": "PowerPoint'ten PDF'e",
+      "description": "PowerPoint sunumlarını PDF'ye dönüştürün."
+    },
+    "excel-to-pdf": {
+      "name": "Excel'den PDF'e",
+      "description": "Excel tablolarını PDF'ye dönüştürün."
+    },
+    "image-to-pdf": {
+      "name": "Görüntüden PDF'e",
+      "description": "Görüntüleri tek bir PDF'de birleştirin."
+    },
+    "jpg-to-pdf": {
+      "name": "JPG'den PDF'e",
+      "description": "JPG görüntüyü PDF'ye dönüştürün."
+    },
+    "png-to-pdf": {
+      "name": "PNG'den PDF'e",
+      "description": "PNG görüntüyü PDF'ye dönüştürün."
+    },
+    "office-to-pdf": {
+      "name": "Office'ten PDF'e",
+      "description": "Office belgelerini PDF'ye dönüştürün."
+    },
+    "edit-pdf": {
+      "name": "PDF düzenle",
+      "description": "PDF içeriğinde temel düzenlemeler yapın."
+    },
+    "watermark-pdf": {
+      "name": "PDF filigran",
+      "description": "PDF'ye metin veya görüntü filigranı ekleyin."
+    },
+    "page-numbers-pdf": {
+      "name": "Sayfa numaraları",
+      "description": "PDF'ye sayfa numaraları ekleyin."
+    },
+    "protect-pdf": {
+      "name": "PDF koru",
+      "description": "PDF'ye parola koruması ekleyin."
+    },
+    "unlock-pdf": {
+      "name": "PDF kilidini aç",
+      "description": "Sahibi olduğunuz PDF'nin parola korumasını kaldırın."
+    },
+    "sign-pdf": {
+      "name": "PDF imzala",
+      "description": "PDF'ye dijital veya görsel imza ekleyin."
+    },
+    "redact-pdf": {
+      "name": "PDF karart",
+      "description": "Hassas içeriği kalıcı olarak karartın."
+    },
+    "compare-pdf": {
+      "name": "PDF karşılaştır",
+      "description": "İki PDF sürümünü karşılaştırın."
+    },
+    "pdf-forms": {
+      "name": "PDF formları",
+      "description": "Etkileşimli PDF formlarını doldurun veya hazırlayın."
+    },
+    "web-to-pdf": {
+      "name": "Web'den PDF'e",
+      "description": "Bir web sayfasını PDF olarak kaydedin."
+    },
+    "scan-to-pdf": {
+      "name": "Tarama PDF",
+      "description": "Taranmış görüntüleri PDF'ye dönüştürün."
+    },
+    "pdf-extract": {
+      "name": "PDF çıkar",
+      "description": "PDF'den yapılandırılmış içerik çıkarın."
+    },
+    "pdf-to-markdown": {
+      "name": "PDF'den Markdown'a",
+      "description": "PDF içeriğini Markdown'a dönüştürün."
+    },
+    "ocr-pdf": {
+      "name": "PDF OCR",
+      "description": "Taranmış PDF'leri OCR ile aranabilir yapın."
+    },
+    "ai-summarizer": {
+      "name": "AI özetleyici",
+      "description": "PDF içeriğini yapay zeka ile özetleyin."
+    },
+    "translate-pdf": {
+      "name": "PDF çevir",
+      "description": "PDF içeriğini başka bir dile çevirin."
     }
   }
 }

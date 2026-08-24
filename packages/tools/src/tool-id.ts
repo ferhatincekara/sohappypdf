@@ -1,31 +1,14 @@
-export const TOOL_IDS = [
-  "merge-pdf",
-  "split-pdf",
-  "compress-pdf",
-  "repair-pdf",
-  "rotate-pdf",
-  "organize-pdf",
-  "pdf-to-word",
-  "pdf-to-excel",
-  "pdf-to-powerpoint",
-  "pdf-to-jpg",
-  "pdf-to-png",
-  "pdf-to-txt",
-  "word-to-pdf",
-  "excel-to-pdf",
-  "powerpoint-to-pdf",
-  "jpg-to-pdf",
-  "png-to-pdf",
-  "ocr-pdf",
-  "ocr-image",
-  "protect-pdf",
-  "unlock-pdf",
-  "watermark-pdf",
-  "page-numbers-pdf",
-] as const;
+import {
+  type ToolId as CatalogToolId,
+  TOOL_CATALOG,
+} from "./public-catalog.js";
 
-export type ToolId = (typeof TOOL_IDS)[number];
+export type ToolId = CatalogToolId;
+
+export const TOOL_IDS = TOOL_CATALOG.map(
+  (tool) => tool.id,
+) as unknown as readonly [ToolId, ...ToolId[]];
 
 export function isToolId(value: string): value is ToolId {
-  return TOOL_IDS.some((id) => id === value);
+  return TOOL_CATALOG.some((tool) => tool.id === value);
 }

@@ -1,1 +1,1 @@
-export { REGISTERED_TOOLS } from "./public-catalog.js";
+export { REGISTERED_TOOLS, TOOL_CATALOG } from "./public-catalog.js";

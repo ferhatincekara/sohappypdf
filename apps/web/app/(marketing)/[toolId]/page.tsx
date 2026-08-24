@@ -27,10 +27,10 @@ export async function generateMetadata({
   }
 
   const t = await getTranslations("publicTools");
-  const tTypes = await getTranslations("conversions.form.types");
+  const tTools = await getTranslations("tools");
 
   return {
-    title: t("metaTitle", { tool: tTypes(tool.id) }),
+    title: t("metaTitle", { tool: tTools(`${tool.id}.name`) }),
     description: t("description"),
   };
 }

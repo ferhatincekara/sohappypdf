@@ -21,7 +21,7 @@ export function MarketingToolsNav({
   groups: readonly MarketingToolNavGroup[];
 }) {
   const t = useTranslations("marketing.nav");
-  const tTypes = useTranslations("conversions.form.types");
+  const tTools = useTranslations("tools");
 
   return (
     <DropdownMenu>
@@ -48,7 +48,7 @@ export function MarketingToolsNav({
                 key={tool.id}
                 render={<Link href={tool.href} />}
               >
-                {tTypes(tool.id)}
+                {tTools(`${tool.id}.name`)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>

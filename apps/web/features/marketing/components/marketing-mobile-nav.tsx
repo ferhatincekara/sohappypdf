@@ -36,7 +36,7 @@ export function MarketingMobileNav({
   isAuthenticated: boolean;
 }) {
   const t = useTranslations("marketing.nav");
-  const tTypes = useTranslations("conversions.form.types");
+  const tTools = useTranslations("tools");
   const [open, setOpen] = useState(false);
 
   function close(action: "close" | "escape" | "navigate") {
@@ -118,7 +118,7 @@ export function MarketingMobileNav({
                       className: "justify-start",
                     })}
                   >
-                    {tTypes(tool.id)}
+                    {tTools(`${tool.id}.name`)}
                   </Link>
                 ))}
               </div>

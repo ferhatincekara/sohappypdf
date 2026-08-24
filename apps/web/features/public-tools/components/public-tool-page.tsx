@@ -1,6 +1,6 @@
 "use client";
 
-import { type ToolDefinition, toolPublicPath } from "@repo/tools/catalog";
+import type { ToolDefinition } from "@repo/tools/catalog";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
@@ -145,7 +145,7 @@ async function uploadSelectedFile(
 
 export function PublicToolPageContent({ tool }: { tool: ToolDefinition }) {
   const t = useTranslations("publicTools");
-  const tTypes = useTranslations("conversions.form.types");
+  const tTools = useTranslations("tools");
   const session = authClient.useSession();
   const isAuthenticated = session.data !== null && session.data !== undefined;
   const apis = useMemo(
@@ -172,7 +172,7 @@ export function PublicToolPageContent({ tool }: { tool: ToolDefinition }) {
   });
 
   const conversion = conversionQuery.data;
-  const title = tTypes(tool.id);
+  const title = tTools(`${tool.id}.name`);
 
   async function onProcess() {
     setErrorKey(null);
@@ -361,10 +361,7 @@ export function PublicToolPageContent({ tool }: { tool: ToolDefinition }) {
       {downloaded && !isAuthenticated ? (
         <p className="text-sm">
           {t("keepWorkspace")}{" "}
-          <Link
-            href={signupPath(toolPublicPath(tool.id))}
-            className="underline"
-          >
+          <Link href={signupPath(tool.route)} className="underline">
             {t("createAccount")}
           </Link>
         </p>
