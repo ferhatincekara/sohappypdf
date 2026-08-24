@@ -27,11 +27,13 @@ RUN apt-get update \
     ghostscript \
     libreoffice-writer \
     poppler-utils \
+    qpdf \
   && rm -rf /var/lib/apt/lists/* \
   && soffice --version \
   && pdftoppm -v \
   && pdftotext -v \
-  && gs --version
+  && gs --version \
+  && qpdf --version
 
 WORKDIR /app
 COPY --from=installer /app /app

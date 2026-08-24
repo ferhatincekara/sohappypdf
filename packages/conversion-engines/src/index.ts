@@ -34,6 +34,7 @@ export type { NativeBinaryProbe } from "./native-binary.js";
 export {
   assertRequiredConversionBinaries,
   isConversionBinaryAvailable,
+  optionalConversionBinaries,
   probeConversionBinary,
   requiredConversionBinaries,
   versionArgsForBinary,

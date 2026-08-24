@@ -43,6 +43,7 @@ const createConversionSchema = z.object({
     .array(z.string().regex(FILE_ID_PATTERN, "Invalid file id"))
     .max(20, "Invalid conversion options")
     .optional(),
+  options: z.record(z.string(), z.unknown()).optional(),
 });
 
 const conversionIdSchema = z

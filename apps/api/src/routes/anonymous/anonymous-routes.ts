@@ -12,6 +12,7 @@ import {
   type CheckRateLimit,
 } from "../../middleware/rate-limit.js";
 import { toRateLimitSubject } from "../../rate-limit-subject.js";
+import { buildConversionRequestOptions } from "../conversions/build-conversion-options.js";
 import { toPublicConversion } from "../conversions/conversion-presenter.js";
 import { parseConversionId } from "../conversions/conversion-schemas.js";
 import { enqueueCreatedConversion } from "../conversions/enqueue-created-conversion.js";
@@ -176,12 +177,10 @@ export function createAnonymousRoutes(options: AnonymousRoutesOptions) {
         targetFormat: resolved.targetFormat,
         type: resolved.type,
         expiresAt,
-        options:
-          resolved.additionalFileIds.length === 0
-            ? undefined
-            : {
-                additionalFileIds: resolved.additionalFileIds,
-              },
+        options: buildConversionRequestOptions({
+          additionalFileIds: resolved.additionalFileIds,
+          options: resolved.options,
+        }),
       },
     });
 

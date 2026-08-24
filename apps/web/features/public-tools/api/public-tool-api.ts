@@ -1,4 +1,8 @@
-import { conversionApi } from "@/features/conversions/api/conversion-api";
+import type { AxiosInstance } from "axios";
+import {
+  ConversionApiRequestError,
+  conversionApi,
+} from "@/features/conversions/api/conversion-api";
 import type {
   ConversionType,
   PublicConversion,
@@ -7,6 +11,7 @@ import {
   completeUpload as completeAuthenticatedUpload,
   createDownloadUrl as createAuthenticatedDownloadUrl,
   createUpload as createAuthenticatedUpload,
+  FileApiRequestError,
 } from "@/features/files/api/file-api";
 import type {
   CreateUploadInput,
@@ -20,69 +25,91 @@ export async function createAnonymousUpload(
   input: CreateUploadInput,
   options?: { signal?: AbortSignal },
 ): Promise<CreateUploadResponse> {
-  const response = await apiClient.post<CreateUploadResponse>(
-    "/api/v1/anonymous/files/upload",
-    {
-      filename: input.filename,
-      contentType: input.contentType,
-      size: input.size,
-    },
-    { signal: options?.signal },
-  );
+  try {
+    const response = await apiClient.post<CreateUploadResponse>(
+      "/api/v1/anonymous/files/upload",
+      {
+        filename: input.filename,
+        contentType: input.contentType,
+        size: input.size,
+      },
+      { signal: options?.signal },
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw new FileApiRequestError(error);
+  }
 }
 
 export async function completeAnonymousUpload(
   fileId: string,
   options?: { signal?: AbortSignal },
 ): Promise<PublicFile> {
-  const response = await apiClient.post<{ file: PublicFile }>(
-    `/api/v1/anonymous/files/${fileId}/complete`,
-    undefined,
-    { signal: options?.signal },
-  );
+  try {
+    const response = await apiClient.post<{ file: PublicFile }>(
+      `/api/v1/anonymous/files/${fileId}/complete`,
+      undefined,
+      { signal: options?.signal },
+    );
 
-  return response.data.file;
+    return response.data.file;
+  } catch (error) {
+    throw new FileApiRequestError(error);
+  }
 }
 
 export async function createAnonymousConversion(input: {
   sourceFileId: string;
   type: ConversionType;
   additionalFileIds?: string[];
+  options?: Record<string, unknown>;
 }): Promise<PublicConversion> {
-  const response = await apiClient.post<{ conversion: PublicConversion }>(
-    "/api/v1/anonymous/conversions",
-    {
-      sourceFileId: input.sourceFileId,
-      type: input.type,
-      ...(input.additionalFileIds === undefined
-        ? {}
-        : { additionalFileIds: input.additionalFileIds }),
-    },
-  );
+  try {
+    const response = await apiClient.post<{ conversion: PublicConversion }>(
+      "/api/v1/anonymous/conversions",
+      {
+        sourceFileId: input.sourceFileId,
+        type: input.type,
+        ...(input.additionalFileIds === undefined
+          ? {}
+          : { additionalFileIds: input.additionalFileIds }),
+        ...(input.options === undefined ? {} : { options: input.options }),
+      },
+    );
 
-  return response.data.conversion;
+    return response.data.conversion;
+  } catch (error) {
+    throw new ConversionApiRequestError(error);
+  }
 }
 
 export async function getAnonymousConversion(
   id: string,
 ): Promise<PublicConversion> {
-  const response = await apiClient.get<{ conversion: PublicConversion }>(
-    `/api/v1/anonymous/conversions/${id}`,
-  );
+  try {
+    const response = await apiClient.get<{ conversion: PublicConversion }>(
+      `/api/v1/anonymous/conversions/${id}`,
+    );
 
-  return response.data.conversion;
+    return response.data.conversion;
+  } catch (error) {
+    throw new ConversionApiRequestError(error);
+  }
 }
 
 export async function createAnonymousDownloadUrl(
   fileId: string,
 ): Promise<FileDownloadResponse> {
-  const response = await apiClient.post<FileDownloadResponse>(
-    `/api/v1/anonymous/files/${fileId}/download`,
-  );
+  try {
+    const response = await apiClient.post<FileDownloadResponse>(
+      `/api/v1/anonymous/files/${fileId}/download`,
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw new FileApiRequestError(error);
+  }
 }
 
 export type PublicToolConversionInput = {
@@ -90,6 +117,7 @@ export type PublicToolConversionInput = {
   type: ConversionType;
   targetFormat: string;
   additionalFileIds?: string[];
+  options?: Record<string, unknown>;
 };
 
 export function createPublicToolApis(authenticated: boolean) {
@@ -107,6 +135,7 @@ export function createPublicToolApis(authenticated: boolean) {
             type: input.type,
             targetFormat: input.targetFormat,
             additionalFileIds: input.additionalFileIds,
+            options: input.options,
           })
         : createAnonymousConversion(input),
     getConversion: authenticated

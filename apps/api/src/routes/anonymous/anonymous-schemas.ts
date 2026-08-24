@@ -30,12 +30,14 @@ const createAnonymousConversionSchema = z.object({
   additionalFileIds: z
     .array(z.string().regex(FILE_ID_PATTERN, "Invalid file id"))
     .optional(),
+  options: z.record(z.string(), z.unknown()).optional(),
 });
 
 export type AnonymousCreateConversionBody = {
   sourceFileId: string;
   type: string;
   additionalFileIds?: string[];
+  options?: Record<string, unknown>;
 };
 
 export function parseCreateAnonymousConversion(
@@ -96,6 +98,7 @@ export function resolveAnonymousConversionRequest(
     type: body.type,
     targetFormat,
     additionalFileIds,
+    options: body.options,
   };
 }
 

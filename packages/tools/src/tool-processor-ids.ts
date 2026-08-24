@@ -8,6 +8,9 @@ export const LIVE_PROCESSOR_IDS = [
   "pdf-text",
   "image-pdf",
   "pdf-manipulate",
+  "pdf-edit",
+  "pdf-security",
+  "pdf-repair",
 ] as const;
 
 export type LiveProcessorId = (typeof LIVE_PROCESSOR_IDS)[number];

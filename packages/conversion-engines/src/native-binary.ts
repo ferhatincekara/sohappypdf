@@ -9,6 +9,7 @@ const VERSION_FLAGS: Record<string, readonly string[]> = {
   pdftoppm: ["-v"],
   pdftotext: ["-v"],
   gs: ["--version"],
+  qpdf: ["--version"],
 };
 
 export type NativeBinaryProbe = {
@@ -30,6 +31,12 @@ export function requiredConversionBinaries(
     config.pdftotextBin,
     config.ghostscriptBin,
   ];
+}
+
+export function optionalConversionBinaries(
+  config: ConversionEngineConfig,
+): readonly string[] {
+  return [config.qpdfBin];
 }
 
 export function isConversionBinaryAvailable(command: string): boolean {

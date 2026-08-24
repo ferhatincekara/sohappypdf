@@ -15,6 +15,32 @@ function expectInvalidOptions(run: () => unknown): void {
 }
 
 describe("conversion options", () => {
+  test("accepts typed options for core pdf tools", () => {
+    expect(parseConversionOptions("rotate-pdf", { degrees: 90 })).toEqual({
+      type: "rotate-pdf",
+      degrees: 90,
+    });
+
+    expect(
+      parseConversionOptions("watermark-pdf", { text: "Draft", opacity: 0.4 }),
+    ).toEqual({
+      type: "watermark-pdf",
+      text: "Draft",
+      opacity: 0.4,
+    });
+
+    expect(
+      parseConversionOptions("protect-pdf", { password: "secret" }),
+    ).toEqual({
+      type: "protect-pdf",
+      password: "secret",
+    });
+
+    expect(parseConversionOptions("repair-pdf", undefined)).toEqual({
+      type: "repair-pdf",
+    });
+  });
+
   test("accepts typed options for image and compression conversions", () => {
     expect(
       parseConversionOptions("pdf-to-jpg", {
@@ -59,10 +85,10 @@ describe("conversion options", () => {
     expectInvalidOptions(() => parseConversionOptions("rotate-pdf", undefined));
     expectInvalidOptions(() => parseConversionOptions("merge-pdf", undefined));
     expectInvalidOptions(() =>
-      parseConversionOptions("protect-pdf", { password: "secret" }),
+      parseConversionOptions("protect-pdf", undefined),
     );
     expectInvalidOptions(() =>
-      parseConversionOptions("pdf-to-word", { quality: 80 }),
+      parseConversionOptions("pdf-to-word", { password: "secret" }),
     );
   });
 });

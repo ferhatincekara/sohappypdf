@@ -19,11 +19,22 @@ import {
   assertPathInside,
   joinJobPath,
 } from "../../workspace/temp-workspace.js";
+import {
+  cropPdfMargins,
+  removePdfPages,
+  reorderPdfPages,
+  rotatePdfPages,
+} from "./pdf-page-operations.js";
 
 const TYPES = [
   "merge-pdf",
   "split-pdf",
   "compress-pdf",
+  "rotate-pdf",
+  "organize-pdf",
+  "remove-pages",
+  "reorder-pages",
+  "crop-pdf",
 ] as const satisfies readonly ConversionType[];
 
 const GHOSTSCRIPT_QUALITY: Record<CompressionLevel, string> = {
@@ -72,6 +83,37 @@ export function createPdfManipulateEngine(
           outputPath,
           cwd: input.outputDirectory,
           level: input.options.level,
+        });
+      } else if (input.options.type === "rotate-pdf") {
+        await rotatePdfPages({
+          sourcePath: input.sourcePath,
+          outputPath,
+          degrees: input.options.degrees,
+          pages: input.options.pages,
+        });
+      } else if (
+        input.options.type === "organize-pdf" ||
+        input.options.type === "reorder-pages"
+      ) {
+        await reorderPdfPages({
+          sourcePath: input.sourcePath,
+          outputPath,
+          order: input.options.order,
+        });
+      } else if (input.options.type === "remove-pages") {
+        await removePdfPages({
+          sourcePath: input.sourcePath,
+          outputPath,
+          pagesToRemove: input.options.pages,
+        });
+      } else if (input.options.type === "crop-pdf") {
+        await cropPdfMargins({
+          sourcePath: input.sourcePath,
+          outputPath,
+          marginTop: input.options.marginTop,
+          marginRight: input.options.marginRight,
+          marginBottom: input.options.marginBottom,
+          marginLeft: input.options.marginLeft,
         });
       } else {
         throw unsupportedConversionError();

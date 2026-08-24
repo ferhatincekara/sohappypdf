@@ -1,6 +1,6 @@
-import { neon } from "@neondatabase/serverless";
+import { Pool } from "@neondatabase/serverless";
 import { loadDatabaseConfig } from "@repo/config";
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schema from "./schema/index.js";
 
 export type CreateDatabaseOptions = {
@@ -8,9 +8,8 @@ export type CreateDatabaseOptions = {
 };
 
 export function createDatabase(options: CreateDatabaseOptions) {
-  const client = neon(options.url);
-  return drizzle({
-    client,
+  const pool = new Pool({ connectionString: options.url });
+  return drizzle(pool, {
     schema,
     casing: "snake_case",
   });

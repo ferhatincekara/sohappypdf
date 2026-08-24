@@ -3,8 +3,11 @@ import type { ConversionEngine, ConversionEngineQuery } from "./engine.js";
 import type { ConversionEngineConfig } from "./engine-config.js";
 import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 import { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
+import { createPdfEditEngine } from "./engines/pdf/pdf-edit-engine.js";
 import { createPdfImageEngine } from "./engines/pdf/pdf-image-engine.js";
 import { createPdfManipulateEngine } from "./engines/pdf/pdf-manipulate-engine.js";
+import { createPdfRepairEngine } from "./engines/pdf/pdf-repair-engine.js";
+import { createPdfSecurityEngine } from "./engines/pdf/pdf-security-engine.js";
 import { createPdfTextEngine } from "./engines/pdf/pdf-text-engine.js";
 import { unsupportedConversionError } from "./errors.js";
 
@@ -35,6 +38,9 @@ export function createEngineRegistry(
     createPdfTextEngine(config),
     createImagePdfEngine(),
     createPdfManipulateEngine(config),
+    createPdfEditEngine(config),
+    createPdfSecurityEngine(config),
+    createPdfRepairEngine(config),
   ];
 
   return {

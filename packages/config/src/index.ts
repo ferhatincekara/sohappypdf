@@ -32,6 +32,7 @@ export {
 } from "./billing-config.js";
 export type { DatabaseConfig } from "./database-config.js";
 export { loadDatabaseConfig } from "./database-config.js";
+export { isLocalDevelopmentOrigin } from "./dev-cors.js";
 export type { EnvSource } from "./env.js";
 export { getOptionalEnv, getRequiredEnv } from "./env.js";
 export { loadEnvFile } from "./env-file.js";

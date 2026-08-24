@@ -76,14 +76,24 @@ describe("tool catalog", () => {
     expect(REGISTERED_TOOLS.map((tool) => tool.id).sort()).toEqual(
       [
         "compress-pdf",
+        "crop-pdf",
         "jpg-to-pdf",
         "merge-pdf",
+        "organize-pdf",
+        "page-numbers-pdf",
         "pdf-to-jpg",
         "pdf-to-png",
         "pdf-to-txt",
         "pdf-to-word",
         "png-to-pdf",
+        "protect-pdf",
+        "remove-pages",
+        "repair-pdf",
+        "reorder-pages",
+        "rotate-pdf",
         "split-pdf",
+        "unlock-pdf",
+        "watermark-pdf",
       ].sort(),
     );
 
@@ -146,6 +156,8 @@ describe("tool catalog", () => {
   test("allows anonymous use only for registered anonymous tools", () => {
     expect(isRegisteredToolId("merge-pdf")).toBe(true);
     expect(isAnonymousToolAllowed("merge-pdf")).toBe(true);
+    expect(isAnonymousToolAllowed("protect-pdf")).toBe(false);
+    expect(isAnonymousToolAllowed("unlock-pdf")).toBe(false);
     expect(isAnonymousToolAllowed("ocr-pdf")).toBe(false);
     expect(isAnonymousToolAllowed("unknown-tool")).toBe(false);
     expect(findCatalogTool("ocr-pdf")?.availability).toBe("planned");

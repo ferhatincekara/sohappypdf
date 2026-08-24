@@ -41,6 +41,7 @@ export function createConversionApi(
             ...(input.additionalFileIds === undefined
               ? {}
               : { additionalFileIds: input.additionalFileIds }),
+            ...(input.options === undefined ? {} : { options: input.options }),
           },
           input.idempotencyKey === undefined
             ? undefined

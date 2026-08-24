@@ -58,4 +58,52 @@ describe("pdf manipulate engine", () => {
       await workspace.cleanup();
     }
   });
+
+  test("rotates and reorders pages without native binaries", async () => {
+    const workspace = await createConversionWorkspace(
+      "550e8400-e29b-41d4-a716-446655440223",
+    );
+
+    try {
+      const source = workspace.join("source.pdf");
+      const document = await PDFDocument.create();
+      document.addPage([200, 200]);
+      document.addPage([200, 200]);
+      await writeFile(source, await document.save());
+
+      const engine = createPdfManipulateEngine(
+        DEFAULT_CONVERSION_ENGINE_CONFIG,
+      );
+
+      const rotated = await engine.convert({
+        type: "rotate-pdf",
+        sourcePath: source,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: { type: "rotate-pdf", degrees: 180, pages: [1] },
+        additionalSourcePaths: [],
+      });
+      const rotatedPdf = await PDFDocument.load(
+        await readFile(rotated.outputPath),
+      );
+      expect(rotatedPdf.getPage(0)?.getRotation().angle % 360).toBe(180);
+
+      const reordered = await engine.convert({
+        type: "reorder-pages",
+        sourcePath: source,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: { type: "reorder-pages", order: [2, 1] },
+        additionalSourcePaths: [],
+      });
+      const reorderedPdf = await PDFDocument.load(
+        await readFile(reordered.outputPath),
+      );
+      expect(reorderedPdf.getPageCount()).toBe(2);
+    } finally {
+      await workspace.cleanup();
+    }
+  });
 });

@@ -13,6 +13,7 @@ export type WorkerConfig = {
   ghostscriptBin: string;
   pdftoppmBin: string;
   pdftotextBin: string;
+  qpdfBin: string;
 };
 
 export const DEFAULT_WORKER_CONFIG: WorkerConfig = {
@@ -27,6 +28,7 @@ export const DEFAULT_WORKER_CONFIG: WorkerConfig = {
   ghostscriptBin: "gs",
   pdftoppmBin: "pdftoppm",
   pdftotextBin: "pdftotext",
+  qpdfBin: "qpdf",
 };
 
 function parsePositiveInteger(
@@ -145,6 +147,10 @@ export function loadWorkerConfig(
     pdftotextBin: parseBinaryName(
       getOptionalEnv("PDFTOTEXT_BIN", source),
       DEFAULT_WORKER_CONFIG.pdftotextBin,
+    ),
+    qpdfBin: parseBinaryName(
+      getOptionalEnv("QPDF_BIN", source),
+      DEFAULT_WORKER_CONFIG.qpdfBin,
     ),
   };
 }

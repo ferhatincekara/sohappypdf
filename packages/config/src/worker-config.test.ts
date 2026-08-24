@@ -14,6 +14,12 @@ describe("loadWorkerConfig", () => {
       DEFAULT_WORKER_CONFIG.conversionTimeoutMs + 10_000,
     );
     expect(config.healthPort).toBe(8080);
+    expect(config.qpdfBin).toBe("qpdf");
+  });
+
+  test("loads custom qpdf binary path", () => {
+    const config = loadWorkerConfig({ QPDF_BIN: "qpdf-custom" });
+    expect(config.qpdfBin).toBe("qpdf-custom");
   });
 
   test("prefers Cloud Run PORT over WORKER_HEALTH_PORT", () => {

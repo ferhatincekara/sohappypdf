@@ -22,6 +22,16 @@ describe("engine registry", () => {
     expect(registry.resolve("merge-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("split-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("compress-pdf").name).toBe("pdf-manipulate");
+    expect(registry.resolve("rotate-pdf").name).toBe("pdf-manipulate");
+    expect(registry.resolve("organize-pdf").name).toBe("pdf-manipulate");
+    expect(registry.resolve("remove-pages").name).toBe("pdf-manipulate");
+    expect(registry.resolve("reorder-pages").name).toBe("pdf-manipulate");
+    expect(registry.resolve("crop-pdf").name).toBe("pdf-manipulate");
+    expect(registry.resolve("watermark-pdf").name).toBe("pdf-edit");
+    expect(registry.resolve("page-numbers-pdf").name).toBe("pdf-edit");
+    expect(registry.resolve("protect-pdf").name).toBe("pdf-security");
+    expect(registry.resolve("unlock-pdf").name).toBe("pdf-security");
+    expect(registry.resolve("repair-pdf").name).toBe("pdf-repair");
   });
 
   test("rejects conversions without an engine", () => {

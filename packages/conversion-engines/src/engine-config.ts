@@ -5,6 +5,7 @@ export type ConversionEngineConfig = {
   ghostscriptBin: string;
   pdftoppmBin: string;
   pdftotextBin: string;
+  qpdfBin: string;
 };
 
 export const DEFAULT_CONVERSION_ENGINE_CONFIG: ConversionEngineConfig = {
@@ -14,6 +15,7 @@ export const DEFAULT_CONVERSION_ENGINE_CONFIG: ConversionEngineConfig = {
   ghostscriptBin: "gs",
   pdftoppmBin: "pdftoppm",
   pdftotextBin: "pdftotext",
+  qpdfBin: "qpdf",
 };
 
 export const CONVERSION_NATIVE_BINARIES = [
@@ -22,4 +24,5 @@ export const CONVERSION_NATIVE_BINARIES = [
   "pdftoppm",
   "pdftotext",
   "gs",
+  "qpdf",
 ] as const;

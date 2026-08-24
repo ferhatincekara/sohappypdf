@@ -13,6 +13,7 @@ import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireAuthenticatedIdentity } from "../../auth/request-identity.js";
 import { requireAuthMiddleware } from "../../middleware/require-auth.js";
+import { buildConversionRequestOptions } from "./build-conversion-options.js";
 import { toPublicConversion } from "./conversion-presenter.js";
 import {
   parseConversionId,
@@ -125,12 +126,10 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         type: body.type,
         idempotencyKey,
         expiresAt: new Date(Date.now() + loadRetentionPolicy().authenticatedMs),
-        options:
-          body.additionalFileIds === undefined
-            ? undefined
-            : {
-                additionalFileIds: body.additionalFileIds,
-              },
+        options: buildConversionRequestOptions({
+          additionalFileIds: body.additionalFileIds,
+          options: body.options,
+        }),
       },
     });
 

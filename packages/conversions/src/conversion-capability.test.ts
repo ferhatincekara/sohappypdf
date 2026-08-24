@@ -48,7 +48,8 @@ describe("conversion capabilities", () => {
   test("distinguishes implemented engines from catalogued capabilities", () => {
     expect(isConversionImplemented("pdf-to-jpg")).toBe(true);
     expect(isConversionImplemented("pdf-to-txt")).toBe(true);
+    expect(isConversionImplemented("rotate-pdf")).toBe(true);
+    expect(isConversionImplemented("protect-pdf")).toBe(true);
     expect(isConversionImplemented("ocr-pdf")).toBe(false);
-    expect(isConversionImplemented("rotate-pdf")).toBe(false);
   });
 });

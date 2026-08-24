@@ -25,6 +25,13 @@ export const CONVERSION_TYPES = [
   "split-pdf",
   "compress-pdf",
   "rotate-pdf",
+  "organize-pdf",
+  "remove-pages",
+  "reorder-pages",
+  "crop-pdf",
+  "repair-pdf",
+  "watermark-pdf",
+  "page-numbers-pdf",
   "protect-pdf",
   "unlock-pdf",
   "ocr-pdf",
@@ -86,6 +93,7 @@ export type CreateConversionInput = {
   targetFormat: string;
   type?: ConversionType;
   additionalFileIds?: string[];
+  options?: Record<string, unknown>;
   idempotencyKey?: string;
 };
 

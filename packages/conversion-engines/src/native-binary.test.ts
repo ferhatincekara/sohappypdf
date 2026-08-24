@@ -3,6 +3,7 @@ import { isAppError } from "@repo/core";
 import { DEFAULT_CONVERSION_ENGINE_CONFIG } from "./engine-config.js";
 import {
   assertRequiredConversionBinaries,
+  optionalConversionBinaries,
   probeConversionBinary,
   requiredConversionBinaries,
   versionArgsForBinary,
@@ -20,6 +21,12 @@ describe("native binary probes", () => {
     expect(
       requiredConversionBinaries(DEFAULT_CONVERSION_ENGINE_CONFIG),
     ).toEqual(["soffice", "pdftoppm", "pdftotext", "gs"]);
+  });
+
+  test("tracks optional binaries separately from startup requirements", () => {
+    expect(
+      optionalConversionBinaries(DEFAULT_CONVERSION_ENGINE_CONFIG),
+    ).toEqual(["qpdf"]);
   });
 
   test("does not treat a missing command as available", () => {
