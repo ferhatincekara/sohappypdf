@@ -275,6 +275,11 @@ export function buildToolConversionOptions(
         : { text: state.watermarkText.trim() };
     case "page-numbers-pdf":
       return { startAt: state.pageNumberStart };
+    case "ocr-pdf":
+      return {
+        language: state.targetLanguage.trim() || "eng",
+        outputMode: state.outputFormat === "txt" ? "txt" : "pdf",
+      };
     case "protect-pdf":
     case "unlock-pdf":
       return state.password.trim().length === 0

@@ -8,6 +8,7 @@ import { DefaultToolWorkspace } from "./default-tool-workspace";
 import { ExtractPagesWorkspace } from "./extract-pages-workspace";
 import { ImageToPdfWorkspace } from "./image-to-pdf-workspace";
 import { MergePdfWorkspace } from "./merge-pdf-workspace";
+import { OcrPdfWorkspace } from "./ocr-pdf-workspace";
 import { OrganizePdfWorkspace } from "./organize-pdf-workspace";
 import { PasswordPdfWorkspace } from "./password-pdf-workspace";
 import { RemovePagesWorkspace } from "./remove-pages-workspace";
@@ -39,6 +40,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <PasswordPdfWorkspace {...props} />;
     case "repair":
       return <RepairPdfWorkspace {...props} />;
+    case "ocr":
+      return <OcrPdfWorkspace {...props} />;
     default:
       return <DefaultToolWorkspace {...props} />;
   }

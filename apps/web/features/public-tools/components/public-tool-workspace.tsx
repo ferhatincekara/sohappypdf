@@ -66,6 +66,7 @@ export function PublicToolWorkspace({
       parseSelectedPagesInput(workspace.workspaceState.pagesToRemove)?.length ??
       0,
     compressionLevel: workspace.workspaceState.compressionLevel,
+    ocrOutput: workspace.workspaceState.outputFormat === "txt" ? "txt" : "pdf",
     errorKey: ux.status === "error" ? ux.error.key : null,
     hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
   });
@@ -210,6 +211,7 @@ function dedicatedToolShellCopy({
   rotationDegrees,
   removeSelectedCount,
   compressionLevel,
+  ocrOutput,
   errorKey,
   hours,
 }: {
@@ -222,6 +224,7 @@ function dedicatedToolShellCopy({
   rotationDegrees: number;
   removeSelectedCount: number;
   compressionLevel: CompressionLevel;
+  ocrOutput: "pdf" | "txt";
   errorKey: PublicToolErrorKey | null;
   hours: number;
 }): {
@@ -428,6 +431,24 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "ocr-pdf") {
+    return {
+      processingTitle: t("workspaces.ocr.processing"),
+      processingHint: t("workspaces.ocr.processingHint"),
+      successTitle: t("workspaces.ocr.successTitle"),
+      successDescription: t("workspaces.ocr.successDescription"),
+      downloadLabel: t("workspaces.ocr.download"),
+      resetLabel: t("workspaces.ocr.ocrAnother"),
+      expiredTitle: t("workspaces.ocr.expiredTitle"),
+      expiredDescription: t("workspaces.ocr.expiredDescription", { hours }),
+      processHint: t(`workspaces.ocr.output.${ocrOutput}`),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveOcrErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -606,6 +627,26 @@ function resolveRepairErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.repair.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveOcrErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.ocr.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.ocr.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.ocr.expiredDescription", { hours });
   }
 
   return undefined;

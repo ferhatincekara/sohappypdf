@@ -100,6 +100,18 @@ describe("tool workspace helpers", () => {
     ).toEqual({ text: "CONFIDENTIAL" });
 
     expect(
+      buildToolConversionOptions("ocr-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
+    ).toEqual({ language: "eng", outputMode: "pdf" });
+
+    expect(
+      buildToolConversionOptions("ocr-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        targetLanguage: "tur",
+        outputFormat: "txt",
+      }),
+    ).toEqual({ language: "tur", outputMode: "txt" });
+
+    expect(
       buildToolConversionOptions("protect-pdf", {
         ...DEFAULT_TOOL_WORKSPACE_STATE,
         password: "",

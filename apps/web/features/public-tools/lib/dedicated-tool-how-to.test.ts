@@ -13,6 +13,7 @@ describe("dedicatedHowToForTool", () => {
     expect(dedicatedHowToForTool("pdf-to-word")?.workspace).toBe("convert");
     expect(dedicatedHowToForTool("jpg-to-pdf")?.workspace).toBe("imageToPdf");
     expect(dedicatedHowToForTool("repair-pdf")?.workspace).toBe("repair");
-    expect(dedicatedHowToForTool("ocr-pdf")).toBeNull();
+    expect(dedicatedHowToForTool("ocr-pdf")?.workspace).toBe("ocr");
+    expect(dedicatedHowToForTool("protect-pdf")).toBeNull();
   });
 });

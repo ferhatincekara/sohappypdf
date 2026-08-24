@@ -31,6 +31,7 @@ export const TOOL_WORKSPACE_KINDS = [
   "imageToPdf",
   "password",
   "repair",
+  "ocr",
   "default",
 ] as const;
 
@@ -81,6 +82,10 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
 
   if (toolId === "repair-pdf") {
     return "repair";
+  }
+
+  if (toolId === "ocr-pdf") {
+    return "ocr";
   }
 
   if (isImageToPdfToolId(toolId)) {

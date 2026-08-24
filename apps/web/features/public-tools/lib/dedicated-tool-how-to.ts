@@ -10,7 +10,8 @@ export type DedicatedHowToWorkspace =
   | "compress"
   | "convert"
   | "imageToPdf"
-  | "repair";
+  | "repair"
+  | "ocr";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -49,6 +50,10 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   "repair-pdf": {
     workspace: "repair",
     steps: ["upload", "repair", "download"],
+  },
+  "ocr-pdf": {
+    workspace: "ocr",
+    steps: ["upload", "recognize", "download"],
   },
 };
 

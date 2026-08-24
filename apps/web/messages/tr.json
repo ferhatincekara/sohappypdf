@@ -1216,7 +1216,48 @@
         }
       },
       "ocr": {
-        "title": "Metni tanı"
+        "title": "Metni tanı",
+        "hint": "Belge dilini seçin ve aranabilir PDF mi, yoksa çıkarılmış metin mi istediğinizi belirtin.",
+        "language": "Belge dili",
+        "output": {
+          "pdf": "Aranabilir bir PDF alacaksınız.",
+          "txt": "Tanınan metni içeren bir metin dosyası alacaksınız."
+        },
+        "modes": {
+          "pdf": {
+            "title": "Aranabilir PDF",
+            "hint": "Orijinal sayfaları koruyun ve aranıp kopyalanabilen bir metin katmanı ekleyin."
+          },
+          "txt": {
+            "title": "Çıkarılmış metin",
+            "hint": "Tanınan metni ayrı bir dosya olarak indirin."
+          }
+        },
+        "processing": "Metin tanınıyor...",
+        "processingHint": "Taranmış veya görsel ağırlıklı PDF’lerde bu işlem daha uzun sürebilir.",
+        "successTitle": "Sonucunuz hazır",
+        "successDescription": "Aranabilir PDF’i veya çıkarılmış metni indirin.",
+        "download": "Sonucu indir",
+        "ocrAnother": "Başka bir PDF tanı",
+        "processingFailed": "Bu PDF’deki metin tanınamadı. Lütfen başka bir dosya deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF’de metin tanıyın.",
+        "faqHow": "Bir PDF yükleyin, dili seçin, ardından aranabilir PDF oluşturun veya metni çıkarın. Bu araç için giriş gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Taranmış veya görsel tabanlı bir PDF bırakın."
+          },
+          "recognize": {
+            "title": "Tanı",
+            "description": "Dili ve aranabilir PDF mi yoksa metin mi istediğinizi seçin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Aranabilir PDF’i veya çıkarılmış metni alın."
+          }
+        }
       },
       "sign": {
         "title": "PDF imzala"

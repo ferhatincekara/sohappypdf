@@ -1216,7 +1216,48 @@
         }
       },
       "ocr": {
-        "title": "Recognize text"
+        "title": "Recognize text",
+        "hint": "Choose the document language and whether you need a searchable PDF or extracted text.",
+        "language": "Document language",
+        "output": {
+          "pdf": "You'll get a searchable PDF.",
+          "txt": "You'll get a text file with the recognized text."
+        },
+        "modes": {
+          "pdf": {
+            "title": "Searchable PDF",
+            "hint": "Keep the original pages and add a text layer you can search and copy."
+          },
+          "txt": {
+            "title": "Extracted text",
+            "hint": "Download the recognized text as a separate file."
+          }
+        },
+        "processing": "Recognizing text...",
+        "processingHint": "This can take longer for scanned or image-heavy PDFs.",
+        "successTitle": "Your result is ready",
+        "successDescription": "Download the searchable PDF or extracted text.",
+        "download": "Download result",
+        "ocrAnother": "Recognize another PDF",
+        "processingFailed": "We couldn't recognize text in this PDF. Please try another file.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Recognize text in another PDF to continue.",
+        "faqHow": "Upload a PDF, choose the language, then create a searchable PDF or extract the text. Sign in is required for this tool.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in a scanned or image-based PDF."
+          },
+          "recognize": {
+            "title": "Recognize",
+            "description": "Choose the language and whether you want a searchable PDF or text."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get the searchable PDF or extracted text."
+          }
+        }
       },
       "sign": {
         "title": "Sign PDF"
