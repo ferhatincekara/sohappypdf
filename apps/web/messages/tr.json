@@ -612,39 +612,51 @@
     "description": "Hesabınızı ve aboneliğinizi yönetin.",
     "billing": {
       "title": "Faturalandırma",
-      "description": "Mevcut planınızı, kullanımınızı ve aboneliğinizi inceleyin.",
+      "description": "Web planınızı, API kredilerinizi ve Polar faturalandırmasını inceleyin.",
       "open": "Faturalandırmayı aç"
     }
   },
   "billing": {
     "title": "Faturalandırma",
-    "description": "Web planınız ve API kullanımınız. Satın almalar Polar ödemesinden sonra onaylanır.",
+    "description": "Web planı, API kredileri ve AI kredileri tek yerde. Ödeme yöntemleri, faturalar ve abonelik değişiklikleri Polar üzerinden yönetilir.",
     "currentPlan": "Mevcut plan",
     "usage": "Kullanım",
     "upgrade": "Yükselt",
     "upgrading": "Ödemeye yönlendiriliyor…",
-    "manage": "Aboneliği yönet",
+    "manage": "Polar portalını aç",
     "openingPortal": "Portal açılıyor…",
+    "portalHint": "Ödeme yöntemleri, faturalar, abonelik yönetimi ve iptal Polar müşteri portalında yapılır.",
     "activating": "Satın almanız etkinleştiriliyor.",
     "noSubscription": "Ücretli abonelik yok",
     "cancelsOn": "İptal planlandı. Pro {date} tarihine kadar devam eder.",
+    "renewsOn": "Yenileme tarihi: {date}.",
+    "creditsResetOn": "Aylık araç kredileri {date} tarihinde yenilenir.",
+    "remainingLabel": "Kalan",
+    "remaining": "{count} kalan",
+    "usedOfLimit": "{used} / {limit} kullanıldı",
     "backToSettings": "Ayarlara dön",
     "period": "UTC dönemi {start} – {end}",
     "sections": {
-      "web": "Web planı",
-      "api": "API kullanımı"
+      "web": "Web Planı",
+      "api": "API",
+      "ai": "AI"
     },
     "api": {
-      "title": "API kullanımı",
+      "title": "API",
       "noProduct": "API planı yok",
       "noSubscription": "API aboneliği yok",
-      "credits": "Kalan API kredisi",
+      "credits": "API kredileri",
       "plans": "API planları ve paketler",
-      "topUp": "Kredi paketi satın al",
+      "topUp": "Kredi yükle",
       "recentUsage": "Son API kullanımı",
       "noUsage": "Bu dönemde API kredi hareketi yok.",
       "documentation": "API dokümantasyonu",
       "manageKeys": "API anahtarları"
+    },
+    "ai": {
+      "title": "AI",
+      "description": "AI kredileri web planınıza dahildir.",
+      "credits": "AI kredileri"
     },
     "apiProducts": {
       "starter": "API Starter",

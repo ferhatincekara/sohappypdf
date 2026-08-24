@@ -164,8 +164,10 @@ describe("createBillingService", () => {
     expect(status.canUpgrade).toBe(true);
     expect(status.usage.webCreditsLimit).toBe(100);
     expect(status.usage.webCreditsUsed).toBe(0);
+    expect(status.usage.webCreditsRemaining).toBe(100);
     expect(status.usage.aiCreditsLimit).toBe(0);
     expect(status.usage.aiCreditsUsed).toBe(0);
+    expect(status.usage.aiCreditsRemaining).toBe(0);
     expect(status.usage.conversionsLimit).toBe(20);
     expect(status.usage.storageUsedBytes).toBe(1024);
     expect(status.limits.maxFileSizeBytes).toBe(20 * 1024 * 1024);

@@ -474,8 +474,10 @@ export function createBillingService(
         usage: {
           webCreditsUsed: balance.webCreditsUsed,
           webCreditsLimit: entitlements.limits.monthlyWebCredits,
+          webCreditsRemaining: balance.webCreditsRemaining,
           aiCreditsUsed: aiBalance.aiCreditsUsed,
           aiCreditsLimit: entitlements.limits.monthlyAiCredits,
+          aiCreditsRemaining: aiBalance.aiCreditsRemaining,
           conversionsUsed: conversionUsage.conversionsUsed,
           conversionsLimit: entitlements.limits.monthlyConversions,
           storageUsedBytes: input.storageUsedBytes,

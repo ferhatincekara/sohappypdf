@@ -84,6 +84,7 @@ describe("AI credits", () => {
 
     expect(balance.aiCreditsGranted).toBe(200);
     expect(status.usage.aiCreditsLimit).toBe(200);
+    expect(status.usage.aiCreditsRemaining).toBe(200);
     expect(status.usage.periodStart).toBe("2026-08-01T00:00:00.000Z");
     expect(status.usage.periodEnd).toBe("2026-09-01T00:00:00.000Z");
   });

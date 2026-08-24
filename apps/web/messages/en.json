@@ -612,39 +612,51 @@
     "description": "Manage your account and subscription.",
     "billing": {
       "title": "Billing",
-      "description": "Review your current plan, usage, and subscription.",
+      "description": "Review your web plan, API credits, and Polar billing.",
       "open": "Open billing"
     }
   },
   "billing": {
     "title": "Billing",
-    "description": "Your web plan and API usage. Purchases are confirmed after Polar payment.",
+    "description": "One place for your web plan, API credits, and AI credits. Polar handles payment methods, invoices, and subscription changes.",
     "currentPlan": "Current plan",
     "usage": "Usage",
     "upgrade": "Upgrade",
     "upgrading": "Redirecting to checkout…",
-    "manage": "Manage subscription",
+    "manage": "Open Polar portal",
     "openingPortal": "Opening portal…",
+    "portalHint": "Payment methods, invoices, subscription management, and cancellation are handled in the Polar customer portal.",
     "activating": "Your purchase is being activated.",
     "noSubscription": "No paid subscription",
     "cancelsOn": "Cancellation scheduled. Pro remains until {date}.",
+    "renewsOn": "Renews on {date}.",
+    "creditsResetOn": "Monthly tool credits reset on {date}.",
+    "remainingLabel": "Remaining",
+    "remaining": "{count} remaining",
+    "usedOfLimit": "{used} of {limit} used",
     "backToSettings": "Back to settings",
     "period": "UTC period {start} – {end}",
     "sections": {
-      "web": "Web plan",
-      "api": "API usage"
+      "web": "Web Plan",
+      "api": "API",
+      "ai": "AI"
     },
     "api": {
-      "title": "API usage",
+      "title": "API",
       "noProduct": "No API plan",
       "noSubscription": "No API subscription",
-      "credits": "API credits remaining",
+      "credits": "API credits",
       "plans": "API plans and packs",
-      "topUp": "Buy credit pack",
+      "topUp": "Top up",
       "recentUsage": "Recent API usage",
       "noUsage": "No API credit activity in this period.",
       "documentation": "API documentation",
       "manageKeys": "API keys"
+    },
+    "ai": {
+      "title": "AI",
+      "description": "AI credits are included with your web plan.",
+      "credits": "AI credits"
     },
     "apiProducts": {
       "starter": "API Starter",

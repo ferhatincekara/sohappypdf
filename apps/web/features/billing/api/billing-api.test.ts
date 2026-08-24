@@ -30,8 +30,10 @@ describe("billing api", () => {
                 usage: {
                   webCreditsUsed: 0,
                   webCreditsLimit: 100,
+                  webCreditsRemaining: 100,
                   aiCreditsUsed: 0,
                   aiCreditsLimit: 0,
+                  aiCreditsRemaining: 0,
                   conversionsUsed: 0,
                   conversionsLimit: 20,
                   storageUsedBytes: 0,
