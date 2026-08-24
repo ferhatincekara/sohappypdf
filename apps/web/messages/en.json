@@ -804,7 +804,7 @@
       "selectAll": "Select all",
       "clear": "Clear selection",
       "selectedCount": "{count, plural, one {# page selected} other {# pages selected}}",
-      "allSelected": "All pages selected",
+      "allSelected": "{count, plural, one {All # page selected} other {All # pages selected}}",
       "loading": "Loading PDF pages",
       "pagePreviewFailed": "Preview unavailable",
       "previewFailed": "This PDF could not be previewed.",
@@ -813,14 +813,46 @@
     },
     "workspaces": {
       "split": {
-        "title": "Select pages",
-        "hint": "Choose the pages to keep. They will be extracted into one PDF.",
-        "output": "{count, plural, one {# page will be saved as 1 PDF} other {# pages will be saved as 1 PDF}}",
-        "advanced": "Advanced: page ranges",
-        "advancedHint": "Type ranges such as 1-3, 5. Visual selection stays in sync.",
-        "selectPrompt": "Select at least one page",
+        "title": "Choose the pages you want",
+        "hint": "Select the pages to include. They stay in order in one new PDF.",
+        "modeTitle": "How this split works",
+        "modeExtract": "Extract selected pages",
+        "modeExtractHint": "Create one PDF containing the pages you selected.",
+        "output": "{count, plural, one {# selected page → 1 PDF} other {# selected pages → 1 PDF}}",
+        "allSelectedOutput": "All {count} pages → 1 PDF",
+        "advanced": "Advanced",
+        "advancedTitle": "Enter page ranges manually",
+        "advancedHint": "Use this if you already know the page numbers. Visual selection stays in sync.",
+        "advancedExample": "Example: 1-3, 5, 8-10",
+        "advancedError": "Check the page numbers. Use commas and dashes, like 1-3, 5.",
+        "selectPrompt": "Select at least one page to continue.",
         "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
-        "previewFailed": "Page preview is unavailable. You can still split using page ranges below."
+        "previewFailed": "This PDF couldn't be previewed. You can still enter page numbers in Advanced.",
+        "processing": "Splitting your PDF...",
+        "processingHint": "Extracting the pages you selected. This may take a moment.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the new PDF with the pages you selected.",
+        "download": "Download PDF",
+        "splitAnother": "Split another PDF",
+        "processingFailed": "We couldn't split this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Split another PDF to continue.",
+        "faqHow": "Upload a PDF, select the pages you want, then split. You'll get one new PDF with those pages. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to split."
+          },
+          "select": {
+            "title": "Select pages",
+            "description": "Tap the pages to include, or select all."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get one PDF with the pages you chose."
+          }
+        }
       },
       "merge": {
         "title": "Arrange files",
@@ -964,7 +996,7 @@
       "compressionHigh": "High (smallest file)",
       "rotation": "Rotation",
       "splitRanges": "Page ranges",
-      "splitRangesPlaceholder": "e.g. 1-3, 5",
+      "splitRangesPlaceholder": "1-3, 5, 8-10",
       "pageOrder": "Page order",
       "pageOrderPlaceholder": "e.g. 3, 1, 2",
       "pagesToRemove": "Pages to remove",
@@ -1015,7 +1047,7 @@
     },
     "split-pdf": {
       "name": "Split PDF",
-      "description": "Extract selected pages into a new PDF."
+      "description": "Choose the pages you want and extract them into a new PDF."
     },
     "organize-pdf": {
       "name": "Organize PDF",

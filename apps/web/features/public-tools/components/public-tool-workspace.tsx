@@ -6,7 +6,10 @@ import type { ReactNode } from "react";
 import { signupPath } from "@/features/auth/paths";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { usePublicToolWorkspace } from "../hooks/use-public-tool-workspace";
+import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
 import { formatAcceptedFormats } from "../lib/format-labels";
+import type { PublicToolErrorKey } from "../lib/public-tool-errors";
+import { selectedPagesFromSplitRanges } from "../lib/split-selection";
 import { acceptForTool } from "../lib/tool-limits";
 import type { ToolSelectedUxState } from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
@@ -40,6 +43,29 @@ export function PublicToolWorkspace({
   const accept = acceptForTool(tool);
   const processLabel = tTools(`${tool.id}.name`);
   const { ux } = workspace;
+  const isSplit = tool.id === "split-pdf";
+  const splitSelectedCount = isSplit
+    ? selectedPagesFromSplitRanges(workspace.workspaceState.splitRanges).length
+    : 0;
+  const splitProcessHint = isSplit
+    ? splitSelectedCount === 0
+      ? t("workspaces.split.selectPrompt")
+      : t("workspaces.split.output", { count: splitSelectedCount })
+    : null;
+  const splitResetLabel = isSplit
+    ? t("workspaces.split.splitAnother")
+    : undefined;
+  const splitDownloadLabel = isSplit
+    ? t("workspaces.split.download")
+    : undefined;
+  const splitErrorMessage =
+    isSplit && ux.status === "error"
+      ? resolveSplitErrorMessage(
+          ux.error.key,
+          t,
+          PUBLIC_ANONYMOUS_RETENTION_HOURS,
+        )
+      : undefined;
 
   if (workspace.isSessionPending) {
     return (
@@ -99,7 +125,13 @@ export function PublicToolWorkspace({
 
       {selected}
 
-      {ux.status === "processing" ? <ToolProcessingState state={ux} /> : null}
+      {ux.status === "processing" ? (
+        <ToolProcessingState
+          state={ux}
+          title={isSplit ? t("workspaces.split.processing") : undefined}
+          hint={isSplit ? t("workspaces.split.processingHint") : undefined}
+        />
+      ) : null}
 
       {ux.status === "success" ? (
         <ToolSuccessState
@@ -107,6 +139,12 @@ export function PublicToolWorkspace({
           signupHref={signupPath(tool.route)}
           isAuthenticated={workspace.isAuthenticated}
           isDownloading={workspace.isDownloading}
+          title={isSplit ? t("workspaces.split.successTitle") : undefined}
+          description={
+            isSplit ? t("workspaces.split.successDescription") : undefined
+          }
+          downloadLabel={splitDownloadLabel}
+          resetLabel={splitResetLabel}
           onDownload={() => {
             void workspace.onDownload();
           }}
@@ -118,6 +156,8 @@ export function PublicToolWorkspace({
         <ToolErrorState
           state={ux}
           toolRoute={tool.route}
+          message={splitErrorMessage}
+          resetLabel={splitResetLabel}
           onRetry={() => {
             void workspace.onRetry();
           }}
@@ -126,14 +166,28 @@ export function PublicToolWorkspace({
       ) : null}
 
       {ux.status === "expired" ? (
-        <ToolExpiredState onReset={workspace.resetWorkspace} />
+        <ToolExpiredState
+          title={isSplit ? t("workspaces.split.expiredTitle") : undefined}
+          description={
+            isSplit
+              ? t("workspaces.split.expiredDescription", {
+                  hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
+                })
+              : undefined
+          }
+          resetLabel={splitResetLabel}
+          onReset={workspace.resetWorkspace}
+        />
       ) : null}
 
       <ToolMobileActionBar
         ux={ux}
         canProcess={workspace.canProcess}
         processLabel={processLabel}
+        processHint={splitProcessHint}
         isDownloading={workspace.isDownloading}
+        downloadLabel={splitDownloadLabel}
+        resetLabel={splitResetLabel}
         maxFiles={workspace.maxFiles}
         maxFileSizeBytes={workspace.maxFileSizeBytes}
         onProcess={() => {
@@ -149,4 +203,24 @@ export function PublicToolWorkspace({
       />
     </div>
   );
+}
+
+function resolveSplitErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.split.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.split.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.split.expiredDescription", { hours });
+  }
+
+  return undefined;
 }

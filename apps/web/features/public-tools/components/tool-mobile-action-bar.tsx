@@ -9,7 +9,10 @@ export function ToolMobileActionBar({
   ux,
   canProcess,
   processLabel,
+  processHint,
   isDownloading,
+  downloadLabel,
+  resetLabel,
   maxFiles,
   maxFileSizeBytes,
   onProcess,
@@ -20,7 +23,10 @@ export function ToolMobileActionBar({
   ux: ToolUxState;
   canProcess: boolean;
   processLabel: string;
+  processHint?: string | null;
   isDownloading: boolean;
+  downloadLabel?: string;
+  resetLabel?: string;
   maxFiles: number;
   maxFileSizeBytes: number;
   onProcess: () => void;
@@ -40,11 +46,12 @@ export function ToolMobileActionBar({
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs text-muted-foreground">
-              {t("limits", {
-                files: maxFiles,
-                sizeMb: Math.floor(maxFileSizeBytes / (1024 * 1024)),
-                hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
-              })}
+              {processHint ??
+                t("limits", {
+                  files: maxFiles,
+                  sizeMb: Math.floor(maxFileSizeBytes / (1024 * 1024)),
+                  hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
+                })}
             </p>
           </div>
           <Button
@@ -72,7 +79,9 @@ export function ToolMobileActionBar({
             disabled={isDownloading}
             onClick={onDownload}
           >
-            {isDownloading ? t("result.downloading") : t("actions.download")}
+            {isDownloading
+              ? t("result.downloading")
+              : (downloadLabel ?? t("actions.download"))}
           </Button>
           <Button
             type="button"
@@ -81,7 +90,7 @@ export function ToolMobileActionBar({
             className="flex-1"
             onClick={onReset}
           >
-            {t("actions.startAgain")}
+            {resetLabel ?? t("actions.startAgain")}
           </Button>
         </div>
       </div>
@@ -109,7 +118,7 @@ export function ToolMobileActionBar({
             className="flex-1"
             onClick={onReset}
           >
-            {t("actions.startAgain")}
+            {resetLabel ?? t("actions.startAgain")}
           </Button>
         </div>
       </div>
@@ -120,7 +129,7 @@ export function ToolMobileActionBar({
     <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden">
       <div className="mx-auto flex w-full max-w-5xl">
         <Button type="button" size="lg" className="w-full" onClick={onReset}>
-          {t("actions.startAgain")}
+          {resetLabel ?? t("actions.startAgain")}
         </Button>
       </div>
     </div>

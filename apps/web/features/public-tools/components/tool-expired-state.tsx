@@ -5,7 +5,17 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
 
-export function ToolExpiredState({ onReset }: { onReset: () => void }) {
+export function ToolExpiredState({
+  title,
+  description,
+  resetLabel,
+  onReset,
+}: {
+  title?: string;
+  description?: string;
+  resetLabel?: string;
+  onReset: () => void;
+}) {
   const t = useTranslations("publicTools");
 
   return (
@@ -21,16 +31,17 @@ export function ToolExpiredState({ onReset }: { onReset: () => void }) {
         />
         <div className="min-w-0 flex-1">
           <h2 className="text-base font-semibold text-foreground">
-            {t("expiration.title")}
+            {title ?? t("expiration.title")}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground text-pretty">
-            {t("expiration.description", {
-              hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
-            })}
+            {description ??
+              t("expiration.description", {
+                hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
+              })}
           </p>
           <div className="mt-4 hidden md:block">
             <Button type="button" size="lg" onClick={onReset}>
-              {t("actions.startAgain")}
+              {resetLabel ?? t("actions.startAgain")}
             </Button>
           </div>
         </div>

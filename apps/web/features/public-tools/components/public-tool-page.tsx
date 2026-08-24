@@ -59,7 +59,10 @@ export async function PublicToolPageContent({
     {
       id: "how",
       question: t("faq.how.question"),
-      answer: t("faq.how.answer"),
+      answer:
+        tool.id === "split-pdf"
+          ? t("workspaces.split.faqHow")
+          : t("faq.how.answer"),
     },
     {
       id: "formats",
@@ -131,28 +134,47 @@ export async function PublicToolPageContent({
             {t("overview.howTitle")}
           </h2>
           <ol className="grid gap-3 sm:grid-cols-3">
-            {(
-              [
-                ["upload", formats],
-                ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
-                ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
-              ] as const
-            ).map(([step, detail], index) => (
-              <li
-                key={step}
-                className="rounded-lg border border-border bg-card p-4"
-              >
-                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                  {t("overview.step", { number: index + 1 })}
-                </p>
-                <p className="mt-1 text-sm font-medium text-foreground">
-                  {t(`overview.steps.${step}.title`)}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t(`overview.steps.${step}.description`, { detail })}
-                </p>
-              </li>
-            ))}
+            {tool.id === "split-pdf"
+              ? (["upload", "select", "download"] as const).map(
+                  (step, index) => (
+                    <li
+                      key={step}
+                      className="rounded-lg border border-border bg-card p-4"
+                    >
+                      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                        {t("overview.step", { number: index + 1 })}
+                      </p>
+                      <p className="mt-1 text-sm font-medium text-foreground">
+                        {t(`workspaces.split.how.${step}.title`)}
+                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {t(`workspaces.split.how.${step}.description`)}
+                      </p>
+                    </li>
+                  ),
+                )
+              : (
+                  [
+                    ["upload", formats],
+                    ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
+                    ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
+                  ] as const
+                ).map(([step, detail], index) => (
+                  <li
+                    key={step}
+                    className="rounded-lg border border-border bg-card p-4"
+                  >
+                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                      {t("overview.step", { number: index + 1 })}
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-foreground">
+                      {t(`overview.steps.${step}.title`)}
+                    </p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {t(`overview.steps.${step}.description`, { detail })}
+                    </p>
+                  </li>
+                ))}
           </ol>
         </section>
 

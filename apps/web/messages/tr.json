@@ -804,7 +804,7 @@
       "selectAll": "Tümünü seç",
       "clear": "Seçimi temizle",
       "selectedCount": "{count, plural, one {# sayfa seçildi} other {# sayfa seçildi}}",
-      "allSelected": "Tüm sayfalar seçildi",
+      "allSelected": "{count, plural, one {Tüm # sayfa seçildi} other {Tüm # sayfa seçildi}}",
       "loading": "PDF sayfaları yükleniyor",
       "pagePreviewFailed": "Önizleme yok",
       "previewFailed": "Bu PDF önizlenemedi.",
@@ -813,14 +813,46 @@
     },
     "workspaces": {
       "split": {
-        "title": "Sayfa seç",
-        "hint": "Tutmak istediğiniz sayfaları seçin. Seçilen sayfalar tek bir PDF olarak çıkarılır.",
-        "output": "{count, plural, one {# sayfa 1 PDF olarak kaydedilecek} other {# sayfa 1 PDF olarak kaydedilecek}}",
-        "advanced": "Gelişmiş: sayfa aralıkları",
-        "advancedHint": "1-3, 5 gibi aralıklar yazabilirsiniz. Görsel seçim senkron kalır.",
-        "selectPrompt": "En az bir sayfa seçin",
+        "title": "Kullanmak istediğiniz sayfaları seçin",
+        "hint": "Dahil edilecek sayfaları seçin. Sayfalar sırasını koruyarak tek bir yeni PDF’de toplanır.",
+        "modeTitle": "Bu bölümme nasıl çalışır",
+        "modeExtract": "Seçilen sayfaları çıkar",
+        "modeExtractHint": "Seçtiğiniz sayfaları içeren tek bir PDF oluşturur.",
+        "output": "{count, plural, one {# seçili sayfa → 1 PDF} other {# seçili sayfa → 1 PDF}}",
+        "allSelectedOutput": "Tüm {count} sayfa → 1 PDF",
+        "advanced": "Gelişmiş",
+        "advancedTitle": "Sayfa aralıklarını elle girin",
+        "advancedHint": "Sayfa numaralarını zaten biliyorsanız bunu kullanın. Görsel seçim senkron kalır.",
+        "advancedExample": "Örnek: 1-3, 5, 8-10",
+        "advancedError": "Sayfa numaralarını kontrol edin. 1-3, 5 gibi virgül ve tire kullanın.",
+        "selectPrompt": "Devam etmek için en az bir sayfa seçin.",
         "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
-        "previewFailed": "Sayfa önizlemesi kullanılamıyor. Aşağıdaki sayfa aralıklarıyla yine de bölebilirsiniz."
+        "previewFailed": "Bu PDF önizlenemedi. Yine de Gelişmiş bölümünden sayfa numarası girebilirsiniz.",
+        "processing": "PDF’niz bölünüyor...",
+        "processingHint": "Seçtiğiniz sayfalar çıkarılıyor. Bu biraz sürebilir.",
+        "successTitle": "PDF’niz hazır",
+        "successDescription": "Seçtiğiniz sayfaları içeren yeni PDF’i indirin.",
+        "download": "PDF’i indir",
+        "splitAnother": "Başka bir PDF böl",
+        "processingFailed": "Bu PDF bölünemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF bölün.",
+        "faqHow": "Bir PDF yükleyin, istediğiniz sayfaları seçin ve bölün. Bu sayfaları içeren tek bir yeni PDF alırsınız. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Bölmek istediğiniz PDF’i sürükleyip bırakın."
+          },
+          "select": {
+            "title": "Sayfa seç",
+            "description": "Dahil edilecek sayfalara dokunun veya tümünü seçin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Seçtiğiniz sayfaları içeren tek bir PDF alın."
+          }
+        }
       },
       "merge": {
         "title": "Dosyaları düzenle",
@@ -964,7 +996,7 @@
       "compressionHigh": "Yüksek (en küçük dosya)",
       "rotation": "Döndürme",
       "splitRanges": "Sayfa aralıkları",
-      "splitRangesPlaceholder": "örn. 1-3, 5",
+      "splitRangesPlaceholder": "1-3, 5, 8-10",
       "pageOrder": "Sayfa sırası",
       "pageOrderPlaceholder": "örn. 3, 1, 2",
       "pagesToRemove": "Silinecek sayfalar",
@@ -1015,7 +1047,7 @@
     },
     "split-pdf": {
       "name": "PDF böl",
-      "description": "Seçilen sayfaları yeni bir PDF'ye çıkarın."
+      "description": "İstediğiniz sayfaları seçin ve yeni bir PDF olarak çıkarın."
     },
     "organize-pdf": {
       "name": "PDF düzenle",

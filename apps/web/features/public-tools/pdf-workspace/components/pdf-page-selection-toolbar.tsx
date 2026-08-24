@@ -21,7 +21,7 @@ export function PdfPageSelectionToolbar({
   const t = useTranslations("publicTools.pages");
   const selectionLabel =
     isAllSelected && pageCount > 0
-      ? t("allSelected")
+      ? t("allSelected", { count: pageCount })
       : t("selectedCount", { count: selectedCount });
 
   return (

@@ -11,11 +11,15 @@ import type { ToolErrorUxState } from "../types/tool-ux-state";
 export function ToolErrorState({
   state,
   toolRoute,
+  message,
+  resetLabel,
   onRetry,
   onReset,
 }: {
   state: ToolErrorUxState;
   toolRoute: `/${string}`;
+  message?: string;
+  resetLabel?: string;
   onRetry: () => void;
   onReset: () => void;
 }) {
@@ -42,7 +46,7 @@ export function ToolErrorState({
             {t("errors.title")}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {t(`errors.${state.error.key}`)}
+            {message ?? t(`errors.${state.error.key}`)}
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             {state.error.retryable
@@ -71,7 +75,7 @@ export function ToolErrorState({
               variant={state.error.retryable ? "outline" : "default"}
               onClick={onReset}
             >
-              {t("actions.startAgain")}
+              {resetLabel ?? t("actions.startAgain")}
             </Button>
           </div>
         </div>

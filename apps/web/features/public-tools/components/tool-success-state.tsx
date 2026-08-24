@@ -12,6 +12,10 @@ export function ToolSuccessState({
   signupHref,
   isAuthenticated,
   isDownloading,
+  title,
+  description,
+  downloadLabel,
+  resetLabel,
   onDownload,
   onReset,
 }: {
@@ -19,6 +23,10 @@ export function ToolSuccessState({
   signupHref: string;
   isAuthenticated: boolean;
   isDownloading: boolean;
+  title?: string;
+  description?: string;
+  downloadLabel?: string;
+  resetLabel?: string;
   onDownload: () => void;
   onReset: () => void;
 }) {
@@ -37,13 +45,14 @@ export function ToolSuccessState({
         />
         <div className="min-w-0 flex-1">
           <h2 className="text-base font-semibold text-foreground">
-            {t("result.title")}
+            {title ?? t("result.title")}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {t("result.description", {
-              format: formatLabel(state.targetFormat),
-              source: state.sourceFilename ?? t("result.unnamedSource"),
-            })}
+            {description ??
+              t("result.description", {
+                format: formatLabel(state.targetFormat),
+                source: state.sourceFilename ?? t("result.unnamedSource"),
+              })}
           </p>
           {state.downloadError !== null ? (
             <p className="mt-2 text-sm text-destructive">
@@ -59,7 +68,9 @@ export function ToolSuccessState({
               autoFocus
               onClick={onDownload}
             >
-              {isDownloading ? t("result.downloading") : t("actions.download")}
+              {isDownloading
+                ? t("result.downloading")
+                : (downloadLabel ?? t("actions.download"))}
             </Button>
             <Button
               type="button"
@@ -68,7 +79,7 @@ export function ToolSuccessState({
               className="w-full sm:w-auto"
               onClick={onReset}
             >
-              {t("actions.startAgain")}
+              {resetLabel ?? t("actions.startAgain")}
             </Button>
           </div>
           {isAuthenticated ? null : (
