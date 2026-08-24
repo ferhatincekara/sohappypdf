@@ -196,8 +196,64 @@ function createMemoryConversionRepository(
       );
       return conversion === undefined ? undefined : { ...conversion };
     },
-    async listByOwner() {
-      return [];
+    async listByOwner(input) {
+      return [...records.values()]
+        .filter((conversion) => {
+          if (conversion.ownerId !== input.ownerId) {
+            return false;
+          }
+
+          if (
+            input.ownerKind !== undefined &&
+            conversion.ownerKind !== input.ownerKind
+          ) {
+            return false;
+          }
+
+          if (
+            input.now !== undefined &&
+            conversion.expiresAt !== null &&
+            conversion.expiresAt.getTime() <= input.now.getTime()
+          ) {
+            return false;
+          }
+
+          if (
+            input.status !== undefined &&
+            conversion.status !== input.status
+          ) {
+            return false;
+          }
+
+          if (
+            input.targetFormat !== undefined &&
+            conversion.targetFormat !== input.targetFormat
+          ) {
+            return false;
+          }
+
+          if (input.cursor === undefined) {
+            return true;
+          }
+
+          if (
+            conversion.createdAt.getTime() < input.cursor.createdAt.getTime()
+          ) {
+            return true;
+          }
+
+          return (
+            conversion.createdAt.getTime() ===
+              input.cursor.createdAt.getTime() &&
+            conversion.id < input.cursor.id
+          );
+        })
+        .sort((left, right) => {
+          const created = right.createdAt.getTime() - left.createdAt.getTime();
+          return created === 0 ? right.id.localeCompare(left.id) : created;
+        })
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
     },
     async updateStatus(input) {
       const conversion = records.get(input.id);
@@ -468,9 +524,103 @@ describe("anonymous tool API", () => {
       `/api/v1/anonymous/conversions/${created.id}`,
       { headers: { cookie: first.cookie } },
     );
-    expect(expired.status).toBe(404);
+    expect(expired.status).toBe(200);
     expect(await expired.json()).toMatchObject({
-      error: { code: APP_ERROR_CODES.NOT_FOUND },
+      conversion: {
+        id: created.id,
+        expired: true,
+        outputFileId: null,
+      },
+    });
+  });
+
+  test("lists recent conversions for the same anonymous session across tools", async () => {
+    const { app, fileService, storage } = createAnonymousApp();
+    const uploaded = await uploadAnonymousFile(app);
+    const ownerId = (await fileService.findFileById(uploaded.body.file.id))
+      ?.ownerId;
+    await completeAnonymousFile(
+      app,
+      fileService,
+      storage,
+      uploaded.body.file.id,
+      uploaded.cookie,
+      ownerId ?? "",
+    );
+    const created = await app.request("/api/v1/anonymous/conversions", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        cookie: uploaded.cookie,
+      },
+      body: JSON.stringify({
+        sourceFileId: uploaded.body.file.id,
+        type: "pdf-to-png",
+      }),
+    });
+    const createdBody = await created.json();
+    const listed = await app.request("/api/v1/anonymous/conversions?limit=8", {
+      headers: { cookie: uploaded.cookie },
+    });
+    const listedBody = await listed.json();
+    const otherSession = await uploadAnonymousFile(app);
+    const foreign = await app.request("/api/v1/anonymous/conversions?limit=8", {
+      headers: { cookie: otherSession.cookie },
+    });
+    const foreignBody = await foreign.json();
+
+    expect(created.status).toBe(201);
+    expect(listed.status).toBe(200);
+    expect(listedBody.conversions).toHaveLength(1);
+    expect(listedBody.conversions[0].id).toBe(createdBody.conversion.id);
+    expect(listedBody.conversions[0].sourceFilename).toBe("report.pdf");
+    expect(listedBody.conversions[0].type).toBe("pdf-to-png");
+    expect(listedBody.nextCursor).toBeNull();
+    expect(JSON.stringify(listedBody).includes("objectKey")).toBe(false);
+    expect(foreign.status).toBe(200);
+    expect(foreignBody.conversions).toEqual([]);
+  });
+
+  test("lists expired anonymous conversions as expired history without a downloadable result", async () => {
+    let current = new Date("2026-08-24T01:00:00.000Z");
+    const { app, fileService, conversionService, storage } = createAnonymousApp(
+      {
+        now: () => current,
+      },
+    );
+    const uploaded = await uploadAnonymousFile(app);
+    const ownerId = (await fileService.findFileById(uploaded.body.file.id))
+      ?.ownerId;
+    await completeAnonymousFile(
+      app,
+      fileService,
+      storage,
+      uploaded.body.file.id,
+      uploaded.cookie,
+      ownerId ?? "",
+    );
+    const created = await conversionService.createOwnedConversion({
+      ownerId: ownerId ?? "",
+      ownerKind: "anonymous_session",
+      sourceFileId: uploaded.body.file.id,
+      targetFormat: "png",
+      type: "pdf-to-png",
+      expiresAt: new Date("2026-08-24T01:30:00.000Z"),
+    });
+
+    current = new Date("2026-08-24T02:00:00.000Z");
+    const listed = await app.request("/api/v1/anonymous/conversions?limit=8", {
+      headers: { cookie: uploaded.cookie },
+    });
+    const listedBody = await listed.json();
+
+    expect(listed.status).toBe(200);
+    expect(listedBody.conversions).toHaveLength(1);
+    expect(listedBody.conversions[0]).toMatchObject({
+      id: created.id,
+      expired: true,
+      outputFileId: null,
+      sourceFilename: "report.pdf",
     });
   });
 

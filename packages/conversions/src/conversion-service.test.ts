@@ -53,6 +53,13 @@ function createMemoryRepository(
           }
 
           if (
+            input.ownerKind !== undefined &&
+            conversion.ownerKind !== input.ownerKind
+          ) {
+            return false;
+          }
+
+          if (
             input.now !== undefined &&
             conversion.expiresAt !== null &&
             conversion.expiresAt.getTime() <= input.now.getTime()
@@ -534,6 +541,31 @@ describe("conversion service", () => {
         expect(error.code).toBe("NOT_FOUND");
       }
     }
+  });
+
+  test("lists owned conversions only for the requested owner kind", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+    });
+    const anonymous = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      ownerKind: "anonymous_session",
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+    });
+
+    const listed = await service.listOwnedConversions({
+      ownerId: sourceFile.ownerId,
+      ownerKind: "anonymous_session",
+    });
+    const users = await service.listOwnedConversions({
+      ownerId: sourceFile.ownerId,
+      ownerKind: "user",
+    });
+
+    expect(listed.conversions.map((item) => item.id)).toEqual([anonymous.id]);
+    expect(users.conversions).toEqual([]);
   });
 
   test("marks a pending conversion failed when queueing cannot proceed", async () => {

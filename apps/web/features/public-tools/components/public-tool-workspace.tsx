@@ -2,11 +2,13 @@
 
 import type { ToolDefinition } from "@repo/tools/catalog";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { signupPath } from "@/features/auth/paths";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { usePublicToolWorkspace } from "../hooks/use-public-tool-workspace";
 import { formatAcceptedFormats } from "../lib/format-labels";
 import { acceptForTool } from "../lib/tool-limits";
+import type { ToolSelectedUxState } from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
 import { ToolExpiredState } from "./tool-expired-state";
@@ -31,7 +33,18 @@ function processActionKey(toolId: string): "merge" | "split" | "process" {
   return "process";
 }
 
-export function PublicToolWorkspace({ tool }: { tool: ToolDefinition }) {
+export type PublicToolSelectedSlot = {
+  defaultSelected: ReactNode;
+  state: ToolSelectedUxState;
+};
+
+export function PublicToolWorkspace({
+  tool,
+  renderSelected,
+}: {
+  tool: ToolDefinition;
+  renderSelected?: (slot: PublicToolSelectedSlot) => ReactNode;
+}) {
   const t = useTranslations("publicTools");
   const workspace = usePublicToolWorkspace(tool);
   const formatsLabel = formatAcceptedFormats(
@@ -75,6 +88,40 @@ export function PublicToolWorkspace({ tool }: { tool: ToolDefinition }) {
       </section>
     ) : null;
 
+  const defaultSelected =
+    ux.status === "selected" ? (
+      <ToolSelectedState
+        toolRoute={tool.route}
+        state={ux}
+        accept={accept}
+        multiple={workspace.maxFiles > 1}
+        canAddFiles={workspace.files.length < workspace.maxFiles}
+        formatsLabel={formatsLabel}
+        maxSizeLabel={maxSizeLabel}
+        reorderable={workspace.reorderable}
+        disabled={workspace.isBusy}
+        canProcess={workspace.canProcess}
+        processLabel={processLabel}
+        options={options}
+        onSelectFiles={workspace.addFiles}
+        onMove={workspace.onMove}
+        onReorder={workspace.onReorder}
+        onRemove={workspace.onRemove}
+        onRetryUpload={workspace.onRetryUpload}
+        onProcess={() => {
+          void workspace.onProcess();
+        }}
+      />
+    ) : null;
+
+  const selected =
+    ux.status === "selected" && defaultSelected !== null
+      ? (renderSelected?.({
+          defaultSelected,
+          state: ux,
+        }) ?? defaultSelected)
+      : null;
+
   return (
     <div className="flex flex-col gap-6 pb-28 md:pb-0">
       {ux.status === "empty" ? (
@@ -87,30 +134,7 @@ export function PublicToolWorkspace({ tool }: { tool: ToolDefinition }) {
         />
       ) : null}
 
-      {ux.status === "selected" ? (
-        <ToolSelectedState
-          toolRoute={tool.route}
-          state={ux}
-          accept={accept}
-          multiple={workspace.maxFiles > 1}
-          canAddFiles={workspace.files.length < workspace.maxFiles}
-          formatsLabel={formatsLabel}
-          maxSizeLabel={maxSizeLabel}
-          reorderable={workspace.reorderable}
-          disabled={workspace.isBusy}
-          canProcess={workspace.canProcess}
-          processLabel={processLabel}
-          options={options}
-          onSelectFiles={workspace.addFiles}
-          onMove={workspace.onMove}
-          onReorder={workspace.onReorder}
-          onRemove={workspace.onRemove}
-          onRetryUpload={workspace.onRetryUpload}
-          onProcess={() => {
-            void workspace.onProcess();
-          }}
-        />
-      ) : null}
+      {selected}
 
       {ux.status === "processing" ? <ToolProcessingState state={ux} /> : null}
 

@@ -174,6 +174,13 @@ function createMemoryConversionRepository(
           }
 
           if (
+            input.ownerKind !== undefined &&
+            conversion.ownerKind !== input.ownerKind
+          ) {
+            return false;
+          }
+
+          if (
             input.status !== undefined &&
             conversion.status !== input.status
           ) {

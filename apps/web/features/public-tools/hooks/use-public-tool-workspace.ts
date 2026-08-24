@@ -1,8 +1,10 @@
 "use client";
 
 import type { ToolDefinition } from "@repo/tools/catalog";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getPublicWebEnv } from "@/config/public-env";
+import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 import { canDownloadConversion } from "@/features/conversions/lib/can-download-conversion";
 import { startBrowserDownload } from "@/features/files/lib/start-browser-download";
 import {
@@ -11,6 +13,7 @@ import {
 } from "@/features/files/lib/upload-workflow";
 import { authClient } from "@/lib/auth/auth-client";
 import { createPublicToolApis } from "../api/public-tool-api";
+import { publicToolQueryKeys } from "../api/public-tool-query-keys";
 import { PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES } from "../lib/anonymous-limits";
 import {
   isExpirationResponse,
@@ -47,6 +50,7 @@ import { useToolExecutionStatus } from "./use-tool-execution-status";
 
 export function usePublicToolWorkspace(tool: ToolDefinition) {
   const session = authClient.useSession();
+  const queryClient = useQueryClient();
   const isAuthenticated = session.data !== null && session.data !== undefined;
   const apis = useMemo(
     () => createPublicToolApis(isAuthenticated),
@@ -454,6 +458,14 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
 
       setProcessError(null);
       setExecutionId(created.id);
+      void queryClient.invalidateQueries({
+        queryKey: publicToolQueryKeys.recent(isAuthenticated),
+      });
+      if (isAuthenticated) {
+        void queryClient.invalidateQueries({
+          queryKey: conversionQueryKeys.lists(),
+        });
+      }
     } catch (error) {
       setProcessError(mapPublicToolError(error));
     } finally {

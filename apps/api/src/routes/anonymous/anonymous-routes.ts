@@ -14,8 +14,15 @@ import {
 import { toRateLimitSubject } from "../../rate-limit-subject.js";
 import { buildConversionRequestOptions } from "../conversions/build-conversion-options.js";
 import { toPublicConversion } from "../conversions/conversion-presenter.js";
-import { parseConversionId } from "../conversions/conversion-schemas.js";
+import {
+  parseConversionId,
+  parseListConversionsQuery,
+} from "../conversions/conversion-schemas.js";
 import { enqueueCreatedConversion } from "../conversions/enqueue-created-conversion.js";
+import {
+  resolveSourceFilename,
+  resolveSourceFilenames,
+} from "../conversions/resolve-source-filenames.js";
 import {
   toPublicFile,
   toUploadIntentResponse,
@@ -204,6 +211,32 @@ export function createAnonymousRoutes(options: AnonymousRoutesOptions) {
     );
   });
 
+  anonymous.get("/conversions", async (c) => {
+    const identity = requireAnonymousIdentity(c.get("identity"));
+    const query = parseListConversionsQuery(c.req.query());
+    const result = await options.getConversionService().listOwnedConversions({
+      ownerId: identity.sessionId,
+      ownerKind: "anonymous_session",
+      limit: query.limit,
+      cursor: query.cursor,
+      status: query.status,
+      targetFormat: query.targetFormat,
+    });
+    const sourceFilenames = await resolveSourceFilenames(
+      options.getFileService(),
+      result.conversions.map((conversion) => conversion.sourceFileId),
+    );
+
+    return c.json({
+      conversions: result.conversions.map((conversion) =>
+        toPublicConversion(conversion, {
+          sourceFilename: sourceFilenames.get(conversion.sourceFileId) ?? null,
+        }),
+      ),
+      nextCursor: result.nextCursor,
+    });
+  });
+
   anonymous.get("/conversions/:id", async (c) => {
     const identity = requireAnonymousIdentity(c.get("identity"));
     const conversion = await options
@@ -215,9 +248,10 @@ export function createAnonymousRoutes(options: AnonymousRoutesOptions) {
 
     return c.json({
       conversion: toPublicConversion(conversion, {
-        sourceFilename:
-          (await options.getFileService().findFileById(conversion.sourceFileId))
-            ?.originalFilename ?? null,
+        sourceFilename: await resolveSourceFilename(
+          options.getFileService(),
+          conversion.sourceFileId,
+        ),
       }),
     });
   });

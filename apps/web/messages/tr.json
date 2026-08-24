@@ -793,7 +793,8 @@
       "removeFile": "{name} dosyasını kaldır",
       "retry": "Yüklemeyi tekrar dene",
       "fileReady": "Hazır",
-      "filePending": "Yükleme bekleniyor"
+      "filePending": "Yükleme bekleniyor",
+      "pageCount": "{count, plural, one {# sayfa} other {# sayfa}}"
     },
     "phases": {
       "uploading": "Yükleniyor",
@@ -817,6 +818,29 @@
     },
     "related": {
       "title": "İlgili araçlar"
+    },
+    "recent": {
+      "title": "Son işlemler",
+      "notice": "Geçici dosyalar yaklaşık {hours} saat saklanır, ardından süreleri dolar.",
+      "empty": "Henüz son işlem yok. İşlenen dosyalar kısa süre burada görünür.",
+      "error": "Son işlemler yüklenemedi.",
+      "retry": "Tekrar dene",
+      "unnamedFile": "Adsız dosya",
+      "download": "İndir",
+      "downloading": "İndirme hazırlanıyor…",
+      "openTool": "Aracı aç",
+      "startAgain": "Yeniden başla",
+      "status": {
+        "processing": "İşleniyor",
+        "completed": "Tamamlandı",
+        "failed": "Başarısız",
+        "expired": "Süresi doldu"
+      },
+      "age": {
+        "justNow": "Az önce",
+        "minutes": "{count}dk",
+        "hours": "{count}sa"
+      }
     },
     "privacy": {
       "title": "Dosyalar ve saklama süresi",

@@ -1,0 +1,3 @@
+export const RECENT_EXECUTIONS_LIMIT = 8;
+export const RECENT_EXECUTIONS_STALE_TIME_MS = 15_000;
+export const RECENT_EXECUTIONS_FALLBACK_ROUTE = "/tools" as const;

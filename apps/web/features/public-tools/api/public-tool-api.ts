@@ -3,6 +3,7 @@ import {
   conversionApi,
 } from "@/features/conversions/api/conversion-api";
 import type {
+  ConversionListResponse,
   ConversionType,
   PublicConversion,
 } from "@/features/conversions/types/conversion";
@@ -97,6 +98,28 @@ export async function getAnonymousConversion(
   }
 }
 
+export async function listAnonymousConversions(
+  query: { limit?: number } = {},
+): Promise<ConversionListResponse> {
+  try {
+    const response = await apiClient.get<ConversionListResponse>(
+      "/api/v1/anonymous/conversions",
+      {
+        params:
+          query.limit === undefined
+            ? undefined
+            : {
+                limit: query.limit,
+              },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new ConversionApiRequestError(error);
+  }
+}
+
 export async function createAnonymousDownloadUrl(
   fileId: string,
 ): Promise<FileDownloadResponse> {
@@ -140,6 +163,12 @@ export function createPublicToolApis(authenticated: boolean) {
     getConversion: authenticated
       ? (id: string) => conversionApi.get(id)
       : getAnonymousConversion,
+    listConversions: (query?: { limit?: number }) =>
+      authenticated
+        ? conversionApi.list({
+            limit: query?.limit,
+          })
+        : listAnonymousConversions(query),
     createDownloadUrl: authenticated
       ? createAuthenticatedDownloadUrl
       : createAnonymousDownloadUrl,

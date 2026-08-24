@@ -793,7 +793,8 @@
       "removeFile": "Remove {name}",
       "retry": "Retry upload",
       "fileReady": "Ready",
-      "filePending": "Waiting to upload"
+      "filePending": "Waiting to upload",
+      "pageCount": "{count, plural, one {# page} other {# pages}}"
     },
     "phases": {
       "uploading": "Uploading",
@@ -817,6 +818,29 @@
     },
     "related": {
       "title": "Related tools"
+    },
+    "recent": {
+      "title": "Recent",
+      "notice": "Temporary files are kept for about {hours} hours, then they expire.",
+      "empty": "No recent executions yet. Processed files will appear here for a short time.",
+      "error": "Recent executions could not be loaded.",
+      "retry": "Try again",
+      "unnamedFile": "Untitled file",
+      "download": "Download",
+      "downloading": "Preparing download…",
+      "openTool": "Open tool",
+      "startAgain": "Start again",
+      "status": {
+        "processing": "Processing",
+        "completed": "Completed",
+        "failed": "Failed",
+        "expired": "Expired"
+      },
+      "age": {
+        "justNow": "Just now",
+        "minutes": "{count}m",
+        "hours": "{count}h"
+      }
     },
     "privacy": {
       "title": "Files and retention",

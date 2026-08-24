@@ -73,6 +73,7 @@ export type CreateOwnedConversionInput = {
 
 export type ConversionListQuery = {
   ownerId: string;
+  ownerKind?: ResourceOwnerKind;
   limit?: number;
   cursor?: string;
   status?: ConversionStatus;

@@ -410,6 +410,7 @@ export function createConversionService(
           : assertFileFormat(query.targetFormat, "Invalid target format");
       const records = await options.repository.listByOwner({
         ownerId,
+        ownerKind: query.ownerKind,
         limit: limit + 1,
         cursor,
         status,

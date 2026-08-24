@@ -18,6 +18,7 @@ import {
 
 export type ConversionOwnerListInput = {
   ownerId: string;
+  ownerKind?: ConversionRecord["ownerKind"];
   limit: number;
   cursor?: ConversionListCursor;
   status?: ConversionStatus;
@@ -189,6 +190,10 @@ export function createConversionRepository(db: Database): ConversionRepository {
 
     async listByOwner(input) {
       const conditions = [eq(conversions.ownerId, input.ownerId)];
+
+      if (input.ownerKind !== undefined) {
+        conditions.push(eq(conversions.ownerKind, input.ownerKind));
+      }
 
       if (input.now !== undefined) {
         const activeExpiry = or(

@@ -13,6 +13,8 @@ import { maxFilesForTool } from "../lib/tool-limits";
 import { PublicToolFaq } from "./public-tool-faq";
 import { PublicToolJsonLd } from "./public-tool-json-ld";
 import { PublicToolWorkspace } from "./public-tool-workspace";
+import { RecentExecutions } from "./recent-executions";
+import { ToolHeader } from "./tool-header";
 
 export type RelatedPublicTool = {
   id: string;
@@ -100,24 +102,18 @@ export async function PublicToolPageContent({
         })}
         faq={faq}
       />
-      <header className="flex flex-col gap-3">
-        <p className="text-sm font-medium text-muted-foreground">
-          {tNav(`categories.${tool.category}`)}
-        </p>
-        <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          {name}
-        </h1>
-        <p className="max-w-2xl text-base text-muted-foreground text-pretty">
-          {description}
-        </p>
-        {tool.allowsAnonymous ? null : (
-          <p className="text-sm text-muted-foreground">
-            {t("descriptionAuthenticated")}
-          </p>
-        )}
-      </header>
+      <ToolHeader
+        category={tNav(`categories.${tool.category}`)}
+        name={name}
+        description={description}
+        authenticationNotice={
+          tool.allowsAnonymous ? null : t("descriptionAuthenticated")
+        }
+      />
 
       <PublicToolWorkspace tool={tool} />
+
+      <RecentExecutions />
 
       <section aria-labelledby="how-to-heading" className="flex flex-col gap-3">
         <h2

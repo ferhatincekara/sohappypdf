@@ -81,6 +81,9 @@ export function ToolFileList({
                 <p className="text-xs text-muted-foreground">
                   {fileExtensionLabel(entry.file.name)} ·{" "}
                   {formatFileSize(entry.file.size)}
+                  {entry.pageCount === null
+                    ? null
+                    : ` · ${t("workspace.pageCount", { count: entry.pageCount })}`}
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-1">

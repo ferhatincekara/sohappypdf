@@ -27,6 +27,7 @@ export type WorkspaceFile = {
   progress: UploadProgress;
   publicFile: PublicFile | null;
   errorKey: PublicToolErrorKey | null;
+  pageCount: number | null;
 };
 
 export function supportsFileReorder(tool: ToolDefinition): boolean {
@@ -116,6 +117,7 @@ export function createWorkspaceFiles(
     progress: INITIAL_UPLOAD_PROGRESS,
     publicFile: null,
     errorKey: null,
+    pageCount: null,
   }));
 }
 
@@ -242,7 +244,12 @@ export function patchWorkspaceFile(
   patch: Partial<
     Pick<
       WorkspaceFile,
-      "status" | "progress" | "publicFile" | "errorKey" | "previewUrl"
+      | "status"
+      | "progress"
+      | "publicFile"
+      | "errorKey"
+      | "previewUrl"
+      | "pageCount"
     >
   >,
 ): WorkspaceFile[] {

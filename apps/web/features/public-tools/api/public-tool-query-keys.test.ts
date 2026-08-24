@@ -10,4 +10,13 @@ describe("public tool query keys", () => {
     expect(authenticated.slice(0, 2)).toEqual(publicToolQueryKeys.executions());
     expect(anonymous).not.toEqual(authenticated);
   });
+
+  test("scopes recent execution list keys under a shared prefix", () => {
+    const anonymous = publicToolQueryKeys.recent(false);
+    const authenticated = publicToolQueryKeys.recent(true);
+
+    expect(anonymous.slice(0, 2)).toEqual(publicToolQueryKeys.recents());
+    expect(authenticated.slice(0, 2)).toEqual(publicToolQueryKeys.recents());
+    expect(anonymous).not.toEqual(authenticated);
+  });
 });
