@@ -858,9 +858,39 @@
         }
       },
       "merge": {
-        "title": "Arrange files",
-        "hint": "Drag files into the order you want in the merged PDF.",
-        "selectPrompt": "Select at least two PDFs to merge."
+        "title": "Arrange the files to merge",
+        "hint": "Add at least two PDFs and drag them into the order you want.",
+        "selectPrompt": "Add at least two PDFs to continue.",
+        "resultTitle": "What you will get",
+        "resultLabel": "One merged PDF",
+        "equation": "{files} = 1 PDF",
+        "output": "{count, plural, one {# PDF → 1 merged PDF} other {# PDFs → 1 merged PDF}}",
+        "outputWithPages": "{files, plural, one {# PDF} other {# PDFs}} · {pages, plural, one {# page} other {# pages}} → 1 PDF",
+        "processing": "Merging your PDFs...",
+        "processingHint": "Combining the files in the order you chose. This may take a moment.",
+        "successTitle": "Your merged PDF is ready",
+        "successDescription": "Download the combined PDF.",
+        "download": "Download PDF",
+        "mergeAnother": "Merge more PDFs",
+        "processingFailed": "We couldn't merge these PDFs. Please try again.",
+        "invalidFile": "One of these files couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Merge more PDFs to continue.",
+        "faqHow": "Upload two or more PDFs, arrange the order, then merge. You'll get one combined PDF. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Add the PDFs you want to combine."
+          },
+          "arrange": {
+            "title": "Arrange",
+            "description": "Drag files into the order they should appear."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get one PDF with every file included."
+          }
+        }
       },
       "compress": {
         "title": "Compression",

@@ -52,6 +52,7 @@ export function PublicToolWorkspace({
     ).length,
     organizePageCount:
       parseOrganizeOrderInput(workspace.workspaceState.pageOrder)?.length ?? 0,
+    mergeFileCount: workspace.files.length,
     errorKey: ux.status === "error" ? ux.error.key : null,
     hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
   });
@@ -191,6 +192,7 @@ function dedicatedToolShellCopy({
   t,
   splitSelectedCount,
   organizePageCount,
+  mergeFileCount,
   errorKey,
   hours,
 }: {
@@ -198,6 +200,7 @@ function dedicatedToolShellCopy({
   t: ReturnType<typeof useTranslations>;
   splitSelectedCount: number;
   organizePageCount: number;
+  mergeFileCount: number;
   errorKey: PublicToolErrorKey | null;
   hours: number;
 }): {
@@ -256,6 +259,27 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "merge-pdf") {
+    return {
+      processingTitle: t("workspaces.merge.processing"),
+      processingHint: t("workspaces.merge.processingHint"),
+      successTitle: t("workspaces.merge.successTitle"),
+      successDescription: t("workspaces.merge.successDescription"),
+      downloadLabel: t("workspaces.merge.download"),
+      resetLabel: t("workspaces.merge.mergeAnother"),
+      expiredTitle: t("workspaces.merge.expiredTitle"),
+      expiredDescription: t("workspaces.merge.expiredDescription", { hours }),
+      processHint:
+        mergeFileCount < 2
+          ? t("workspaces.merge.selectPrompt")
+          : t("workspaces.merge.output", { count: mergeFileCount }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveMergeErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -294,6 +318,26 @@ function resolveOrganizeErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.organize.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveMergeErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.merge.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.merge.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.merge.expiredDescription", { hours });
   }
 
   return undefined;

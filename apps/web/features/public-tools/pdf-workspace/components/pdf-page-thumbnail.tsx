@@ -53,6 +53,9 @@ export function PdfPageThumbnail({
   rotation = 0,
   reorderable = false,
   overlay,
+  interactive = true,
+  showLabel = true,
+  className,
   onActivate,
   onKeyDown,
   onReorderDragStart,
@@ -66,7 +69,10 @@ export function PdfPageThumbnail({
   rotation?: PdfPageRotation;
   reorderable?: boolean;
   overlay?: ReactNode;
-  onActivate: (event: {
+  interactive?: boolean;
+  showLabel?: boolean;
+  className?: string;
+  onActivate?: (event: {
     shiftKey: boolean;
     metaKey: boolean;
     ctrlKey: boolean;
@@ -167,8 +173,10 @@ export function PdfPageThumbnail({
       ref={rootRef}
       className={cn(
         "group flex w-full min-h-11 flex-col items-center gap-2 rounded-xl p-2 text-left",
-        selected ? "bg-foreground/8" : "hover:bg-muted/70",
+        interactive && selected ? "bg-foreground/8" : null,
+        interactive && !selected ? "hover:bg-muted/70" : null,
         disabled && "opacity-60",
+        className,
       )}
     >
       <span
@@ -184,19 +192,31 @@ export function PdfPageThumbnail({
           type="button"
           data-pdf-page={pageNumber}
           data-pdf-page-id={pageId}
-          disabled={disabled}
-          aria-pressed={selected}
-          aria-label={pageLabel(t, pageNumber, selected, rotation)}
+          disabled={disabled || !interactive}
+          tabIndex={interactive ? undefined : -1}
+          aria-hidden={!interactive}
+          aria-pressed={interactive ? selected : undefined}
+          aria-label={
+            interactive
+              ? pageLabel(t, pageNumber, selected, rotation)
+              : undefined
+          }
           aria-keyshortcuts={
-            reorderable ? "Alt+ArrowLeft Alt+ArrowRight" : undefined
+            reorderable && interactive
+              ? "Alt+ArrowLeft Alt+ArrowRight"
+              : undefined
           }
           onClick={(event) => {
-            onActivate(event);
+            if (!interactive) {
+              return;
+            }
+
+            onActivate?.(event);
           }}
           onKeyDown={onKeyDown}
           className={cn(
             "absolute inset-0 z-0 flex items-center justify-center outline-none",
-            "focus-visible:ring-3 focus-visible:ring-ring/50",
+            interactive && "focus-visible:ring-3 focus-visible:ring-ring/50",
           )}
         >
           {status === "pending" ? (
@@ -229,7 +249,7 @@ export function PdfPageThumbnail({
             }
           />
 
-          {selected ? (
+          {interactive && selected ? (
             <span className="absolute top-1.5 right-1.5 flex size-6 items-center justify-center rounded-full bg-foreground text-background shadow-xs">
               <CheckIcon className="size-3.5" aria-hidden="true" />
             </span>
@@ -267,14 +287,16 @@ export function PdfPageThumbnail({
 
         {overlay}
       </span>
-      <span
-        className={cn(
-          "text-xs font-medium",
-          selected ? "text-foreground" : "text-muted-foreground",
-        )}
-      >
-        {pageNumber}
-      </span>
+      {showLabel ? (
+        <span
+          className={cn(
+            "text-xs font-medium",
+            selected ? "text-foreground" : "text-muted-foreground",
+          )}
+        >
+          {pageNumber}
+        </span>
+      ) : null}
     </div>
   );
 }

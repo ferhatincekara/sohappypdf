@@ -858,9 +858,39 @@
         }
       },
       "merge": {
-        "title": "Dosyaları düzenle",
-        "hint": "Birleştirilen PDF’de istediğiniz sıraya sürükleyin.",
-        "selectPrompt": "Birleştirmek için en az iki PDF seçin."
+        "title": "Birleştirilecek dosyaları düzenleyin",
+        "hint": "En az iki PDF ekleyin ve istediğiniz sıraya sürükleyin.",
+        "selectPrompt": "Devam etmek için en az iki PDF ekleyin.",
+        "resultTitle": "Ne alırsınız",
+        "resultLabel": "Tek birleştirilmiş PDF",
+        "equation": "{files} = 1 PDF",
+        "output": "{count, plural, one {# PDF → 1 birleşik PDF} other {# PDF → 1 birleşik PDF}}",
+        "outputWithPages": "{files, plural, one {# PDF} other {# PDF}} · {pages, plural, one {# sayfa} other {# sayfa}} → 1 PDF",
+        "processing": "PDF’leriniz birleştiriliyor...",
+        "processingHint": "Dosyalar seçtiğiniz sırada birleştiriliyor. Bu biraz sürebilir.",
+        "successTitle": "Birleştirilmiş PDF’niz hazır",
+        "successDescription": "Birleştirilmiş PDF’i indirin.",
+        "download": "PDF’i indir",
+        "mergeAnother": "Daha fazla PDF birleştir",
+        "processingFailed": "Bu PDF’ler birleştirilemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Dosyalardan biri açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için daha fazla PDF birleştirin.",
+        "faqHow": "İki veya daha fazla PDF yükleyin, sırayı ayarlayın ve birleştirin. Tek bir birleşik PDF alırsınız. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Birleştirmek istediğiniz PDF’leri ekleyin."
+          },
+          "arrange": {
+            "title": "Düzenle",
+            "description": "Dosyaları görünmelerini istediğiniz sıraya sürükleyin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Tüm dosyaları içeren tek bir PDF alın."
+          }
+        }
       },
       "compress": {
         "title": "Sıkıştırma",

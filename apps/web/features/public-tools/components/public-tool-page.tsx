@@ -64,7 +64,9 @@ export async function PublicToolPageContent({
           ? t("workspaces.split.faqHow")
           : tool.id === "organize-pdf"
             ? t("workspaces.organize.faqHow")
-            : t("faq.how.answer"),
+            : tool.id === "merge-pdf"
+              ? t("workspaces.merge.faqHow")
+              : t("faq.how.answer"),
     },
     {
       id: "formats",
@@ -174,28 +176,53 @@ export async function PublicToolPageContent({
                       </li>
                     ),
                   )
-                : (
-                    [
-                      ["upload", formats],
-                      ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
-                      ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
-                    ] as const
-                  ).map(([step, detail], index) => (
-                    <li
-                      key={step}
-                      className="rounded-lg border border-border bg-card p-4"
-                    >
-                      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                        {t("overview.step", { number: index + 1 })}
-                      </p>
-                      <p className="mt-1 text-sm font-medium text-foreground">
-                        {t(`overview.steps.${step}.title`)}
-                      </p>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {t(`overview.steps.${step}.description`, { detail })}
-                      </p>
-                    </li>
-                  ))}
+                : tool.id === "merge-pdf"
+                  ? (["upload", "arrange", "download"] as const).map(
+                      (step, index) => (
+                        <li
+                          key={step}
+                          className="rounded-lg border border-border bg-card p-4"
+                        >
+                          <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                            {t("overview.step", { number: index + 1 })}
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {t(`workspaces.merge.how.${step}.title`)}
+                          </p>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {t(`workspaces.merge.how.${step}.description`)}
+                          </p>
+                        </li>
+                      ),
+                    )
+                  : (
+                      [
+                        ["upload", formats],
+                        [
+                          "process",
+                          formatLabel(tool.outputFormats[0] ?? "pdf"),
+                        ],
+                        [
+                          "download",
+                          formatLabel(tool.outputFormats[0] ?? "pdf"),
+                        ],
+                      ] as const
+                    ).map(([step, detail], index) => (
+                      <li
+                        key={step}
+                        className="rounded-lg border border-border bg-card p-4"
+                      >
+                        <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                          {t("overview.step", { number: index + 1 })}
+                        </p>
+                        <p className="mt-1 text-sm font-medium text-foreground">
+                          {t(`overview.steps.${step}.title`)}
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {t(`overview.steps.${step}.description`, { detail })}
+                        </p>
+                      </li>
+                    ))}
           </ol>
         </section>
 
