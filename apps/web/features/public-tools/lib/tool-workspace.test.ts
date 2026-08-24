@@ -123,6 +123,14 @@ describe("tool workspace helpers", () => {
         ...DEFAULT_TOOL_WORKSPACE_STATE,
         password: "secret",
       }),
+    ).toBeUndefined();
+
+    expect(
+      buildToolConversionOptions("protect-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        password: "secret",
+        confirmPassword: "secret",
+      }),
     ).toEqual({ password: "secret" });
 
     expect(

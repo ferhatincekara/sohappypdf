@@ -21,6 +21,7 @@ export type ToolWorkspaceState = {
   watermarkText: string;
   pageNumberStart: number;
   password: string;
+  confirmPassword: string;
   targetLanguage: string;
   outputFormat: string;
 };
@@ -42,6 +43,7 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   watermarkText: "CONFIDENTIAL",
   pageNumberStart: 1,
   password: "",
+  confirmPassword: "",
   targetLanguage: "eng",
   outputFormat: "",
 };
@@ -280,7 +282,18 @@ export function buildToolConversionOptions(
         language: state.targetLanguage.trim() || "eng",
         outputMode: state.outputFormat === "txt" ? "txt" : "pdf",
       };
-    case "protect-pdf":
+    case "protect-pdf": {
+      const password = state.password;
+      if (
+        password.length === 0 ||
+        password.length > 128 ||
+        password !== state.confirmPassword
+      ) {
+        return undefined;
+      }
+
+      return { password };
+    }
     case "unlock-pdf":
       return state.password.trim().length === 0
         ? undefined

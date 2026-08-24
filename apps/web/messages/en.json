@@ -1044,6 +1044,42 @@
         "protectHint": "Set a password that will be required to open the result.",
         "required": "Enter a password to continue."
       },
+      "protect": {
+        "title": "Protect this PDF",
+        "hint": "Set a password. Anyone who opens the result will need it.",
+        "password": "Password",
+        "confirm": "Confirm password",
+        "required": "Enter a password to continue.",
+        "confirmRequired": "Confirm the password to continue.",
+        "mismatch": "The passwords do not match.",
+        "tooLong": "Use a password of 128 characters or fewer.",
+        "output": "The downloaded PDF will require this password to open.",
+        "processing": "Protecting your PDF...",
+        "processingHint": "Adding a password to the file.",
+        "successTitle": "Your protected PDF is ready",
+        "successDescription": "Download the password-protected PDF.",
+        "download": "Download PDF",
+        "protectAnother": "Protect another PDF",
+        "processingFailed": "We couldn't protect this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Protect another PDF to continue.",
+        "faqHow": "Upload a PDF, set and confirm a password, then protect. Sign in is required for this tool.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to protect."
+          },
+          "password": {
+            "title": "Set password",
+            "description": "Enter the password twice so it can be confirmed."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF that requires the password to open."
+          }
+        }
+      },
       "repair": {
         "title": "Repair this PDF",
         "hint": "We'll try to open and rebuild a damaged file. Repair is not guaranteed.",

@@ -1044,6 +1044,42 @@
         "protectHint": "Sonucu açmak için gereken bir parola belirleyin.",
         "required": "Devam etmek için bir parola girin."
       },
+      "protect": {
+        "title": "Bu PDF’yi koru",
+        "hint": "Bir parola belirleyin. Sonucu açmak isteyen herkes bu parolaya ihtiyaç duyar.",
+        "password": "Parola",
+        "confirm": "Parolayı doğrula",
+        "required": "Devam etmek için bir parola girin.",
+        "confirmRequired": "Devam etmek için parolayı doğrulayın.",
+        "mismatch": "Parolalar eşleşmiyor.",
+        "tooLong": "128 karakter veya daha kısa bir parola kullanın.",
+        "output": "İndirilen PDF’i açmak için bu parola gerekir.",
+        "processing": "PDF’niz korunuyor...",
+        "processingHint": "Dosyaya parola ekleniyor.",
+        "successTitle": "Korumalı PDF’niz hazır",
+        "successDescription": "Parola korumalı PDF’i indirin.",
+        "download": "PDF’i indir",
+        "protectAnother": "Başka bir PDF koru",
+        "processingFailed": "Bu PDF korunamadı. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF koruyun.",
+        "faqHow": "Bir PDF yükleyin, parolayı girip doğrulayın, ardından koruyun. Bu araç için giriş gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Korumak istediğiniz PDF’i bırakın."
+          },
+          "password": {
+            "title": "Parola belirle",
+            "description": "Parolayı iki kez girerek doğrulayın."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Açmak için parola gerektiren bir PDF alın."
+          }
+        }
+      },
       "repair": {
         "title": "PDF’yi onar",
         "hint": "Hasarlı bir dosyayı açıp yeniden oluşturmayı deneyeceğiz. Onarım garanti değildir.",
