@@ -25,6 +25,7 @@ import {
 import { resolveToolUxState } from "../lib/resolve-tool-ux-state";
 import { maxFilesForTool } from "../lib/tool-limits";
 import {
+  additionalFileIdsFromOptions,
   buildToolConversionOptions,
   DEFAULT_TOOL_WORKSPACE_STATE,
 } from "../lib/tool-workspace";
@@ -475,14 +476,16 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     setIsCreatingExecution(true);
 
     try {
+      const optionFileIds = additionalFileIdsFromOptions(options);
       const created = await apis.createConversion({
         sourceFileId: source.id,
         type: tool.id,
         targetFormat,
         additionalFileIds:
-          uploaded.length < 2
+          optionFileIds ??
+          (uploaded.length < 2
             ? undefined
-            : uploaded.slice(1).map((file) => file.id),
+            : uploaded.slice(1).map((file) => file.id)),
         options,
       });
 

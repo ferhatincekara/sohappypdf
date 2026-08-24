@@ -1408,7 +1408,49 @@
         }
       },
       "sign": {
-        "title": "PDF imzala"
+        "title": "Bu PDF’yi imzala",
+        "hint": "Bir imza oluşturun, ardından sayfaya yerleştirin. İmzalı PDF bu işareti içerecek.",
+        "methods": {
+          "draw": "Çiz",
+          "type": "Yaz",
+          "upload": "Görsel yükle"
+        },
+        "clear": "Temizle",
+        "useSignature": "Bu imzayı kullan",
+        "typedLabel": "Adınızı yazın",
+        "typedPlaceholder": "Adınız",
+        "uploadLabel": "PNG veya JPG yükleyin",
+        "uploading": "İmzanız kaydediliyor…",
+        "uploadFailed": "İmza kaydedilemedi. Lütfen tekrar deneyin.",
+        "selectPrompt": "Bir imza oluşturun, ardından sayfaya yerleştirin.",
+        "output": "İmza indirilen PDF’e yazılacak.",
+        "previewFailed": "Bu PDF önizlenemedi.",
+        "passwordProtected": "Bu PDF parola korumalı. İmzalamak için önce kilidini açın.",
+        "processing": "PDF’niz imzalanıyor...",
+        "processingHint": "İmza dosyaya yazılıyor.",
+        "successTitle": "İmzalı PDF’niz hazır",
+        "successDescription": "İmzanın uygulandığı PDF’i indirin.",
+        "download": "PDF’i indir",
+        "signAnother": "Başka bir PDF imzala",
+        "processingFailed": "Bu PDF imzalanamadı. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF imzalayın.",
+        "faqHow": "Bir PDF yükleyin, çizerek, yazarak veya görsel yükleyerek bir imza oluşturun, sayfaya yerleştirin, ardından imzalayın. Bu araç için giriş gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "İmzalanması gereken PDF’i bırakın."
+          },
+          "sign": {
+            "title": "İmzayı yerleştir",
+            "description": "Çizin, yazın veya bir görsel yükleyin, ardından sayfada taşıyın."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "İmzayı içeren bir PDF alın."
+          }
+        }
       },
       "edit": {
         "title": "PDF düzenle"

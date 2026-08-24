@@ -64,7 +64,10 @@ export function EditorPropertiesPanel({
         </div>
       ) : null}
       <div className="grid grid-cols-2 gap-3">
-        {(["x", "y", "width", "height", "rotation"] as const).map((key) => (
+        {(object.kind === "signature"
+          ? (["x", "y", "width", "height"] as const)
+          : (["x", "y", "width", "height", "rotation"] as const)
+        ).map((key) => (
           <div key={key} className="flex flex-col gap-2">
             <Label htmlFor={`editor-object-${key}`}>{t(key)}</Label>
             <Input

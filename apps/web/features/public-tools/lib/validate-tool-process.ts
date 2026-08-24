@@ -19,6 +19,7 @@ const TOOLS_REQUIRING_OPTIONS = new Set([
   "watermark-pdf",
   "protect-pdf",
   "unlock-pdf",
+  "sign-pdf",
   "translate-pdf",
 ]);
 

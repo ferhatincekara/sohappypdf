@@ -148,6 +148,25 @@ describe("tool workspace helpers", () => {
     ).toEqual({ language: "eng", outputMode: "md" });
 
     expect(
+      buildToolConversionOptions("sign-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        signFileId: "sig-1",
+        signPageHeight: 792,
+        signX: 10,
+        signY: 20,
+        signWidth: 100,
+        signHeight: 40,
+      }),
+    ).toEqual({
+      page: 1,
+      x: 10,
+      y: 732,
+      width: 100,
+      height: 40,
+      additionalFileIds: ["sig-1"],
+    });
+
+    expect(
       buildToolConversionOptions("translate-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
     ).toEqual({ targetLanguage: "eng" });
   });

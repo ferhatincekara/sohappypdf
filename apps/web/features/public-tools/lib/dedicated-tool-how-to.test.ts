@@ -18,6 +18,7 @@ describe("dedicatedHowToForTool", () => {
     expect(dedicatedHowToForTool("unlock-pdf")?.workspace).toBe("unlock");
     expect(dedicatedHowToForTool("watermark-pdf")?.workspace).toBe("watermark");
     expect(dedicatedHowToForTool("crop-pdf")?.workspace).toBe("crop");
-    expect(dedicatedHowToForTool("sign-pdf")).toBeNull();
+    expect(dedicatedHowToForTool("sign-pdf")?.workspace).toBe("sign");
+    expect(dedicatedHowToForTool("edit-pdf")).toBeNull();
   });
 });

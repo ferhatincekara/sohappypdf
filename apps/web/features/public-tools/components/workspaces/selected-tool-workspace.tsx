@@ -15,6 +15,7 @@ import { ProtectPdfWorkspace } from "./protect-pdf-workspace";
 import { RemovePagesWorkspace } from "./remove-pages-workspace";
 import { RepairPdfWorkspace } from "./repair-pdf-workspace";
 import { RotatePdfWorkspace } from "./rotate-pdf-workspace";
+import { SignPdfWorkspace } from "./sign-pdf-workspace";
 import { SplitPdfWorkspace } from "./split-pdf-workspace";
 import { UnlockPdfWorkspace } from "./unlock-pdf-workspace";
 import { WatermarkPdfWorkspace } from "./watermark-pdf-workspace";
@@ -47,6 +48,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <WatermarkPdfWorkspace {...props} />;
     case "crop":
       return <CropPdfWorkspace {...props} />;
+    case "sign":
+      return <SignPdfWorkspace {...props} />;
     case "repair":
       return <RepairPdfWorkspace {...props} />;
     case "ocr":

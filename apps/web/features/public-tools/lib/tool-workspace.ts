@@ -1,3 +1,5 @@
+import { editorRectToPdf } from "@/features/pdf-document-editor";
+
 export const COMPRESSION_LEVELS = ["low", "medium", "high"] as const;
 export type CompressionLevel = (typeof COMPRESSION_LEVELS)[number];
 
@@ -25,6 +27,14 @@ export type ToolWorkspaceState = {
   confirmPassword: string;
   targetLanguage: string;
   outputFormat: string;
+  signPage: number;
+  signX: number;
+  signY: number;
+  signWidth: number;
+  signHeight: number;
+  signPageHeight: number;
+  signText: string;
+  signFileId: string;
 };
 
 export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
@@ -48,7 +58,35 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   confirmPassword: "",
   targetLanguage: "eng",
   outputFormat: "",
+  signPage: 1,
+  signX: 72,
+  signY: 72,
+  signWidth: 180,
+  signHeight: 64,
+  signPageHeight: 0,
+  signText: "",
+  signFileId: "",
 };
+
+export function additionalFileIdsFromOptions(
+  options: Record<string, unknown> | undefined,
+): string[] | undefined {
+  if (options === undefined) {
+    return undefined;
+  }
+
+  const value = options.additionalFileIds;
+
+  if (
+    !Array.isArray(value) ||
+    value.length === 0 ||
+    value.some((id) => typeof id !== "string")
+  ) {
+    return undefined;
+  }
+
+  return value;
+}
 
 export function parsePageListInput(value: string): number[] | undefined {
   const trimmed = value.trim();
@@ -305,6 +343,30 @@ export function buildToolConversionOptions(
       return state.password.trim().length === 0
         ? undefined
         : { password: state.password };
+    case "sign-pdf": {
+      if (
+        state.signPageHeight <= 0 ||
+        state.signWidth <= 0 ||
+        state.signHeight <= 0 ||
+        state.signFileId.length === 0
+      ) {
+        return undefined;
+      }
+
+      const box = editorRectToPdf({
+        x: state.signX,
+        y: state.signY,
+        width: state.signWidth,
+        height: state.signHeight,
+        pageHeight: state.signPageHeight,
+      });
+
+      return {
+        page: state.signPage,
+        ...box,
+        additionalFileIds: [state.signFileId],
+      };
+    }
     case "ai-summarizer":
       return {
         language: "eng",

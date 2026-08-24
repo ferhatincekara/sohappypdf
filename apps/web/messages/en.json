@@ -1408,7 +1408,49 @@
         }
       },
       "sign": {
-        "title": "Sign PDF"
+        "title": "Sign this PDF",
+        "hint": "Create a signature, then place it on the page. The signed PDF will include the mark.",
+        "methods": {
+          "draw": "Draw",
+          "type": "Type",
+          "upload": "Upload image"
+        },
+        "clear": "Clear",
+        "useSignature": "Use this signature",
+        "typedLabel": "Type your name",
+        "typedPlaceholder": "Your name",
+        "uploadLabel": "Upload a PNG or JPG",
+        "uploading": "Saving your signature…",
+        "uploadFailed": "We couldn't save the signature. Please try again.",
+        "selectPrompt": "Create a signature, then place it on the page.",
+        "output": "The signature will be written into the downloaded PDF.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to sign.",
+        "processing": "Signing your PDF...",
+        "processingHint": "Writing the signature into the file.",
+        "successTitle": "Your signed PDF is ready",
+        "successDescription": "Download the PDF with the signature applied.",
+        "download": "Download PDF",
+        "signAnother": "Sign another PDF",
+        "processingFailed": "We couldn't sign this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Sign another PDF to continue.",
+        "faqHow": "Upload a PDF, create a signature by drawing, typing, or uploading an image, place it on the page, then sign. Sign in is required for this tool.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF that needs a signature."
+          },
+          "sign": {
+            "title": "Place signature",
+            "description": "Draw, type, or upload a mark, then move it on the page."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF that includes the signature."
+          }
+        }
       },
       "edit": {
         "title": "Edit PDF"
