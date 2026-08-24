@@ -434,7 +434,12 @@ describe("conversion API", () => {
   });
 
   test("allows API-key identities to create conversions for their owner", async () => {
-    const context = createConversionApp({ identity: apiKeyIdentity });
+    const context = createConversionApp({
+      identity: apiKeyIdentity,
+      billingService: createTestBillingService({
+        apiCreditGrants: { user_1: 100 },
+      }),
+    });
     const file = await createReadyFile(context, {
       ownerId: "user_1",
       filename: "image.png",
@@ -826,5 +831,32 @@ describe("conversion API", () => {
     expect(await second.json()).toMatchObject({
       error: { code: APP_ERROR_CODES.PLAN_LIMIT_REACHED },
     });
+  });
+
+  test("rejects an API-key conversion when API credits are insufficient", async () => {
+    const context = createConversionApp({
+      identity: apiKeyIdentity,
+      billingService: createTestBillingService(),
+    });
+    const file = await createReadyFile(context, {
+      ownerId: "user_1",
+      filename: "image.png",
+      contentType: "image/png",
+    });
+
+    const response = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "pdf",
+      }),
+    });
+
+    expect(response.status).toBe(403);
+    expect(await response.json()).toMatchObject({
+      error: { code: APP_ERROR_CODES.PLAN_LIMIT_REACHED },
+    });
+    expect(context.jobs).toHaveLength(0);
   });
 });

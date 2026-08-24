@@ -27,6 +27,10 @@ describe("loadBillingConfig", () => {
       accessToken: "polar_at_test",
       webhookSecret: "whsec_test",
       proProductId: "prod_pro",
+      apiStarterProductId: undefined,
+      apiGrowthProductId: undefined,
+      apiScaleProductId: undefined,
+      apiCreditPacks: [],
       server: "production",
     });
   });

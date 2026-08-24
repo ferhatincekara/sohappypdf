@@ -98,27 +98,28 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
     let conversionToolId: string | undefined;
 
     if (existing === undefined) {
-      if (identity.kind === "session") {
-        conversionToolId = await resolveConversionToolId({
-          fileService,
-          ownerId: identity.userId,
-          sourceFileId: body.sourceFileId,
-          targetFormat: body.targetFormat,
-          type: body.type,
+      conversionToolId = await resolveConversionToolId({
+        fileService,
+        ownerId: identity.userId,
+        sourceFileId: body.sourceFileId,
+        targetFormat: body.targetFormat,
+        type: body.type,
+      });
+      if (usesAiCredits(conversionToolId)) {
+        await billing.assertCanSpendAiCredits({
+          userId: identity.userId,
+          toolId: conversionToolId,
         });
-        if (usesAiCredits(conversionToolId)) {
-          await billing.assertCanSpendAiCredits({
-            userId: identity.userId,
-            toolId: conversionToolId,
-          });
-        } else {
-          await billing.assertCanSpendWebCredits({
-            userId: identity.userId,
-            toolId: conversionToolId,
-          });
-        }
+      } else if (identity.kind === "session") {
+        await billing.assertCanSpendWebCredits({
+          userId: identity.userId,
+          toolId: conversionToolId,
+        });
       } else {
-        await billing.assertCanCreateConversion(identity.userId);
+        await billing.assertCanSpendApiCredits({
+          userId: identity.userId,
+          toolId: conversionToolId,
+        });
       }
     }
 
@@ -142,49 +143,45 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
     });
 
     if (existing === undefined) {
-      if (identity.kind === "session") {
-        const toolId = conversionToolId ?? conversion.type;
-        try {
-          if (usesAiCredits(toolId)) {
-            await billing.consumeAiCredits({
-              userId: identity.userId,
-              conversionId: conversion.id,
-              toolId,
-            });
-          } else {
-            await billing.consumeWebCredits({
-              userId: identity.userId,
-              conversionId: conversion.id,
-              toolId,
-            });
-          }
-        } catch (error) {
-          if (
-            isAppError(error) &&
-            error.code === APP_ERROR_CODES.PLAN_LIMIT_REACHED
-          ) {
-            try {
-              await options
-                .getConversionService()
-                .cancelOwnedConversion(conversion.id, identity.userId);
-            } catch {
-              c.get("logger").error(
-                "conversion cancelled after credit failure",
-                {
-                  conversionId: conversion.id,
-                  userId: identity.userId,
-                },
-              );
-            }
-          }
-
-          throw error;
+      const toolId = conversionToolId ?? conversion.type;
+      try {
+        if (usesAiCredits(toolId)) {
+          await billing.consumeAiCredits({
+            userId: identity.userId,
+            conversionId: conversion.id,
+            toolId,
+          });
+        } else if (identity.kind === "session") {
+          await billing.consumeWebCredits({
+            userId: identity.userId,
+            conversionId: conversion.id,
+            toolId,
+          });
+        } else {
+          await billing.consumeApiCredits({
+            userId: identity.userId,
+            conversionId: conversion.id,
+            toolId,
+          });
         }
-      } else {
-        await billing.recordConversionUsage({
-          userId: identity.userId,
-          conversionId: conversion.id,
-        });
+      } catch (error) {
+        if (
+          isAppError(error) &&
+          error.code === APP_ERROR_CODES.PLAN_LIMIT_REACHED
+        ) {
+          try {
+            await options
+              .getConversionService()
+              .cancelOwnedConversion(conversion.id, identity.userId);
+          } catch {
+            c.get("logger").error("conversion cancelled after credit failure", {
+              conversionId: conversion.id,
+              userId: identity.userId,
+            });
+          }
+        }
+
+        throw error;
       }
     }
 

@@ -4,6 +4,8 @@ assertServerOnly("@repo/billing");
 
 export { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 export { shouldRefundAiCredits } from "./ai-credit-refund.js";
+export { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";
+export { shouldRefundApiCredits } from "./api-credit-refund.js";
 export type { BillingRepository } from "./billing-repository.js";
 export { createBillingRepository } from "./billing-repository.js";
 export type {
@@ -14,8 +16,13 @@ export { createBillingService } from "./billing-service.js";
 export { getBillingService } from "./billing-service-factory.js";
 export type {
   AiCreditBalance,
+  ApiCreditBalance,
+  ApiCreditLedgerEntry,
+  ApiProductKey,
+  ApiSubscriptionRecord,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
+  CheckoutProductKey,
   PolarClient,
   PolarWebhookEvent,
   PublicBillingStatus,
@@ -27,6 +34,7 @@ export {
   assertCanCreateApiKey,
   assertCanCreateConversion,
   assertCanSpendAiCredits,
+  assertCanSpendApiCredits,
   assertCanSpendWebCredits,
   assertCanUploadFile,
   isProSubscription,
@@ -51,6 +59,10 @@ export {
   PLANS,
 } from "./plan-types.js";
 export { createPolarClient } from "./polar-client.js";
+export {
+  CHECKOUT_PRODUCT_KEYS,
+  isCheckoutProductKey,
+} from "./polar-products.js";
 export {
   isSubscriptionWebhookType,
   parsePolarSubscription,

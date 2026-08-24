@@ -182,6 +182,7 @@ function createBillingApp(options?: {
   fileService?: FileService;
   repository?: ReturnType<typeof createMemoryBillingRepository>;
   polarClient?: PolarClient;
+  env?: Record<string, string | undefined>;
 }) {
   const repository =
     options?.repository ??
@@ -195,6 +196,7 @@ function createBillingApp(options?: {
       POLAR_WEBHOOK_SECRET: "whsec_test",
       POLAR_PRO_PRODUCT_ID: "prod_pro",
       APP_URL: "https://app.example",
+      ...options?.env,
     }),
     polarClient: options?.polarClient ?? createPolarClientMock(),
     verifyWebhook: (_body, _headers, _secret) => ({
@@ -250,6 +252,7 @@ describe("billing API", () => {
     expect(body.billing.canUpgrade).toBe(true);
     expect(body.billing.usage.webCreditsLimit).toBe(100);
     expect(body.billing.usage.conversionsLimit).toBe(20);
+    expect(body.billing.api.creditsLimit).toBe(0);
     expect(JSON.stringify(body).includes("polar_at_test")).toBe(false);
   });
 
@@ -262,6 +265,32 @@ describe("billing API", () => {
 
     expect(response.status).toBe(201);
     expect(body.checkout.url).toBe("https://polar.example/checkout/cs_1");
+  });
+
+  test("creates an API credit pack checkout from a product key", async () => {
+    let productId: string | undefined;
+    const app = createBillingApp({
+      env: {
+        POLAR_API_CREDIT_PACKS: "prod_pack:500",
+      },
+      polarClient: createPolarClientMock({
+        async createCheckout(input) {
+          productId = input.productId;
+          return { url: "https://polar.example/checkout/pack" };
+        },
+      }),
+    });
+
+    const response = await app.request("/api/v1/billing/checkout", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ product: "api-pack" }),
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(201);
+    expect(body.checkout.url).toBe("https://polar.example/checkout/pack");
+    expect(productId).toBe("prod_pack");
   });
 
   test("activates Pro after a verified webhook", async () => {

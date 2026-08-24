@@ -33,6 +33,42 @@ export function isProSubscription(
   );
 }
 
+export function isActiveApiSubscription(
+  subscription: {
+    status: BillingSubscriptionRecord["status"];
+    endedAt: Date | null;
+    cancelAtPeriodEnd: boolean;
+    currentPeriodEnd: Date | null;
+  } | null,
+  now: Date,
+): boolean {
+  if (subscription === null) {
+    return false;
+  }
+
+  if (
+    subscription.endedAt !== null &&
+    subscription.endedAt.getTime() <= now.getTime()
+  ) {
+    return false;
+  }
+
+  if (
+    subscription.status === "active" ||
+    subscription.status === "trialing" ||
+    subscription.status === "past_due"
+  ) {
+    return true;
+  }
+
+  return (
+    subscription.status === "canceled" &&
+    subscription.cancelAtPeriodEnd &&
+    subscription.currentPeriodEnd !== null &&
+    subscription.currentPeriodEnd.getTime() > now.getTime()
+  );
+}
+
 export function resolvePlan(
   subscription: BillingSubscriptionRecord | null,
   now: Date,
@@ -74,6 +110,19 @@ export function assertCanSpendAiCredits(input: {
     throw new AppError({
       code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
       message: "Monthly AI credit limit reached",
+    });
+  }
+}
+
+export function assertCanSpendApiCredits(input: {
+  used: number;
+  granted: number;
+  amount: number;
+}): void {
+  if (input.granted - input.used < input.amount) {
+    throw new AppError({
+      code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+      message: "API credit limit reached",
     });
   }
 }

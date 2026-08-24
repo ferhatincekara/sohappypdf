@@ -1,4 +1,6 @@
+import type { ApiProductKey } from "@repo/config";
 import type { BillingSubscriptionStatus, PlanId } from "./plan-types.js";
+import type { CheckoutProductKey } from "./polar-products.js";
 
 export type BillingCustomerRecord = {
   userId: string;
@@ -31,6 +33,8 @@ export type UsagePeriodRecord = {
   webCreditsUsed: number;
   aiCreditsGranted: number;
   aiCreditsUsed: number;
+  apiCreditsGranted: number;
+  apiCreditsUsed: number;
 };
 
 export type WebCreditBalance = {
@@ -43,6 +47,37 @@ export type AiCreditBalance = {
   aiCreditsGranted: number;
   aiCreditsUsed: number;
   aiCreditsRemaining: number;
+};
+
+export type ApiCreditBalance = {
+  apiCreditsGranted: number;
+  apiCreditsUsed: number;
+  apiCreditsRemaining: number;
+};
+
+export type ApiCreditLedgerEntry = {
+  amount: number;
+  type: "grant" | "consume" | "refund" | "adjustment";
+  toolId: string | null;
+  createdAt: string;
+};
+
+export type { ApiProductKey } from "@repo/config";
+export type { CheckoutProductKey } from "./polar-products.js";
+
+export type ApiSubscriptionRecord = {
+  id: string;
+  userId: string;
+  polarSubscriptionId: string;
+  polarProductId: string;
+  productKey: ApiProductKey;
+  status: BillingSubscriptionStatus;
+  cancelAtPeriodEnd: boolean;
+  currentPeriodStart: Date | null;
+  currentPeriodEnd: Date | null;
+  endedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type PublicBillingStatus = {
@@ -63,6 +98,19 @@ export type PublicBillingStatus = {
     storageLimitBytes: number;
     apiKeyCount: number;
     apiKeyLimit: number;
+    periodStart: string;
+    periodEnd: string;
+  };
+  api: {
+    product: ApiProductKey | null;
+    subscriptionStatus: BillingSubscriptionStatus | null;
+    creditsUsed: number;
+    creditsLimit: number;
+    creditsRemaining: number;
+    recentUsage: readonly ApiCreditLedgerEntry[];
+    canSubscribe: boolean;
+    canTopUp: boolean;
+    availableProducts: readonly CheckoutProductKey[];
     periodStart: string;
     periodEnd: string;
   };

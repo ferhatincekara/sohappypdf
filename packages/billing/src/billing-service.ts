@@ -1,11 +1,19 @@
-import { assertPolarCheckoutConfig, type BillingConfig } from "@repo/config";
+import {
+  assertPolarCheckoutConfig,
+  type BillingConfig,
+  loadApiCreditConfig,
+} from "@repo/config";
 import { isConversionFailureCode } from "@repo/conversions";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 import { shouldRefundAiCredits } from "./ai-credit-refund.js";
+import { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";
+import { shouldRefundApiCredits } from "./api-credit-refund.js";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
   AiCreditBalance,
+  ApiCreditBalance,
+  CheckoutProductKey,
   PolarClient,
   PublicBillingStatus,
   VerifyPolarWebhook,
@@ -15,12 +23,21 @@ import {
   assertCanCreateApiKey,
   assertCanCreateConversion,
   assertCanSpendAiCredits,
+  assertCanSpendApiCredits,
   assertCanSpendWebCredits,
   assertCanUploadFile,
+  isActiveApiSubscription,
   resolvePlan,
 } from "./entitlements.js";
 import { buildPlanCatalog, getPlanLimits } from "./plan-config.js";
 import type { PlanCatalog, PlanId, UserEntitlements } from "./plan-types.js";
+import {
+  apiProductKeyFromPolarProductId,
+  isWebProPolarProduct,
+  listConfiguredCheckoutProducts,
+  monthlyApiCreditsForProduct,
+  polarProductIdForCheckout,
+} from "./polar-products.js";
 import {
   parsePolarSubscription,
   planFromPolarProductId,
@@ -102,7 +119,31 @@ export type BillingService = {
     conversionId: string;
     errorCode: string;
   }): Promise<boolean>;
-  createCheckout(userId: string): Promise<{ url: string }>;
+  getApiCreditBalance(userId: string): Promise<ApiCreditBalance>;
+  assertCanSpendApiCredits(input: {
+    userId: string;
+    toolId: string;
+    amount?: number;
+  }): Promise<void>;
+  consumeApiCredits(input: {
+    userId: string;
+    conversionId: string;
+    toolId: string;
+  }): Promise<boolean>;
+  refundApiCredits(input: {
+    userId: string;
+    conversionId: string;
+    reason: string;
+  }): Promise<boolean>;
+  refundApiCreditsForFailure(input: {
+    userId: string;
+    conversionId: string;
+    errorCode: string;
+  }): Promise<boolean>;
+  createCheckout(
+    userId: string,
+    product?: CheckoutProductKey,
+  ): Promise<{ url: string }>;
   createCustomerPortal(userId: string): Promise<{ url: string }>;
   handleWebhook(input: {
     body: string;
@@ -180,6 +221,50 @@ export function createBillingService(
     });
   }
 
+  async function resolveActiveApiGrant(userId: string) {
+    const current = now();
+    const subscriptions =
+      await options.repository.listApiSubscriptionsByUserId(userId);
+    const creditConfig = loadApiCreditConfig();
+    let monthlyCredits = 0;
+    let product: Awaited<
+      ReturnType<BillingRepository["findLatestApiSubscriptionByUserId"]>
+    >;
+
+    for (const subscription of subscriptions) {
+      if (!isActiveApiSubscription(subscription, current)) {
+        continue;
+      }
+
+      const credits = monthlyApiCreditsForProduct(
+        subscription.productKey,
+        creditConfig,
+      );
+
+      if (credits >= monthlyCredits) {
+        monthlyCredits = credits;
+        product = subscription;
+      }
+    }
+
+    return { monthlyCredits, subscription: product };
+  }
+
+  async function ensureApiCreditBalance(
+    userId: string,
+  ): Promise<ApiCreditBalance> {
+    const period = getUtcMonthPeriod(now());
+    const { monthlyCredits } = await resolveActiveApiGrant(userId);
+
+    return options.repository.ensureApiCreditGrant({
+      userId,
+      periodStart: period.start,
+      periodEnd: period.end,
+      grantAmount: monthlyCredits,
+      now: now(),
+    });
+  }
+
   async function ensurePolarCustomer(userId: string) {
     const polar = options.polarClient;
 
@@ -231,21 +316,43 @@ export function createBillingService(
       });
     }
 
-    await options.repository.upsertSubscription({
-      userId,
-      polarSubscriptionId: parsed.polarSubscriptionId,
-      polarProductId: parsed.polarProductId,
-      plan: planFromPolarProductId(
-        parsed.polarProductId,
-        options.config.polar.proProductId,
-      ),
-      status: parsed.status,
-      cancelAtPeriodEnd: parsed.cancelAtPeriodEnd,
-      currentPeriodStart: parsed.currentPeriodStart,
-      currentPeriodEnd: parsed.currentPeriodEnd,
-      endedAt: parsed.endedAt,
-      updatedAt: now(),
-    });
+    if (isWebProPolarProduct(parsed.polarProductId, options.config.polar)) {
+      await options.repository.upsertSubscription({
+        userId,
+        polarSubscriptionId: parsed.polarSubscriptionId,
+        polarProductId: parsed.polarProductId,
+        plan: planFromPolarProductId(
+          parsed.polarProductId,
+          options.config.polar.proProductId,
+        ),
+        status: parsed.status,
+        cancelAtPeriodEnd: parsed.cancelAtPeriodEnd,
+        currentPeriodStart: parsed.currentPeriodStart,
+        currentPeriodEnd: parsed.currentPeriodEnd,
+        endedAt: parsed.endedAt,
+        updatedAt: now(),
+      });
+    }
+
+    const apiProductKey = apiProductKeyFromPolarProductId(
+      parsed.polarProductId,
+      options.config.polar,
+    );
+
+    if (apiProductKey !== undefined) {
+      await options.repository.upsertApiSubscription({
+        userId,
+        polarSubscriptionId: parsed.polarSubscriptionId,
+        polarProductId: parsed.polarProductId,
+        productKey: apiProductKey,
+        status: parsed.status,
+        cancelAtPeriodEnd: parsed.cancelAtPeriodEnd,
+        currentPeriodStart: parsed.currentPeriodStart,
+        currentPeriodEnd: parsed.currentPeriodEnd,
+        endedAt: parsed.endedAt,
+        updatedAt: now(),
+      });
+    }
   }
 
   async function revokeLocalSubscription(userId: string): Promise<void> {
@@ -327,12 +434,19 @@ export function createBillingService(
       return ensureAiCreditBalance(userId);
     },
 
+    async getApiCreditBalance(userId) {
+      return ensureApiCreditBalance(userId);
+    },
+
     async getBillingStatus(input) {
       await reconcileFromPolar(input.userId);
       const { entitlements, period } = await resolveUsageContext(input.userId);
       const balance = await ensureWebCreditBalance(input.userId);
       const aiBalance = await ensureAiCreditBalance(input.userId);
-      const conversionPeriod = getUtcMonthPeriod(now());
+      const apiBalance = await ensureApiCreditBalance(input.userId);
+      const apiGrant = await resolveActiveApiGrant(input.userId);
+      const apiPeriod = getUtcMonthPeriod(now());
+      const conversionPeriod = apiPeriod;
       const conversionUsage = await options.repository.getOrCreateUsagePeriod({
         userId: input.userId,
         periodStart: conversionPeriod.start,
@@ -341,6 +455,14 @@ export function createBillingService(
       const customer = await options.repository.findCustomerByUserId(
         input.userId,
       );
+      const recentUsage = await options.repository.listApiCreditLedger({
+        userId: input.userId,
+        limit: 20,
+      });
+      const configuredProducts = listConfiguredCheckoutProducts(
+        options.config.polar,
+      );
+      const apiProducts = configuredProducts.filter((key) => key !== "pro");
 
       return {
         plan: entitlements.plan,
@@ -362,6 +484,19 @@ export function createBillingService(
           apiKeyLimit: entitlements.limits.maxApiKeys,
           periodStart: period.start.toISOString(),
           periodEnd: period.end.toISOString(),
+        },
+        api: {
+          product: apiGrant.subscription?.productKey ?? null,
+          subscriptionStatus: apiGrant.subscription?.status ?? null,
+          creditsUsed: apiBalance.apiCreditsUsed,
+          creditsLimit: apiBalance.apiCreditsGranted,
+          creditsRemaining: apiBalance.apiCreditsRemaining,
+          recentUsage,
+          canSubscribe: apiProducts.some((key) => key !== "api-pack"),
+          canTopUp: apiProducts.includes("api-pack"),
+          availableProducts: apiProducts,
+          periodStart: apiPeriod.start.toISOString(),
+          periodEnd: apiPeriod.end.toISOString(),
         },
         limits: {
           maxFileSizeBytes: entitlements.limits.maxFileSizeBytes,
@@ -395,6 +530,16 @@ export function createBillingService(
       assertCanSpendAiCredits({
         used: balance.aiCreditsUsed,
         granted: balance.aiCreditsGranted,
+        amount,
+      });
+    },
+
+    async assertCanSpendApiCredits(input) {
+      const balance = await ensureApiCreditBalance(input.userId);
+      const amount = input.amount ?? resolveApiCreditCost(input.toolId);
+      assertCanSpendApiCredits({
+        used: balance.apiCreditsUsed,
+        granted: balance.apiCreditsGranted,
         amount,
       });
     },
@@ -514,29 +659,85 @@ export function createBillingService(
       });
     },
 
-    async createCheckout(userId) {
-      const polar = options.polarClient;
-      const polarConfig = assertPolarCheckoutConfig(options.config.polar);
+    async consumeApiCredits(input) {
+      if (!usesApiCredits(input.toolId)) {
+        return false;
+      }
 
-      if (polar === undefined) {
+      const period = getUtcMonthPeriod(now());
+      await ensureApiCreditBalance(input.userId);
+      const amount = resolveApiCreditCost(input.toolId);
+
+      return options.repository.consumeApiCredits({
+        userId: input.userId,
+        periodStart: period.start,
+        periodEnd: period.end,
+        amount,
+        toolId: input.toolId,
+        executionId: input.conversionId,
+        reason: "tool_execution",
+        now: now(),
+      });
+    },
+
+    async refundApiCredits(input) {
+      return options.repository.refundApiCredits({
+        userId: input.userId,
+        executionId: input.conversionId,
+        reason: input.reason,
+        now: now(),
+      });
+    },
+
+    async refundApiCreditsForFailure(input) {
+      if (!isConversionFailureCode(input.errorCode)) {
+        return false;
+      }
+
+      if (!shouldRefundApiCredits(input.errorCode)) {
+        return false;
+      }
+
+      return this.refundApiCredits({
+        userId: input.userId,
+        conversionId: input.conversionId,
+        reason: "execution_failed",
+      });
+    },
+
+    async createCheckout(userId, product = "pro") {
+      const polar = options.polarClient;
+      const productId = polarProductIdForCheckout(
+        product,
+        options.config.polar,
+      );
+
+      if (polar === undefined || productId === undefined) {
+        if (product === "pro") {
+          assertPolarCheckoutConfig(options.config.polar);
+        }
+
         throw new AppError({
           code: APP_ERROR_CODES.CONFIGURATION_ERROR,
           message: "Polar checkout is not configured",
         });
       }
 
-      const entitlements = await getEntitlements(userId);
+      if (product === "pro") {
+        assertPolarCheckoutConfig(options.config.polar);
+        const entitlements = await getEntitlements(userId);
 
-      if (entitlements.plan === "pro") {
-        throw new AppError({
-          code: APP_ERROR_CODES.CONFLICT,
-          message: "The current plan already includes Pro",
-        });
+        if (entitlements.plan === "pro") {
+          throw new AppError({
+            code: APP_ERROR_CODES.CONFLICT,
+            message: "The current plan already includes Pro",
+          });
+        }
       }
 
       await ensurePolarCustomer(userId);
       const checkout = await polar.createCheckout({
-        productId: polarConfig.proProductId,
+        productId,
         externalCustomerId: userId,
         successUrl: checkoutSuccessUrl(options.config),
       });

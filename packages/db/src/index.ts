@@ -32,9 +32,11 @@ export {
   verification,
 } from "./schema/auth.js";
 export type {
+  ApiSubscriptionRow,
   BillingCustomerRow,
   BillingSubscriptionRow,
   ConversionUsageEventRow,
+  NewApiSubscriptionRow,
   NewBillingCustomerRow,
   NewBillingSubscriptionRow,
   NewUsagePeriodRow,
@@ -45,6 +47,8 @@ export type {
   WebhookEventRow,
 } from "./schema/billing.js";
 export {
+  apiProductKeyEnum,
+  apiSubscriptions,
   billingCustomers,
   billingPlanEnum,
   billingSubscriptionStatusEnum,

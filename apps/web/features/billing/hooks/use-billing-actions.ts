@@ -4,11 +4,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { billingApi } from "../api/billing-api";
 import { mapUnknownBillingError } from "../api/billing-errors";
 import { billingQueryKeys } from "../api/billing-query-keys";
+import type { CheckoutProductKey } from "../types/billing";
 
 export function useBillingActions() {
   const queryClient = useQueryClient();
   const checkout = useMutation({
-    mutationFn: () => billingApi.createCheckout(),
+    mutationFn: (product: CheckoutProductKey = "pro") =>
+      billingApi.createCheckout(product),
     onSuccess(result) {
       window.location.assign(result.checkout.url);
     },

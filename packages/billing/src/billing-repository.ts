@@ -1,5 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import {
+  apiSubscriptions,
   billingCustomers,
   billingSubscriptions,
   conversionUsageEvents,
@@ -12,6 +13,9 @@ import {
 import { and, desc, eq, sql } from "drizzle-orm";
 import type {
   AiCreditBalance,
+  ApiCreditBalance,
+  ApiCreditLedgerEntry,
+  ApiSubscriptionRecord,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
   WebCreditBalance,
@@ -44,7 +48,21 @@ export type BillingRepository = {
     webCreditsUsed: number;
     aiCreditsGranted: number;
     aiCreditsUsed: number;
+    apiCreditsGranted: number;
+    apiCreditsUsed: number;
   }>;
+  findLatestApiSubscriptionByUserId(
+    userId: string,
+  ): Promise<ApiSubscriptionRecord | undefined>;
+  listApiSubscriptionsByUserId(
+    userId: string,
+  ): Promise<readonly ApiSubscriptionRecord[]>;
+  upsertApiSubscription(
+    record: Omit<ApiSubscriptionRecord, "id" | "createdAt"> & {
+      id?: string;
+      createdAt?: Date;
+    },
+  ): Promise<ApiSubscriptionRecord>;
   ensureWebCreditGrant(input: {
     userId: string;
     periodStart: Date;
@@ -91,6 +109,41 @@ export type BillingRepository = {
     reason: string;
     now: Date;
   }): Promise<boolean>;
+  ensureApiCreditGrant(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    grantAmount: number;
+    now: Date;
+  }): Promise<ApiCreditBalance>;
+  consumeApiCredits(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    amount: number;
+    toolId: string;
+    executionId: string;
+    reason: string;
+    now: Date;
+  }): Promise<boolean>;
+  refundApiCredits(input: {
+    userId: string;
+    executionId: string;
+    reason: string;
+    now: Date;
+  }): Promise<boolean>;
+  grantApiCreditTopUp(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    amount: number;
+    providerEventId: string;
+    now: Date;
+  }): Promise<boolean>;
+  listApiCreditLedger(input: {
+    userId: string;
+    limit: number;
+  }): Promise<readonly ApiCreditLedgerEntry[]>;
   recordConversionUsage(input: {
     userId: string;
     conversionId: string;
@@ -110,6 +163,16 @@ export type BillingRepository = {
     subscription?: Omit<BillingSubscriptionRecord, "id" | "createdAt"> & {
       id?: string;
       createdAt?: Date;
+    };
+    apiSubscription?: Omit<ApiSubscriptionRecord, "id" | "createdAt"> & {
+      id?: string;
+      createdAt?: Date;
+    };
+    apiCreditTopUp?: {
+      userId: string;
+      periodStart: Date;
+      periodEnd: Date;
+      amount: number;
     };
   }): Promise<boolean>;
 };
@@ -163,6 +226,48 @@ function toAiCreditBalance(input: {
     aiCreditsGranted: input.aiCreditsGranted,
     aiCreditsUsed: input.aiCreditsUsed,
     aiCreditsRemaining: input.aiCreditsGranted - input.aiCreditsUsed,
+  };
+}
+
+function toApiCreditBalance(input: {
+  apiCreditsGranted: number;
+  apiCreditsUsed: number;
+}): ApiCreditBalance {
+  return {
+    apiCreditsGranted: input.apiCreditsGranted,
+    apiCreditsUsed: input.apiCreditsUsed,
+    apiCreditsRemaining: input.apiCreditsGranted - input.apiCreditsUsed,
+  };
+}
+
+function toApiSubscription(
+  row: typeof apiSubscriptions.$inferSelect,
+): ApiSubscriptionRecord {
+  return {
+    id: row.id,
+    userId: row.userId,
+    polarSubscriptionId: row.polarSubscriptionId,
+    polarProductId: row.polarProductId,
+    productKey: row.productKey,
+    status: row.status,
+    cancelAtPeriodEnd: row.cancelAtPeriodEnd,
+    currentPeriodStart: row.currentPeriodStart,
+    currentPeriodEnd: row.currentPeriodEnd,
+    endedAt: row.endedAt,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+}
+
+function emptyUsageCredits() {
+  return {
+    conversionsUsed: 0,
+    webCreditsGranted: 0,
+    webCreditsUsed: 0,
+    aiCreditsGranted: 0,
+    aiCreditsUsed: 0,
+    apiCreditsGranted: 0,
+    apiCreditsUsed: 0,
   };
 }
 
@@ -270,6 +375,70 @@ export function createBillingRepository(db: Database): BillingRepository {
       return toSubscription(row);
     },
 
+    async findLatestApiSubscriptionByUserId(userId) {
+      const [row] = await db
+        .select()
+        .from(apiSubscriptions)
+        .where(eq(apiSubscriptions.userId, userId))
+        .orderBy(desc(apiSubscriptions.updatedAt))
+        .limit(1);
+
+      return row === undefined ? undefined : toApiSubscription(row);
+    },
+
+    async listApiSubscriptionsByUserId(userId) {
+      const rows = await db
+        .select()
+        .from(apiSubscriptions)
+        .where(eq(apiSubscriptions.userId, userId))
+        .orderBy(desc(apiSubscriptions.updatedAt));
+
+      return rows.map(toApiSubscription);
+    },
+
+    async upsertApiSubscription(record) {
+      const [row] = await db
+        .insert(apiSubscriptions)
+        .values({
+          ...(record.id === undefined ? {} : { id: record.id }),
+          userId: record.userId,
+          polarSubscriptionId: record.polarSubscriptionId,
+          polarProductId: record.polarProductId,
+          productKey: record.productKey,
+          status: record.status,
+          cancelAtPeriodEnd: record.cancelAtPeriodEnd,
+          currentPeriodStart: record.currentPeriodStart,
+          currentPeriodEnd: record.currentPeriodEnd,
+          endedAt: record.endedAt,
+          createdAt: record.createdAt ?? record.updatedAt,
+          updatedAt: record.updatedAt,
+        })
+        .onConflictDoUpdate({
+          target: apiSubscriptions.polarSubscriptionId,
+          set: {
+            userId: record.userId,
+            polarProductId: record.polarProductId,
+            productKey: record.productKey,
+            status: record.status,
+            cancelAtPeriodEnd: record.cancelAtPeriodEnd,
+            currentPeriodStart: record.currentPeriodStart,
+            currentPeriodEnd: record.currentPeriodEnd,
+            endedAt: record.endedAt,
+            updatedAt: record.updatedAt,
+          },
+        })
+        .returning();
+
+      if (row === undefined) {
+        throw new AppError({
+          code: APP_ERROR_CODES.INTERNAL_ERROR,
+          message: "Failed to store API subscription",
+        });
+      }
+
+      return toApiSubscription(row);
+    },
+
     async getOrCreateUsagePeriod(input) {
       const [existing] = await db
         .select()
@@ -289,6 +458,8 @@ export function createBillingRepository(db: Database): BillingRepository {
           webCreditsUsed: existing.webCreditsUsed,
           aiCreditsGranted: existing.aiCreditsGranted,
           aiCreditsUsed: existing.aiCreditsUsed,
+          apiCreditsGranted: existing.apiCreditsGranted,
+          apiCreditsUsed: existing.apiCreditsUsed,
         };
       }
 
@@ -314,6 +485,8 @@ export function createBillingRepository(db: Database): BillingRepository {
           webCreditsUsed: created.webCreditsUsed,
           aiCreditsGranted: created.aiCreditsGranted,
           aiCreditsUsed: created.aiCreditsUsed,
+          apiCreditsGranted: created.apiCreditsGranted,
+          apiCreditsUsed: created.apiCreditsUsed,
         };
       }
 
@@ -334,6 +507,8 @@ export function createBillingRepository(db: Database): BillingRepository {
         webCreditsUsed: retry?.webCreditsUsed ?? 0,
         aiCreditsGranted: retry?.aiCreditsGranted ?? 0,
         aiCreditsUsed: retry?.aiCreditsUsed ?? 0,
+        apiCreditsGranted: retry?.apiCreditsGranted ?? 0,
+        apiCreditsUsed: retry?.apiCreditsUsed ?? 0,
       };
     },
 
@@ -350,6 +525,8 @@ export function createBillingRepository(db: Database): BillingRepository {
             webCreditsUsed: 0,
             aiCreditsGranted: 0,
             aiCreditsUsed: 0,
+            apiCreditsGranted: 0,
+            apiCreditsUsed: 0,
           })
           .onConflictDoNothing();
 
@@ -521,6 +698,8 @@ export function createBillingRepository(db: Database): BillingRepository {
             webCreditsUsed: 0,
             aiCreditsGranted: 0,
             aiCreditsUsed: 0,
+            apiCreditsGranted: 0,
+            apiCreditsUsed: 0,
           })
           .onConflictDoNothing();
 
@@ -682,6 +861,250 @@ export function createBillingRepository(db: Database): BillingRepository {
       });
     },
 
+    async ensureApiCreditGrant(input) {
+      return db.transaction(async (tx) => {
+        await tx
+          .insert(usagePeriods)
+          .values({
+            userId: input.userId,
+            periodStart: input.periodStart,
+            periodEnd: input.periodEnd,
+            ...emptyUsageCredits(),
+          })
+          .onConflictDoNothing();
+
+        if (input.grantAmount > 0) {
+          const insertedGrant = await tx
+            .insert(webCreditLedgerEntries)
+            .values({
+              userId: input.userId,
+              amount: input.grantAmount,
+              type: "grant",
+              source: "api",
+              reason: "monthly_plan_grant",
+              periodStart: input.periodStart,
+              createdAt: input.now,
+            })
+            .onConflictDoNothing()
+            .returning();
+
+          if (insertedGrant.length > 0) {
+            await tx
+              .update(usagePeriods)
+              .set({
+                apiCreditsGranted: sql`${usagePeriods.apiCreditsGranted} + ${input.grantAmount}`,
+                updatedAt: input.now,
+              })
+              .where(
+                and(
+                  eq(usagePeriods.userId, input.userId),
+                  eq(usagePeriods.periodStart, input.periodStart),
+                ),
+              );
+          }
+        }
+
+        const [period] = await tx
+          .select({
+            apiCreditsGranted: usagePeriods.apiCreditsGranted,
+            apiCreditsUsed: usagePeriods.apiCreditsUsed,
+          })
+          .from(usagePeriods)
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+            ),
+          )
+          .limit(1);
+
+        return toApiCreditBalance({
+          apiCreditsGranted: period?.apiCreditsGranted ?? 0,
+          apiCreditsUsed: period?.apiCreditsUsed ?? 0,
+        });
+      });
+    },
+
+    async consumeApiCredits(input) {
+      return db.transaction(async (tx) => {
+        const inserted = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: input.amount,
+            type: "consume",
+            source: "api",
+            reason: input.reason,
+            toolId: input.toolId,
+            executionId: input.executionId,
+            periodStart: input.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (inserted.length === 0) {
+          return false;
+        }
+
+        const updated = await tx
+          .update(usagePeriods)
+          .set({
+            apiCreditsUsed: sql`${usagePeriods.apiCreditsUsed} + ${input.amount}`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+              sql`${usagePeriods.apiCreditsUsed} + ${input.amount} <= ${usagePeriods.apiCreditsGranted}`,
+            ),
+          )
+          .returning();
+
+        if (updated.length === 0) {
+          throw new AppError({
+            code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+            message: "API credit limit reached",
+          });
+        }
+
+        return true;
+      });
+    },
+
+    async refundApiCredits(input) {
+      return db.transaction(async (tx) => {
+        const [consumeEntry] = await tx
+          .select({
+            amount: webCreditLedgerEntries.amount,
+            periodStart: webCreditLedgerEntries.periodStart,
+          })
+          .from(webCreditLedgerEntries)
+          .where(
+            and(
+              eq(webCreditLedgerEntries.userId, input.userId),
+              eq(webCreditLedgerEntries.executionId, input.executionId),
+              eq(webCreditLedgerEntries.type, "consume"),
+              eq(webCreditLedgerEntries.source, "api"),
+            ),
+          )
+          .limit(1);
+
+        if (consumeEntry === undefined) {
+          return false;
+        }
+
+        const insertedRefund = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: consumeEntry.amount,
+            type: "refund",
+            source: "api",
+            reason: input.reason,
+            executionId: input.executionId,
+            periodStart: consumeEntry.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (insertedRefund.length === 0) {
+          return false;
+        }
+
+        await tx
+          .update(usagePeriods)
+          .set({
+            apiCreditsUsed: sql`GREATEST(0, ${usagePeriods.apiCreditsUsed} - ${consumeEntry.amount})`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, consumeEntry.periodStart),
+            ),
+          );
+
+        return true;
+      });
+    },
+
+    async grantApiCreditTopUp(input) {
+      return db.transaction(async (tx) => {
+        await tx
+          .insert(usagePeriods)
+          .values({
+            userId: input.userId,
+            periodStart: input.periodStart,
+            periodEnd: input.periodEnd,
+            ...emptyUsageCredits(),
+          })
+          .onConflictDoNothing();
+
+        const inserted = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: input.amount,
+            type: "adjustment",
+            source: "api",
+            reason: "polar_topup",
+            providerEventId: input.providerEventId,
+            periodStart: input.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (inserted.length === 0) {
+          return false;
+        }
+
+        await tx
+          .update(usagePeriods)
+          .set({
+            apiCreditsGranted: sql`${usagePeriods.apiCreditsGranted} + ${input.amount}`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+            ),
+          );
+
+        return true;
+      });
+    },
+
+    async listApiCreditLedger(input) {
+      const rows = await db
+        .select({
+          amount: webCreditLedgerEntries.amount,
+          type: webCreditLedgerEntries.type,
+          toolId: webCreditLedgerEntries.toolId,
+          createdAt: webCreditLedgerEntries.createdAt,
+        })
+        .from(webCreditLedgerEntries)
+        .where(
+          and(
+            eq(webCreditLedgerEntries.userId, input.userId),
+            eq(webCreditLedgerEntries.source, "api"),
+          ),
+        )
+        .orderBy(desc(webCreditLedgerEntries.createdAt))
+        .limit(input.limit);
+
+      return rows.map((row) => ({
+        amount: row.amount,
+        type: row.type,
+        toolId: row.toolId,
+        createdAt: row.createdAt.toISOString(),
+      }));
+    },
+
     async recordConversionUsage(input) {
       return db.transaction(async (tx) => {
         const inserted = await tx
@@ -709,6 +1132,8 @@ export function createBillingRepository(db: Database): BillingRepository {
             webCreditsUsed: 0,
             aiCreditsGranted: 0,
             aiCreditsUsed: 0,
+            apiCreditsGranted: 0,
+            apiCreditsUsed: 0,
           })
           .onConflictDoUpdate({
             target: [usagePeriods.userId, usagePeriods.periodStart],
@@ -801,6 +1226,88 @@ export function createBillingRepository(db: Database): BillingRepository {
                 updatedAt: input.subscription.updatedAt,
               },
             });
+        }
+
+        if (input.apiSubscription !== undefined) {
+          await tx
+            .insert(apiSubscriptions)
+            .values({
+              ...(input.apiSubscription.id === undefined
+                ? {}
+                : { id: input.apiSubscription.id }),
+              userId: input.apiSubscription.userId,
+              polarSubscriptionId: input.apiSubscription.polarSubscriptionId,
+              polarProductId: input.apiSubscription.polarProductId,
+              productKey: input.apiSubscription.productKey,
+              status: input.apiSubscription.status,
+              cancelAtPeriodEnd: input.apiSubscription.cancelAtPeriodEnd,
+              currentPeriodStart: input.apiSubscription.currentPeriodStart,
+              currentPeriodEnd: input.apiSubscription.currentPeriodEnd,
+              endedAt: input.apiSubscription.endedAt,
+              createdAt:
+                input.apiSubscription.createdAt ??
+                input.apiSubscription.updatedAt,
+              updatedAt: input.apiSubscription.updatedAt,
+            })
+            .onConflictDoUpdate({
+              target: apiSubscriptions.polarSubscriptionId,
+              set: {
+                userId: input.apiSubscription.userId,
+                polarProductId: input.apiSubscription.polarProductId,
+                productKey: input.apiSubscription.productKey,
+                status: input.apiSubscription.status,
+                cancelAtPeriodEnd: input.apiSubscription.cancelAtPeriodEnd,
+                currentPeriodStart: input.apiSubscription.currentPeriodStart,
+                currentPeriodEnd: input.apiSubscription.currentPeriodEnd,
+                endedAt: input.apiSubscription.endedAt,
+                updatedAt: input.apiSubscription.updatedAt,
+              },
+            });
+        }
+
+        if (input.apiCreditTopUp !== undefined) {
+          await tx
+            .insert(usagePeriods)
+            .values({
+              userId: input.apiCreditTopUp.userId,
+              periodStart: input.apiCreditTopUp.periodStart,
+              periodEnd: input.apiCreditTopUp.periodEnd,
+              ...emptyUsageCredits(),
+            })
+            .onConflictDoNothing();
+
+          const insertedTopUp = await tx
+            .insert(webCreditLedgerEntries)
+            .values({
+              userId: input.apiCreditTopUp.userId,
+              amount: input.apiCreditTopUp.amount,
+              type: "adjustment",
+              source: "api",
+              reason: "polar_topup",
+              providerEventId: input.eventId,
+              periodStart: input.apiCreditTopUp.periodStart,
+              createdAt: input.processedAt,
+            })
+            .onConflictDoNothing()
+            .returning();
+
+          if (insertedTopUp.length > 0) {
+            await tx
+              .update(usagePeriods)
+              .set({
+                apiCreditsGranted: sql`${usagePeriods.apiCreditsGranted} + ${input.apiCreditTopUp.amount}`,
+                updatedAt: input.processedAt,
+              })
+              .where(
+                and(
+                  eq(usagePeriods.userId, input.apiCreditTopUp.userId),
+                  eq(
+                    usagePeriods.periodStart,
+                    input.apiCreditTopUp.periodStart,
+                  ),
+                ),
+              );
+          }
         }
 
         return true;

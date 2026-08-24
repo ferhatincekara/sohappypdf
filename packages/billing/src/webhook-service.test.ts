@@ -3,6 +3,7 @@ import { loadBillingConfig } from "@repo/config";
 import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
 import type { PolarWebhookEvent, VerifyPolarWebhook } from "./billing-types.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
+import { getUtcMonthPeriod } from "./usage-period.js";
 import { handlePolarWebhook } from "./webhook-service.js";
 
 const processedAt = new Date("2026-08-15T12:00:00.000Z");
@@ -123,6 +124,76 @@ describe("handlePolarWebhook", () => {
     expect(result.outcome).toBe("applied");
     expect(subscription?.plan).toBe("pro");
     expect(subscription?.status).toBe("active");
+  });
+
+  test("stores API subscriptions separately from the web Pro plan", async () => {
+    const repository = createMemoryBillingRepository();
+    const result = await handlePolarWebhook({
+      body: "{}",
+      headers: {},
+      config: loadBillingConfig({
+        POLAR_WEBHOOK_SECRET: "whsec_test",
+        POLAR_PRO_PRODUCT_ID: "prod_pro",
+        POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
+      }).polar,
+      repository,
+      verifyWebhook: createVerify({
+        id: "evt_api",
+        type: "subscription.active",
+        data: {
+          id: "sub_api_1",
+          status: "active",
+          productId: "prod_api_starter",
+          customerId: "cus_1",
+          externalCustomerId: "user_1",
+        },
+      }),
+      now: () => processedAt,
+    });
+    const web = await repository.findLatestSubscriptionByUserId("user_1");
+    const api = await repository.findLatestApiSubscriptionByUserId("user_1");
+
+    expect(result.outcome).toBe("applied");
+    expect(web).toBeUndefined();
+    expect(api?.productKey).toBe("starter");
+    expect(api?.status).toBe("active");
+  });
+
+  test("adds one-time API credit packs from a paid Polar order", async () => {
+    const repository = createMemoryBillingRepository();
+    const result = await handlePolarWebhook({
+      body: "{}",
+      headers: {},
+      config: loadBillingConfig({
+        POLAR_WEBHOOK_SECRET: "whsec_test",
+        POLAR_PRO_PRODUCT_ID: "prod_pro",
+        POLAR_API_CREDIT_PACKS: "prod_pack:500",
+      }).polar,
+      repository,
+      verifyWebhook: createVerify({
+        id: "evt_pack",
+        type: "order.paid",
+        data: {
+          id: "ord_1",
+          status: "paid",
+          productId: "prod_pack",
+          customerId: "cus_1",
+          externalCustomerId: "user_1",
+        },
+      }),
+      now: () => processedAt,
+    });
+    const period = getUtcMonthPeriod(processedAt);
+    const balance = await repository.ensureApiCreditGrant({
+      userId: "user_1",
+      periodStart: period.start,
+      periodEnd: period.end,
+      grantAmount: 0,
+      now: processedAt,
+    });
+
+    expect(result.outcome).toBe("applied");
+    expect(balance.apiCreditsGranted).toBe(500);
   });
 
   test("keeps Pro until the period ends after a scheduled cancellation", async () => {

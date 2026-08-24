@@ -4,6 +4,7 @@ import type {
   BillingCheckoutResponse,
   BillingPortalResponse,
   BillingStatusResponse,
+  CheckoutProductKey,
 } from "../types/billing";
 import { toBillingClientError } from "./billing-errors";
 
@@ -19,7 +20,9 @@ export class BillingApiRequestError extends Error {
 
 export type BillingApi = {
   getStatus: () => Promise<BillingStatusResponse>;
-  createCheckout: () => Promise<BillingCheckoutResponse>;
+  createCheckout: (
+    product?: CheckoutProductKey,
+  ) => Promise<BillingCheckoutResponse>;
   createPortal: () => Promise<BillingPortalResponse>;
 };
 
@@ -37,10 +40,11 @@ export function createBillingApi(
       }
     },
 
-    async createCheckout() {
+    async createCheckout(product: CheckoutProductKey = "pro") {
       try {
         const response = await client.post<BillingCheckoutResponse>(
           "/api/v1/billing/checkout",
+          { product },
         );
         return response.data;
       } catch (error) {

@@ -289,6 +289,11 @@ export function createConversionProcessor(
               conversionId: current.id,
               errorCode: failure.errorCode,
             });
+            await dependencies.billing.refundApiCreditsForFailure({
+              userId: conversion.ownerId,
+              conversionId: current.id,
+              errorCode: failure.errorCode,
+            });
           } catch (refundError) {
             jobLogger.error("credit refund failed", {
               conversionId: current.id,

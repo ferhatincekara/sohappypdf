@@ -6,6 +6,7 @@ import {
 import type { PolarClient, VerifyPolarWebhook } from "./billing-types.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
 import type { PlanCatalog } from "./plan-types.js";
+import { getUtcMonthPeriod } from "./usage-period.js";
 
 export function createTestBillingService(options?: {
   now?: () => Date;
@@ -14,14 +15,33 @@ export function createTestBillingService(options?: {
   userEmails?: Record<string, string>;
   env?: Record<string, string | undefined>;
   planCatalog?: PlanCatalog;
+  apiCreditGrants?: Record<string, number>;
 }): BillingService {
+  const now = options?.now ?? (() => new Date());
+  const repository = createMemoryBillingRepository({
+    userEmails: options?.userEmails ?? {
+      user_1: "user@example.com",
+      user_2: "other@example.com",
+    },
+  });
+  const period = getUtcMonthPeriod(now());
+
+  for (const [userId, amount] of Object.entries(
+    options?.apiCreditGrants ?? {},
+  )) {
+    if (amount > 0) {
+      void repository.ensureApiCreditGrant({
+        userId,
+        periodStart: period.start,
+        periodEnd: period.end,
+        grantAmount: amount,
+        now: now(),
+      });
+    }
+  }
+
   return createBillingService({
-    repository: createMemoryBillingRepository({
-      userEmails: options?.userEmails ?? {
-        user_1: "user@example.com",
-        user_2: "other@example.com",
-      },
-    }),
+    repository,
     config: loadBillingConfig({
       POLAR_ACCESS_TOKEN: "polar_at_test",
       POLAR_WEBHOOK_SECRET: "whsec_test",

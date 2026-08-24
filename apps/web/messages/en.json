@@ -608,18 +608,39 @@
   },
   "billing": {
     "title": "Billing",
-    "description": "Your current plan and usage. Upgrades are confirmed after Polar payment.",
+    "description": "Your web plan and API usage. Purchases are confirmed after Polar payment.",
     "currentPlan": "Current plan",
     "usage": "Usage",
     "upgrade": "Upgrade",
     "upgrading": "Redirecting to checkout…",
     "manage": "Manage subscription",
     "openingPortal": "Opening portal…",
-    "activating": "Your subscription is being activated.",
+    "activating": "Your purchase is being activated.",
     "noSubscription": "No paid subscription",
     "cancelsOn": "Cancellation scheduled. Pro remains until {date}.",
     "backToSettings": "Back to settings",
     "period": "UTC period {start} – {end}",
+    "sections": {
+      "web": "Web plan",
+      "api": "API usage"
+    },
+    "api": {
+      "title": "API usage",
+      "noProduct": "No API plan",
+      "noSubscription": "No API subscription",
+      "credits": "API credits remaining",
+      "plans": "API plans and packs",
+      "topUp": "Buy credit pack",
+      "recentUsage": "Recent API usage",
+      "noUsage": "No API credit activity in this period.",
+      "documentation": "API documentation",
+      "manageKeys": "API keys"
+    },
+    "apiProducts": {
+      "starter": "API Starter",
+      "growth": "API Growth",
+      "scale": "API Scale"
+    },
     "plans": {
       "free": "Free",
       "pro": "Pro"

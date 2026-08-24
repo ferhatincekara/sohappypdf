@@ -2,6 +2,16 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/config");
 
+export type { ApiCreditConfig, ApiProductKey, PolarApiPackProduct } from "./api-credit-config.js";
+export {
+  API_PRODUCT_KEYS,
+  DEFAULT_API_GROWTH_CREDITS,
+  DEFAULT_API_SCALE_CREDITS,
+  DEFAULT_API_STARTER_CREDITS,
+  isApiProductKey,
+  loadApiCreditConfig,
+  parsePolarApiCreditPacks,
+} from "./api-credit-config.js";
 export type { AnonymousConfig } from "./anonymous-config.js";
 export {
   DEFAULT_ANONYMOUS_CONFIG,

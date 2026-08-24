@@ -87,6 +87,48 @@ export const billingSubscriptions = pgTable(
   ],
 );
 
+export const apiProductKeyEnum = pgEnum("api_product_key", [
+  "starter",
+  "growth",
+  "scale",
+]);
+
+export const apiSubscriptions = pgTable(
+  "api_subscriptions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    polarSubscriptionId: text("polar_subscription_id").notNull(),
+    polarProductId: text("polar_product_id").notNull(),
+    productKey: apiProductKeyEnum("product_key").notNull(),
+    status: billingSubscriptionStatusEnum("status").notNull(),
+    cancelAtPeriodEnd: boolean("cancel_at_period_end").notNull().default(false),
+    currentPeriodStart: timestamp("current_period_start", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    currentPeriodEnd: timestamp("current_period_end", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    endedAt: timestamp("ended_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("api_subscriptions_polar_subscription_id_uidx").on(
+      table.polarSubscriptionId,
+    ),
+    index("api_subscriptions_user_id_idx").on(table.userId),
+  ],
+);
+
 export const usagePeriods = pgTable(
   "usage_periods",
   {
@@ -107,6 +149,8 @@ export const usagePeriods = pgTable(
     webCreditsUsed: integer("web_credits_used").notNull().default(0),
     aiCreditsGranted: integer("ai_credits_granted").notNull().default(0),
     aiCreditsUsed: integer("ai_credits_used").notNull().default(0),
+    apiCreditsGranted: integer("api_credits_granted").notNull().default(0),
+    apiCreditsUsed: integer("api_credits_used").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
       .notNull()
       .defaultNow(),
@@ -146,6 +190,18 @@ export const usagePeriods = pgTable(
     check(
       "usage_periods_ai_credits_used_lte_granted",
       sql`${table.aiCreditsUsed} <= ${table.aiCreditsGranted}`,
+    ),
+    check(
+      "usage_periods_api_credits_granted_non_negative",
+      sql`${table.apiCreditsGranted} >= 0`,
+    ),
+    check(
+      "usage_periods_api_credits_used_non_negative",
+      sql`${table.apiCreditsUsed} >= 0`,
+    ),
+    check(
+      "usage_periods_api_credits_used_lte_granted",
+      sql`${table.apiCreditsUsed} <= ${table.apiCreditsGranted}`,
     ),
   ],
 );
@@ -194,6 +250,7 @@ export const webCreditLedgerEntries = pgTable(
     reason: text("reason").notNull(),
     toolId: text("tool_id"),
     executionId: uuid("execution_id"),
+    providerEventId: text("provider_event_id"),
     periodStart: timestamp("period_start", {
       withTimezone: true,
       mode: "date",
@@ -205,6 +262,9 @@ export const webCreditLedgerEntries = pgTable(
   (table) => [
     index("web_credit_ledger_entries_user_id_idx").on(table.userId),
     index("web_credit_ledger_entries_execution_id_idx").on(table.executionId),
+    uniqueIndex("web_credit_ledger_provider_event_uidx").on(
+      table.providerEventId,
+    ),
     check(
       "web_credit_ledger_entries_amount_positive",
       sql`${table.amount} > 0`,
@@ -249,3 +309,5 @@ export type NewWebCreditLedgerEntryRow =
   typeof webCreditLedgerEntries.$inferInsert;
 export type WebhookEventRow = typeof webhookEvents.$inferSelect;
 export type NewWebhookEventRow = typeof webhookEvents.$inferInsert;
+export type ApiSubscriptionRow = typeof apiSubscriptions.$inferSelect;
+export type NewApiSubscriptionRow = typeof apiSubscriptions.$inferInsert;

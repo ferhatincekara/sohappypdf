@@ -1,4 +1,8 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
+import {
+  type PolarApiPackProduct,
+  parsePolarApiCreditPacks,
+} from "./api-credit-config.js";
 import { type EnvSource, getOptionalEnv } from "./env.js";
 
 export const POLAR_SERVERS = ["sandbox", "production"] as const;
@@ -9,6 +13,10 @@ export type PolarConfig = {
   accessToken: string | undefined;
   webhookSecret: string | undefined;
   proProductId: string | undefined;
+  apiStarterProductId: string | undefined;
+  apiGrowthProductId: string | undefined;
+  apiScaleProductId: string | undefined;
+  apiCreditPacks: readonly PolarApiPackProduct[];
   server: PolarServer;
 };
 
@@ -52,6 +60,15 @@ export function loadBillingConfig(
       accessToken: getOptionalEnv("POLAR_ACCESS_TOKEN", source),
       webhookSecret: getOptionalEnv("POLAR_WEBHOOK_SECRET", source),
       proProductId: getOptionalEnv("POLAR_PRO_PRODUCT_ID", source),
+      apiStarterProductId: getOptionalEnv(
+        "POLAR_API_STARTER_PRODUCT_ID",
+        source,
+      ),
+      apiGrowthProductId: getOptionalEnv("POLAR_API_GROWTH_PRODUCT_ID", source),
+      apiScaleProductId: getOptionalEnv("POLAR_API_SCALE_PRODUCT_ID", source),
+      apiCreditPacks: parsePolarApiCreditPacks(
+        getOptionalEnv("POLAR_API_CREDIT_PACKS", source),
+      ),
       server: parsePolarServer(getOptionalEnv("POLAR_SERVER", source)),
     },
     successPath: DEFAULT_BILLING_SUCCESS_PATH,

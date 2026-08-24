@@ -2,6 +2,8 @@ import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
   AiCreditBalance,
+  ApiCreditBalance,
+  ApiSubscriptionRecord,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
   WebCreditBalance,
@@ -13,6 +15,8 @@ type UsageRecord = {
   webCreditsUsed: number;
   aiCreditsGranted: number;
   aiCreditsUsed: number;
+  apiCreditsGranted: number;
+  apiCreditsUsed: number;
 };
 
 type LedgerEntry = {
@@ -23,6 +27,7 @@ type LedgerEntry = {
   reason: string;
   toolId?: string;
   executionId?: string;
+  providerEventId?: string;
   periodStart: Date;
   createdAt: Date;
 };
@@ -33,6 +38,7 @@ export function createMemoryBillingRepository(options?: {
   const customers = new Map<string, BillingCustomerRecord>();
   const customersByPolarId = new Map<string, BillingCustomerRecord>();
   const subscriptions = new Map<string, BillingSubscriptionRecord>();
+  const apiSubscriptions = new Map<string, ApiSubscriptionRecord>();
   const usage = new Map<string, UsageRecord>();
   const conversionEvents = new Set<string>();
   const ledger: LedgerEntry[] = [];
@@ -61,6 +67,8 @@ export function createMemoryBillingRepository(options?: {
       webCreditsUsed: 0,
       aiCreditsGranted: 0,
       aiCreditsUsed: 0,
+      apiCreditsGranted: 0,
+      apiCreditsUsed: 0,
     };
     usage.set(key, created);
     return created;
@@ -79,6 +87,14 @@ export function createMemoryBillingRepository(options?: {
       aiCreditsGranted: record.aiCreditsGranted,
       aiCreditsUsed: record.aiCreditsUsed,
       aiCreditsRemaining: record.aiCreditsGranted - record.aiCreditsUsed,
+    };
+  }
+
+  function toApiBalance(record: UsageRecord): ApiCreditBalance {
+    return {
+      apiCreditsGranted: record.apiCreditsGranted,
+      apiCreditsUsed: record.apiCreditsUsed,
+      apiCreditsRemaining: record.apiCreditsGranted - record.apiCreditsUsed,
     };
   }
 
@@ -155,6 +171,47 @@ export function createMemoryBillingRepository(options?: {
         updatedAt: record.updatedAt,
       };
       subscriptions.set(stored.polarSubscriptionId, stored);
+      return { ...stored };
+    },
+
+    async findLatestApiSubscriptionByUserId(userId) {
+      const matches = [...apiSubscriptions.values()]
+        .filter((item) => item.userId === userId)
+        .sort(
+          (left, right) => right.updatedAt.getTime() - left.updatedAt.getTime(),
+        );
+
+      return matches[0] === undefined ? undefined : { ...matches[0] };
+    },
+
+    async listApiSubscriptionsByUserId(userId) {
+      return [...apiSubscriptions.values()]
+        .filter((item) => item.userId === userId)
+        .sort(
+          (left, right) => right.updatedAt.getTime() - left.updatedAt.getTime(),
+        )
+        .map((item) => ({ ...item }));
+    },
+
+    async upsertApiSubscription(record) {
+      const existing = [...apiSubscriptions.values()].find(
+        (item) => item.polarSubscriptionId === record.polarSubscriptionId,
+      );
+      const stored: ApiSubscriptionRecord = {
+        id: record.id ?? existing?.id ?? `api_sub_${apiSubscriptions.size + 1}`,
+        createdAt: record.createdAt ?? existing?.createdAt ?? record.updatedAt,
+        userId: record.userId,
+        polarSubscriptionId: record.polarSubscriptionId,
+        polarProductId: record.polarProductId,
+        productKey: record.productKey,
+        status: record.status,
+        cancelAtPeriodEnd: record.cancelAtPeriodEnd,
+        currentPeriodStart: record.currentPeriodStart,
+        currentPeriodEnd: record.currentPeriodEnd,
+        endedAt: record.endedAt,
+        updatedAt: record.updatedAt,
+      };
+      apiSubscriptions.set(stored.polarSubscriptionId, stored);
       return { ...stored };
     },
 
@@ -348,6 +405,137 @@ export function createMemoryBillingRepository(options?: {
       return true;
     },
 
+    async ensureApiCreditGrant(input) {
+      const record = getUsageRecord(input.userId, input.periodStart);
+
+      if (
+        input.grantAmount > 0 &&
+        !hasGrant(input.userId, input.periodStart, "api")
+      ) {
+        ledger.push({
+          userId: input.userId,
+          amount: input.grantAmount,
+          type: "grant",
+          source: "api",
+          reason: "monthly_plan_grant",
+          periodStart: input.periodStart,
+          createdAt: input.now,
+        });
+        record.apiCreditsGranted += input.grantAmount;
+      }
+
+      return toApiBalance(record);
+    },
+
+    async consumeApiCredits(input) {
+      if (
+        ledger.some(
+          (entry) =>
+            entry.type === "consume" && entry.executionId === input.executionId,
+        )
+      ) {
+        return false;
+      }
+
+      const record = getUsageRecord(input.userId, input.periodStart);
+
+      if (record.apiCreditsUsed + input.amount > record.apiCreditsGranted) {
+        throw new AppError({
+          code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+          message: "API credit limit reached",
+        });
+      }
+
+      ledger.push({
+        userId: input.userId,
+        amount: input.amount,
+        type: "consume",
+        source: "api",
+        reason: input.reason,
+        toolId: input.toolId,
+        executionId: input.executionId,
+        periodStart: input.periodStart,
+        createdAt: input.now,
+      });
+      record.apiCreditsUsed += input.amount;
+      return true;
+    },
+
+    async refundApiCredits(input) {
+      const consumeEntry = findConsumeEntry(input.executionId, "api");
+
+      if (consumeEntry === undefined) {
+        return false;
+      }
+
+      if (
+        ledger.some(
+          (entry) =>
+            entry.type === "refund" &&
+            entry.source === "api" &&
+            entry.executionId === input.executionId,
+        )
+      ) {
+        return false;
+      }
+
+      const record = getUsageRecord(input.userId, consumeEntry.periodStart);
+      ledger.push({
+        userId: input.userId,
+        amount: consumeEntry.amount,
+        type: "refund",
+        source: "api",
+        reason: input.reason,
+        executionId: input.executionId,
+        periodStart: consumeEntry.periodStart,
+        createdAt: input.now,
+      });
+      record.apiCreditsUsed = Math.max(
+        0,
+        record.apiCreditsUsed - consumeEntry.amount,
+      );
+      return true;
+    },
+
+    async grantApiCreditTopUp(input) {
+      if (
+        ledger.some((entry) => entry.providerEventId === input.providerEventId)
+      ) {
+        return false;
+      }
+
+      const record = getUsageRecord(input.userId, input.periodStart);
+      ledger.push({
+        userId: input.userId,
+        amount: input.amount,
+        type: "adjustment",
+        source: "api",
+        reason: "polar_topup",
+        providerEventId: input.providerEventId,
+        periodStart: input.periodStart,
+        createdAt: input.now,
+      });
+      record.apiCreditsGranted += input.amount;
+      return true;
+    },
+
+    async listApiCreditLedger(input) {
+      return ledger
+        .filter(
+          (entry) => entry.userId === input.userId && entry.source === "api",
+        )
+        .sort(
+          (left, right) => right.createdAt.getTime() - left.createdAt.getTime(),
+        )
+        .slice(0, input.limit)
+        .map((entry) => ({
+          amount: entry.amount,
+          type: entry.type,
+          toolId: entry.toolId ?? null,
+          createdAt: entry.createdAt.toISOString(),
+        }));
+    },
+
     async recordConversionUsage(input) {
       if (conversionEvents.has(input.conversionId)) {
         return false;
@@ -383,6 +571,21 @@ export function createMemoryBillingRepository(options?: {
 
       if (input.subscription !== undefined) {
         await this.upsertSubscription(input.subscription);
+      }
+
+      if (input.apiSubscription !== undefined) {
+        await this.upsertApiSubscription(input.apiSubscription);
+      }
+
+      if (input.apiCreditTopUp !== undefined) {
+        await this.grantApiCreditTopUp({
+          userId: input.apiCreditTopUp.userId,
+          periodStart: input.apiCreditTopUp.periodStart,
+          periodEnd: input.apiCreditTopUp.periodEnd,
+          amount: input.apiCreditTopUp.amount,
+          providerEventId: input.eventId,
+          now: input.processedAt,
+        });
       }
 
       return true;

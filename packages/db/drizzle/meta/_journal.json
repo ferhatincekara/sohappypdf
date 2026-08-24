@@ -85,6 +85,13 @@
       "when": 1787550000000,
       "tag": "0011_ai_credits",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1787555000000,
+      "tag": "0012_api_credits",
+      "breakpoints": true
     }
   ]
 }

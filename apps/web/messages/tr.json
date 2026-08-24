@@ -608,18 +608,39 @@
   },
   "billing": {
     "title": "Faturalandırma",
-    "description": "Mevcut planınız ve kullanımınız. Yükseltmeler Polar ödemesinden sonra onaylanır.",
+    "description": "Web planınız ve API kullanımınız. Satın almalar Polar ödemesinden sonra onaylanır.",
     "currentPlan": "Mevcut plan",
     "usage": "Kullanım",
     "upgrade": "Yükselt",
     "upgrading": "Ödemeye yönlendiriliyor…",
     "manage": "Aboneliği yönet",
     "openingPortal": "Portal açılıyor…",
-    "activating": "Aboneliğiniz etkinleştiriliyor.",
+    "activating": "Satın almanız etkinleştiriliyor.",
     "noSubscription": "Ücretli abonelik yok",
     "cancelsOn": "İptal planlandı. Pro {date} tarihine kadar devam eder.",
     "backToSettings": "Ayarlara dön",
     "period": "UTC dönemi {start} – {end}",
+    "sections": {
+      "web": "Web planı",
+      "api": "API kullanımı"
+    },
+    "api": {
+      "title": "API kullanımı",
+      "noProduct": "API planı yok",
+      "noSubscription": "API aboneliği yok",
+      "credits": "Kalan API kredisi",
+      "plans": "API planları ve paketler",
+      "topUp": "Kredi paketi satın al",
+      "recentUsage": "Son API kullanımı",
+      "noUsage": "Bu dönemde API kredi hareketi yok.",
+      "documentation": "API dokümantasyonu",
+      "manageKeys": "API anahtarları"
+    },
+    "apiProducts": {
+      "starter": "API Starter",
+      "growth": "API Growth",
+      "scale": "API Scale"
+    },
     "plans": {
       "free": "Ücretsiz",
       "pro": "Pro"

@@ -34,6 +34,7 @@ function createService(options?: {
   polarClient?: PolarClient;
   userEmails?: Record<string, string>;
   repository?: ReturnType<typeof createMemoryBillingRepository>;
+  env?: Record<string, string | undefined>;
 }) {
   return createBillingService({
     repository:
@@ -46,6 +47,7 @@ function createService(options?: {
       POLAR_WEBHOOK_SECRET: "whsec_test",
       POLAR_PRO_PRODUCT_ID: "prod_pro",
       APP_URL: "https://app.example",
+      ...options?.env,
     }),
     polarClient: options?.polarClient ?? createPolarClientMock(),
     now: () => now,
@@ -167,6 +169,8 @@ describe("createBillingService", () => {
     expect(status.usage.conversionsLimit).toBe(20);
     expect(status.usage.storageUsedBytes).toBe(1024);
     expect(status.limits.maxFileSizeBytes).toBe(20 * 1024 * 1024);
+    expect(status.api.creditsLimit).toBe(0);
+    expect(status.api.product).toBeNull();
     expect(JSON.stringify(status).includes("polar_at_test")).toBe(false);
   });
 
@@ -287,5 +291,57 @@ describe("createBillingService", () => {
 
     expect(status.plan).toBe("pro");
     expect(status.canUpgrade).toBe(false);
+  });
+
+  test("reconciles an API subscription without changing the web plan", async () => {
+    const billing = createService({
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
+      },
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_api_1",
+              status: "active",
+              productId: "prod_api_starter",
+              customerId: "cus_polar_1",
+              externalCustomerId: "user_1",
+            },
+          ];
+        },
+      }),
+    });
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.plan).toBe("free");
+    expect(status.canUpgrade).toBe(true);
+    expect(status.api.product).toBe("starter");
+    expect(status.api.creditsLimit).toBe(1_000);
+    expect(status.api.creditsRemaining).toBe(1_000);
+  });
+
+  test("creates checkout for an API product using configured Polar IDs", async () => {
+    let productId: string | undefined;
+    const billing = createService({
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
+      },
+      polarClient: createPolarClientMock({
+        async createCheckout(input) {
+          productId = input.productId;
+          return { url: "https://polar.example/checkout/api" };
+        },
+      }),
+    });
+
+    const checkout = await billing.createCheckout("user_1", "api-starter");
+    expect(checkout.url).toBe("https://polar.example/checkout/api");
+    expect(productId).toBe("prod_api_starter");
   });
 });

@@ -1,5 +1,10 @@
 import type { ApiKeyService } from "@repo/api-keys";
-import type { BillingService } from "@repo/billing";
+import {
+  type BillingService,
+  type CheckoutProductKey,
+  isCheckoutProductKey,
+} from "@repo/billing";
+import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { FileService } from "@repo/files";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
@@ -80,9 +85,10 @@ export function createBillingRoutes(options: BillingRoutesOptions) {
 
   managed.post("/checkout", async (c) => {
     const identity = requireSessionIdentity(c.get("identity"));
+    const product = await parseCheckoutProduct(c.req.raw);
     const checkout = await options
       .getBillingService()
-      .createCheckout(identity.userId);
+      .createCheckout(identity.userId, product);
 
     c.get("logger").info("billing checkout created", {
       userId: identity.userId,
@@ -106,4 +112,48 @@ export function createBillingRoutes(options: BillingRoutesOptions) {
 
   billing.route("/", managed);
   return billing;
+}
+
+async function parseCheckoutProduct(
+  request: Request,
+): Promise<CheckoutProductKey> {
+  const text = await request.text();
+
+  if (text.trim().length === 0) {
+    return "pro";
+  }
+
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Invalid request",
+    });
+  }
+
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Invalid request",
+    });
+  }
+
+  if (!("product" in parsed) || parsed.product === undefined) {
+    return "pro";
+  }
+
+  if (
+    typeof parsed.product !== "string" ||
+    !isCheckoutProductKey(parsed.product)
+  ) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Invalid checkout product",
+    });
+  }
+
+  return parsed.product;
 }

@@ -17,6 +17,22 @@ export const BILLING_SUBSCRIPTION_STATUSES = [
 export type BillingSubscriptionStatus =
   (typeof BILLING_SUBSCRIPTION_STATUSES)[number];
 
+export type ApiProductKey = "starter" | "growth" | "scale";
+
+export type CheckoutProductKey =
+  | "pro"
+  | "api-starter"
+  | "api-growth"
+  | "api-scale"
+  | "api-pack";
+
+export type ApiCreditLedgerEntry = {
+  amount: number;
+  type: "grant" | "consume" | "refund" | "adjustment";
+  toolId: string | null;
+  createdAt: string;
+};
+
 export type PublicBillingStatus = {
   plan: BillingPlan;
   subscriptionStatus: BillingSubscriptionStatus | null;
@@ -35,6 +51,19 @@ export type PublicBillingStatus = {
     storageLimitBytes: number;
     apiKeyCount: number;
     apiKeyLimit: number;
+    periodStart: string;
+    periodEnd: string;
+  };
+  api: {
+    product: ApiProductKey | null;
+    subscriptionStatus: BillingSubscriptionStatus | null;
+    creditsUsed: number;
+    creditsLimit: number;
+    creditsRemaining: number;
+    recentUsage: readonly ApiCreditLedgerEntry[];
+    canSubscribe: boolean;
+    canTopUp: boolean;
+    availableProducts: readonly CheckoutProductKey[];
     periodStart: string;
     periodEnd: string;
   };

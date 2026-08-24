@@ -7,6 +7,10 @@ describe("isCheckoutActivationPending", () => {
       isCheckoutActivationPending({
         plan: "free",
         subscriptionStatus: null,
+        api: {
+          product: null,
+          creditsLimit: 0,
+        },
       }),
     ).toBe(true);
   });
@@ -16,6 +20,33 @@ describe("isCheckoutActivationPending", () => {
       isCheckoutActivationPending({
         plan: "pro",
         subscriptionStatus: "active",
+        api: {
+          product: null,
+          creditsLimit: 0,
+        },
+      }),
+    ).toBe(false);
+  });
+
+  test("is not pending after an API product or pack is applied", () => {
+    expect(
+      isCheckoutActivationPending({
+        plan: "free",
+        subscriptionStatus: null,
+        api: {
+          product: "starter",
+          creditsLimit: 1000,
+        },
+      }),
+    ).toBe(false);
+    expect(
+      isCheckoutActivationPending({
+        plan: "free",
+        subscriptionStatus: null,
+        api: {
+          product: null,
+          creditsLimit: 500,
+        },
       }),
     ).toBe(false);
   });
@@ -25,12 +56,20 @@ describe("isCheckoutActivationPending", () => {
       isCheckoutActivationPending({
         plan: "free",
         subscriptionStatus: "revoked",
+        api: {
+          product: null,
+          creditsLimit: 0,
+        },
       }),
     ).toBe(false);
     expect(
       isCheckoutActivationPending({
         plan: "free",
         subscriptionStatus: "canceled",
+        api: {
+          product: null,
+          creditsLimit: 0,
+        },
       }),
     ).toBe(false);
   });

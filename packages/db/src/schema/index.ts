@@ -25,9 +25,11 @@ export {
   verification,
 } from "./auth.js";
 export type {
+  ApiSubscriptionRow,
   BillingCustomerRow,
   BillingSubscriptionRow,
   ConversionUsageEventRow,
+  NewApiSubscriptionRow,
   NewBillingCustomerRow,
   NewBillingSubscriptionRow,
   NewUsagePeriodRow,
@@ -38,6 +40,8 @@ export type {
   WebhookEventRow,
 } from "./billing.js";
 export {
+  apiProductKeyEnum,
+  apiSubscriptions,
   billingCustomers,
   billingPlanEnum,
   billingSubscriptionStatusEnum,
