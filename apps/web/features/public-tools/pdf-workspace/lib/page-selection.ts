@@ -3,6 +3,18 @@ export type PageRange = {
   end: number;
 };
 
+export type PageSelectionMode = "multiple" | "single";
+
+export type PageActivationModifiers = {
+  additive: boolean;
+  range: boolean;
+};
+
+export type PageActivationResult = {
+  selectedPages: number[];
+  anchor: number;
+};
+
 export function uniqueSortedPages(pages: readonly number[]): number[] {
   return [
     ...new Set(pages.filter((page) => Number.isInteger(page) && page > 0)),
@@ -93,4 +105,70 @@ export function allPages(pageCount: number): number[] {
   }
 
   return Array.from({ length: pageCount }, (_, index) => index + 1);
+}
+
+export function isAllPagesSelected(
+  selectedPages: readonly number[],
+  pageCount: number,
+): boolean {
+  return pageCount > 0 && uniqueSortedPages(selectedPages).length === pageCount;
+}
+
+export function pageActivationFromPointerEvent(event: {
+  shiftKey: boolean;
+  metaKey: boolean;
+  ctrlKey: boolean;
+}): PageActivationModifiers {
+  return {
+    additive: event.metaKey || event.ctrlKey,
+    range: event.shiftKey,
+  };
+}
+
+export function applyPageActivation(input: {
+  selectedPages: readonly number[];
+  pageNumber: number;
+  pageCount: number;
+  anchor: number | null;
+  mode: PageSelectionMode;
+  modifiers: PageActivationModifiers;
+}): PageActivationResult {
+  if (input.pageNumber < 1 || input.pageNumber > input.pageCount) {
+    return {
+      selectedPages: uniqueSortedPages(input.selectedPages),
+      anchor: input.anchor ?? 1,
+    };
+  }
+
+  if (input.modifiers.range && input.anchor !== null) {
+    const range = selectPageRange(
+      input.anchor,
+      input.pageNumber,
+      input.pageCount,
+    );
+
+    if (input.mode === "single" || !input.modifiers.additive) {
+      return {
+        selectedPages: range,
+        anchor: input.anchor,
+      };
+    }
+
+    return {
+      selectedPages: uniqueSortedPages([...input.selectedPages, ...range]),
+      anchor: input.anchor,
+    };
+  }
+
+  if (input.mode === "single") {
+    return {
+      selectedPages: [input.pageNumber],
+      anchor: input.pageNumber,
+    };
+  }
+
+  return {
+    selectedPages: togglePage(input.selectedPages, input.pageNumber),
+    anchor: input.pageNumber,
+  };
 }

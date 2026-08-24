@@ -2,19 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
-import { usePdfDocument } from "../../hooks/use-pdf-document";
+import { parseSplitRangesInput } from "../../lib/tool-workspace";
 import {
-  allPages,
+  PdfPageWorkspace,
   pagesToRangeInput,
   rangesToPages,
-  togglePage,
-} from "../../lib/page-selection";
-import { parseSplitRangesInput } from "../../lib/tool-workspace";
+  usePdfDocument,
+} from "../../pdf-workspace";
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { PdfPageGrid } from "../pdf-pages/pdf-page-grid";
 import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
 
@@ -73,67 +69,22 @@ export function SplitPdfWorkspace(props: ToolSelectedWorkspaceProps) {
           </p>
         </div>
 
-        {pdf.status === "loading" ? (
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
-            <Skeleton className="h-36 w-full" />
-            <Skeleton className="h-36 w-full" />
-            <Skeleton className="h-36 w-full" />
-          </div>
-        ) : null}
-
-        {pdf.status === "error" ? (
-          <p className="text-sm text-muted-foreground">
-            {pdf.errorKey === "passwordProtected"
-              ? t("workspaces.split.passwordProtected")
-              : t("workspaces.split.previewFailed")}
-          </p>
-        ) : null}
-
-        {pdf.status === "ready" && pdf.document !== null ? (
-          <>
-            <div className="flex flex-wrap items-center gap-2">
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={props.disabled}
-                onClick={() => {
-                  setSelectedPages(allPages(pdf.pageCount));
-                }}
-              >
-                {t("pages.selectAll")}
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                disabled={props.disabled || selectedPages.length === 0}
-                onClick={() => {
-                  setSelectedPages([]);
-                }}
-              >
-                {t("pages.clear")}
-              </Button>
-              <p className="text-sm text-muted-foreground">
-                {t("workspaces.split.selectedCount", {
-                  count: selectedPages.length,
-                })}
-              </p>
-            </div>
-            <PdfPageGrid
-              document={pdf.document}
-              pageCount={pdf.pageCount}
-              selectedPages={selectedPages}
-              disabled={props.disabled}
-              onToggle={(page) => {
-                setSelectedPages(togglePage(selectedPages, page));
-              }}
-            />
+        <PdfPageWorkspace
+          pdf={pdf}
+          selectedPages={selectedPages}
+          onSelectedPagesChange={(pages) => {
+            setSelectedPages(pages);
+          }}
+          disabled={props.disabled}
+          passwordProtectedMessage={t("workspaces.split.passwordProtected")}
+          previewFailedMessage={t("workspaces.split.previewFailed")}
+        >
+          {pdf.status === "ready" ? (
             <p className="text-sm text-foreground">
               {t("workspaces.split.output", { count: selectedPages.length })}
             </p>
-          </>
-        ) : null}
+          ) : null}
+        </PdfPageWorkspace>
 
         <details className="rounded-lg border border-border bg-card p-3">
           <summary className="cursor-pointer text-sm font-medium text-foreground">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { PdfjsDocument } from "../lib/pdfjs-client";
+import type { PdfjsDocument } from "../../lib/pdfjs-client";
 
 export type PdfDocumentStatus = "idle" | "loading" | "ready" | "error";
 
@@ -41,7 +41,7 @@ export function usePdfDocument(file: File | null): PdfDocumentState {
 
     void (async () => {
       const { isPdfPasswordError, loadPdfDocument } = await import(
-        "../lib/pdfjs-client"
+        "../../lib/pdfjs-client"
       );
 
       try {

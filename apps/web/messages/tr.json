@@ -800,14 +800,21 @@
     },
     "pages": {
       "pageLabel": "Sayfa {number}",
+      "pageLabelSelected": "Sayfa {number}, seçildi",
       "selectAll": "Tümünü seç",
-      "clear": "Temizle"
+      "clear": "Seçimi temizle",
+      "selectedCount": "{count, plural, one {# sayfa seçildi} other {# sayfa seçildi}}",
+      "allSelected": "Tüm sayfalar seçildi",
+      "loading": "PDF sayfaları yükleniyor",
+      "pagePreviewFailed": "Önizleme yok",
+      "previewFailed": "Bu PDF önizlenemedi.",
+      "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+      "gridLabel": "PDF sayfaları"
     },
     "workspaces": {
       "split": {
         "title": "Sayfa seç",
         "hint": "Tutmak istediğiniz sayfaları seçin. Seçilen sayfalar tek bir PDF olarak çıkarılır.",
-        "selectedCount": "{count, plural, one {# sayfa seçildi} other {# sayfa seçildi}}",
         "output": "{count, plural, one {# sayfa 1 PDF olarak kaydedilecek} other {# sayfa 1 PDF olarak kaydedilecek}}",
         "advanced": "Gelişmiş: sayfa aralıkları",
         "advancedHint": "1-3, 5 gibi aralıklar yazabilirsiniz. Görsel seçim senkron kalır.",

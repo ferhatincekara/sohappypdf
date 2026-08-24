@@ -800,14 +800,21 @@
     },
     "pages": {
       "pageLabel": "Page {number}",
+      "pageLabelSelected": "Page {number}, selected",
       "selectAll": "Select all",
-      "clear": "Clear"
+      "clear": "Clear selection",
+      "selectedCount": "{count, plural, one {# page selected} other {# pages selected}}",
+      "allSelected": "All pages selected",
+      "loading": "Loading PDF pages",
+      "pagePreviewFailed": "Preview unavailable",
+      "previewFailed": "This PDF could not be previewed.",
+      "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+      "gridLabel": "PDF pages"
     },
     "workspaces": {
       "split": {
         "title": "Select pages",
         "hint": "Choose the pages to keep. They will be extracted into one PDF.",
-        "selectedCount": "{count, plural, one {# page selected} other {# pages selected}}",
         "output": "{count, plural, one {# page will be saved as 1 PDF} other {# pages will be saved as 1 PDF}}",
         "advanced": "Advanced: page ranges",
         "advancedHint": "Type ranges such as 1-3, 5. Visual selection stays in sync.",
