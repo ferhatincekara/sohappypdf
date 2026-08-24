@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test";
 import { formatAcceptedFormats } from "./format-labels";
-import { resolveToolProcessingPhase } from "./processing-phase";
 import { mapConversionFailure } from "./public-tool-errors";
 import {
   appendWorkspaceFiles,
@@ -59,46 +58,6 @@ describe("workspace files", () => {
     const result = appendWorkspaceFiles(current, incoming, 2);
     expect(result.rejected).toBe("tooManyFiles");
     expect(result.files).toHaveLength(2);
-  });
-});
-
-describe("processing phase", () => {
-  test("maps conversion and upload states honestly", () => {
-    expect(
-      resolveToolProcessingPhase({
-        hasError: false,
-        isCreatingConversion: false,
-        fileStatuses: ["uploading"],
-        conversionStatus: undefined,
-      }),
-    ).toBe("uploading");
-
-    expect(
-      resolveToolProcessingPhase({
-        hasError: false,
-        isCreatingConversion: true,
-        fileStatuses: ["ready"],
-        conversionStatus: undefined,
-      }),
-    ).toBe("preparing");
-
-    expect(
-      resolveToolProcessingPhase({
-        hasError: false,
-        isCreatingConversion: false,
-        fileStatuses: ["ready"],
-        conversionStatus: "processing",
-      }),
-    ).toBe("processing");
-
-    expect(
-      resolveToolProcessingPhase({
-        hasError: false,
-        isCreatingConversion: false,
-        fileStatuses: ["ready"],
-        conversionStatus: "completed",
-      }),
-    ).toBe("ready");
   });
 });
 

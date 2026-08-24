@@ -5,25 +5,24 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { formatLabel } from "../lib/format-labels";
+import type { ToolSuccessUxState } from "../types/tool-ux-state";
 
-export function ToolResult({
-  targetFormat,
-  sourceFilename,
+export function ToolSuccessState({
+  state,
   signupHref,
   isAuthenticated,
   isDownloading,
   onDownload,
   onReset,
 }: {
-  targetFormat: string;
-  sourceFilename: string | null;
+  state: ToolSuccessUxState;
   signupHref: string;
   isAuthenticated: boolean;
   isDownloading: boolean;
   onDownload: () => void;
   onReset: () => void;
 }) {
-  const t = useTranslations("publicTools.result");
+  const t = useTranslations("publicTools");
 
   return (
     <div
@@ -38,15 +37,20 @@ export function ToolResult({
         />
         <div className="min-w-0 flex-1">
           <h2 className="text-base font-semibold text-foreground">
-            {t("title")}
+            {t("result.title")}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {t("description", {
-              format: formatLabel(targetFormat),
-              source: sourceFilename ?? t("unnamedSource"),
+            {t("result.description", {
+              format: formatLabel(state.targetFormat),
+              source: state.sourceFilename ?? t("result.unnamedSource"),
             })}
           </p>
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+          {state.downloadError !== null ? (
+            <p className="mt-2 text-sm text-destructive">
+              {t(`errors.${state.downloadError.key}`)}
+            </p>
+          ) : null}
+          <div className="mt-4 hidden flex-col gap-2 sm:flex-row sm:flex-wrap md:flex">
             <Button
               type="button"
               size="lg"
@@ -55,7 +59,7 @@ export function ToolResult({
               autoFocus
               onClick={onDownload}
             >
-              {isDownloading ? t("downloading") : t("download")}
+              {isDownloading ? t("result.downloading") : t("actions.download")}
             </Button>
             <Button
               type="button"
@@ -64,17 +68,17 @@ export function ToolResult({
               className="w-full sm:w-auto"
               onClick={onReset}
             >
-              {t("processAnother")}
+              {t("actions.startAgain")}
             </Button>
           </div>
           {isAuthenticated ? null : (
             <p className="mt-4 text-sm text-muted-foreground">
-              {t("signupPrompt")}{" "}
+              {t("result.signupPrompt")}{" "}
               <Link
                 href={signupHref}
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >
-                {t("signupCta")}
+                {t("result.signupCta")}
               </Link>
             </p>
           )}

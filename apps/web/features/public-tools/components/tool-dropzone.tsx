@@ -12,6 +12,7 @@ export function ToolDropzone({
   formatsLabel,
   maxSizeLabel,
   onSelectFiles,
+  variant = "default",
 }: {
   accept: string;
   multiple: boolean;
@@ -19,23 +20,39 @@ export function ToolDropzone({
   formatsLabel: string;
   maxSizeLabel: string;
   onSelectFiles: (files: FileList | File[]) => void;
+  variant?: "default" | "compact";
 }) {
   const t = useTranslations("publicTools.upload");
   const inputId = useId();
   const hintId = useId();
   const dragDepth = useRef(0);
   const [isDragging, setIsDragging] = useState(false);
+  const compact = variant === "compact";
 
   function resetDragging() {
     dragDepth.current = 0;
     setIsDragging(false);
   }
 
+  const title = compact
+    ? multiple
+      ? t("addMoreMultiple")
+      : t("addMore")
+    : multiple
+      ? t("titleMultiple")
+      : t("title");
+  const browse = compact
+    ? t("addMoreBrowse")
+    : multiple
+      ? t("browseMultiple")
+      : t("browse");
+
   return (
     <label
       htmlFor={inputId}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-card px-6 py-12 text-center outline-none transition-colors motion-safe:duration-150",
+        "relative flex cursor-pointer flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-card text-center outline-none transition-colors motion-safe:duration-150",
+        compact ? "px-4 py-6" : "px-6 py-12",
         "has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50",
         isDragging && !disabled && "border-foreground bg-muted/50",
         disabled && "pointer-events-none cursor-not-allowed opacity-60",
@@ -90,14 +107,17 @@ export function ToolDropzone({
       <span className="flex size-11 items-center justify-center rounded-full bg-muted text-foreground">
         <UploadIcon className="size-5" aria-hidden="true" />
       </span>
-      <span className="text-base font-medium text-foreground">
-        {multiple ? t("titleMultiple") : t("title")}
-      </span>
-      <span id={hintId} className="max-w-md text-sm text-muted-foreground">
+      <span className="text-base font-medium text-foreground">{title}</span>
+      <span
+        id={hintId}
+        className={
+          compact ? "sr-only" : "max-w-md text-sm text-muted-foreground"
+        }
+      >
         {t("hint", { formats: formatsLabel, size: maxSizeLabel })}
       </span>
       <span className="text-sm font-medium text-foreground underline-offset-4 hover:underline">
-        {multiple ? t("browseMultiple") : t("browse")}
+        {browse}
       </span>
     </label>
   );

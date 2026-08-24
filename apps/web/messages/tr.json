@@ -758,8 +758,34 @@
       "titleMultiple": "Dosyaları buraya bırakın",
       "browse": "Dosya seç",
       "browseMultiple": "Dosya seç",
+      "addMore": "Başka bir dosya ekle",
+      "addMoreMultiple": "Daha fazla dosya ekle",
+      "addMoreBrowse": "Dosya seç",
       "hint": "{formats} desteklenir. Dosya başına en fazla {size}.",
       "conjunction": "ve"
+    },
+    "actions": {
+      "download": "İndir",
+      "retry": "Tekrar dene",
+      "startAgain": "Yeniden başla"
+    },
+    "states": {
+      "empty": {
+        "privacy": "Dosyalar geçicidir ve yaklaşık {hours} saat saklanır."
+      },
+      "processing": {
+        "status": "İşlem durumu",
+        "starting": "Başlatılıyor",
+        "startingHint": "İşleme görevi oluşturuluyor.",
+        "queued": "Sırada",
+        "queuedHint": "Dosyanız işlenmek üzere sırada.",
+        "processing": "İşleniyor",
+        "processingHint": "Dosyanız üzerinde çalışıyoruz. Bu biraz sürebilir."
+      }
+    },
+    "expiration": {
+      "title": "Bu sonucun süresi doldu",
+      "description": "Geçici dosyalar yaklaşık {hours} saat saklanır, ardından kaldırılır. Yeni bir dosya işlemek için yeniden başlayın."
     },
     "workspace": {
       "fileList": "Seçilen dosyalar",
@@ -866,9 +892,12 @@
       "signInCta": "Devam etmek için giriş yapın",
       "passwordProtected": "Bu PDF parola korumalı. Önce kilidini açın veya Unlock PDF aracını doğru parola ile kullanın.",
       "processingFailed": "İşlem başarısız oldu. Farklı bir dosyayla tekrar deneyin.",
+      "filesExpired": "Yüklenen dosyalar artık kullanılabilir değil. Yeni bir dosyayla yeniden başlayın.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "Yükleme başarısız. Bağlantınızı kontrol edip tekrar deneyin.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "retryHint": "Bu işlemi tekrar deneyebilirsiniz.",
+      "startAgainHint": "Yeni bir dosyayla yeniden başlayın."
     }
   },
   "tools": {

@@ -758,8 +758,34 @@
       "titleMultiple": "Drop files here",
       "browse": "Browse files",
       "browseMultiple": "Browse files",
+      "addMore": "Add another file",
+      "addMoreMultiple": "Add more files",
+      "addMoreBrowse": "Browse files",
       "hint": "Supports {formats}. Max {size} per file.",
       "conjunction": "and"
+    },
+    "actions": {
+      "download": "Download",
+      "retry": "Retry",
+      "startAgain": "Start again"
+    },
+    "states": {
+      "empty": {
+        "privacy": "Files are temporary and are kept for about {hours} hours."
+      },
+      "processing": {
+        "status": "Processing status",
+        "starting": "Starting",
+        "startingHint": "Creating the processing job.",
+        "queued": "Queued",
+        "queuedHint": "Your file is in line to be processed.",
+        "processing": "Processing",
+        "processingHint": "Working on your file. This may take a moment."
+      }
+    },
+    "expiration": {
+      "title": "This result has expired",
+      "description": "Temporary files are kept for about {hours} hours, then they are removed. Start again to process a new file."
     },
     "workspace": {
       "fileList": "Selected files",
@@ -866,9 +892,12 @@
       "signInCta": "Sign in to continue",
       "passwordProtected": "This PDF is password protected. Unlock it first, or use Unlock PDF with the correct password.",
       "processingFailed": "Processing failed. Try again with a different file.",
+      "filesExpired": "The uploaded files are no longer available. Start again with a new file.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "Upload failed. Check your connection and try again.",
-      "unexpected": "Something went wrong. Try again."
+      "unexpected": "Something went wrong. Try again.",
+      "retryHint": "You can try this operation again.",
+      "startAgainHint": "Start again with a new file."
     }
   },
   "tools": {

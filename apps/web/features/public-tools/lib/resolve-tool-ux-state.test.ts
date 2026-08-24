@@ -1,0 +1,203 @@
+import { describe, expect, test } from "bun:test";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
+import { INITIAL_UPLOAD_PROGRESS } from "@/features/files/types/upload-state";
+import { isToolUxStatus } from "../types/tool-ux-state";
+import { resolveToolUxState } from "./resolve-tool-ux-state";
+import type { WorkspaceFile } from "./workspace-files";
+
+function createFile(overrides: Partial<WorkspaceFile> = {}): WorkspaceFile {
+  return {
+    id: "file-1",
+    file: new File(["a"], "a.pdf", { type: "application/pdf" }),
+    previewUrl: null,
+    status: "ready",
+    progress: INITIAL_UPLOAD_PROGRESS,
+    publicFile: null,
+    errorKey: null,
+    ...overrides,
+  };
+}
+
+function createExecution(
+  overrides: Partial<PublicConversion> = {},
+): PublicConversion {
+  return {
+    id: "exec-1",
+    status: "queued",
+    sourceFileId: "file-1",
+    sourceFilename: "a.pdf",
+    outputFileId: null,
+    type: "compress-pdf",
+    sourceFormat: "pdf",
+    targetFormat: "pdf",
+    createdAt: "2026-08-24T00:00:00.000Z",
+    updatedAt: "2026-08-24T00:00:00.000Z",
+    queuedAt: "2026-08-24T00:00:01.000Z",
+    startedAt: null,
+    completedAt: null,
+    expiresAt: "2026-08-24T02:00:00.000Z",
+    expired: false,
+    ...overrides,
+  };
+}
+
+const baseInput = {
+  files: [] as WorkspaceFile[],
+  isCreatingExecution: false,
+  executionId: null as string | null,
+  execution: undefined as PublicConversion | undefined,
+  executionQueryError: null as unknown,
+  selectionError: null,
+  processError: null,
+  downloadError: null,
+  resultExpired: false,
+  now: new Date("2026-08-24T01:00:00.000Z"),
+};
+
+describe("tool UX state model", () => {
+  test("uses a closed set of statuses", () => {
+    expect(isToolUxStatus("empty")).toBe(true);
+    expect(isToolUxStatus("selected")).toBe(true);
+    expect(isToolUxStatus("processing")).toBe(true);
+    expect(isToolUxStatus("success")).toBe(true);
+    expect(isToolUxStatus("error")).toBe(true);
+    expect(isToolUxStatus("expired")).toBe(true);
+    expect(isToolUxStatus("uploading")).toBe(false);
+    expect(isToolUxStatus("ready")).toBe(false);
+  });
+
+  test("starts empty when no files or execution exist", () => {
+    expect(resolveToolUxState(baseInput)).toEqual({ status: "empty" });
+  });
+
+  test("enters selected with files and keeps selection errors in that state", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      files: [createFile()],
+      selectionError: "tooManyFiles",
+    });
+
+    expect(state.status).toBe("selected");
+    if (state.status !== "selected") {
+      throw new Error("expected selected");
+    }
+    expect(state.files).toHaveLength(1);
+    expect(state.error).toEqual({
+      key: "tooManyFiles",
+      retryable: false,
+    });
+  });
+
+  test("enters processing while creating or running an execution", () => {
+    expect(
+      resolveToolUxState({
+        ...baseInput,
+        files: [createFile()],
+        isCreatingExecution: true,
+      }).status,
+    ).toBe("processing");
+
+    const queued = resolveToolUxState({
+      ...baseInput,
+      files: [createFile()],
+      executionId: "exec-1",
+      execution: createExecution({ status: "queued" }),
+    });
+    expect(queued).toMatchObject({
+      status: "processing",
+      executionId: "exec-1",
+      processingStatus: "queued",
+      progress: null,
+    });
+
+    const processing = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({ status: "processing" }),
+    });
+    expect(processing).toMatchObject({
+      status: "processing",
+      processingStatus: "processing",
+      progress: null,
+    });
+  });
+
+  test("enters success with download metadata and never invents progress", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "completed",
+        outputFileId: "out-1",
+        completedAt: "2026-08-24T00:05:00.000Z",
+      }),
+    });
+
+    expect(state).toEqual({
+      status: "success",
+      executionId: "exec-1",
+      targetFormat: "pdf",
+      sourceFilename: "a.pdf",
+      outputFileId: "out-1",
+      expiresAt: "2026-08-24T02:00:00.000Z",
+      downloadError: null,
+    });
+  });
+
+  test("enters error for failed processing with retry capability", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "failed",
+        error: { code: "processing_failed", message: "engine crashed" },
+      }),
+    });
+
+    expect(state.status).toBe("error");
+    if (state.status !== "error") {
+      throw new Error("expected error");
+    }
+    expect(state.error).toEqual({
+      key: "processingFailed",
+      retryable: true,
+    });
+    expect(JSON.stringify(state)).not.toContain("engine crashed");
+  });
+
+  test("treats expiration as a first-class state", () => {
+    const byFlag = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "completed",
+        outputFileId: null,
+        expired: true,
+      }),
+    });
+    expect(byFlag.status).toBe("expired");
+
+    const byClock = resolveToolUxState({
+      ...baseInput,
+      now: new Date("2026-08-24T03:00:00.000Z"),
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "completed",
+        outputFileId: "out-1",
+        expiresAt: "2026-08-24T02:00:00.000Z",
+      }),
+    });
+    expect(byClock.status).toBe("expired");
+
+    const byDownload = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "completed",
+        outputFileId: "out-1",
+      }),
+      resultExpired: true,
+    });
+    expect(byDownload.status).toBe("expired");
+  });
+});

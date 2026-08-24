@@ -1,9 +1,11 @@
+import { ConversionApiRequestError } from "@/features/conversions/api/conversion-api";
 import {
   CONVERSION_ERROR_KEYS,
   mapUnknownConversionError,
   toConversionClientError,
 } from "@/features/conversions/api/conversion-errors";
 import type { PublicConversionError } from "@/features/conversions/types/conversion";
+import { FileApiRequestError } from "@/features/files/api/file-api";
 import {
   FILE_ERROR_KEYS,
   mapUnknownUploadError,
@@ -24,10 +26,76 @@ export const PUBLIC_TOOL_ERROR_KEYS = [
   "signInRequired",
   "passwordProtected",
   "processingFailed",
+  "filesExpired",
   "unexpected",
 ] as const;
 
 export type PublicToolErrorKey = (typeof PUBLIC_TOOL_ERROR_KEYS)[number];
+
+export type ToolUserError = {
+  key: PublicToolErrorKey;
+  retryable: boolean;
+};
+
+const RETRYABLE_TOOL_ERROR_KEYS: ReadonlySet<PublicToolErrorKey> = new Set([
+  "rateLimited",
+  "networkFailure",
+  "processingFailed",
+  "unexpected",
+]);
+
+const EXPIRATION_ERROR_CODES = new Set(["FILE_EXPIRED", "GONE"]);
+
+export function isRetryableToolError(key: PublicToolErrorKey): boolean {
+  return RETRYABLE_TOOL_ERROR_KEYS.has(key);
+}
+
+export function toToolUserError(key: PublicToolErrorKey): ToolUserError {
+  return {
+    key,
+    retryable: isRetryableToolError(key),
+  };
+}
+
+function readClientStatusAndCode(error: unknown): {
+  status?: number;
+  code?: string;
+} {
+  if (error instanceof FileApiRequestError) {
+    return {
+      status: error.clientError.status,
+      code: error.clientError.code,
+    };
+  }
+
+  if (error instanceof ConversionApiRequestError) {
+    return {
+      status: error.clientError.status,
+      code: error.clientError.code,
+    };
+  }
+
+  const fileClient = toFileClientError(error);
+  if (fileClient.status !== undefined || fileClient.code !== undefined) {
+    return { status: fileClient.status, code: fileClient.code };
+  }
+
+  const conversionClient = toConversionClientError(error);
+  return { status: conversionClient.status, code: conversionClient.code };
+}
+
+export function isExpirationResponse(error: unknown): boolean {
+  const client = readClientStatusAndCode(error);
+  return (
+    client.status === 410 ||
+    (client.code !== undefined && EXPIRATION_ERROR_CODES.has(client.code))
+  );
+}
+
+export function isMissingResourceResponse(error: unknown): boolean {
+  const client = readClientStatusAndCode(error);
+  return client.status === 404 || client.code === "NOT_FOUND";
+}
 
 function mapUploadErrorKey(errorKey: string): PublicToolErrorKey | undefined {
   switch (errorKey) {
@@ -42,6 +110,8 @@ function mapUploadErrorKey(errorKey: string): PublicToolErrorKey | undefined {
       return "signInRequired";
     case FILE_ERROR_KEYS.storageLimitReached:
       return "limitReached";
+    case FILE_ERROR_KEYS.fileNotFound:
+      return "filesExpired";
     case FILE_ERROR_KEYS.networkFailure:
     case FILE_ERROR_KEYS.expiredUpload:
     case FILE_ERROR_KEYS.objectNotUploaded:
@@ -68,6 +138,8 @@ function mapConversionErrorKey(
     case CONVERSION_ERROR_KEYS.unauthorized:
       return "signInRequired";
     case CONVERSION_ERROR_KEYS.sourceUnavailable:
+    case CONVERSION_ERROR_KEYS.notFound:
+      return "filesExpired";
     case CONVERSION_ERROR_KEYS.conflict:
       return "networkFailure";
     default:
@@ -104,7 +176,14 @@ export function mapConversionFailure(
 }
 
 export function mapPublicToolError(error: unknown): PublicToolErrorKey {
-  const fileClient = toFileClientError(error);
+  if (isExpirationResponse(error)) {
+    return "filesExpired";
+  }
+
+  const fileClient =
+    error instanceof FileApiRequestError
+      ? error.clientError
+      : toFileClientError(error);
   if (fileClient.code === "INTERNAL_ERROR") {
     return "networkFailure";
   }
@@ -116,7 +195,10 @@ export function mapPublicToolError(error: unknown): PublicToolErrorKey {
     return message.includes("credit") ? "creditsExhausted" : "limitReached";
   }
 
-  const conversionClient = toConversionClientError(error);
+  const conversionClient =
+    error instanceof ConversionApiRequestError
+      ? error.clientError
+      : toConversionClientError(error);
   if (conversionClient.code === "INTERNAL_ERROR") {
     return "networkFailure";
   }
@@ -147,7 +229,7 @@ export function mapPublicToolError(error: unknown): PublicToolErrorKey {
     return conversionError;
   }
 
-  if (toFileClientError(error).kind === "network") {
+  if (fileClient.kind === "network") {
     return "networkFailure";
   }
 
