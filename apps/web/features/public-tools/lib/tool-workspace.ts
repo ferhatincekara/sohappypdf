@@ -19,6 +19,7 @@ export type ToolWorkspaceState = {
     left: number;
   };
   watermarkText: string;
+  watermarkOpacity: number;
   pageNumberStart: number;
   password: string;
   confirmPassword: string;
@@ -41,6 +42,7 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
     left: 36,
   },
   watermarkText: "CONFIDENTIAL",
+  watermarkOpacity: 0.25,
   pageNumberStart: 1,
   password: "",
   confirmPassword: "",
@@ -271,10 +273,15 @@ export function buildToolConversionOptions(
         marginBottom: state.cropMargins.bottom,
         marginLeft: state.cropMargins.left,
       };
-    case "watermark-pdf":
-      return state.watermarkText.trim().length === 0
-        ? undefined
-        : { text: state.watermarkText.trim() };
+    case "watermark-pdf": {
+      const text = state.watermarkText.trim();
+
+      if (text.length === 0 || text.length > 200) {
+        return undefined;
+      }
+
+      return { text, opacity: state.watermarkOpacity };
+    }
     case "page-numbers-pdf":
       return { startAt: state.pageNumberStart };
     case "ocr-pdf":

@@ -16,6 +16,7 @@ describe("dedicatedHowToForTool", () => {
     expect(dedicatedHowToForTool("ocr-pdf")?.workspace).toBe("ocr");
     expect(dedicatedHowToForTool("protect-pdf")?.workspace).toBe("protect");
     expect(dedicatedHowToForTool("unlock-pdf")?.workspace).toBe("unlock");
-    expect(dedicatedHowToForTool("watermark-pdf")).toBeNull();
+    expect(dedicatedHowToForTool("watermark-pdf")?.workspace).toBe("watermark");
+    expect(dedicatedHowToForTool("crop-pdf")).toBeNull();
   });
 });

@@ -1328,6 +1328,46 @@
           }
         }
       },
+      "watermark": {
+        "title": "Filigran ekle",
+        "hint": "İşaret her sayfaya çapraz yerleştirilir. Görsel filigran, konum ve boyut bu araçta yok.",
+        "text": "Filigran metni",
+        "required": "Devam etmek için filigran metnini girin.",
+        "tooLong": "200 karakter veya daha az kullanın.",
+        "more": "Opaklık",
+        "opacity": "Yoğunluk · %{percent}",
+        "opacityHint": "Daha düşük değer daha açıktır. Aynı işaret her sayfaya uygulanır.",
+        "previewEmpty": "FİLİGRAN",
+        "previewCaption": "İlk sayfa önizlemesi",
+        "previewHint": "Filigranı önizlemek için bir PDF yükleyin.",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+        "output": "Her sayfada bu çapraz filigran yer alacak.",
+        "processing": "Filigran ekleniyor...",
+        "processingHint": "İşaret her sayfaya uygulanıyor.",
+        "successTitle": "Filigranlı PDF’niz hazır",
+        "successDescription": "Filigranlı PDF’i indirin.",
+        "download": "PDF’i indir",
+        "watermarkAnother": "Başka bir PDF’e filigran ekle",
+        "processingFailed": "Bu PDF’e filigran eklenemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF’e filigran ekleyin.",
+        "faqHow": "Bir PDF yükleyin, filigran metnini girin, isteğe bağlı olarak opaklığı ayarlayın, ardından uygulayın. Aynı çapraz işaret her sayfaya eklenir. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "İşaretlenmesi gereken PDF’i bırakın."
+          },
+          "mark": {
+            "title": "Filigranı ayarla",
+            "description": "Metni girin ve isterseniz ne kadar belirgin görüneceğini ayarlayın."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Her sayfada filigran bulunan bir PDF alın."
+          }
+        }
+      },
       "sign": {
         "title": "PDF imzala"
       },

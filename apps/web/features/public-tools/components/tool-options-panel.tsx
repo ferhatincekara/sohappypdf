@@ -10,7 +10,6 @@ export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
     case "reorder-pages":
     case "crop-pdf":
-    case "watermark-pdf":
     case "page-numbers-pdf":
     case "ai-summarizer":
     case "translate-pdf":
@@ -106,20 +105,6 @@ export function ToolOptionsPanel({
               />
             </div>
           ))}
-        </div>
-      );
-    case "watermark-pdf":
-      return (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="watermark">{t("watermarkText")}</Label>
-          <Input
-            id="watermark"
-            value={state.watermarkText}
-            disabled={disabled}
-            onChange={(event) => {
-              onChange({ ...state, watermarkText: event.target.value });
-            }}
-          />
         </div>
       );
     case "page-numbers-pdf":

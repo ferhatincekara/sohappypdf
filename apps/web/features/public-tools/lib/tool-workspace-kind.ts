@@ -31,6 +31,7 @@ export const TOOL_WORKSPACE_KINDS = [
   "imageToPdf",
   "protect",
   "unlock",
+  "watermark",
   "repair",
   "ocr",
   "default",
@@ -83,6 +84,10 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
 
   if (toolId === "unlock-pdf") {
     return "unlock";
+  }
+
+  if (toolId === "watermark-pdf") {
+    return "watermark";
   }
 
   if (toolId === "repair-pdf") {

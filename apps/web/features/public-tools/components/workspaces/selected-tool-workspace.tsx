@@ -16,6 +16,7 @@ import { RepairPdfWorkspace } from "./repair-pdf-workspace";
 import { RotatePdfWorkspace } from "./rotate-pdf-workspace";
 import { SplitPdfWorkspace } from "./split-pdf-workspace";
 import { UnlockPdfWorkspace } from "./unlock-pdf-workspace";
+import { WatermarkPdfWorkspace } from "./watermark-pdf-workspace";
 
 export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
   switch (resolveToolWorkspaceKind(props.tool.id)) {
@@ -41,6 +42,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <ProtectPdfWorkspace {...props} />;
     case "unlock":
       return <UnlockPdfWorkspace {...props} />;
+    case "watermark":
+      return <WatermarkPdfWorkspace {...props} />;
     case "repair":
       return <RepairPdfWorkspace {...props} />;
     case "ocr":

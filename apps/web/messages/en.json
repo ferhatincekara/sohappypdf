@@ -1328,6 +1328,46 @@
           }
         }
       },
+      "watermark": {
+        "title": "Add a watermark",
+        "hint": "The mark is placed diagonally across every page. Image watermarks, position, and size are not available.",
+        "text": "Watermark text",
+        "required": "Enter watermark text to continue.",
+        "tooLong": "Use 200 characters or fewer.",
+        "more": "Opacity",
+        "opacity": "Strength · {percent}%",
+        "opacityHint": "Lower is lighter. The same mark is applied to every page.",
+        "previewEmpty": "WATERMARK",
+        "previewCaption": "Preview of the first page",
+        "previewHint": "Upload a PDF to preview the watermark.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "output": "Every page will include this diagonal watermark.",
+        "processing": "Adding your watermark...",
+        "processingHint": "Applying the mark to every page.",
+        "successTitle": "Your watermarked PDF is ready",
+        "successDescription": "Download the PDF with the watermark applied.",
+        "download": "Download PDF",
+        "watermarkAnother": "Watermark another PDF",
+        "processingFailed": "We couldn't add a watermark to this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Watermark another PDF to continue.",
+        "faqHow": "Upload a PDF, enter the watermark text, optionally adjust opacity, then apply. The same diagonal mark is added to every page. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF that should carry the mark."
+          },
+          "mark": {
+            "title": "Set watermark",
+            "description": "Enter the text and, if you want, adjust how strong it looks."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF with the watermark on every page."
+          }
+        }
+      },
       "sign": {
         "title": "Sign PDF"
       },

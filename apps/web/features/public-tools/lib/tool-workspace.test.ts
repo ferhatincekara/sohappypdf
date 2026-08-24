@@ -97,7 +97,7 @@ describe("tool workspace helpers", () => {
 
     expect(
       buildToolConversionOptions("watermark-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
-    ).toEqual({ text: "CONFIDENTIAL" });
+    ).toEqual({ text: "CONFIDENTIAL", opacity: 0.25 });
 
     expect(
       buildToolConversionOptions("ocr-pdf", DEFAULT_TOOL_WORKSPACE_STATE),

@@ -13,7 +13,8 @@ export type DedicatedHowToWorkspace =
   | "repair"
   | "ocr"
   | "protect"
-  | "unlock";
+  | "unlock"
+  | "watermark";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -64,6 +65,10 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   "unlock-pdf": {
     workspace: "unlock",
     steps: ["upload", "password", "download"],
+  },
+  "watermark-pdf": {
+    workspace: "watermark",
+    steps: ["upload", "mark", "download"],
   },
 };
 

@@ -487,6 +487,26 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "watermark-pdf") {
+    return {
+      processingTitle: t("workspaces.watermark.processing"),
+      processingHint: t("workspaces.watermark.processingHint"),
+      successTitle: t("workspaces.watermark.successTitle"),
+      successDescription: t("workspaces.watermark.successDescription"),
+      downloadLabel: t("workspaces.watermark.download"),
+      resetLabel: t("workspaces.watermark.watermarkAnother"),
+      expiredTitle: t("workspaces.watermark.expiredTitle"),
+      expiredDescription: t("workspaces.watermark.expiredDescription", {
+        hours,
+      }),
+      processHint: t("workspaces.watermark.output"),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveWatermarkErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -729,6 +749,26 @@ function resolveUnlockErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.unlock.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveWatermarkErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.watermark.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.watermark.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.watermark.expiredDescription", { hours });
   }
 
   return undefined;
