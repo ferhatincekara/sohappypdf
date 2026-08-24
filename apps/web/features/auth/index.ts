@@ -4,7 +4,7 @@ export { LoginForm } from "./components/login-form";
 export { LogoutButton } from "./components/logout-button";
 export { RegisterForm } from "./components/register-form";
 export { ResetPasswordForm } from "./components/reset-password-form";
-export { AUTH_PATHS, loginPath } from "./paths";
+export { AUTH_PATHS, loginPath, signupPath } from "./paths";
 export {
   resolveGuestOnlyRedirect,
   resolvePostAuthPath,

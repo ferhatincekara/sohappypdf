@@ -1,12 +1,171 @@
 {
   "metadata": {
     "title": "SohappyPDF",
-    "description": "PDF dosyalarını dönüştürün ve işleyin."
+    "description": "PDF ve görselleri sade bir akış ve genel bir API ile dönüştürün."
   },
-  "home": {
-    "title": "SohappyPDF",
-    "tagline": "Web uygulaması temeli hazır.",
-    "openApp": "Uygulamayı aç"
+  "marketing": {
+    "nav": {
+      "brand": "SohappyPDF",
+      "product": "Ürün",
+      "pricing": "Fiyatlandırma",
+      "developers": "Geliştiriciler",
+      "signIn": "Giriş yap",
+      "getStarted": "Başla",
+      "open": "Menüyü aç",
+      "close": "Menüyü kapat",
+      "menu": "Site",
+      "skip": "İçeriğe geç"
+    },
+    "hero": {
+      "eyebrow": "PDF dönüştürme",
+      "title": "İnsanlar ve API’ler için sade PDF dönüştürme.",
+      "description": "Bir dosya yükleyin, dönüşümü seçin ve sonucu indirin. Aynı akış hem panelde hem genel API’de geçerlidir.",
+      "primaryCta": "Ücretsiz başla",
+      "secondaryCta": "API’yi gör"
+    },
+    "demo": {
+      "title": "Yüklemeden indirmeye",
+      "description": "Ürün akışı panelde de aynıdır: dosya yükleyin, dönüşümü seçin, işlemin bitmesini bekleyin ve sonucu indirin.",
+      "panelTitle": "Dönüşüm oluştur",
+      "fileLabel": "Dosya",
+      "fileName": "report.pdf",
+      "conversionLabel": "Dönüşüm",
+      "conversion": "PDF’den PNG’ye",
+      "resultLabel": "Sonuç",
+      "result": "report.png",
+      "status": "Tamamlandı",
+      "upload": "Yükle",
+      "choose": "Dönüşüm seç",
+      "convert": "Dönüştür",
+      "download": "İndir"
+    },
+    "features": {
+      "title": "Bugün yapabilecekleriniz",
+      "description": "SohappyPDF desteklenen dosyaları bulutta dönüştürür ve geçmişi hesabınızda tutar.",
+      "items": {
+        "conversion": {
+          "title": "PDF dönüştürme",
+          "description": "PDF dosyalarını Word, görsel veya metne dönüştürün. Gerektiğinde PDF’yi bölün veya sıkıştırın."
+        },
+        "workflow": {
+          "title": "Sade dosya akışı",
+          "description": "Bir dosya yükleyin, çıktıyı seçin ve dönüşüm bitince indirin."
+        },
+        "history": {
+          "title": "Dönüşüm geçmişi",
+          "description": "Geçmiş dönüşümleri inceleyin ve tamamlanan dosyaları hesabınızdan indirin."
+        },
+        "api": {
+          "title": "Geliştirici API’si",
+          "description": "Aynı dosya ve dönüşüm akışını bir API anahtarıyla çağırın."
+        },
+        "keys": {
+          "title": "API anahtarları",
+          "description": "Panelden anahtar oluşturun ve iptal edin. Ham anahtar yalnızca bir kez gösterilir."
+        },
+        "limits": {
+          "title": "Öngörülebilir limitler",
+          "description": "Ücretsiz ve Pro planlar aylık dönüşüm, depolama, dosya boyutu ve API limitlerini yayınlar."
+        },
+        "security": {
+          "title": "Özel dosyalar",
+          "description": "Dosyalar hesabınıza aittir. İndirmeler kısa ömürlü imzalı erişim kullanır."
+        },
+        "cloud": {
+          "title": "Bulut işleme",
+          "description": "Dönüşümler bulutta çalışır; yerelde dönüştürme yazılımı kurmanız gerekmez."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "Nasıl çalışır",
+      "step": "Adım {number}",
+      "upload": {
+        "title": "Yükle",
+        "description": "Desteklenen bir dosyayı panelden veya API’den gönderin."
+      },
+      "convert": {
+        "title": "Dönüştür",
+        "description": "Kullanılabilir bir dönüşüm seçin. İşlem arka planda devam eder."
+      },
+      "download": {
+        "title": "İndir",
+        "description": "Dönüşüm tamamlandığında sonucu indirin."
+      }
+    },
+    "developer": {
+      "title": "Aynı ürün için bir API",
+      "description": "Bir API anahtarı oluşturun, Bearer jetonuyla kimlik doğrulayın, ardından genel v1 API üzerinden yükleyin, dönüştürün ve indirin.",
+      "authHint": "Authorization: Bearer YOUR_API_KEY kullanın. Anahtarları URL’lere veya tarayıcı koduna koymayın.",
+      "exampleLabel": "Bir dönüşümü kontrol edin",
+      "cta": "API belgelerini oku"
+    },
+    "security": {
+      "title": "Gerçekten sağladığımız güvenlik özellikleri",
+      "description": "Bunlar ürün kontrolleridir; üçüncü taraf uyumluluk sertifikaları değildir.",
+      "items": {
+        "authentication": {
+          "title": "Güvenli kimlik doğrulama",
+          "description": "Panel, hesap verilerini göstermeden önce e-posta ve parola ile kimlik doğrular."
+        },
+        "privateFiles": {
+          "title": "Özel dosyalar",
+          "description": "Yüklenen ve dönüştürülen dosyalar oturum açmış hesaba veya API anahtarı sahibine bağlıdır."
+        },
+        "authorization": {
+          "title": "Sunucu tarafı yetkilendirme",
+          "description": "Dosya, dönüşüm ve API anahtarı işlemleri sunucuda yetkilendirilir."
+        },
+        "signedAccess": {
+          "title": "İmzalı sonuç erişimi",
+          "description": "İndirmeler herkese açık nesne bağlantıları yerine kısa ömürlü imzalı URL’lerle verilir."
+        },
+        "apiKeys": {
+          "title": "API anahtarı koruması",
+          "description": "Anahtarlar gizlidir. Sızan bir anahtarı panelden iptal edin ve yenisini oluşturun."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Ücretsiz ve Pro planlar",
+      "description": "Limitler, ürünün uyguladığı plan kataloğundan gelir.",
+      "viewPage": "Fiyatlandırmayı gör",
+      "note": "Pro yükseltmeleri girişten sonra mevcut Polar ödeme akışını kullanır. Bu sayfa bir fiyat uydurmaz.",
+      "free": {
+        "name": "Ücretsiz",
+        "badge": "Dahil",
+        "summary": "Aylık bir hakla dönüştürmeye başlayın.",
+        "cta": "Ücretsiz başla"
+      },
+      "pro": {
+        "name": "Pro",
+        "badge": "Daha yüksek limitler",
+        "summary": "Daha fazla dönüşüm, depolama, dosya boyutu ve API kapasitesi.",
+        "cta": "Pro’ya başla"
+      },
+      "limits": {
+        "conversions": "Ayda {count} dönüşüm",
+        "storage": "{size} depolama",
+        "fileSize": "Dosya başına en fazla {size}",
+        "apiKeys": "{count} API anahtarı",
+        "apiRate": "Dakikada {count} API isteği",
+        "apiAccess": "Genel API erişimi"
+      }
+    },
+    "footer": {
+      "brand": "SohappyPDF",
+      "menu": "Alt bilgi",
+      "product": "Ürün",
+      "pricing": "Fiyatlandırma",
+      "api": "API",
+      "signIn": "Giriş yap"
+    },
+    "metadata": {
+      "homeTitle": "SohappyPDF — İnsanlar ve API’ler için PDF dönüştürme",
+      "homeDescription": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. SohappyPDF aynı akışı genel bir API ile de sunar.",
+      "pricingTitle": "Fiyatlandırma",
+      "pricingDescription": "Ücretsiz ve Pro planların dönüşüm, depolama, dosya boyutu ve API limitlerini karşılaştırın."
+    }
   },
   "app": {
     "title": "Uygulama",
@@ -387,8 +546,10 @@
     },
     "usage": {
       "title": "API anahtarı kullanımı",
-      "description": "Anahtarı Authorization başlığında gönderin. Sorgu parametrelerine koymayın.",
-      "docsHint": "API belgelendirmesi ayrı olarak yayınlanacak."
+      "description": "Anahtarı Authorization başlığında gönderin. Sorgu parametrelerine veya tarayıcı koduna koymayın.",
+      "baseUrlLabel": "API taban URL’si:",
+      "rotateHint": "Anahtarı gizli tutun. Sızarsa hemen iptal edin.",
+      "docsLink": "API belgelendirmesini aç"
     },
     "validation": {
       "nameRequired": "Bir anahtar adı girin.",

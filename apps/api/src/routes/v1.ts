@@ -10,6 +10,7 @@ import { createBillingRoutes } from "./billing/index.js";
 import { createConversionRoutes } from "./conversions/index.js";
 import { createFileRoutes } from "./files/index.js";
 import { healthRoutes } from "./health.js";
+import { openApiRoutes } from "./openapi.js";
 
 export type V1RoutesOptions = {
   getFileService: () => FileService;
@@ -23,6 +24,7 @@ export type V1RoutesOptions = {
 export function createV1Routes(options: V1RoutesOptions) {
   const v1 = new Hono<AppEnv>();
   v1.route("/", healthRoutes);
+  v1.route("/", openApiRoutes);
   v1.route("/files", createFileRoutes(options));
   v1.route("/conversions", createConversionRoutes(options));
   v1.route("/api-keys", createApiKeyRoutes(options));

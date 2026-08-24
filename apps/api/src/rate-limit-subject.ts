@@ -35,5 +35,9 @@ export function isHealthPath(path: string): boolean {
 }
 
 export function isRateLimitExemptPath(path: string): boolean {
-  return isHealthPath(path) || path === "/api/v1/billing/webhooks";
+  return (
+    isHealthPath(path) ||
+    path === "/api/v1/billing/webhooks" ||
+    path === "/api/v1/openapi.json"
+  );
 }

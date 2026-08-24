@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "@/lib/i18n/navigation";
 import { useLogin } from "../hooks/use-login";
-import { AUTH_PATHS } from "../paths";
+import { AUTH_PATHS, signupPath } from "../paths";
 import { AuthFormError } from "./auth-form-error";
 
 export function LoginForm({ next }: { next?: string | null }) {
@@ -65,7 +65,7 @@ export function LoginForm({ next }: { next?: string | null }) {
         </Link>
         <Link
           className="text-muted-foreground underline-offset-4 hover:underline"
-          href={AUTH_PATHS.register}
+          href={next ? signupPath(next) : AUTH_PATHS.signup}
         >
           {t("registerLink")}
         </Link>

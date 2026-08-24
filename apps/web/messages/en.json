@@ -1,12 +1,171 @@
 {
   "metadata": {
     "title": "SohappyPDF",
-    "description": "Convert and process PDF files."
+    "description": "Convert PDFs and images with a simple workflow and a public API."
   },
-  "home": {
-    "title": "SohappyPDF",
-    "tagline": "The web application foundation is ready.",
-    "openApp": "Open application"
+  "marketing": {
+    "nav": {
+      "brand": "SohappyPDF",
+      "product": "Product",
+      "pricing": "Pricing",
+      "developers": "Developers",
+      "signIn": "Sign in",
+      "getStarted": "Get started",
+      "open": "Open menu",
+      "close": "Close menu",
+      "menu": "Site",
+      "skip": "Skip to content"
+    },
+    "hero": {
+      "eyebrow": "PDF conversion",
+      "title": "PDF conversion that stays simple for people and APIs.",
+      "description": "Upload a file, choose a conversion, and download the result. The same workflow is available in the dashboard and through the public API.",
+      "primaryCta": "Start for free",
+      "secondaryCta": "View API"
+    },
+    "demo": {
+      "title": "From upload to download",
+      "description": "The product workflow is the same in the dashboard: upload a file, choose a conversion, wait for processing, then download the result.",
+      "panelTitle": "Create conversion",
+      "fileLabel": "File",
+      "fileName": "report.pdf",
+      "conversionLabel": "Conversion",
+      "conversion": "PDF to PNG",
+      "resultLabel": "Result",
+      "result": "report.png",
+      "status": "Completed",
+      "upload": "Upload",
+      "choose": "Choose conversion",
+      "convert": "Convert",
+      "download": "Download"
+    },
+    "features": {
+      "title": "What you can do today",
+      "description": "SohappyPDF converts supported files in the cloud and keeps the history in your account.",
+      "items": {
+        "conversion": {
+          "title": "PDF conversion",
+          "description": "Convert PDFs to Word, images, or text. Split or compress a PDF when you need a different PDF result."
+        },
+        "workflow": {
+          "title": "Simple file workflow",
+          "description": "Upload one file, choose an output, and download it when the conversion completes."
+        },
+        "history": {
+          "title": "Conversion history",
+          "description": "Review past conversions and download completed files from your account."
+        },
+        "api": {
+          "title": "Developer API",
+          "description": "Call the same file and conversion workflow with an API key."
+        },
+        "keys": {
+          "title": "API keys",
+          "description": "Create and revoke keys in the dashboard. The raw key is shown only once."
+        },
+        "limits": {
+          "title": "Predictable limits",
+          "description": "Free and Pro plans publish monthly conversion, storage, file size, and API limits."
+        },
+        "security": {
+          "title": "Private files",
+          "description": "Files belong to your account. Downloads use short-lived signed access."
+        },
+        "cloud": {
+          "title": "Cloud processing",
+          "description": "Conversions run in the cloud, so you do not install conversion software locally."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "step": "Step {number}",
+      "upload": {
+        "title": "Upload",
+        "description": "Send a supported file from the dashboard or the API."
+      },
+      "convert": {
+        "title": "Convert",
+        "description": "Choose an available conversion. Processing continues in the background."
+      },
+      "download": {
+        "title": "Download",
+        "description": "Download the result when the conversion is complete."
+      }
+    },
+    "developer": {
+      "title": "An API for the same product",
+      "description": "Create an API key, authenticate with a Bearer token, then upload, convert, and download through the public v1 API.",
+      "authHint": "Use Authorization: Bearer YOUR_API_KEY. Do not put keys in URLs or browser code.",
+      "exampleLabel": "Check a conversion",
+      "cta": "Read the API docs"
+    },
+    "security": {
+      "title": "Security properties we actually provide",
+      "description": "These are product controls, not third-party compliance certifications.",
+      "items": {
+        "authentication": {
+          "title": "Secure authentication",
+          "description": "The dashboard uses email and password authentication before account data is shown."
+        },
+        "privateFiles": {
+          "title": "Private files",
+          "description": "Uploaded and converted files are scoped to the signed-in account or API key owner."
+        },
+        "authorization": {
+          "title": "Server-side authorization",
+          "description": "File, conversion, and API key actions are authorized on the server."
+        },
+        "signedAccess": {
+          "title": "Signed result access",
+          "description": "Downloads are issued as short-lived signed URLs rather than public object links."
+        },
+        "apiKeys": {
+          "title": "API key protection",
+          "description": "Keys are secrets. Revoke a leaked key in the dashboard and create a replacement."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Free and Pro plans",
+      "description": "Limits come from the same plan catalog the product enforces.",
+      "viewPage": "View pricing",
+      "note": "Pro upgrades use the existing Polar checkout after you sign in. This page does not invent a price.",
+      "free": {
+        "name": "Free",
+        "badge": "Included",
+        "summary": "Start converting with a monthly allowance.",
+        "cta": "Start for free"
+      },
+      "pro": {
+        "name": "Pro",
+        "badge": "Higher limits",
+        "summary": "More conversions, storage, file size, and API capacity.",
+        "cta": "Start Pro"
+      },
+      "limits": {
+        "conversions": "{count} conversions per month",
+        "storage": "{size} storage",
+        "fileSize": "Up to {size} per file",
+        "apiKeys": "{count} API keys",
+        "apiRate": "{count} API requests per minute",
+        "apiAccess": "Public API access"
+      }
+    },
+    "footer": {
+      "brand": "SohappyPDF",
+      "menu": "Footer",
+      "product": "Product",
+      "pricing": "Pricing",
+      "api": "API",
+      "signIn": "Sign in"
+    },
+    "metadata": {
+      "homeTitle": "SohappyPDF — PDF conversion for people and APIs",
+      "homeDescription": "Upload a file, convert it, and download the result. SohappyPDF also exposes the same workflow through a public API.",
+      "pricingTitle": "Pricing",
+      "pricingDescription": "Compare Free and Pro limits for conversions, storage, file size, and API access."
+    }
   },
   "app": {
     "title": "Application",
@@ -387,8 +546,10 @@
     },
     "usage": {
       "title": "Using an API key",
-      "description": "Send the key in the Authorization header. Do not put it in query parameters.",
-      "docsHint": "API documentation will be published separately."
+      "description": "Send the key in the Authorization header. Do not put it in query parameters or browser code.",
+      "baseUrlLabel": "API base URL:",
+      "rotateHint": "Treat the key as a secret. Revoke it immediately if it leaks.",
+      "docsLink": "Open API documentation"
     },
     "validation": {
       "nameRequired": "Enter a key name.",

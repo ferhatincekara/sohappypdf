@@ -53,4 +53,8 @@ describe("isRateLimitExemptPath", () => {
     expect(isRateLimitExemptPath("/api/v1/billing/webhooks")).toBe(true);
     expect(isRateLimitExemptPath("/api/v1/billing")).toBe(false);
   });
+
+  test("exempts the public OpenAPI document", () => {
+    expect(isRateLimitExemptPath("/api/v1/openapi.json")).toBe(true);
+  });
 });

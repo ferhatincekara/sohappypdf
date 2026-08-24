@@ -7,6 +7,10 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./plans": {
+      "types": "./src/default-plan-limits.ts",
+      "default": "./src/default-plan-limits.ts"
     }
   },
   "scripts": {

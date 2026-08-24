@@ -11,7 +11,13 @@ import { ApiKeyList } from "./api-key-list";
 import { ApiKeyRevokeDialog } from "./api-key-revoke-dialog";
 import { ApiKeyUsage } from "./api-key-usage";
 
-export function ApiKeysWorkspace() {
+export function ApiKeysWorkspace({
+  apiV1BaseUrl,
+  docsHref,
+}: {
+  apiV1BaseUrl: string;
+  docsHref: string;
+}) {
   const t = useTranslations("apiKeys");
   const tErrors = useTranslations("apiKeys.errors");
   const tRevoke = useTranslations("apiKeys.revoke");
@@ -64,7 +70,7 @@ export function ApiKeysWorkspace() {
           void refetch();
         }}
       />
-      <ApiKeyUsage />
+      <ApiKeyUsage apiV1BaseUrl={apiV1BaseUrl} docsHref={docsHref} />
       <ApiKeyCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ApiKeyRevokeDialog
         apiKey={keyToRevoke}

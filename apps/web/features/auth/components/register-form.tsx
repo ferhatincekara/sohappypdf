@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "@/lib/i18n/navigation";
 import { useRegister } from "../hooks/use-register";
-import { AUTH_PATHS } from "../paths";
+import { AUTH_PATHS, loginPath } from "../paths";
 import { AuthFormError } from "./auth-form-error";
 
 export function RegisterForm({ next }: { next?: string | null }) {
@@ -78,7 +78,7 @@ export function RegisterForm({ next }: { next?: string | null }) {
       </Button>
       <Link
         className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-        href={AUTH_PATHS.login}
+        href={next ? loginPath(next) : AUTH_PATHS.login}
       >
         {t("loginLink")}
       </Link>
