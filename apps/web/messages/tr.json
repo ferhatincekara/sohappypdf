@@ -1046,7 +1046,47 @@
       },
       "repair": {
         "title": "PDF’yi onar",
-        "hint": "Hasarlı dosyayı onarmayı deneyeceğiz. Onarım garanti değildir."
+        "hint": "Hasarlı bir dosyayı açıp yeniden oluşturmayı deneyeceğiz. Onarım garanti değildir.",
+        "output": "Önce analiz, sonra onarım, ardından indirme.",
+        "processing": "PDF’niz inceleniyor...",
+        "processingHint": "PDF’niz onarılıyor. Bu biraz sürebilir.",
+        "successTitle": "Onarılan PDF’niz hazır",
+        "successDescription": "Onarılan dosyayı indirin.",
+        "download": "PDF’i indir",
+        "repairAnother": "Başka bir PDF onar",
+        "processingFailed": "Bu PDF onarılamadı. Lütfen başka bir dosya deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF onarın.",
+        "faqHow": "Bir PDF yükleyin ve onarın. Hasarı gidermeyi deneriz, ardından sonucu indirebilirsiniz. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Düzgün açılmayan PDF’i sürükleyip bırakın."
+          },
+          "repair": {
+            "title": "Onar",
+            "description": "Dosyayı inceler ve yeniden oluşturmayı deneriz."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Onarım başarılıysa PDF’i alın."
+          }
+        },
+        "steps": {
+          "analyze": {
+            "title": "İncele",
+            "description": "Dosyanın onarılıp onarılamayacağını kontrol et."
+          },
+          "repair": {
+            "title": "Onar",
+            "description": "Kurtarılabilen içerikten yeni bir PDF oluştur."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Onarılan dosyayı kaydet."
+          }
+        }
       },
       "rotate": {
         "title": "Döndürülecek sayfaları seçin",

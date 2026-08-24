@@ -35,6 +35,27 @@ export function RepairPdfWorkspace(props: ToolSelectedWorkspaceProps) {
           {t("workspaces.repair.hint")}
         </p>
       </div>
+      <ol className="grid gap-3 sm:grid-cols-3">
+        {(["analyze", "repair", "download"] as const).map((step, index) => (
+          <li
+            key={step}
+            className="rounded-lg border border-border bg-card p-4"
+          >
+            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              {t("overview.step", { number: index + 1 })}
+            </p>
+            <p className="mt-1 text-sm font-medium text-foreground">
+              {t(`workspaces.repair.steps.${step}.title`)}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground text-pretty">
+              {t(`workspaces.repair.steps.${step}.description`)}
+            </p>
+          </li>
+        ))}
+      </ol>
+      <p className="text-sm font-medium text-foreground">
+        {t("workspaces.repair.output")}
+      </p>
       <ToolSelectedActions
         toolRoute={props.tool.route}
         state={props.state}

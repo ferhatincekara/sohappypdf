@@ -1046,7 +1046,47 @@
       },
       "repair": {
         "title": "Repair this PDF",
-        "hint": "We will try to fix a damaged file. Repair is not guaranteed."
+        "hint": "We'll try to open and rebuild a damaged file. Repair is not guaranteed.",
+        "output": "Analyze, then repair, then download the result.",
+        "processing": "Analyzing your PDF...",
+        "processingHint": "Repairing your PDF. This may take a moment.",
+        "successTitle": "Your repaired PDF is ready",
+        "successDescription": "Download the repaired file.",
+        "download": "Download PDF",
+        "repairAnother": "Repair another PDF",
+        "processingFailed": "We couldn't repair this PDF. Please try another file.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Repair another PDF to continue.",
+        "faqHow": "Upload a PDF and repair it. We'll try to fix damage, then you can download the result. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF that won't open correctly."
+          },
+          "repair": {
+            "title": "Repair",
+            "description": "We'll analyze the file and try to rebuild it."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get the repaired PDF if the repair succeeds."
+          }
+        },
+        "steps": {
+          "analyze": {
+            "title": "Analyze",
+            "description": "Check whether the file can be rebuilt."
+          },
+          "repair": {
+            "title": "Repair",
+            "description": "Create a new PDF from what can be recovered."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Save the repaired file."
+          }
+        }
       },
       "rotate": {
         "title": "Choose pages to rotate",
