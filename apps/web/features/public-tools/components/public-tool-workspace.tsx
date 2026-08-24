@@ -469,6 +469,24 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "unlock-pdf") {
+    return {
+      processingTitle: t("workspaces.unlock.processing"),
+      processingHint: t("workspaces.unlock.processingHint"),
+      successTitle: t("workspaces.unlock.successTitle"),
+      successDescription: t("workspaces.unlock.successDescription"),
+      downloadLabel: t("workspaces.unlock.download"),
+      resetLabel: t("workspaces.unlock.unlockAnother"),
+      expiredTitle: t("workspaces.unlock.expiredTitle"),
+      expiredDescription: t("workspaces.unlock.expiredDescription", { hours }),
+      processHint: t("workspaces.unlock.output"),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveUnlockErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -687,6 +705,30 @@ function resolveProtectErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.protect.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveUnlockErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "passwordProtected") {
+    return t("workspaces.unlock.wrongPassword");
+  }
+
+  if (errorKey === "processingFailed") {
+    return t("workspaces.unlock.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.unlock.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.unlock.expiredDescription", { hours });
   }
 
   return undefined;

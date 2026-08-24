@@ -29,8 +29,8 @@ export const TOOL_WORKSPACE_KINDS = [
   "compress",
   "convert",
   "imageToPdf",
-  "password",
   "protect",
+  "unlock",
   "repair",
   "ocr",
   "default",
@@ -82,7 +82,7 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
   }
 
   if (toolId === "unlock-pdf") {
-    return "password";
+    return "unlock";
   }
 
   if (toolId === "repair-pdf") {

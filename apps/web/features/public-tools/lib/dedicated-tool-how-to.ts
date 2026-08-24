@@ -12,7 +12,8 @@ export type DedicatedHowToWorkspace =
   | "imageToPdf"
   | "repair"
   | "ocr"
-  | "protect";
+  | "protect"
+  | "unlock";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -58,6 +59,10 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   },
   "protect-pdf": {
     workspace: "protect",
+    steps: ["upload", "password", "download"],
+  },
+  "unlock-pdf": {
+    workspace: "unlock",
     steps: ["upload", "password", "download"],
   },
 };

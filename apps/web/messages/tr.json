@@ -1080,6 +1080,39 @@
           }
         }
       },
+      "unlock": {
+        "title": "Bu PDF’nin kilidini aç",
+        "hint": "Mevcut parolayı girin. Parolasız açılabilen bir kopya oluşturacağız.",
+        "password": "Parola",
+        "required": "Devam etmek için parolayı girin.",
+        "output": "Parolasız açılan bir kopya alacaksınız.",
+        "wrongPassword": "Bu parola işe yaramadı. Kontrol edip tekrar deneyin.",
+        "processing": "PDF’nizin kilidi açılıyor...",
+        "processingHint": "Dosyanın bir kopyasından parola kaldırılıyor.",
+        "successTitle": "Kilidi açılmış PDF’niz hazır",
+        "successDescription": "Kilidi açılmış kopyayı indirin.",
+        "download": "PDF’i indir",
+        "unlockAnother": "Başka bir PDF’nin kilidini aç",
+        "processingFailed": "Bu PDF’nin kilidi açılamadı. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF’nin kilidini açın.",
+        "faqHow": "Parola korumalı bir PDF yükleyin, parolayı girin, ardından kilidi açın. Bu araç için giriş gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Kilitli PDF’i bırakın."
+          },
+          "password": {
+            "title": "Parolayı gir",
+            "description": "Dosyayı açmak için şu anda gereken parolayı yazın."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Kilidi açılmış bir kopya alın."
+          }
+        }
+      },
       "repair": {
         "title": "PDF’yi onar",
         "hint": "Hasarlı bir dosyayı açıp yeniden oluşturmayı deneyeceğiz. Onarım garanti değildir.",

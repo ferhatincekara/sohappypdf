@@ -134,6 +134,13 @@ describe("tool workspace helpers", () => {
     ).toEqual({ password: "secret" });
 
     expect(
+      buildToolConversionOptions("unlock-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        password: "secret",
+      }),
+    ).toEqual({ password: "secret" });
+
+    expect(
       buildToolConversionOptions("ai-summarizer", {
         ...DEFAULT_TOOL_WORKSPACE_STATE,
         outputFormat: "md",

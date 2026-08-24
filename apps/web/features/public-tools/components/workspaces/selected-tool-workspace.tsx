@@ -10,12 +10,12 @@ import { ImageToPdfWorkspace } from "./image-to-pdf-workspace";
 import { MergePdfWorkspace } from "./merge-pdf-workspace";
 import { OcrPdfWorkspace } from "./ocr-pdf-workspace";
 import { OrganizePdfWorkspace } from "./organize-pdf-workspace";
-import { PasswordPdfWorkspace } from "./password-pdf-workspace";
 import { ProtectPdfWorkspace } from "./protect-pdf-workspace";
 import { RemovePagesWorkspace } from "./remove-pages-workspace";
 import { RepairPdfWorkspace } from "./repair-pdf-workspace";
 import { RotatePdfWorkspace } from "./rotate-pdf-workspace";
 import { SplitPdfWorkspace } from "./split-pdf-workspace";
+import { UnlockPdfWorkspace } from "./unlock-pdf-workspace";
 
 export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
   switch (resolveToolWorkspaceKind(props.tool.id)) {
@@ -37,10 +37,10 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <ConvertPdfWorkspace {...props} />;
     case "imageToPdf":
       return <ImageToPdfWorkspace {...props} />;
-    case "password":
-      return <PasswordPdfWorkspace {...props} />;
     case "protect":
       return <ProtectPdfWorkspace {...props} />;
+    case "unlock":
+      return <UnlockPdfWorkspace {...props} />;
     case "repair":
       return <RepairPdfWorkspace {...props} />;
     case "ocr":

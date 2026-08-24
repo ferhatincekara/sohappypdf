@@ -13,7 +13,7 @@ describe("resolveToolWorkspaceKind", () => {
     expect(resolveToolWorkspaceKind("pdf-to-word")).toBe("convert");
     expect(resolveToolWorkspaceKind("jpg-to-pdf")).toBe("imageToPdf");
     expect(resolveToolWorkspaceKind("protect-pdf")).toBe("protect");
-    expect(resolveToolWorkspaceKind("unlock-pdf")).toBe("password");
+    expect(resolveToolWorkspaceKind("unlock-pdf")).toBe("unlock");
     expect(resolveToolWorkspaceKind("repair-pdf")).toBe("repair");
     expect(resolveToolWorkspaceKind("ocr-pdf")).toBe("ocr");
     expect(resolveToolWorkspaceKind("edit-pdf")).toBe("default");

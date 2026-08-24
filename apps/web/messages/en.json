@@ -1080,6 +1080,39 @@
           }
         }
       },
+      "unlock": {
+        "title": "Unlock this PDF",
+        "hint": "Enter the current password. We'll create an unlocked copy you can open without it.",
+        "password": "Password",
+        "required": "Enter the password to continue.",
+        "output": "You'll get a copy that opens without a password.",
+        "wrongPassword": "That password didn't work. Check it and try again.",
+        "processing": "Unlocking your PDF...",
+        "processingHint": "Removing the password from a copy of the file.",
+        "successTitle": "Your unlocked PDF is ready",
+        "successDescription": "Download the unlocked copy.",
+        "download": "Download PDF",
+        "unlockAnother": "Unlock another PDF",
+        "processingFailed": "We couldn't unlock this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Unlock another PDF to continue.",
+        "faqHow": "Upload a password-protected PDF, enter the password, then unlock. Sign in is required for this tool.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the locked PDF."
+          },
+          "password": {
+            "title": "Enter password",
+            "description": "Type the password currently required to open it."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get an unlocked copy."
+          }
+        }
+      },
       "repair": {
         "title": "Repair this PDF",
         "hint": "We'll try to open and rebuild a damaged file. Repair is not guaranteed.",
