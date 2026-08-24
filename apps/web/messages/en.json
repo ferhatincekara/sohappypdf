@@ -790,11 +790,87 @@
     "workspace": {
       "fileList": "Selected files",
       "options": "Tool options",
+      "replaceFile": "Replace",
+      "remove": "Remove",
       "removeFile": "Remove {name}",
       "retry": "Retry upload",
       "fileReady": "Ready",
       "filePending": "Waiting to upload",
       "pageCount": "{count, plural, one {# page} other {# pages}}"
+    },
+    "pages": {
+      "pageLabel": "Page {number}",
+      "selectAll": "Select all",
+      "clear": "Clear"
+    },
+    "workspaces": {
+      "split": {
+        "title": "Select pages",
+        "hint": "Choose the pages to keep. They will be extracted into one PDF.",
+        "selectedCount": "{count, plural, one {# page selected} other {# pages selected}}",
+        "output": "{count, plural, one {# page will be saved as 1 PDF} other {# pages will be saved as 1 PDF}}",
+        "advanced": "Advanced: page ranges",
+        "advancedHint": "Type ranges such as 1-3, 5. Visual selection stays in sync.",
+        "selectPrompt": "Select at least one page",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "Page preview is unavailable. You can still split using page ranges below."
+      },
+      "merge": {
+        "title": "Arrange files",
+        "hint": "Drag files into the order you want in the merged PDF.",
+        "selectPrompt": "Select at least two PDFs to merge."
+      },
+      "compress": {
+        "title": "Compression",
+        "hint": "Higher compression makes a smaller file. Quality may drop.",
+        "medium": {
+          "title": "Recommended",
+          "hint": "Balanced size and quality for most files."
+        },
+        "high": {
+          "title": "Smallest file",
+          "hint": "Maximum compression. Fine for sharing, not archival."
+        },
+        "low": {
+          "title": "Best quality",
+          "hint": "Keeps more visual quality with less size reduction."
+        }
+      },
+      "convert": {
+        "hint": "Your file is ready to convert."
+      },
+      "password": {
+        "unlockTitle": "Unlock this PDF",
+        "unlockHint": "Enter the current password to open the file.",
+        "protectTitle": "Protect this PDF",
+        "protectHint": "Set a password that will be required to open the result.",
+        "required": "Enter a password to continue."
+      },
+      "repair": {
+        "title": "Repair this PDF",
+        "hint": "We will try to fix a damaged file. Repair is not guaranteed."
+      },
+      "rotate": {
+        "title": "Rotate pages"
+      },
+      "organize": {
+        "title": "Organize pages"
+      },
+      "remove": {
+        "title": "Remove pages"
+      },
+      "ocr": {
+        "title": "Recognize text"
+      },
+      "sign": {
+        "title": "Sign PDF"
+      },
+      "edit": {
+        "title": "Edit PDF"
+      },
+      "generic": {
+        "title": "Process this file"
+      }
     },
     "phases": {
       "uploading": "Uploading",
@@ -931,7 +1007,7 @@
     },
     "split-pdf": {
       "name": "Split PDF",
-      "description": "Extract pages or split a PDF into separate files."
+      "description": "Extract selected pages into a new PDF."
     },
     "organize-pdf": {
       "name": "Organize PDF",

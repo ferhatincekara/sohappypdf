@@ -51,8 +51,8 @@ export function ToolDropzone({
     <label
       htmlFor={inputId}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center gap-3 rounded-lg border border-dashed border-border bg-card text-center outline-none transition-colors motion-safe:duration-150",
-        compact ? "px-4 py-6" : "px-6 py-12",
+        "relative flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card text-center outline-none transition-colors motion-safe:duration-150",
+        compact ? "px-4 py-6" : "px-6 py-16",
         "has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50",
         isDragging && !disabled && "border-foreground bg-muted/50",
         disabled && "pointer-events-none cursor-not-allowed opacity-60",
@@ -104,7 +104,7 @@ export function ToolDropzone({
           event.target.value = "";
         }}
       />
-      <span className="flex size-11 items-center justify-center rounded-full bg-muted text-foreground">
+      <span className="flex size-12 items-center justify-center rounded-full bg-muted/70 text-muted-foreground">
         <UploadIcon className="size-5" aria-hidden="true" />
       </span>
       <span className="text-base font-medium text-foreground">{title}</span>

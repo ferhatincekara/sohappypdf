@@ -7,7 +7,11 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/packages/db/drizzle"]
+    "includes": [
+      "**",
+      "!**/packages/db/drizzle",
+      "!**/apps/web/public/pdf.worker.min.mjs"
+    ]
   },
   "formatter": {
     "enabled": true,

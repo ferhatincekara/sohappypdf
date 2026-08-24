@@ -1,0 +1,30 @@
+"use client";
+
+import { resolveToolWorkspaceKind } from "../../lib/tool-workspace-kind";
+import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
+import { CompressPdfWorkspace } from "./compress-pdf-workspace";
+import { ConvertPdfWorkspace } from "./convert-pdf-workspace";
+import { DefaultToolWorkspace } from "./default-tool-workspace";
+import { MergePdfWorkspace } from "./merge-pdf-workspace";
+import { PasswordPdfWorkspace } from "./password-pdf-workspace";
+import { RepairPdfWorkspace } from "./repair-pdf-workspace";
+import { SplitPdfWorkspace } from "./split-pdf-workspace";
+
+export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
+  switch (resolveToolWorkspaceKind(props.tool.id)) {
+    case "split":
+      return <SplitPdfWorkspace {...props} />;
+    case "merge":
+      return <MergePdfWorkspace {...props} />;
+    case "compress":
+      return <CompressPdfWorkspace {...props} />;
+    case "convert":
+      return <ConvertPdfWorkspace {...props} />;
+    case "password":
+      return <PasswordPdfWorkspace {...props} />;
+    case "repair":
+      return <RepairPdfWorkspace {...props} />;
+    default:
+      return <DefaultToolWorkspace {...props} />;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { FileIcon, GripVerticalIcon, XIcon } from "lucide-react";
+import { GripVerticalIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
 } from "@/features/files/lib/format-file-size";
 import { cn } from "@/lib/utils";
 import { fileExtensionLabel, type WorkspaceFile } from "../lib/workspace-files";
+import { ToolFilePreview } from "./tool-file-preview";
 
 export function ToolFileList({
   files,
@@ -71,7 +72,7 @@ export function ToolFileList({
             reorderable && !disabled && "cursor-grab active:cursor-grabbing",
           )}
         >
-          <FileThumbnail entry={entry} />
+          <ToolFilePreview entry={entry} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
@@ -143,25 +144,6 @@ export function ToolFileList({
         </li>
       ))}
     </ul>
-  );
-}
-
-function FileThumbnail({ entry }: { entry: WorkspaceFile }) {
-  if (entry.previewUrl !== null) {
-    return (
-      // biome-ignore lint/performance/noImgElement: local object URL preview
-      <img
-        src={entry.previewUrl}
-        alt=""
-        className="size-12 shrink-0 rounded-md border border-border object-cover"
-      />
-    );
-  }
-
-  return (
-    <span className="flex size-12 shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground">
-      <FileIcon className="size-5" aria-hidden="true" />
-    </span>
   );
 }
 

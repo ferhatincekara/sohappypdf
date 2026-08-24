@@ -34,7 +34,6 @@ import {
 } from "../lib/validate-tool-process";
 import {
   appendWorkspaceFiles,
-  areWorkspaceFilesReady,
   clearWorkspaceFiles,
   createWorkspaceFiles,
   hasUploadingWorkspaceFiles,
@@ -144,11 +143,19 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     execution?.status === "queued" ||
     execution?.status === "processing";
 
+  const conversionOptions = buildToolConversionOptions(tool.id, workspaceState);
   const canProcess =
     ux.status === "selected" &&
     !isBusy &&
     !session.isPending &&
-    areWorkspaceFilesReady(files);
+    validateToolProcess({
+      toolId: tool.id,
+      allowsAnonymous: tool.allowsAnonymous,
+      isAuthenticated,
+      files,
+      maxFiles,
+      options: conversionOptions,
+    }).ok;
 
   function stopWorkflow(id: string) {
     const workflow = workflowsRef.current.get(id);
@@ -257,17 +264,36 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
   }
 
   function addFiles(selected: FileList | File[]) {
+    ingestFiles(selected, false);
+  }
+
+  function replaceFiles(selected: FileList | File[]) {
+    ingestFiles(selected, true);
+  }
+
+  function ingestFiles(selected: FileList | File[], replace: boolean) {
     setSelectionError(null);
     setProcessError(null);
     setDownloadError(null);
     setResultExpired(false);
     setExecutionId(null);
 
+    if (replace) {
+      for (const id of workflowsRef.current.keys()) {
+        stopWorkflow(id);
+      }
+      setWorkspaceState((current) => ({
+        ...current,
+        splitRanges: "",
+      }));
+    }
+
     const created = createWorkspaceFiles(selected);
 
     setFiles((current) => {
+      const base = replace ? clearWorkspaceFiles(current) : current;
       const { files: next, rejected } = appendWorkspaceFiles(
-        current,
+        base,
         created,
         maxFiles,
       );
@@ -528,6 +554,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     maxFileSizeBytes,
     isDownloading,
     addFiles,
+    replaceFiles,
     onRemove,
     onRetryUpload,
     onMove: (index: number, direction: -1 | 1) => {

@@ -8,17 +8,13 @@ import type { ToolWorkspaceState } from "../lib/tool-workspace";
 
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
-    case "compress-pdf":
     case "rotate-pdf":
-    case "split-pdf":
     case "organize-pdf":
     case "reorder-pages":
     case "remove-pages":
     case "crop-pdf":
     case "watermark-pdf":
     case "page-numbers-pdf":
-    case "protect-pdf":
-    case "unlock-pdf":
     case "ai-summarizer":
     case "translate-pdf":
       return true;
@@ -86,21 +82,6 @@ export function ToolOptionsPanel({
             <option value={180}>180°</option>
             <option value={270}>270°</option>
           </select>
-        </div>
-      );
-    case "split-pdf":
-      return (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="split-ranges">{t("splitRanges")}</Label>
-          <Input
-            id="split-ranges"
-            placeholder={t("splitRangesPlaceholder")}
-            value={state.splitRanges}
-            disabled={disabled}
-            onChange={(event) => {
-              onChange({ ...state, splitRanges: event.target.value });
-            }}
-          />
         </div>
       );
     case "organize-pdf":

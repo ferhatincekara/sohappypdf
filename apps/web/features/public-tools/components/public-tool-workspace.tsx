@@ -13,25 +13,9 @@ import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
 import { ToolExpiredState } from "./tool-expired-state";
 import { ToolMobileActionBar } from "./tool-mobile-action-bar";
-import {
-  ToolOptionsPanel,
-  toolHasWorkspaceOptions,
-} from "./tool-options-panel";
 import { ToolProcessingState } from "./tool-processing-state";
-import { ToolSelectedState } from "./tool-selected-state";
 import { ToolSuccessState } from "./tool-success-state";
-
-function processActionKey(toolId: string): "merge" | "split" | "process" {
-  if (toolId === "merge-pdf") {
-    return "merge";
-  }
-
-  if (toolId === "split-pdf") {
-    return "split";
-  }
-
-  return "process";
-}
+import { SelectedToolWorkspace } from "./workspaces/selected-tool-workspace";
 
 export type PublicToolSelectedSlot = {
   defaultSelected: ReactNode;
@@ -46,6 +30,7 @@ export function PublicToolWorkspace({
   renderSelected?: (slot: PublicToolSelectedSlot) => ReactNode;
 }) {
   const t = useTranslations("publicTools");
+  const tTools = useTranslations("tools");
   const workspace = usePublicToolWorkspace(tool);
   const formatsLabel = formatAcceptedFormats(
     tool.inputFormats,
@@ -53,45 +38,21 @@ export function PublicToolWorkspace({
   );
   const maxSizeLabel = formatFileSize(workspace.maxFileSizeBytes);
   const accept = acceptForTool(tool);
-  const processLabel = t(processActionKey(tool.id));
-  const hasOptions = toolHasWorkspaceOptions(tool.id);
+  const processLabel = tTools(`${tool.id}.name`);
   const { ux } = workspace;
 
   if (workspace.isSessionPending) {
     return (
-      <div className="rounded-lg border border-border bg-card p-8">
+      <div className="rounded-xl border border-border bg-card p-8">
         <p className="text-sm text-muted-foreground">{t("loading")}</p>
       </div>
     );
   }
 
-  const options =
-    ux.status === "selected" && hasOptions ? (
-      <section
-        aria-labelledby="tool-options-heading"
-        className="rounded-lg border border-border bg-card p-4"
-      >
-        <h2
-          id="tool-options-heading"
-          className="text-sm font-medium text-foreground"
-        >
-          {t("workspace.options")}
-        </h2>
-        <div className="mt-3">
-          <ToolOptionsPanel
-            tool={tool}
-            state={workspace.workspaceState}
-            onChange={workspace.setWorkspaceState}
-            disabled={false}
-          />
-        </div>
-      </section>
-    ) : null;
-
   const defaultSelected =
     ux.status === "selected" ? (
-      <ToolSelectedState
-        toolRoute={tool.route}
+      <SelectedToolWorkspace
+        tool={tool}
         state={ux}
         accept={accept}
         multiple={workspace.maxFiles > 1}
@@ -102,8 +63,10 @@ export function PublicToolWorkspace({
         disabled={workspace.isBusy}
         canProcess={workspace.canProcess}
         processLabel={processLabel}
-        options={options}
+        workspaceState={workspace.workspaceState}
+        setWorkspaceState={workspace.setWorkspaceState}
         onSelectFiles={workspace.addFiles}
+        onReplaceFiles={workspace.replaceFiles}
         onMove={workspace.onMove}
         onReorder={workspace.onReorder}
         onRemove={workspace.onRemove}

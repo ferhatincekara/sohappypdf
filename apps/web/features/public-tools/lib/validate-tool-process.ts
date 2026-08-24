@@ -10,6 +10,7 @@ import {
 } from "./workspace-files";
 
 const TOOLS_REQUIRING_OPTIONS = new Set([
+  "split-pdf",
   "organize-pdf",
   "reorder-pages",
   "remove-pages",

@@ -94,5 +94,27 @@ describe("validate tool process", () => {
         options: undefined,
       }),
     ).toEqual({ ok: false, errorKey: "invalidOptions" });
+
+    expect(
+      validateToolProcess({
+        toolId: "split-pdf",
+        allowsAnonymous: true,
+        isAuthenticated: false,
+        files: files.map((file) => ({ ...file, status: "ready" })),
+        maxFiles: 1,
+        options: undefined,
+      }),
+    ).toEqual({ ok: false, errorKey: "invalidOptions" });
+
+    expect(
+      validateToolProcess({
+        toolId: "split-pdf",
+        allowsAnonymous: true,
+        isAuthenticated: false,
+        files: files.map((file) => ({ ...file, status: "ready" })),
+        maxFiles: 1,
+        options: { ranges: [{ start: 1, end: 2 }] },
+      }),
+    ).toEqual({ ok: true });
   });
 });

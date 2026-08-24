@@ -790,11 +790,87 @@
     "workspace": {
       "fileList": "Seçilen dosyalar",
       "options": "Araç ayarları",
+      "replaceFile": "Değiştir",
+      "remove": "Kaldır",
       "removeFile": "{name} dosyasını kaldır",
       "retry": "Yüklemeyi tekrar dene",
       "fileReady": "Hazır",
       "filePending": "Yükleme bekleniyor",
       "pageCount": "{count, plural, one {# sayfa} other {# sayfa}}"
+    },
+    "pages": {
+      "pageLabel": "Sayfa {number}",
+      "selectAll": "Tümünü seç",
+      "clear": "Temizle"
+    },
+    "workspaces": {
+      "split": {
+        "title": "Sayfa seç",
+        "hint": "Tutmak istediğiniz sayfaları seçin. Seçilen sayfalar tek bir PDF olarak çıkarılır.",
+        "selectedCount": "{count, plural, one {# sayfa seçildi} other {# sayfa seçildi}}",
+        "output": "{count, plural, one {# sayfa 1 PDF olarak kaydedilecek} other {# sayfa 1 PDF olarak kaydedilecek}}",
+        "advanced": "Gelişmiş: sayfa aralıkları",
+        "advancedHint": "1-3, 5 gibi aralıklar yazabilirsiniz. Görsel seçim senkron kalır.",
+        "selectPrompt": "En az bir sayfa seçin",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+        "previewFailed": "Sayfa önizlemesi kullanılamıyor. Aşağıdaki sayfa aralıklarıyla yine de bölebilirsiniz."
+      },
+      "merge": {
+        "title": "Dosyaları düzenle",
+        "hint": "Birleştirilen PDF’de istediğiniz sıraya sürükleyin.",
+        "selectPrompt": "Birleştirmek için en az iki PDF seçin."
+      },
+      "compress": {
+        "title": "Sıkıştırma",
+        "hint": "Daha yüksek sıkıştırma daha küçük dosya üretir. Kalite düşebilir.",
+        "medium": {
+          "title": "Önerilen",
+          "hint": "Çoğu dosya için boyut ve kalite dengesi."
+        },
+        "high": {
+          "title": "En küçük dosya",
+          "hint": "Maksimum sıkıştırma. Paylaşım için uygun, arşiv için değil."
+        },
+        "low": {
+          "title": "En iyi kalite",
+          "hint": "Görüntü kalitesini daha çok korur, daha az küçültür."
+        }
+      },
+      "convert": {
+        "hint": "Dosyanız dönüştürülmeye hazır."
+      },
+      "password": {
+        "unlockTitle": "PDF kilidini aç",
+        "unlockHint": "Dosyayı açmak için mevcut parolayı girin.",
+        "protectTitle": "PDF’yi koru",
+        "protectHint": "Sonucu açmak için gereken bir parola belirleyin.",
+        "required": "Devam etmek için bir parola girin."
+      },
+      "repair": {
+        "title": "PDF’yi onar",
+        "hint": "Hasarlı dosyayı onarmayı deneyeceğiz. Onarım garanti değildir."
+      },
+      "rotate": {
+        "title": "Sayfaları döndür"
+      },
+      "organize": {
+        "title": "Sayfaları düzenle"
+      },
+      "remove": {
+        "title": "Sayfaları sil"
+      },
+      "ocr": {
+        "title": "Metni tanı"
+      },
+      "sign": {
+        "title": "PDF imzala"
+      },
+      "edit": {
+        "title": "PDF düzenle"
+      },
+      "generic": {
+        "title": "Bu dosyayı işle"
+      }
     },
     "phases": {
       "uploading": "Yükleniyor",
@@ -931,7 +1007,7 @@
     },
     "split-pdf": {
       "name": "PDF böl",
-      "description": "Sayfaları ayırın veya PDF'yi ayrı dosyalara bölün."
+      "description": "Seçilen sayfaları yeni bir PDF'ye çıkarın."
     },
     "organize-pdf": {
       "name": "PDF düzenle",

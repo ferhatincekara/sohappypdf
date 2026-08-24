@@ -1,0 +1,26 @@
+import type { ToolDefinition } from "@repo/tools/catalog";
+import type { ToolWorkspaceState } from "../lib/tool-workspace";
+import type { ToolSelectedUxState } from "./tool-ux-state";
+
+export type ToolSelectedWorkspaceProps = {
+  tool: ToolDefinition;
+  state: ToolSelectedUxState;
+  accept: string;
+  multiple: boolean;
+  canAddFiles: boolean;
+  formatsLabel: string;
+  maxSizeLabel: string;
+  reorderable: boolean;
+  disabled: boolean;
+  canProcess: boolean;
+  processLabel: string;
+  workspaceState: ToolWorkspaceState;
+  setWorkspaceState: (next: ToolWorkspaceState) => void;
+  onSelectFiles: (files: FileList | File[]) => void;
+  onReplaceFiles: (files: FileList | File[]) => void;
+  onMove: (index: number, direction: -1 | 1) => void;
+  onReorder: (fromIndex: number, toIndex: number) => void;
+  onRemove: (id: string) => void;
+  onRetryUpload: (id: string) => void;
+  onProcess: () => void;
+};
