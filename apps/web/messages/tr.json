@@ -1008,7 +1008,47 @@
         }
       },
       "remove": {
-        "title": "Sayfaları sil"
+        "title": "Silinecek sayfaları seçin",
+        "hint": "Kaldırmak istediğiniz sayfaları seçin. En az bir sayfa kalmalıdır.",
+        "selectPrompt": "Silmek için en az bir sayfa seçin.",
+        "keepOnePage": "PDF’de en az bir sayfa bırakın.",
+        "willRemoveBadge": "Sil",
+        "resultTitle": "Ne olacak",
+        "output": "{count, plural, one {# sayfa silinecek.} other {# sayfa silinecek.}}",
+        "remaining": "{count, plural, one {PDF # sayfa olacak.} other {PDF # sayfa olacak.}}",
+        "advanced": "Gelişmiş",
+        "advancedTitle": "Silinecek sayfaları yazın",
+        "advancedHint": "Sayfa numaraları veya aralıklar kullanın, örneğin 2, 5-7.",
+        "advancedPlaceholder": "ör. 2, 5-7",
+        "advancedExample": "Örnek: 2, 5-7",
+        "advancedError": "Sayfa numaralarını kontrol edin. Virgül ve 2, 5-7 gibi aralıklar kullanın.",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+        "previewFailed": "Bu PDF önizlenemedi.",
+        "processing": "Sayfalar siliniyor...",
+        "processingHint": "Seçtiğiniz sayfalar olmadan yeni bir PDF oluşturuluyor.",
+        "successTitle": "PDF’niz hazır",
+        "successDescription": "Bu sayfaların silindiği PDF’i indirin.",
+        "download": "PDF’i indir",
+        "removeAnother": "Başka bir PDF’den sayfa sil",
+        "processingFailed": "Bu sayfalar silinemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF’den sayfa silin.",
+        "faqHow": "Bir PDF yükleyin, silinecek sayfaları seçin ve kaldırın. En az bir sayfa kalmalıdır. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Düzenlemek istediğiniz PDF’i sürükleyip bırakın."
+          },
+          "select": {
+            "title": "Sayfa seç",
+            "description": "Kaldırılması gereken sayfaları seçin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Bu sayfalar olmadan bir PDF alın."
+          }
+        }
       },
       "ocr": {
         "title": "Metni tanı"

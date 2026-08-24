@@ -253,8 +253,13 @@ export function buildToolConversionOptions(
       return order === undefined ? undefined : { order };
     }
     case "remove-pages": {
-      const pages = parsePageListInput(state.pagesToRemove);
-      return pages === undefined ? undefined : { pages };
+      const pages = parseSelectedPagesInput(state.pagesToRemove);
+
+      if (pages === undefined || pages.length === 0) {
+        return undefined;
+      }
+
+      return { pages };
     }
     case "crop-pdf":
       return {

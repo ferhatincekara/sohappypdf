@@ -24,6 +24,7 @@ export const TOOL_WORKSPACE_KINDS = [
   "organize",
   "merge",
   "rotate",
+  "remove",
   "compress",
   "convert",
   "password",
@@ -52,6 +53,10 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
 
   if (toolId === "rotate-pdf") {
     return "rotate";
+  }
+
+  if (toolId === "remove-pages") {
+    return "remove";
   }
 
   if (toolId === "compress-pdf") {

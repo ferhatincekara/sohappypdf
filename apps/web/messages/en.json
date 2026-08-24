@@ -1008,7 +1008,47 @@
         }
       },
       "remove": {
-        "title": "Remove pages"
+        "title": "Choose pages to delete",
+        "hint": "Select the pages you want to remove. At least one page must remain.",
+        "selectPrompt": "Select at least one page to delete.",
+        "keepOnePage": "Keep at least one page in the PDF.",
+        "willRemoveBadge": "Remove",
+        "resultTitle": "What will happen",
+        "output": "{count, plural, one {# page will be removed.} other {# pages will be removed.}}",
+        "remaining": "{count, plural, one {The PDF will have # page.} other {The PDF will have # pages.}}",
+        "advanced": "Advanced",
+        "advancedTitle": "Enter pages to delete",
+        "advancedHint": "Use page numbers or ranges, for example 2, 5-7.",
+        "advancedPlaceholder": "e.g. 2, 5-7",
+        "advancedExample": "Example: 2, 5-7",
+        "advancedError": "Check the page numbers. Use commas and ranges like 2, 5-7.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "processing": "Removing pages...",
+        "processingHint": "Creating a new PDF without the pages you selected.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the PDF with those pages removed.",
+        "download": "Download PDF",
+        "removeAnother": "Delete pages from another PDF",
+        "processingFailed": "We couldn't remove those pages. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Delete pages from another PDF to continue.",
+        "faqHow": "Upload a PDF, select the pages to delete, then remove them. At least one page must remain. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to edit."
+          },
+          "select": {
+            "title": "Select pages",
+            "description": "Choose the pages that should be removed."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF without those pages."
+          }
+        }
       },
       "ocr": {
         "title": "Recognize text"

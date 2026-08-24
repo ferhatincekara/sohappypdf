@@ -9,7 +9,6 @@ import type { ToolWorkspaceState } from "../lib/tool-workspace";
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
     case "reorder-pages":
-    case "remove-pages":
     case "crop-pdf":
     case "watermark-pdf":
     case "page-numbers-pdf":
@@ -69,21 +68,6 @@ export function ToolOptionsPanel({
             disabled={disabled}
             onChange={(event) => {
               onChange({ ...state, pageOrder: event.target.value });
-            }}
-          />
-        </div>
-      );
-    case "remove-pages":
-      return (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="remove-pages">{t("pagesToRemove")}</Label>
-          <Input
-            id="remove-pages"
-            placeholder={t("pagesToRemovePlaceholder")}
-            value={state.pagesToRemove}
-            disabled={disabled}
-            onChange={(event) => {
-              onChange({ ...state, pagesToRemove: event.target.value });
             }}
           />
         </div>

@@ -7,6 +7,7 @@ describe("dedicatedHowToForTool", () => {
     expect(dedicatedHowToForTool("organize-pdf")?.workspace).toBe("organize");
     expect(dedicatedHowToForTool("merge-pdf")?.workspace).toBe("merge");
     expect(dedicatedHowToForTool("rotate-pdf")?.workspace).toBe("rotate");
+    expect(dedicatedHowToForTool("remove-pages")?.workspace).toBe("remove");
     expect(dedicatedHowToForTool("compress-pdf")).toBeNull();
   });
 });

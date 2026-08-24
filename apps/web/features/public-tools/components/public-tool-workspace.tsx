@@ -60,6 +60,9 @@ export function PublicToolWorkspace({
       parseSelectedPagesInput(workspace.workspaceState.pageSelection)?.length ??
       0,
     rotationDegrees: workspace.workspaceState.rotationDegrees,
+    removeSelectedCount:
+      parseSelectedPagesInput(workspace.workspaceState.pagesToRemove)?.length ??
+      0,
     errorKey: ux.status === "error" ? ux.error.key : null,
     hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
   });
@@ -202,6 +205,7 @@ function dedicatedToolShellCopy({
   mergeFileCount,
   rotateSelectedCount,
   rotationDegrees,
+  removeSelectedCount,
   errorKey,
   hours,
 }: {
@@ -212,6 +216,7 @@ function dedicatedToolShellCopy({
   mergeFileCount: number;
   rotateSelectedCount: number;
   rotationDegrees: number;
+  removeSelectedCount: number;
   errorKey: PublicToolErrorKey | null;
   hours: number;
 }): {
@@ -315,6 +320,27 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "remove-pages") {
+    return {
+      processingTitle: t("workspaces.remove.processing"),
+      processingHint: t("workspaces.remove.processingHint"),
+      successTitle: t("workspaces.remove.successTitle"),
+      successDescription: t("workspaces.remove.successDescription"),
+      downloadLabel: t("workspaces.remove.download"),
+      resetLabel: t("workspaces.remove.removeAnother"),
+      expiredTitle: t("workspaces.remove.expiredTitle"),
+      expiredDescription: t("workspaces.remove.expiredDescription", { hours }),
+      processHint:
+        removeSelectedCount === 0
+          ? t("workspaces.remove.selectPrompt")
+          : t("workspaces.remove.output", { count: removeSelectedCount }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveRemoveErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -393,6 +419,26 @@ function resolveRotateErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.rotate.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveRemoveErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.remove.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.remove.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.remove.expiredDescription", { hours });
   }
 
   return undefined;

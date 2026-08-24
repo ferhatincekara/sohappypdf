@@ -82,6 +82,13 @@ describe("tool workspace helpers", () => {
     ).toEqual({ pages: [2] });
 
     expect(
+      buildToolConversionOptions("remove-pages", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        pagesToRemove: "1-2",
+      }),
+    ).toEqual({ pages: [1, 2] });
+
+    expect(
       buildToolConversionOptions("watermark-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
     ).toEqual({ text: "CONFIDENTIAL" });
 

@@ -1,4 +1,9 @@
-export type DedicatedHowToWorkspace = "split" | "organize" | "merge" | "rotate";
+export type DedicatedHowToWorkspace =
+  | "split"
+  | "organize"
+  | "merge"
+  | "rotate"
+  | "remove";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -20,6 +25,10 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   },
   "rotate-pdf": {
     workspace: "rotate",
+    steps: ["upload", "select", "download"],
+  },
+  "remove-pages": {
+    workspace: "remove",
     steps: ["upload", "select", "download"],
   },
 };
