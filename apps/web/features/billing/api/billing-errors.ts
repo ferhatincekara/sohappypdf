@@ -60,7 +60,7 @@ export function mapBillingError(
     return BILLING_ERROR_KEYS.conflict;
   }
 
-  if (error.code === "CONFIGURATION_ERROR" || error.status === 500) {
+  if (error.code === "CONFIGURATION_ERROR") {
     return BILLING_ERROR_KEYS.configuration;
   }
 

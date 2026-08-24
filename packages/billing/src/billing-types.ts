@@ -80,6 +80,7 @@ export type PolarClient = {
   createCustomerPortal: (input: {
     customerId: string;
   }) => Promise<PolarCustomerPortal>;
+  listSubscriptionsByExternalId: (externalId: string) => Promise<unknown[]>;
 };
 
 export type PolarWebhookEvent = {

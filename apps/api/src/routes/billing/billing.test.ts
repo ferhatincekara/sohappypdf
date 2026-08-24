@@ -148,7 +148,9 @@ function createMemoryApiKeyRepository(
   };
 }
 
-function createPolarClientMock(): PolarClient {
+function createPolarClientMock(
+  overrides: Partial<PolarClient> = {},
+): PolarClient {
   return {
     async findCustomerByExternalId() {
       return null;
@@ -162,6 +164,10 @@ function createPolarClientMock(): PolarClient {
     async createCustomerPortal() {
       return { url: "https://polar.example/portal/ps_1" };
     },
+    async listSubscriptionsByExternalId() {
+      return [];
+    },
+    ...overrides,
   };
 }
 
@@ -169,6 +175,7 @@ function createBillingApp(options?: {
   identity?: RequestIdentity;
   fileService?: FileService;
   repository?: ReturnType<typeof createMemoryBillingRepository>;
+  polarClient?: PolarClient;
 }) {
   const repository =
     options?.repository ??
@@ -183,7 +190,7 @@ function createBillingApp(options?: {
       POLAR_PRO_PRODUCT_ID: "prod_pro",
       APP_URL: "https://app.example",
     }),
-    polarClient: createPolarClientMock(),
+    polarClient: options?.polarClient ?? createPolarClientMock(),
     verifyWebhook: (_body, _headers, _secret) => ({
       id: "evt_test",
       type: "subscription.active",
@@ -254,7 +261,22 @@ describe("billing API", () => {
     const repository = createMemoryBillingRepository({
       userEmails: { user_1: "user@example.com" },
     });
-    const app = createBillingApp({ repository });
+    const app = createBillingApp({
+      repository,
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_polar_1",
+              status: "active",
+              productId: "prod_pro",
+              customerId: "cus_1",
+              externalCustomerId: "user_1",
+            },
+          ];
+        },
+      }),
+    });
 
     const webhook = await app.request("/api/v1/billing/webhooks", {
       method: "POST",
@@ -269,6 +291,30 @@ describe("billing API", () => {
     const body = await status.json();
 
     expect(webhook.status).toBe(202);
+    expect(body.billing.plan).toBe("pro");
+    expect(body.billing.canUpgrade).toBe(false);
+  });
+
+  test("activates Pro after Polar subscription reconcile", async () => {
+    const app = createBillingApp({
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_polar_1",
+              status: "active",
+              productId: "prod_pro",
+              customerId: "cus_1",
+              externalCustomerId: "user_1",
+            },
+          ];
+        },
+      }),
+    });
+    const response = await app.request("/api/v1/billing");
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
     expect(body.billing.plan).toBe("pro");
     expect(body.billing.canUpgrade).toBe(false);
   });

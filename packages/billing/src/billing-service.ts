@@ -14,6 +14,10 @@ import {
 } from "./entitlements.js";
 import { DEFAULT_PLAN_LIMITS, getPlanLimits } from "./plan-config.js";
 import type { PlanCatalog, PlanId, UserEntitlements } from "./plan-types.js";
+import {
+  parsePolarSubscription,
+  planFromPolarProductId,
+} from "./polar-subscription.js";
 import { getUtcMonthPeriod } from "./usage-period.js";
 import { handlePolarWebhook } from "./webhook-service.js";
 
@@ -111,6 +115,82 @@ export function createBillingService(
     });
   }
 
+  async function applyRemoteSubscription(
+    userId: string,
+    data: unknown,
+  ): Promise<void> {
+    const parsed = parsePolarSubscription(data);
+
+    if (parsed === undefined) {
+      return;
+    }
+
+    if (parsed.polarCustomerId !== null) {
+      await options.repository.upsertCustomer({
+        userId,
+        polarCustomerId: parsed.polarCustomerId,
+        createdAt: now(),
+        updatedAt: now(),
+      });
+    }
+
+    await options.repository.upsertSubscription({
+      userId,
+      polarSubscriptionId: parsed.polarSubscriptionId,
+      polarProductId: parsed.polarProductId,
+      plan: planFromPolarProductId(
+        parsed.polarProductId,
+        options.config.polar.proProductId,
+      ),
+      status: parsed.status,
+      cancelAtPeriodEnd: parsed.cancelAtPeriodEnd,
+      currentPeriodStart: parsed.currentPeriodStart,
+      currentPeriodEnd: parsed.currentPeriodEnd,
+      endedAt: parsed.endedAt,
+      updatedAt: now(),
+    });
+  }
+
+  async function revokeLocalSubscription(userId: string): Promise<void> {
+    const existing =
+      await options.repository.findLatestSubscriptionByUserId(userId);
+
+    if (existing === undefined) {
+      return;
+    }
+
+    await options.repository.upsertSubscription({
+      ...existing,
+      status: "revoked",
+      cancelAtPeriodEnd: false,
+      endedAt: existing.endedAt ?? now(),
+      updatedAt: now(),
+    });
+  }
+
+  async function reconcileFromPolar(userId: string): Promise<void> {
+    const polar = options.polarClient;
+
+    if (polar === undefined) {
+      return;
+    }
+
+    try {
+      const remote = await polar.listSubscriptionsByExternalId(userId);
+
+      if (remote.length === 0) {
+        await revokeLocalSubscription(userId);
+        return;
+      }
+
+      for (const subscription of remote) {
+        await applyRemoteSubscription(userId, subscription);
+      }
+    } catch {
+      return;
+    }
+  }
+
   async function requireUserEmail(userId: string): Promise<string> {
     const email = await options.repository.findUserEmail(userId);
 
@@ -142,6 +222,7 @@ export function createBillingService(
     },
 
     async getBillingStatus(input) {
+      await reconcileFromPolar(input.userId);
       const entitlements = await getEntitlements(input.userId);
       const period = getUtcMonthPeriod(now());
       const usage = await options.repository.getOrCreateUsagePeriod({

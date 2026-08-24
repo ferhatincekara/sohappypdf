@@ -10,6 +10,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { useBillingActions } from "../hooks/use-billing-actions";
 import { useBillingStatus } from "../hooks/use-billing-status";
 import { useCheckoutReturn } from "../hooks/use-checkout-return";
+import { isCheckoutActivationPending } from "../lib/checkout-activation";
 import { formatBytes } from "../lib/format-bytes";
 
 function BillingWorkspaceInner() {
@@ -48,7 +49,7 @@ function BillingWorkspaceInner() {
     );
   }
 
-  const activating = checkoutReturn && billing.plan === "free";
+  const activating = checkoutReturn && isCheckoutActivationPending(billing);
 
   return (
     <div className="flex flex-col gap-8">
@@ -70,13 +71,15 @@ function BillingWorkspaceInner() {
             </h2>
             <p className="text-lg font-semibold">{tPlans(billing.plan)}</p>
             <p className="text-sm text-muted-foreground">
-              {billing.subscriptionStatus === null
+              {billing.plan === "free"
                 ? t("noSubscription")
                 : billing.cancelAtPeriodEnd && billing.currentPeriodEnd !== null
                   ? t("cancelsOn", {
                       date: billing.currentPeriodEnd.slice(0, 10),
                     })
-                  : tStatus(billing.subscriptionStatus)}
+                  : billing.subscriptionStatus === null
+                    ? t("noSubscription")
+                    : tStatus(billing.subscriptionStatus)}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

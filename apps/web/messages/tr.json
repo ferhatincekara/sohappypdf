@@ -426,7 +426,7 @@
     "openingPortal": "Portal açılıyor…",
     "activating": "Aboneliğiniz etkinleştiriliyor.",
     "noSubscription": "Ücretli abonelik yok",
-    "cancelsOn": "{date} tarihinde iptal edilir",
+    "cancelsOn": "İptal planlandı. Pro {date} tarihine kadar devam eder.",
     "backToSettings": "Ayarlara dön",
     "period": "UTC dönemi {start} – {end}",
     "plans": {

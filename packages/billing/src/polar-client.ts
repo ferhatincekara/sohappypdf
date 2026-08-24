@@ -79,5 +79,41 @@ export function createPolarClient(
         url: requireUrl(session.customerPortalUrl, "customer portal"),
       };
     },
+
+    async listSubscriptionsByExternalId(externalId) {
+      try {
+        const state = await polar.customers.getStateExternal({
+          externalId,
+        });
+
+        if (state.activeSubscriptions.length === 0) {
+          return [];
+        }
+
+        return state.activeSubscriptions.map((subscription) => ({
+          ...subscription,
+          customerId: state.id,
+          externalCustomerId: state.externalId ?? externalId,
+        }));
+      } catch {
+        return listSubscriptionsFromPolar(polar, externalId);
+      }
+    },
   };
+}
+
+async function listSubscriptionsFromPolar(
+  polar: Polar,
+  externalId: string,
+): Promise<unknown[]> {
+  const page = await polar.subscriptions.list({
+    externalCustomerId: externalId,
+  });
+  const items: unknown[] = [];
+
+  for await (const result of page) {
+    items.push(...result.result.items);
+  }
+
+  return items;
 }

@@ -426,7 +426,7 @@
     "openingPortal": "Opening portal…",
     "activating": "Your subscription is being activated.",
     "noSubscription": "No paid subscription",
-    "cancelsOn": "Cancels on {date}",
+    "cancelsOn": "Cancellation scheduled. Pro remains until {date}.",
     "backToSettings": "Back to settings",
     "period": "UTC period {start} – {end}",
     "plans": {

@@ -13,6 +13,9 @@ describe("billing error mapping", () => {
         status: 500,
       }),
     ).toBe(BILLING_ERROR_KEYS.configuration);
+    expect(
+      mapBillingError({ kind: "api", code: "INTERNAL_ERROR", status: 500 }),
+    ).toBe(BILLING_ERROR_KEYS.unexpected);
   });
 
   test("maps a network failure", () => {

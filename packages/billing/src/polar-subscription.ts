@@ -153,6 +153,8 @@ export function parsePolarSubscription(
     currentPeriodEnd: readDate(
       record.currentPeriodEnd ?? record.current_period_end,
     ),
-    endedAt: readDate(record.endedAt ?? record.ended_at),
+    endedAt: readDate(
+      record.endedAt ?? record.ended_at ?? record.endsAt ?? record.ends_at,
+    ),
   };
 }

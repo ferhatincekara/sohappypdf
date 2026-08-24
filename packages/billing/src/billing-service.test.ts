@@ -23,6 +23,9 @@ function createPolarClientMock(
     async createCustomerPortal() {
       return { url: "https://polar.example/portal/ps_1" };
     },
+    async listSubscriptionsByExternalId() {
+      return [];
+    },
     ...overrides,
   };
 }
@@ -30,11 +33,14 @@ function createPolarClientMock(
 function createService(options?: {
   polarClient?: PolarClient;
   userEmails?: Record<string, string>;
+  repository?: ReturnType<typeof createMemoryBillingRepository>;
 }) {
   return createBillingService({
-    repository: createMemoryBillingRepository({
-      userEmails: options?.userEmails ?? { user_1: "user@example.com" },
-    }),
+    repository:
+      options?.repository ??
+      createMemoryBillingRepository({
+        userEmails: options?.userEmails ?? { user_1: "user@example.com" },
+      }),
     config: loadBillingConfig({
       POLAR_ACCESS_TOKEN: "polar_at_test",
       POLAR_WEBHOOK_SECRET: "whsec_test",
@@ -43,6 +49,29 @@ function createService(options?: {
     }),
     polarClient: options?.polarClient ?? createPolarClientMock(),
     now: () => now,
+  });
+}
+
+async function seedProSubscription(
+  repository: ReturnType<typeof createMemoryBillingRepository>,
+) {
+  await repository.upsertCustomer({
+    userId: "user_1",
+    polarCustomerId: "cus_polar_1",
+    createdAt: now,
+    updatedAt: now,
+  });
+  await repository.upsertSubscription({
+    userId: "user_1",
+    polarSubscriptionId: "sub_polar_1",
+    polarProductId: "prod_pro",
+    plan: "pro",
+    status: "active",
+    cancelAtPeriodEnd: false,
+    currentPeriodStart: new Date("2026-08-01T00:00:00.000Z"),
+    currentPeriodEnd: new Date("2026-09-01T00:00:00.000Z"),
+    endedAt: null,
+    updatedAt: now,
   });
 }
 
@@ -135,5 +164,124 @@ describe("createBillingService", () => {
     expect(status.usage.storageUsedBytes).toBe(1024);
     expect(status.limits.maxFileSizeBytes).toBe(20 * 1024 * 1024);
     expect(JSON.stringify(status).includes("polar_at_test")).toBe(false);
+  });
+
+  test("reconciles an active Polar subscription without trusting checkout query params", async () => {
+    const billing = createService({
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_polar_1",
+              status: "active",
+              productId: "prod_pro",
+              customerId: "cus_polar_1",
+              externalCustomerId: "user_1",
+              currentPeriodEnd: "2026-09-15T12:00:00.000Z",
+            },
+          ];
+        },
+      }),
+    });
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.plan).toBe("pro");
+    expect(status.canUpgrade).toBe(false);
+    expect(status.canManage).toBe(true);
+    expect(status.subscriptionStatus).toBe("active");
+  });
+
+  test("does not grant Pro when Polar has no subscription for the user", async () => {
+    const billing = createService();
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.plan).toBe("free");
+    expect(status.canUpgrade).toBe(true);
+  });
+
+  test("drops local Pro when Polar no longer has an active subscription", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await seedProSubscription(repository);
+    const billing = createService({ repository });
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.plan).toBe("free");
+    expect(status.canUpgrade).toBe(true);
+    expect(status.subscriptionStatus).toBe("revoked");
+  });
+
+  test("keeps Pro through the paid period when Polar schedules cancellation", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await seedProSubscription(repository);
+    const billing = createService({
+      repository,
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_polar_1",
+              status: "active",
+              productId: "prod_pro",
+              customerId: "cus_polar_1",
+              externalCustomerId: "user_1",
+              cancelAtPeriodEnd: true,
+              currentPeriodEnd: "2026-09-01T00:00:00.000Z",
+            },
+          ];
+        },
+      }),
+    });
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.plan).toBe("pro");
+    expect(status.cancelAtPeriodEnd).toBe(true);
+    expect(status.canUpgrade).toBe(false);
+  });
+
+  test("keeps local Pro when Polar reconcile fails", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await seedProSubscription(repository);
+    const billing = createService({
+      repository,
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          throw new Error("polar unavailable");
+        },
+      }),
+    });
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.plan).toBe("pro");
+    expect(status.canUpgrade).toBe(false);
   });
 });

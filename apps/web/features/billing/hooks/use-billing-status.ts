@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { billingApi } from "../api/billing-api";
 import { mapUnknownBillingError } from "../api/billing-errors";
 import { billingQueryKeys } from "../api/billing-query-keys";
+import { isCheckoutActivationPending } from "../lib/checkout-activation";
 
 export function useBillingStatus(options?: { pollWhileFree?: boolean }) {
   const query = useQuery({
@@ -14,7 +15,10 @@ export function useBillingStatus(options?: { pollWhileFree?: boolean }) {
         return false;
       }
 
-      return current.state.data?.billing.plan === "free" ? 2_000 : false;
+      const billing = current.state.data?.billing;
+      return billing === undefined || isCheckoutActivationPending(billing)
+        ? 2_000
+        : false;
     },
   });
 
