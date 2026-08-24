@@ -1328,6 +1328,45 @@
           }
         }
       },
+      "crop": {
+        "title": "Korunacak alanı seçin",
+        "hint": "Kutuyu veya kenarlarını sürükleyin. Aynı kırpma her sayfaya uygulanır. Sayfa sayfa kırpma yok.",
+        "move": "Kırpma alanını taşı",
+        "edges": {
+          "top": "Üst kenarı boyutlandır",
+          "right": "Sağ kenarı boyutlandır",
+          "bottom": "Alt kenarı boyutlandır",
+          "left": "Sol kenarı boyutlandır"
+        },
+        "previewHint": "Kırpma alanını önizlemek için bir PDF yükleyin.",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+        "output": "Her sayfada kutu içindeki alan korunacak.",
+        "processing": "PDF’niz kırpılıyor...",
+        "processingHint": "Aynı kırpma her sayfaya uygulanıyor.",
+        "successTitle": "Kırpılmış PDF’niz hazır",
+        "successDescription": "Kırpılmış PDF’i indirin.",
+        "download": "PDF’i indir",
+        "cropAnother": "Başka bir PDF kırp",
+        "processingFailed": "Bu PDF kırpılamadı. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF kırpın.",
+        "faqHow": "Bir PDF yükleyin, kırpma kutusunu sürükleyin, ardından kırpın. Aynı alan her sayfada korunur. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Kırpmak istediğiniz PDF’i bırakın."
+          },
+          "crop": {
+            "title": "Kırpmayı ayarla",
+            "description": "İlk sayfadaki kutuyu taşıyın veya boyutlandırın. Tüm sayfalara uygulanır."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Fazla kenarları kaldırılmış bir PDF alın."
+          }
+        }
+      },
       "watermark": {
         "title": "Filigran ekle",
         "hint": "İşaret her sayfaya çapraz yerleştirilir. Görsel filigran, konum ve boyut bu araçta yok.",

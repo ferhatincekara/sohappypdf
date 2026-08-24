@@ -4,6 +4,7 @@ import { resolveToolWorkspaceKind } from "../../lib/tool-workspace-kind";
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
 import { CompressPdfWorkspace } from "./compress-pdf-workspace";
 import { ConvertPdfWorkspace } from "./convert-pdf-workspace";
+import { CropPdfWorkspace } from "./crop-pdf-workspace";
 import { DefaultToolWorkspace } from "./default-tool-workspace";
 import { ExtractPagesWorkspace } from "./extract-pages-workspace";
 import { ImageToPdfWorkspace } from "./image-to-pdf-workspace";
@@ -44,6 +45,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <UnlockPdfWorkspace {...props} />;
     case "watermark":
       return <WatermarkPdfWorkspace {...props} />;
+    case "crop":
+      return <CropPdfWorkspace {...props} />;
     case "repair":
       return <RepairPdfWorkspace {...props} />;
     case "ocr":

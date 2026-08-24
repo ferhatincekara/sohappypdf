@@ -9,7 +9,6 @@ import type { ToolWorkspaceState } from "../lib/tool-workspace";
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
     case "reorder-pages":
-    case "crop-pdf":
     case "page-numbers-pdf":
     case "ai-summarizer":
     case "translate-pdf":
@@ -69,42 +68,6 @@ export function ToolOptionsPanel({
               onChange({ ...state, pageOrder: event.target.value });
             }}
           />
-        </div>
-      );
-    case "crop-pdf":
-      return (
-        <div className="grid gap-3 sm:grid-cols-2">
-          {(["top", "right", "bottom", "left"] as const).map((side) => (
-            <div key={side} className="flex flex-col gap-2">
-              <Label htmlFor={`crop-${side}`}>
-                {t(
-                  side === "top"
-                    ? "cropTop"
-                    : side === "right"
-                      ? "cropRight"
-                      : side === "bottom"
-                        ? "cropBottom"
-                        : "cropLeft",
-                )}
-              </Label>
-              <Input
-                id={`crop-${side}`}
-                type="number"
-                min={0}
-                value={state.cropMargins[side]}
-                disabled={disabled}
-                onChange={(event) => {
-                  onChange({
-                    ...state,
-                    cropMargins: {
-                      ...state.cropMargins,
-                      [side]: Number(event.target.value),
-                    },
-                  });
-                }}
-              />
-            </div>
-          ))}
         </div>
       );
     case "page-numbers-pdf":

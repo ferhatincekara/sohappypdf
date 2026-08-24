@@ -1328,6 +1328,45 @@
           }
         }
       },
+      "crop": {
+        "title": "Choose the area to keep",
+        "hint": "Drag the box or its edges. The same crop is applied to every page. Per-page cropping is not available.",
+        "move": "Move crop area",
+        "edges": {
+          "top": "Resize top edge",
+          "right": "Resize right edge",
+          "bottom": "Resize bottom edge",
+          "left": "Resize left edge"
+        },
+        "previewHint": "Upload a PDF to preview the crop area.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "output": "Every page will keep the area inside the box.",
+        "processing": "Cropping your PDF...",
+        "processingHint": "Applying the same crop to every page.",
+        "successTitle": "Your cropped PDF is ready",
+        "successDescription": "Download the cropped PDF.",
+        "download": "Download PDF",
+        "cropAnother": "Crop another PDF",
+        "processingFailed": "We couldn't crop this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Crop another PDF to continue.",
+        "faqHow": "Upload a PDF, drag the crop box, then crop. The same area is kept on every page. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to crop."
+          },
+          "crop": {
+            "title": "Set crop",
+            "description": "Move or resize the box on the first page. It applies to all pages."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF with the extra margins removed."
+          }
+        }
+      },
       "watermark": {
         "title": "Add a watermark",
         "hint": "The mark is placed diagonally across every page. Image watermarks, position, and size are not available.",

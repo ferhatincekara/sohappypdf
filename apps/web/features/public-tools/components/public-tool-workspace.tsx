@@ -507,6 +507,24 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "crop-pdf") {
+    return {
+      processingTitle: t("workspaces.crop.processing"),
+      processingHint: t("workspaces.crop.processingHint"),
+      successTitle: t("workspaces.crop.successTitle"),
+      successDescription: t("workspaces.crop.successDescription"),
+      downloadLabel: t("workspaces.crop.download"),
+      resetLabel: t("workspaces.crop.cropAnother"),
+      expiredTitle: t("workspaces.crop.expiredTitle"),
+      expiredDescription: t("workspaces.crop.expiredDescription", { hours }),
+      processHint: t("workspaces.crop.output"),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveCropErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -769,6 +787,26 @@ function resolveWatermarkErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.watermark.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveCropErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.crop.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.crop.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.crop.expiredDescription", { hours });
   }
 
   return undefined;
