@@ -1,3 +1,5 @@
+import { isConvertToolId } from "./tool-workspace-kind";
+
 export type DedicatedHowToWorkspace =
   | "split"
   | "extract"
@@ -5,7 +7,8 @@ export type DedicatedHowToWorkspace =
   | "merge"
   | "rotate"
   | "remove"
-  | "compress";
+  | "compress"
+  | "convert";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -44,5 +47,18 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
 };
 
 export function dedicatedHowToForTool(toolId: string): DedicatedHowTo | null {
-  return DEDICATED_HOW_TO[toolId] ?? null;
+  const dedicated = DEDICATED_HOW_TO[toolId];
+
+  if (dedicated !== undefined) {
+    return dedicated;
+  }
+
+  if (isConvertToolId(toolId)) {
+    return {
+      workspace: "convert",
+      steps: ["upload", "convert", "download"],
+    };
+  }
+
+  return null;
 }

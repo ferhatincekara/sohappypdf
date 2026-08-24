@@ -981,8 +981,41 @@
         }
       },
       "convert": {
-        "hint": "Dosyanız dönüştürülmeye hazır.",
-        "excelHint": "Metin ve tablolar bir elektronik tabloya çıkarılır. Taranmış PDF’ler için PDF to Excel OCR kullanın."
+        "title": "Dönüştürmeye hazır",
+        "hint": "Bu dosyayı bu aracın ürettiği formata dönüştüreceğiz.",
+        "excelHint": "Metin ve tablolar bir elektronik tabloya çıkarılır. Taranmış PDF’ler için PDF to Excel OCR kullanın.",
+        "wordOcrHint": "Önce metin tanınır, sonra Word’e dönüştürülür. Taramalarda daha uzun sürer.",
+        "pdfaHint": "Arşiv PDF/A dosyası oluşturur. Düzen aynı kalır.",
+        "imageHint": "Bu görüntü, orijinal boyutunda tek bir PDF sayfası olur.",
+        "textHint": "PDF’den okunabilir metin çıkarılır.",
+        "resultTitle": "Ne alırsınız",
+        "equation": "{source} → {target}",
+        "resultHint": "{source} dosyanızdan bir {target} dosyası.",
+        "processing": "Dosyanız dönüştürülüyor...",
+        "processingHint": "Yeni dosya oluşturuluyor. Bu biraz sürebilir.",
+        "successTitle": "Dosyanız hazır",
+        "successDescription": "Dönüştürülen dosyayı indirin.",
+        "download": "İndir",
+        "convertAnother": "Başka bir dosya dönüştür",
+        "processingFailed": "Bu dosya dönüştürülemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir dosya deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir dosya dönüştürün.",
+        "faqHow": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. Ücretsiz dönüştürme araçları için hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Dönüştürmek istediğiniz dosyayı sürükleyip bırakın."
+          },
+          "convert": {
+            "title": "Dönüştür",
+            "description": "Yeni formatı sizin için oluşturacağız."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Dönüştürülen dosyayı alın."
+          }
+        }
       },
       "password": {
         "unlockTitle": "PDF kilidini aç",

@@ -10,6 +10,7 @@ describe("dedicatedHowToForTool", () => {
     expect(dedicatedHowToForTool("rotate-pdf")?.workspace).toBe("rotate");
     expect(dedicatedHowToForTool("remove-pages")?.workspace).toBe("remove");
     expect(dedicatedHowToForTool("compress-pdf")?.workspace).toBe("compress");
+    expect(dedicatedHowToForTool("pdf-to-word")?.workspace).toBe("convert");
     expect(dedicatedHowToForTool("ocr-pdf")).toBeNull();
   });
 });

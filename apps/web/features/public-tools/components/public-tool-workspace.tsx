@@ -16,6 +16,7 @@ import {
   parseOrganizeOrderInput,
   parseSelectedPagesInput,
 } from "../lib/tool-workspace";
+import { isConvertToolId } from "../lib/tool-workspace-kind";
 import type { ToolSelectedUxState } from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
@@ -390,6 +391,25 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (isConvertToolId(toolId)) {
+    return {
+      processingTitle: t("workspaces.convert.processing"),
+      processingHint: t("workspaces.convert.processingHint"),
+      successTitle: t("workspaces.convert.successTitle"),
+      successDescription: t("workspaces.convert.successDescription"),
+      downloadLabel: t("workspaces.convert.download"),
+      resetLabel: t("workspaces.convert.convertAnother"),
+      expiredTitle: t("workspaces.convert.expiredTitle"),
+      expiredDescription: t("workspaces.convert.expiredDescription", {
+        hours,
+      }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveConvertErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -528,6 +548,26 @@ function resolveCompressErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.compress.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveConvertErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.convert.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.convert.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.convert.expiredDescription", { hours });
   }
 
   return undefined;

@@ -981,8 +981,41 @@
         }
       },
       "convert": {
-        "hint": "Your file is ready to convert.",
-        "excelHint": "Text and tables are extracted into a spreadsheet. Scanned PDFs need PDF to Excel OCR."
+        "title": "Ready to convert",
+        "hint": "We'll convert this file into the format this tool creates.",
+        "excelHint": "Text and tables are extracted into a spreadsheet. Scanned PDFs need PDF to Excel OCR.",
+        "wordOcrHint": "Text is recognized first, then converted to Word. This takes longer on scans.",
+        "pdfaHint": "Creates an archival PDF/A file. Layout stays the same.",
+        "imageHint": "This image becomes one PDF page at its original size.",
+        "textHint": "Readable text is extracted from the PDF.",
+        "resultTitle": "What you will get",
+        "equation": "{source} → {target}",
+        "resultHint": "One {target} file from your {source}.",
+        "processing": "Converting your file...",
+        "processingHint": "Creating the new file. This may take a moment.",
+        "successTitle": "Your file is ready",
+        "successDescription": "Download the converted file.",
+        "download": "Download",
+        "convertAnother": "Convert another file",
+        "processingFailed": "We couldn't convert this file. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another file.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Convert another file to continue.",
+        "faqHow": "Upload a file, convert it, then download the result. An account is not required for free conversion tools.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the file you want to convert."
+          },
+          "convert": {
+            "title": "Convert",
+            "description": "We'll create the new format for you."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get the converted file."
+          }
+        }
       },
       "password": {
         "unlockTitle": "Unlock this PDF",
