@@ -1,8 +1,9 @@
 "use client";
 
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, GripVerticalIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
+  type DragEvent,
   type KeyboardEvent,
   type ReactNode,
   useEffect,
@@ -11,6 +12,7 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import type { PdfjsDocument } from "../../lib/pdfjs-client";
+import type { PdfPageRotation } from "../types/pdf-page";
 
 const THUMBNAIL_WIDTH = 160;
 
@@ -25,19 +27,44 @@ function isRenderCancelled(error: unknown): boolean {
   );
 }
 
+function pageLabel(
+  t: ReturnType<typeof useTranslations>,
+  pageNumber: number,
+  selected: boolean,
+  rotation: PdfPageRotation,
+): string {
+  if (rotation === 0) {
+    return selected
+      ? t("pageLabelSelected", { number: pageNumber })
+      : t("pageLabel", { number: pageNumber });
+  }
+
+  return selected
+    ? t("pageLabelSelectedRotated", { number: pageNumber, degrees: rotation })
+    : t("pageLabelRotated", { number: pageNumber, degrees: rotation });
+}
+
 export function PdfPageThumbnail({
   document,
+  pageId,
   pageNumber,
   selected,
   disabled,
+  rotation = 0,
+  reorderable = false,
   overlay,
   onActivate,
   onKeyDown,
+  onReorderDragStart,
+  onReorderDragEnd,
 }: {
   document: PdfjsDocument;
+  pageId: string;
   pageNumber: number;
   selected: boolean;
   disabled: boolean;
+  rotation?: PdfPageRotation;
+  reorderable?: boolean;
   overlay?: ReactNode;
   onActivate: (event: {
     shiftKey: boolean;
@@ -45,17 +72,21 @@ export function PdfPageThumbnail({
     ctrlKey: boolean;
   }) => void;
   onKeyDown?: (event: KeyboardEvent<HTMLButtonElement>) => void;
+  onReorderDragStart?: (event: DragEvent<HTMLButtonElement>) => void;
+  onReorderDragEnd?: () => void;
 }) {
   const t = useTranslations("publicTools.pages");
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const visibleRef = useRef(false);
   const [status, setStatus] = useState<ThumbnailStatus>("pending");
+  const isQuarterTurn = rotation === 90 || rotation === 270;
 
   useEffect(() => {
-    const button = buttonRef.current;
+    const root = rootRef.current;
 
-    if (button === null) {
+    if (root === null) {
       return;
     }
 
@@ -122,7 +153,7 @@ export function PdfPageThumbnail({
       { rootMargin: "160px" },
     );
 
-    observer.observe(button);
+    observer.observe(root);
 
     return () => {
       cancelled = true;
@@ -132,24 +163,10 @@ export function PdfPageThumbnail({
   }, [document, pageNumber]);
 
   return (
-    <button
-      ref={buttonRef}
-      type="button"
-      data-pdf-page={pageNumber}
-      disabled={disabled}
-      aria-pressed={selected}
-      aria-label={
-        selected
-          ? t("pageLabelSelected", { number: pageNumber })
-          : t("pageLabel", { number: pageNumber })
-      }
-      onClick={(event) => {
-        onActivate(event);
-      }}
-      onKeyDown={onKeyDown}
+    <div
+      ref={rootRef}
       className={cn(
-        "group flex w-full min-h-11 flex-col items-center gap-2 rounded-xl p-2 text-left outline-none transition-colors",
-        "focus-visible:ring-3 focus-visible:ring-ring/50",
+        "group flex w-full min-h-11 flex-col items-center gap-2 rounded-xl p-2 text-left",
         selected ? "bg-foreground/8" : "hover:bg-muted/70",
         disabled && "opacity-60",
       )}
@@ -162,31 +179,90 @@ export function PdfPageThumbnail({
             : "border-border group-hover:border-foreground/40",
         )}
       >
-        {status === "pending" ? (
-          <span
-            className="absolute inset-0 animate-pulse bg-muted"
-            aria-hidden="true"
-          />
-        ) : null}
-
-        {status === "error" ? (
-          <span className="absolute inset-0 flex items-center justify-center bg-muted/50 p-2 text-center text-[11px] leading-snug text-muted-foreground">
-            {t("pagePreviewFailed")}
-          </span>
-        ) : null}
-
-        <canvas
-          ref={canvasRef}
+        <button
+          ref={buttonRef}
+          type="button"
+          data-pdf-page={pageNumber}
+          data-pdf-page-id={pageId}
+          disabled={disabled}
+          aria-pressed={selected}
+          aria-label={pageLabel(t, pageNumber, selected, rotation)}
+          aria-keyshortcuts={
+            reorderable ? "Alt+ArrowLeft Alt+ArrowRight" : undefined
+          }
+          onClick={(event) => {
+            onActivate(event);
+          }}
+          onKeyDown={onKeyDown}
           className={cn(
-            "block max-h-full max-w-full",
-            status === "ready" ? "opacity-100" : "opacity-0",
+            "absolute inset-0 z-0 flex items-center justify-center outline-none",
+            "focus-visible:ring-3 focus-visible:ring-ring/50",
           )}
-        />
+        >
+          {status === "pending" ? (
+            <span
+              className="absolute inset-0 animate-pulse bg-muted"
+              aria-hidden="true"
+            />
+          ) : null}
 
-        {selected ? (
-          <span className="absolute top-1.5 right-1.5 flex size-6 items-center justify-center rounded-full bg-foreground text-background shadow-xs">
-            <CheckIcon className="size-3.5" aria-hidden="true" />
-          </span>
+          {status === "error" ? (
+            <span className="absolute inset-0 flex items-center justify-center bg-muted/50 p-2 text-center text-[11px] leading-snug text-muted-foreground">
+              {t("pagePreviewFailed")}
+            </span>
+          ) : null}
+
+          <canvas
+            ref={canvasRef}
+            className={cn(
+              "block max-h-full max-w-full",
+              status === "ready" ? "opacity-100" : "opacity-0",
+            )}
+            style={
+              rotation === 0
+                ? undefined
+                : {
+                    transform: isQuarterTurn
+                      ? `rotate(${rotation}deg) scale(0.75)`
+                      : `rotate(${rotation}deg)`,
+                  }
+            }
+          />
+
+          {selected ? (
+            <span className="absolute top-1.5 right-1.5 flex size-6 items-center justify-center rounded-full bg-foreground text-background shadow-xs">
+              <CheckIcon className="size-3.5" aria-hidden="true" />
+            </span>
+          ) : null}
+        </button>
+
+        {reorderable ? (
+          <button
+            type="button"
+            draggable={!disabled}
+            disabled={disabled}
+            aria-label={t("reorderHandle", { number: pageNumber })}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+            onDragStart={(event) => {
+              event.dataTransfer.effectAllowed = "move";
+              event.dataTransfer.setData("text/plain", pageId);
+              onReorderDragStart?.(event);
+            }}
+            onDragEnd={() => {
+              onReorderDragEnd?.();
+            }}
+            className={cn(
+              "absolute top-1.5 left-1.5 z-10 flex size-11 items-center justify-center rounded-md bg-background/90 text-muted-foreground shadow-xs",
+              "hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+              disabled
+                ? "cursor-not-allowed"
+                : "cursor-grab active:cursor-grabbing",
+            )}
+          >
+            <GripVerticalIcon className="size-4" aria-hidden="true" />
+          </button>
         ) : null}
 
         {overlay}
@@ -199,6 +275,6 @@ export function PdfPageThumbnail({
       >
         {pageNumber}
       </span>
-    </button>
+    </div>
   );
 }

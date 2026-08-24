@@ -22,4 +22,8 @@ export {
   rangesToPages,
   togglePage,
 } from "./lib/page-selection";
-export { createPdfPages, type PdfPage } from "./types/pdf-page";
+export {
+  createPdfPages,
+  type PdfPage,
+  type PdfPageRotation,
+} from "./types/pdf-page";

@@ -36,6 +36,27 @@ describe("conversion options", () => {
       password: "secret",
     });
 
+    expect(
+      parseConversionOptions("organize-pdf", {
+        order: [3, 1, 1],
+        rotations: [90, 0, 180],
+      }),
+    ).toEqual({
+      type: "organize-pdf",
+      order: [3, 1, 1],
+      rotations: [90, 0, 180],
+    });
+
+    expect(
+      parseConversionOptions("organize-pdf", {
+        order: [2, 1],
+        rotations: [0, 0],
+      }),
+    ).toEqual({
+      type: "organize-pdf",
+      order: [2, 1],
+    });
+
     expect(parseConversionOptions("repair-pdf", undefined)).toEqual({
       type: "repair-pdf",
     });
@@ -167,6 +188,18 @@ describe("conversion options", () => {
     );
     expectInvalidOptions(() =>
       parseConversionOptions("pdf-to-word", { password: "secret" }),
+    );
+    expectInvalidOptions(() =>
+      parseConversionOptions("organize-pdf", { order: [] }),
+    );
+    expectInvalidOptions(() =>
+      parseConversionOptions("organize-pdf", {
+        order: [1, 2],
+        rotations: [90],
+      }),
+    );
+    expectInvalidOptions(() =>
+      parseConversionOptions("reorder-pages", { order: [1, 1] }),
     );
   });
 });

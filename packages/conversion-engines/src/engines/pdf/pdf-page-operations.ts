@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { RotationDegrees } from "@repo/conversions";
+import type { OrganizeRotation, RotationDegrees } from "@repo/conversions";
 import { degrees, PDFDocument, type PDFPage } from "pdf-lib";
 import { invalidInputError, PermanentConversionError } from "../../errors.js";
 
@@ -66,6 +66,62 @@ export async function reorderPdfPages(input: {
     }
 
     output.addPage(page);
+  }
+
+  await savePdfDocument(output, input.outputPath);
+}
+
+export async function organizePdfPages(input: {
+  sourcePath: string;
+  outputPath: string;
+  order: readonly number[];
+  rotations?: readonly OrganizeRotation[];
+}): Promise<void> {
+  const source = await loadPdfDocument(input.sourcePath);
+  const pageCount = source.getPageCount();
+
+  if (input.order.length < 1) {
+    throw new PermanentConversionError(
+      "invalid_options",
+      "Invalid conversion options",
+    );
+  }
+
+  if (
+    input.rotations !== undefined &&
+    input.rotations.length !== input.order.length
+  ) {
+    throw new PermanentConversionError(
+      "invalid_options",
+      "Invalid conversion options",
+    );
+  }
+
+  const output = await PDFDocument.create();
+
+  for (let index = 0; index < input.order.length; index += 1) {
+    const pageNumber = input.order[index];
+
+    if (pageNumber === undefined) {
+      throw new PermanentConversionError(
+        "invalid_options",
+        "Invalid conversion options",
+      );
+    }
+
+    assertValidPageNumber(pageNumber, pageCount);
+    const [page] = await output.copyPages(source, [pageNumber - 1]);
+
+    if (page === undefined) {
+      throw invalidInputError();
+    }
+
+    output.addPage(page);
+    const rotation = input.rotations?.[index] ?? 0;
+
+    if (rotation !== 0) {
+      applyRotation(page, rotation);
+    }
   }
 
   await savePdfDocument(output, input.outputPath);
@@ -163,7 +219,10 @@ export async function rotatePdfPages(input: {
   await savePdfDocument(output, input.outputPath);
 }
 
-function applyRotation(page: PDFPage, rotation: RotationDegrees): void {
+function applyRotation(
+  page: PDFPage,
+  rotation: Exclude<OrganizeRotation, 0>,
+): void {
   const current = page.getRotation().angle;
   page.setRotation(degrees(current + rotation));
 }

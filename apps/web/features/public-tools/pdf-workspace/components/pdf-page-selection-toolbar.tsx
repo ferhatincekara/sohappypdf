@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 
 export function PdfPageSelectionToolbar({
@@ -10,6 +11,7 @@ export function PdfPageSelectionToolbar({
   disabled,
   onSelectAll,
   onClear,
+  children,
 }: {
   selectedCount: number;
   pageCount: number;
@@ -17,6 +19,7 @@ export function PdfPageSelectionToolbar({
   disabled: boolean;
   onSelectAll: () => void;
   onClear: () => void;
+  children?: ReactNode;
 }) {
   const t = useTranslations("publicTools.pages");
   const selectionLabel =
@@ -47,6 +50,7 @@ export function PdfPageSelectionToolbar({
       <p className="text-sm text-muted-foreground" aria-live="polite">
         {selectionLabel}
       </p>
+      {children}
     </div>
   );
 }

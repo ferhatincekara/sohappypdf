@@ -801,6 +801,9 @@
     "pages": {
       "pageLabel": "Page {number}",
       "pageLabelSelected": "Page {number}, selected",
+      "pageLabelRotated": "Page {number}, rotated {degrees} degrees",
+      "pageLabelSelectedRotated": "Page {number}, selected, rotated {degrees} degrees",
+      "reorderHandle": "Drag to reorder page {number}",
       "selectAll": "Select all",
       "clear": "Clear selection",
       "selectedCount": "{count, plural, one {# page selected} other {# pages selected}}",
@@ -894,7 +897,53 @@
         "title": "Rotate pages"
       },
       "organize": {
-        "title": "Organize pages"
+        "title": "Arrange your pages",
+        "hint": "Drag pages into order. Select pages to rotate, duplicate, or remove.",
+        "rotateLeft": "Rotate left",
+        "rotateRight": "Rotate right",
+        "duplicate": "Duplicate",
+        "delete": "Remove",
+        "reset": "Reset pages",
+        "rotatePage": "Rotate page {number}",
+        "deletePage": "Remove page {number}",
+        "output": "{from} pages → {to, plural, one {# page} other {# pages}}",
+        "outputSame": "{count, plural, one {# page → 1 PDF} other {# pages → 1 PDF}}",
+        "outputCount": "{count, plural, one {# page → 1 PDF} other {# pages → 1 PDF}}",
+        "keepOnePage": "Keep at least one page in the document.",
+        "selectPrompt": "Wait for pages to load, then organize your PDF.",
+        "advanced": "Advanced",
+        "advancedTitle": "Enter page order manually",
+        "advancedHint": "Use original page numbers. Repeat a number to duplicate. Visual rotation is cleared.",
+        "advancedPlaceholder": "e.g. 3, 1, 1, 2",
+        "advancedExample": "Example: 3, 1, 1, 2",
+        "advancedError": "Check the page numbers. Use commas, and only pages that exist in this PDF.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to organize pages.",
+        "previewFailed": "This PDF couldn't be previewed. Try another file, or enter a page order in Advanced if the file still uploaded.",
+        "processing": "Organizing your PDF...",
+        "processingHint": "Applying your page order, rotations, and edits. This may take a moment.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the organized PDF.",
+        "download": "Download PDF",
+        "organizeAnother": "Organize another PDF",
+        "processingFailed": "We couldn't organize this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Organize another PDF to continue.",
+        "faqHow": "Upload a PDF, rearrange or edit the pages, then organize. You'll get one new PDF. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to organize."
+          },
+          "arrange": {
+            "title": "Arrange pages",
+            "description": "Reorder, rotate, duplicate, or remove pages."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get one PDF with your page changes applied."
+          }
+        }
       },
       "remove": {
         "title": "Remove pages"

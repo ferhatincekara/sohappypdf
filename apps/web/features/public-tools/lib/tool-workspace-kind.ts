@@ -21,6 +21,7 @@ export type ConvertToolId = (typeof CONVERT_TOOL_IDS)[number];
 
 export const TOOL_WORKSPACE_KINDS = [
   "split",
+  "organize",
   "merge",
   "compress",
   "convert",
@@ -38,6 +39,10 @@ export function isConvertToolId(toolId: string): toolId is ConvertToolId {
 export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
   if (toolId === "split-pdf") {
     return "split";
+  }
+
+  if (toolId === "organize-pdf") {
+    return "organize";
   }
 
   if (toolId === "merge-pdf") {

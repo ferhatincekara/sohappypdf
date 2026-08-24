@@ -9,6 +9,7 @@ export type ToolWorkspaceState = {
   rotationDegrees: RotationDegrees;
   splitRanges: string;
   pageOrder: string;
+  pageRotations: string;
   pagesToRemove: string;
   cropMargins: {
     top: number;
@@ -28,6 +29,7 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   rotationDegrees: 90,
   splitRanges: "",
   pageOrder: "",
+  pageRotations: "",
   pagesToRemove: "",
   cropMargins: {
     top: 36,
@@ -67,6 +69,60 @@ export function parsePageListInput(value: string): number[] | undefined {
   }
 
   return pages.length === 0 ? undefined : pages;
+}
+
+export function parseOrganizeOrderInput(value: string): number[] | undefined {
+  const trimmed = value.trim();
+
+  if (trimmed.length === 0) {
+    return undefined;
+  }
+
+  const parts = trimmed.split(/[,\s]+/).filter((part) => part.length > 0);
+  const pages: number[] = [];
+
+  for (const part of parts) {
+    const parsed = Number.parseInt(part, 10);
+
+    if (!Number.isInteger(parsed) || parsed < 1) {
+      return undefined;
+    }
+
+    pages.push(parsed);
+  }
+
+  return pages.length === 0 ? undefined : pages;
+}
+
+export function parseOrganizeRotationsInput(
+  value: string,
+  orderLength: number,
+): Array<0 | 90 | 180 | 270> | undefined {
+  const trimmed = value.trim();
+
+  if (trimmed.length === 0) {
+    return undefined;
+  }
+
+  const parts = trimmed.split(/[,\s]+/).filter((part) => part.length > 0);
+
+  if (parts.length !== orderLength) {
+    return undefined;
+  }
+
+  const rotations: Array<0 | 90 | 180 | 270> = [];
+
+  for (const part of parts) {
+    const parsed = Number.parseInt(part, 10);
+
+    if (parsed !== 0 && parsed !== 90 && parsed !== 180 && parsed !== 270) {
+      return undefined;
+    }
+
+    rotations.push(parsed);
+  }
+
+  return rotations;
 }
 
 export function parseSplitRangesInput(
@@ -131,7 +187,32 @@ export function buildToolConversionOptions(
       const ranges = parseSplitRangesInput(state.splitRanges);
       return ranges === undefined ? undefined : { ranges };
     }
-    case "organize-pdf":
+    case "organize-pdf": {
+      const order = parseOrganizeOrderInput(state.pageOrder);
+
+      if (order === undefined) {
+        return undefined;
+      }
+
+      if (state.pageRotations.trim().length === 0) {
+        return { order };
+      }
+
+      const rotations = parseOrganizeRotationsInput(
+        state.pageRotations,
+        order.length,
+      );
+
+      if (rotations === undefined) {
+        return undefined;
+      }
+
+      if (rotations.every((rotation) => rotation === 0)) {
+        return { order };
+      }
+
+      return { order, rotations };
+    }
     case "reorder-pages": {
       const order = parsePageListInput(state.pageOrder);
       return order === undefined ? undefined : { order };

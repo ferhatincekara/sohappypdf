@@ -9,7 +9,6 @@ import type { ToolWorkspaceState } from "../lib/tool-workspace";
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
     case "rotate-pdf":
-    case "organize-pdf":
     case "reorder-pages":
     case "remove-pages":
     case "crop-pdf":
@@ -84,7 +83,6 @@ export function ToolOptionsPanel({
           </select>
         </div>
       );
-    case "organize-pdf":
     case "reorder-pages":
       return (
         <div className="flex flex-col gap-2">

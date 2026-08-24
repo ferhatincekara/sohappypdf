@@ -801,6 +801,9 @@
     "pages": {
       "pageLabel": "Sayfa {number}",
       "pageLabelSelected": "Sayfa {number}, seçildi",
+      "pageLabelRotated": "Sayfa {number}, {degrees} derece döndürülmüş",
+      "pageLabelSelectedRotated": "Sayfa {number}, seçildi, {degrees} derece döndürülmüş",
+      "reorderHandle": "Sayfa {number} sırasını değiştirmek için sürükleyin",
       "selectAll": "Tümünü seç",
       "clear": "Seçimi temizle",
       "selectedCount": "{count, plural, one {# sayfa seçildi} other {# sayfa seçildi}}",
@@ -894,7 +897,53 @@
         "title": "Sayfaları döndür"
       },
       "organize": {
-        "title": "Sayfaları düzenle"
+        "title": "Sayfalarınızı düzenleyin",
+        "hint": "Sayfaları sürükleyerek sıralayın. Döndürmek, çoğaltmak veya kaldırmak için sayfa seçin.",
+        "rotateLeft": "Sola döndür",
+        "rotateRight": "Sağa döndür",
+        "duplicate": "Çoğalt",
+        "delete": "Kaldır",
+        "reset": "Sayfaları sıfırla",
+        "rotatePage": "Sayfa {number} döndür",
+        "deletePage": "Sayfa {number} kaldır",
+        "output": "{from} sayfa → {to, plural, one {# sayfa} other {# sayfa}}",
+        "outputSame": "{count, plural, one {# sayfa → 1 PDF} other {# sayfa → 1 PDF}}",
+        "outputCount": "{count, plural, one {# sayfa → 1 PDF} other {# sayfa → 1 PDF}}",
+        "keepOnePage": "Belgede en az bir sayfa bırakın.",
+        "selectPrompt": "Sayfaların yüklenmesini bekleyin, ardından PDF’nizi düzenleyin.",
+        "advanced": "Gelişmiş",
+        "advancedTitle": "Sayfa sırasını elle girin",
+        "advancedHint": "Orijinal sayfa numaralarını kullanın. Çoğaltmak için bir numarayı tekrarlayın. Görsel döndürme sıfırlanır.",
+        "advancedPlaceholder": "örn. 3, 1, 1, 2",
+        "advancedExample": "Örnek: 3, 1, 1, 2",
+        "advancedError": "Sayfa numaralarını kontrol edin. Virgül kullanın ve yalnızca bu PDF’de bulunan sayfaları girin.",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları düzenlemek için önce kilidini açın.",
+        "previewFailed": "Bu PDF önizlenemedi. Başka bir dosya deneyin veya dosya yüklendiyse Gelişmiş bölümünden sayfa sırası girin.",
+        "processing": "PDF’niz düzenleniyor...",
+        "processingHint": "Sayfa sırası, döndürmeler ve düzenlemeler uygulanıyor. Bu biraz sürebilir.",
+        "successTitle": "PDF’niz hazır",
+        "successDescription": "Düzenlenen PDF’i indirin.",
+        "download": "PDF’i indir",
+        "organizeAnother": "Başka bir PDF düzenle",
+        "processingFailed": "Bu PDF düzenlenemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF düzenleyin.",
+        "faqHow": "Bir PDF yükleyin, sayfaları yeniden düzenleyin ve uygulayın. Tek bir yeni PDF alırsınız. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Düzenlemek istediğiniz PDF’i sürükleyip bırakın."
+          },
+          "arrange": {
+            "title": "Sayfaları düzenle",
+            "description": "Sayfaları sıralayın, döndürün, çoğaltın veya kaldırın."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Sayfa değişikliklerinizin uygulandığı tek bir PDF alın."
+          }
+        }
       },
       "remove": {
         "title": "Sayfaları sil"

@@ -39,9 +39,27 @@ describe("page selection", () => {
 
   test("builds the smallest page model from a count and selection", () => {
     expect(createPdfPages(3, [2])).toEqual([
-      { pageIndex: 0, pageNumber: 1, selected: false },
-      { pageIndex: 1, pageNumber: 2, selected: true },
-      { pageIndex: 2, pageNumber: 3, selected: false },
+      {
+        id: "page-1",
+        pageIndex: 0,
+        pageNumber: 1,
+        selected: false,
+        rotation: 0,
+      },
+      {
+        id: "page-2",
+        pageIndex: 1,
+        pageNumber: 2,
+        selected: true,
+        rotation: 0,
+      },
+      {
+        id: "page-3",
+        pageIndex: 2,
+        pageNumber: 3,
+        selected: false,
+        rotation: 0,
+      },
     ]);
   });
 

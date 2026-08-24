@@ -78,7 +78,9 @@ export function PdfPageWorkspace({
         pages={pages}
         disabled={disabled}
         renderPageOverlay={renderPageOverlay}
-        onActivate={selection.activate}
+        onActivate={(page, modifiers) => {
+          selection.activate(page.pageNumber, modifiers);
+        }}
       />
       {children}
     </div>

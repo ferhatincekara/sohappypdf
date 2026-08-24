@@ -21,6 +21,7 @@ import {
 } from "../../workspace/temp-workspace.js";
 import {
   cropPdfMargins,
+  organizePdfPages,
   removePdfPages,
   reorderPdfPages,
   rotatePdfPages,
@@ -91,10 +92,14 @@ export function createPdfManipulateEngine(
           degrees: input.options.degrees,
           pages: input.options.pages,
         });
-      } else if (
-        input.options.type === "organize-pdf" ||
-        input.options.type === "reorder-pages"
-      ) {
+      } else if (input.options.type === "organize-pdf") {
+        await organizePdfPages({
+          sourcePath: input.sourcePath,
+          outputPath,
+          order: input.options.order,
+          rotations: input.options.rotations,
+        });
+      } else if (input.options.type === "reorder-pages") {
         await reorderPdfPages({
           sourcePath: input.sourcePath,
           outputPath,

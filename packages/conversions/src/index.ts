@@ -33,6 +33,7 @@ export type {
   OcrOutputMode,
   OfficeConversionOptions,
   OfficeOcrConversionOptions,
+  OrganizeRotation,
   ParseConversionOptionsContext,
   PdfExtractOptions,
   PdfFormsOptions,
@@ -53,6 +54,7 @@ export {
   AI_SUMMARIZER_OUTPUT_MODES,
   COMPRESSION_LEVELS,
   OCR_OUTPUT_MODES,
+  ORGANIZE_ROTATIONS,
   parseConversionOptions,
   ROTATION_DEGREES,
 } from "./conversion-options.js";

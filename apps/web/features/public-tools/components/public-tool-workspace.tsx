@@ -11,6 +11,7 @@ import { formatAcceptedFormats } from "../lib/format-labels";
 import type { PublicToolErrorKey } from "../lib/public-tool-errors";
 import { selectedPagesFromSplitRanges } from "../lib/split-selection";
 import { acceptForTool } from "../lib/tool-limits";
+import { parseOrganizeOrderInput } from "../lib/tool-workspace";
 import type { ToolSelectedUxState } from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
@@ -43,29 +44,17 @@ export function PublicToolWorkspace({
   const accept = acceptForTool(tool);
   const processLabel = tTools(`${tool.id}.name`);
   const { ux } = workspace;
-  const isSplit = tool.id === "split-pdf";
-  const splitSelectedCount = isSplit
-    ? selectedPagesFromSplitRanges(workspace.workspaceState.splitRanges).length
-    : 0;
-  const splitProcessHint = isSplit
-    ? splitSelectedCount === 0
-      ? t("workspaces.split.selectPrompt")
-      : t("workspaces.split.output", { count: splitSelectedCount })
-    : null;
-  const splitResetLabel = isSplit
-    ? t("workspaces.split.splitAnother")
-    : undefined;
-  const splitDownloadLabel = isSplit
-    ? t("workspaces.split.download")
-    : undefined;
-  const splitErrorMessage =
-    isSplit && ux.status === "error"
-      ? resolveSplitErrorMessage(
-          ux.error.key,
-          t,
-          PUBLIC_ANONYMOUS_RETENTION_HOURS,
-        )
-      : undefined;
+  const shell = dedicatedToolShellCopy({
+    toolId: tool.id,
+    t,
+    splitSelectedCount: selectedPagesFromSplitRanges(
+      workspace.workspaceState.splitRanges,
+    ).length,
+    organizePageCount:
+      parseOrganizeOrderInput(workspace.workspaceState.pageOrder)?.length ?? 0,
+    errorKey: ux.status === "error" ? ux.error.key : null,
+    hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
+  });
 
   if (workspace.isSessionPending) {
     return (
@@ -128,8 +117,8 @@ export function PublicToolWorkspace({
       {ux.status === "processing" ? (
         <ToolProcessingState
           state={ux}
-          title={isSplit ? t("workspaces.split.processing") : undefined}
-          hint={isSplit ? t("workspaces.split.processingHint") : undefined}
+          title={shell.processingTitle}
+          hint={shell.processingHint}
         />
       ) : null}
 
@@ -139,12 +128,10 @@ export function PublicToolWorkspace({
           signupHref={signupPath(tool.route)}
           isAuthenticated={workspace.isAuthenticated}
           isDownloading={workspace.isDownloading}
-          title={isSplit ? t("workspaces.split.successTitle") : undefined}
-          description={
-            isSplit ? t("workspaces.split.successDescription") : undefined
-          }
-          downloadLabel={splitDownloadLabel}
-          resetLabel={splitResetLabel}
+          title={shell.successTitle}
+          description={shell.successDescription}
+          downloadLabel={shell.downloadLabel}
+          resetLabel={shell.resetLabel}
           onDownload={() => {
             void workspace.onDownload();
           }}
@@ -156,8 +143,8 @@ export function PublicToolWorkspace({
         <ToolErrorState
           state={ux}
           toolRoute={tool.route}
-          message={splitErrorMessage}
-          resetLabel={splitResetLabel}
+          message={shell.errorMessage}
+          resetLabel={shell.resetLabel}
           onRetry={() => {
             void workspace.onRetry();
           }}
@@ -167,15 +154,9 @@ export function PublicToolWorkspace({
 
       {ux.status === "expired" ? (
         <ToolExpiredState
-          title={isSplit ? t("workspaces.split.expiredTitle") : undefined}
-          description={
-            isSplit
-              ? t("workspaces.split.expiredDescription", {
-                  hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
-                })
-              : undefined
-          }
-          resetLabel={splitResetLabel}
+          title={shell.expiredTitle}
+          description={shell.expiredDescription}
+          resetLabel={shell.resetLabel}
           onReset={workspace.resetWorkspace}
         />
       ) : null}
@@ -184,10 +165,10 @@ export function PublicToolWorkspace({
         ux={ux}
         canProcess={workspace.canProcess}
         processLabel={processLabel}
-        processHint={splitProcessHint}
+        processHint={shell.processHint}
         isDownloading={workspace.isDownloading}
-        downloadLabel={splitDownloadLabel}
-        resetLabel={splitResetLabel}
+        downloadLabel={shell.downloadLabel}
+        resetLabel={shell.resetLabel}
         maxFiles={workspace.maxFiles}
         maxFileSizeBytes={workspace.maxFileSizeBytes}
         onProcess={() => {
@@ -205,6 +186,79 @@ export function PublicToolWorkspace({
   );
 }
 
+function dedicatedToolShellCopy({
+  toolId,
+  t,
+  splitSelectedCount,
+  organizePageCount,
+  errorKey,
+  hours,
+}: {
+  toolId: string;
+  t: ReturnType<typeof useTranslations>;
+  splitSelectedCount: number;
+  organizePageCount: number;
+  errorKey: PublicToolErrorKey | null;
+  hours: number;
+}): {
+  processingTitle?: string;
+  processingHint?: string;
+  successTitle?: string;
+  successDescription?: string;
+  downloadLabel?: string;
+  resetLabel?: string;
+  expiredTitle?: string;
+  expiredDescription?: string;
+  processHint?: string | null;
+  errorMessage?: string;
+} {
+  if (toolId === "split-pdf") {
+    return {
+      processingTitle: t("workspaces.split.processing"),
+      processingHint: t("workspaces.split.processingHint"),
+      successTitle: t("workspaces.split.successTitle"),
+      successDescription: t("workspaces.split.successDescription"),
+      downloadLabel: t("workspaces.split.download"),
+      resetLabel: t("workspaces.split.splitAnother"),
+      expiredTitle: t("workspaces.split.expiredTitle"),
+      expiredDescription: t("workspaces.split.expiredDescription", { hours }),
+      processHint:
+        splitSelectedCount === 0
+          ? t("workspaces.split.selectPrompt")
+          : t("workspaces.split.output", { count: splitSelectedCount }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveSplitErrorMessage(errorKey, t, hours),
+    };
+  }
+
+  if (toolId === "organize-pdf") {
+    return {
+      processingTitle: t("workspaces.organize.processing"),
+      processingHint: t("workspaces.organize.processingHint"),
+      successTitle: t("workspaces.organize.successTitle"),
+      successDescription: t("workspaces.organize.successDescription"),
+      downloadLabel: t("workspaces.organize.download"),
+      resetLabel: t("workspaces.organize.organizeAnother"),
+      expiredTitle: t("workspaces.organize.expiredTitle"),
+      expiredDescription: t("workspaces.organize.expiredDescription", {
+        hours,
+      }),
+      processHint:
+        organizePageCount === 0
+          ? t("workspaces.organize.selectPrompt")
+          : t("workspaces.organize.outputCount", { count: organizePageCount }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveOrganizeErrorMessage(errorKey, t, hours),
+    };
+  }
+
+  return {};
+}
+
 function resolveSplitErrorMessage(
   errorKey: PublicToolErrorKey,
   t: ReturnType<typeof useTranslations>,
@@ -220,6 +274,26 @@ function resolveSplitErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.split.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveOrganizeErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.organize.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.organize.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.organize.expiredDescription", { hours });
   }
 
   return undefined;

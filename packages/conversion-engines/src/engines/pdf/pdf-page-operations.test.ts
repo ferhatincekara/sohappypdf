@@ -5,6 +5,7 @@ import { PermanentConversionError } from "../../errors.js";
 import { createConversionWorkspace } from "../../workspace/temp-workspace.js";
 import {
   cropPdfMargins,
+  organizePdfPages,
   removePdfPages,
   reorderPdfPages,
   rotatePdfPages,
@@ -62,6 +63,19 @@ describe("pdf page operations", () => {
       expect(rotatedDocument.getPageCount()).toBe(3);
       expect(rotatedDocument.getPage(0)?.getRotation().angle % 360).toBe(90);
 
+      const organized = workspace.join("organized.pdf");
+      await organizePdfPages({
+        sourcePath: source,
+        outputPath: organized,
+        order: [3, 1],
+        rotations: [90, 0],
+      });
+      const organizedDocument = await PDFDocument.load(
+        await readFile(organized),
+      );
+      expect(organizedDocument.getPageCount()).toBe(2);
+      expect(organizedDocument.getPage(0)?.getRotation().angle % 360).toBe(90);
+
       await cropPdfMargins({
         sourcePath: source,
         outputPath: cropped,
@@ -98,6 +112,24 @@ describe("pdf page operations", () => {
           order: [1, 1],
         }),
       ).rejects.toBeInstanceOf(PermanentConversionError);
+
+      await expect(
+        organizePdfPages({
+          sourcePath: source,
+          outputPath: workspace.join("empty-organize.pdf"),
+          order: [],
+        }),
+      ).rejects.toBeInstanceOf(PermanentConversionError);
+
+      const duplicated = workspace.join("duplicated.pdf");
+      await organizePdfPages({
+        sourcePath: source,
+        outputPath: duplicated,
+        order: [1, 1],
+      });
+      expect(
+        (await PDFDocument.load(await readFile(duplicated))).getPageCount(),
+      ).toBe(2);
 
       await expect(
         removePdfPages({

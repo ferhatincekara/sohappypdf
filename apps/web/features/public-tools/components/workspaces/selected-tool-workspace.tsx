@@ -6,6 +6,7 @@ import { CompressPdfWorkspace } from "./compress-pdf-workspace";
 import { ConvertPdfWorkspace } from "./convert-pdf-workspace";
 import { DefaultToolWorkspace } from "./default-tool-workspace";
 import { MergePdfWorkspace } from "./merge-pdf-workspace";
+import { OrganizePdfWorkspace } from "./organize-pdf-workspace";
 import { PasswordPdfWorkspace } from "./password-pdf-workspace";
 import { RepairPdfWorkspace } from "./repair-pdf-workspace";
 import { SplitPdfWorkspace } from "./split-pdf-workspace";
@@ -14,6 +15,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
   switch (resolveToolWorkspaceKind(props.tool.id)) {
     case "split":
       return <SplitPdfWorkspace {...props} />;
+    case "organize":
+      return <OrganizePdfWorkspace {...props} />;
     case "merge":
       return <MergePdfWorkspace {...props} />;
     case "compress":

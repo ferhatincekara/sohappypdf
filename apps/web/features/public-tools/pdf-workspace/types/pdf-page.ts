@@ -1,7 +1,11 @@
+export type PdfPageRotation = 0 | 90 | 180 | 270;
+
 export type PdfPage = {
+  id: string;
   pageIndex: number;
   pageNumber: number;
   selected: boolean;
+  rotation: PdfPageRotation;
 };
 
 export function createPdfPages(
@@ -17,9 +21,11 @@ export function createPdfPages(
   return Array.from({ length: pageCount }, (_, pageIndex) => {
     const pageNumber = pageIndex + 1;
     return {
+      id: `page-${pageNumber}`,
       pageIndex,
       pageNumber,
       selected: selected.has(pageNumber),
+      rotation: 0,
     };
   });
 }

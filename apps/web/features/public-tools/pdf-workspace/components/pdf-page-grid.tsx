@@ -1,7 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { type KeyboardEvent, type ReactNode, useRef } from "react";
+import { type KeyboardEvent, type ReactNode, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import type { PdfjsDocument } from "../../lib/pdfjs-client";
 import {
   type PageActivationModifiers,
@@ -17,17 +18,24 @@ export function PdfPageGrid({
   document,
   pages,
   disabled,
+  reorderable = false,
   renderPageOverlay,
   onActivate,
+  onReorder,
 }: {
   document: PdfjsDocument;
   pages: readonly PdfPage[];
   disabled: boolean;
+  reorderable?: boolean;
   renderPageOverlay?: (page: PdfPage) => ReactNode;
-  onActivate: (pageNumber: number, modifiers: PageActivationModifiers) => void;
+  onActivate: (page: PdfPage, modifiers: PageActivationModifiers) => void;
+  onReorder?: (fromIndex: number, toIndex: number) => void;
 }) {
   const t = useTranslations("publicTools.pages");
   const listRef = useRef<HTMLUListElement>(null);
+  const dragIndex = useRef<number | null>(null);
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
+  const [dropIndex, setDropIndex] = useState<number | null>(null);
 
   function focusPageAt(index: number): void {
     const page = pages[index];
@@ -37,7 +45,7 @@ export function PdfPageGrid({
     }
 
     const target = listRef.current?.querySelector(
-      `[data-pdf-page="${page.pageNumber}"]`,
+      `[data-pdf-page-id="${page.id}"]`,
     );
 
     if (target instanceof HTMLButtonElement) {
@@ -47,11 +55,37 @@ export function PdfPageGrid({
 
   function handleKeyDown(
     event: KeyboardEvent<HTMLButtonElement>,
-    pageNumber: number,
+    page: PdfPage,
   ): void {
-    const index = pages.findIndex((page) => page.pageNumber === pageNumber);
+    const index = pages.findIndex((item) => item.id === page.id);
 
     if (index < 0) {
+      return;
+    }
+
+    if (
+      reorderable &&
+      onReorder !== undefined &&
+      event.altKey &&
+      (event.key === "ArrowLeft" ||
+        event.key === "ArrowRight" ||
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown")
+    ) {
+      const toIndex =
+        event.key === "ArrowLeft" || event.key === "ArrowUp"
+          ? index - 1
+          : index + 1;
+
+      if (toIndex < 0 || toIndex >= pages.length) {
+        return;
+      }
+
+      event.preventDefault();
+      onReorder(index, toIndex);
+      requestAnimationFrame(() => {
+        focusPageAt(toIndex);
+      });
       return;
     }
 
@@ -76,28 +110,78 @@ export function PdfPageGrid({
     focusPageAt(nextIndex);
   }
 
+  function clearDragState(): void {
+    dragIndex.current = null;
+    setDraggingIndex(null);
+    setDropIndex(null);
+  }
+
   return (
     <ul
       ref={listRef}
       className={PDF_PAGE_GRID_CLASS_NAME}
       aria-label={t("gridLabel")}
     >
-      {pages.map((page) => (
-        <li key={page.pageIndex}>
+      {pages.map((page, index) => (
+        <li
+          key={page.id}
+          onDragOver={(event) => {
+            if (!reorderable || disabled || dragIndex.current === null) {
+              return;
+            }
+
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "move";
+
+            if (dropIndex !== index) {
+              setDropIndex(index);
+            }
+          }}
+          onDrop={(event) => {
+            event.preventDefault();
+
+            if (
+              !reorderable ||
+              disabled ||
+              onReorder === undefined ||
+              dragIndex.current === null ||
+              dragIndex.current === index
+            ) {
+              clearDragState();
+              return;
+            }
+
+            onReorder(dragIndex.current, index);
+            clearDragState();
+          }}
+          className={cn(
+            dropIndex === index &&
+              draggingIndex !== index &&
+              "rounded-xl ring-2 ring-foreground",
+            draggingIndex === index && "opacity-50",
+          )}
+        >
           <PdfPageThumbnail
             document={document}
+            pageId={page.id}
             pageNumber={page.pageNumber}
             selected={page.selected}
             disabled={disabled}
+            rotation={page.rotation}
+            reorderable={reorderable}
             overlay={renderPageOverlay?.(page)}
             onActivate={(event) => {
-              onActivate(
-                page.pageNumber,
-                pageActivationFromPointerEvent(event),
-              );
+              onActivate(page, pageActivationFromPointerEvent(event));
             }}
             onKeyDown={(event) => {
-              handleKeyDown(event, page.pageNumber);
+              handleKeyDown(event, page);
+            }}
+            onReorderDragStart={() => {
+              dragIndex.current = index;
+              setDraggingIndex(index);
+            }}
+            onReorderDragEnd={() => {
+              clearDragState();
             }}
           />
         </li>

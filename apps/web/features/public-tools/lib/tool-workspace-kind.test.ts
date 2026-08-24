@@ -4,6 +4,7 @@ import { resolveToolWorkspaceKind } from "./tool-workspace-kind";
 describe("resolveToolWorkspaceKind", () => {
   test("maps focused tools to specialized workspaces", () => {
     expect(resolveToolWorkspaceKind("split-pdf")).toBe("split");
+    expect(resolveToolWorkspaceKind("organize-pdf")).toBe("organize");
     expect(resolveToolWorkspaceKind("merge-pdf")).toBe("merge");
     expect(resolveToolWorkspaceKind("compress-pdf")).toBe("compress");
     expect(resolveToolWorkspaceKind("pdf-to-word")).toBe("convert");

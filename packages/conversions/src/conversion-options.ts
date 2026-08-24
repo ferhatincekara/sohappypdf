@@ -76,9 +76,13 @@ export type RotatePdfOptions = {
   pages?: number[];
 };
 
+export const ORGANIZE_ROTATIONS = [0, 90, 180, 270] as const;
+export type OrganizeRotation = (typeof ORGANIZE_ROTATIONS)[number];
+
 export type OrganizePdfOptions = {
   type: "organize-pdf";
   order: number[];
+  rotations?: OrganizeRotation[];
 };
 
 export type RemovePagesOptions = {
@@ -569,6 +573,57 @@ function parsePageList(value: unknown, minimumLength = 1): number[] {
   return pages;
 }
 
+function parseOrganizeOrder(value: unknown): number[] {
+  if (!Array.isArray(value) || value.length < 1) {
+    throw invalidOptions();
+  }
+
+  const pages: number[] = [];
+
+  for (const item of value) {
+    if (!isPositiveInteger(item)) {
+      throw invalidOptions();
+    }
+
+    pages.push(item);
+  }
+
+  return pages;
+}
+
+function isOrganizeRotation(value: unknown): value is OrganizeRotation {
+  return ORGANIZE_ROTATIONS.some((rotation) => rotation === value);
+}
+
+function parseOrganizeRotations(
+  value: unknown,
+  orderLength: number,
+): OrganizeRotation[] | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(value) || value.length !== orderLength) {
+    throw invalidOptions();
+  }
+
+  const rotations: OrganizeRotation[] = [];
+
+  for (const item of value) {
+    if (!isOrganizeRotation(item)) {
+      throw invalidOptions();
+    }
+
+    rotations.push(item);
+  }
+
+  if (rotations.every((rotation) => rotation === 0)) {
+    return undefined;
+  }
+
+  return rotations;
+}
+
 function parsePassword(value: unknown): string {
   if (typeof value !== "string") {
     throw invalidOptions();
@@ -791,7 +846,16 @@ export function parseConversionOptions(
         ...(pages === undefined ? {} : { pages }),
       };
     }
-    case "organize-pdf":
+    case "organize-pdf": {
+      assertAllowedKeys(record, ["type", "order", "rotations"]);
+      const order = parseOrganizeOrder(record.order);
+      const rotations = parseOrganizeRotations(record.rotations, order.length);
+      return {
+        type,
+        order,
+        ...(rotations === undefined ? {} : { rotations }),
+      };
+    }
     case "reorder-pages": {
       assertAllowedKeys(record, ["type", "order"]);
       return {

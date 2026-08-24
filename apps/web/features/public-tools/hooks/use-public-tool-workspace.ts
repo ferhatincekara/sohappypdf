@@ -285,6 +285,8 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
       setWorkspaceState((current) => ({
         ...current,
         splitRanges: "",
+        pageOrder: "",
+        pageRotations: "",
       }));
     }
 
