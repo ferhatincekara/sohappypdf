@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { layoutPagesToHtml, layoutPagesToSections } from "./layout-html.js";
+import {
+  layoutPagesToHtml,
+  layoutPagesToSections,
+  layoutPagesToSpreadsheetHtml,
+} from "./layout-html.js";
 import { parsePdfLayout } from "./pdf-layout.js";
 
 const SAMPLE_LAYOUT = `<doc>
@@ -117,5 +121,15 @@ describe("layout html", () => {
 
     expect(html).toContain("A &lt;b&gt;B");
     expect(html).not.toContain("<b>B");
+  });
+
+  test("flattens reconstructed sections into a Calc HTML table", () => {
+    const html = layoutPagesToSpreadsheetHtml(parsePdfLayout(SAMPLE_LAYOUT));
+
+    expect(html).toContain("<td>Recovery Kit</td>");
+    expect(html).toContain("<td>alpha</td>");
+    expect(html).toContain("<td>bravo</td>");
+    expect(html).toContain("<td>hotel</td>");
+    expect(html).not.toContain("<h1>");
   });
 });

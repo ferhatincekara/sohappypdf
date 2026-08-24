@@ -1,19 +1,17 @@
-import { readFile, stat, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 import type {
   ConversionEngineInput,
   ConversionEngineResult,
 } from "../../engine.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
 import { layoutPagesToHtml } from "../pdf/layout-html.js";
-import { countLayoutWords, parsePdfLayout } from "../pdf/pdf-layout.js";
 import {
   type LibreOfficeRunContext,
   prepareLibreOfficeDirectories,
   readLibreOfficeOutput,
   runLibreOfficeConvert,
 } from "./libreoffice-runner.js";
-
-const MAX_LAYOUT_BYTES = 8 * 1024 * 1024;
+import { loadPdfLayoutPages } from "./load-pdf-layout.js";
 
 export async function convertPdfToWord(
   ctx: LibreOfficeRunContext,
@@ -50,34 +48,9 @@ async function writeReconstructedHtml(
   sourcePath: string,
   outputDirectory: string,
 ): Promise<string | undefined> {
-  const layoutPath = joinJobPath(outputDirectory, "layout.html");
+  const pages = await loadPdfLayoutPages(ctx, sourcePath, outputDirectory);
 
-  await ctx.runCommand({
-    command: ctx.config.pdftotextBin,
-    args: ["-bbox-layout", "-enc", "UTF-8", sourcePath, layoutPath],
-    cwd: outputDirectory,
-    timeoutMs: ctx.config.conversionTimeoutMs,
-  });
-
-  const layoutStat = await stat(layoutPath).catch(() => undefined);
-
-  if (
-    layoutStat === undefined ||
-    layoutStat.size < 1 ||
-    layoutStat.size > MAX_LAYOUT_BYTES
-  ) {
-    return undefined;
-  }
-
-  const layoutXml = await readFile(layoutPath, "utf8");
-
-  if (layoutXml.length === 0) {
-    return undefined;
-  }
-
-  const pages = parsePdfLayout(layoutXml);
-
-  if (countLayoutWords(pages) === 0) {
+  if (pages === undefined) {
     return undefined;
   }
 

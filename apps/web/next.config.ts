@@ -6,7 +6,6 @@ const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 const nextConfig: NextConfig = {
   typedRoutes: true,
   agentRules: false,
-  serverExternalPackages: ["pdfjs-dist"],
   async redirects() {
     return [
       {

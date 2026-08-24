@@ -5,8 +5,23 @@ import type { RunCommandInput } from "../../process/run-process.js";
 import { createConversionWorkspace } from "../../workspace/temp-workspace.js";
 import { createOfficeEngine } from "./office-engine.js";
 
+const LAYOUT_FIXTURE = `<doc>
+  <page width="612" height="792">
+    <block xMin="110" yMin="450" xMax="153" yMax="460">
+      <line xMin="110" yMin="450" xMax="153" yMax="460">
+        <word xMin="110" yMin="450" xMax="153" yMax="460">alpha</word>
+      </line>
+    </block>
+    <block xMin="210" yMin="450" xMax="268" yMax="460">
+      <line xMin="210" yMin="450" xMax="268" yMax="460">
+        <word xMin="210" yMin="450" xMax="268" yMax="460">bravo</word>
+      </line>
+    </block>
+  </page>
+</doc>`;
+
 describe("office engine pdf-to-spreadsheet", () => {
-  test("imports a PDF into Calc and exports XLSX", async () => {
+  test("rebuilds a spreadsheet from Poppler layout, then exports XLSX", async () => {
     const workspace = await createConversionWorkspace(
       "550e8400-e29b-41d4-a716-446655440231",
     );
@@ -18,10 +33,19 @@ describe("office engine pdf-to-spreadsheet", () => {
       const engine = createOfficeEngine(DEFAULT_CONVERSION_ENGINE_CONFIG, {
         async runCommand(input) {
           calls.push(input);
+
+          if (input.command === "pdftotext") {
+            const outputPath = input.args[input.args.length - 1];
+            if (outputPath !== undefined) {
+              await writeFile(outputPath, LAYOUT_FIXTURE);
+            }
+            return;
+          }
+
           const outputDirectory = workspace.join("lo-out");
           await mkdir(outputDirectory, { recursive: true });
           await writeFile(
-            `${outputDirectory}/source.xlsx`,
+            `${outputDirectory}/spreadsheet.xlsx`,
             Buffer.from([80, 75, 3, 4, 0, 0, 0, 0]),
           );
         },
@@ -37,10 +61,15 @@ describe("office engine pdf-to-spreadsheet", () => {
         additionalSourcePaths: [],
       });
 
-      expect(calls).toHaveLength(1);
-      expect(calls[0]?.command).toBe("soffice");
-      expect(calls[0]?.args).toContain("--infilter=calc_pdf_import");
-      expect(calls[0]?.args).toContain("xlsx");
+      expect(calls).toHaveLength(2);
+      expect(calls[0]?.command).toBe("pdftotext");
+      expect(calls[0]?.args).toContain("-bbox-layout");
+      expect(calls[1]?.command).toBe("soffice");
+      expect(
+        calls[1]?.args.some((arg) => arg.endsWith("spreadsheet.html")),
+      ).toBe(true);
+      expect(calls[1]?.args).toContain("--infilter=HTML (StarCalc)");
+      expect(calls[1]?.args.includes("--infilter=calc_pdf_import")).toBe(false);
       expect(result.filename).toBe("output.xlsx");
     } finally {
       await workspace.cleanup();

@@ -28,7 +28,10 @@ export function ConvertPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         }}
       />
       <p className="text-sm text-muted-foreground text-pretty">
-        {t("workspaces.convert.hint")}
+        {props.tool.id === "pdf-to-excel" ||
+        props.tool.id === "pdf-to-excel-ocr"
+          ? t("workspaces.convert.excelHint")
+          : t("workspaces.convert.hint")}
       </p>
       <ToolSelectedActions
         toolRoute={props.tool.route}

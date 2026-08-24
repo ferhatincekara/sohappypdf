@@ -837,7 +837,8 @@
         }
       },
       "convert": {
-        "hint": "Your file is ready to convert."
+        "hint": "Your file is ready to convert.",
+        "excelHint": "Text and tables are extracted into a spreadsheet. Scanned PDFs need PDF to Excel OCR."
       },
       "password": {
         "unlockTitle": "Unlock this PDF",

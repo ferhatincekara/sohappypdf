@@ -180,10 +180,14 @@ export async function runAllowedCommand(input: RunCommandInput): Promise<void> {
     timeoutMs: input.timeoutMs,
   });
 
-  if (result.exitCode !== 0) {
+  if (result.exitCode !== 0 || hasLibreOfficeExportFilterError(result.stderr)) {
     const details = `${command} exited ${String(result.exitCode)}: ${result.stderr
       .trim()
       .slice(0, 800)}`;
     throw nativeToolFailureError(details);
   }
+}
+
+function hasLibreOfficeExportFilterError(stderr: string): boolean {
+  return stderr.toLowerCase().includes("no export filter");
 }

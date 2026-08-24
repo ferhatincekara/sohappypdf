@@ -837,7 +837,8 @@
         }
       },
       "convert": {
-        "hint": "Dosyanız dönüştürülmeye hazır."
+        "hint": "Dosyanız dönüştürülmeye hazır.",
+        "excelHint": "Metin ve tablolar bir elektronik tabloya çıkarılır. Taranmış PDF’ler için PDF to Excel OCR kullanın."
       },
       "password": {
         "unlockTitle": "PDF kilidini aç",

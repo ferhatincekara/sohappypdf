@@ -283,6 +283,70 @@ function renderSection(section: LayoutSection): string {
   }
 }
 
+function spreadsheetRowsFromSections(
+  sections: readonly LayoutSection[],
+): string[][] {
+  const rows: string[][] = [];
+
+  for (const section of sections) {
+    switch (section.kind) {
+      case "heading":
+      case "paragraph":
+        rows.push([section.text]);
+        break;
+      case "list":
+        for (const item of section.items) {
+          rows.push([item]);
+        }
+        break;
+      case "table":
+        rows.push(...section.rows);
+        break;
+    }
+  }
+
+  return rows;
+}
+
+function padSpreadsheetRows(rows: readonly string[][]): string[][] {
+  const columnCount = rows.reduce((max, row) => Math.max(max, row.length), 1);
+
+  return rows.map((row) => {
+    const next = [...row];
+
+    while (next.length < columnCount) {
+      next.push("");
+    }
+
+    return next;
+  });
+}
+
+export function layoutPagesToSpreadsheetHtml(
+  pages: readonly LayoutPage[],
+): string {
+  const rows = padSpreadsheetRows(
+    spreadsheetRowsFromSections(layoutPagesToSections(pages)),
+  );
+  const body = `<table>${rows
+    .map(
+      (row) =>
+        `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`,
+    )
+    .join("")}</table>`;
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+${body}
+</body>
+</html>
+`;
+}
+
 export function layoutPagesToHtml(pages: readonly LayoutPage[]): string {
   const sections = layoutPagesToSections(pages);
   const body = sections.map(renderSection).join("\n");

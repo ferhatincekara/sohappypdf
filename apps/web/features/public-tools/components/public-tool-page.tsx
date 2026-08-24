@@ -108,7 +108,9 @@ export async function PublicToolPageContent({
           name={name}
           description={description}
           authenticationNotice={
-            tool.allowsAnonymous ? null : t("descriptionAuthenticated")
+            tool.allowsAnonymous || isAuthenticated
+              ? null
+              : t("descriptionAuthenticated")
           }
         />
       </div>

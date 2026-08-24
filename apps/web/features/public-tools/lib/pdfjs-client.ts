@@ -1,21 +1,8 @@
-import {
-  GlobalWorkerOptions,
-  getDocument,
-  type PDFDocumentProxy,
-} from "pdfjs-dist";
+import type { PDFDocumentProxy } from "pdfjs-dist";
 
 let workerConfigured = false;
 
 export type PdfjsDocument = PDFDocumentProxy;
-
-export function configurePdfjsWorker(): void {
-  if (workerConfigured || typeof window === "undefined") {
-    return;
-  }
-
-  GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-  workerConfigured = true;
-}
 
 export function isPdfPasswordError(error: unknown): boolean {
   if (!(error instanceof Error)) {
@@ -27,9 +14,19 @@ export function isPdfPasswordError(error: unknown): boolean {
 }
 
 export async function loadPdfDocument(file: File): Promise<PdfjsDocument> {
-  configurePdfjsWorker();
+  if (typeof window === "undefined") {
+    throw new Error("PDF preview is only available in the browser");
+  }
+
+  const pdfjs = await import("pdfjs-dist");
+
+  if (!workerConfigured) {
+    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    workerConfigured = true;
+  }
+
   const bytes = new Uint8Array(await file.arrayBuffer());
-  const task = getDocument({
+  const task = pdfjs.getDocument({
     data: bytes,
     disableAutoFetch: true,
     disableStream: true,

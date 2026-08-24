@@ -93,4 +93,38 @@ describe("office engine native", () => {
       }
     },
   );
+
+  test.skipIf(!nativeAvailable)(
+    "writes an XLSX workbook from extracted PDF text",
+    async () => {
+      const workspace = await createConversionWorkspace(
+        "550e8400-e29b-41d4-a716-446655440234",
+      );
+
+      try {
+        const sourcePath = workspace.join("source.pdf");
+        await writeSamplePdf(sourcePath);
+
+        const result = await createOfficeEngine(
+          DEFAULT_CONVERSION_ENGINE_CONFIG,
+        ).convert({
+          type: "pdf-to-excel",
+          sourcePath,
+          outputDirectory: workspace.directory,
+          sourceFormat: "pdf",
+          targetFormat: "xlsx",
+          options: { type: "pdf-to-excel" },
+          additionalSourcePaths: [],
+        });
+
+        const output = await readFile(result.outputPath);
+
+        expect(result.filename).toBe("output.xlsx");
+        expect(output.subarray(0, 2)).toEqual(Uint8Array.from([80, 75]));
+        expect(output.byteLength).toBeGreaterThan(100);
+      } finally {
+        await workspace.cleanup();
+      }
+    },
+  );
 });
