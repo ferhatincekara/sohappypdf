@@ -16,14 +16,15 @@
       "menu": "Site",
       "skip": "İçeriğe geç",
       "tools": "Araçlar",
+      "allTools": "Tüm araçlar",
       "categories": {
-        "organize": "Düzenleme",
-        "optimize": "Optimizasyon",
-        "convert": "Dönüştürme",
-        "edit": "Düzenle",
-        "security": "Güvenlik",
-        "document": "Belge",
-        "intelligence": "Zeka"
+        "organize": "PDF organize",
+        "optimize": "PDF optimize",
+        "convert": "PDF dönüştür",
+        "edit": "PDF düzenle",
+        "security": "PDF güvenliği",
+        "document": "Ofis ve görseller",
+        "intelligence": "PDF zekası"
       }
     },
     "hero": {
@@ -167,16 +168,33 @@
     "footer": {
       "brand": "SohappyPDF",
       "menu": "Alt bilgi",
-      "product": "Ürün",
+      "tools": "Araçlar",
       "pricing": "Fiyatlandırma",
       "api": "API",
       "signIn": "Giriş yap"
+    },
+    "toolsDirectory": {
+      "title": "PDF araçları",
+      "description": "Her genel araç odaklı bir akıştır. Bir kategori seçin, aracı açın, dosya yükleyin ve sonucu indirin.",
+      "openTool": "Aracı aç",
+      "comingSoon": "Yakında",
+      "categories": {
+        "organize": "PDF sayfalarını birleştirin, bölün ve yeniden düzenleyin.",
+        "convert": "PDF’leri diğer formatlara ve geri dönüştürün.",
+        "edit": "Filigran, sayfa numarası ve hafif düzenlemeler ekleyin.",
+        "optimize": "PDF’leri sıkıştırın, onarın ve paylaşıma hazırlayın.",
+        "security": "PDF’leri koruyun, kilidini açın ve erişimi yönetin.",
+        "document": "Ofis dosyalarını ve görselleri PDF’e dönüştürün.",
+        "intelligence": "OCR, özetleme ve belge çevirisi."
+      }
     },
     "metadata": {
       "homeTitle": "SohappyPDF — İnsanlar ve API’ler için PDF dönüştürme",
       "homeDescription": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. SohappyPDF aynı akışı genel bir API ile de sunar.",
       "pricingTitle": "Fiyatlandırma",
-      "pricingDescription": "Ücretsiz ve Pro planların dönüşüm, depolama, dosya boyutu ve API limitlerini karşılaştırın."
+      "pricingDescription": "Ücretsiz ve Pro planların dönüşüm, depolama, dosya boyutu ve API limitlerini karşılaştırın.",
+      "toolsTitle": "PDF araçları",
+      "toolsDescription": "Organize, Dönüştür, Düzenle, Optimize, Güvenlik ve Zeka PDF araçlarına göz atın."
     }
   },
   "app": {
@@ -635,8 +653,8 @@
   },
   "publicTools": {
     "metaTitle": "{tool}",
-    "description": "Bir dosya yükleyin, tarayıcıda işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
-    "descriptionAuthenticated": "Bir dosya yükleyin, bulutta işleyin ve sonucu indirin. Giriş yapmanız gerekir.",
+    "description": "Bir dosya yükleyin, bulutta işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
+    "descriptionAuthenticated": "Bu araç işlem başlamadan önce oturum açmanızı gerektirir.",
     "selectFile": "Dosya seçin",
     "selectFiles": "Dosyaları seçin",
     "process": "İşle",
@@ -651,6 +669,65 @@
     "keepWorkspace": "Çalışma alanınızı ve geçmişinizi saklamak için ücretsiz bir hesap oluşturun.",
     "createAccount": "Ücretsiz hesap oluştur",
     "limits": "En fazla {files} dosya, her biri {sizeMb} MB. Dosyalar {hours} saat saklanır.",
+    "overview": {
+      "accepts": "Kabul edilen dosyalar",
+      "outputs": "Çıktı",
+      "limits": "Limitler",
+      "step": "Adım {number}",
+      "steps": {
+        "upload": {
+          "title": "Yükle",
+          "description": "Desteklenen dosyaları ekleyin ({detail})."
+        },
+        "process": {
+          "title": "İşle",
+          "description": "Dosyanızı bulutta {detail} formatına dönüştürürüz."
+        },
+        "download": {
+          "title": "İndir",
+          "description": "Araç izin verdiğinde hesap oluşturmadan {detail} sonucunuzu alın."
+        }
+      }
+    },
+    "upload": {
+      "title": "PDF’yi buraya bırakın",
+      "titleMultiple": "Dosyaları buraya bırakın",
+      "browse": "Dosya seç",
+      "browseMultiple": "Dosya seç",
+      "hint": "{formats} desteklenir. Dosya başına en fazla {size}.",
+      "conjunction": "ve"
+    },
+    "workspace": {
+      "fileList": "Seçilen dosyalar",
+      "options": "Araç ayarları",
+      "removeFile": "{name} dosyasını kaldır",
+      "retry": "Yüklemeyi tekrar dene",
+      "fileReady": "Hazır",
+      "filePending": "Yükleme bekleniyor"
+    },
+    "phases": {
+      "uploading": "Yükleniyor",
+      "uploadingHint": "Dosyanız güvenli depolamaya gönderiliyor.",
+      "preparing": "Hazırlanıyor",
+      "preparingHint": "Dönüşüm işi oluşturuluyor.",
+      "processing": "İşleniyor",
+      "processingHint": "Dosyanız üzerinde çalışıyoruz. Bu biraz sürebilir.",
+      "ready": "Hazır",
+      "readyHint": "Sonucunuz indirilmeye hazır."
+    },
+    "result": {
+      "title": "Dosyanız hazır",
+      "description": "{source} dosyası {format} formatına dönüştürüldü.",
+      "unnamedSource": "Dosyanız",
+      "download": "İndir",
+      "downloading": "İndirme hazırlanıyor…",
+      "processAnother": "Başka bir dosya işle",
+      "signupPrompt": "Geçmiş, daha yüksek limitler ve kayıtlı dosyalar ister misiniz?",
+      "signupCta": "Ücretsiz hesap oluştur"
+    },
+    "related": {
+      "title": "İlgili araçlar"
+    },
     "options": {
       "compressionLevel": "Sıkıştırma düzeyi",
       "compressionLow": "Düşük (en iyi kalite)",
@@ -671,17 +748,28 @@
       "pageNumberStart": "Numaralandırma başlangıcı",
       "password": "Parola",
       "targetLanguage": "Hedef dil",
-      "outputFormat": "Çıktı formatı"
+      "outputFormat": "Çıktı formatı",
+      "languages": {
+        "eng": "İngilizce",
+        "tur": "Türkçe",
+        "deu": "Almanca",
+        "fra": "Fransızca",
+        "spa": "İspanyolca"
+      }
     },
     "errors": {
+      "title": "Bir şeye dikkat etmeniz gerekiyor",
       "noFile": "İşlemek için bir dosya seçin.",
       "tooFewFiles": "Birleştirmek için en az iki PDF seçin.",
       "tooManyFiles": "Bu araç için çok fazla dosya seçildi.",
       "tooLarge": "Bu dosya geçerli boyut sınırının üzerinde.",
-      "unsupported": "Bu dosya bu araçla işlenemez.",
+      "unsupported": "Bu dosya türü bu araç için desteklenmiyor.",
       "invalidOptions": "Araç ayarlarını kontrol edip tekrar deneyin.",
       "creditsExhausted": "Bu ayki krediniz bitti. Pro'ya geçin veya yeni dönemi bekleyin.",
+      "limitReached": "Geçerli kullanım limitine ulaştınız. Daha sonra tekrar deneyin veya planınızı yükseltin.",
       "signInRequired": "Bu aracı kullanmak için giriş yapın.",
+      "signInCta": "Devam etmek için giriş yapın",
+      "passwordProtected": "Bu PDF parola korumalı. Önce kilidini açın veya Unlock PDF aracını doğru parola ile kullanın.",
       "processingFailed": "İşlem başarısız oldu. Farklı bir dosyayla tekrar deneyin.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "Yükleme başarısız. Bağlantınızı kontrol edip tekrar deneyin.",

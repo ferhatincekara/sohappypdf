@@ -16,14 +16,15 @@
       "menu": "Site",
       "skip": "Skip to content",
       "tools": "Tools",
+      "allTools": "All tools",
       "categories": {
-        "organize": "Organize",
-        "optimize": "Optimize",
-        "convert": "Convert",
-        "edit": "Edit",
-        "security": "Security",
-        "document": "Document",
-        "intelligence": "Intelligence"
+        "organize": "Organize PDF",
+        "optimize": "Optimize PDF",
+        "convert": "Convert PDF",
+        "edit": "Edit PDF",
+        "security": "PDF Security",
+        "document": "Office & images",
+        "intelligence": "PDF Intelligence"
       }
     },
     "hero": {
@@ -167,16 +168,33 @@
     "footer": {
       "brand": "SohappyPDF",
       "menu": "Footer",
-      "product": "Product",
+      "tools": "Tools",
       "pricing": "Pricing",
       "api": "API",
       "signIn": "Sign in"
+    },
+    "toolsDirectory": {
+      "title": "PDF tools",
+      "description": "Every public tool is a focused workflow. Pick a category, open a tool, upload a file, and download the result.",
+      "openTool": "Open tool",
+      "comingSoon": "Coming soon",
+      "categories": {
+        "organize": "Combine, split, and rearrange PDF pages.",
+        "convert": "Turn PDFs into other formats and back again.",
+        "edit": "Add watermarks, page numbers, and light edits.",
+        "optimize": "Compress, repair, and prepare PDFs for sharing.",
+        "security": "Protect, unlock, and control access to PDFs.",
+        "document": "Convert Office files and images to PDF.",
+        "intelligence": "OCR, summarize, and translate document content."
+      }
     },
     "metadata": {
       "homeTitle": "SohappyPDF — PDF conversion for people and APIs",
       "homeDescription": "Upload a file, convert it, and download the result. SohappyPDF also exposes the same workflow through a public API.",
       "pricingTitle": "Pricing",
-      "pricingDescription": "Compare Free and Pro limits for conversions, storage, file size, and API access."
+      "pricingDescription": "Compare Free and Pro limits for conversions, storage, file size, and API access.",
+      "toolsTitle": "PDF tools",
+      "toolsDescription": "Browse Organize, Convert, Edit, Optimize, Security, and Intelligence PDF tools."
     }
   },
   "app": {
@@ -635,8 +653,8 @@
   },
   "publicTools": {
     "metaTitle": "{tool}",
-    "description": "Upload a file, process it in the browser, and download the result. No account required for basic processing.",
-    "descriptionAuthenticated": "Upload a file, process it in the cloud, and download the result. Sign in required.",
+    "description": "Upload a file, process it in the cloud, and download the result. No account required for basic processing.",
+    "descriptionAuthenticated": "This tool requires a signed-in account before processing can start.",
     "selectFile": "Choose a file",
     "selectFiles": "Choose files",
     "process": "Process",
@@ -651,6 +669,65 @@
     "keepWorkspace": "Create a free account to keep your workspace and history.",
     "createAccount": "Create a free account",
     "limits": "Up to {files} files, {sizeMb} MB each. Files are kept for {hours} hours.",
+    "overview": {
+      "accepts": "Accepted files",
+      "outputs": "Output",
+      "limits": "Limits",
+      "step": "Step {number}",
+      "steps": {
+        "upload": {
+          "title": "Upload",
+          "description": "Add supported files ({detail})."
+        },
+        "process": {
+          "title": "Process",
+          "description": "We convert your file in the cloud to {detail}."
+        },
+        "download": {
+          "title": "Download",
+          "description": "Get your {detail} result without creating an account when the tool allows it."
+        }
+      }
+    },
+    "upload": {
+      "title": "Drop a PDF here",
+      "titleMultiple": "Drop files here",
+      "browse": "Browse files",
+      "browseMultiple": "Browse files",
+      "hint": "Supports {formats}. Max {size} per file.",
+      "conjunction": "and"
+    },
+    "workspace": {
+      "fileList": "Selected files",
+      "options": "Tool options",
+      "removeFile": "Remove {name}",
+      "retry": "Retry upload",
+      "fileReady": "Ready",
+      "filePending": "Waiting to upload"
+    },
+    "phases": {
+      "uploading": "Uploading",
+      "uploadingHint": "Sending your file to secure storage.",
+      "preparing": "Preparing",
+      "preparingHint": "Creating the conversion job.",
+      "processing": "Processing",
+      "processingHint": "Working on your file. This may take a moment.",
+      "ready": "Ready",
+      "readyHint": "Your result is ready to download."
+    },
+    "result": {
+      "title": "Your file is ready",
+      "description": "{source} was converted to {format}.",
+      "unnamedSource": "Your file",
+      "download": "Download",
+      "downloading": "Preparing download…",
+      "processAnother": "Process another file",
+      "signupPrompt": "Want history, higher limits, and saved workspace files?",
+      "signupCta": "Create a free account"
+    },
+    "related": {
+      "title": "Related tools"
+    },
     "options": {
       "compressionLevel": "Compression level",
       "compressionLow": "Low (best quality)",
@@ -671,17 +748,28 @@
       "pageNumberStart": "Start numbering at",
       "password": "Password",
       "targetLanguage": "Target language",
-      "outputFormat": "Output format"
+      "outputFormat": "Output format",
+      "languages": {
+        "eng": "English",
+        "tur": "Turkish",
+        "deu": "German",
+        "fra": "French",
+        "spa": "Spanish"
+      }
     },
     "errors": {
+      "title": "Something needs attention",
       "noFile": "Choose a file to process.",
       "tooFewFiles": "Select at least two PDFs to merge.",
       "tooManyFiles": "Too many files for this tool.",
       "tooLarge": "That file is larger than the current limit.",
-      "unsupported": "That file cannot be processed with this tool.",
+      "unsupported": "That file type is not supported for this tool.",
       "invalidOptions": "Check the tool settings and try again.",
       "creditsExhausted": "You have used all credits for this month. Upgrade to Pro or wait for the next billing period.",
+      "limitReached": "You have reached the current usage limit. Try again later or upgrade your plan.",
       "signInRequired": "Sign in to use this tool.",
+      "signInCta": "Sign in to continue",
+      "passwordProtected": "This PDF is password protected. Unlock it first, or use Unlock PDF with the correct password.",
       "processingFailed": "Processing failed. Try again with a different file.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "Upload failed. Check your connection and try again.",

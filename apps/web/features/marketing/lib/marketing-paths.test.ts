@@ -5,12 +5,14 @@ describe("public marketing routes", () => {
   test("exposes only real public routes", () => {
     expect(PUBLIC_MARKETING_ROUTES).toEqual([
       "/",
+      "/tools",
       "/pricing",
       "/developers",
       "/login",
       "/signup",
     ]);
     expect(MARKETING_PATHS.product).toBe("/#product");
+    expect(MARKETING_PATHS.tools).toBe("/tools");
   });
 
   test("does not invent legal or content routes", () => {

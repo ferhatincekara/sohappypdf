@@ -3,6 +3,7 @@ import { DEVELOPER_PATHS } from "@/features/developer-docs/config/developer-path
 
 export const MARKETING_PATHS = {
   home: "/",
+  tools: "/tools",
   pricing: "/pricing",
   developers: DEVELOPER_PATHS.docs,
   login: AUTH_PATHS.login,
@@ -12,6 +13,7 @@ export const MARKETING_PATHS = {
 
 export const PUBLIC_MARKETING_ROUTES = [
   MARKETING_PATHS.home,
+  MARKETING_PATHS.tools,
   MARKETING_PATHS.pricing,
   MARKETING_PATHS.developers,
   MARKETING_PATHS.login,

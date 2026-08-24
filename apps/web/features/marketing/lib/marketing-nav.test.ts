@@ -4,9 +4,8 @@ import { getMarketingFooterLinks, MARKETING_NAV_LINKS } from "./marketing-nav";
 import { MARKETING_PATHS } from "./marketing-paths";
 
 describe("marketing navigation", () => {
-  test("uses real product, pricing, and developer routes", () => {
+  test("uses tools dropdown companions with pricing and developer routes", () => {
     expect(MARKETING_NAV_LINKS.map((item) => item.href)).toEqual([
-      MARKETING_PATHS.product,
       MARKETING_PATHS.pricing,
       MARKETING_PATHS.developers,
     ]);
@@ -16,7 +15,7 @@ describe("marketing navigation", () => {
     const links = getMarketingFooterLinks(AUTH_PATHS.login);
 
     expect(links.map((item) => item.href)).toEqual([
-      MARKETING_PATHS.product,
+      MARKETING_PATHS.tools,
       MARKETING_PATHS.pricing,
       MARKETING_PATHS.developers,
       AUTH_PATHS.login,

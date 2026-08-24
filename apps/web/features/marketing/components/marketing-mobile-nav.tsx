@@ -82,6 +82,18 @@ export function MarketingMobileNav({
           </SheetTitle>
         </SheetHeader>
         <nav aria-label={t("menu")} className="flex flex-col gap-1 p-4">
+          <Link
+            href={MARKETING_PATHS.tools}
+            onClick={() => {
+              close("navigate");
+            }}
+            className={buttonVariants({
+              variant: "ghost",
+              className: "justify-start",
+            })}
+          >
+            {t("tools")}
+          </Link>
           {MARKETING_NAV_LINKS.map((item) => (
             <Link
               key={item.id}
@@ -99,7 +111,7 @@ export function MarketingMobileNav({
           ))}
           <div className="mt-2 flex flex-col gap-3 border-t border-border pt-4">
             <p className="px-2 text-xs font-medium text-muted-foreground">
-              {t("tools")}
+              {t("allTools")}
             </p>
             {toolGroups.map((group) => (
               <div key={group.category} className="flex flex-col gap-1">

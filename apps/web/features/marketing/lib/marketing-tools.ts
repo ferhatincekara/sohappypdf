@@ -7,9 +7,9 @@ import {
 
 export const MARKETING_TOOL_CATEGORY_ORDER = [
   "organize",
-  "optimize",
   "convert",
   "edit",
+  "optimize",
   "security",
   "document",
   "intelligence",
@@ -64,8 +64,29 @@ export function getMarketingToolDirectoryItems(): readonly MarketingToolNavItem[
 }
 
 export function getMarketingToolDirectoryGroups(): readonly MarketingToolNavGroup[] {
-  return groupCatalogToolsByCategory().map((group) => ({
-    category: group.category,
-    tools: group.tools.map(toNavItem),
-  }));
+  const grouped = new Map(
+    groupCatalogToolsByCategory().map((group) => [
+      group.category,
+      group.tools.map(toNavItem),
+    ]),
+  );
+
+  return MARKETING_TOOL_CATEGORY_ORDER.flatMap((category) => {
+    const tools = grouped.get(category);
+
+    if (tools === undefined || tools.length === 0) {
+      return [];
+    }
+
+    return [{ category, tools }];
+  });
+}
+
+export function getRelatedMarketingTools(
+  tool: ToolDefinition,
+  limit = 4,
+): readonly MarketingToolNavItem[] {
+  return getMarketingToolNavItems()
+    .filter((item) => item.category === tool.category && item.id !== tool.id)
+    .slice(0, limit);
 }

@@ -5,6 +5,7 @@ import {
   getMarketingToolDirectoryItems,
   getMarketingToolNavGroups,
   getMarketingToolNavItems,
+  getRelatedMarketingTools,
 } from "./marketing-tools";
 
 describe("marketing tool navigation", () => {
@@ -27,16 +28,16 @@ describe("marketing tool navigation", () => {
 
     expect(groups.map((group) => group.category)).toEqual([
       "organize",
-      "optimize",
       "convert",
       "edit",
+      "optimize",
       "security",
       "document",
       "intelligence",
     ]);
     expect(
-      groups.flatMap((group) => group.tools.map((tool) => tool.id)),
-    ).toEqual(items.map((item) => item.id));
+      groups.flatMap((group) => group.tools.map((tool) => tool.id)).sort(),
+    ).toEqual(items.map((item) => item.id).sort());
   });
 
   test("builds the full tool directory from catalog metadata", () => {
@@ -49,9 +50,9 @@ describe("marketing tool navigation", () => {
     );
     expect(groups.map((group) => group.category)).toEqual([
       "organize",
-      "optimize",
       "convert",
       "edit",
+      "optimize",
       "security",
       "document",
       "intelligence",
@@ -59,5 +60,19 @@ describe("marketing tool navigation", () => {
     expect(
       groups.flatMap((group) => group.tools.map((tool) => tool.id)).sort(),
     ).toEqual(catalog.map((tool) => tool.id).sort());
+  });
+
+  test("returns related tools from the same category", () => {
+    const merge = listRegisteredTools().find((tool) => tool.id === "merge-pdf");
+    expect(merge).toBeDefined();
+    if (merge === undefined) {
+      throw new Error("merge-pdf must exist");
+    }
+
+    const related = getRelatedMarketingTools(merge, 4);
+    expect(related.every((item) => item.category === merge.category)).toBe(
+      true,
+    );
+    expect(related.some((item) => item.id === "merge-pdf")).toBe(false);
   });
 });

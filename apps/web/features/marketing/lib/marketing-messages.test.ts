@@ -22,6 +22,15 @@ describe("marketing locales", () => {
     expect(englishKeys.some((key) => key.startsWith("pricing."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("nav."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("footer."))).toBe(true);
+    expect(englishKeys.some((key) => key.startsWith("toolsDirectory."))).toBe(
+      true,
+    );
+  });
+
+  test("keeps English and Turkish publicTools keys aligned", () => {
+    expect(flattenKeys(tr.publicTools).sort()).toEqual(
+      flattenKeys(en.publicTools).sort(),
+    );
   });
 
   test("does not claim certifications or unlimited usage", () => {

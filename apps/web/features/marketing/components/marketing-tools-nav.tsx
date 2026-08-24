@@ -9,9 +9,11 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@/lib/i18n/navigation";
+import { MARKETING_PATHS } from "../lib/marketing-paths";
 import type { MarketingToolNavGroup } from "../lib/marketing-tools";
 
 export function MarketingToolsNav({
@@ -39,6 +41,13 @@ export function MarketingToolsNav({
         align="start"
         className="w-[min(90vw,44rem)] max-h-[min(70vh,36rem)] p-2"
       >
+        <DropdownMenuItem
+          className="font-medium"
+          render={<Link href={MARKETING_PATHS.tools} />}
+        >
+          {t("allTools")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3">
           {groups.map((group) => (
             <DropdownMenuGroup

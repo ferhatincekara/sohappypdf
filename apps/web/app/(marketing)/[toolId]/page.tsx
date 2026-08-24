@@ -6,6 +6,10 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { getPublicWebEnv } from "@/config/public-env";
+import { getWebSession } from "@/features/auth/session/get-web-session";
+import { hasWebSession } from "@/features/auth/session/session-state";
+import { getRelatedMarketingTools } from "@/features/marketing/lib/marketing-tools";
 import { PublicToolPageContent } from "@/features/public-tools";
 
 export function generateStaticParams() {
@@ -31,7 +35,7 @@ export async function generateMetadata({
 
   return {
     title: t("metaTitle", { tool: tTools(`${tool.id}.name`) }),
-    description: t("description"),
+    description: tTools(`${tool.id}.description`),
   };
 }
 
@@ -47,7 +51,17 @@ export default async function PublicToolPage({
     notFound();
   }
 
-  return <PublicToolPageContent tool={tool} />;
+  const session = await getWebSession();
+  const isAuthenticated = hasWebSession(session);
+
+  return (
+    <PublicToolPageContent
+      tool={tool}
+      isAuthenticated={isAuthenticated}
+      relatedTools={getRelatedMarketingTools(tool)}
+      maxAuthenticatedFileSizeBytes={getPublicWebEnv().maxUploadFileSizeBytes}
+    />
+  );
 }
 
 export type PublicToolPageParams = {
