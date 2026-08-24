@@ -1,24 +1,30 @@
 import { assertPolarCheckoutConfig, type BillingConfig } from "@repo/config";
+import { isConversionFailureCode } from "@repo/conversions";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
   PolarClient,
   PublicBillingStatus,
   VerifyPolarWebhook,
+  WebCreditBalance,
 } from "./billing-types.js";
 import {
   assertCanCreateApiKey,
   assertCanCreateConversion,
+  assertCanSpendWebCredits,
   assertCanUploadFile,
   resolvePlan,
 } from "./entitlements.js";
-import { DEFAULT_PLAN_LIMITS, getPlanLimits } from "./plan-config.js";
+import { buildPlanCatalog, getPlanLimits } from "./plan-config.js";
 import type { PlanCatalog, PlanId, UserEntitlements } from "./plan-types.js";
 import {
   parsePolarSubscription,
   planFromPolarProductId,
 } from "./polar-subscription.js";
 import { getUtcMonthPeriod } from "./usage-period.js";
+import { resolveWebCreditCost } from "./web-credit-cost.js";
+import { resolveWebCreditPeriod } from "./web-credit-period.js";
+import { shouldRefundWebCredits } from "./web-credit-refund.js";
 import { handlePolarWebhook } from "./webhook-service.js";
 
 export type BillingServiceOptions = {
@@ -34,12 +40,18 @@ export type BillingService = {
   getEntitlements(userId: string): Promise<UserEntitlements>;
   resolvePlan(userId: string): Promise<PlanId>;
   getConversionUsage(userId: string): Promise<{ conversionsUsed: number }>;
+  getWebCreditBalance(userId: string): Promise<WebCreditBalance>;
   getBillingStatus(input: {
     userId: string;
     storageUsedBytes: number;
     apiKeyCount: number;
   }): Promise<PublicBillingStatus>;
   assertCanCreateConversion(userId: string): Promise<void>;
+  assertCanSpendWebCredits(input: {
+    userId: string;
+    toolId: string;
+    amount?: number;
+  }): Promise<void>;
   assertCanUploadFile(input: {
     userId: string;
     sizeBytes: number;
@@ -49,6 +61,21 @@ export type BillingService = {
   recordConversionUsage(input: {
     userId: string;
     conversionId: string;
+  }): Promise<boolean>;
+  consumeWebCredits(input: {
+    userId: string;
+    conversionId: string;
+    toolId: string;
+  }): Promise<boolean>;
+  refundWebCredits(input: {
+    userId: string;
+    conversionId: string;
+    reason: string;
+  }): Promise<boolean>;
+  refundWebCreditsForFailure(input: {
+    userId: string;
+    conversionId: string;
+    errorCode: string;
   }): Promise<boolean>;
   createCheckout(userId: string): Promise<{ url: string }>;
   createCustomerPortal(userId: string): Promise<{ url: string }>;
@@ -66,7 +93,7 @@ export function createBillingService(
   options: BillingServiceOptions,
 ): BillingService {
   const now = options.now ?? (() => new Date());
-  const catalog = options.planCatalog ?? DEFAULT_PLAN_LIMITS;
+  const catalog = options.planCatalog ?? buildPlanCatalog();
 
   async function getEntitlements(userId: string): Promise<UserEntitlements> {
     const subscription =
@@ -81,6 +108,37 @@ export function createBillingService(
       cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd ?? false,
       currentPeriodEnd: subscription?.currentPeriodEnd ?? null,
     };
+  }
+
+  async function resolveUsageContext(userId: string) {
+    const subscription =
+      await options.repository.findLatestSubscriptionByUserId(userId);
+    const current = now();
+    const entitlements = await getEntitlements(userId);
+    const period = resolveWebCreditPeriod({
+      subscription: subscription ?? null,
+      now: current,
+    });
+
+    return {
+      entitlements,
+      period,
+      subscription: subscription ?? null,
+    };
+  }
+
+  async function ensureWebCreditBalance(
+    userId: string,
+  ): Promise<WebCreditBalance> {
+    const { entitlements, period } = await resolveUsageContext(userId);
+
+    return options.repository.ensureWebCreditGrant({
+      userId,
+      periodStart: period.start,
+      periodEnd: period.end,
+      grantAmount: entitlements.limits.monthlyWebCredits,
+      now: now(),
+    });
   }
 
   async function ensurePolarCustomer(userId: string) {
@@ -214,21 +272,27 @@ export function createBillingService(
 
     async getConversionUsage(userId) {
       const period = getUtcMonthPeriod(now());
-      return options.repository.getOrCreateUsagePeriod({
+      const usage = await options.repository.getOrCreateUsagePeriod({
         userId,
         periodStart: period.start,
         periodEnd: period.end,
       });
+      return { conversionsUsed: usage.conversionsUsed };
+    },
+
+    async getWebCreditBalance(userId) {
+      return ensureWebCreditBalance(userId);
     },
 
     async getBillingStatus(input) {
       await reconcileFromPolar(input.userId);
-      const entitlements = await getEntitlements(input.userId);
-      const period = getUtcMonthPeriod(now());
-      const usage = await options.repository.getOrCreateUsagePeriod({
+      const { entitlements, period } = await resolveUsageContext(input.userId);
+      const balance = await ensureWebCreditBalance(input.userId);
+      const conversionPeriod = getUtcMonthPeriod(now());
+      const conversionUsage = await options.repository.getOrCreateUsagePeriod({
         userId: input.userId,
-        periodStart: period.start,
-        periodEnd: period.end,
+        periodStart: conversionPeriod.start,
+        periodEnd: conversionPeriod.end,
       });
       const customer = await options.repository.findCustomerByUserId(
         input.userId,
@@ -242,7 +306,9 @@ export function createBillingService(
         canUpgrade: entitlements.plan === "free",
         canManage: customer !== undefined,
         usage: {
-          conversionsUsed: usage.conversionsUsed,
+          webCreditsUsed: balance.webCreditsUsed,
+          webCreditsLimit: entitlements.limits.monthlyWebCredits,
+          conversionsUsed: conversionUsage.conversionsUsed,
           conversionsLimit: entitlements.limits.monthlyConversions,
           storageUsedBytes: input.storageUsedBytes,
           storageLimitBytes: entitlements.limits.storageBytes,
@@ -264,6 +330,16 @@ export function createBillingService(
       assertCanCreateConversion({
         used: usage.conversionsUsed,
         limit: entitlements.limits.monthlyConversions,
+      });
+    },
+
+    async assertCanSpendWebCredits(input) {
+      const balance = await ensureWebCreditBalance(input.userId);
+      const amount = input.amount ?? resolveWebCreditCost(input.toolId);
+      assertCanSpendWebCredits({
+        used: balance.webCreditsUsed,
+        granted: balance.webCreditsGranted,
+        amount,
       });
     },
 
@@ -291,6 +367,48 @@ export function createBillingService(
         conversionId: input.conversionId,
         periodStart: period.start,
         periodEnd: period.end,
+      });
+    },
+
+    async consumeWebCredits(input) {
+      const { period } = await resolveUsageContext(input.userId);
+      await ensureWebCreditBalance(input.userId);
+      const amount = resolveWebCreditCost(input.toolId);
+
+      return options.repository.consumeWebCredits({
+        userId: input.userId,
+        periodStart: period.start,
+        periodEnd: period.end,
+        amount,
+        toolId: input.toolId,
+        executionId: input.conversionId,
+        reason: "tool_execution",
+        now: now(),
+      });
+    },
+
+    async refundWebCredits(input) {
+      return options.repository.refundWebCredits({
+        userId: input.userId,
+        executionId: input.conversionId,
+        reason: input.reason,
+        now: now(),
+      });
+    },
+
+    async refundWebCreditsForFailure(input) {
+      if (!isConversionFailureCode(input.errorCode)) {
+        return false;
+      }
+
+      if (!shouldRefundWebCredits(input.errorCode)) {
+        return false;
+      }
+
+      return this.refundWebCredits({
+        userId: input.userId,
+        conversionId: input.conversionId,
+        reason: "execution_failed",
       });
     },
 

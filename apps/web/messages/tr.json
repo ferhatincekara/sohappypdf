@@ -154,7 +154,8 @@
         "cta": "Pro’ya başla"
       },
       "limits": {
-        "conversions": "Ayda {count} dönüşüm",
+        "webCredits": "Ayda {count} web araç kredisi",
+        "conversions": "Ayda {count} API dönüşümü",
         "storage": "{size} depolama",
         "fileSize": "Dosya başına en fazla {size}",
         "apiKeys": "{count} API anahtarı",
@@ -469,7 +470,7 @@
       "conflict": "Bu dönüşüm isteği tamamlanamadı.",
       "unauthorized": "Dönüşüm oluşturmak için tekrar oturum açın.",
       "rateLimited": "Çok fazla istek gönderildi. Kısa bir süre sonra tekrar deneyin.",
-      "planLimitReached": "Bu ayki dönüşüm limitinize ulaştınız.",
+      "planLimitReached": "Aylık limitinize ulaştınız.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     },
@@ -616,6 +617,7 @@
       "paused": "Duraklatıldı"
     },
     "usageItems": {
+      "webCredits": "Web araç kredileri",
       "conversions": "Bu ayki dönüşümler",
       "storage": "Depolama",
       "apiKeys": "API anahtarları"

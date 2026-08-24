@@ -160,6 +160,8 @@ describe("createBillingService", () => {
 
     expect(status.plan).toBe("free");
     expect(status.canUpgrade).toBe(true);
+    expect(status.usage.webCreditsLimit).toBe(100);
+    expect(status.usage.webCreditsUsed).toBe(0);
     expect(status.usage.conversionsLimit).toBe(20);
     expect(status.usage.storageUsedBytes).toBe(1024);
     expect(status.limits.maxFileSizeBytes).toBe(20 * 1024 * 1024);

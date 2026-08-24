@@ -64,5 +64,11 @@ export {
 } from "./retention-policy.js";
 export type { StorageConfig } from "./storage-config.js";
 export { loadStorageConfig } from "./storage-config.js";
+export type { WebCreditConfig } from "./web-credit-config.js";
+export {
+  DEFAULT_FREE_WEB_TOOL_CREDITS,
+  DEFAULT_PRO_WEB_TOOL_CREDITS,
+  loadWebCreditConfig,
+} from "./web-credit-config.js";
 export type { WorkerConfig } from "./worker-config.js";
 export { DEFAULT_WORKER_CONFIG, loadWorkerConfig } from "./worker-config.js";

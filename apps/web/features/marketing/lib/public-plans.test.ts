@@ -12,6 +12,7 @@ describe("public plans", () => {
       const source = DEFAULT_PLAN_LIMITS[plan.id];
 
       expect(plan.monthlyConversions).toBe(source.monthlyConversions);
+      expect(plan.monthlyWebCredits).toBe(source.monthlyWebCredits);
       expect(plan.storageBytes).toBe(source.storageBytes);
       expect(plan.maxFileSizeBytes).toBe(source.maxFileSizeBytes);
       expect(plan.maxApiKeys).toBe(source.maxApiKeys);

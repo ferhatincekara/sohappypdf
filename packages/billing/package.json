@@ -20,9 +20,11 @@
   },
   "dependencies": {
     "@polar-sh/sdk": "^0.49.0",
+    "@repo/conversions": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/db": "workspace:*",
+    "@repo/tools": "workspace:*",
     "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {

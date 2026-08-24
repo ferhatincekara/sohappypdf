@@ -40,6 +40,9 @@ export async function PricingCards({
             </p>
             <ul className="mt-6 flex flex-col gap-2 text-sm">
               <li>
+                {t("limits.webCredits", { count: plan.monthlyWebCredits })}
+              </li>
+              <li>
                 {t("limits.conversions", { count: plan.monthlyConversions })}
               </li>
               <li>{t("limits.storage", { size: plan.storageLabel })}</li>

@@ -6,12 +6,14 @@ import {
   type Database,
   usagePeriods,
   user,
+  webCreditLedgerEntries,
   webhookEvents,
 } from "@repo/db";
 import { and, desc, eq, sql } from "drizzle-orm";
 import type {
   BillingCustomerRecord,
   BillingSubscriptionRecord,
+  WebCreditBalance,
 } from "./billing-types.js";
 
 export type BillingRepository = {
@@ -35,7 +37,34 @@ export type BillingRepository = {
     userId: string;
     periodStart: Date;
     periodEnd: Date;
-  }): Promise<{ conversionsUsed: number }>;
+  }): Promise<{
+    conversionsUsed: number;
+    webCreditsGranted: number;
+    webCreditsUsed: number;
+  }>;
+  ensureWebCreditGrant(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    grantAmount: number;
+    now: Date;
+  }): Promise<WebCreditBalance>;
+  consumeWebCredits(input: {
+    userId: string;
+    periodStart: Date;
+    periodEnd: Date;
+    amount: number;
+    toolId: string;
+    executionId: string;
+    reason: string;
+    now: Date;
+  }): Promise<boolean>;
+  refundWebCredits(input: {
+    userId: string;
+    executionId: string;
+    reason: string;
+    now: Date;
+  }): Promise<boolean>;
   recordConversionUsage(input: {
     userId: string;
     conversionId: string;
@@ -86,6 +115,17 @@ function toSubscription(
     endedAt: row.endedAt,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
+  };
+}
+
+function toWebCreditBalance(input: {
+  webCreditsGranted: number;
+  webCreditsUsed: number;
+}): WebCreditBalance {
+  return {
+    webCreditsGranted: input.webCreditsGranted,
+    webCreditsUsed: input.webCreditsUsed,
+    webCreditsRemaining: input.webCreditsGranted - input.webCreditsUsed,
   };
 }
 
@@ -206,7 +246,11 @@ export function createBillingRepository(db: Database): BillingRepository {
         .limit(1);
 
       if (existing !== undefined) {
-        return { conversionsUsed: existing.conversionsUsed };
+        return {
+          conversionsUsed: existing.conversionsUsed,
+          webCreditsGranted: existing.webCreditsGranted,
+          webCreditsUsed: existing.webCreditsUsed,
+        };
       }
 
       const [created] = await db
@@ -216,12 +260,18 @@ export function createBillingRepository(db: Database): BillingRepository {
           periodStart: input.periodStart,
           periodEnd: input.periodEnd,
           conversionsUsed: 0,
+          webCreditsGranted: 0,
+          webCreditsUsed: 0,
         })
         .onConflictDoNothing()
         .returning();
 
       if (created !== undefined) {
-        return { conversionsUsed: created.conversionsUsed };
+        return {
+          conversionsUsed: created.conversionsUsed,
+          webCreditsGranted: created.webCreditsGranted,
+          webCreditsUsed: created.webCreditsUsed,
+        };
       }
 
       const [retry] = await db
@@ -235,7 +285,180 @@ export function createBillingRepository(db: Database): BillingRepository {
         )
         .limit(1);
 
-      return { conversionsUsed: retry?.conversionsUsed ?? 0 };
+      return {
+        conversionsUsed: retry?.conversionsUsed ?? 0,
+        webCreditsGranted: retry?.webCreditsGranted ?? 0,
+        webCreditsUsed: retry?.webCreditsUsed ?? 0,
+      };
+    },
+
+    async ensureWebCreditGrant(input) {
+      return db.transaction(async (tx) => {
+        await tx
+          .insert(usagePeriods)
+          .values({
+            userId: input.userId,
+            periodStart: input.periodStart,
+            periodEnd: input.periodEnd,
+            conversionsUsed: 0,
+            webCreditsGranted: 0,
+            webCreditsUsed: 0,
+          })
+          .onConflictDoNothing();
+
+        const insertedGrant = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: input.grantAmount,
+            type: "grant",
+            source: "web",
+            reason: "monthly_plan_grant",
+            periodStart: input.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (insertedGrant.length > 0) {
+          await tx
+            .update(usagePeriods)
+            .set({
+              webCreditsGranted: input.grantAmount,
+              updatedAt: input.now,
+            })
+            .where(
+              and(
+                eq(usagePeriods.userId, input.userId),
+                eq(usagePeriods.periodStart, input.periodStart),
+              ),
+            );
+        }
+
+        const [period] = await tx
+          .select({
+            webCreditsGranted: usagePeriods.webCreditsGranted,
+            webCreditsUsed: usagePeriods.webCreditsUsed,
+          })
+          .from(usagePeriods)
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+            ),
+          )
+          .limit(1);
+
+        return toWebCreditBalance({
+          webCreditsGranted: period?.webCreditsGranted ?? 0,
+          webCreditsUsed: period?.webCreditsUsed ?? 0,
+        });
+      });
+    },
+
+    async consumeWebCredits(input) {
+      return db.transaction(async (tx) => {
+        const inserted = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: input.amount,
+            type: "consume",
+            source: "web",
+            reason: input.reason,
+            toolId: input.toolId,
+            executionId: input.executionId,
+            periodStart: input.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (inserted.length === 0) {
+          return false;
+        }
+
+        const updated = await tx
+          .update(usagePeriods)
+          .set({
+            webCreditsUsed: sql`${usagePeriods.webCreditsUsed} + ${input.amount}`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+              sql`${usagePeriods.webCreditsUsed} + ${input.amount} <= ${usagePeriods.webCreditsGranted}`,
+            ),
+          )
+          .returning();
+
+        if (updated.length === 0) {
+          throw new AppError({
+            code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+            message: "Monthly web tool credit limit reached",
+          });
+        }
+
+        return true;
+      });
+    },
+
+    async refundWebCredits(input) {
+      return db.transaction(async (tx) => {
+        const [consumeEntry] = await tx
+          .select({
+            amount: webCreditLedgerEntries.amount,
+            periodStart: webCreditLedgerEntries.periodStart,
+          })
+          .from(webCreditLedgerEntries)
+          .where(
+            and(
+              eq(webCreditLedgerEntries.userId, input.userId),
+              eq(webCreditLedgerEntries.executionId, input.executionId),
+              eq(webCreditLedgerEntries.type, "consume"),
+            ),
+          )
+          .limit(1);
+
+        if (consumeEntry === undefined) {
+          return false;
+        }
+
+        const insertedRefund = await tx
+          .insert(webCreditLedgerEntries)
+          .values({
+            userId: input.userId,
+            amount: consumeEntry.amount,
+            type: "refund",
+            source: "web",
+            reason: input.reason,
+            executionId: input.executionId,
+            periodStart: consumeEntry.periodStart,
+            createdAt: input.now,
+          })
+          .onConflictDoNothing()
+          .returning();
+
+        if (insertedRefund.length === 0) {
+          return false;
+        }
+
+        await tx
+          .update(usagePeriods)
+          .set({
+            webCreditsUsed: sql`GREATEST(0, ${usagePeriods.webCreditsUsed} - ${consumeEntry.amount})`,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, consumeEntry.periodStart),
+            ),
+          );
+
+        return true;
+      });
     },
 
     async recordConversionUsage(input) {
@@ -261,6 +484,8 @@ export function createBillingRepository(db: Database): BillingRepository {
             periodStart: input.periodStart,
             periodEnd: input.periodEnd,
             conversionsUsed: 1,
+            webCreditsGranted: 0,
+            webCreditsUsed: 0,
           })
           .onConflictDoUpdate({
             target: [usagePeriods.userId, usagePeriods.periodStart],

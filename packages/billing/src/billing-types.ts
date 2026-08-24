@@ -27,6 +27,14 @@ export type UsagePeriodRecord = {
   periodStart: Date;
   periodEnd: Date;
   conversionsUsed: number;
+  webCreditsGranted: number;
+  webCreditsUsed: number;
+};
+
+export type WebCreditBalance = {
+  webCreditsGranted: number;
+  webCreditsUsed: number;
+  webCreditsRemaining: number;
 };
 
 export type PublicBillingStatus = {
@@ -37,6 +45,8 @@ export type PublicBillingStatus = {
   canUpgrade: boolean;
   canManage: boolean;
   usage: {
+    webCreditsUsed: number;
+    webCreditsLimit: number;
     conversionsUsed: number;
     conversionsLimit: number;
     storageUsedBytes: number;

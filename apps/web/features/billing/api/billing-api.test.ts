@@ -28,6 +28,8 @@ describe("billing api", () => {
                 canUpgrade: true,
                 canManage: false,
                 usage: {
+                  webCreditsUsed: 0,
+                  webCreditsLimit: 100,
                   conversionsUsed: 0,
                   conversionsLimit: 20,
                   storageUsedBytes: 0,

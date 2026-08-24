@@ -154,7 +154,8 @@
         "cta": "Start Pro"
       },
       "limits": {
-        "conversions": "{count} conversions per month",
+        "webCredits": "{count} web tool credits per month",
+        "conversions": "{count} API conversions per month",
         "storage": "{size} storage",
         "fileSize": "Up to {size} per file",
         "apiKeys": "{count} API keys",
@@ -469,7 +470,7 @@
       "conflict": "This conversion request could not be completed.",
       "unauthorized": "Sign in again to create a conversion.",
       "rateLimited": "Too many requests. Please try again shortly.",
-      "planLimitReached": "You have reached this month’s conversion limit.",
+      "planLimitReached": "You've reached your monthly limit.",
       "networkFailure": "The request could not be completed. Try again.",
       "unexpected": "Something went wrong. Try again."
     },
@@ -616,6 +617,7 @@
       "paused": "Paused"
     },
     "usageItems": {
+      "webCredits": "Web tool credits",
       "conversions": "Conversions this month",
       "storage": "Storage",
       "apiKeys": "API keys"

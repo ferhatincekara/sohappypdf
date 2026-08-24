@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/auth": "workspace:*",
+    "@repo/billing": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/conversion-engines": "workspace:*",
     "@repo/conversions": "workspace:*",

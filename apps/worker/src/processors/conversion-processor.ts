@@ -1,3 +1,4 @@
+import type { BillingService } from "@repo/billing";
 import type { WorkerConfig } from "@repo/config";
 import type { EngineRegistry } from "@repo/conversion-engines";
 import {
@@ -29,6 +30,7 @@ export type ConversionProcessorDependencies = {
   engines: EngineRegistry;
   config: WorkerConfig;
   logger: Logger;
+  billing?: BillingService;
 };
 
 async function downloadToFile(input: {
@@ -261,10 +263,30 @@ export function createConversionProcessor(
       });
     } catch (error) {
       if (isPermanentConversionError(error)) {
-        await dependencies.conversions.markFailed(
-          current.id,
-          toSafeFailure(error),
-        );
+        const failure = toSafeFailure(error);
+        await dependencies.conversions.markFailed(current.id, failure);
+
+        if (dependencies.billing !== undefined) {
+          try {
+            await dependencies.billing.refundWebCreditsForFailure({
+              userId: conversion.ownerId,
+              conversionId: current.id,
+              errorCode: failure.errorCode,
+            });
+          } catch (refundError) {
+            jobLogger.error("web credit refund failed", {
+              conversionId: current.id,
+            });
+            jobLogger.debug("web credit refund error", {
+              conversionId: current.id,
+              error:
+                refundError instanceof Error
+                  ? refundError.message
+                  : "unknown error",
+            });
+          }
+        }
+
         jobLogger.warn("conversion failed", {
           durationMs: Date.now() - startedAt,
         });

@@ -4,6 +4,7 @@ const GIB = 1024 * MIB;
 export const DEFAULT_PLAN_LIMITS = {
   free: {
     monthlyConversions: 20,
+    monthlyWebCredits: 100,
     storageBytes: 500 * MIB,
     maxFileSizeBytes: 20 * MIB,
     maxApiKeys: 2,
@@ -13,6 +14,7 @@ export const DEFAULT_PLAN_LIMITS = {
   },
   pro: {
     monthlyConversions: 500,
+    monthlyWebCredits: 2_000,
     storageBytes: 10 * GIB,
     maxFileSizeBytes: 100 * MIB,
     maxApiKeys: 20,

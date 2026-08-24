@@ -25,6 +25,8 @@ export type PublicBillingStatus = {
   canUpgrade: boolean;
   canManage: boolean;
   usage: {
+    webCreditsUsed: number;
+    webCreditsLimit: number;
     conversionsUsed: number;
     conversionsLimit: number;
     storageUsedBytes: number;

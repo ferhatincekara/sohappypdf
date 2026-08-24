@@ -789,7 +789,7 @@ describe("conversion API", () => {
     });
   });
 
-  test("rejects a new conversion after the monthly plan limit", async () => {
+  test("rejects a new conversion after the monthly web credit limit", async () => {
     const context = createConversionApp({
       identity: sessionIdentity,
       billingService: createTestBillingService({
@@ -797,7 +797,7 @@ describe("conversion API", () => {
           ...DEFAULT_PLAN_LIMITS,
           free: {
             ...DEFAULT_PLAN_LIMITS.free,
-            monthlyConversions: 1,
+            monthlyWebCredits: 1,
           },
         },
       }),

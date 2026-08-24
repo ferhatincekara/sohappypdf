@@ -248,6 +248,7 @@ describe("billing API", () => {
     expect(response.status).toBe(200);
     expect(body.billing.plan).toBe("free");
     expect(body.billing.canUpgrade).toBe(true);
+    expect(body.billing.usage.webCreditsLimit).toBe(100);
     expect(body.billing.usage.conversionsLimit).toBe(20);
     expect(JSON.stringify(body).includes("polar_at_test")).toBe(false);
   });

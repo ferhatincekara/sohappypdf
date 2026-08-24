@@ -52,6 +52,19 @@ export function assertCanCreateConversion(input: {
   }
 }
 
+export function assertCanSpendWebCredits(input: {
+  used: number;
+  granted: number;
+  amount: number;
+}): void {
+  if (input.granted - input.used < input.amount) {
+    throw new AppError({
+      code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+      message: "Monthly web tool credit limit reached",
+    });
+  }
+}
+
 export function assertCanUploadFile(input: {
   sizeBytes: number;
   storageUsedBytes: number;

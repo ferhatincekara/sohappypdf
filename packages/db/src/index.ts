@@ -38,8 +38,10 @@ export type {
   NewBillingCustomerRow,
   NewBillingSubscriptionRow,
   NewUsagePeriodRow,
+  NewWebCreditLedgerEntryRow,
   NewWebhookEventRow,
   UsagePeriodRow,
+  WebCreditLedgerEntryRow,
   WebhookEventRow,
 } from "./schema/billing.js";
 export {
@@ -48,7 +50,10 @@ export {
   billingSubscriptionStatusEnum,
   billingSubscriptions,
   conversionUsageEvents,
+  creditLedgerSourceEnum,
+  creditLedgerTypeEnum,
   usagePeriods,
+  webCreditLedgerEntries,
   webhookEvents,
 } from "./schema/billing.js";
 export type { ConversionRow, NewConversionRow } from "./schema/conversions.js";

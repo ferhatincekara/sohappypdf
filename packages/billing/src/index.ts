@@ -18,16 +18,22 @@ export type {
   PublicBillingStatus,
   UsagePeriodRecord,
   VerifyPolarWebhook,
+  WebCreditBalance,
 } from "./billing-types.js";
 export {
   assertCanCreateApiKey,
   assertCanCreateConversion,
+  assertCanSpendWebCredits,
   assertCanUploadFile,
   isProSubscription,
   resolvePlan,
 } from "./entitlements.js";
 export { createMemoryBillingRepository } from "./memory-billing-repository.js";
-export { DEFAULT_PLAN_LIMITS, getPlanLimits } from "./plan-config.js";
+export {
+  buildPlanCatalog,
+  DEFAULT_PLAN_LIMITS,
+  getPlanLimits,
+} from "./plan-config.js";
 export type {
   BillingSubscriptionStatus,
   PlanCatalog,
@@ -49,4 +55,7 @@ export {
 export { verifyPolarWebhook } from "./polar-webhook.js";
 export { createTestBillingService } from "./test-billing-service.js";
 export { getUtcMonthPeriod } from "./usage-period.js";
+export { resolveWebCreditCost } from "./web-credit-cost.js";
+export { resolveWebCreditPeriod } from "./web-credit-period.js";
+export { shouldRefundWebCredits } from "./web-credit-refund.js";
 export { handlePolarWebhook } from "./webhook-service.js";

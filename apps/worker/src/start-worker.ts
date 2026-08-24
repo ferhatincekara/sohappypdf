@@ -1,4 +1,5 @@
 import { getAnonymousSessionService } from "@repo/auth";
+import { getBillingService } from "@repo/billing";
 import {
   type EnvSource,
   loadFileConfig,
@@ -159,6 +160,7 @@ export async function startConversionWorkerRuntime(
         engines: createEngineRegistry(runtimeConfig.worker),
         config: runtimeConfig.worker,
         logger,
+        billing: getBillingService(),
       });
 
     worker = createQueueWorker({

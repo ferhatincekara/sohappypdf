@@ -19,6 +19,7 @@ export type BillingSubscriptionStatus =
 
 export type PlanLimits = {
   monthlyConversions: number;
+  monthlyWebCredits: number;
   storageBytes: number;
   maxFileSizeBytes: number;
   maxApiKeys: number;

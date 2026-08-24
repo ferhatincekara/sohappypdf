@@ -80,6 +80,7 @@
       "version": "0.0.0",
       "dependencies": {
         "@repo/auth": "workspace:*",
+        "@repo/billing": "workspace:*",
         "@repo/config": "workspace:*",
         "@repo/conversion-engines": "workspace:*",
         "@repo/conversions": "workspace:*",
@@ -130,8 +131,10 @@
       "dependencies": {
         "@polar-sh/sdk": "^0.49.0",
         "@repo/config": "workspace:*",
+        "@repo/conversions": "workspace:*",
         "@repo/core": "workspace:*",
         "@repo/db": "workspace:*",
+        "@repo/tools": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {

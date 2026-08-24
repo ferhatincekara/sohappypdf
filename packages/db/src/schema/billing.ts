@@ -103,6 +103,8 @@ export const usagePeriods = pgTable(
       mode: "date",
     }).notNull(),
     conversionsUsed: integer("conversions_used").notNull().default(0),
+    webCreditsGranted: integer("web_credits_granted").notNull().default(0),
+    webCreditsUsed: integer("web_credits_used").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
       .notNull()
       .defaultNow(),
@@ -118,6 +120,18 @@ export const usagePeriods = pgTable(
     check(
       "usage_periods_conversions_used_non_negative",
       sql`${table.conversionsUsed} >= 0`,
+    ),
+    check(
+      "usage_periods_web_credits_granted_non_negative",
+      sql`${table.webCreditsGranted} >= 0`,
+    ),
+    check(
+      "usage_periods_web_credits_used_non_negative",
+      sql`${table.webCreditsUsed} >= 0`,
+    ),
+    check(
+      "usage_periods_web_credits_used_lte_granted",
+      sql`${table.webCreditsUsed} <= ${table.webCreditsGranted}`,
     ),
   ],
 );
@@ -138,6 +152,50 @@ export const conversionUsageEvents = pgTable(
       .defaultNow(),
   },
   (table) => [index("conversion_usage_events_user_id_idx").on(table.userId)],
+);
+
+export const creditLedgerTypeEnum = pgEnum("credit_ledger_type", [
+  "grant",
+  "consume",
+  "refund",
+  "adjustment",
+]);
+
+export const creditLedgerSourceEnum = pgEnum("credit_ledger_source", [
+  "web",
+  "api",
+  "ai",
+]);
+
+export const webCreditLedgerEntries = pgTable(
+  "web_credit_ledger_entries",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    amount: integer("amount").notNull(),
+    type: creditLedgerTypeEnum("type").notNull(),
+    source: creditLedgerSourceEnum("source").notNull().default("web"),
+    reason: text("reason").notNull(),
+    toolId: text("tool_id"),
+    executionId: uuid("execution_id"),
+    periodStart: timestamp("period_start", {
+      withTimezone: true,
+      mode: "date",
+    }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index("web_credit_ledger_entries_user_id_idx").on(table.userId),
+    index("web_credit_ledger_entries_execution_id_idx").on(table.executionId),
+    check(
+      "web_credit_ledger_entries_amount_positive",
+      sql`${table.amount} > 0`,
+    ),
+  ],
 );
 
 export const webhookEvents = pgTable(
@@ -171,5 +229,9 @@ export type NewBillingSubscriptionRow =
 export type UsagePeriodRow = typeof usagePeriods.$inferSelect;
 export type NewUsagePeriodRow = typeof usagePeriods.$inferInsert;
 export type ConversionUsageEventRow = typeof conversionUsageEvents.$inferSelect;
+export type WebCreditLedgerEntryRow =
+  typeof webCreditLedgerEntries.$inferSelect;
+export type NewWebCreditLedgerEntryRow =
+  typeof webCreditLedgerEntries.$inferInsert;
 export type WebhookEventRow = typeof webhookEvents.$inferSelect;
 export type NewWebhookEventRow = typeof webhookEvents.$inferInsert;

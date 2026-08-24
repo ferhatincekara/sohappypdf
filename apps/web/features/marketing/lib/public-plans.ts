@@ -7,6 +7,7 @@ export type PublicPlanLimits = (typeof DEFAULT_PLAN_LIMITS)[PublicPlanId];
 export type PublicPlanPresentation = {
   id: PublicPlanId;
   monthlyConversions: number;
+  monthlyWebCredits: number;
   storageBytes: number;
   maxFileSizeBytes: number;
   maxApiKeys: number;
@@ -24,6 +25,7 @@ export function presentPlan(
   return {
     id,
     monthlyConversions: limits.monthlyConversions,
+    monthlyWebCredits: limits.monthlyWebCredits,
     storageBytes: limits.storageBytes,
     maxFileSizeBytes: limits.maxFileSizeBytes,
     maxApiKeys: limits.maxApiKeys,

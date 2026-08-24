@@ -1,6 +1,12 @@
 import type { BillingService } from "@repo/billing";
 import { loadRetentionPolicy } from "@repo/config";
 import type { ConversionService } from "@repo/conversions";
+import {
+  fileFormatFromMimeType,
+  normalizeFileFormat,
+  resolveImplementedConversionType,
+} from "@repo/conversions";
+import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
 import type { FileService } from "@repo/files";
 import type { ConversionJobData } from "@repo/queue";
 import { Hono } from "hono";
@@ -24,6 +30,51 @@ export type ConversionRoutesOptions = {
   enqueueConversion: (input: ConversionJobData) => Promise<unknown>;
 };
 
+async function resolveConversionToolId(input: {
+  fileService: FileService;
+  ownerId: string;
+  sourceFileId: string;
+  targetFormat: string;
+  type?: string;
+}): Promise<string> {
+  const sourceFile = await input.fileService.findFileById(input.sourceFileId);
+
+  if (
+    sourceFile === undefined ||
+    sourceFile.ownerId !== input.ownerId ||
+    sourceFile.deletedAt !== null
+  ) {
+    throw new AppError({
+      code: APP_ERROR_CODES.NOT_FOUND,
+      message: "File not found",
+    });
+  }
+
+  const sourceFormat = fileFormatFromMimeType(sourceFile.mimeType);
+
+  if (sourceFormat === undefined) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Unsupported conversion",
+    });
+  }
+
+  const targetFormat = normalizeFileFormat(input.targetFormat);
+
+  if (targetFormat === undefined) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "Invalid target format",
+    });
+  }
+
+  return resolveImplementedConversionType(
+    sourceFormat,
+    targetFormat,
+    input.type,
+  );
+}
+
 export function createConversionRoutes(options: ConversionRoutesOptions) {
   const conversions = new Hono<AppEnv>();
 
@@ -33,6 +84,8 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
     const identity = requireAuthenticatedIdentity(c.get("identity"));
     const body = parseCreateConversion(await readJsonBody(c.req.raw));
     const idempotencyKey = parseIdempotencyKey(c.req.header("Idempotency-Key"));
+    const billing = options.getBillingService();
+    const fileService = options.getFileService();
     const existing =
       idempotencyKey === undefined
         ? undefined
@@ -40,15 +93,29 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
             .getConversionService()
             .findOwnedByIdempotencyKey(identity.userId, idempotencyKey);
 
+    let conversionToolId: string | undefined;
+
     if (existing === undefined) {
-      await options
-        .getBillingService()
-        .assertCanCreateConversion(identity.userId);
+      if (identity.kind === "session") {
+        conversionToolId = await resolveConversionToolId({
+          fileService,
+          ownerId: identity.userId,
+          sourceFileId: body.sourceFileId,
+          targetFormat: body.targetFormat,
+          type: body.type,
+        });
+        await billing.assertCanSpendWebCredits({
+          userId: identity.userId,
+          toolId: conversionToolId,
+        });
+      } else {
+        await billing.assertCanCreateConversion(identity.userId);
+      }
     }
 
     const conversion = await enqueueCreatedConversion({
       conversions: options.getConversionService(),
-      findFileById: (id) => options.getFileService().findFileById(id),
+      findFileById: (id) => fileService.findFileById(id),
       enqueue: options.enqueueConversion,
       logger: c.get("logger"),
       input: {
@@ -68,10 +135,41 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
     });
 
     if (existing === undefined) {
-      await options.getBillingService().recordConversionUsage({
-        userId: identity.userId,
-        conversionId: conversion.id,
-      });
+      if (identity.kind === "session") {
+        try {
+          await billing.consumeWebCredits({
+            userId: identity.userId,
+            conversionId: conversion.id,
+            toolId: conversionToolId ?? conversion.type,
+          });
+        } catch (error) {
+          if (
+            isAppError(error) &&
+            error.code === APP_ERROR_CODES.PLAN_LIMIT_REACHED
+          ) {
+            try {
+              await options
+                .getConversionService()
+                .cancelOwnedConversion(conversion.id, identity.userId);
+            } catch {
+              c.get("logger").error(
+                "conversion cancelled after credit failure",
+                {
+                  conversionId: conversion.id,
+                  userId: identity.userId,
+                },
+              );
+            }
+          }
+
+          throw error;
+        }
+      } else {
+        await billing.recordConversionUsage({
+          userId: identity.userId,
+          conversionId: conversion.id,
+        });
+      }
     }
 
     c.get("logger").info("conversion created", {

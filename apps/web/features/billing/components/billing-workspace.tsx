@@ -116,8 +116,8 @@ function BillingWorkspaceInner() {
       <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
         <h2 className="text-sm font-medium text-foreground">{t("usage")}</h2>
         <UsageRow
-          label={t("usageItems.conversions")}
-          value={`${billing.usage.conversionsUsed} / ${billing.usage.conversionsLimit}`}
+          label={t("usageItems.webCredits")}
+          value={`${billing.usage.webCreditsUsed} / ${billing.usage.webCreditsLimit}`}
         />
         <UsageRow
           label={t("usageItems.storage")}

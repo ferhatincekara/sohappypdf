@@ -5,6 +5,7 @@ import {
   type BillingService,
   createBillingService,
 } from "./billing-service.js";
+import { buildPlanCatalog } from "./plan-config.js";
 import { createPolarClient } from "./polar-client.js";
 
 let billingService: BillingService | undefined;
@@ -15,6 +16,7 @@ export function getBillingService(): BillingService {
     billingService = createBillingService({
       repository: createBillingRepository(getDb()),
       config,
+      planCatalog: buildPlanCatalog(),
       polarClient:
         config.polar.accessToken === undefined
           ? undefined
