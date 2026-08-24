@@ -2,9 +2,40 @@ import { describe, expect, test } from "bun:test";
 import { tmpdir } from "node:os";
 import { isAppError } from "@repo/core";
 import { isPermanentConversionError } from "../errors.js";
-import { runAllowedCommand, runChildProcess } from "./run-process.js";
+import {
+  buildConversionProcessEnv,
+  runAllowedCommand,
+  runChildProcess,
+} from "./run-process.js";
+import { getSafeConversionTempDir } from "../workspace/temp-workspace.js";
 
 describe("command execution", () => {
+  test("preserves a safe TMPDIR for native converter processes", () => {
+    const env = buildConversionProcessEnv("/tmp/job");
+    expect(env.HOME).toBe("/tmp/job");
+    expect(env.TMPDIR).toBe(getSafeConversionTempDir());
+    expect(env.PATH).toBe(process.env.PATH);
+  });
+
+  test("does not point TMPDIR at macOS /tmp", () => {
+    const previous = process.env.TMPDIR;
+    process.env.TMPDIR = "/tmp";
+
+    try {
+      const env = buildConversionProcessEnv("/tmp/job");
+      if (process.platform === "darwin") {
+        expect(env.TMPDIR).not.toBe("/tmp");
+        expect(env.TMPDIR?.startsWith("/private/tmp")).toBe(false);
+      }
+    } finally {
+      if (previous === undefined) {
+        delete process.env.TMPDIR;
+      } else {
+        process.env.TMPDIR = previous;
+      }
+    }
+  });
+
   test("times out a long-running process", async () => {
     try {
       await runChildProcess({

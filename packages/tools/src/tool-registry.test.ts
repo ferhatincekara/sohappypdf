@@ -75,17 +75,24 @@ describe("tool catalog", () => {
   test("registers only executable tools with live processors", () => {
     expect(REGISTERED_TOOLS.map((tool) => tool.id).sort()).toEqual(
       [
+        "compare-pdf",
         "compress-pdf",
         "crop-pdf",
+        "edit-pdf",
         "excel-to-pdf",
         "jpg-to-pdf",
         "merge-pdf",
+        "ocr-pdf",
         "office-to-pdf",
         "organize-pdf",
         "page-numbers-pdf",
+        "pdf-extract",
+        "pdf-forms",
         "pdf-to-excel",
         "pdf-to-excel-ocr",
         "pdf-to-jpg",
+        "pdf-to-markdown",
+        "pdf-to-pdfa",
         "pdf-to-png",
         "pdf-to-powerpoint",
         "pdf-to-txt",
@@ -94,10 +101,13 @@ describe("tool catalog", () => {
         "png-to-pdf",
         "powerpoint-to-pdf",
         "protect-pdf",
+        "redact-pdf",
         "remove-pages",
         "repair-pdf",
         "reorder-pages",
         "rotate-pdf",
+        "scan-to-pdf",
+        "sign-pdf",
         "split-pdf",
         "unlock-pdf",
         "watermark-pdf",
@@ -168,7 +178,8 @@ describe("tool catalog", () => {
     expect(isAnonymousToolAllowed("unlock-pdf")).toBe(false);
     expect(isAnonymousToolAllowed("ocr-pdf")).toBe(false);
     expect(isAnonymousToolAllowed("unknown-tool")).toBe(false);
-    expect(findCatalogTool("ocr-pdf")?.availability).toBe("planned");
+    expect(findCatalogTool("web-to-pdf")?.availability).toBe("planned");
+    expect(findCatalogTool("ocr-pdf")?.availability).toBe("available");
   });
 
   test("maps public pages from catalog routes", () => {

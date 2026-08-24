@@ -17,6 +17,7 @@ export {
 export { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 export { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
 export { createOfficeOcrEngine } from "./engines/libreoffice/office-ocr-engine.js";
+export { createOcrEngine } from "./engines/ocr/ocr-engine.js";
 export { createPdfImageEngine } from "./engines/pdf/pdf-image-engine.js";
 export { createPdfManipulateEngine } from "./engines/pdf/pdf-manipulate-engine.js";
 export { createPdfTextEngine } from "./engines/pdf/pdf-text-engine.js";
@@ -54,6 +55,7 @@ export {
   assertPathInside,
   createConversionWorkspace,
   createJobTempDirectory,
+  getSafeConversionTempDir,
   getWorkerTempRoot,
   joinJobPath,
   removeJobTempDirectory,

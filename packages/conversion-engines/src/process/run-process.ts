@@ -4,7 +4,10 @@ import type { Readable } from "node:stream";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { CONVERSION_NATIVE_BINARIES } from "../engine-config.js";
 import { conversionTimeoutError, nativeToolFailureError } from "../errors.js";
-import { assertPathInside } from "../workspace/temp-workspace.js";
+import {
+  assertPathInside,
+  getSafeConversionTempDir,
+} from "../workspace/temp-workspace.js";
 
 const MAX_PROCESS_OUTPUT_BYTES = 8 * 1024;
 
@@ -24,6 +27,33 @@ export type RunProcessResult = {
 export type RunAllowedCommand = (input: RunCommandInput) => Promise<void>;
 
 const ALLOWED_BINARIES = new Set<string>(CONVERSION_NATIVE_BINARIES);
+
+/**
+ * Minimal env for native converters. Preserve TMPDIR so tools like
+ * ocrmypdf/tesseract can use the OS temp area (required on macOS).
+ */
+export function buildConversionProcessEnv(
+  homeDirectory: string,
+): NodeJS.ProcessEnv {
+  const tempDir = getSafeConversionTempDir();
+  const env: NodeJS.ProcessEnv = {
+    PATH: process.env.PATH,
+    HOME: homeDirectory,
+    LANG: process.env.LANG ?? "C.UTF-8",
+    TMPDIR: tempDir,
+    TMP: tempDir,
+    TEMP: tempDir,
+  };
+
+  for (const key of ["TESSDATA_PREFIX", "LC_ALL", "LC_CTYPE"] as const) {
+    const value = process.env[key];
+    if (value !== undefined && value.length > 0) {
+      env[key] = value;
+    }
+  }
+
+  return env;
+}
 
 function assertAllowedCommand(command: string): string {
   if (!ALLOWED_BINARIES.has(command)) {
@@ -88,11 +118,7 @@ export async function runChildProcess(input: {
   return new Promise((resolve, reject) => {
     const child = spawn(input.command, [...input.args], {
       cwd,
-      env: {
-        PATH: process.env.PATH,
-        HOME: cwd,
-        LANG: "C.UTF-8",
-      },
+      env: buildConversionProcessEnv(cwd),
       shell: false,
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -135,8 +161,8 @@ export async function runChildProcess(input: {
         });
     };
 
-    child.on("error", () => {
-      finish(nativeToolFailureError());
+    child.on("error", (error) => {
+      finish(nativeToolFailureError(error.message));
     });
 
     child.on("close", (code) => {
@@ -155,6 +181,9 @@ export async function runAllowedCommand(input: RunCommandInput): Promise<void> {
   });
 
   if (result.exitCode !== 0) {
-    throw nativeToolFailureError();
+    const details = `${command} exited ${String(result.exitCode)}: ${result.stderr
+      .trim()
+      .slice(0, 800)}`;
+    throw nativeToolFailureError(details);
   }
 }

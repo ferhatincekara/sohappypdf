@@ -89,6 +89,34 @@ describe("conversion options", () => {
     });
   });
 
+  test("accepts advanced pdf tool options", () => {
+    expect(
+      parseConversionOptions("edit-pdf", {
+        operations: [
+          { kind: "text", page: 1, x: 10, y: 20, text: "Hello" },
+        ],
+      }),
+    ).toEqual({
+      type: "edit-pdf",
+      operations: [{ kind: "text", page: 1, x: 10, y: 20, text: "Hello" }],
+    });
+
+    expect(
+      parseConversionOptions("redact-pdf", {
+        regions: [{ page: 1, x: 0, y: 0, width: 10, height: 10 }],
+      }),
+    ).toMatchObject({ type: "redact-pdf" });
+
+    expect(
+      parseConversionOptions("compare-pdf", {
+        additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+      }),
+    ).toEqual({
+      type: "compare-pdf",
+      additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+    });
+  });
+
   test("rejects invalid or sensitive options", () => {
     expectInvalidOptions(() =>
       parseConversionOptions("pdf-to-jpg", { quality: 250 }),

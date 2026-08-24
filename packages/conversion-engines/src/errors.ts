@@ -4,10 +4,16 @@ import { APP_ERROR_CODES, isAppError } from "@repo/core";
 export class PermanentConversionError extends Error {
   override readonly name = "PermanentConversionError";
   readonly failureCode: ConversionFailureCode;
+  readonly details?: string;
 
-  constructor(failureCode: ConversionFailureCode, message: string) {
+  constructor(
+    failureCode: ConversionFailureCode,
+    message: string,
+    details?: string,
+  ) {
     super(message);
     this.failureCode = failureCode;
+    this.details = details;
   }
 }
 
@@ -30,10 +36,13 @@ export function invalidInputError(
   return new PermanentConversionError("processing_failed", message);
 }
 
-export function nativeToolFailureError(): PermanentConversionError {
+export function nativeToolFailureError(
+  details?: string,
+): PermanentConversionError {
   return new PermanentConversionError(
     "processing_failed",
     "Conversion engine failed",
+    details,
   );
 }
 

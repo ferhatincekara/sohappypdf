@@ -634,6 +634,7 @@
   "publicTools": {
     "metaTitle": "{tool}",
     "description": "Bir dosya yükleyin, tarayıcıda işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
+    "descriptionAuthenticated": "Bir dosya yükleyin, bulutta işleyin ve sonucu indirin. Giriş yapmanız gerekir.",
     "selectFile": "Dosya seçin",
     "selectFiles": "Dosyaları seçin",
     "process": "İşle",
@@ -786,7 +787,7 @@
     },
     "edit-pdf": {
       "name": "PDF düzenle",
-      "description": "PDF içeriğinde temel düzenlemeler yapın."
+      "description": "Metin, görsel damgası, dikdörtgen ve vurgu ekleyin. Mevcut PDF içerik akışını yeniden yazmaz."
     },
     "watermark-pdf": {
       "name": "PDF filigran",
@@ -806,7 +807,7 @@
     },
     "sign-pdf": {
       "name": "PDF imzala",
-      "description": "PDF'ye dijital veya görsel imza ekleyin."
+      "description": "Görsel imza görseli veya metin damgası ekleyin. Kriptografik dijital imza değildir."
     },
     "redact-pdf": {
       "name": "PDF karart",

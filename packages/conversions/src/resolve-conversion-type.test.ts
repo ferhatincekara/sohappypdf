@@ -22,15 +22,12 @@ describe("resolveImplementedConversionType", () => {
       expect(isAppError(error)).toBe(true);
     }
 
-    try {
-      resolveImplementedConversionType("pdf", "xlsx");
-      throw new Error("expected unimplemented pair to fail");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-    }
+    expect(resolveImplementedConversionType("pdf", "pdf", "ocr-pdf")).toBe(
+      "ocr-pdf",
+    );
 
     try {
-      resolveImplementedConversionType("pdf", "pdf", "ocr-pdf");
+      resolveImplementedConversionType("pdf", "pdf", "ocr-image");
       throw new Error("expected unimplemented type to fail");
     } catch (error) {
       expect(isAppError(error)).toBe(true);

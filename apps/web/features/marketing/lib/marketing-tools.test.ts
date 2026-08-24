@@ -31,6 +31,8 @@ describe("marketing tool navigation", () => {
       "convert",
       "edit",
       "security",
+      "document",
+      "intelligence",
     ]);
     expect(
       groups.flatMap((group) => group.tools.map((tool) => tool.id)),

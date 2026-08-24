@@ -183,7 +183,10 @@ export function createConversionProcessor(
 
       const additionalSourcePaths: string[] = [];
 
-      if (parsedOptions.type === "merge-pdf") {
+      if (
+        "additionalFileIds" in parsedOptions &&
+        Array.isArray(parsedOptions.additionalFileIds)
+      ) {
         for (const [
           index,
           fileId,
@@ -197,7 +200,15 @@ export function createConversionProcessor(
             );
           }
 
-          const additionalPath = workspace.join(`additional-${index}.pdf`);
+          const extension =
+            additional.mimeType === "image/png"
+              ? "png"
+              : additional.mimeType === "image/jpeg"
+                ? "jpg"
+                : "pdf";
+          const additionalPath = workspace.join(
+            `additional-${index}.${extension}`,
+          );
           writtenBytes += await downloadToFile({
             storage: dependencies.storage,
             objectKey: additional.objectKey,
@@ -289,6 +300,8 @@ export function createConversionProcessor(
 
         jobLogger.warn("conversion failed", {
           durationMs: Date.now() - startedAt,
+          errorCode: failure.errorCode,
+          ...(error.details === undefined ? {} : { details: error.details }),
         });
       } else {
         jobLogger.error("conversion failed", {

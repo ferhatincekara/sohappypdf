@@ -32,6 +32,8 @@ function matchesExpectedFormat(format: FileFormat, bytes: Uint8Array): boolean {
     case "pptx":
       return hasPrefix(bytes, [80, 75]);
     case "txt":
+    case "md":
+    case "json":
       return bytes.length > 0;
     default:
       return bytes.length > 0;

@@ -6,6 +6,8 @@ import {
   assertPathInside,
   createConversionWorkspace,
   createJobTempDirectory,
+  getSafeConversionTempDir,
+  getWorkerTempRoot,
   joinJobPath,
   removeJobTempDirectory,
 } from "./temp-workspace.js";
@@ -17,6 +19,11 @@ describe("conversion workspace", () => {
     const second = await createJobTempDirectory(conversionId);
 
     expect(first).not.toBe(second);
+    expect(first.startsWith(getWorkerTempRoot())).toBe(true);
+    if (process.platform === "darwin") {
+      expect(getSafeConversionTempDir() === "/tmp").toBe(false);
+      expect(getSafeConversionTempDir().startsWith("/private/tmp")).toBe(false);
+    }
     await access(first);
     await removeJobTempDirectory(first);
     await removeJobTempDirectory(second);

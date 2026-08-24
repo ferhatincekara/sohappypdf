@@ -16,6 +16,7 @@ describe("engine registry", () => {
     expect(registry.resolve("office-to-pdf").name).toBe("office");
     expect(registry.resolve("pdf-to-word-ocr").name).toBe("office-ocr");
     expect(registry.resolve("pdf-to-excel-ocr").name).toBe("office-ocr");
+    expect(registry.resolve("ocr-pdf").name).toBe("ocr");
     expect(
       registry.resolve({
         type: "pdf-to-jpg",
@@ -27,6 +28,7 @@ describe("engine registry", () => {
     expect(registry.resolve("pdf-to-txt").name).toBe("pdf-text");
     expect(registry.resolve("jpg-to-pdf").name).toBe("image-pdf");
     expect(registry.resolve("png-to-pdf").name).toBe("image-pdf");
+    expect(registry.resolve("scan-to-pdf").name).toBe("image-pdf");
     expect(registry.resolve("merge-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("split-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("compress-pdf").name).toBe("pdf-manipulate");
@@ -37,14 +39,22 @@ describe("engine registry", () => {
     expect(registry.resolve("crop-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("watermark-pdf").name).toBe("pdf-edit");
     expect(registry.resolve("page-numbers-pdf").name).toBe("pdf-edit");
+    expect(registry.resolve("edit-pdf").name).toBe("pdf-edit");
+    expect(registry.resolve("sign-pdf").name).toBe("pdf-edit");
     expect(registry.resolve("protect-pdf").name).toBe("pdf-security");
     expect(registry.resolve("unlock-pdf").name).toBe("pdf-security");
     expect(registry.resolve("repair-pdf").name).toBe("pdf-repair");
+    expect(registry.resolve("pdf-to-pdfa").name).toBe("pdf-pdfa");
+    expect(registry.resolve("redact-pdf").name).toBe("pdf-redact");
+    expect(registry.resolve("compare-pdf").name).toBe("pdf-compare");
+    expect(registry.resolve("pdf-forms").name).toBe("pdf-forms");
+    expect(registry.resolve("pdf-extract").name).toBe("pdf-extract");
+    expect(registry.resolve("pdf-to-markdown").name).toBe("pdf-markdown");
   });
 
   test("rejects conversions without an engine", () => {
     try {
-      registry.resolve("ocr-pdf");
+      registry.resolve("ocr-image");
       throw new Error("expected unsupported conversion");
     } catch (error) {
       expect(isPermanentConversionError(error)).toBe(true);

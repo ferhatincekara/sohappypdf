@@ -11,6 +11,8 @@ export const FILE_FORMATS = [
   "png",
   "webp",
   "txt",
+  "md",
+  "json",
 ] as const;
 
 export type FileFormat = (typeof FILE_FORMATS)[number];

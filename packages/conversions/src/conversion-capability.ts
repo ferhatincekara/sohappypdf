@@ -8,6 +8,8 @@ export type ConversionCapability = {
   sourceFormats: readonly FileFormat[];
   targetFormats: readonly FileFormat[];
   implemented: boolean;
+  /** When true, type must be requested explicitly (not auto-resolved from formats). */
+  requiresExplicitType?: boolean;
 };
 
 const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
@@ -22,6 +24,7 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     sourceFormats: ["pdf"],
     targetFormats: ["docx"],
     implemented: true,
+    requiresExplicitType: true,
   },
   "pdf-to-excel": {
     type: "pdf-to-excel",
@@ -34,6 +37,7 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     sourceFormats: ["pdf"],
     targetFormats: ["xlsx"],
     implemented: true,
+    requiresExplicitType: true,
   },
   "pdf-to-powerpoint": {
     type: "pdf-to-powerpoint",
@@ -100,6 +104,7 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     sourceFormats: ["pdf"],
     targetFormats: ["pdf"],
     implemented: true,
+    requiresExplicitType: true,
   },
   "split-pdf": {
     type: "split-pdf",
@@ -149,6 +154,12 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     targetFormats: ["pdf"],
     implemented: true,
   },
+  "pdf-to-pdfa": {
+    type: "pdf-to-pdfa",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+    implemented: true,
+  },
   "watermark-pdf": {
     type: "watermark-pdf",
     sourceFormats: ["pdf"],
@@ -157,6 +168,12 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
   },
   "page-numbers-pdf": {
     type: "page-numbers-pdf",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+    implemented: true,
+  },
+  "edit-pdf": {
+    type: "edit-pdf",
     sourceFormats: ["pdf"],
     targetFormats: ["pdf"],
     implemented: true,
@@ -173,11 +190,57 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     targetFormats: ["pdf"],
     implemented: true,
   },
+  "sign-pdf": {
+    type: "sign-pdf",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+    implemented: true,
+  },
+  "redact-pdf": {
+    type: "redact-pdf",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+    implemented: true,
+  },
+  "compare-pdf": {
+    type: "compare-pdf",
+    sourceFormats: ["pdf"],
+    targetFormats: ["txt"],
+    implemented: true,
+    requiresExplicitType: true,
+  },
+  "pdf-forms": {
+    type: "pdf-forms",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+    implemented: true,
+  },
+  "scan-to-pdf": {
+    type: "scan-to-pdf",
+    sourceFormats: ["jpg", "png"],
+    targetFormats: ["pdf"],
+    implemented: true,
+    requiresExplicitType: true,
+  },
+  "pdf-extract": {
+    type: "pdf-extract",
+    sourceFormats: ["pdf"],
+    targetFormats: ["txt", "json"],
+    implemented: true,
+    requiresExplicitType: true,
+  },
+  "pdf-to-markdown": {
+    type: "pdf-to-markdown",
+    sourceFormats: ["pdf"],
+    targetFormats: ["md"],
+    implemented: true,
+  },
   "ocr-pdf": {
     type: "ocr-pdf",
     sourceFormats: ["pdf"],
     targetFormats: ["pdf", "txt"],
-    implemented: false,
+    implemented: true,
+    requiresExplicitType: true,
   },
   "ocr-image": {
     type: "ocr-image",
@@ -243,7 +306,8 @@ export function findImplementedConversionTypes(
   sourceFormat: FileFormat,
   targetFormat: FileFormat,
 ): ConversionType[] {
-  return findConversionTypes(sourceFormat, targetFormat).filter(
-    isConversionImplemented,
-  );
+  return findConversionTypes(sourceFormat, targetFormat).filter((type) => {
+    const capability = getConversionCapability(type);
+    return capability.implemented && capability.requiresExplicitType !== true;
+  });
 }

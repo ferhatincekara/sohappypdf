@@ -4,9 +4,16 @@ import type { ConversionEngineConfig } from "./engine-config.js";
 import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 import { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
 import { createOfficeOcrEngine } from "./engines/libreoffice/office-ocr-engine.js";
+import { createOcrEngine } from "./engines/ocr/ocr-engine.js";
+import { createPdfCompareEngine } from "./engines/pdf/pdf-compare-engine.js";
 import { createPdfEditEngine } from "./engines/pdf/pdf-edit-engine.js";
+import { createPdfExtractEngine } from "./engines/pdf/pdf-extract-engine.js";
+import { createPdfFormsEngine } from "./engines/pdf/pdf-forms-engine.js";
 import { createPdfImageEngine } from "./engines/pdf/pdf-image-engine.js";
 import { createPdfManipulateEngine } from "./engines/pdf/pdf-manipulate-engine.js";
+import { createPdfMarkdownEngine } from "./engines/pdf/pdf-markdown-engine.js";
+import { createPdfPdfaEngine } from "./engines/pdf/pdf-pdfa-engine.js";
+import { createPdfRedactEngine } from "./engines/pdf/pdf-redact-engine.js";
 import { createPdfRepairEngine } from "./engines/pdf/pdf-repair-engine.js";
 import { createPdfSecurityEngine } from "./engines/pdf/pdf-security-engine.js";
 import { createPdfTextEngine } from "./engines/pdf/pdf-text-engine.js";
@@ -36,6 +43,7 @@ export function createEngineRegistry(
   const engines: readonly ConversionEngine[] = [
     createOfficeEngine(config),
     createOfficeOcrEngine(config),
+    createOcrEngine(config),
     createPdfImageEngine(config),
     createPdfTextEngine(config),
     createImagePdfEngine(),
@@ -43,6 +51,12 @@ export function createEngineRegistry(
     createPdfEditEngine(config),
     createPdfSecurityEngine(config),
     createPdfRepairEngine(config),
+    createPdfPdfaEngine(config),
+    createPdfRedactEngine(config),
+    createPdfCompareEngine(config),
+    createPdfFormsEngine(config),
+    createPdfExtractEngine(config),
+    createPdfMarkdownEngine(config),
   ];
 
   return {

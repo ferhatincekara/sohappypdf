@@ -3,6 +3,10 @@ import type { FileFormat } from "./conversion-format.js";
 import type { ConversionType } from "./conversion-type.js";
 
 const MAX_MERGE_ADDITIONAL_FILES = 20;
+const MAX_SCAN_ADDITIONAL_FILES = 49;
+const MAX_REDACT_REGIONS = 200;
+const MAX_EDIT_OPERATIONS = 50;
+const MAX_FORM_FIELDS = 200;
 const MIN_DPI = 72;
 const MAX_DPI = 600;
 const SENSITIVE_OPTION_KEYS = new Set([
@@ -122,6 +126,98 @@ export type OcrOptions = {
   outputMode: OcrOutputMode;
 };
 
+export type PdfToPdfaOptions = {
+  type: "pdf-to-pdfa";
+};
+
+/**
+ * Overlay-only editing. Does not rewrite existing PDF content streams.
+ * Supported: text stamps, rectangle/highlight overlays, optional image stamp
+ * (via additionalFileIds[0]).
+ */
+export type EditPdfOptions = {
+  type: "edit-pdf";
+  operations: readonly EditPdfOperation[];
+  additionalFileIds?: string[];
+};
+
+export type EditPdfOperation =
+  | {
+      kind: "text";
+      page: number;
+      x: number;
+      y: number;
+      text: string;
+      size?: number;
+    }
+  | {
+      kind: "rectangle";
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      style?: "fill" | "highlight";
+    }
+  | {
+      kind: "image";
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+
+/**
+ * Visual signature stamp only — not a cryptographic / PAdES digital signature.
+ * Provide a signature image via additionalFileIds[0] or fall back to text.
+ */
+export type SignPdfOptions = {
+  type: "sign-pdf";
+  page: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  text?: string;
+  additionalFileIds?: string[];
+};
+
+export type RedactPdfOptions = {
+  type: "redact-pdf";
+  regions: readonly {
+    page: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }[];
+};
+
+export type ComparePdfOptions = {
+  type: "compare-pdf";
+  additionalFileIds: string[];
+};
+
+export type PdfFormsOptions = {
+  type: "pdf-forms";
+  fields: Record<string, string>;
+  flatten?: boolean;
+};
+
+export type ScanToPdfOptions = {
+  type: "scan-to-pdf";
+  additionalFileIds?: string[];
+};
+
+export type PdfExtractOptions = {
+  type: "pdf-extract";
+};
+
+export type PdfToMarkdownOptions = {
+  type: "pdf-to-markdown";
+};
+
 export type ConversionOptions =
   | PdfPageImageOptions
   | OfficeConversionOptions
@@ -135,10 +231,19 @@ export type ConversionOptions =
   | ReorderPagesOptions
   | CropPdfOptions
   | RepairPdfOptions
+  | PdfToPdfaOptions
   | WatermarkPdfOptions
   | PageNumbersPdfOptions
+  | EditPdfOptions
   | ProtectPdfOptions
   | UnlockPdfOptions
+  | SignPdfOptions
+  | RedactPdfOptions
+  | ComparePdfOptions
+  | PdfFormsOptions
+  | ScanToPdfOptions
+  | PdfExtractOptions
+  | PdfToMarkdownOptions
   | OcrOptions;
 
 export type ParseConversionOptionsContext = {
@@ -241,12 +346,15 @@ function parseLanguage(value: unknown): string {
   return language;
 }
 
-function parseAdditionalFileIds(value: unknown): string[] {
+function parseAdditionalFileIds(
+  value: unknown,
+  maxFiles = MAX_MERGE_ADDITIONAL_FILES,
+): string[] {
   if (!Array.isArray(value) || value.length === 0) {
     throw invalidOptions();
   }
 
-  if (value.length > MAX_MERGE_ADDITIONAL_FILES) {
+  if (value.length > maxFiles) {
     throw invalidOptions();
   }
 
@@ -265,6 +373,152 @@ function parseAdditionalFileIds(value: unknown): string[] {
   }
 
   return ids;
+}
+
+function parseOptionalAdditionalFileIds(
+  value: unknown,
+  maxFiles: number,
+): string[] | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return parseAdditionalFileIds(value, maxFiles);
+}
+
+function parseNonNegativeCoordinate(value: unknown): number {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    throw invalidOptions();
+  }
+
+  return value;
+}
+
+function parsePositiveCoordinate(value: unknown): number {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) {
+    throw invalidOptions();
+  }
+
+  return value;
+}
+
+function parseEditOperations(value: unknown): EditPdfOperation[] {
+  if (!Array.isArray(value) || value.length < 1 || value.length > MAX_EDIT_OPERATIONS) {
+    throw invalidOptions();
+  }
+
+  const operations: EditPdfOperation[] = [];
+
+  for (const item of value) {
+    if (!isRecord(item) || typeof item.kind !== "string") {
+      throw invalidOptions();
+    }
+
+    const page = assertOptionalPositiveInteger(item.page);
+    if (page === undefined) {
+      throw invalidOptions();
+    }
+
+    if (item.kind === "text") {
+      if (typeof item.text !== "string" || item.text.trim().length === 0) {
+        throw invalidOptions();
+      }
+
+      const size = assertOptionalPositiveInteger(item.size, 96);
+      operations.push({
+        kind: "text",
+        page,
+        x: parseNonNegativeCoordinate(item.x),
+        y: parseNonNegativeCoordinate(item.y),
+        text: item.text.trim().slice(0, 500),
+        ...(size === undefined ? {} : { size }),
+      });
+      continue;
+    }
+
+    if (item.kind === "rectangle") {
+      const style = item.style ?? "fill";
+      if (style !== "fill" && style !== "highlight") {
+        throw invalidOptions();
+      }
+
+      operations.push({
+        kind: "rectangle",
+        page,
+        x: parseNonNegativeCoordinate(item.x),
+        y: parseNonNegativeCoordinate(item.y),
+        width: parsePositiveCoordinate(item.width),
+        height: parsePositiveCoordinate(item.height),
+        style,
+      });
+      continue;
+    }
+
+    if (item.kind === "image") {
+      operations.push({
+        kind: "image",
+        page,
+        x: parseNonNegativeCoordinate(item.x),
+        y: parseNonNegativeCoordinate(item.y),
+        width: parsePositiveCoordinate(item.width),
+        height: parsePositiveCoordinate(item.height),
+      });
+      continue;
+    }
+
+    throw invalidOptions();
+  }
+
+  return operations;
+}
+
+function parseRedactRegions(value: unknown): RedactPdfOptions["regions"] {
+  if (!Array.isArray(value) || value.length < 1 || value.length > MAX_REDACT_REGIONS) {
+    throw invalidOptions();
+  }
+
+  return value.map((item) => {
+    if (!isRecord(item)) {
+      throw invalidOptions();
+    }
+
+    const page = assertOptionalPositiveInteger(item.page);
+    if (page === undefined) {
+      throw invalidOptions();
+    }
+
+    return {
+      page,
+      x: parseNonNegativeCoordinate(item.x),
+      y: parseNonNegativeCoordinate(item.y),
+      width: parsePositiveCoordinate(item.width),
+      height: parsePositiveCoordinate(item.height),
+    };
+  });
+}
+
+function parseFormFields(value: unknown): Record<string, string> {
+  if (!isRecord(value)) {
+    throw invalidOptions();
+  }
+
+  const entries = Object.entries(value);
+
+  if (entries.length < 1 || entries.length > MAX_FORM_FIELDS) {
+    throw invalidOptions();
+  }
+
+  const fields: Record<string, string> = {};
+
+  for (const [key, fieldValue] of entries) {
+    if (key.trim().length === 0 || typeof fieldValue !== "string") {
+      throw invalidOptions();
+    }
+
+    fields[key] = fieldValue.slice(0, 2_000);
+  }
+
+  return fields;
 }
 
 function parsePageList(value: unknown, minimumLength = 1): number[] {
@@ -521,6 +775,10 @@ export function parseConversionOptions(
       assertAllowedKeys(record, ["type"]);
       return { type };
     }
+    case "pdf-to-pdfa": {
+      assertAllowedKeys(record, ["type"]);
+      return { type };
+    }
     case "watermark-pdf": {
       assertAllowedKeys(record, ["type", "text", "opacity"]);
       const opacity = parseOpacity(record.opacity);
@@ -540,6 +798,19 @@ export function parseConversionOptions(
         ...(startAt === undefined ? {} : { startAt }),
       };
     }
+    case "edit-pdf": {
+      assertAllowedKeys(record, ["type", "operations", "additionalFileIds"]);
+      const additionalFileIds = parseOptionalAdditionalFileIds(
+        record.additionalFileIds,
+        1,
+      );
+
+      return {
+        type,
+        operations: parseEditOperations(record.operations),
+        ...(additionalFileIds === undefined ? {} : { additionalFileIds }),
+      };
+    }
     case "protect-pdf": {
       assertAllowedKeys(record, ["type", "password"]);
       return {
@@ -553,6 +824,102 @@ export function parseConversionOptions(
         type,
         password: parsePassword(record.password),
       };
+    }
+    case "sign-pdf": {
+      assertAllowedKeys(record, [
+        "type",
+        "page",
+        "x",
+        "y",
+        "width",
+        "height",
+        "text",
+        "additionalFileIds",
+      ]);
+      const page = assertOptionalPositiveInteger(record.page);
+      if (page === undefined) {
+        throw invalidOptions();
+      }
+
+      const additionalFileIds = parseOptionalAdditionalFileIds(
+        record.additionalFileIds,
+        1,
+      );
+      const text =
+        record.text === undefined
+          ? undefined
+          : parseWatermarkText(record.text);
+
+      if (additionalFileIds === undefined && text === undefined) {
+        throw invalidOptions();
+      }
+
+      return {
+        type,
+        page,
+        x: parseNonNegativeCoordinate(record.x),
+        y: parseNonNegativeCoordinate(record.y),
+        width: parsePositiveCoordinate(record.width),
+        height: parsePositiveCoordinate(record.height),
+        ...(text === undefined ? {} : { text }),
+        ...(additionalFileIds === undefined ? {} : { additionalFileIds }),
+      };
+    }
+    case "redact-pdf": {
+      assertAllowedKeys(record, ["type", "regions"]);
+      return {
+        type,
+        regions: parseRedactRegions(record.regions),
+      };
+    }
+    case "compare-pdf": {
+      assertAllowedKeys(record, ["type", "additionalFileIds"]);
+      const additionalFileIds = parseAdditionalFileIds(
+        record.additionalFileIds,
+        1,
+      );
+
+      if (additionalFileIds.length !== 1) {
+        throw invalidOptions();
+      }
+
+      return { type, additionalFileIds };
+    }
+    case "pdf-forms": {
+      assertAllowedKeys(record, ["type", "fields", "flatten"]);
+      const flatten =
+        record.flatten === undefined
+          ? undefined
+          : record.flatten === true
+            ? true
+            : record.flatten === false
+              ? false
+              : (() => {
+                  throw invalidOptions();
+                })();
+
+      return {
+        type,
+        fields: parseFormFields(record.fields),
+        ...(flatten === undefined ? {} : { flatten }),
+      };
+    }
+    case "scan-to-pdf": {
+      assertAllowedKeys(record, ["type", "additionalFileIds"]);
+      const additionalFileIds = parseAdditionalFileIds(
+        record.additionalFileIds,
+        MAX_SCAN_ADDITIONAL_FILES,
+      );
+
+      return {
+        type,
+        additionalFileIds,
+      };
+    }
+    case "pdf-extract":
+    case "pdf-to-markdown": {
+      assertAllowedKeys(record, ["type"]);
+      return { type };
     }
     case "ocr-pdf":
     case "ocr-image": {

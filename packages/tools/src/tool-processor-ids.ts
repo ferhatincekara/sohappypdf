@@ -5,6 +5,7 @@
 export const LIVE_PROCESSOR_IDS = [
   "office",
   "office-ocr",
+  "ocr",
   "pdf-image",
   "pdf-text",
   "image-pdf",
@@ -12,6 +13,12 @@ export const LIVE_PROCESSOR_IDS = [
   "pdf-edit",
   "pdf-security",
   "pdf-repair",
+  "pdf-pdfa",
+  "pdf-redact",
+  "pdf-compare",
+  "pdf-forms",
+  "pdf-extract",
+  "pdf-markdown",
 ] as const;
 
 export type LiveProcessorId = (typeof LIVE_PROCESSOR_IDS)[number];

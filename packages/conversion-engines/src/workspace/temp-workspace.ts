@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { isAbsolute, join, relative, resolve } from "node:path";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 
@@ -14,8 +14,40 @@ export type ConversionWorkspace = {
   cleanup(): Promise<void>;
 };
 
+function isMacSystemTmp(directory: string): boolean {
+  if (process.platform !== "darwin") {
+    return false;
+  }
+
+  const normalized = resolve(directory);
+  return (
+    normalized === "/tmp" ||
+    normalized === "/private/tmp" ||
+    normalized.startsWith("/tmp/") ||
+    normalized.startsWith("/private/tmp/")
+  );
+}
+
+/**
+ * macOS tesseract/leptonica cannot read rasterized OCR images from /tmp.
+ * Prefer the OS user temp, then a user cache directory on Darwin.
+ */
+export function getSafeConversionTempDir(): string {
+  const candidates = [process.env.TMPDIR, tmpdir()].filter(
+    (value): value is string => value !== undefined && value.length > 0,
+  );
+
+  for (const candidate of candidates) {
+    if (!isMacSystemTmp(candidate)) {
+      return candidate;
+    }
+  }
+
+  return join(homedir(), "Library", "Caches", "sohappypdf");
+}
+
 export function getWorkerTempRoot(): string {
-  return join(tmpdir(), TEMP_ROOT_NAME);
+  return join(getSafeConversionTempDir(), TEMP_ROOT_NAME);
 }
 
 export function assertPathInside(root: string, target: string): string {

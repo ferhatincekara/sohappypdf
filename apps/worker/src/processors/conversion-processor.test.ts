@@ -109,10 +109,10 @@ describe("conversion processor", () => {
     const processor = createConversionProcessor({
       conversions: {
         async getConversion() {
-          return createConversion({ type: "ocr-pdf", status: "queued" });
+          return createConversion({ type: "ocr-image", status: "queued" });
         },
         async markProcessing() {
-          return createConversion({ type: "ocr-pdf", status: "processing" });
+          return createConversion({ type: "ocr-image", status: "processing" });
         },
         async markFailed(_id, input) {
           failed.push(input);
@@ -145,7 +145,14 @@ describe("conversion processor", () => {
     });
 
     try {
-      await processor(createJob({ conversionType: "ocr-pdf" }));
+      await processor(
+        createJob({
+          conversionType: "ocr-image",
+          sourceFormat: "jpg",
+          targetFormat: "txt",
+          options: { type: "ocr-image", language: "eng", outputMode: "txt" },
+        }),
+      );
       throw new Error("expected unsupported conversion");
     } catch (error) {
       expect(error).toBeInstanceOf(PermanentConversionError);

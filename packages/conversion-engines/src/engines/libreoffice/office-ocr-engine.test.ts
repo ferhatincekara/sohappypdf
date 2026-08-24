@@ -66,7 +66,7 @@ describe("office ocr engine", () => {
       });
 
       expect(calls[0]?.command).toBe("ocrmypdf");
-      expect(calls[0]?.args).toContain("--force-ocr");
+      expect(calls[0]?.args).toContain("--skip-text");
       expect(calls.some((call) => call.command === "soffice")).toBe(true);
       expect(result.filename).toBe("output.docx");
     } finally {

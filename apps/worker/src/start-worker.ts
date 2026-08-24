@@ -7,6 +7,7 @@ import {
 } from "@repo/config";
 import {
   createEngineRegistry,
+  getSafeConversionTempDir,
   type NativeBinaryProbe,
 } from "@repo/conversion-engines";
 import { getConversionService } from "@repo/conversions";
@@ -100,6 +101,7 @@ export async function startConversionWorkerRuntime(
   options: StartConversionWorkerRuntimeOptions = {},
 ): Promise<WorkerRuntime> {
   const runtimeConfig = loadWorkerRuntimeConfig(options.env);
+  process.env.TMPDIR = getSafeConversionTempDir();
   const logger = createWorkerLogger({
     logLevel: runtimeConfig.app.logLevel,
     format: runtimeConfig.app.runtimeEnv === "production" ? "json" : "pretty",

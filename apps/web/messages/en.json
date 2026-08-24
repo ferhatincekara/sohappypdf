@@ -634,6 +634,7 @@
   "publicTools": {
     "metaTitle": "{tool}",
     "description": "Upload a file, process it in the browser, and download the result. No account required for basic processing.",
+    "descriptionAuthenticated": "Upload a file, process it in the cloud, and download the result. Sign in required.",
     "selectFile": "Choose a file",
     "selectFiles": "Choose files",
     "process": "Process",
@@ -786,7 +787,7 @@
     },
     "edit-pdf": {
       "name": "Edit PDF",
-      "description": "Make basic edits to PDF content."
+      "description": "Add text, image stamps, rectangles, and highlights as overlays. Does not rewrite existing PDF content streams."
     },
     "watermark-pdf": {
       "name": "Watermark PDF",
@@ -806,7 +807,7 @@
     },
     "sign-pdf": {
       "name": "Sign PDF",
-      "description": "Add a digital or visual signature to a PDF."
+      "description": "Add a visual signature image or text stamp. This is not a cryptographic digital signature."
     },
     "redact-pdf": {
       "name": "Redact PDF",

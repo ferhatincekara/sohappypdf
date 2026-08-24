@@ -69,7 +69,7 @@ export function createOfficeOcrEngine(
       await runCommand({
         command: config.ocrMyPdfBin,
         args: [
-          "--force-ocr",
+          "--skip-text",
           "--optimize",
           "0",
           "--output-type",

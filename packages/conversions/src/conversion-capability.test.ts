@@ -44,7 +44,6 @@ describe("conversion capabilities", () => {
     ]);
     expect(findImplementedConversionTypes("pdf", "xlsx")).toEqual([
       "pdf-to-excel",
-      "pdf-to-excel-ocr",
     ]);
   });
 
@@ -56,6 +55,8 @@ describe("conversion capabilities", () => {
     expect(isConversionImplemented("pdf-to-excel")).toBe(true);
     expect(isConversionImplemented("word-to-pdf")).toBe(true);
     expect(isConversionImplemented("pdf-to-word-ocr")).toBe(true);
-    expect(isConversionImplemented("ocr-pdf")).toBe(false);
+    expect(isConversionImplemented("ocr-pdf")).toBe(true);
+    expect(isConversionImplemented("redact-pdf")).toBe(true);
+    expect(isConversionImplemented("ocr-image")).toBe(false);
   });
 });

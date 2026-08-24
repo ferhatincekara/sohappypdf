@@ -33,10 +33,19 @@ export const CONVERSION_TYPES = [
   "reorder-pages",
   "crop-pdf",
   "repair-pdf",
+  "pdf-to-pdfa",
   "watermark-pdf",
   "page-numbers-pdf",
+  "edit-pdf",
   "protect-pdf",
   "unlock-pdf",
+  "sign-pdf",
+  "redact-pdf",
+  "compare-pdf",
+  "pdf-forms",
+  "scan-to-pdf",
+  "pdf-extract",
+  "pdf-to-markdown",
   "ocr-pdf",
   "ocr-image",
 ] as const;
@@ -65,6 +74,8 @@ export const CONVERSION_TARGET_FORMATS = [
   "jpg",
   "png",
   "txt",
+  "md",
+  "json",
 ] as const;
 
 export type ConversionTargetFormat = (typeof CONVERSION_TARGET_FORMATS)[number];

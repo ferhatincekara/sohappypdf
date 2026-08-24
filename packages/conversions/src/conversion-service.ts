@@ -120,6 +120,22 @@ function isSameConversionRequest(
   );
 }
 
+function getAdditionalFileIds(
+  options: ConversionOptions,
+): readonly string[] | undefined {
+  if (
+    options.type === "merge-pdf" ||
+    options.type === "compare-pdf" ||
+    options.type === "edit-pdf" ||
+    options.type === "sign-pdf" ||
+    options.type === "scan-to-pdf"
+  ) {
+    return options.additionalFileIds;
+  }
+
+  return undefined;
+}
+
 function assertOcrTargetAlignment(
   options: ConversionOptions,
   targetFormat: FileFormat,
@@ -236,15 +252,17 @@ export function createConversionService(
 
     assertOcrTargetAlignment(parsedOptions, targetFormat);
 
-    if (parsedOptions.type === "merge-pdf") {
-      if (parsedOptions.additionalFileIds.includes(sourceFileId)) {
+    const additionalFileIds = getAdditionalFileIds(parsedOptions);
+
+    if (additionalFileIds !== undefined) {
+      if (additionalFileIds.includes(sourceFileId)) {
         throw new AppError({
           code: APP_ERROR_CODES.VALIDATION_ERROR,
           message: "Invalid conversion options",
         });
       }
 
-      for (const additionalFileId of parsedOptions.additionalFileIds) {
+      for (const additionalFileId of additionalFileIds) {
         assertFileReferenceId(additionalFileId);
       }
     }
@@ -282,8 +300,8 @@ export function createConversionService(
       createdAt,
     );
 
-    if (parsedOptions.type === "merge-pdf") {
-      for (const additionalFileId of parsedOptions.additionalFileIds) {
+    if (additionalFileIds !== undefined) {
+      for (const additionalFileId of additionalFileIds) {
         assertOwnedSourceFile(
           await options.files.findFileById(additionalFileId),
           ownerId,

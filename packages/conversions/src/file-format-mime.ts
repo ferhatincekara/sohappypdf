@@ -18,6 +18,8 @@ const FILE_FORMAT_MIME_TYPES: Record<FileFormat, readonly string[]> = {
   png: ["image/png"],
   webp: ["image/webp"],
   txt: ["text/plain"],
+  md: ["text/markdown", "text/plain"],
+  json: ["application/json"],
 };
 
 export function normalizeContentType(value: string): string {
