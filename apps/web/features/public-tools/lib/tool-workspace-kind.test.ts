@@ -11,6 +11,7 @@ describe("resolveToolWorkspaceKind", () => {
     expect(resolveToolWorkspaceKind("remove-pages")).toBe("remove");
     expect(resolveToolWorkspaceKind("compress-pdf")).toBe("compress");
     expect(resolveToolWorkspaceKind("pdf-to-word")).toBe("convert");
+    expect(resolveToolWorkspaceKind("jpg-to-pdf")).toBe("imageToPdf");
     expect(resolveToolWorkspaceKind("protect-pdf")).toBe("password");
     expect(resolveToolWorkspaceKind("repair-pdf")).toBe("repair");
     expect(resolveToolWorkspaceKind("edit-pdf")).toBe("default");

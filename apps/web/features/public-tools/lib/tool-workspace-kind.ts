@@ -28,12 +28,19 @@ export const TOOL_WORKSPACE_KINDS = [
   "remove",
   "compress",
   "convert",
+  "imageToPdf",
   "password",
   "repair",
   "default",
 ] as const;
 
 export type ToolWorkspaceKind = (typeof TOOL_WORKSPACE_KINDS)[number];
+
+export const IMAGE_TO_PDF_TOOL_IDS = ["jpg-to-pdf", "png-to-pdf"] as const;
+
+export function isImageToPdfToolId(toolId: string): boolean {
+  return IMAGE_TO_PDF_TOOL_IDS.some((id) => id === toolId);
+}
 
 export function isConvertToolId(toolId: string): toolId is ConvertToolId {
   return CONVERT_TOOL_IDS.some((id) => id === toolId);
@@ -74,6 +81,10 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
 
   if (toolId === "repair-pdf") {
     return "repair";
+  }
+
+  if (isImageToPdfToolId(toolId)) {
+    return "imageToPdf";
   }
 
   if (isConvertToolId(toolId)) {

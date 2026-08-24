@@ -1017,6 +1017,26 @@
           }
         }
       },
+      "imageToPdf": {
+        "title": "This image will become a PDF",
+        "hint": "One image becomes one PDF page at its original size. Page size, margins, and multi-image order are not available for this tool.",
+        "output": "1 image → 1 PDF page",
+        "faqHow": "Upload a JPG or PNG, then convert it to a PDF page at the image's original size. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in one image."
+          },
+          "convert": {
+            "title": "Convert",
+            "description": "We'll place it on a matching PDF page."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a one-page PDF."
+          }
+        }
+      },
       "password": {
         "unlockTitle": "Unlock this PDF",
         "unlockHint": "Enter the current password to open the file.",

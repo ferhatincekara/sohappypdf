@@ -6,6 +6,7 @@ import { CompressPdfWorkspace } from "./compress-pdf-workspace";
 import { ConvertPdfWorkspace } from "./convert-pdf-workspace";
 import { DefaultToolWorkspace } from "./default-tool-workspace";
 import { ExtractPagesWorkspace } from "./extract-pages-workspace";
+import { ImageToPdfWorkspace } from "./image-to-pdf-workspace";
 import { MergePdfWorkspace } from "./merge-pdf-workspace";
 import { OrganizePdfWorkspace } from "./organize-pdf-workspace";
 import { PasswordPdfWorkspace } from "./password-pdf-workspace";
@@ -32,6 +33,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <CompressPdfWorkspace {...props} />;
     case "convert":
       return <ConvertPdfWorkspace {...props} />;
+    case "imageToPdf":
+      return <ImageToPdfWorkspace {...props} />;
     case "password":
       return <PasswordPdfWorkspace {...props} />;
     case "repair":

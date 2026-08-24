@@ -1,4 +1,4 @@
-import { isConvertToolId } from "./tool-workspace-kind";
+import { isConvertToolId, isImageToPdfToolId } from "./tool-workspace-kind";
 
 export type DedicatedHowToWorkspace =
   | "split"
@@ -8,7 +8,8 @@ export type DedicatedHowToWorkspace =
   | "rotate"
   | "remove"
   | "compress"
-  | "convert";
+  | "convert"
+  | "imageToPdf";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -51,6 +52,13 @@ export function dedicatedHowToForTool(toolId: string): DedicatedHowTo | null {
 
   if (dedicated !== undefined) {
     return dedicated;
+  }
+
+  if (isImageToPdfToolId(toolId)) {
+    return {
+      workspace: "imageToPdf",
+      steps: ["upload", "convert", "download"],
+    };
   }
 
   if (isConvertToolId(toolId)) {

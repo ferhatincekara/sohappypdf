@@ -1017,6 +1017,26 @@
           }
         }
       },
+      "imageToPdf": {
+        "title": "Bu görüntü PDF olacak",
+        "hint": "Bir görüntü, orijinal boyutunda tek bir PDF sayfası olur. Bu araçta sayfa boyutu, kenar boşluğu ve birden fazla görüntü sıralaması yok.",
+        "output": "1 görüntü → 1 PDF sayfası",
+        "faqHow": "Bir JPG veya PNG yükleyin ve dönüştürün. PDF sayfası görüntü boyutuna uyar. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Tek bir görüntü sürükleyip bırakın."
+          },
+          "convert": {
+            "title": "Dönüştür",
+            "description": "Orijinal boyutta bir PDF sayfasına yerleştiririz."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Tek sayfalık bir PDF alın."
+          }
+        }
+      },
       "password": {
         "unlockTitle": "PDF kilidini aç",
         "unlockHint": "Dosyayı açmak için mevcut parolayı girin.",
