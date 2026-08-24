@@ -4,7 +4,8 @@ export type DedicatedHowToWorkspace =
   | "organize"
   | "merge"
   | "rotate"
-  | "remove";
+  | "remove"
+  | "compress";
 
 export type DedicatedHowTo = {
   workspace: DedicatedHowToWorkspace;
@@ -34,6 +35,10 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   },
   "remove-pages": {
     workspace: "remove",
+    steps: ["upload", "select", "download"],
+  },
+  "compress-pdf": {
+    workspace: "compress",
     steps: ["upload", "select", "download"],
   },
 };

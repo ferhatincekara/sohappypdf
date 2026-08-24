@@ -936,19 +936,48 @@
         }
       },
       "compress": {
-        "title": "Compression",
-        "hint": "Higher compression makes a smaller file. Quality may drop.",
+        "title": "Choose how much to compress",
+        "hint": "Extreme makes a smaller file. Less compression keeps more quality. We don't guess the new file size.",
+        "output": "Compress with {level}.",
+        "processing": "Compressing your PDF...",
+        "processingHint": "Reducing the file size. This may take a moment.",
+        "successTitle": "Your compressed PDF is ready",
+        "successDescription": "Download the smaller PDF.",
+        "download": "Download PDF",
+        "compressAnother": "Compress another PDF",
+        "processingFailed": "We couldn't compress this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Compress another PDF to continue.",
+        "faqHow": "Upload a PDF, choose Extreme, Recommended, or Less compression, then compress. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to make smaller."
+          },
+          "select": {
+            "title": "Choose compression",
+            "description": "Pick Extreme, Recommended, or Less compression."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get the compressed PDF."
+          }
+        },
         "medium": {
           "title": "Recommended",
-          "hint": "Balanced size and quality for most files."
+          "hint": "Balanced for most files.",
+          "outcome": "Balanced"
         },
         "high": {
-          "title": "Smallest file",
-          "hint": "Maximum compression. Fine for sharing, not archival."
+          "title": "Extreme",
+          "hint": "Smallest file. Quality may drop.",
+          "outcome": "Smaller file"
         },
         "low": {
-          "title": "Best quality",
-          "hint": "Keeps more visual quality with less size reduction."
+          "title": "Less compression",
+          "hint": "Keeps more visual quality.",
+          "outcome": "Better quality"
         }
       },
       "convert": {

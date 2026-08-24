@@ -7,7 +7,7 @@ import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-works
 import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
 
-const LEVELS: readonly CompressionLevel[] = ["medium", "high", "low"];
+const LEVELS: readonly CompressionLevel[] = ["high", "medium", "low"];
 
 export function CompressPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");
@@ -75,11 +75,22 @@ export function CompressPdfWorkspace(props: ToolSelectedWorkspaceProps) {
                 <p className="mt-1 text-xs text-muted-foreground text-pretty">
                   {t(`workspaces.compress.${level}.hint`)}
                 </p>
+                <p className="mt-2 text-xs font-medium text-foreground/80">
+                  {t(`workspaces.compress.${level}.outcome`)}
+                </p>
               </button>
             );
           })}
         </div>
       </section>
+
+      <p className="text-sm font-medium text-foreground" aria-live="polite">
+        {t("workspaces.compress.output", {
+          level: t(
+            `workspaces.compress.${props.workspaceState.compressionLevel}.title`,
+          ),
+        })}
+      </p>
 
       <ToolSelectedActions
         toolRoute={props.tool.route}

@@ -12,6 +12,7 @@ import type { PublicToolErrorKey } from "../lib/public-tool-errors";
 import { selectedPagesFromSplitRanges } from "../lib/split-selection";
 import { acceptForTool } from "../lib/tool-limits";
 import {
+  type CompressionLevel,
   parseOrganizeOrderInput,
   parseSelectedPagesInput,
 } from "../lib/tool-workspace";
@@ -63,6 +64,7 @@ export function PublicToolWorkspace({
     removeSelectedCount:
       parseSelectedPagesInput(workspace.workspaceState.pagesToRemove)?.length ??
       0,
+    compressionLevel: workspace.workspaceState.compressionLevel,
     errorKey: ux.status === "error" ? ux.error.key : null,
     hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
   });
@@ -206,6 +208,7 @@ function dedicatedToolShellCopy({
   rotateSelectedCount,
   rotationDegrees,
   removeSelectedCount,
+  compressionLevel,
   errorKey,
   hours,
 }: {
@@ -217,6 +220,7 @@ function dedicatedToolShellCopy({
   rotateSelectedCount: number;
   rotationDegrees: number;
   removeSelectedCount: number;
+  compressionLevel: CompressionLevel;
   errorKey: PublicToolErrorKey | null;
   hours: number;
 }): {
@@ -364,6 +368,28 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "compress-pdf") {
+    return {
+      processingTitle: t("workspaces.compress.processing"),
+      processingHint: t("workspaces.compress.processingHint"),
+      successTitle: t("workspaces.compress.successTitle"),
+      successDescription: t("workspaces.compress.successDescription"),
+      downloadLabel: t("workspaces.compress.download"),
+      resetLabel: t("workspaces.compress.compressAnother"),
+      expiredTitle: t("workspaces.compress.expiredTitle"),
+      expiredDescription: t("workspaces.compress.expiredDescription", {
+        hours,
+      }),
+      processHint: t("workspaces.compress.output", {
+        level: t(`workspaces.compress.${compressionLevel}.title`),
+      }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveCompressErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -482,6 +508,26 @@ function resolveRemoveErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.remove.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveCompressErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.compress.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.compress.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.compress.expiredDescription", { hours });
   }
 
   return undefined;

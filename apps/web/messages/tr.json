@@ -936,19 +936,48 @@
         }
       },
       "compress": {
-        "title": "Sıkıştırma",
-        "hint": "Daha yüksek sıkıştırma daha küçük dosya üretir. Kalite düşebilir.",
+        "title": "Ne kadar sıkıştırılacağını seçin",
+        "hint": "Aşırı sıkıştırma daha küçük dosya üretir. Daha az sıkıştırma kaliteyi korur. Yeni dosya boyutunu tahmin etmiyoruz.",
+        "output": "{level} ile sıkıştır.",
+        "processing": "PDF’niz sıkıştırılıyor...",
+        "processingHint": "Dosya boyutu küçültülüyor. Bu biraz sürebilir.",
+        "successTitle": "Sıkıştırılmış PDF’niz hazır",
+        "successDescription": "Daha küçük PDF’i indirin.",
+        "download": "PDF’i indir",
+        "compressAnother": "Başka bir PDF sıkıştır",
+        "processingFailed": "Bu PDF sıkıştırılamadı. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF sıkıştırın.",
+        "faqHow": "Bir PDF yükleyin, Aşırı, Önerilen veya Daha az sıkıştırma seçin ve sıkıştırın. Hesap gerekmez.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Küçültmek istediğiniz PDF’i sürükleyip bırakın."
+          },
+          "select": {
+            "title": "Sıkıştırma seçin",
+            "description": "Aşırı, Önerilen veya Daha az sıkıştırma seçin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Sıkıştırılmış PDF’i alın."
+          }
+        },
         "medium": {
           "title": "Önerilen",
-          "hint": "Çoğu dosya için boyut ve kalite dengesi."
+          "hint": "Çoğu dosya için dengeli.",
+          "outcome": "Dengeli"
         },
         "high": {
-          "title": "En küçük dosya",
-          "hint": "Maksimum sıkıştırma. Paylaşım için uygun, arşiv için değil."
+          "title": "Aşırı",
+          "hint": "En küçük dosya. Kalite düşebilir.",
+          "outcome": "Daha küçük dosya"
         },
         "low": {
-          "title": "En iyi kalite",
-          "hint": "Görüntü kalitesini daha çok korur, daha az küçültür."
+          "title": "Daha az sıkıştırma",
+          "hint": "Daha fazla görüntü kalitesi korur.",
+          "outcome": "Daha iyi kalite"
         }
       },
       "convert": {
