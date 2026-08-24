@@ -4,6 +4,7 @@
  */
 export const LIVE_PROCESSOR_IDS = [
   "office",
+  "office-ocr",
   "pdf-image",
   "pdf-text",
   "image-pdf",

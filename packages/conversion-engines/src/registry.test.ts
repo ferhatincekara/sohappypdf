@@ -8,6 +8,14 @@ describe("engine registry", () => {
 
   test("selects engines for the implemented first conversions", () => {
     expect(registry.resolve("pdf-to-word").name).toBe("office");
+    expect(registry.resolve("pdf-to-excel").name).toBe("office");
+    expect(registry.resolve("pdf-to-powerpoint").name).toBe("office");
+    expect(registry.resolve("word-to-pdf").name).toBe("office");
+    expect(registry.resolve("excel-to-pdf").name).toBe("office");
+    expect(registry.resolve("powerpoint-to-pdf").name).toBe("office");
+    expect(registry.resolve("office-to-pdf").name).toBe("office");
+    expect(registry.resolve("pdf-to-word-ocr").name).toBe("office-ocr");
+    expect(registry.resolve("pdf-to-excel-ocr").name).toBe("office-ocr");
     expect(
       registry.resolve({
         type: "pdf-to-jpg",

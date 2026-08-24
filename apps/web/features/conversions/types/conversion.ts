@@ -11,11 +11,14 @@ export type ConversionStatus = (typeof CONVERSION_STATUSES)[number];
 
 export const CONVERSION_TYPES = [
   "pdf-to-word",
+  "pdf-to-word-ocr",
   "pdf-to-excel",
+  "pdf-to-excel-ocr",
   "pdf-to-powerpoint",
   "word-to-pdf",
   "excel-to-pdf",
   "powerpoint-to-pdf",
+  "office-to-pdf",
   "pdf-to-jpg",
   "pdf-to-png",
   "pdf-to-txt",

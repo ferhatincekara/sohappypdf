@@ -75,6 +75,20 @@ describe("conversion options", () => {
     });
   });
 
+  test("accepts office OCR conversion options", () => {
+    expect(
+      parseConversionOptions("pdf-to-word-ocr", { language: "eng" }),
+    ).toEqual({
+      type: "pdf-to-word-ocr",
+      language: "eng",
+    });
+
+    expect(parseConversionOptions("pdf-to-excel-ocr", undefined)).toEqual({
+      type: "pdf-to-excel-ocr",
+      language: "eng",
+    });
+  });
+
   test("rejects invalid or sensitive options", () => {
     expectInvalidOptions(() =>
       parseConversionOptions("pdf-to-jpg", { quality: 250 }),

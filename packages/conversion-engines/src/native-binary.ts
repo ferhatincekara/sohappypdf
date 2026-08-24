@@ -10,6 +10,7 @@ const VERSION_FLAGS: Record<string, readonly string[]> = {
   pdftotext: ["-v"],
   gs: ["--version"],
   qpdf: ["--version"],
+  ocrmypdf: ["--version"],
 };
 
 export type NativeBinaryProbe = {
@@ -36,7 +37,7 @@ export function requiredConversionBinaries(
 export function optionalConversionBinaries(
   config: ConversionEngineConfig,
 ): readonly string[] {
-  return [config.qpdfBin];
+  return [config.qpdfBin, config.ocrMyPdfBin];
 }
 
 export function isConversionBinaryAvailable(command: string): boolean {

@@ -3,6 +3,7 @@ import type { ConversionEngine, ConversionEngineQuery } from "./engine.js";
 import type { ConversionEngineConfig } from "./engine-config.js";
 import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 import { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
+import { createOfficeOcrEngine } from "./engines/libreoffice/office-ocr-engine.js";
 import { createPdfEditEngine } from "./engines/pdf/pdf-edit-engine.js";
 import { createPdfImageEngine } from "./engines/pdf/pdf-image-engine.js";
 import { createPdfManipulateEngine } from "./engines/pdf/pdf-manipulate-engine.js";
@@ -34,6 +35,7 @@ export function createEngineRegistry(
 ): EngineRegistry {
   const engines: readonly ConversionEngine[] = [
     createOfficeEngine(config),
+    createOfficeOcrEngine(config),
     createPdfImageEngine(config),
     createPdfTextEngine(config),
     createImagePdfEngine(),

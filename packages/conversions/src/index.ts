@@ -27,6 +27,7 @@ export type {
   OcrOptions,
   OcrOutputMode,
   OfficeConversionOptions,
+  OfficeOcrConversionOptions,
   ParseConversionOptionsContext,
   PdfPageImageOptions,
   ProtectPdfOptions,

@@ -36,9 +36,15 @@ export type OfficeConversionOptions = {
     | "word-to-pdf"
     | "excel-to-pdf"
     | "powerpoint-to-pdf"
+    | "office-to-pdf"
     | "jpg-to-pdf"
     | "png-to-pdf"
     | "pdf-to-txt";
+};
+
+export type OfficeOcrConversionOptions = {
+  type: "pdf-to-word-ocr" | "pdf-to-excel-ocr";
+  language: string;
 };
 
 export type MergePdfOptions = {
@@ -119,6 +125,7 @@ export type OcrOptions = {
 export type ConversionOptions =
   | PdfPageImageOptions
   | OfficeConversionOptions
+  | OfficeOcrConversionOptions
   | MergePdfOptions
   | SplitPdfOptions
   | CompressPdfOptions
@@ -565,11 +572,20 @@ export function parseConversionOptions(
     case "word-to-pdf":
     case "excel-to-pdf":
     case "powerpoint-to-pdf":
+    case "office-to-pdf":
     case "jpg-to-pdf":
     case "png-to-pdf":
     case "pdf-to-txt": {
       assertAllowedKeys(record, ["type"]);
       return { type };
+    }
+    case "pdf-to-word-ocr":
+    case "pdf-to-excel-ocr": {
+      assertAllowedKeys(record, ["type", "language"]);
+      return {
+        type,
+        language: parseLanguage(record.language ?? "eng"),
+      };
     }
   }
 }

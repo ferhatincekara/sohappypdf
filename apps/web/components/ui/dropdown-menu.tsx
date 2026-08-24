@@ -95,8 +95,17 @@ function DropdownMenuSeparator({
   );
 }
 
-function DropdownMenuGroup({ ...props }: MenuPrimitive.Group.Props) {
-  return <MenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />;
+function DropdownMenuGroup({
+  className,
+  ...props
+}: MenuPrimitive.Group.Props) {
+  return (
+    <MenuPrimitive.Group
+      data-slot="dropdown-menu-group"
+      className={className}
+      {...props}
+    />
+  );
 }
 
 function DropdownMenuShortcut({ className, ...props }: ComponentProps<"span">) {

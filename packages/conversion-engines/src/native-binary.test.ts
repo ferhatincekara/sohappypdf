@@ -26,7 +26,7 @@ describe("native binary probes", () => {
   test("tracks optional binaries separately from startup requirements", () => {
     expect(
       optionalConversionBinaries(DEFAULT_CONVERSION_ENGINE_CONFIG),
-    ).toEqual(["qpdf"]);
+    ).toEqual(["qpdf", "ocrmypdf"]);
   });
 
   test("does not treat a missing command as available", () => {

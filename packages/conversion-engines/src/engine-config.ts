@@ -6,6 +6,7 @@ export type ConversionEngineConfig = {
   pdftoppmBin: string;
   pdftotextBin: string;
   qpdfBin: string;
+  ocrMyPdfBin: string;
 };
 
 export const DEFAULT_CONVERSION_ENGINE_CONFIG: ConversionEngineConfig = {
@@ -16,6 +17,7 @@ export const DEFAULT_CONVERSION_ENGINE_CONFIG: ConversionEngineConfig = {
   pdftoppmBin: "pdftoppm",
   pdftotextBin: "pdftotext",
   qpdfBin: "qpdf",
+  ocrMyPdfBin: "ocrmypdf",
 };
 
 export const CONVERSION_NATIVE_BINARIES = [
@@ -25,4 +27,5 @@ export const CONVERSION_NATIVE_BINARIES = [
   "pdftotext",
   "gs",
   "qpdf",
+  "ocrmypdf",
 ] as const;

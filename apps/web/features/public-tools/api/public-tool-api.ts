@@ -1,4 +1,3 @@
-import type { AxiosInstance } from "axios";
 import {
   ConversionApiRequestError,
   conversionApi,

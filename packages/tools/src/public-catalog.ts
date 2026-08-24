@@ -343,7 +343,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office-ocr",
   }),
   defineTool("pdf-to-powerpoint", {
@@ -356,7 +356,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office",
   }),
   defineTool("pdf-to-excel", {
@@ -369,7 +369,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office",
   }),
   defineTool("pdf-to-excel-ocr", {
@@ -382,7 +382,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office-ocr",
   }),
   defineTool("pdf-to-jpg", {
@@ -434,7 +434,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office",
   }),
   defineTool("powerpoint-to-pdf", {
@@ -447,7 +447,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office",
   }),
   defineTool("excel-to-pdf", {
@@ -460,7 +460,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office",
   }),
   defineTool("image-to-pdf", {
@@ -512,7 +512,7 @@ export const TOOL_CATALOG = [
     allowsAnonymous: false,
     requiresAuthentication: true,
     maxInputCount: 1,
-    availability: "planned",
+    availability: "available",
     processorId: "office",
   }),
 

@@ -115,11 +115,14 @@
         "type": "string",
         "enum": [
           "pdf-to-word",
+          "pdf-to-word-ocr",
           "pdf-to-excel",
+          "pdf-to-excel-ocr",
           "pdf-to-powerpoint",
           "word-to-pdf",
           "excel-to-pdf",
           "powerpoint-to-pdf",
+          "office-to-pdf",
           "pdf-to-jpg",
           "pdf-to-png",
           "pdf-to-txt",
@@ -141,7 +144,7 @@
           "ocr-pdf",
           "ocr-image"
         ],
-        "description": "Implemented types: pdf-to-word, pdf-to-jpg, pdf-to-png, pdf-to-txt, jpg-to-pdf, png-to-pdf, merge-pdf, split-pdf, compress-pdf, rotate-pdf, organize-pdf, remove-pages, reorder-pages, crop-pdf, repair-pdf, watermark-pdf, page-numbers-pdf, protect-pdf, unlock-pdf."
+        "description": "Implemented types: pdf-to-word, pdf-to-word-ocr, pdf-to-excel, pdf-to-excel-ocr, pdf-to-powerpoint, word-to-pdf, excel-to-pdf, powerpoint-to-pdf, office-to-pdf, pdf-to-jpg, pdf-to-png, pdf-to-txt, jpg-to-pdf, png-to-pdf, merge-pdf, split-pdf, compress-pdf, rotate-pdf, organize-pdf, remove-pages, reorder-pages, crop-pdf, repair-pdf, watermark-pdf, page-numbers-pdf, protect-pdf, unlock-pdf."
       },
       "PublicFile": {
         "type": "object",

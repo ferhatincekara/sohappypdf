@@ -106,21 +106,25 @@ export function MarketingMobileNav({
                 <p className="px-2 text-xs font-medium text-muted-foreground">
                   {t(`categories.${group.category}`)}
                 </p>
-                {group.tools.map((tool) => (
-                  <Link
-                    key={tool.id}
-                    href={tool.href}
-                    onClick={() => {
-                      close("navigate");
-                    }}
-                    className={buttonVariants({
-                      variant: "ghost",
-                      className: "justify-start",
-                    })}
-                  >
-                    {tTools(`${tool.id}.name`)}
-                  </Link>
-                ))}
+                <div className="grid grid-cols-2 gap-1">
+                  {group.tools.map((tool) => (
+                    <Link
+                      key={tool.id}
+                      href={tool.href}
+                      onClick={() => {
+                        close("navigate");
+                      }}
+                      className={buttonVariants({
+                        variant: "ghost",
+                        size: "sm",
+                        className:
+                          "h-auto justify-start whitespace-normal px-2 py-1.5 text-left",
+                      })}
+                    >
+                      {tTools(`${tool.id}.name`)}
+                    </Link>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
