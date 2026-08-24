@@ -6,7 +6,7 @@ import type {
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { FileRecord } from "@repo/files";
 import type { Logger } from "@repo/logger";
-import type { ConversionJobData } from "@repo/queue";
+import { type ConversionJobData, toQueueSafeJobOptions } from "@repo/queue";
 
 export type EnqueueCreatedConversionOptions = {
   conversions: ConversionService;
@@ -15,12 +15,6 @@ export type EnqueueCreatedConversionOptions = {
   logger: Logger;
   input: CreateOwnedConversionInput;
 };
-
-function toJobOptions(
-  options: ConversionRecord["options"],
-): Record<string, unknown> {
-  return { ...options };
-}
 
 function isDuplicateQueueJob(error: unknown): boolean {
   if (!(error instanceof Error)) {
@@ -61,7 +55,7 @@ export async function enqueueCreatedConversion(
       conversionType: conversion.type,
       sourceFormat: conversion.sourceFormat,
       targetFormat: conversion.targetFormat,
-      options: toJobOptions(conversion.options),
+      options: toQueueSafeJobOptions(conversion.options),
     });
   } catch (error) {
     if (isDuplicateQueueJob(error)) {

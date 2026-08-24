@@ -1,5 +1,5 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
+import { parsePositiveInteger } from "./parse-positive-integer.js";
 
 export const DEFAULT_FILE_RETENTION_HOURS = 2;
 export const DEFAULT_FILE_RETENTION_MS =
@@ -18,32 +18,6 @@ export const DEFAULT_FILE_CONFIG: FileConfig = {
   retentionMs: DEFAULT_FILE_RETENTION_MS,
   cleanupBatchSize: DEFAULT_FILE_CLEANUP_BATCH_SIZE,
 };
-
-function parsePositiveInteger(
-  name: string,
-  value: string | undefined,
-  fallback: number,
-  maximum?: number,
-): number {
-  if (value === undefined) {
-    return fallback;
-  }
-
-  const parsed = Number(value);
-
-  if (
-    !Number.isInteger(parsed) ||
-    parsed < 1 ||
-    (maximum !== undefined && parsed > maximum)
-  ) {
-    throw new AppError({
-      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
-      message: `Invalid ${name}`,
-    });
-  }
-
-  return parsed;
-}
 
 export function loadFileConfig(source: EnvSource = process.env): FileConfig {
   const retentionHours = parsePositiveInteger(

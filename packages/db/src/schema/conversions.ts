@@ -58,6 +58,7 @@ export const conversions = pgTable(
   },
   (table) => [
     index("conversions_source_file_id_idx").on(table.sourceFileId),
+    index("conversions_output_file_id_idx").on(table.outputFileId),
     index("conversions_status_idx").on(table.status),
     index("conversions_owner_id_idx").on(table.ownerId),
     index("conversions_owner_kind_owner_id_idx").on(

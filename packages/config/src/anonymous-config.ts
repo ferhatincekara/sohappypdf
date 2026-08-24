@@ -1,5 +1,5 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
+import { parsePositiveInteger } from "./parse-positive-integer.js";
 
 const MIB = 1024 * 1024;
 
@@ -23,27 +23,6 @@ export const DEFAULT_ANONYMOUS_CONFIG: AnonymousConfig = {
   operationsPerHour: DEFAULT_ANONYMOUS_OPERATIONS_PER_HOUR,
   retentionMs: DEFAULT_ANONYMOUS_RETENTION_MS,
 };
-
-function parsePositiveInteger(
-  name: string,
-  value: string | undefined,
-  fallback: number,
-): number {
-  if (value === undefined) {
-    return fallback;
-  }
-
-  const parsed = Number(value);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    throw new AppError({
-      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
-      message: `Invalid ${name}`,
-    });
-  }
-
-  return parsed;
-}
 
 export function loadAnonymousConfig(
   source: EnvSource = process.env,

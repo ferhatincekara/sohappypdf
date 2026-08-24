@@ -76,26 +76,24 @@ export function errorHandler(error: Error, c: Context<AppEnv>) {
   const publicError = toPublicError(error);
   logPublicError(c, publicError);
 
-  switch (publicError.code) {
-    case APP_ERROR_CODES.VALIDATION_ERROR:
-      return jsonError(c, publicError.code, publicError.message, 400);
-    case APP_ERROR_CODES.UNAUTHORIZED:
-      return jsonError(c, publicError.code, publicError.message, 401);
-    case APP_ERROR_CODES.FORBIDDEN:
-    case APP_ERROR_CODES.PLAN_LIMIT_REACHED:
-    case APP_ERROR_CODES.STORAGE_LIMIT_REACHED:
-    case APP_ERROR_CODES.API_KEY_LIMIT_REACHED:
-      return jsonError(c, publicError.code, publicError.message, 403);
-    case APP_ERROR_CODES.FILE_TOO_LARGE:
-      return jsonError(c, publicError.code, publicError.message, 413);
-    case APP_ERROR_CODES.NOT_FOUND:
-      return jsonError(c, publicError.code, publicError.message, 404);
-    case APP_ERROR_CODES.CONFLICT:
-      return jsonError(c, publicError.code, publicError.message, 409);
-    case APP_ERROR_CODES.RATE_LIMITED:
-      return jsonError(c, publicError.code, publicError.message, 429);
-    case APP_ERROR_CODES.CONFIGURATION_ERROR:
-    case APP_ERROR_CODES.INTERNAL_ERROR:
-      return jsonError(c, publicError.code, publicError.message, 500);
-  }
+  const status = isHandledErrorStatus(publicError.status)
+    ? publicError.status
+    : 500;
+
+  return jsonError(c, publicError.code, publicError.message, status);
+}
+
+function isHandledErrorStatus(
+  status: number,
+): status is 400 | 401 | 403 | 404 | 409 | 413 | 429 | 500 {
+  return (
+    status === 400 ||
+    status === 401 ||
+    status === 403 ||
+    status === 404 ||
+    status === 409 ||
+    status === 413 ||
+    status === 429 ||
+    status === 500
+  );
 }

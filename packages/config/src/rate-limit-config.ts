@@ -1,5 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
+import { parsePositiveInteger } from "./parse-positive-integer.js";
 
 export type RateLimitRedisConfig = {
   restUrl: string;
@@ -22,27 +23,6 @@ export const DEFAULT_RATE_LIMIT_CONFIG = {
   freeAuthenticatedPerMinute: 60,
   freeApiPerMinute: 30,
 } as const;
-
-function parsePositiveInteger(
-  name: string,
-  value: string | undefined,
-  fallback: number,
-): number {
-  if (value === undefined) {
-    return fallback;
-  }
-
-  const parsed = Number(value);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    throw new AppError({
-      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
-      message: `Invalid ${name}`,
-    });
-  }
-
-  return parsed;
-}
 
 function parseRedisConfig(source: EnvSource): RateLimitRedisConfig | undefined {
   const restUrl = getOptionalEnv("UPSTASH_REDIS_REST_URL", source);

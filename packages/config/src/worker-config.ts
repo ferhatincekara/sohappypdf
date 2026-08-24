@@ -1,5 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
+import { parsePositiveInteger } from "./parse-positive-integer.js";
 
 export type WorkerConfig = {
   concurrency: number;
@@ -32,27 +33,6 @@ export const DEFAULT_WORKER_CONFIG: WorkerConfig = {
   qpdfBin: "qpdf",
   ocrMyPdfBin: "ocrmypdf",
 };
-
-function parsePositiveInteger(
-  name: string,
-  value: string | undefined,
-  fallback: number,
-): number {
-  if (value === undefined) {
-    return fallback;
-  }
-
-  const parsed = Number(value);
-
-  if (!Number.isInteger(parsed) || parsed < 1) {
-    throw new AppError({
-      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
-      message: `Invalid ${name}`,
-    });
-  }
-
-  return parsed;
-}
 
 function parsePort(
   name: string,

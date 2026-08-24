@@ -262,9 +262,24 @@ export const webCreditLedgerEntries = pgTable(
   (table) => [
     index("web_credit_ledger_entries_user_id_idx").on(table.userId),
     index("web_credit_ledger_entries_execution_id_idx").on(table.executionId),
-    uniqueIndex("web_credit_ledger_provider_event_uidx").on(
-      table.providerEventId,
-    ),
+    uniqueIndex("web_credit_ledger_provider_event_uidx")
+      .on(table.providerEventId)
+      .where(sql`${table.providerEventId} is not null`),
+    uniqueIndex("web_credit_ledger_consume_execution_uidx")
+      .on(table.executionId)
+      .where(sql`${table.type} = 'consume' AND ${table.executionId} is not null`),
+    uniqueIndex("web_credit_ledger_refund_execution_uidx")
+      .on(table.executionId)
+      .where(sql`${table.type} = 'refund' AND ${table.executionId} is not null`),
+    uniqueIndex("web_credit_ledger_grant_period_uidx")
+      .on(table.userId, table.periodStart, table.source)
+      .where(sql`${table.type} = 'grant' AND ${table.source} = 'web'`),
+    uniqueIndex("web_credit_ledger_ai_grant_period_uidx")
+      .on(table.userId, table.periodStart, table.source)
+      .where(sql`${table.type} = 'grant' AND ${table.source} = 'ai'`),
+    uniqueIndex("web_credit_ledger_api_grant_period_uidx")
+      .on(table.userId, table.periodStart, table.source)
+      .where(sql`${table.type} = 'grant' AND ${table.source} = 'api'`),
     check(
       "web_credit_ledger_entries_amount_positive",
       sql`${table.amount} > 0`,

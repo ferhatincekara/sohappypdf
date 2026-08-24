@@ -36,6 +36,22 @@ const FORBIDDEN_PAYLOAD_KEYS = new Set([
   "url",
 ]);
 
+export function toQueueSafeJobOptions(
+  options: Record<string, unknown>,
+): Record<string, unknown> {
+  const safe: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(options)) {
+    if (SENSITIVE_OPTION_KEYS.has(key.toLowerCase())) {
+      continue;
+    }
+
+    safe[key] = value;
+  }
+
+  return safe;
+}
+
 export type ConversionJobData = {
   conversionId: string;
   sourceFileId: string;

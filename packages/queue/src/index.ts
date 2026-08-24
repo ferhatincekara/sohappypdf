@@ -12,6 +12,7 @@ export {
   createConversionJob,
   createConversionJobId,
   parseConversionJobData,
+  toQueueSafeJobOptions,
 } from "./conversion-job.js";
 export type {
   ConversionJobWriter,
