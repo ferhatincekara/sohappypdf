@@ -1452,6 +1452,48 @@
           }
         }
       },
+      "fill": {
+        "title": "Bu PDF formunu doldur",
+        "hint": "Bu PDF’deki mevcut form alanlarını bulduk. Doldurun, ardından tamamlanmış bir kopya kaydedin.",
+        "detecting": "Form alanları aranıyor",
+        "empty": "Bu PDF’de doldurulabilir form alanı yok. Sayfaya yeni alan yerleştirmiyoruz.",
+        "fieldCount": "{count, plural, one {# alan} other {# alan}}",
+        "choose": "Bir seçenek belirleyin",
+        "page": "Sayfa {page}",
+        "flatten": "Yanıtları dosyaya kilitle",
+        "flattenHint": "Doldurulan yanıtları sayfanın bir parçası yapar, böylece sonradan değiştirilemez.",
+        "skippedRadio": "Bu PDF’deki radyo düğmeleri henüz doldurulamaz.",
+        "skippedSignature": "İmza alanları burada doldurulamaz. İmza eklemek için PDF imzala aracını kullanın.",
+        "selectPrompt": "Devam etmek için bu PDF’de doldurulabilir form alanları olmalı.",
+        "output": "Yanıtlarınız indirilen PDF’e yazılacak.",
+        "previewFailed": "Bu PDF önizlenemedi.",
+        "passwordProtected": "Bu PDF parola korumalı. Formu doldurmak için önce kilidini açın.",
+        "processing": "PDF’niz dolduruluyor...",
+        "processingHint": "Yanıtlarınız forma yazılıyor.",
+        "successTitle": "Doldurulmuş PDF’niz hazır",
+        "successDescription": "Yanıtlarınızın uygulandığı PDF’i indirin.",
+        "download": "PDF’i indir",
+        "fillAnother": "Başka bir PDF doldur",
+        "processingFailed": "Bu PDF doldurulamadı. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF doldurun.",
+        "faqHow": "Zaten form alanları içeren bir PDF yükleyin, alanları doldurun, ardından indirin. Bu araç için giriş gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Zaten form alanları olan bir PDF bırakın."
+          },
+          "fill": {
+            "title": "Alanları doldur",
+            "description": "Tespit edilen alanları yanıtlayın. Yalnızca dosyada zaten var olan alanları doldururuz."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Yanıtlarınızı içeren tamamlanmış bir PDF alın."
+          }
+        }
+      },
       "edit": {
         "title": "PDF düzenle"
       },
@@ -1758,7 +1800,7 @@
     },
     "pdf-forms": {
       "name": "PDF formları",
-      "description": "Etkileşimli PDF formlarını doldurun veya hazırlayın."
+      "description": "Etkileşimli bir PDF formundaki mevcut alanları doldurun."
     },
     "web-to-pdf": {
       "name": "Web'den PDF'e",

@@ -17,6 +17,7 @@ describe("resolveToolWorkspaceKind", () => {
     expect(resolveToolWorkspaceKind("watermark-pdf")).toBe("watermark");
     expect(resolveToolWorkspaceKind("crop-pdf")).toBe("crop");
     expect(resolveToolWorkspaceKind("sign-pdf")).toBe("sign");
+    expect(resolveToolWorkspaceKind("pdf-forms")).toBe("fill");
     expect(resolveToolWorkspaceKind("repair-pdf")).toBe("repair");
     expect(resolveToolWorkspaceKind("ocr-pdf")).toBe("ocr");
     expect(resolveToolWorkspaceKind("edit-pdf")).toBe("default");

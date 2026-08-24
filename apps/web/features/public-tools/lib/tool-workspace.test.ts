@@ -167,6 +167,21 @@ describe("tool workspace helpers", () => {
     });
 
     expect(
+      buildToolConversionOptions("pdf-forms", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        formFields: { Name: "Ada", Agree: "true" },
+        flattenForm: true,
+      }),
+    ).toEqual({
+      fields: { Name: "Ada", Agree: "true" },
+      flatten: true,
+    });
+
+    expect(
+      buildToolConversionOptions("pdf-forms", DEFAULT_TOOL_WORKSPACE_STATE),
+    ).toBeUndefined();
+
+    expect(
       buildToolConversionOptions("translate-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
     ).toEqual({ targetLanguage: "eng" });
   });

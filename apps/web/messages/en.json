@@ -1452,6 +1452,48 @@
           }
         }
       },
+      "fill": {
+        "title": "Fill this PDF",
+        "hint": "We found the existing form fields in this PDF. Fill them in, then save a completed copy.",
+        "detecting": "Looking for form fields",
+        "empty": "This PDF doesn't have fillable form fields we can edit. We don't place new fields on the page.",
+        "fieldCount": "{count, plural, one {# field} other {# fields}}",
+        "choose": "Choose an option",
+        "page": "Page {page}",
+        "flatten": "Lock answers in the file",
+        "flattenHint": "Makes the filled answers part of the page so they can't be changed later.",
+        "skippedRadio": "Radio buttons in this PDF can't be filled yet.",
+        "skippedSignature": "Signature fields can't be filled here. Use Sign PDF to add a signature.",
+        "selectPrompt": "This PDF needs fillable form fields before you can continue.",
+        "output": "Your answers will be written into the downloaded PDF.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to fill the form.",
+        "processing": "Filling your PDF...",
+        "processingHint": "Writing your answers into the form.",
+        "successTitle": "Your filled PDF is ready",
+        "successDescription": "Download the PDF with your answers applied.",
+        "download": "Download PDF",
+        "fillAnother": "Fill another PDF",
+        "processingFailed": "We couldn't fill this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Fill another PDF to continue.",
+        "faqHow": "Upload a PDF that already contains form fields, fill them in, then download. Sign in is required for this tool.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in a PDF that already has form fields."
+          },
+          "fill": {
+            "title": "Fill fields",
+            "description": "Answer the detected fields. We only fill fields that already exist in the file."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a completed PDF with your answers."
+          }
+        }
+      },
       "edit": {
         "title": "Edit PDF"
       },
@@ -1758,7 +1800,7 @@
     },
     "pdf-forms": {
       "name": "PDF forms",
-      "description": "Fill or prepare interactive PDF forms."
+      "description": "Fill existing fields in an interactive PDF form."
     },
     "web-to-pdf": {
       "name": "Web to PDF",

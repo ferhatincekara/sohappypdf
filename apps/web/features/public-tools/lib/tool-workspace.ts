@@ -35,6 +35,8 @@ export type ToolWorkspaceState = {
   signPageHeight: number;
   signText: string;
   signFileId: string;
+  formFields: Record<string, string>;
+  flattenForm: boolean;
 };
 
 export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
@@ -66,6 +68,8 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   signPageHeight: 0,
   signText: "",
   signFileId: "",
+  formFields: {},
+  flattenForm: false,
 };
 
 export function additionalFileIdsFromOptions(
@@ -365,6 +369,22 @@ export function buildToolConversionOptions(
         page: state.signPage,
         ...box,
         additionalFileIds: [state.signFileId],
+      };
+    }
+    case "pdf-forms": {
+      const fields = Object.fromEntries(
+        Object.entries(state.formFields).filter(
+          ([name]) => name.trim().length > 0,
+        ),
+      );
+
+      if (Object.keys(fields).length === 0) {
+        return undefined;
+      }
+
+      return {
+        fields,
+        ...(state.flattenForm ? { flatten: true } : {}),
       };
     }
     case "ai-summarizer":

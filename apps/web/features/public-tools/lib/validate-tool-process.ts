@@ -20,6 +20,7 @@ const TOOLS_REQUIRING_OPTIONS = new Set([
   "protect-pdf",
   "unlock-pdf",
   "sign-pdf",
+  "pdf-forms",
   "translate-pdf",
 ]);
 
