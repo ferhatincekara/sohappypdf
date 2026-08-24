@@ -4,9 +4,8 @@ import { Link } from "@/lib/i18n/navigation";
 import { resolveMarketingCtas } from "../lib/marketing-cta";
 import { MARKETING_NAV_LINKS } from "../lib/marketing-nav";
 import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { getMarketingToolNavGroups } from "../lib/marketing-tools";
 import { MarketingMobileNav } from "./marketing-mobile-nav";
-import { MarketingToolsNav } from "./marketing-tools-nav";
+import { MarketingToolShortcuts } from "./marketing-tool-shortcuts";
 
 export async function MarketingHeader({
   isAuthenticated,
@@ -17,7 +16,6 @@ export async function MarketingHeader({
   const { startHref, signInHref } = resolveMarketingCtas(isAuthenticated);
   const startLabel = t("getStarted");
   const signInLabel = t("signIn");
-  const toolGroups = getMarketingToolNavGroups();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background">
@@ -38,7 +36,12 @@ export async function MarketingHeader({
           aria-label={t("menu")}
           className="hidden items-center gap-1 md:flex"
         >
-          <MarketingToolsNav groups={toolGroups} />
+          <Link
+            href={MARKETING_PATHS.tools}
+            className={buttonVariants({ variant: "ghost", size: "sm" })}
+          >
+            {t("tools")}
+          </Link>
           {MARKETING_NAV_LINKS.map((item) => (
             <Link
               key={item.id}
@@ -63,7 +66,6 @@ export async function MarketingHeader({
           </Link>
         </div>
         <MarketingMobileNav
-          toolGroups={toolGroups}
           startHref={startHref}
           signInHref={signInHref}
           startLabel={startLabel}
@@ -71,6 +73,7 @@ export async function MarketingHeader({
           isAuthenticated={isAuthenticated}
         />
       </div>
+      <MarketingToolShortcuts />
     </header>
   );
 }

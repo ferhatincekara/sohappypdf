@@ -1,12 +1,17 @@
 import type { ToolDefinition } from "@repo/tools/catalog";
 import { getTranslations } from "next-intl/server";
+import { getPublicWebEnv } from "@/config/public-env";
 import { Link } from "@/lib/i18n/navigation";
 import {
   PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES,
   PUBLIC_ANONYMOUS_RETENTION_HOURS,
 } from "../lib/anonymous-limits";
 import { formatAcceptedFormats, formatLabel } from "../lib/format-labels";
+import type { PublicToolFaqItem } from "../lib/public-tool-json-ld";
+import { publicToolCanonicalUrl } from "../lib/public-tool-metadata";
 import { maxFilesForTool } from "../lib/tool-limits";
+import { PublicToolFaq } from "./public-tool-faq";
+import { PublicToolJsonLd } from "./public-tool-json-ld";
 import { PublicToolWorkspace } from "./public-tool-workspace";
 
 export type RelatedPublicTool = {
@@ -28,7 +33,8 @@ export async function PublicToolPageContent({
   const t = await getTranslations("publicTools");
   const tTools = await getTranslations("tools");
   const tNav = await getTranslations("marketing.nav");
-
+  const name = tTools(`${tool.id}.name`);
+  const description = tTools(`${tool.id}.description`);
   const maxFiles = maxFilesForTool(tool, !isAuthenticated);
   const maxFileSizeBytes = isAuthenticated
     ? maxAuthenticatedFileSizeBytes
@@ -42,22 +48,120 @@ export async function PublicToolPageContent({
     tool.outputFormats,
     t("upload.conjunction"),
   );
+  const faq: readonly PublicToolFaqItem[] = [
+    {
+      id: "what",
+      question: t("faq.what.question", { tool: name }),
+      answer: description,
+    },
+    {
+      id: "how",
+      question: t("faq.how.question"),
+      answer: t("faq.how.answer"),
+    },
+    {
+      id: "formats",
+      question: t("faq.formats.question"),
+      answer: t("faq.formats.answer", { formats, outputs }),
+    },
+    {
+      id: "account",
+      question: t("faq.account.question"),
+      answer: tool.allowsAnonymous
+        ? t("faq.account.anonymous")
+        : t("faq.account.required"),
+    },
+    {
+      id: "limits",
+      question: t("faq.limits.question"),
+      answer: t("faq.limits.answer", {
+        files: maxFiles,
+        sizeMb,
+        hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
+      }),
+    },
+    {
+      id: "privacy",
+      question: t("faq.privacy.question"),
+      answer: t("faq.privacy.answer", {
+        hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
+      }),
+    },
+  ];
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-10 px-4 py-10 sm:py-14">
-      <header className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-medium text-muted-foreground">
-            {tNav(`categories.${tool.category}`)}
+      <PublicToolJsonLd
+        name={name}
+        description={description}
+        url={publicToolCanonicalUrl({
+          appUrl: getPublicWebEnv().appUrl,
+          path: tool.route,
+        })}
+        faq={faq}
+      />
+      <header className="flex flex-col gap-3">
+        <p className="text-sm font-medium text-muted-foreground">
+          {tNav(`categories.${tool.category}`)}
+        </p>
+        <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+          {name}
+        </h1>
+        <p className="max-w-2xl text-base text-muted-foreground text-pretty">
+          {description}
+        </p>
+        {tool.allowsAnonymous ? null : (
+          <p className="text-sm text-muted-foreground">
+            {t("descriptionAuthenticated")}
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            {tTools(`${tool.id}.name`)}
-          </h1>
-          <p className="max-w-2xl text-base text-muted-foreground text-pretty">
-            {tTools(`${tool.id}.description`)}
-          </p>
-        </div>
+        )}
+      </header>
 
+      <PublicToolWorkspace tool={tool} />
+
+      <section aria-labelledby="how-to-heading" className="flex flex-col gap-3">
+        <h2
+          id="how-to-heading"
+          className="text-lg font-semibold tracking-tight"
+        >
+          {t("overview.howTitle")}
+        </h2>
+        <ol className="grid gap-3 sm:grid-cols-3">
+          {(
+            [
+              ["upload", formats],
+              ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
+              ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
+            ] as const
+          ).map(([step, detail], index) => (
+            <li
+              key={step}
+              className="rounded-lg border border-border bg-card p-4"
+            >
+              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {t("overview.step", { number: index + 1 })}
+              </p>
+              <p className="mt-1 text-sm font-medium text-foreground">
+                {t(`overview.steps.${step}.title`)}
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t(`overview.steps.${step}.description`, { detail })}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section
+        aria-labelledby="formats-heading"
+        className="flex flex-col gap-3"
+      >
+        <h2
+          id="formats-heading"
+          className="text-lg font-semibold tracking-tight"
+        >
+          {t("overview.detailsTitle")}
+        </h2>
         <dl className="grid gap-3 rounded-lg border border-border bg-card p-4 text-sm sm:grid-cols-3">
           <div>
             <dt className="font-medium text-foreground">
@@ -84,40 +188,24 @@ export async function PublicToolPageContent({
             </dd>
           </div>
         </dl>
+      </section>
 
-        <ol className="grid gap-3 sm:grid-cols-3">
-          {(
-            [
-              ["upload", formats],
-              ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
-              ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
-            ] as const
-          ).map(([step, detail], index) => (
-            <li
-              key={step}
-              className="rounded-lg border border-border bg-card p-4"
-            >
-              <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                {t("overview.step", { number: index + 1 })}
-              </p>
-              <p className="mt-1 text-sm font-medium text-foreground">
-                {t(`overview.steps.${step}.title`)}
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t(`overview.steps.${step}.description`, { detail })}
-              </p>
-            </li>
-          ))}
-        </ol>
+      <section
+        aria-labelledby="privacy-heading"
+        className="flex flex-col gap-2"
+      >
+        <h2
+          id="privacy-heading"
+          className="text-lg font-semibold tracking-tight"
+        >
+          {t("privacy.title")}
+        </h2>
+        <p className="text-sm text-muted-foreground text-pretty">
+          {t("privacy.body", { hours: PUBLIC_ANONYMOUS_RETENTION_HOURS })}
+        </p>
+      </section>
 
-        {tool.allowsAnonymous ? null : (
-          <p className="text-sm text-muted-foreground">
-            {t("descriptionAuthenticated")}
-          </p>
-        )}
-      </header>
-
-      <PublicToolWorkspace tool={tool} />
+      <PublicToolFaq title={t("faq.title")} items={faq} />
 
       {relatedTools.length > 0 ? (
         <section

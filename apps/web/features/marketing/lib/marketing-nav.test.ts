@@ -4,7 +4,7 @@ import { getMarketingFooterLinks, MARKETING_NAV_LINKS } from "./marketing-nav";
 import { MARKETING_PATHS } from "./marketing-paths";
 
 describe("marketing navigation", () => {
-  test("uses tools dropdown companions with pricing and developer routes", () => {
+  test("uses tools directory companions with pricing and developer routes", () => {
     expect(MARKETING_NAV_LINKS.map((item) => item.href)).toEqual([
       MARKETING_PATHS.pricing,
       MARKETING_PATHS.developers,

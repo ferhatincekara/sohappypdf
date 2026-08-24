@@ -17,6 +17,15 @@
       "skip": "Skip to content",
       "tools": "Tools",
       "allTools": "All tools",
+      "shortcuts": {
+        "label": "Popular tools",
+        "merge": "Merge",
+        "split": "Split",
+        "compress": "Compress",
+        "convert": "Convert",
+        "ocr": "OCR",
+        "protect": "Protect"
+      },
       "categories": {
         "organize": "Organize PDF",
         "optimize": "Optimize PDF",
@@ -178,6 +187,7 @@
       "description": "Every public tool is a focused workflow. Pick a category, open a tool, upload a file, and download the result.",
       "openTool": "Open tool",
       "comingSoon": "Coming soon",
+      "jump": "Popular tools",
       "categories": {
         "organize": "Combine, split, and rearrange PDF pages.",
         "convert": "Turn PDFs into other formats and back again.",
@@ -673,7 +683,7 @@
     }
   },
   "publicTools": {
-    "metaTitle": "{tool}",
+    "metaTitle": "{tool} | SohappyPDF",
     "description": "Upload a file, process it in the cloud, and download the result. No account required for basic processing.",
     "descriptionAuthenticated": "This tool requires a signed-in account before processing can start.",
     "selectFile": "Choose a file",
@@ -694,6 +704,8 @@
       "accepts": "Accepted files",
       "outputs": "Output",
       "limits": "Limits",
+      "howTitle": "How to use it",
+      "detailsTitle": "Formats and limits",
       "step": "Step {number}",
       "steps": {
         "upload": {
@@ -748,6 +760,37 @@
     },
     "related": {
       "title": "Related tools"
+    },
+    "privacy": {
+      "title": "Files and retention",
+      "body": "Uploaded files are used to run this tool. Temporary files are kept for about {hours} hours, then they become eligible for removal. Downloads use short-lived signed links. We do not claim compliance certifications."
+    },
+    "faq": {
+      "title": "Questions",
+      "what": {
+        "question": "What does {tool} do?"
+      },
+      "how": {
+        "question": "How do I use this tool?",
+        "answer": "Upload a supported file, start processing, then download the result when it is ready. An account is not required unless the tool says it is."
+      },
+      "formats": {
+        "question": "Which formats are supported?",
+        "answer": "This tool accepts {formats} and returns {outputs}."
+      },
+      "account": {
+        "question": "Do I need an account?",
+        "anonymous": "No. You can run this tool without creating an account. A free account is optional if you want history and higher limits.",
+        "required": "Yes. Sign in before processing so the file can be stored in your workspace."
+      },
+      "limits": {
+        "question": "What are the current limits?",
+        "answer": "Up to {files} files, {sizeMb} MB each. Files are kept for about {hours} hours."
+      },
+      "privacy": {
+        "question": "How long are files kept?",
+        "answer": "Files are kept for about {hours} hours for processing and download, then they become eligible for removal."
+      }
     },
     "options": {
       "compressionLevel": "Compression level",

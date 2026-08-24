@@ -17,6 +17,15 @@
       "skip": "İçeriğe geç",
       "tools": "Araçlar",
       "allTools": "Tüm araçlar",
+      "shortcuts": {
+        "label": "Popüler araçlar",
+        "merge": "Birleştir",
+        "split": "Böl",
+        "compress": "Sıkıştır",
+        "convert": "Dönüştür",
+        "ocr": "OCR",
+        "protect": "Koruma"
+      },
       "categories": {
         "organize": "PDF organize",
         "optimize": "PDF optimize",
@@ -178,6 +187,7 @@
       "description": "Her genel araç odaklı bir akıştır. Bir kategori seçin, aracı açın, dosya yükleyin ve sonucu indirin.",
       "openTool": "Aracı aç",
       "comingSoon": "Yakında",
+      "jump": "Popüler araçlar",
       "categories": {
         "organize": "PDF sayfalarını birleştirin, bölün ve yeniden düzenleyin.",
         "convert": "PDF’leri diğer formatlara ve geri dönüştürün.",
@@ -673,7 +683,7 @@
     }
   },
   "publicTools": {
-    "metaTitle": "{tool}",
+    "metaTitle": "{tool} | SohappyPDF",
     "description": "Bir dosya yükleyin, bulutta işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
     "descriptionAuthenticated": "Bu araç işlem başlamadan önce oturum açmanızı gerektirir.",
     "selectFile": "Dosya seçin",
@@ -694,6 +704,8 @@
       "accepts": "Kabul edilen dosyalar",
       "outputs": "Çıktı",
       "limits": "Limitler",
+      "howTitle": "Nasıl kullanılır",
+      "detailsTitle": "Formatlar ve limitler",
       "step": "Adım {number}",
       "steps": {
         "upload": {
@@ -748,6 +760,37 @@
     },
     "related": {
       "title": "İlgili araçlar"
+    },
+    "privacy": {
+      "title": "Dosyalar ve saklama süresi",
+      "body": "Yüklenen dosyalar bu aracı çalıştırmak için kullanılır. Geçici dosyalar yaklaşık {hours} saat saklanır, ardından silinmeye uygun hale gelir. İndirmeler kısa ömürlü imzalı bağlantılar kullanır. Uyumluluk sertifikası iddiasında bulunmuyoruz."
+    },
+    "faq": {
+      "title": "Sorular",
+      "what": {
+        "question": "{tool} ne işe yarar?"
+      },
+      "how": {
+        "question": "Bu aracı nasıl kullanırım?",
+        "answer": "Desteklenen bir dosya yükleyin, işlemi başlatın ve hazır olduğunda sonucu indirin. Araç aksi belirtmedikçe hesap gerekmez."
+      },
+      "formats": {
+        "question": "Hangi formatlar desteklenir?",
+        "answer": "Bu araç {formats} kabul eder ve {outputs} üretir."
+      },
+      "account": {
+        "question": "Hesap gerekir mi?",
+        "anonymous": "Hayır. Bu aracı hesap oluşturmadan kullanabilirsiniz. Geçmiş ve daha yüksek limitler için ücretsiz hesap isteğe bağlıdır.",
+        "required": "Evet. Dosyanın çalışma alanınıza kaydedilmesi için işlemeden önce oturum açın."
+      },
+      "limits": {
+        "question": "Güncel limitler nelerdir?",
+        "answer": "En fazla {files} dosya, her biri {sizeMb} MB. Dosyalar yaklaşık {hours} saat saklanır."
+      },
+      "privacy": {
+        "question": "Dosyalar ne kadar saklanır?",
+        "answer": "Dosyalar işleme ve indirme için yaklaşık {hours} saat saklanır, ardından silinmeye uygun hale gelir."
+      }
     },
     "options": {
       "compressionLevel": "Sıkıştırma düzeyi",

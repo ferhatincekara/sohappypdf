@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { getMarketingToolShortcuts } from "../lib/marketing-tool-shortcuts";
 import type { MarketingToolNavGroup } from "../lib/marketing-tools";
 
 export async function ToolDirectoryPageContent({
@@ -12,6 +13,7 @@ export async function ToolDirectoryPageContent({
   const t = await getTranslations("marketing.toolsDirectory");
   const tNav = await getTranslations("marketing.nav");
   const tTools = await getTranslations("tools");
+  const shortcuts = getMarketingToolShortcuts();
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-12 sm:py-16">
@@ -24,12 +26,28 @@ export async function ToolDirectoryPageContent({
         </p>
       </header>
 
+      <nav aria-label={t("jump")} className="flex flex-wrap gap-2">
+        {shortcuts.map((shortcut) => (
+          <Link
+            key={shortcut.id}
+            href={shortcut.href}
+            className={cn(
+              buttonVariants({ variant: "outline", size: "sm" }),
+              "no-underline",
+            )}
+          >
+            {tNav(`shortcuts.${shortcut.id}`)}
+          </Link>
+        ))}
+      </nav>
+
       <div className="flex flex-col gap-12">
         {groups.map((group) => (
           <section
             key={group.category}
+            id={group.category}
             aria-labelledby={`tools-${group.category}`}
-            className="flex flex-col gap-4"
+            className="flex scroll-mt-28 flex-col gap-4"
           >
             <div>
               <h2

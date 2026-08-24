@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { listCatalogTools } from "@repo/tools/catalog";
 import en from "../../../messages/en.json";
 import tr from "../../../messages/tr.json";
 
@@ -33,12 +34,36 @@ describe("marketing locales", () => {
     );
   });
 
+  test("keeps English and Turkish tool catalog copy aligned", () => {
+    expect(flattenKeys(tr.tools).sort()).toEqual(flattenKeys(en.tools).sort());
+  });
+
   test("does not claim certifications or unlimited usage", () => {
-    const copy = `${JSON.stringify(en.marketing)} ${JSON.stringify(tr.marketing)}`;
+    const copy = `${JSON.stringify(en.marketing)} ${JSON.stringify(tr.marketing)} ${JSON.stringify(en.publicTools)} ${JSON.stringify(tr.publicTools)}`;
 
     expect(copy).not.toContain("SOC 2");
     expect(copy).not.toContain("HIPAA");
     expect(copy.toLowerCase()).not.toContain("unlimited");
     expect(copy.toLowerCase()).not.toContain("instant");
+  });
+
+  test("has unique English tool names", () => {
+    const names = listCatalogTools().map(
+      (tool) => en.tools[tool.id as keyof typeof en.tools].name,
+    );
+
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  test("has name and description copy for every catalog tool in both locales", () => {
+    for (const tool of listCatalogTools()) {
+      const english = en.tools[tool.id as keyof typeof en.tools];
+      const turkish = tr.tools[tool.id as keyof typeof tr.tools];
+
+      expect(english.name.length).toBeGreaterThan(0);
+      expect(english.description.length).toBeGreaterThan(0);
+      expect(turkish.name.length).toBeGreaterThan(0);
+      expect(turkish.description.length).toBeGreaterThan(0);
+    }
   });
 });
