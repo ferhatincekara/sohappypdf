@@ -210,16 +210,6 @@ export function createConversionService(
       });
     }
 
-    if (
-      conversion.expiresAt != null &&
-      conversion.expiresAt.getTime() <= now().getTime()
-    ) {
-      throw new AppError({
-        code: APP_ERROR_CODES.NOT_FOUND,
-        message: "Conversion not found",
-      });
-    }
-
     return conversion;
   }
 
@@ -424,7 +414,6 @@ export function createConversionService(
         cursor,
         status,
         targetFormat,
-        now: now(),
       });
       const hasMore = records.length > limit;
       const page = hasMore ? records.slice(0, limit) : records;

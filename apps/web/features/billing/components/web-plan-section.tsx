@@ -7,7 +7,6 @@ import {
   webCreditsResetDate,
   webPlanRenewalDate,
 } from "../lib/billing-view";
-import { formatBytes } from "../lib/format-bytes";
 import type { PublicBillingStatus } from "../types/billing";
 import { BillingUsageRow } from "./billing-usage-row";
 import { PolarPortalActions } from "./polar-portal-actions";
@@ -95,10 +94,6 @@ export function WebPlanSection({
           value={t("remaining", {
             count: billing.usage.webCreditsRemaining,
           })}
-        />
-        <BillingUsageRow
-          label={t("usageItems.storage")}
-          value={`${formatBytes(billing.usage.storageUsedBytes)} / ${formatBytes(billing.usage.storageLimitBytes)}`}
         />
         <p className="text-xs text-muted-foreground">
           {t("period", {

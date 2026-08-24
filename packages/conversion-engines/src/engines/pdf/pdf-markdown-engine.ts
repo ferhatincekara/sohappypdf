@@ -4,20 +4,14 @@ import { isConversionSupported } from "@repo/conversions";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
-import {
-  invalidInputError,
-  unsupportedConversionError,
-} from "../../errors.js";
+import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import {
   type RunAllowedCommand,
   runAllowedCommand,
 } from "../../process/run-process.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
-import {
-  type LayoutSection,
-  layoutPagesToSections,
-} from "./layout-html.js";
+import { type LayoutSection, layoutPagesToSections } from "./layout-html.js";
 import { countLayoutWords, parsePdfLayout } from "./pdf-layout.js";
 
 const TYPES = ["pdf-to-markdown"] as const satisfies readonly ConversionType[];
@@ -29,7 +23,9 @@ function sectionToMarkdown(section: LayoutSection): string {
     case "paragraph":
       return section.text;
     case "list":
-      return section.items.map((item, index) => `${index + 1}. ${item}`).join("\n");
+      return section.items
+        .map((item, index) => `${index + 1}. ${item}`)
+        .join("\n");
     case "table": {
       if (section.rows.length === 0) {
         return "";

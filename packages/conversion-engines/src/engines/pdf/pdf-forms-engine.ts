@@ -3,10 +3,7 @@ import { isConversionSupported } from "@repo/conversions";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
-import {
-  invalidInputError,
-  unsupportedConversionError,
-} from "../../errors.js";
+import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
 import { loadPdfDocument, savePdfDocument } from "./pdf-page-operations.js";
@@ -54,7 +51,11 @@ export function createPdfFormsEngine(
             filled += 1;
           } else if (fieldType.includes("CheckBox")) {
             const checkbox = form.getCheckBox(name);
-            if (value === "true" || value === "1" || value.toLowerCase() === "yes") {
+            if (
+              value === "true" ||
+              value === "1" ||
+              value.toLowerCase() === "yes"
+            ) {
               checkbox.check();
             } else {
               checkbox.uncheck();

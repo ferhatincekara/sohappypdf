@@ -1,1 +1,3 @@
-export { ApplicationPage } from "./components/application-page";
+import { AccountOverviewPage } from "./components/account-overview-page";
+
+export { AccountOverviewPage };

@@ -14,10 +14,7 @@ describe("office engine office-to-pdf", () => {
 
     try {
       const sourcePath = workspace.join("source.docx");
-      await writeFile(
-        sourcePath,
-        Buffer.from([80, 75, 3, 4, 0, 0, 0, 0]),
-      );
+      await writeFile(sourcePath, Buffer.from([80, 75, 3, 4, 0, 0, 0, 0]));
       const engine = createOfficeEngine(DEFAULT_CONVERSION_ENGINE_CONFIG, {
         async runCommand(input) {
           calls.push(input);

@@ -2,12 +2,12 @@ import { describe, expect, test } from "bun:test";
 import { tmpdir } from "node:os";
 import { isAppError } from "@repo/core";
 import { isPermanentConversionError } from "../errors.js";
+import { getSafeConversionTempDir } from "../workspace/temp-workspace.js";
 import {
   buildConversionProcessEnv,
   runAllowedCommand,
   runChildProcess,
 } from "./run-process.js";
-import { getSafeConversionTempDir } from "../workspace/temp-workspace.js";
 
 describe("command execution", () => {
   test("preserves a safe TMPDIR for native converter processes", () => {

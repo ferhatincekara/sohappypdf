@@ -11,7 +11,7 @@ describe("loadBillingConfig", () => {
 
     expect(config.polar.accessToken).toBeUndefined();
     expect(config.polar.server).toBe("sandbox");
-    expect(config.successPath).toBe("/app/settings/billing");
+    expect(config.successPath).toBe("/account/billing");
     expect(config.appUrl).toBe("http://localhost:3000");
   });
 

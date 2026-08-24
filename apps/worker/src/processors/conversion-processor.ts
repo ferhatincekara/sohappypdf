@@ -16,7 +16,6 @@ import {
 } from "@repo/conversions";
 import {
   DEFAULT_RESOURCE_OWNER_KIND,
-  type FileRecord,
   type FileService,
   remainingFileTtlMs,
 } from "@repo/files";
@@ -34,19 +33,7 @@ export type ConversionProcessorDependencies = {
   billing?: BillingService;
 };
 
-function requireOwnedFile(
-  file: FileRecord | undefined,
-  ownerId: string,
-): FileRecord {
-  if (file === undefined || file.ownerId !== ownerId) {
-    throw new PermanentConversionError(
-      "source_file_unavailable",
-      "Source file unavailable",
-    );
-  }
-
-  return file;
-}
+async function downloadToFile(input: {
   storage: Storage;
   objectKey: string;
   destination: string;

@@ -576,7 +576,7 @@ describe("conversion service", () => {
     });
   });
 
-  test("hides expired owned conversions", async () => {
+  test("returns expired owned conversions for history metadata", async () => {
     const service = createConversionService({
       repository: createMemoryRepository(),
       files: createFileLookup([sourceFile]),
@@ -589,15 +589,13 @@ describe("conversion service", () => {
       expiresAt: new Date("2026-08-23T18:00:00.000Z"),
     });
 
-    try {
-      await service.getOwnedConversion(created.id, sourceFile.ownerId);
-      throw new Error("expected expired conversion to fail");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-      if (isAppError(error)) {
-        expect(error.code).toBe("NOT_FOUND");
-      }
-    }
+    const loaded = await service.getOwnedConversion(
+      created.id,
+      sourceFile.ownerId,
+    );
+
+    expect(loaded.id).toBe(created.id);
+    expect(loaded.expiresAt?.toISOString()).toBe("2026-08-23T18:00:00.000Z");
   });
 
   test("deletes expired conversions idempotently", async () => {

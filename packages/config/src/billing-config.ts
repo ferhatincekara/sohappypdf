@@ -26,7 +26,7 @@ export type BillingConfig = {
   appUrl: string;
 };
 
-export const DEFAULT_BILLING_SUCCESS_PATH = "/app/settings/billing";
+export const DEFAULT_BILLING_SUCCESS_PATH = "/account/billing";
 
 function parsePolarServer(value: string | undefined): PolarServer {
   if (value === undefined || value.trim() === "") {

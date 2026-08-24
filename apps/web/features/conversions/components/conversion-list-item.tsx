@@ -3,7 +3,10 @@
 import { useFormatter, useTranslations } from "next-intl";
 import { FileDownloadButton } from "@/features/files/components/file-download-button";
 import { Link } from "@/lib/i18n/navigation";
-import { conversionHistoryActions } from "../lib/conversion-history-actions";
+import {
+  canDownloadConversion,
+  isConversionExpired,
+} from "../lib/can-download-conversion";
 import { conversionFormatLabel } from "../lib/format-label";
 import { conversionPath } from "../paths";
 import type { PublicConversion } from "../types/conversion";
@@ -19,7 +22,9 @@ export function ConversionListItem({
   const formatter = useFormatter();
   const filename = conversion.sourceFilename ?? t("unnamedSource");
   const outputFileId = conversion.outputFileId;
-  const actions = conversionHistoryActions(conversion);
+  const expired = isConversionExpired(conversion);
+  const canDownload = canDownloadConversion(conversion);
+  const statusLabel = expired ? tStatus("expired") : tStatus(conversion.status);
 
   return (
     <li className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-start sm:justify-between">
@@ -33,7 +38,7 @@ export function ConversionListItem({
             target: conversionFormatLabel(conversion.targetFormat, tFormats),
           })}
           <span aria-hidden="true"> · </span>
-          {tStatus(conversion.status)}
+          {statusLabel}
         </p>
         <p className="text-xs text-muted-foreground">
           {t("created", {
@@ -54,6 +59,9 @@ export function ConversionListItem({
             </>
           )}
         </p>
+        {expired ? (
+          <p className="text-xs text-muted-foreground">{t("expiredHint")}</p>
+        ) : null}
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <Link
@@ -62,7 +70,7 @@ export function ConversionListItem({
         >
           {t("view")}
         </Link>
-        {actions.canDownload && outputFileId !== null ? (
+        {canDownload && outputFileId !== null ? (
           <FileDownloadButton fileId={outputFileId} variant="outline" />
         ) : null}
       </div>

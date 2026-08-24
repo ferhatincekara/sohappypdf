@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import type { PublicConversion } from "../types/conversion";
-import { canDownloadConversion } from "./can-download-conversion";
+import {
+  canDownloadConversion,
+  isConversionExpired,
+} from "./can-download-conversion";
 
 function createConversion(
   overrides: Partial<PublicConversion> = {},
@@ -19,23 +22,38 @@ function createConversion(
     queuedAt: null,
     startedAt: null,
     completedAt: "2026-08-24T00:01:00.000Z",
+    expiresAt: "2026-08-24T02:00:00.000Z",
+    expired: false,
     ...overrides,
   };
 }
 
 describe("canDownloadConversion", () => {
   test("allows download only for completed conversions with an output file", () => {
-    expect(canDownloadConversion(createConversion())).toBe(true);
+    const now = new Date("2026-08-24T01:00:00.000Z");
+
+    expect(canDownloadConversion(createConversion(), now)).toBe(true);
     expect(
-      canDownloadConversion(createConversion({ outputFileId: null })),
+      canDownloadConversion(createConversion({ outputFileId: null }), now),
     ).toBe(false);
     expect(
       canDownloadConversion(
         createConversion({ status: "failed", outputFileId: null }),
+        now,
       ),
     ).toBe(false);
     expect(
-      canDownloadConversion(createConversion({ status: "processing" })),
+      canDownloadConversion(createConversion({ status: "processing" }), now),
+    ).toBe(false);
+  });
+
+  test("rejects expired executions even when an output id remains", () => {
+    const now = new Date("2026-08-24T03:00:00.000Z");
+
+    expect(isConversionExpired(createConversion(), now)).toBe(true);
+    expect(canDownloadConversion(createConversion(), now)).toBe(false);
+    expect(
+      canDownloadConversion(createConversion({ expired: true }), now),
     ).toBe(false);
   });
 });

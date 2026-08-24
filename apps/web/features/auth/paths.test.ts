@@ -6,19 +6,20 @@ describe("auth paths", () => {
     expect(AUTH_PATHS.register).toBe("/register");
     expect(AUTH_PATHS.signup).toBe("/signup");
     expect(AUTH_PATHS.login).toBe("/login");
+    expect(AUTH_PATHS.app).toBe("/account");
   });
 
   test("builds signup URLs without inventing a destination", () => {
     expect(signupPath()).toBe(AUTH_PATHS.signup);
     expect(signupPath(null)).toBe(AUTH_PATHS.signup);
-    expect(signupPath("/app/settings/billing")).toBe(
-      `${AUTH_PATHS.signup}?next=${encodeURIComponent("/app/settings/billing")}`,
+    expect(signupPath("/account/billing")).toBe(
+      `${AUTH_PATHS.signup}?next=${encodeURIComponent("/account/billing")}`,
     );
   });
 
   test("builds login URLs with a next destination", () => {
-    expect(loginPath("/app/settings/billing")).toBe(
-      `${AUTH_PATHS.login}?next=${encodeURIComponent("/app/settings/billing")}`,
+    expect(loginPath("/account/billing")).toBe(
+      `${AUTH_PATHS.login}?next=${encodeURIComponent("/account/billing")}`,
     );
   });
 });

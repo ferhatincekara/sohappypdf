@@ -48,9 +48,7 @@ describe("ocr engine", () => {
 
 describe("pdf forms engine", () => {
   test("fills an existing text field and flattens", async () => {
-    const { createPdfFormsEngine } = await import(
-      "../pdf/pdf-forms-engine.js"
-    );
+    const { createPdfFormsEngine } = await import("../pdf/pdf-forms-engine.js");
     const workspace = await createConversionWorkspace(
       "550e8400-e29b-41d4-a716-446655440302",
     );

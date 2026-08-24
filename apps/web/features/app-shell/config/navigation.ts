@@ -1,17 +1,19 @@
 import {
-  FilesIcon,
+  ActivityIcon,
+  CreditCardIcon,
+  GaugeIcon,
   KeyRoundIcon,
   LayoutDashboardIcon,
   type LucideIcon,
-  RefreshCwIcon,
   SettingsIcon,
 } from "lucide-react";
 import { APP_PATHS, type AppPath } from "./app-paths";
 
 export const APP_NAV_IDS = [
   "overview",
-  "files",
-  "conversions",
+  "usage",
+  "activity",
+  "billing",
   "apiKeys",
   "settings",
 ] as const;
@@ -31,14 +33,19 @@ export const APP_NAVIGATION: readonly AppNavItem[] = [
     icon: LayoutDashboardIcon,
   },
   {
-    id: "files",
-    href: APP_PATHS.files,
-    icon: FilesIcon,
+    id: "usage",
+    href: APP_PATHS.usage,
+    icon: GaugeIcon,
   },
   {
-    id: "conversions",
-    href: APP_PATHS.conversions,
-    icon: RefreshCwIcon,
+    id: "activity",
+    href: APP_PATHS.activity,
+    icon: ActivityIcon,
+  },
+  {
+    id: "billing",
+    href: APP_PATHS.billing,
+    icon: CreditCardIcon,
   },
   {
     id: "apiKeys",

@@ -1,6 +1,6 @@
 import { ConversionStatusPageContent } from "@/features/conversions";
 
-export default async function ConversionDetailPage({
+export default async function AccountActivityDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;

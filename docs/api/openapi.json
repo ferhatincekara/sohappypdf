@@ -311,7 +311,9 @@
           "updatedAt",
           "queuedAt",
           "startedAt",
-          "completedAt"
+          "completedAt",
+          "expiresAt",
+          "expired"
         ],
         "properties": {
           "id": {
@@ -360,6 +362,13 @@
           "completedAt": {
             "type": ["string", "null"],
             "format": "date-time"
+          },
+          "expiresAt": {
+            "type": ["string", "null"],
+            "format": "date-time"
+          },
+          "expired": {
+            "type": "boolean"
           },
           "error": {
             "type": "object",

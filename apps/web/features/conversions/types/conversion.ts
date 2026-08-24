@@ -101,6 +101,8 @@ export type PublicConversion = {
   queuedAt: string | null;
   startedAt: string | null;
   completedAt: string | null;
+  expiresAt: string | null;
+  expired: boolean;
   error?: PublicConversionError;
 };
 

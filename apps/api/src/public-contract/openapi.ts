@@ -299,6 +299,8 @@ export function createOpenApiDocument(): OpenApiDocument {
             "queuedAt",
             "startedAt",
             "completedAt",
+            "expiresAt",
+            "expired",
           ],
           properties: {
             id: { type: "string", format: "uuid" },
@@ -314,6 +316,8 @@ export function createOpenApiDocument(): OpenApiDocument {
             queuedAt: { type: ["string", "null"], format: "date-time" },
             startedAt: { type: ["string", "null"], format: "date-time" },
             completedAt: { type: ["string", "null"], format: "date-time" },
+            expiresAt: { type: ["string", "null"], format: "date-time" },
+            expired: { type: "boolean" },
             error: {
               type: "object",
               additionalProperties: false,

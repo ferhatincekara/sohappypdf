@@ -4,10 +4,7 @@ import { isConversionSupported } from "@repo/conversions";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
-import {
-  invalidInputError,
-  unsupportedConversionError,
-} from "../../errors.js";
+import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import {
   type RunAllowedCommand,
@@ -75,9 +72,13 @@ export function createPdfExtractEngine(
               case "paragraph":
                 return section.text;
               case "list":
-                return section.items.map((item, index) => `${index + 1}. ${item}`).join("\n");
+                return section.items
+                  .map((item, index) => `${index + 1}. ${item}`)
+                  .join("\n");
               case "table":
                 return section.rows.map((row) => row.join("\t")).join("\n");
+              default:
+                return "";
             }
           })
           .join("\n\n");
@@ -108,7 +109,11 @@ export function createPdfExtractEngine(
       };
 
       const outputPath = joinJobPath(input.outputDirectory, "output.json");
-      await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+      await writeFile(
+        outputPath,
+        `${JSON.stringify(payload, null, 2)}\n`,
+        "utf8",
+      );
       await validateConversionOutput({
         outputPath,
         expectedFormat: "json",

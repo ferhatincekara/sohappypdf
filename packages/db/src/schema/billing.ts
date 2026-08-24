@@ -267,10 +267,14 @@ export const webCreditLedgerEntries = pgTable(
       .where(sql`${table.providerEventId} is not null`),
     uniqueIndex("web_credit_ledger_consume_execution_uidx")
       .on(table.executionId)
-      .where(sql`${table.type} = 'consume' AND ${table.executionId} is not null`),
+      .where(
+        sql`${table.type} = 'consume' AND ${table.executionId} is not null`,
+      ),
     uniqueIndex("web_credit_ledger_refund_execution_uidx")
       .on(table.executionId)
-      .where(sql`${table.type} = 'refund' AND ${table.executionId} is not null`),
+      .where(
+        sql`${table.type} = 'refund' AND ${table.executionId} is not null`,
+      ),
     uniqueIndex("web_credit_ledger_grant_period_uidx")
       .on(table.userId, table.periodStart, table.source)
       .where(sql`${table.type} = 'grant' AND ${table.source} = 'web'`),

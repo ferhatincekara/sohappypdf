@@ -7,13 +7,19 @@ alwaysApply: true
 
 ## Project
 
-SohappyPDF is a SaaS platform for PDF conversion, file processing, OCR, and a public API.
+SohappyPDF is a tool-first SaaS PDF platform: public PDF tools, temporary file processing, OCR, and a public API.
 
 The repository is a Turborepo monorepo.
 
 Use Bun as the only package manager.
 
 Do not introduce npm, pnpm, or yarn.
+
+## Product Surfaces
+
+- Primary: public tool pages (anonymous-friendly)
+- Secondary: authenticated account area (`/account`) for usage, billing, API, settings, and recent activity
+- Do not design the product as a file-management dashboard
 
 ## Monorepo Structure
 
@@ -22,24 +28,30 @@ apps/
 - web: Main customer-facing Next.js application
 - api: Public Hono API
 - worker: Background conversion worker
-- admin: Internal administration application
 
 packages/
 
 - core: Shared domain primitives and application errors
 - utils: Generic reusable utilities
-- validation: Shared Zod validation
 - logger: Structured logging
 - config: Environment and application configuration
 - db: Drizzle ORM and database schema
-- auth: Better Auth configuration
+- auth: Better Auth + anonymous sessions
 - storage: S3 abstraction
 - queue: BullMQ configuration and jobs
 - rate-limit: Upstash rate limiting
-- conversions: Conversion contracts and definitions
-- billing: Polar.sh integration
-- api-client: Typed Axios client
-- ui: Shared shadcn/ui primitives
+- files: Temporary file domain
+- conversions: Processing job / conversion domain
+- conversion-engines: Native conversion engines
+- billing: Polar.sh integration, entitlements, credit ledger
+- api-keys: API key lifecycle
+- tools: Public tool catalog and credit pricing
+- ai: AI provider abstraction
+- typescript-config: Shared TypeScript configs
+
+Shared UI currently lives in `apps/web/components/ui`. Do not assume `@repo/ui`, `@repo/validation`, or `@repo/api-client` exist unless they are added deliberately.
+
+There is no `apps/admin` yet.
 
 ## Application Boundaries
 
@@ -51,7 +63,7 @@ apps/web importing from apps/api/src/...
 
 Good:
 
-apps/web importing from packages/api-client.
+apps/web calling the public API through its own client helpers or a shared API client package when one exists.
 
 Shared functionality belongs in packages.
 

@@ -67,11 +67,11 @@ export function conversionListHref(params: {
   }
 
   if (query.status === undefined && query.cursor === undefined) {
-    return { pathname: APP_PATHS.conversions };
+    return { pathname: APP_PATHS.activity };
   }
 
   return {
-    pathname: APP_PATHS.conversions,
+    pathname: APP_PATHS.activity,
     query,
   };
 }

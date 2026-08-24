@@ -19,19 +19,31 @@ export type PublicConversion = {
   queuedAt: string | null;
   startedAt: string | null;
   completedAt: string | null;
+  expiresAt: string | null;
+  expired: boolean;
   error?: PublicConversionError;
 };
 
+function isExpired(conversion: ConversionRecord, now: Date): boolean {
+  return (
+    conversion.expiresAt != null &&
+    conversion.expiresAt.getTime() <= now.getTime()
+  );
+}
+
 export function toPublicConversion(
   conversion: ConversionRecord,
-  extras?: { sourceFilename?: string | null },
+  extras?: { sourceFilename?: string | null; now?: Date },
 ): PublicConversion {
+  const now = extras?.now ?? new Date();
+  const expired = isExpired(conversion, now);
+
   return {
     id: conversion.id,
     status: conversion.status,
     sourceFileId: conversion.sourceFileId,
     sourceFilename: extras?.sourceFilename ?? null,
-    outputFileId: conversion.outputFileId,
+    outputFileId: expired ? null : conversion.outputFileId,
     type: conversion.type,
     sourceFormat: conversion.sourceFormat,
     targetFormat: conversion.targetFormat,
@@ -40,6 +52,8 @@ export function toPublicConversion(
     queuedAt: conversion.queuedAt?.toISOString() ?? null,
     startedAt: conversion.startedAt?.toISOString() ?? null,
     completedAt: conversion.completedAt?.toISOString() ?? null,
+    expiresAt: conversion.expiresAt?.toISOString() ?? null,
+    expired,
     ...(conversion.errorCode === null || conversion.errorMessage === null
       ? {}
       : {

@@ -21,6 +21,8 @@ function createConversion(): PublicConversion {
     queuedAt: "2026-08-24T00:00:01.000Z",
     startedAt: null,
     completedAt: null,
+    expiresAt: "2026-08-24T02:00:00.000Z",
+    expired: false,
   };
 }
 

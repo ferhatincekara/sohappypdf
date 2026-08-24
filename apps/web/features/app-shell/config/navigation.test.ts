@@ -7,11 +7,12 @@ import {
 } from "./navigation";
 
 describe("app navigation", () => {
-  test("keeps a single source of truth for the initial product routes", () => {
+  test("keeps account routes as the authenticated product surface", () => {
     expect(APP_NAVIGATION.map((item) => item.href)).toEqual([
       APP_PATHS.overview,
-      APP_PATHS.files,
-      APP_PATHS.conversions,
+      APP_PATHS.usage,
+      APP_PATHS.activity,
+      APP_PATHS.billing,
       APP_PATHS.apiKeys,
       APP_PATHS.settings,
     ]);
@@ -20,12 +21,20 @@ describe("app navigation", () => {
   test("separates settings from the primary destinations", () => {
     expect(PRIMARY_APP_NAVIGATION.map((item) => item.id)).toEqual([
       "overview",
-      "files",
-      "conversions",
+      "usage",
+      "activity",
+      "billing",
       "apiKeys",
     ]);
     expect(SECONDARY_APP_NAVIGATION.map((item) => item.id)).toEqual([
       "settings",
     ]);
+  });
+
+  test("does not expose a file library as a primary destination", () => {
+    expect(APP_NAVIGATION.some((item) => item.id === "files")).toBe(false);
+    expect(APP_NAVIGATION.map((item) => item.href).join(" ")).not.toContain(
+      "/files",
+    );
   });
 });

@@ -15,7 +15,9 @@ export type LibreOfficeRunContext = {
   outputDirectory: string;
 };
 
-export async function prepareLibreOfficeDirectories(outputDirectory: string): Promise<{
+export async function prepareLibreOfficeDirectories(
+  outputDirectory: string,
+): Promise<{
   profileDirectory: string;
   outputDir: string;
 }> {

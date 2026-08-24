@@ -3,19 +3,21 @@ import { APP_PATHS } from "../config/app-paths";
 import { isNavItemActive } from "./is-nav-item-active";
 
 describe("isNavItemActive", () => {
-  test("activates overview only on the exact /app route", () => {
-    expect(isNavItemActive("/app", APP_PATHS.overview)).toBe(true);
-    expect(isNavItemActive("/app/files", APP_PATHS.overview)).toBe(false);
-    expect(isNavItemActive("/app/conversions", APP_PATHS.overview)).toBe(false);
+  test("activates overview only on the exact /account route", () => {
+    expect(isNavItemActive("/account", APP_PATHS.overview)).toBe(true);
+    expect(isNavItemActive("/account/usage", APP_PATHS.overview)).toBe(false);
+    expect(isNavItemActive("/account/activity", APP_PATHS.overview)).toBe(
+      false,
+    );
   });
 
   test("activates a section for itself and nested paths only", () => {
-    expect(isNavItemActive("/app/files", APP_PATHS.files)).toBe(true);
-    expect(isNavItemActive("/app/files/upload", APP_PATHS.files)).toBe(true);
-    expect(isNavItemActive("/app/conversions", APP_PATHS.files)).toBe(false);
-    expect(isNavItemActive("/app", APP_PATHS.files)).toBe(false);
-    expect(isNavItemActive("/app/settings/billing", APP_PATHS.settings)).toBe(
+    expect(isNavItemActive("/account/activity", APP_PATHS.activity)).toBe(true);
+    expect(isNavItemActive("/account/activity/abc", APP_PATHS.activity)).toBe(
       true,
     );
+    expect(isNavItemActive("/account/usage", APP_PATHS.activity)).toBe(false);
+    expect(isNavItemActive("/account", APP_PATHS.activity)).toBe(false);
+    expect(isNavItemActive("/account/settings", APP_PATHS.settings)).toBe(true);
   });
 });

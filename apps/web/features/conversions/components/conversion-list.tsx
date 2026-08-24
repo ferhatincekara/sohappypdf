@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { APP_PATHS } from "@/features/app-shell";
 import { Link } from "@/lib/i18n/navigation";
 import {
   type ConversionHistoryFilter,
@@ -71,12 +70,10 @@ export function ConversionList({
           {isFiltered ? t("emptyFilteredHint") : t("emptyHint")}
         </p>
         <Link
-          href={
-            isFiltered ? conversionListHref({ filter: "all" }) : APP_PATHS.files
-          }
+          href={isFiltered ? conversionListHref({ filter: "all" }) : "/tools"}
           className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
         >
-          {isFiltered ? t("filters.all") : t("openFiles")}
+          {isFiltered ? t("filters.all") : t("browseTools")}
         </Link>
       </div>
     );

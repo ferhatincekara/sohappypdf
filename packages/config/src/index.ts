@@ -2,16 +2,15 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/config");
 
-export type { ApiCreditConfig, ApiProductKey, PolarApiPackProduct } from "./api-credit-config.js";
+export type { AiConfig, AiProviderKind } from "./ai-config.js";
 export {
-  API_PRODUCT_KEYS,
-  DEFAULT_API_GROWTH_CREDITS,
-  DEFAULT_API_SCALE_CREDITS,
-  DEFAULT_API_STARTER_CREDITS,
-  isApiProductKey,
-  loadApiCreditConfig,
-  parsePolarApiCreditPacks,
-} from "./api-credit-config.js";
+  DEFAULT_AI_MAX_EXTRACTED_CHARS,
+  DEFAULT_AI_MAX_PAGES,
+  DEFAULT_AI_MAX_REQUEST_CHARS,
+  DEFAULT_FREE_AI_CREDITS,
+  DEFAULT_PRO_AI_CREDITS,
+  loadAiConfig,
+} from "./ai-config.js";
 export type { AnonymousConfig } from "./anonymous-config.js";
 export {
   DEFAULT_ANONYMOUS_CONFIG,
@@ -24,6 +23,20 @@ export {
 } from "./anonymous-config.js";
 export type { ApiConfig } from "./api-config.js";
 export { loadApiConfig } from "./api-config.js";
+export type {
+  ApiCreditConfig,
+  ApiProductKey,
+  PolarApiPackProduct,
+} from "./api-credit-config.js";
+export {
+  API_PRODUCT_KEYS,
+  DEFAULT_API_GROWTH_CREDITS,
+  DEFAULT_API_SCALE_CREDITS,
+  DEFAULT_API_STARTER_CREDITS,
+  isApiProductKey,
+  loadApiCreditConfig,
+  parsePolarApiCreditPacks,
+} from "./api-credit-config.js";
 export type { AppConfig, LogLevel, RuntimeEnv } from "./app-config.js";
 export { LOG_LEVELS, loadAppConfig, RUNTIME_ENVS } from "./app-config.js";
 export type { AuthConfig } from "./auth-config.js";
@@ -81,14 +94,5 @@ export {
   DEFAULT_PRO_WEB_TOOL_CREDITS,
   loadWebCreditConfig,
 } from "./web-credit-config.js";
-export type { AiConfig, AiProviderKind } from "./ai-config.js";
-export {
-  DEFAULT_AI_MAX_EXTRACTED_CHARS,
-  DEFAULT_AI_MAX_PAGES,
-  DEFAULT_AI_MAX_REQUEST_CHARS,
-  DEFAULT_FREE_AI_CREDITS,
-  DEFAULT_PRO_AI_CREDITS,
-  loadAiConfig,
-} from "./ai-config.js";
 export type { WorkerConfig } from "./worker-config.js";
 export { DEFAULT_WORKER_CONFIG, loadWorkerConfig } from "./worker-config.js";

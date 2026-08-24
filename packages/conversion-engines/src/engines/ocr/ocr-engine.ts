@@ -3,10 +3,7 @@ import { type ConversionType, isConversionSupported } from "@repo/conversions";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
-import {
-  invalidInputError,
-  unsupportedConversionError,
-} from "../../errors.js";
+import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { isConversionBinaryAvailable } from "../../native-binary.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import {
@@ -50,7 +47,9 @@ export function createOcrEngine(
       }
 
       if (!isBinaryAvailable(config.ocrMyPdfBin)) {
-        throw invalidInputError("OCR conversion is not available on this worker");
+        throw invalidInputError(
+          "OCR conversion is not available on this worker",
+        );
       }
 
       const searchablePdfPath = joinJobPath(input.outputDirectory, "ocr.pdf");

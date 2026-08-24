@@ -2,7 +2,7 @@
 
 ## Project
 
-SohappyPDF is a SaaS platform for PDF conversion, PDF manipulation, OCR, file processing, and public API access.
+SohappyPDF is a tool-first SaaS PDF platform: public PDF tools, temporary file processing, OCR, and a public API.
 
 The project is a Turborepo monorepo.
 
@@ -27,7 +27,7 @@ Detailed architecture and implementation rules are defined in `.cursor/rules/`.
 - Axios
 - React Hook Form
 - Zod
-- shadcn/ui
+- shadcn/ui (in `apps/web/components/ui`)
 - next-intl
 
 ### Backend
@@ -57,13 +57,11 @@ Sentry is not used.
 apps/
 ├── web/
 ├── api/
-├── worker/
-└── admin/
+└── worker/
 
 packages/
 ├── core/
 ├── utils/
-├── validation/
 ├── logger/
 ├── config/
 ├── db/
@@ -71,21 +69,28 @@ packages/
 ├── storage/
 ├── queue/
 ├── rate-limit/
+├── files/
 ├── conversions/
+├── conversion-engines/
 ├── billing/
-├── api-client/
-└── ui/
+├── api-keys/
+├── tools/
+├── ai/
+└── typescript-config/
 
 docs/
 ├── architecture/
-├── api/
-└── decisions/
+└── api/
 
 ## Applications
 
 ### web
 
 Customer-facing Next.js application.
+
+Primary product surface: public tool pages (anonymous-friendly).
+
+Secondary surface: authenticated account area at `/account` (usage, billing, API, settings, recent activity).
 
 ### api
 
@@ -97,24 +102,38 @@ Background PDF conversion and file processing worker.
 
 ### admin
 
-Internal administration application.
+Not present yet. Do not create it unless explicitly requested.
 
 ## Package Responsibilities
 
-- `core`: Shared domain primitives
-- `utils`: Generic reusable utilities
-- `validation`: Shared Zod validation
+- `core`: Shared domain primitives and application errors
+- `utils`: Generic reusable utilities (organized by purpose)
 - `logger`: Structured logging
 - `config`: Environment configuration
 - `db`: Drizzle ORM and database schema
-- `auth`: Better Auth
+- `auth`: Better Auth and anonymous sessions
 - `storage`: AWS S3 abstraction
 - `queue`: BullMQ
 - `rate-limit`: Upstash rate limiting
-- `conversions`: Conversion definitions and contracts
-- `billing`: Polar.sh integration
-- `api-client`: Shared Axios client
-- `ui`: Shared shadcn/ui components
+- `files`: Temporary file domain
+- `conversions`: Processing job / conversion domain
+- `conversion-engines`: Native conversion engines
+- `billing`: Polar.sh integration, entitlements, credit ledger
+- `api-keys`: API key lifecycle
+- `tools`: Public tool catalog and credit pricing
+- `ai`: AI provider abstraction
+- `typescript-config`: Shared TypeScript configs
+
+## Product Principles
+
+- Tool pages own the end-to-end operation UX.
+- Anonymous users can use anonymous-allowed tools without an account.
+- Authentication unlocks higher limits, history, billing, and API access.
+- The account area is not a file-management dashboard.
+- Files are temporary (~2 hours). Do not build a permanent document library for normal tool usage.
+- Web credits are the primary authenticated web usage meter.
+- Anonymous usage may rely on rate/daily limits without a full credit account.
+- Do not present storage quota as a Free/Pro product differentiator.
 
 ## Global Rules
 
@@ -197,6 +216,8 @@ AWS S3 is used for file storage.
 Large files should use direct browser-to-S3 uploads through presigned URLs.
 
 Temporary files should have a short lifecycle, targeting approximately 2 hours.
+
+S3 lifecycle rules are a secondary safety net for orphans, not the primary user-facing expiration mechanism.
 
 ### Plans and Billing
 

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { AppShell } from "@/features/app-shell";
 import { requireWebSession } from "@/features/auth/session/require-web-session";
 
-export default async function AuthenticatedAppLayout({
+export default async function AuthenticatedAccountLayout({
   children,
 }: {
   children: ReactNode;

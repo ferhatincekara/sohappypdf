@@ -34,16 +34,16 @@ export function ConversionStatusPageContent({
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
-              href={APP_PATHS.conversions}
+              href={APP_PATHS.activity}
               className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
             >
               {t("backToHistory")}
             </Link>
             <Link
-              href={APP_PATHS.files}
+              href="/tools"
               className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
             >
-              {t("backToFiles")}
+              {t("browseTools")}
             </Link>
           </div>
         </div>

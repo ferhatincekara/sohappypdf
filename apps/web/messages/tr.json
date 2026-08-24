@@ -160,14 +160,12 @@
       "pro": {
         "name": "Pro",
         "badge": "Daha yüksek limitler",
-        "summary": "Daha fazla dönüşüm, depolama, dosya boyutu ve API kapasitesi.",
+        "summary": "Daha fazla web kredisi, daha büyük dosyalar ve daha yüksek API kapasitesi.",
         "cta": "Pro’ya başla"
       },
       "limits": {
         "webCredits": "Ayda {count} web araç kredisi",
         "aiCredits": "Ayda {count} AI kredisi",
-        "conversions": "Ayda {count} API dönüşümü",
-        "storage": "{size} depolama",
         "fileSize": "Dosya başına en fazla {size}",
         "apiKeys": "{count} API anahtarı",
         "apiRate": "Dakikada {count} API isteği",
@@ -202,7 +200,7 @@
       "homeTitle": "SohappyPDF — İnsanlar ve API’ler için PDF dönüştürme",
       "homeDescription": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. SohappyPDF aynı akışı genel bir API ile de sunar.",
       "pricingTitle": "Fiyatlandırma",
-      "pricingDescription": "Ücretsiz ve Pro planların dönüşüm, depolama, dosya boyutu ve API limitlerini karşılaştırın.",
+      "pricingDescription": "Ücretsiz ve Pro planların kredi, dosya boyutu ve API limitlerini karşılaştırın.",
       "toolsTitle": "PDF araçları",
       "toolsDescription": "Organize, Dönüştür, Düzenle, Optimize, Güvenlik ve Zeka PDF araçlarına göz atın."
     }
@@ -216,7 +214,7 @@
   },
   "appShell": {
     "brand": "SohappyPDF",
-    "navigation": "Uygulama",
+    "navigation": "Hesap",
     "openNavigation": "Navigasyonu aç",
     "closeNavigation": "Navigasyonu kapat",
     "breadcrumb": "Sayfa yolu",
@@ -225,31 +223,47 @@
     "loggingOut": "Çıkış yapılıyor…",
     "nav": {
       "overview": "Genel bakış",
-      "files": "Dosyalar",
-      "conversions": "Dönüşümler",
-      "apiKeys": "API anahtarları",
+      "usage": "Kullanım",
+      "activity": "Son etkinlik",
+      "billing": "Faturalama",
+      "apiKeys": "API",
       "settings": "Ayarlar"
     },
     "pages": {
       "overview": {
         "title": "Genel bakış",
-        "description": "Çalışma alanınız hazır. Ürün özellikleri burada görünecek."
+        "description": "Planınızı ve kredilerinizi kontrol edin, ardından PDF araçlarına dönün.",
+        "planTitle": "Planınız",
+        "creditsSummary": "{limit} web kredisinden {used} kullanıldı ({remaining} kaldı).",
+        "manageBilling": "Faturalamayı yönet",
+        "toolsTitle": "PDF araçları",
+        "toolsDescription": "Dosyaları doğrudan araç sayfalarında işleyin. Geçici sonuçlar yaklaşık iki saat sonra sona erer.",
+        "browseTools": "Araçlara göz at",
+        "viewActivity": "Son etkinlik",
+        "viewUsage": "Kullanımı gör"
       },
-      "files": {
-        "title": "Dosyalar",
-        "description": "Dosya yükleyin, durumlarını görün ve dönüşüm başlatın."
+      "usage": {
+        "title": "Kullanım",
+        "description": "Oturum açmış kullanıcılar için birincil ölçü web kredileridir.",
+        "webCreditsTitle": "Web kredileri",
+        "billingHint": "Daha fazla kapasite mi gerekiyor?",
+        "openBilling": "Faturalamayı aç"
       },
-      "conversions": {
-        "title": "Dönüşümler",
-        "description": "Dönüşüm geçmişini inceleyin ve tamamlanan sonuçları indirin."
+      "activity": {
+        "title": "Son etkinlik",
+        "description": "Hesabınızdaki işlem geçmişi. Geçici dosyalar yaklaşık iki saat sonra sona erer ve süresi dolunca indirilemez."
+      },
+      "billing": {
+        "title": "Faturalama",
+        "description": "Planınızı ve ödeme bilgilerinizi yönetin."
       },
       "apiKeys": {
-        "title": "API anahtarları",
+        "title": "API",
         "description": "Programatik erişim için anahtar oluşturun ve iptal edin."
       },
       "settings": {
         "title": "Ayarlar",
-        "description": "Hesabınızı ve faturalandırmayı yönetin."
+        "description": "Hesap tercihlerinizi yönetin."
       }
     }
   },
@@ -412,24 +426,26 @@
       "convert": "Dönüştür"
     },
     "history": {
-      "title": "Dönüşümler",
-      "description": "Dönüşüm geçmişiniz. Durumu görmek veya tamamlanan sonucu indirmek için bir dönüşüm açın.",
-      "loading": "Dönüşümler yükleniyor…",
-      "empty": "Henüz dönüşüm yok.",
-      "emptyHint": "Bir dosya yükleyip dönüşüm başlatınca burada görünür.",
-      "emptyFiltered": "Bu filtreyle eşleşen dönüşüm yok.",
-      "emptyFilteredHint": "Başka bir durum deneyin veya tüm dönüşümleri görüntüleyin.",
-      "openFiles": "Dosya yükle",
+      "title": "Son etkinlik",
+      "description": "Oturum açıkken çalıştırdığınız araçların işlem geçmişi. Geçici dosyalar yaklaşık iki saat sonra sona erer.",
+      "loading": "Etkinlik yükleniyor…",
+      "empty": "Henüz etkinlik yok.",
+      "emptyHint": "Bir PDF aracı açıp dosya işlediğinizde burada görünür.",
+      "emptyFiltered": "Bu filtreyle eşleşen etkinlik yok.",
+      "emptyFilteredHint": "Başka bir durum deneyin veya tüm etkinliği görüntüleyin.",
+      "browseTools": "Araçlara göz at",
+      "openFiles": "Araçlara göz at",
       "retry": "Tekrar dene",
       "view": "Görüntüle",
       "unnamedSource": "Kaynak dosya",
       "summary": "{source} → {target}",
       "created": "Başladı {date}",
       "completed": "Bitti {date}",
+      "expiredHint": "Bu sonuç süresi doldu ve artık indirilemez.",
       "firstPage": "En yeni",
-      "nextPage": "Daha eski dönüşümler",
+      "nextPage": "Daha eski etkinlik",
       "filters": {
-        "label": "Dönüşümleri filtrele",
+        "label": "Etkinliği filtrele",
         "all": "Tümü",
         "queued": "Kuyrukta",
         "processing": "İşleniyor",
@@ -504,20 +520,23 @@
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     },
     "status": {
-      "title": "Dönüşüm",
-      "description": "Bu sayfa dönüşümün güncel durumunu gösterir.",
-      "loading": "Dönüşüm yükleniyor…",
-      "pending": "Dönüşüm hazırlanıyor",
+      "title": "Etkinlik ayrıntıları",
+      "description": "Bu araç işleminin durumu. Süresi dolan sonuçlar indirilemez.",
+      "loading": "Etkinlik yükleniyor…",
+      "pending": "Hazırlanıyor",
       "queued": "Kuyrukta",
       "processing": "İşleniyor",
       "completed": "Tamamlandı",
       "failed": "Başarısız",
       "cancelled": "İptal edildi",
-      "complete": "Dönüşüm tamamlandı",
-      "inProgressHint": "Dönüşüm arka planda çalışıyor. Bu sayfa otomatik güncellenir.",
+      "expired": "Süresi doldu",
+      "complete": "İndirmeye hazır",
+      "inProgressHint": "İşlem arka planda devam ediyor. Bu sayfa otomatik güncellenir.",
+      "expiredHint": "Bu işleme ait geçici dosyaların süresi doldu ve artık indirilemez.",
       "summary": "{type} → {target}",
-      "backToHistory": "Dönüşümlere dön",
-      "backToFiles": "Dosyalara dön"
+      "backToHistory": "Son etkinliğe dön",
+      "browseTools": "Araçlara göz at",
+      "backToFiles": "Araçlara göz at"
     },
     "failure": {
       "unsupported_conversion": "Bu dönüşüm desteklenmiyor.",
@@ -767,7 +786,7 @@
       "download": "İndir",
       "downloading": "İndirme hazırlanıyor…",
       "processAnother": "Başka bir dosya işle",
-      "signupPrompt": "Geçmiş, daha yüksek limitler ve kayıtlı dosyalar ister misiniz?",
+      "signupPrompt": "Geçmiş, daha yüksek limitler ve hesap kullanım takibi ister misiniz?",
       "signupCta": "Ücretsiz hesap oluştur"
     },
     "related": {

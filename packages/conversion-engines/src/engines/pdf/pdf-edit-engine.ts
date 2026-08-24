@@ -5,10 +5,7 @@ import { degrees, rgb, StandardFonts } from "pdf-lib";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
-import {
-  invalidInputError,
-  unsupportedConversionError,
-} from "../../errors.js";
+import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
 import { loadPdfDocument, savePdfDocument } from "./pdf-page-operations.js";
@@ -108,7 +105,9 @@ export function createPdfEditEngine(
           const page = pages[operation.page - 1];
 
           if (page === undefined) {
-            throw invalidInputError("Edit operation references an invalid page");
+            throw invalidInputError(
+              "Edit operation references an invalid page",
+            );
           }
 
           if (operation.kind === "text") {
@@ -132,7 +131,9 @@ export function createPdfEditEngine(
             });
           } else if (operation.kind === "image") {
             if (stampImage === undefined) {
-              throw invalidInputError("Image edit requires an additional image file");
+              throw invalidInputError(
+                "Image edit requires an additional image file",
+              );
             }
 
             page.drawImage(stampImage, {

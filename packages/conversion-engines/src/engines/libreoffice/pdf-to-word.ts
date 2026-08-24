@@ -1,8 +1,11 @@
 import { readFile, stat, writeFile } from "node:fs/promises";
-import type { ConversionEngineInput, ConversionEngineResult } from "../../engine.js";
+import type {
+  ConversionEngineInput,
+  ConversionEngineResult,
+} from "../../engine.js";
+import { joinJobPath } from "../../workspace/temp-workspace.js";
 import { layoutPagesToHtml } from "../pdf/layout-html.js";
 import { countLayoutWords, parsePdfLayout } from "../pdf/pdf-layout.js";
-import { joinJobPath } from "../../workspace/temp-workspace.js";
 import {
   type LibreOfficeRunContext,
   prepareLibreOfficeDirectories,
@@ -20,23 +23,19 @@ export async function convertPdfToWord(
     input.outputDirectory,
   );
 
-  const htmlPath = await writeReconstructedHtml(ctx, input.sourcePath, input.outputDirectory);
+  const htmlPath = await writeReconstructedHtml(
+    ctx,
+    input.sourcePath,
+    input.outputDirectory,
+  );
 
   await runLibreOfficeConvert(ctx, {
     profileDirectory,
     outputDir,
-    sourcePath:
-      htmlPath === undefined
-        ? input.sourcePath
-        : htmlPath,
-    convertTo:
-      htmlPath === undefined
-        ? "docx"
-        : "docx:Office Open XML Text",
+    sourcePath: htmlPath === undefined ? input.sourcePath : htmlPath,
+    convertTo: htmlPath === undefined ? "docx" : "docx:Office Open XML Text",
     infilter:
-      htmlPath === undefined
-        ? "writer_pdf_import"
-        : "HTML (StarWriter)",
+      htmlPath === undefined ? "writer_pdf_import" : "HTML (StarWriter)",
   });
 
   return readLibreOfficeOutput(

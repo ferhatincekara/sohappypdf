@@ -28,10 +28,10 @@ describe("conversion list params", () => {
 
   test("builds shareable history hrefs and drops cursor on the first page", () => {
     expect(conversionListHref({ filter: "all" })).toEqual({
-      pathname: "/app/conversions",
+      pathname: "/account/activity",
     });
     expect(conversionListHref({ filter: "failed", cursor: "next-1" })).toEqual({
-      pathname: "/app/conversions",
+      pathname: "/account/activity",
       query: { status: "failed", cursor: "next-1" },
     });
   });

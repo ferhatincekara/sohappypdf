@@ -37,63 +37,63 @@
       }
     },
     "hero": {
-      "eyebrow": "PDF conversion",
-      "title": "PDF conversion that stays simple for people and APIs.",
-      "description": "Upload a file, choose a conversion, and download the result. The same workflow is available in the dashboard and through the public API.",
+      "eyebrow": "Online PDF tools",
+      "title": "PDF tools that stay simple for people and APIs.",
+      "description": "Open a tool, upload a file, process it, and download the result. No account required for basic use.",
       "primaryCta": "Start for free",
       "secondaryCta": "View API"
     },
     "demo": {
       "title": "From upload to download",
-      "description": "The product workflow is the same in the dashboard: upload a file, choose a conversion, wait for processing, then download the result.",
-      "panelTitle": "Create conversion",
+      "description": "Each tool owns its workflow: select a file, process it, then download the temporary result.",
+      "panelTitle": "Tool workflow",
       "fileLabel": "File",
       "fileName": "report.pdf",
-      "conversionLabel": "Conversion",
+      "conversionLabel": "Tool",
       "conversion": "PDF to PNG",
       "resultLabel": "Result",
       "result": "report.png",
       "status": "Completed",
       "upload": "Upload",
-      "choose": "Choose conversion",
-      "convert": "Convert",
+      "choose": "Choose tool",
+      "convert": "Process",
       "download": "Download"
     },
     "features": {
       "title": "What you can do today",
-      "description": "SohappyPDF converts supported files in the cloud and keeps the history in your account.",
+      "description": "SohappyPDF processes supported files in the cloud and keeps temporary results available for about two hours.",
       "items": {
         "conversion": {
-          "title": "PDF conversion",
-          "description": "Convert PDFs to Word, images, or text. Split or compress a PDF when you need a different PDF result."
+          "title": "PDF tools",
+          "description": "Merge, split, compress, convert, protect, and more from focused tool pages."
         },
         "workflow": {
-          "title": "Simple file workflow",
-          "description": "Upload one file, choose an output, and download it when the conversion completes."
+          "title": "Simple tool workflow",
+          "description": "Upload on the tool page, process, and download when the result is ready."
         },
         "history": {
-          "title": "Conversion history",
-          "description": "Review past conversions and download completed files from your account."
+          "title": "Recent activity",
+          "description": "Signed-in accounts can review recent executions. Files remain temporary."
         },
         "api": {
           "title": "Developer API",
-          "description": "Call the same file and conversion workflow with an API key."
+          "description": "Call the same file and processing workflow with an API key."
         },
         "keys": {
           "title": "API keys",
-          "description": "Create and revoke keys in the dashboard. The raw key is shown only once."
+          "description": "Create and revoke keys in your account. The raw key is shown only once."
         },
         "limits": {
           "title": "Predictable limits",
-          "description": "Free and Pro plans publish monthly conversion, storage, file size, and API limits."
+          "description": "Free and Pro plans publish credits, file size, and API limits."
         },
         "security": {
           "title": "Private files",
-          "description": "Files belong to your account. Downloads use short-lived signed access."
+          "description": "Files belong to your anonymous session or account. Downloads use short-lived signed access."
         },
         "cloud": {
           "title": "Cloud processing",
-          "description": "Conversions run in the cloud, so you do not install conversion software locally."
+          "description": "Jobs run in the cloud, so you do not install conversion software locally."
         }
       }
     },
@@ -102,15 +102,15 @@
       "step": "Step {number}",
       "upload": {
         "title": "Upload",
-        "description": "Send a supported file from the dashboard or the API."
+        "description": "Open a tool and send a supported file."
       },
       "convert": {
-        "title": "Convert",
-        "description": "Choose an available conversion. Processing continues in the background."
+        "title": "Process",
+        "description": "Choose options if needed. Processing continues in the background."
       },
       "download": {
         "title": "Download",
-        "description": "Download the result when the conversion is complete."
+        "description": "Download the result when processing completes. Temporary files expire after about two hours."
       }
     },
     "developer": {
@@ -160,14 +160,12 @@
       "pro": {
         "name": "Pro",
         "badge": "Higher limits",
-        "summary": "More conversions, storage, file size, and API capacity.",
+        "summary": "More web credits, larger files, and higher API capacity.",
         "cta": "Start Pro"
       },
       "limits": {
         "webCredits": "{count} web tool credits per month",
         "aiCredits": "{count} AI credits per month",
-        "conversions": "{count} API conversions per month",
-        "storage": "{size} storage",
         "fileSize": "Up to {size} per file",
         "apiKeys": "{count} API keys",
         "apiRate": "{count} API requests per minute",
@@ -202,7 +200,7 @@
       "homeTitle": "SohappyPDF — PDF conversion for people and APIs",
       "homeDescription": "Upload a file, convert it, and download the result. SohappyPDF also exposes the same workflow through a public API.",
       "pricingTitle": "Pricing",
-      "pricingDescription": "Compare Free and Pro limits for conversions, storage, file size, and API access.",
+      "pricingDescription": "Compare Free and Pro limits for credits, file size, and API access.",
       "toolsTitle": "PDF tools",
       "toolsDescription": "Browse Organize, Convert, Edit, Optimize, Security, and Intelligence PDF tools."
     }
@@ -216,7 +214,7 @@
   },
   "appShell": {
     "brand": "SohappyPDF",
-    "navigation": "Application",
+    "navigation": "Account",
     "openNavigation": "Open navigation",
     "closeNavigation": "Close navigation",
     "breadcrumb": "Breadcrumb",
@@ -225,31 +223,47 @@
     "loggingOut": "Logging out…",
     "nav": {
       "overview": "Overview",
-      "files": "Files",
-      "conversions": "Conversions",
-      "apiKeys": "API Keys",
+      "usage": "Usage",
+      "activity": "Recent Activity",
+      "billing": "Billing",
+      "apiKeys": "API",
       "settings": "Settings"
     },
     "pages": {
       "overview": {
         "title": "Overview",
-        "description": "Your workspace is ready. Product features will appear here."
+        "description": "Check your plan and credits, then jump back into PDF tools.",
+        "planTitle": "Your plan",
+        "creditsSummary": "{used} of {limit} web credits used ({remaining} remaining).",
+        "manageBilling": "Manage billing",
+        "toolsTitle": "PDF tools",
+        "toolsDescription": "Process files directly on each tool page. Temporary results expire after about two hours.",
+        "browseTools": "Browse tools",
+        "viewActivity": "Recent activity",
+        "viewUsage": "View usage"
       },
-      "files": {
-        "title": "Files",
-        "description": "Upload files, review their status, and start conversions."
+      "usage": {
+        "title": "Usage",
+        "description": "Web credits are the primary meter for authenticated tool usage.",
+        "webCreditsTitle": "Web credits",
+        "billingHint": "Need more capacity?",
+        "openBilling": "Open billing"
       },
-      "conversions": {
-        "title": "Conversions",
-        "description": "Review conversion history and download completed results."
+      "activity": {
+        "title": "Recent Activity",
+        "description": "Execution history for your account. Temporary files expire after about two hours and cannot be downloaded after they expire."
+      },
+      "billing": {
+        "title": "Billing",
+        "description": "Manage your plan and payment details."
       },
       "apiKeys": {
-        "title": "API Keys",
+        "title": "API",
         "description": "Create and revoke keys for programmatic access."
       },
       "settings": {
         "title": "Settings",
-        "description": "Manage your account and billing."
+        "description": "Manage your account preferences."
       }
     }
   },
@@ -412,24 +426,26 @@
       "convert": "Convert"
     },
     "history": {
-      "title": "Conversions",
-      "description": "Your conversion history. Open a conversion to see the current status or download a completed result.",
-      "loading": "Loading conversions…",
-      "empty": "No conversions yet.",
-      "emptyHint": "Upload a file and start a conversion to see it here.",
-      "emptyFiltered": "No conversions match this filter.",
-      "emptyFilteredHint": "Try another status or view all conversions.",
-      "openFiles": "Upload a file",
+      "title": "Recent Activity",
+      "description": "Execution history for tools you ran while signed in. Temporary files expire after about two hours.",
+      "loading": "Loading activity…",
+      "empty": "No recent activity yet.",
+      "emptyHint": "Open a PDF tool, process a file, and the result will appear here.",
+      "emptyFiltered": "No activity matches this filter.",
+      "emptyFilteredHint": "Try another status or view all activity.",
+      "browseTools": "Browse tools",
+      "openFiles": "Browse tools",
       "retry": "Try again",
       "view": "View",
       "unnamedSource": "Source file",
       "summary": "{source} → {target}",
       "created": "Started {date}",
       "completed": "Finished {date}",
+      "expiredHint": "This result has expired and is no longer downloadable.",
       "firstPage": "Newest",
-      "nextPage": "Older conversions",
+      "nextPage": "Older activity",
       "filters": {
-        "label": "Filter conversions",
+        "label": "Filter activity",
         "all": "All",
         "queued": "Queued",
         "processing": "Processing",
@@ -504,20 +520,23 @@
       "unexpected": "Something went wrong. Try again."
     },
     "status": {
-      "title": "Conversion",
-      "description": "This page shows the current backend status for the conversion.",
-      "loading": "Loading conversion…",
-      "pending": "Preparing conversion",
+      "title": "Activity details",
+      "description": "Status for this tool execution. Expired results cannot be downloaded.",
+      "loading": "Loading activity…",
+      "pending": "Preparing",
       "queued": "Queued",
       "processing": "Processing",
       "completed": "Completed",
       "failed": "Failed",
       "cancelled": "Cancelled",
-      "complete": "Conversion complete",
-      "inProgressHint": "The conversion is running in the background. This page updates automatically.",
+      "expired": "Expired",
+      "complete": "Ready to download",
+      "inProgressHint": "Processing continues in the background. This page updates automatically.",
+      "expiredHint": "Temporary files for this execution have expired and are no longer available for download.",
       "summary": "{type} → {target}",
-      "backToHistory": "Back to conversions",
-      "backToFiles": "Back to files"
+      "backToHistory": "Back to recent activity",
+      "browseTools": "Browse tools",
+      "backToFiles": "Browse tools"
     },
     "failure": {
       "unsupported_conversion": "That conversion is not supported.",
@@ -767,7 +786,7 @@
       "download": "Download",
       "downloading": "Preparing download…",
       "processAnother": "Process another file",
-      "signupPrompt": "Want history, higher limits, and saved workspace files?",
+      "signupPrompt": "Want history, higher limits, and account usage tracking?",
       "signupCta": "Create a free account"
     },
     "related": {

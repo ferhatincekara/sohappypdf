@@ -5,10 +5,7 @@ import { PDFDocument, rgb } from "pdf-lib";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
-import {
-  invalidInputError,
-  unsupportedConversionError,
-} from "../../errors.js";
+import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import {
   type RunAllowedCommand,

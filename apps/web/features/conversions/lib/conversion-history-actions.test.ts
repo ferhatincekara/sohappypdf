@@ -19,6 +19,8 @@ function createConversion(
     queuedAt: null,
     startedAt: null,
     completedAt: "2026-08-24T00:01:00.000Z",
+    expiresAt: "2026-08-24T02:00:00.000Z",
+    expired: false,
     ...overrides,
   };
 }

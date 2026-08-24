@@ -42,7 +42,7 @@ export function DeveloperDocsPage() {
         <ol className="list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
           <li>
             Create a key in{" "}
-            <Link href="/app/api-keys" className="underline underline-offset-4">
+            <Link href="/account/api" className="underline underline-offset-4">
               API Keys
             </Link>
             .

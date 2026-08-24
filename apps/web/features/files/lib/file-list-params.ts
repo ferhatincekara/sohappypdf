@@ -16,16 +16,20 @@ export function parseFileListSearchParams(
   return { cursor };
 }
 
+/**
+ * Files are no longer a primary account destination.
+ * Keep this helper for leftover list UI used by temporary processing flows.
+ */
 export function fileListHref(params: FileListParams): {
   pathname: string;
   query?: { cursor: string };
 } {
   if (params.cursor === undefined || params.cursor.length === 0) {
-    return { pathname: APP_PATHS.files };
+    return { pathname: APP_PATHS.activity };
   }
 
   return {
-    pathname: APP_PATHS.files,
+    pathname: APP_PATHS.activity,
     query: { cursor: params.cursor },
   };
 }

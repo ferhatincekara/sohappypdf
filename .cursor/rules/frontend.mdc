@@ -2,8 +2,6 @@
 description: Frontend development rules for SohappyPDF
 globs:
   - "apps/web/**/*.{ts,tsx}"
-  - "apps/admin/**/*.{ts,tsx}"
-  - "packages/ui/**/*.{ts,tsx}"
 ---
 
 # Frontend Rules
@@ -40,7 +38,8 @@ features/conversions/
 
 Keep feature-specific UI inside the feature.
 
-Shared primitives belong in packages/ui.
+Shared shadcn/ui primitives currently live in `apps/web/components/ui`.
+Do not create `packages/ui` unless there is a clear cross-app reuse need.
 
 ## Server State
 
@@ -94,7 +93,7 @@ Do not duplicate validation rules between form components.
 
 Use shadcn/ui primitives.
 
-Shared UI primitives belong in packages/ui.
+Shared UI primitives currently live in `apps/web/components/ui`.
 
 Feature-specific components remain inside their feature.
 
