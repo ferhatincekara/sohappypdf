@@ -38,6 +38,10 @@ export function isEligibleForCleanup(
   file: FileRecord,
   now: Date = new Date(),
 ): boolean {
+  if (file.purgedAt !== null) {
+    return false;
+  }
+
   if (file.status === "deleted" || file.deletedAt !== null) {
     return true;
   }

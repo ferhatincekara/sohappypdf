@@ -24,6 +24,7 @@ function createFile(overrides: Partial<FileRecord> = {}): FileRecord {
     updatedAt: now,
     expiresAt: new Date("2026-08-23T20:00:00.000Z"),
     deletedAt: null,
+    purgedAt: null,
     ...overrides,
   };
 }
@@ -81,6 +82,15 @@ describe("file expiration", () => {
     expect(isEligibleForCleanup(expired, now)).toBe(true);
     expect(isEligibleForCleanup(deleted, now)).toBe(true);
     expect(isEligibleForCleanup(createFile(), now)).toBe(false);
+    expect(
+      isEligibleForCleanup(
+        createFile({
+          purgedAt: new Date("2026-08-23T17:00:00.000Z"),
+          expiresAt: new Date("2026-08-23T17:00:00.000Z"),
+        }),
+        now,
+      ),
+    ).toBe(false);
   });
 
   test("returns remaining TTL until expiry", () => {

@@ -43,12 +43,14 @@ export const files = pgTable(
       mode: "date",
     }).notNull(),
     deletedAt: timestamp("deleted_at", { withTimezone: true, mode: "date" }),
+    purgedAt: timestamp("purged_at", { withTimezone: true, mode: "date" }),
   },
   (table) => [
     uniqueIndex("files_object_key_uidx").on(table.objectKey),
     index("files_status_idx").on(table.status),
     index("files_expires_at_idx").on(table.expiresAt),
     index("files_deleted_at_idx").on(table.deletedAt),
+    index("files_purged_at_idx").on(table.purgedAt),
     index("files_owner_id_idx").on(table.ownerId),
     index("files_owner_kind_owner_id_idx").on(table.ownerKind, table.ownerId),
     index("files_owner_id_created_at_id_idx").on(
@@ -56,6 +58,9 @@ export const files = pgTable(
       table.createdAt,
       table.id,
     ),
+    index("files_cleanup_eligible_idx")
+      .on(table.expiresAt)
+      .where(sql`${table.purgedAt} is null`),
     check("files_size_bytes_positive", sql`${table.sizeBytes} > 0`),
   ],
 );

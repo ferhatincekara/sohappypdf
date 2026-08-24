@@ -1,3 +1,4 @@
+import { getAnonymousSessionService } from "@repo/auth";
 import {
   type EnvSource,
   loadFileConfig,
@@ -192,6 +193,8 @@ export async function startConversionWorkerRuntime(
       cleanupWorker = createFileCleanupWorker({
         processJob: createFileCleanupProcessor({
           files: getFileService(),
+          conversions: getConversionService(),
+          anonymousSessions: getAnonymousSessionService(),
           logger,
           batchSize: fileConfig.cleanupBatchSize,
         }),

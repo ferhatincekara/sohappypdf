@@ -15,6 +15,7 @@ function file(overrides: Partial<FileRecord>): FileRecord {
     updatedAt: new Date("2026-08-01T00:00:00.000Z"),
     expiresAt: new Date("2026-08-20T00:00:00.000Z"),
     deletedAt: null,
+    purgedAt: null,
     ...overrides,
   };
 }

@@ -1,8 +1,23 @@
 import { describe, expect, test } from "bun:test";
+import type { ConversionService } from "@repo/conversions";
 import { isAppError } from "@repo/core";
 import type { FileService } from "@repo/files";
 import { createLogger } from "@repo/logger";
 import { createFileCleanupProcessor } from "./file-cleanup-processor.js";
+
+function createConversionsStub(
+  overrides: Partial<ConversionService> = {},
+): ConversionService {
+  return {
+    async cleanupExpiredConversions() {
+      return { scanned: 0, deleted: 0 };
+    },
+    async deleteReferencingFile() {
+      return 0;
+    },
+    ...overrides,
+  } as ConversionService;
+}
 
 describe("file cleanup processor", () => {
   test("drains expired files in batches", async () => {
@@ -18,7 +33,11 @@ describe("file cleanup processor", () => {
             failureFileIds: [],
           };
         },
+        async listPurgedAnonymousFiles() {
+          return [];
+        },
       } as FileService,
+      conversions: createConversionsStub(),
       logger: createLogger({ level: "error" }),
       batchSize: 100,
     });
@@ -38,7 +57,11 @@ describe("file cleanup processor", () => {
             failureFileIds: ["550e8400-e29b-41d4-a716-446655440000"],
           };
         },
+        async listPurgedAnonymousFiles() {
+          return [];
+        },
       } as FileService,
+      conversions: createConversionsStub(),
       logger: createLogger({ level: "error" }),
       batchSize: 100,
     });
@@ -52,5 +75,60 @@ describe("file cleanup processor", () => {
         expect(error.code).toBe("INTERNAL_ERROR");
       }
     }
+  });
+
+  test("removes purged anonymous files after detaching conversions", async () => {
+    const hardDeleted: string[] = [];
+    const detached: string[] = [];
+    const processor = createFileCleanupProcessor({
+      files: {
+        async cleanupExpiredFiles() {
+          return {
+            scanned: 1,
+            deleted: 1,
+            failed: 0,
+            failureFileIds: [],
+          };
+        },
+        async listPurgedAnonymousFiles() {
+          if (hardDeleted.length > 0) {
+            return [];
+          }
+
+          return [
+            {
+              id: "550e8400-e29b-41d4-a716-446655440000",
+              ownerId: "anon",
+              ownerKind: "anonymous_session",
+              originalFilename: "a.pdf",
+              mimeType: "application/pdf",
+              sizeBytes: 10,
+              objectKey: "files/a/original",
+              status: "deleted",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              expiresAt: new Date(),
+              deletedAt: new Date(),
+              purgedAt: new Date(),
+            },
+          ];
+        },
+        async hardDeleteFile(id) {
+          hardDeleted.push(id);
+        },
+      } as FileService,
+      conversions: createConversionsStub({
+        async deleteReferencingFile(fileId) {
+          detached.push(fileId);
+          return 1;
+        },
+      }),
+      logger: createLogger({ level: "error" }),
+      batchSize: 100,
+    });
+
+    await processor({ id: "cleanup-1", attemptsMade: 0 });
+    expect(detached).toEqual(["550e8400-e29b-41d4-a716-446655440000"]);
+    expect(hardDeleted).toEqual(["550e8400-e29b-41d4-a716-446655440000"]);
   });
 });

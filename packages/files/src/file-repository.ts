@@ -39,11 +39,13 @@ export type FileRepository = {
     id: string;
     now: Date;
   }): Promise<FileRecord | undefined>;
+  markPurged(input: { id: string; now: Date }): Promise<FileRecord | undefined>;
   deleteById(id: string): Promise<void>;
   listEligibleForCleanup(input: {
     now: Date;
     limit: number;
   }): Promise<FileRecord[]>;
+  listPurgedAnonymous(input: { limit: number }): Promise<FileRecord[]>;
   sumActiveStorageBytes(ownerId: string, now: Date): Promise<number>;
 };
 
@@ -61,6 +63,7 @@ function toFileRecord(row: typeof files.$inferSelect): FileRecord {
     updatedAt: row.updatedAt,
     expiresAt: row.expiresAt,
     deletedAt: row.deletedAt,
+    purgedAt: row.purgedAt,
   };
 }
 
@@ -82,6 +85,7 @@ export function createFileRepository(db: Database): FileRepository {
           updatedAt: file.updatedAt,
           expiresAt: file.expiresAt,
           deletedAt: file.deletedAt,
+          purgedAt: file.purgedAt,
         })
         .returning();
 
@@ -113,6 +117,7 @@ export function createFileRepository(db: Database): FileRepository {
       const conditions = [
         eq(files.ownerId, input.ownerId),
         isNull(files.deletedAt),
+        isNull(files.purgedAt),
         ne(files.status, "deleted"),
         gt(files.expiresAt, input.now),
       ];
@@ -176,6 +181,25 @@ export function createFileRepository(db: Database): FileRepository {
       return toFileRecord(row);
     },
 
+    async markPurged(input) {
+      const [row] = await db
+        .update(files)
+        .set({
+          status: "deleted",
+          deletedAt: input.now,
+          purgedAt: input.now,
+          updatedAt: input.now,
+        })
+        .where(and(eq(files.id, input.id), isNull(files.purgedAt)))
+        .returning();
+
+      if (row === undefined) {
+        return undefined;
+      }
+
+      return toFileRecord(row);
+    },
+
     async deleteById(id) {
       await db.delete(files).where(eq(files.id, id));
     },
@@ -190,6 +214,7 @@ export function createFileRepository(db: Database): FileRepository {
           and(
             eq(files.ownerId, ownerId),
             isNull(files.deletedAt),
+            isNull(files.purgedAt),
             ne(files.status, "deleted"),
             gt(files.expiresAt, now),
           ),
@@ -203,10 +228,28 @@ export function createFileRepository(db: Database): FileRepository {
         .select()
         .from(files)
         .where(
-          or(
-            isNotNull(files.deletedAt),
-            eq(files.status, "deleted"),
-            lte(files.expiresAt, input.now),
+          and(
+            isNull(files.purgedAt),
+            or(
+              isNotNull(files.deletedAt),
+              eq(files.status, "deleted"),
+              lte(files.expiresAt, input.now),
+            ),
+          ),
+        )
+        .limit(input.limit);
+
+      return rows.map((row) => toFileRecord(row));
+    },
+
+    async listPurgedAnonymous(input) {
+      const rows = await db
+        .select()
+        .from(files)
+        .where(
+          and(
+            eq(files.ownerKind, "anonymous_session"),
+            isNotNull(files.purgedAt),
           ),
         )
         .limit(input.limit);

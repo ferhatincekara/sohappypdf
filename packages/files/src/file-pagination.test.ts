@@ -18,6 +18,7 @@ const file: FileRecord = {
   updatedAt: new Date("2026-08-23T18:00:00.000Z"),
   expiresAt: new Date("2026-08-23T20:00:00.000Z"),
   deletedAt: null,
+  purgedAt: null,
 };
 
 describe("file list cursor", () => {

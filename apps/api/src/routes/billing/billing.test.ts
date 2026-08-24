@@ -68,7 +68,13 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
     async deleteById(id) {
       records.delete(id);
     },
+    async markPurged() {
+      return undefined;
+    },
     async listEligibleForCleanup() {
+      return [];
+    },
+    async listPurgedAnonymous() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, currentTime) {

@@ -14,6 +14,7 @@ export type FileRecord = {
   updatedAt: Date;
   expiresAt: Date;
   deletedAt: Date | null;
+  purgedAt: Date | null;
 };
 
 export type CreateFileInput = {

@@ -1,6 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { anonymousSessions, type Database } from "@repo/db";
-import { eq } from "drizzle-orm";
+import { and, eq, lte } from "drizzle-orm";
 import type {
   AnonymousSessionRecord,
   AnonymousSessionRepository,
@@ -70,6 +70,34 @@ export function createAnonymousSessionRepository(
       }
 
       return toAnonymousSessionRecord(row);
+    },
+
+    async deleteExpired(input) {
+      const expired = await db
+        .select({ id: anonymousSessions.id })
+        .from(anonymousSessions)
+        .where(lte(anonymousSessions.expiresAt, input.now))
+        .limit(input.limit);
+
+      if (expired.length === 0) {
+        return 0;
+      }
+
+      let deleted = 0;
+
+      for (const row of expired) {
+        await db
+          .delete(anonymousSessions)
+          .where(
+            and(
+              eq(anonymousSessions.id, row.id),
+              lte(anonymousSessions.expiresAt, input.now),
+            ),
+          );
+        deleted += 1;
+      }
+
+      return deleted;
     },
   };
 }

@@ -50,6 +50,7 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
             file.ownerId !== input.ownerId ||
             file.status === "deleted" ||
             file.deletedAt !== null ||
+            file.purgedAt !== null ||
             file.expiresAt.getTime() <= input.now.getTime()
           ) {
             return false;
@@ -105,7 +106,27 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
     async deleteById(id) {
       records.delete(id);
     },
+    async markPurged(input) {
+      const file = records.get(input.id);
+
+      if (file === undefined || file.purgedAt !== null) {
+        return undefined;
+      }
+
+      const updated = {
+        ...file,
+        status: "deleted" as const,
+        deletedAt: file.deletedAt ?? input.now,
+        purgedAt: input.now,
+        updatedAt: input.now,
+      };
+      records.set(input.id, updated);
+      return { ...updated };
+    },
     async listEligibleForCleanup() {
+      return [];
+    },
+    async listPurgedAnonymous() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, now) {

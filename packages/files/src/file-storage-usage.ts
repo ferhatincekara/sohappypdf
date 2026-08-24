@@ -4,6 +4,7 @@ export function isActiveStorageFile(file: FileRecord, now: Date): boolean {
   return (
     file.status !== "deleted" &&
     file.deletedAt === null &&
+    file.purgedAt === null &&
     file.expiresAt.getTime() > now.getTime()
   );
 }

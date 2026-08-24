@@ -79,5 +79,19 @@ export function createAnonymousSessionService(
         cookieShouldSet: false,
       };
     },
+
+    async deleteExpired(input = {}) {
+      const at = input.now ?? now();
+      const limit = input.limit ?? 100;
+      const deleted = await options.repository.deleteExpired({
+        now: at,
+        limit,
+      });
+
+      return {
+        scanned: deleted,
+        deleted,
+      };
+    },
   };
 }

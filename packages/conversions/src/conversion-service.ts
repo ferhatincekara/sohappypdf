@@ -81,6 +81,11 @@ export type ConversionService = {
   ): Promise<ConversionRecord>;
   cancelConversion(id: string): Promise<ConversionRecord>;
   cancelOwnedConversion(id: string, ownerId: string): Promise<ConversionRecord>;
+  cleanupExpiredConversions(limit?: number): Promise<{
+    scanned: number;
+    deleted: number;
+  }>;
+  deleteReferencingFile(fileId: string): Promise<number>;
 };
 
 function requireConversion(
@@ -395,6 +400,7 @@ export function createConversionService(
         cursor,
         status,
         targetFormat,
+        now: now(),
       });
       const hasMore = records.length > limit;
       const page = hasMore ? records.slice(0, limit) : records;
@@ -469,6 +475,37 @@ export function createConversionService(
         errorCode: "cancelled",
         errorMessage: "Conversion cancelled",
       });
+    },
+
+    async cleanupExpiredConversions(limit = 100) {
+      if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid cleanup limit",
+        });
+      }
+
+      const expired = await options.repository.listExpired({
+        now: now(),
+        limit,
+      });
+      let deleted = 0;
+
+      for (const conversion of expired) {
+        await options.repository.deleteById(conversion.id);
+        deleted += 1;
+      }
+
+      return {
+        scanned: expired.length,
+        deleted,
+      };
+    },
+
+    async deleteReferencingFile(fileId) {
+      return options.repository.deleteReferencingFile(
+        assertFileReferenceId(fileId),
+      );
     },
   };
 }

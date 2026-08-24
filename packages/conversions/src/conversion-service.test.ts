@@ -18,6 +18,7 @@ function createFile(overrides: Partial<FileRecord> = {}): FileRecord {
     updatedAt: new Date("2026-08-23T18:00:00.000Z"),
     expiresAt: new Date("2026-12-31T00:00:00.000Z"),
     deletedAt: null,
+    purgedAt: null,
     ...overrides,
   };
 }
@@ -48,6 +49,14 @@ function createMemoryRepository(
       return [...records.values()]
         .filter((conversion) => {
           if (conversion.ownerId !== input.ownerId) {
+            return false;
+          }
+
+          if (
+            input.now !== undefined &&
+            conversion.expiresAt !== null &&
+            conversion.expiresAt.getTime() <= input.now.getTime()
+          ) {
             return false;
           }
 
@@ -122,6 +131,34 @@ function createMemoryRepository(
       };
       records.set(input.id, updated);
       return { ...updated };
+    },
+    async deleteById(id) {
+      records.delete(id);
+    },
+    async deleteReferencingFile(fileId) {
+      let deleted = 0;
+
+      for (const [id, conversion] of [...records.entries()]) {
+        if (
+          conversion.sourceFileId === fileId ||
+          conversion.outputFileId === fileId
+        ) {
+          records.delete(id);
+          deleted += 1;
+        }
+      }
+
+      return deleted;
+    },
+    async listExpired(input) {
+      return [...records.values()]
+        .filter(
+          (conversion) =>
+            conversion.expiresAt !== null &&
+            conversion.expiresAt.getTime() <= input.now.getTime(),
+        )
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
     },
   };
 }
@@ -561,5 +598,56 @@ describe("conversion service", () => {
         expect(error.code).toBe("NOT_FOUND");
       }
     }
+  });
+
+  test("deletes expired conversions idempotently", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+    const created = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+      expiresAt: new Date("2026-08-23T18:00:00.000Z"),
+    });
+
+    const first = await service.cleanupExpiredConversions();
+    const second = await service.cleanupExpiredConversions();
+
+    expect(first).toEqual({ scanned: 1, deleted: 1 });
+    expect(second).toEqual({ scanned: 0, deleted: 0 });
+
+    try {
+      await service.getOwnedConversion(created.id, sourceFile.ownerId);
+      throw new Error("expected missing conversion");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
+      }
+    }
+  });
+
+  test("detaches conversions that reference a file before hard delete", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+    await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+    });
+
+    const deleted = await service.deleteReferencingFile(sourceFile.id);
+    expect(deleted).toBe(1);
+    expect(
+      (await service.listOwnedConversions({ ownerId: sourceFile.ownerId }))
+        .conversions,
+    ).toEqual([]);
   });
 });

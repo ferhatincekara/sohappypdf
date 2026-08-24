@@ -81,7 +81,13 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
     async deleteById(id) {
       records.delete(id);
     },
+    async markPurged() {
+      return undefined;
+    },
     async listEligibleForCleanup() {
+      return [];
+    },
+    async listPurgedAnonymous() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, now) {
@@ -238,6 +244,34 @@ function createMemoryConversionRepository(
       };
       records.set(input.id, updated);
       return { ...updated };
+    },
+    async deleteById(id) {
+      records.delete(id);
+    },
+    async deleteReferencingFile(fileId) {
+      let deleted = 0;
+
+      for (const [id, conversion] of [...records.entries()]) {
+        if (
+          conversion.sourceFileId === fileId ||
+          conversion.outputFileId === fileId
+        ) {
+          records.delete(id);
+          deleted += 1;
+        }
+      }
+
+      return deleted;
+    },
+    async listExpired(input) {
+      return [...records.values()]
+        .filter(
+          (conversion) =>
+            conversion.expiresAt !== null &&
+            conversion.expiresAt.getTime() <= input.now.getTime(),
+        )
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
     },
   };
 }

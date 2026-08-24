@@ -54,6 +54,14 @@ export {
   DEFAULT_RATE_LIMIT_CONFIG,
   loadRateLimitConfig,
 } from "./rate-limit-config.js";
+export type { RetentionKind, RetentionPolicy } from "./retention-policy.js";
+export {
+  getExpirationDate,
+  isRetentionKind,
+  loadRetentionPolicy,
+  RETENTION_KINDS,
+  resolveRetentionMs,
+} from "./retention-policy.js";
 export type { StorageConfig } from "./storage-config.js";
 export { loadStorageConfig } from "./storage-config.js";
 export type { WorkerConfig } from "./worker-config.js";

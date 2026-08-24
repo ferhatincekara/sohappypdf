@@ -33,6 +33,7 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
             file.ownerId !== input.ownerId ||
             file.status === "deleted" ||
             file.deletedAt !== null ||
+            file.purgedAt !== null ||
             file.expiresAt.getTime() <= input.now.getTime()
           ) {
             return false;
@@ -88,6 +89,23 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
     async deleteById(id) {
       records.delete(id);
     },
+    async markPurged(input) {
+      const file = records.get(input.id);
+
+      if (file === undefined || file.purgedAt !== null) {
+        return undefined;
+      }
+
+      const updated = {
+        ...file,
+        status: "deleted" as const,
+        deletedAt: file.deletedAt ?? input.now,
+        purgedAt: input.now,
+        updatedAt: input.now,
+      };
+      records.set(input.id, updated);
+      return { ...updated };
+    },
     async sumActiveStorageBytes(ownerId, now) {
       return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
     },
@@ -95,9 +113,19 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
       return [...records.values()]
         .filter(
           (file) =>
-            file.status === "deleted" ||
-            file.deletedAt !== null ||
-            file.expiresAt.getTime() <= input.now.getTime(),
+            file.purgedAt === null &&
+            (file.status === "deleted" ||
+              file.deletedAt !== null ||
+              file.expiresAt.getTime() <= input.now.getTime()),
+        )
+        .slice(0, input.limit)
+        .map((file) => ({ ...file }));
+    },
+    async listPurgedAnonymous(input) {
+      return [...records.values()]
+        .filter(
+          (file) =>
+            file.ownerKind === "anonymous_session" && file.purgedAt !== null,
         )
         .slice(0, input.limit)
         .map((file) => ({ ...file }));
@@ -462,6 +490,7 @@ describe("file service", () => {
       updatedAt: new Date("2026-08-23T18:00:00.000Z"),
       expiresAt: new Date("2026-08-23T20:00:00.000Z"),
       deletedAt: null,
+      purgedAt: null,
     };
     const service = createFileService({
       repository: createMemoryRepository([expired]),
@@ -536,7 +565,7 @@ describe("file service", () => {
     }
   });
 
-  test("cleans expired files from S3 and the database", async () => {
+  test("purges expired file binaries while retaining authenticated metadata", async () => {
     const expired: FileRecord = {
       id: "550e8400-e29b-41d4-a716-446655440000",
       ownerId: "user_1",
@@ -549,6 +578,7 @@ describe("file service", () => {
       updatedAt: new Date("2026-08-23T18:00:00.000Z"),
       expiresAt: new Date("2026-08-23T20:00:00.000Z"),
       deletedAt: null,
+      purgedAt: null,
     };
     const storage = createMemoryStorage({ existingKeys: [expired.objectKey] });
     const service = createFileService({
@@ -559,6 +589,7 @@ describe("file service", () => {
 
     const first = await service.cleanupExpiredFiles();
     const second = await service.cleanupExpiredFiles();
+    const purged = await service.findFileById(expired.id);
 
     expect(first).toEqual({
       scanned: 1,
@@ -568,10 +599,11 @@ describe("file service", () => {
     });
     expect(second.scanned).toBe(0);
     expect(storage.objects.has(expired.objectKey)).toBe(false);
-    expect(await service.findFileById(expired.id)).toBeUndefined();
+    expect(purged?.purgedAt?.toISOString()).toBe("2026-08-23T21:00:00.000Z");
+    expect(purged?.originalFilename).toBe("old.pdf");
   });
 
-  test("treats a missing S3 object as a successful cleanup", async () => {
+  test("treats a missing S3 object as a successful purge", async () => {
     const expired: FileRecord = {
       id: "550e8400-e29b-41d4-a716-446655440000",
       ownerId: "user_1",
@@ -584,6 +616,7 @@ describe("file service", () => {
       updatedAt: new Date("2026-08-23T18:00:00.000Z"),
       expiresAt: new Date("2026-08-23T20:00:00.000Z"),
       deletedAt: null,
+      purgedAt: null,
     };
     const service = createFileService({
       repository: createMemoryRepository([expired]),
@@ -592,8 +625,41 @@ describe("file service", () => {
     });
 
     const result = await service.cleanupExpiredFiles();
+    const purged = await service.findFileById(expired.id);
     expect(result.deleted).toBe(1);
-    expect(await service.findFileById(expired.id)).toBeUndefined();
+    expect(purged?.purgedAt).not.toBeNull();
+  });
+
+  test("does not purge the DB row when S3 deletion fails", async () => {
+    const expired: FileRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      ownerId: "user_1",
+      originalFilename: "old.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 10,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440000/original",
+      status: "uploaded",
+      createdAt: new Date("2026-08-23T18:00:00.000Z"),
+      updatedAt: new Date("2026-08-23T18:00:00.000Z"),
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+      deletedAt: null,
+      purgedAt: null,
+    };
+    const service = createFileService({
+      repository: createMemoryRepository([expired]),
+      storage: createMemoryStorage({
+        failDelete: true,
+        existingKeys: [expired.objectKey],
+      }),
+      now: () => new Date("2026-08-23T21:00:00.000Z"),
+    });
+
+    const result = await service.cleanupExpiredFiles();
+    const stored = await service.findFileById(expired.id);
+
+    expect(result.failed).toBe(1);
+    expect(result.failureFileIds).toEqual([expired.id]);
+    expect(stored?.purgedAt).toBeNull();
   });
 
   test("continues a cleanup batch after one file fails", async () => {
@@ -609,6 +675,7 @@ describe("file service", () => {
       updatedAt: new Date("2026-08-23T18:00:00.000Z"),
       expiresAt: new Date("2026-08-23T20:00:00.000Z"),
       deletedAt: null,
+      purgedAt: null,
     };
     const ok: FileRecord = {
       ...failing,
@@ -634,11 +701,14 @@ describe("file service", () => {
     });
 
     const result = await service.cleanupExpiredFiles();
+    const failingRow = await service.findFileById(failing.id);
+    const okRow = await service.findFileById(ok.id);
+
     expect(result.scanned).toBe(2);
     expect(result.deleted).toBe(1);
     expect(result.failed).toBe(1);
     expect(result.failureFileIds).toEqual([failing.id]);
-    expect(await service.findFileById(failing.id)).toBeDefined();
-    expect(await service.findFileById(ok.id)).toBeUndefined();
+    expect(failingRow?.purgedAt).toBeNull();
+    expect(okRow?.purgedAt).not.toBeNull();
   });
 });

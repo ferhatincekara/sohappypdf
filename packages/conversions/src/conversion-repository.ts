@@ -1,7 +1,7 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type ConversionRow, conversions, type Database } from "@repo/db";
 import { DEFAULT_RESOURCE_OWNER_KIND } from "@repo/files";
-import { and, desc, eq, lt, or } from "drizzle-orm";
+import { and, desc, eq, gt, isNull, lt, lte, or, sql } from "drizzle-orm";
 import { normalizeFileFormat } from "./conversion-format.js";
 import { parseConversionOptions } from "./conversion-options.js";
 import type { ConversionListCursor } from "./conversion-pagination.js";
@@ -22,6 +22,7 @@ export type ConversionOwnerListInput = {
   cursor?: ConversionListCursor;
   status?: ConversionStatus;
   targetFormat?: string;
+  now?: Date;
 };
 
 export type ConversionStatusUpdate = {
@@ -45,6 +46,9 @@ export type ConversionRepository = {
   updateStatus(
     input: ConversionStatusUpdate,
   ): Promise<ConversionRecord | undefined>;
+  deleteById(id: string): Promise<void>;
+  deleteReferencingFile(fileId: string): Promise<number>;
+  listExpired(input: { now: Date; limit: number }): Promise<ConversionRecord[]>;
 };
 
 function toFailureCode(value: string | null): ConversionFailureCode | null {
@@ -186,6 +190,17 @@ export function createConversionRepository(db: Database): ConversionRepository {
     async listByOwner(input) {
       const conditions = [eq(conversions.ownerId, input.ownerId)];
 
+      if (input.now !== undefined) {
+        const activeExpiry = or(
+          isNull(conversions.expiresAt),
+          gt(conversions.expiresAt, input.now),
+        );
+
+        if (activeExpiry !== undefined) {
+          conditions.push(activeExpiry);
+        }
+      }
+
       if (input.status !== undefined) {
         conditions.push(eq(conversions.status, input.status));
       }
@@ -246,6 +261,39 @@ export function createConversionRepository(db: Database): ConversionRepository {
       }
 
       return toConversionRecord(row);
+    },
+
+    async deleteById(id) {
+      await db.delete(conversions).where(eq(conversions.id, id));
+    },
+
+    async deleteReferencingFile(fileId) {
+      const deleted = await db
+        .delete(conversions)
+        .where(
+          or(
+            eq(conversions.sourceFileId, fileId),
+            eq(conversions.outputFileId, fileId),
+          ),
+        )
+        .returning({ id: conversions.id });
+
+      return deleted.length;
+    },
+
+    async listExpired(input) {
+      const rows = await db
+        .select()
+        .from(conversions)
+        .where(
+          and(
+            sql`${conversions.expiresAt} is not null`,
+            lte(conversions.expiresAt, input.now),
+          ),
+        )
+        .limit(input.limit);
+
+      return rows.map((row) => toConversionRecord(row));
     },
   };
 }

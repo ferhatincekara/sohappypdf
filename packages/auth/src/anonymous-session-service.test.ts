@@ -46,4 +46,22 @@ describe("anonymous session service", () => {
     expect(rotated.session.id).not.toBe(created.session.id);
     expect(rotated.rawToken).not.toBe(created.rawToken);
   });
+
+  test("deletes expired sessions idempotently", async () => {
+    let current = new Date("2026-08-24T01:00:00.000Z");
+    const service = createAnonymousSessionService({
+      repository: createMemoryAnonymousSessionRepository(),
+      retentionMs: RETENTION_MS,
+      now: () => current,
+    });
+
+    await service.resolveFromToken(undefined);
+    current = new Date("2026-08-24T03:00:00.000Z");
+
+    const first = await service.deleteExpired({ limit: 10 });
+    const second = await service.deleteExpired({ limit: 10 });
+
+    expect(first).toEqual({ scanned: 1, deleted: 1 });
+    expect(second).toEqual({ scanned: 0, deleted: 0 });
+  });
 });

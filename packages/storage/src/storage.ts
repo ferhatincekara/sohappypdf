@@ -403,6 +403,10 @@ export function createStorage(config: StorageConfig): Storage {
           }),
         );
       } catch (error) {
+        if (isS3NotFound(error)) {
+          return;
+        }
+
         throw toStorageError(error);
       }
     },

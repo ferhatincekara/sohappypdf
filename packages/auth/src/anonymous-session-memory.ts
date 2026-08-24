@@ -28,5 +28,17 @@ export function createMemoryAnonymousSessionRepository(
       const record = records.get(id);
       return record === undefined ? undefined : { ...record };
     },
+
+    async deleteExpired(input) {
+      const expired = [...records.values()]
+        .filter((session) => session.expiresAt.getTime() <= input.now.getTime())
+        .slice(0, input.limit);
+
+      for (const session of expired) {
+        records.delete(session.id);
+      }
+
+      return expired.length;
+    },
   };
 }

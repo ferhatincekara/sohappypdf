@@ -1,4 +1,5 @@
 import type { BillingService } from "@repo/billing";
+import { loadRetentionPolicy } from "@repo/config";
 import type { ConversionService } from "@repo/conversions";
 import type { FileService } from "@repo/files";
 import type { ConversionJobData } from "@repo/queue";
@@ -56,6 +57,7 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         targetFormat: body.targetFormat,
         type: body.type,
         idempotencyKey,
+        expiresAt: new Date(Date.now() + loadRetentionPolicy().authenticatedMs),
         options:
           body.additionalFileIds === undefined
             ? undefined

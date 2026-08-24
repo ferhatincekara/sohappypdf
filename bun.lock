@@ -79,6 +79,7 @@
       "name": "@repo/worker",
       "version": "0.0.0",
       "dependencies": {
+        "@repo/auth": "workspace:*",
         "@repo/config": "workspace:*",
         "@repo/conversion-engines": "workspace:*",
         "@repo/conversions": "workspace:*",

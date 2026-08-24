@@ -75,6 +75,8 @@ export type FileService = {
   deleteFile(id: string): Promise<FileRecord>;
   listFilesEligibleForCleanup(limit?: number): Promise<FileRecord[]>;
   cleanupExpiredFiles(limit?: number): Promise<FileCleanupSummary>;
+  listPurgedAnonymousFiles(limit?: number): Promise<FileRecord[]>;
+  hardDeleteFile(id: string): Promise<void>;
   sumActiveStorageBytes(ownerId: string): Promise<number>;
 };
 
@@ -102,6 +104,7 @@ function isUnavailable(file: FileRecord, now: Date): boolean {
   return (
     file.status === "deleted" ||
     file.deletedAt !== null ||
+    file.purgedAt !== null ||
     isFileExpired(file, now)
   );
 }
@@ -153,6 +156,7 @@ export function createFileService(options: FileServiceOptions): FileService {
         retentionMs: input.expiresInMs ?? fileTtlMs,
       }),
       deletedAt: null,
+      purgedAt: null,
     };
 
     const created = await options.repository.insert(file);
@@ -314,6 +318,7 @@ export function createFileService(options: FileServiceOptions): FileService {
           retentionMs: input.expiresInMs ?? fileTtlMs,
         }),
         deletedAt: null,
+        purgedAt: null,
       });
     },
 
@@ -472,8 +477,20 @@ export function createFileService(options: FileServiceOptions): FileService {
             continue;
           }
 
+          // Storage first: never purge the DB marker if delete fails.
           await options.storage.deleteObject(current.objectKey);
-          await options.repository.deleteById(current.id);
+
+          const purged = await options.repository.markPurged({
+            id: current.id,
+            now: now(),
+          });
+
+          if (purged === undefined) {
+            // Another cleanup worker already purged this row.
+            summary.deleted += 1;
+            continue;
+          }
+
           summary.deleted += 1;
         } catch {
           summary.failed += 1;
@@ -482,6 +499,21 @@ export function createFileService(options: FileServiceOptions): FileService {
       }
 
       return summary;
+    },
+
+    async listPurgedAnonymousFiles(limit = DEFAULT_CLEANUP_LIMIT) {
+      if (!Number.isInteger(limit) || limit < 1 || limit > MAX_CLEANUP_LIMIT) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid cleanup limit",
+        });
+      }
+
+      return options.repository.listPurgedAnonymous({ limit });
+    },
+
+    async hardDeleteFile(id) {
+      await options.repository.deleteById(assertFileId(id));
     },
   };
 }

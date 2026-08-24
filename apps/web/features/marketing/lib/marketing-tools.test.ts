@@ -27,8 +27,8 @@ describe("marketing tool navigation", () => {
       "organize",
       "optimize",
     ]);
-    expect(groups.flatMap((group) => group.tools.map((tool) => tool.id))).toEqual(
-      items.map((item) => item.id),
-    );
+    expect(
+      groups.flatMap((group) => group.tools.map((tool) => tool.id)),
+    ).toEqual(items.map((item) => item.id));
   });
 });

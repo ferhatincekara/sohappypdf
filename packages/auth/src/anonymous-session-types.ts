@@ -24,6 +24,7 @@ export type AnonymousSessionRepository = {
     tokenHash: string,
   ): Promise<AnonymousSessionRecord | undefined>;
   findById(id: string): Promise<AnonymousSessionRecord | undefined>;
+  deleteExpired(input: { now: Date; limit: number }): Promise<number>;
 };
 
 export type AnonymousSessionService = {
@@ -31,4 +32,8 @@ export type AnonymousSessionService = {
     rawToken: string | undefined,
     now?: Date,
   ): Promise<ResolveAnonymousSessionResult>;
+  deleteExpired(input?: {
+    now?: Date;
+    limit?: number;
+  }): Promise<{ scanned: number; deleted: number }>;
 };
