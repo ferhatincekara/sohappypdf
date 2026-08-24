@@ -218,7 +218,8 @@ export function buildToolConversionOptions(
 
       return { degrees: state.rotationDegrees, pages };
     }
-    case "split-pdf": {
+    case "split-pdf":
+    case "extract-pages": {
       const ranges = parseSplitRangesInput(state.splitRanges);
       return ranges === undefined ? undefined : { ranges };
     }

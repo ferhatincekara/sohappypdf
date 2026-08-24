@@ -65,6 +65,11 @@ export type SplitPdfOptions = {
   ranges?: readonly { start: number; end: number }[];
 };
 
+export type ExtractPagesOptions = {
+  type: "extract-pages";
+  ranges?: readonly { start: number; end: number }[];
+};
+
 export type CompressPdfOptions = {
   type: "compress-pdf";
   level: CompressionLevel;
@@ -244,6 +249,7 @@ export type ConversionOptions =
   | OfficeOcrConversionOptions
   | MergePdfOptions
   | SplitPdfOptions
+  | ExtractPagesOptions
   | CompressPdfOptions
   | RotatePdfOptions
   | OrganizePdfOptions
@@ -811,7 +817,8 @@ export function parseConversionOptions(
         additionalFileIds: parseAdditionalFileIds(record.additionalFileIds),
       };
     }
-    case "split-pdf": {
+    case "split-pdf":
+    case "extract-pages": {
       assertAllowedKeys(record, ["type", "ranges"]);
       const ranges = parseRanges(record.ranges);
 

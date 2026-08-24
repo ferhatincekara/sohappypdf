@@ -252,6 +252,29 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "extract-pages") {
+    return {
+      processingTitle: t("workspaces.extract.processing"),
+      processingHint: t("workspaces.extract.processingHint"),
+      successTitle: t("workspaces.extract.successTitle"),
+      successDescription: t("workspaces.extract.successDescription"),
+      downloadLabel: t("workspaces.extract.download"),
+      resetLabel: t("workspaces.extract.extractAnother"),
+      expiredTitle: t("workspaces.extract.expiredTitle"),
+      expiredDescription: t("workspaces.extract.expiredDescription", {
+        hours,
+      }),
+      processHint:
+        splitSelectedCount === 0
+          ? t("workspaces.extract.selectPrompt")
+          : t("workspaces.extract.output", { count: splitSelectedCount }),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveExtractErrorMessage(errorKey, t, hours),
+    };
+  }
+
   if (toolId === "organize-pdf") {
     return {
       processingTitle: t("workspaces.organize.processing"),
@@ -359,6 +382,26 @@ function resolveSplitErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.split.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveExtractErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.extract.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.extract.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.extract.expiredDescription", { hours });
   }
 
   return undefined;

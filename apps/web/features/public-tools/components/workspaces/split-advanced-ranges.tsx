@@ -5,17 +5,20 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { parseSplitRangesInput } from "../../lib/tool-workspace";
 import { pagesToRangeInput, rangesToPages } from "../../pdf-workspace";
+import type { KeepSelectedPagesCopy } from "./keep-selected-pages-workspace";
 
 export function SplitAdvancedRanges({
+  copy = "split",
   selectedPages,
   disabled,
   onSelectedPagesChange,
 }: {
+  copy?: KeepSelectedPagesCopy;
   selectedPages: readonly number[];
   disabled: boolean;
   onSelectedPagesChange: (pages: number[]) => void;
 }) {
-  const t = useTranslations("publicTools.workspaces.split");
+  const t = useTranslations(`publicTools.workspaces.${copy}`);
   const tOptions = useTranslations("publicTools.options");
   const committed = pagesToRangeInput(selectedPages);
   const [draft, setDraft] = useState<string | null>(null);
@@ -57,7 +60,7 @@ export function SplitAdvancedRanges({
           aria-label={t("advancedTitle")}
           aria-invalid={invalid}
           aria-describedby={
-            invalid ? "split-range-error" : "split-range-example"
+            invalid ? `${copy}-range-error` : `${copy}-range-example`
           }
           onChange={(event) => {
             applyDraft(event.target.value);
@@ -66,11 +69,14 @@ export function SplitAdvancedRanges({
             setDraft(null);
           }}
         />
-        <p id="split-range-example" className="text-xs text-muted-foreground">
+        <p
+          id={`${copy}-range-example`}
+          className="text-xs text-muted-foreground"
+        >
           {t("advancedExample")}
         </p>
         {invalid ? (
-          <p id="split-range-error" className="text-xs text-destructive">
+          <p id={`${copy}-range-error`} className="text-xs text-destructive">
             {t("advancedError")}
           </p>
         ) : null}

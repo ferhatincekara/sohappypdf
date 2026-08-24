@@ -1,5 +1,6 @@
 export type DedicatedHowToWorkspace =
   | "split"
+  | "extract"
   | "organize"
   | "merge"
   | "rotate"
@@ -13,6 +14,10 @@ export type DedicatedHowTo = {
 const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   "split-pdf": {
     workspace: "split",
+    steps: ["upload", "select", "download"],
+  },
+  "extract-pages": {
+    workspace: "extract",
     steps: ["upload", "select", "download"],
   },
   "organize-pdf": {

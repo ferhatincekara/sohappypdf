@@ -26,6 +26,7 @@ export const CONVERSION_TYPES = [
   "png-to-pdf",
   "merge-pdf",
   "split-pdf",
+  "extract-pages",
   "compress-pdf",
   "rotate-pdf",
   "organize-pdf",

@@ -30,6 +30,7 @@ import {
 const TYPES = [
   "merge-pdf",
   "split-pdf",
+  "extract-pages",
   "compress-pdf",
   "rotate-pdf",
   "organize-pdf",
@@ -74,7 +75,10 @@ export function createPdfManipulateEngine(
           [input.sourcePath, ...input.additionalSourcePaths],
           outputPath,
         );
-      } else if (input.options.type === "split-pdf") {
+      } else if (
+        input.options.type === "split-pdf" ||
+        input.options.type === "extract-pages"
+      ) {
         await splitPdf(input.sourcePath, input.options.ranges, outputPath);
       } else if (input.options.type === "compress-pdf") {
         await compressPdf({

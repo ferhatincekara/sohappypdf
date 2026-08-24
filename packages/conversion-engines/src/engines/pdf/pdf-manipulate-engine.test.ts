@@ -54,6 +54,29 @@ describe("pdf manipulate engine", () => {
       });
       const splitPdf = await PDFDocument.load(await readFile(split.outputPath));
       expect(splitPdf.getPageCount()).toBe(1);
+
+      const extractSource = workspace.join("extract-source.pdf");
+      const extractDocument = await PDFDocument.create();
+      extractDocument.addPage([200, 200]);
+      extractDocument.addPage([200, 200]);
+      await writeFile(extractSource, await extractDocument.save());
+
+      const extracted = await engine.convert({
+        type: "extract-pages",
+        sourcePath: extractSource,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: {
+          type: "extract-pages",
+          ranges: [{ start: 2, end: 2 }],
+        },
+        additionalSourcePaths: [],
+      });
+      const extractedPdf = await PDFDocument.load(
+        await readFile(extracted.outputPath),
+      );
+      expect(extractedPdf.getPageCount()).toBe(1);
     } finally {
       await workspace.cleanup();
     }

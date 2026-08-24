@@ -33,6 +33,7 @@ describe("engine registry", () => {
     expect(registry.resolve("scan-to-pdf").name).toBe("image-pdf");
     expect(registry.resolve("merge-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("split-pdf").name).toBe("pdf-manipulate");
+    expect(registry.resolve("extract-pages").name).toBe("pdf-manipulate");
     expect(registry.resolve("compress-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("rotate-pdf").name).toBe("pdf-manipulate");
     expect(registry.resolve("organize-pdf").name).toBe("pdf-manipulate");

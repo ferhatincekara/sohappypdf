@@ -489,6 +489,7 @@
         "png-to-pdf": "PNG to PDF",
         "merge-pdf": "Merge PDF",
         "split-pdf": "Split PDF",
+        "extract-pages": "Extract pages",
         "compress-pdf": "Compress PDF",
         "rotate-pdf": "Rotate PDF",
         "protect-pdf": "Protect PDF",
@@ -857,6 +858,48 @@
           }
         }
       },
+      "extract": {
+        "title": "Choose pages to extract",
+        "hint": "Select the pages to keep. They stay in order in one new PDF.",
+        "modeTitle": "What you will get",
+        "modeExtract": "Extract selected pages",
+        "modeExtractHint": "Create one PDF containing only the pages you selected.",
+        "output": "{count, plural, one {# selected page → 1 PDF} other {# selected pages → 1 PDF}}",
+        "allSelectedOutput": "All {count} pages → 1 PDF",
+        "advanced": "Advanced",
+        "advancedTitle": "Enter page ranges",
+        "advancedHint": "Use this if you already know the page numbers. Visual selection stays in sync.",
+        "advancedExample": "Example: 1-3, 5, 8-10",
+        "advancedError": "Check the page numbers. Use commas and dashes, like 1-3, 5.",
+        "selectPrompt": "Select at least one page to extract.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "This PDF couldn't be previewed. You can still enter page numbers in Advanced.",
+        "processing": "Extracting pages...",
+        "processingHint": "Creating a new PDF with the pages you selected.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the new PDF with the pages you selected.",
+        "download": "Download PDF",
+        "extractAnother": "Extract pages from another PDF",
+        "processingFailed": "We couldn't extract those pages. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Extract pages from another PDF to continue.",
+        "faqHow": "Upload a PDF, select the pages to keep, then extract. You'll get one new PDF with those pages. An account is not required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to extract pages from."
+          },
+          "select": {
+            "title": "Select pages",
+            "description": "Tap the pages to keep, or select all."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get one PDF with only those pages."
+          }
+        }
+      },
       "merge": {
         "title": "Arrange the files to merge",
         "hint": "Add at least two PDFs and drag them into the order you want.",
@@ -1199,6 +1242,10 @@
     "split-pdf": {
       "name": "Split PDF",
       "description": "Choose the pages you want and extract them into a new PDF."
+    },
+    "extract-pages": {
+      "name": "Extract pages",
+      "description": "Select pages visually and save them as a new PDF."
     },
     "organize-pdf": {
       "name": "Organize PDF",

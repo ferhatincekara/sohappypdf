@@ -112,6 +112,13 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     targetFormats: ["pdf"],
     implemented: true,
   },
+  "extract-pages": {
+    type: "extract-pages",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+    implemented: true,
+    requiresExplicitType: true,
+  },
   "compress-pdf": {
     type: "compress-pdf",
     sourceFormats: ["pdf"],

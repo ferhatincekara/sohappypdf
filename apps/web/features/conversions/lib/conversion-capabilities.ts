@@ -55,6 +55,11 @@ const CREATABLE_CONVERSIONS: readonly CreatableConversionCapability[] = [
     targetFormats: ["pdf"],
   },
   {
+    type: "extract-pages",
+    sourceFormats: ["pdf"],
+    targetFormats: ["pdf"],
+  },
+  {
     type: "compress-pdf",
     sourceFormats: ["pdf"],
     targetFormats: ["pdf"],

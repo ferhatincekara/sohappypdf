@@ -28,6 +28,7 @@ export type {
   ConversionOptions,
   EditPdfOperation,
   EditPdfOptions,
+  ExtractPagesOptions,
   MergePdfOptions,
   OcrOptions,
   OcrOutputMode,

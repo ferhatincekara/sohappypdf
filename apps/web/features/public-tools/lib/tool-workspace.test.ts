@@ -45,6 +45,13 @@ describe("tool workspace helpers", () => {
     ).toEqual({ degrees: 90, pages: [1, 2] });
 
     expect(
+      buildToolConversionOptions("extract-pages", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        splitRanges: "1-2",
+      }),
+    ).toEqual({ ranges: [{ start: 1, end: 2 }] });
+
+    expect(
       buildToolConversionOptions("split-pdf", {
         ...DEFAULT_TOOL_WORKSPACE_STATE,
         splitRanges: "1-2",

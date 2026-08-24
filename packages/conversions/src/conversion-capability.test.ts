@@ -60,6 +60,7 @@ describe("conversion capabilities", () => {
     expect(isConversionImplemented("pdf-to-jpg")).toBe(true);
     expect(isConversionImplemented("pdf-to-txt")).toBe(true);
     expect(isConversionImplemented("rotate-pdf")).toBe(true);
+    expect(isConversionImplemented("extract-pages")).toBe(true);
     expect(isConversionImplemented("protect-pdf")).toBe(true);
     expect(isConversionImplemented("pdf-to-excel")).toBe(true);
     expect(isConversionImplemented("word-to-pdf")).toBe(true);

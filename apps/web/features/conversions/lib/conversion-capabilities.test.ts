@@ -31,6 +31,7 @@ describe("conversion capabilities", () => {
   test("requires an explicit type for pdf to pdf", () => {
     expect(listCreatableConversionTypes("pdf", "pdf")).toEqual([
       "split-pdf",
+      "extract-pages",
       "compress-pdf",
     ]);
     expect(isCreatableConversion("pdf", "pdf")).toBe(false);

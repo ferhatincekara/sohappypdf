@@ -87,6 +87,7 @@ export type ToolDefinition = {
 export const TOOL_CREDIT_PRICING = {
   "merge-pdf": { webCreditCost: 1, apiCreditCost: 1 },
   "split-pdf": { webCreditCost: 1, apiCreditCost: 1 },
+  "extract-pages": { webCreditCost: 1, apiCreditCost: 1 },
   "organize-pdf": { webCreditCost: 1, apiCreditCost: 1 },
   "remove-pages": { webCreditCost: 1, apiCreditCost: 1 },
   "reorder-pages": { webCreditCost: 1, apiCreditCost: 1 },
@@ -216,6 +217,19 @@ export const TOOL_CATALOG = [
   defineTool("split-pdf", {
     category: "organize",
     icon: "split",
+    inputKind: "pdf",
+    outputKind: "pdf",
+    inputFormats: ["pdf"],
+    outputFormats: ["pdf"],
+    allowsAnonymous: true,
+    requiresAuthentication: false,
+    maxInputCount: 1,
+    availability: "available",
+    processorId: "pdf-manipulate",
+  }),
+  defineTool("extract-pages", {
+    category: "organize",
+    icon: "copy",
     inputKind: "pdf",
     outputKind: "pdf",
     inputFormats: ["pdf"],

@@ -11,6 +11,7 @@ import {
 
 const TOOLS_REQUIRING_OPTIONS = new Set([
   "split-pdf",
+  "extract-pages",
   "organize-pdf",
   "reorder-pages",
   "remove-pages",

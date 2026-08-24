@@ -31,6 +31,7 @@ describe("tool catalog", () => {
     expect(TOOL_CATALOG.map((tool) => tool.id)).toEqual([
       "merge-pdf",
       "split-pdf",
+      "extract-pages",
       "organize-pdf",
       "remove-pages",
       "reorder-pages",
@@ -82,6 +83,7 @@ describe("tool catalog", () => {
         "crop-pdf",
         "edit-pdf",
         "excel-to-pdf",
+        "extract-pages",
         "jpg-to-pdf",
         "merge-pdf",
         "ocr-pdf",

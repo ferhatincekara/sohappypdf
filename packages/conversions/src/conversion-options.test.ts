@@ -16,9 +16,13 @@ function expectInvalidOptions(run: () => unknown): void {
 
 describe("conversion options", () => {
   test("accepts typed options for core pdf tools", () => {
-    expect(parseConversionOptions("rotate-pdf", { degrees: 90 })).toEqual({
-      type: "rotate-pdf",
-      degrees: 90,
+    expect(
+      parseConversionOptions("extract-pages", {
+        ranges: [{ start: 2, end: 3 }],
+      }),
+    ).toEqual({
+      type: "extract-pages",
+      ranges: [{ start: 2, end: 3 }],
     });
 
     expect(
