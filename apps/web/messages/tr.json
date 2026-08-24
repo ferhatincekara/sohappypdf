@@ -1413,6 +1413,38 @@
       "edit": {
         "title": "PDF düzenle"
       },
+      "editor": {
+        "toolbar": "Belge araçları",
+        "tools": {
+          "select": "Seç",
+          "text": "Metin ekle",
+          "image": "Görsel ekle",
+          "shape": "Vurgu ekle",
+          "signature": "İmza ekle"
+        },
+        "undo": "Geri al",
+        "redo": "Yinele",
+        "delete": "Seçileni sil",
+        "zoomIn": "Yakınlaştır",
+        "zoomOut": "Uzaklaştır",
+        "previousPage": "Önceki sayfa",
+        "nextPage": "Sonraki sayfa",
+        "pageOf": "Sayfa {current} / {total}",
+        "properties": "Özellikler",
+        "propertiesEmpty": "Konum, boyut ve döndürmeyi düzenlemek için bir nesne seçin.",
+        "text": "Metin",
+        "x": "X",
+        "y": "Y",
+        "width": "Genişlik",
+        "height": "Yükseklik",
+        "rotation": "Döndürme",
+        "objects": {
+          "text": "Metin",
+          "image": "Görsel",
+          "rectangle": "Vurgu",
+          "signature": "İmza"
+        }
+      },
       "generic": {
         "title": "Bu dosyayı işle"
       }

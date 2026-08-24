@@ -1413,6 +1413,38 @@
       "edit": {
         "title": "Edit PDF"
       },
+      "editor": {
+        "toolbar": "Document tools",
+        "tools": {
+          "select": "Select",
+          "text": "Add text",
+          "image": "Add image",
+          "shape": "Add highlight",
+          "signature": "Add signature"
+        },
+        "undo": "Undo",
+        "redo": "Redo",
+        "delete": "Delete selected",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "previousPage": "Previous page",
+        "nextPage": "Next page",
+        "pageOf": "Page {current} of {total}",
+        "properties": "Properties",
+        "propertiesEmpty": "Select an object to edit its position, size, and rotation.",
+        "text": "Text",
+        "x": "X",
+        "y": "Y",
+        "width": "Width",
+        "height": "Height",
+        "rotation": "Rotation",
+        "objects": {
+          "text": "Text",
+          "image": "Image",
+          "rectangle": "Highlight",
+          "signature": "Signature"
+        }
+      },
       "generic": {
         "title": "Process this file"
       }
