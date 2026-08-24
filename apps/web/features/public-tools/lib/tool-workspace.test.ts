@@ -182,6 +182,23 @@ describe("tool workspace helpers", () => {
     ).toBeUndefined();
 
     expect(
+      buildToolConversionOptions("edit-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        editOperations: [
+          { kind: "text", page: 1, x: 10, y: 20, text: "Hello", size: 14 },
+        ],
+      }),
+    ).toEqual({
+      operations: [
+        { kind: "text", page: 1, x: 10, y: 20, text: "Hello", size: 14 },
+      ],
+    });
+
+    expect(
+      buildToolConversionOptions("edit-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
+    ).toBeUndefined();
+
+    expect(
       buildToolConversionOptions("translate-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
     ).toEqual({ targetLanguage: "eng" });
   });

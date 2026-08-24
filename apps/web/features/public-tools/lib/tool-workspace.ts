@@ -1,4 +1,5 @@
 import { editorRectToPdf } from "@/features/pdf-document-editor";
+import type { ToolEditOperation } from "./edit-pdf-operations";
 
 export const COMPRESSION_LEVELS = ["low", "medium", "high"] as const;
 export type CompressionLevel = (typeof COMPRESSION_LEVELS)[number];
@@ -37,6 +38,8 @@ export type ToolWorkspaceState = {
   signFileId: string;
   formFields: Record<string, string>;
   flattenForm: boolean;
+  editOperations: ToolEditOperation[];
+  editImageFileId: string;
 };
 
 export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
@@ -70,6 +73,8 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   signFileId: "",
   formFields: {},
   flattenForm: false,
+  editOperations: [],
+  editImageFileId: "",
 };
 
 export function additionalFileIdsFromOptions(
@@ -385,6 +390,24 @@ export function buildToolConversionOptions(
       return {
         fields,
         ...(state.flattenForm ? { flatten: true } : {}),
+      };
+    }
+    case "edit-pdf": {
+      if (state.editOperations.length === 0) {
+        return undefined;
+      }
+
+      const needsImage = state.editOperations.some(
+        (operation) => operation.kind === "image",
+      );
+
+      if (needsImage && state.editImageFileId.length === 0) {
+        return undefined;
+      }
+
+      return {
+        operations: state.editOperations,
+        ...(needsImage ? { additionalFileIds: [state.editImageFileId] } : {}),
       };
     }
     case "ai-summarizer":

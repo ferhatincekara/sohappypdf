@@ -31,10 +31,7 @@ export function EditorPropertiesPanel({
 
   const selected = object;
 
-  function setNumber(
-    key: "x" | "y" | "width" | "height" | "rotation",
-    value: string,
-  ): void {
+  function setNumber(key: "x" | "y" | "width" | "height", value: string): void {
     const parsed = Number(value);
 
     if (!Number.isFinite(parsed)) {
@@ -63,11 +60,52 @@ export function EditorPropertiesPanel({
           />
         </div>
       ) : null}
+      {object.kind === "text" ? (
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="editor-object-font-size">{t("fontSize")}</Label>
+          <Input
+            id="editor-object-font-size"
+            type="number"
+            min={8}
+            max={96}
+            value={object.fontSize}
+            disabled={disabled}
+            onChange={(event) => {
+              const parsed = Number(event.target.value);
+              if (!Number.isFinite(parsed)) {
+                return;
+              }
+              onChange({
+                ...object,
+                fontSize: Math.min(96, Math.max(8, parsed)),
+              });
+            }}
+          />
+        </div>
+      ) : null}
+      {object.kind === "rectangle" ? (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium text-foreground">{t("style")}</p>
+          <div className="flex gap-2">
+            {(["highlight", "fill"] as const).map((style) => (
+              <button
+                key={style}
+                type="button"
+                disabled={disabled}
+                aria-pressed={object.style === style}
+                className="h-9 rounded-md border border-border px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:border-foreground aria-pressed:bg-muted"
+                onClick={() => {
+                  onChange({ ...object, style });
+                }}
+              >
+                {t(`styles.${style}`)}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <div className="grid grid-cols-2 gap-3">
-        {(object.kind === "signature"
-          ? (["x", "y", "width", "height"] as const)
-          : (["x", "y", "width", "height", "rotation"] as const)
-        ).map((key) => (
+        {(["x", "y", "width", "height"] as const).map((key) => (
           <div key={key} className="flex flex-col gap-2">
             <Label htmlFor={`editor-object-${key}`}>{t(key)}</Label>
             <Input

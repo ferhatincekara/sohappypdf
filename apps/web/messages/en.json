@@ -1495,7 +1495,41 @@
         }
       },
       "edit": {
-        "title": "Edit PDF"
+        "title": "Add marks to this PDF",
+        "hint": "Add text, highlights, shapes, or an image on top of the PDF. Existing PDF text cannot be edited.",
+        "addImage": "Add an image",
+        "uploadingImage": "Saving your image…",
+        "imageFailed": "We couldn't save the image. Please try again.",
+        "selectPrompt": "Add text, a highlight, or an image before continuing.",
+        "output": "{count, plural, one {# mark will be added to the PDF.} other {# marks will be added to the PDF.}}",
+        "limitation": "This adds new marks on top of the pages. It does not change the original text in the PDF.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to edit.",
+        "processing": "Adding your marks...",
+        "processingHint": "Writing text, shapes, and images into the PDF.",
+        "successTitle": "Your edited PDF is ready",
+        "successDescription": "Download the PDF with your marks applied.",
+        "download": "Download PDF",
+        "editAnother": "Edit another PDF",
+        "processingFailed": "We couldn't edit this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Edit another PDF to continue.",
+        "faqHow": "Upload a PDF, add text, highlights, or an image on the page, then save. Existing PDF text cannot be changed. Sign in is required for this tool.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to mark."
+          },
+          "edit": {
+            "title": "Add marks",
+            "description": "Place text, highlights, shapes, or one image on the pages."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF with those marks written into the file."
+          }
+        }
       },
       "editor": {
         "toolbar": "Document tools",
@@ -1515,8 +1549,14 @@
         "nextPage": "Next page",
         "pageOf": "Page {current} of {total}",
         "properties": "Properties",
-        "propertiesEmpty": "Select an object to edit its position, size, and rotation.",
+        "propertiesEmpty": "Select an object to edit its position and size.",
         "text": "Text",
+        "fontSize": "Text size",
+        "style": "Style",
+        "styles": {
+          "highlight": "Highlight",
+          "fill": "Solid"
+        },
         "x": "X",
         "y": "Y",
         "width": "Width",
@@ -1768,7 +1808,7 @@
     },
     "edit-pdf": {
       "name": "Edit PDF",
-      "description": "Add text, image stamps, rectangles, and highlights as overlays. Does not rewrite existing PDF content streams."
+      "description": "Add text, highlights, shapes, and images on top of a PDF. Existing text stays as it is."
     },
     "watermark-pdf": {
       "name": "Watermark PDF",

@@ -1,4 +1,5 @@
 import type {
+  EditorImageObject,
   EditorRectangleObject,
   EditorSignatureObject,
   EditorTextObject,
@@ -23,7 +24,7 @@ export function createTextObject(input: {
     width: 180,
     height: 32,
     rotation: 0,
-    text: input.text ?? "",
+    text: input.text ?? "Text",
     fontSize: 16,
   };
 }
@@ -65,5 +66,24 @@ export function createSignatureObject(input: {
     rotation: 0,
     src: input.src,
     text: input.text,
+  };
+}
+
+export function createImageObject(input: {
+  page: number;
+  x: number;
+  y: number;
+  src: string;
+}): EditorImageObject {
+  return {
+    id: createEditorId(),
+    kind: "image",
+    page: input.page,
+    x: input.x,
+    y: input.y,
+    width: 160,
+    height: 120,
+    rotation: 0,
+    src: input.src,
   };
 }

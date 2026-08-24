@@ -4,6 +4,7 @@ export {
 } from "./components/document-editor";
 export { useDocumentEditor } from "./hooks/use-document-editor";
 export {
+  createImageObject,
   createRectangleObject,
   createSignatureObject,
   createTextObject,

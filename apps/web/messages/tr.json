@@ -1495,7 +1495,41 @@
         }
       },
       "edit": {
-        "title": "PDF düzenle"
+        "title": "Bu PDF’ye işaret ekle",
+        "hint": "PDF’in üzerine metin, vurgu, şekil veya bir görsel ekleyin. Mevcut PDF metni düzenlenemez.",
+        "addImage": "Görsel ekle",
+        "uploadingImage": "Görseliniz kaydediliyor…",
+        "imageFailed": "Görsel kaydedilemedi. Lütfen tekrar deneyin.",
+        "selectPrompt": "Devam etmeden önce metin, vurgu veya bir görsel ekleyin.",
+        "output": "{count, plural, one {PDF’e # işaret eklenecek.} other {PDF’e # işaret eklenecek.}}",
+        "limitation": "Bu, sayfaların üzerine yeni işaretler ekler. PDF’deki orijinal metni değiştirmez.",
+        "previewFailed": "Bu PDF önizlenemedi.",
+        "passwordProtected": "Bu PDF parola korumalı. Düzenlemek için önce kilidini açın.",
+        "processing": "İşaretleriniz ekleniyor...",
+        "processingHint": "Metin, şekil ve görseller PDF’e yazılıyor.",
+        "successTitle": "Düzenlenmiş PDF’niz hazır",
+        "successDescription": "İşaretlerinizin uygulandığı PDF’i indirin.",
+        "download": "PDF’i indir",
+        "editAnother": "Başka bir PDF düzenle",
+        "processingFailed": "Bu PDF düzenlenemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF düzenleyin.",
+        "faqHow": "Bir PDF yükleyin, sayfaya metin, vurgu veya bir görsel ekleyin, ardından kaydedin. Mevcut PDF metni değiştirilemez. Bu araç için giriş gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "İşaretlemek istediğiniz PDF’i bırakın."
+          },
+          "edit": {
+            "title": "İşaret ekle",
+            "description": "Sayfalara metin, vurgu, şekil veya bir görsel yerleştirin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Bu işaretlerin dosyaya yazıldığı bir PDF alın."
+          }
+        }
       },
       "editor": {
         "toolbar": "Belge araçları",
@@ -1515,8 +1549,14 @@
         "nextPage": "Sonraki sayfa",
         "pageOf": "Sayfa {current} / {total}",
         "properties": "Özellikler",
-        "propertiesEmpty": "Konum, boyut ve döndürmeyi düzenlemek için bir nesne seçin.",
+        "propertiesEmpty": "Konum ve boyutu düzenlemek için bir nesne seçin.",
         "text": "Metin",
+        "fontSize": "Metin boyutu",
+        "style": "Stil",
+        "styles": {
+          "highlight": "Vurgu",
+          "fill": "Dolu"
+        },
         "x": "X",
         "y": "Y",
         "width": "Genişlik",
@@ -1768,7 +1808,7 @@
     },
     "edit-pdf": {
       "name": "PDF düzenle",
-      "description": "Metin, görsel damgası, dikdörtgen ve vurgu ekleyin. Mevcut PDF içerik akışını yeniden yazmaz."
+      "description": "Bir PDF’in üzerine metin, vurgu, şekil ve görsel ekleyin. Mevcut metin olduğu gibi kalır."
     },
     "watermark-pdf": {
       "name": "PDF filigran",

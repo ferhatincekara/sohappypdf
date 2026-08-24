@@ -35,6 +35,7 @@ export const TOOL_WORKSPACE_KINDS = [
   "crop",
   "sign",
   "fill",
+  "edit",
   "repair",
   "ocr",
   "default",
@@ -103,6 +104,10 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
 
   if (toolId === "pdf-forms") {
     return "fill";
+  }
+
+  if (toolId === "edit-pdf") {
+    return "edit";
   }
 
   if (toolId === "repair-pdf") {

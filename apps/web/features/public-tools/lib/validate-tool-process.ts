@@ -21,6 +21,7 @@ const TOOLS_REQUIRING_OPTIONS = new Set([
   "unlock-pdf",
   "sign-pdf",
   "pdf-forms",
+  "edit-pdf",
   "translate-pdf",
 ]);
 

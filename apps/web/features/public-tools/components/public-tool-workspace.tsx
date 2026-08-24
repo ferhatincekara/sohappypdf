@@ -561,6 +561,24 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "edit-pdf") {
+    return {
+      processingTitle: t("workspaces.edit.processing"),
+      processingHint: t("workspaces.edit.processingHint"),
+      successTitle: t("workspaces.edit.successTitle"),
+      successDescription: t("workspaces.edit.successDescription"),
+      downloadLabel: t("workspaces.edit.download"),
+      resetLabel: t("workspaces.edit.editAnother"),
+      expiredTitle: t("workspaces.edit.expiredTitle"),
+      expiredDescription: t("workspaces.edit.expiredDescription", { hours }),
+      processHint: t("workspaces.edit.limitation"),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveEditErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -883,6 +901,26 @@ function resolveFillErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.fill.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveEditErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.edit.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.edit.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.edit.expiredDescription", { hours });
   }
 
   return undefined;
