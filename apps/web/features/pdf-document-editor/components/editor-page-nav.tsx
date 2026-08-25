@@ -21,7 +21,8 @@ export function EditorPageNav({
     <div className="flex items-center justify-center gap-2">
       <Button
         type="button"
-        size="icon-sm"
+        size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || currentPage <= 1}
         aria-label={t("previousPage")}
@@ -36,7 +37,8 @@ export function EditorPageNav({
       </p>
       <Button
         type="button"
-        size="icon-sm"
+        size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || currentPage >= pageCount}
         aria-label={t("nextPage")}

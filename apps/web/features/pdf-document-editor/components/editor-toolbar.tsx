@@ -52,7 +52,7 @@ export function EditorToolbar({
 
   return (
     <div
-      className="flex flex-wrap items-center gap-1 overflow-x-auto rounded-lg border border-border bg-card p-2"
+      className="flex flex-nowrap items-center gap-1 overflow-x-auto rounded-lg border border-border bg-card p-2 md:flex-wrap"
       role="toolbar"
       aria-label={t("toolbar")}
     >
@@ -61,6 +61,7 @@ export function EditorToolbar({
           key={tool}
           type="button"
           size="icon"
+          className="min-h-11 min-w-11"
           variant={state.tool === tool ? "secondary" : "ghost"}
           disabled={disabled}
           aria-pressed={state.tool === tool}
@@ -79,9 +80,11 @@ export function EditorToolbar({
       <Button
         type="button"
         size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || !canUndo}
         aria-label={t("undo")}
+        aria-keyshortcuts="Control+z Meta+z"
         onClick={onUndo}
       >
         <UndoIcon />
@@ -89,9 +92,11 @@ export function EditorToolbar({
       <Button
         type="button"
         size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || !canRedo}
         aria-label={t("redo")}
+        aria-keyshortcuts="Control+Shift+z Meta+Shift+z"
         onClick={onRedo}
       >
         <RedoIcon />
@@ -99,9 +104,11 @@ export function EditorToolbar({
       <Button
         type="button"
         size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || state.selectedId === null}
         aria-label={t("delete")}
+        aria-keyshortcuts="Delete Backspace"
         onClick={onDelete}
       >
         <Trash2Icon />
@@ -110,6 +117,7 @@ export function EditorToolbar({
       <Button
         type="button"
         size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || state.zoom <= MIN_EDITOR_ZOOM}
         aria-label={t("zoomOut")}
@@ -120,6 +128,7 @@ export function EditorToolbar({
       <Button
         type="button"
         size="icon"
+        className="min-h-11 min-w-11"
         variant="ghost"
         disabled={disabled || state.zoom >= MAX_EDITOR_ZOOM}
         aria-label={t("zoomIn")}

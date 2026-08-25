@@ -31,7 +31,11 @@ export function ToolErrorState({
   }, []);
 
   return (
-    <div className="rounded-lg border border-border bg-card p-5" role="alert">
+    <div
+      className="rounded-lg border border-border bg-card p-5"
+      role="alert"
+      aria-live="assertive"
+    >
       <div className="flex items-start gap-3">
         <AlertCircleIcon
           className="mt-0.5 size-5 text-destructive"

@@ -116,7 +116,7 @@ export function ToolDropzone({
       >
         {t("hint", { formats: formatsLabel, size: maxSizeLabel })}
       </span>
-      <span className="text-sm font-medium text-foreground underline-offset-4 hover:underline">
+      <span className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-4 text-sm font-medium text-foreground underline-offset-4 hover:underline">
         {browse}
       </span>
     </label>

@@ -1,7 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { type KeyboardEvent, type ReactNode, useRef, useState } from "react";
+import {
+  type KeyboardEvent,
+  type ReactNode,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "@/lib/utils";
 import type { PdfjsDocument } from "../../lib/pdfjs-client";
 import {
@@ -33,6 +39,7 @@ export function PdfPageGrid({
 }) {
   const t = useTranslations("publicTools.pages");
   const listRef = useRef<HTMLUListElement>(null);
+  const keyboardHelpId = useId();
   const dragIndex = useRef<number | null>(null);
   const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
   const [dropIndex, setDropIndex] = useState<number | null>(null);
@@ -117,76 +124,84 @@ export function PdfPageGrid({
   }
 
   return (
-    <ul
-      ref={listRef}
-      className={PDF_PAGE_GRID_CLASS_NAME}
-      aria-label={t("gridLabel")}
-    >
-      {pages.map((page, index) => (
-        <li
-          key={page.id}
-          onDragOver={(event) => {
-            if (!reorderable || disabled || dragIndex.current === null) {
-              return;
-            }
+    <div>
+      {reorderable ? (
+        <p id={keyboardHelpId} className="sr-only">
+          {t("keyboardHelp")}
+        </p>
+      ) : null}
+      <ul
+        ref={listRef}
+        className={PDF_PAGE_GRID_CLASS_NAME}
+        aria-label={t("gridLabel")}
+        aria-describedby={reorderable ? keyboardHelpId : undefined}
+      >
+        {pages.map((page, index) => (
+          <li
+            key={page.id}
+            onDragOver={(event) => {
+              if (!reorderable || disabled || dragIndex.current === null) {
+                return;
+              }
 
-            event.preventDefault();
-            event.dataTransfer.dropEffect = "move";
+              event.preventDefault();
+              event.dataTransfer.dropEffect = "move";
 
-            if (dropIndex !== index) {
-              setDropIndex(index);
-            }
-          }}
-          onDrop={(event) => {
-            event.preventDefault();
-
-            if (
-              !reorderable ||
-              disabled ||
-              onReorder === undefined ||
-              dragIndex.current === null ||
-              dragIndex.current === index
-            ) {
-              clearDragState();
-              return;
-            }
-
-            onReorder(dragIndex.current, index);
-            clearDragState();
-          }}
-          className={cn(
-            dropIndex === index &&
-              draggingIndex !== index &&
-              "rounded-xl ring-2 ring-foreground",
-            draggingIndex === index && "opacity-50",
-          )}
-        >
-          <PdfPageThumbnail
-            document={document}
-            pageId={page.id}
-            pageNumber={page.pageNumber}
-            selected={page.selected}
-            disabled={disabled}
-            rotation={page.rotation}
-            reorderable={reorderable}
-            overlay={renderPageOverlay?.(page)}
-            onActivate={(event) => {
-              onActivate(page, pageActivationFromPointerEvent(event));
+              if (dropIndex !== index) {
+                setDropIndex(index);
+              }
             }}
-            onKeyDown={(event) => {
-              handleKeyDown(event, page);
-            }}
-            onReorderDragStart={() => {
-              dragIndex.current = index;
-              setDraggingIndex(index);
-            }}
-            onReorderDragEnd={() => {
+            onDrop={(event) => {
+              event.preventDefault();
+
+              if (
+                !reorderable ||
+                disabled ||
+                onReorder === undefined ||
+                dragIndex.current === null ||
+                dragIndex.current === index
+              ) {
+                clearDragState();
+                return;
+              }
+
+              onReorder(dragIndex.current, index);
               clearDragState();
             }}
-          />
-        </li>
-      ))}
-    </ul>
+            className={cn(
+              dropIndex === index &&
+                draggingIndex !== index &&
+                "rounded-xl ring-2 ring-foreground",
+              draggingIndex === index && "opacity-50",
+            )}
+          >
+            <PdfPageThumbnail
+              document={document}
+              pageId={page.id}
+              pageNumber={page.pageNumber}
+              selected={page.selected}
+              disabled={disabled}
+              rotation={page.rotation}
+              reorderable={reorderable}
+              overlay={renderPageOverlay?.(page)}
+              onActivate={(event) => {
+                onActivate(page, pageActivationFromPointerEvent(event));
+              }}
+              onKeyDown={(event) => {
+                handleKeyDown(event, page);
+              }}
+              onReorderDragStart={() => {
+                dragIndex.current = index;
+                setDraggingIndex(index);
+              }}
+              onReorderDragEnd={() => {
+                clearDragState();
+              }}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

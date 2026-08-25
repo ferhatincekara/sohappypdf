@@ -33,6 +33,7 @@ export function PdfPageSelectionToolbar({
         type="button"
         size="sm"
         variant="outline"
+        className="min-h-11 min-w-11"
         disabled={disabled || pageCount < 1}
         onClick={onSelectAll}
       >
@@ -42,6 +43,7 @@ export function PdfPageSelectionToolbar({
         type="button"
         size="sm"
         variant="ghost"
+        className="min-h-11 min-w-11"
         disabled={disabled || selectedCount === 0}
         onClick={onClear}
       >
