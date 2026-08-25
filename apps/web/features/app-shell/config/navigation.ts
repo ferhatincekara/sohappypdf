@@ -1,5 +1,6 @@
 import {
   ActivityIcon,
+  BadgeCheckIcon,
   CreditCardIcon,
   GaugeIcon,
   KeyRoundIcon,
@@ -12,6 +13,7 @@ import { APP_PATHS, type AppPath } from "./app-paths";
 export const APP_NAV_IDS = [
   "overview",
   "usage",
+  "plan",
   "activity",
   "billing",
   "apiKeys",
@@ -36,6 +38,11 @@ export const APP_NAVIGATION: readonly AppNavItem[] = [
     id: "usage",
     href: APP_PATHS.usage,
     icon: GaugeIcon,
+  },
+  {
+    id: "plan",
+    href: APP_PATHS.plan,
+    icon: BadgeCheckIcon,
   },
   {
     id: "activity",

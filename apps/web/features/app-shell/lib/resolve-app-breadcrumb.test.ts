@@ -5,6 +5,7 @@ import { resolveAppBreadcrumb } from "./resolve-app-breadcrumb";
 describe("resolveAppBreadcrumb", () => {
   test("maps known account routes to their navigation item", () => {
     expect(resolveAppBreadcrumb("/account").id).toBe("overview");
+    expect(resolveAppBreadcrumb("/account/plan").id).toBe("plan");
     expect(resolveAppBreadcrumb("/account/activity").href).toBe(
       APP_PATHS.activity,
     );

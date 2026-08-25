@@ -4,6 +4,7 @@ import { APP_PATHS } from "@/features/app-shell";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { AccountOverviewRecent } from "./account-overview-recent";
 import { AccountOverviewUsage } from "./account-overview-usage";
 
 export async function AccountOverviewPage() {
@@ -16,9 +17,7 @@ export async function AccountOverviewPage() {
         <p className="text-sm text-muted-foreground">{t("description")}</p>
       </div>
 
-      <AccountOverviewUsage />
-
-      <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
+      <section className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4">
         <h2 className="text-sm font-medium text-foreground">
           {t("toolsTitle")}
         </h2>
@@ -28,13 +27,7 @@ export async function AccountOverviewPage() {
             href={MARKETING_PATHS.tools}
             className={cn(buttonVariants({ variant: "default" }))}
           >
-            {t("browseTools")}
-          </Link>
-          <Link
-            href={APP_PATHS.activity}
-            className={cn(buttonVariants({ variant: "outline" }))}
-          >
-            {t("viewActivity")}
+            {t("chooseTool")}
           </Link>
           <Link
             href={APP_PATHS.usage}
@@ -44,6 +37,9 @@ export async function AccountOverviewPage() {
           </Link>
         </div>
       </section>
+
+      <AccountOverviewUsage />
+      <AccountOverviewRecent />
     </div>
   );
 }

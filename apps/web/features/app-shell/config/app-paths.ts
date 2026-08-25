@@ -1,7 +1,9 @@
 export const APP_PATHS = {
   overview: "/account",
   usage: "/account/usage",
+  plan: "/account/plan",
   activity: "/account/activity",
+  history: "/account/history",
   billing: "/account/billing",
   apiKeys: "/account/api",
   settings: "/account/settings",

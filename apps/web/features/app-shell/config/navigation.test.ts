@@ -11,6 +11,7 @@ describe("app navigation", () => {
     expect(APP_NAVIGATION.map((item) => item.href)).toEqual([
       APP_PATHS.overview,
       APP_PATHS.usage,
+      APP_PATHS.plan,
       APP_PATHS.activity,
       APP_PATHS.billing,
       APP_PATHS.apiKeys,
@@ -22,6 +23,7 @@ describe("app navigation", () => {
     expect(PRIMARY_APP_NAVIGATION.map((item) => item.id)).toEqual([
       "overview",
       "usage",
+      "plan",
       "activity",
       "billing",
       "apiKeys",
@@ -36,5 +38,6 @@ describe("app navigation", () => {
     expect(APP_NAVIGATION.map((item) => item.href).join(" ")).not.toContain(
       "/files",
     );
+    expect(APP_PATHS.history).toBe("/account/history");
   });
 });

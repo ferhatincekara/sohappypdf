@@ -43,6 +43,11 @@ const nextConfig: NextConfig = {
         destination: "/account/billing",
         permanent: true,
       },
+      {
+        source: "/account/history",
+        destination: "/account/activity",
+        permanent: true,
+      },
     ];
   },
 };

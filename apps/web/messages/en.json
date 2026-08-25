@@ -261,7 +261,8 @@
     "nav": {
       "overview": "Overview",
       "usage": "Usage",
-      "activity": "Recent Activity",
+      "plan": "Plan",
+      "activity": "History",
       "billing": "Billing",
       "apiKeys": "API",
       "settings": "Settings"
@@ -273,11 +274,28 @@
         "planTitle": "Your plan",
         "creditsSummary": "{used} of {limit} web credits used ({remaining} remaining).",
         "manageBilling": "Manage billing",
+        "upgrade": "Upgrade",
         "toolsTitle": "PDF tools",
         "toolsDescription": "Process files directly on each tool page. Temporary results expire after about two hours.",
-        "browseTools": "Browse tools",
-        "viewActivity": "Recent activity",
-        "viewUsage": "View usage"
+        "chooseTool": "Choose a tool",
+        "viewActivity": "View history",
+        "viewUsage": "View usage",
+        "recentTitle": "Recent activity",
+        "operations": "Monthly processing",
+        "fileSize": "Max file size",
+        "apiStatus": "API credits",
+        "apiCreditsSummary": "{remaining} of {limit} remaining"
+      },
+      "plan": {
+        "title": "Plan",
+        "description": "Your web plan sets credits, file size, and monthly processing. Billing is handled separately.",
+        "current": "Current plan",
+        "noSubscription": "No paid web subscription",
+        "upgrade": "Upgrade to Pro",
+        "manageBilling": "Manage billing",
+        "fileSize": "Up to {size} per file",
+        "operations": "{used} of {limit} operations this month",
+        "billingHint": "Payment methods and invoices are in Billing."
       },
       "usage": {
         "title": "Usage",
@@ -287,7 +305,7 @@
         "openBilling": "Open billing"
       },
       "activity": {
-        "title": "Recent Activity",
+        "title": "History",
         "description": "Execution history for your account. Temporary files expire after about two hours and cannot be downloaded after they expire."
       },
       "billing": {

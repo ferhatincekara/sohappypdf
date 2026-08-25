@@ -261,7 +261,8 @@
     "nav": {
       "overview": "Genel bakış",
       "usage": "Kullanım",
-      "activity": "Son etkinlik",
+      "plan": "Plan",
+      "activity": "Geçmiş",
       "billing": "Faturalama",
       "apiKeys": "API",
       "settings": "Ayarlar"
@@ -273,11 +274,28 @@
         "planTitle": "Planınız",
         "creditsSummary": "{limit} web kredisinden {used} kullanıldı ({remaining} kaldı).",
         "manageBilling": "Faturalamayı yönet",
+        "upgrade": "Yükselt",
         "toolsTitle": "PDF araçları",
         "toolsDescription": "Dosyaları doğrudan araç sayfalarında işleyin. Geçici sonuçlar yaklaşık iki saat sonra sona erer.",
-        "browseTools": "Araçlara göz at",
-        "viewActivity": "Son etkinlik",
-        "viewUsage": "Kullanımı gör"
+        "chooseTool": "Bir araç seçin",
+        "viewActivity": "Geçmişi gör",
+        "viewUsage": "Kullanımı gör",
+        "recentTitle": "Son etkinlik",
+        "operations": "Aylık işlem",
+        "fileSize": "En büyük dosya",
+        "apiStatus": "API kredileri",
+        "apiCreditsSummary": "{limit} krediden {remaining} kaldı"
+      },
+      "plan": {
+        "title": "Plan",
+        "description": "Web planınız kredileri, dosya boyutunu ve aylık işlem hakkını belirler. Faturalama ayrı yönetilir.",
+        "current": "Mevcut plan",
+        "noSubscription": "Ücretli web aboneliği yok",
+        "upgrade": "Pro’ya yükselt",
+        "manageBilling": "Faturalamayı yönet",
+        "fileSize": "Dosya başına en fazla {size}",
+        "operations": "Bu ay {limit} işlemden {used} kullanıldı",
+        "billingHint": "Ödeme yöntemleri ve faturalar Faturalama sayfasındadır."
       },
       "usage": {
         "title": "Kullanım",
@@ -287,7 +305,7 @@
         "openBilling": "Faturalamayı aç"
       },
       "activity": {
-        "title": "Son etkinlik",
+        "title": "Geçmiş",
         "description": "Hesabınızdaki işlem geçmişi. Geçici dosyalar yaklaşık iki saat sonra sona erer ve süresi dolunca indirilemez."
       },
       "billing": {
