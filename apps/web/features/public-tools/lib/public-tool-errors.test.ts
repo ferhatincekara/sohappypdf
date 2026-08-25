@@ -64,6 +64,21 @@ describe("tool user errors", () => {
     expect(mapPublicToolError(error)).toBe("filesExpired");
     expect(isRetryableToolError("filesExpired")).toBe(false);
   });
+
+  test("maps empty-file, unauthorized, and duplicate processing without internals", () => {
+    expect(
+      mapPublicToolError(
+        new FileApiRequestError(createAxiosError(403, "FORBIDDEN")),
+      ),
+    ).toBe("unauthorized");
+    expect(
+      mapPublicToolError(
+        new ConversionApiRequestError(createAxiosError(409, "CONFLICT")),
+      ),
+    ).toBe("duplicateExecution");
+    expect(isRetryableToolError("uploadInterrupted")).toBe(true);
+    expect(isRetryableToolError("unauthorized")).toBe(false);
+  });
 });
 
 describe("validate tool process", () => {

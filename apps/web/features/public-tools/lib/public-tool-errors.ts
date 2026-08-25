@@ -17,15 +17,21 @@ export const PUBLIC_TOOL_ERROR_KEYS = [
   "tooFewFiles",
   "tooManyFiles",
   "tooLarge",
+  "emptyFile",
   "unsupported",
+  "invalidPdf",
+  "corruptedFile",
   "invalidOptions",
   "rateLimited",
   "networkFailure",
+  "uploadInterrupted",
   "creditsExhausted",
   "limitReached",
   "signInRequired",
+  "unauthorized",
   "passwordProtected",
   "processingFailed",
+  "duplicateExecution",
   "filesExpired",
   "unexpected",
 ] as const;
@@ -40,6 +46,7 @@ export type ToolUserError = {
 const RETRYABLE_TOOL_ERROR_KEYS: ReadonlySet<PublicToolErrorKey> = new Set([
   "rateLimited",
   "networkFailure",
+  "uploadInterrupted",
   "processingFailed",
   "unexpected",
 ]);
@@ -101,8 +108,10 @@ function mapUploadErrorKey(errorKey: string): PublicToolErrorKey | undefined {
   switch (errorKey) {
     case FILE_ERROR_KEYS.fileTooLarge:
       return "tooLarge";
-    case FILE_ERROR_KEYS.unsupportedType:
     case FILE_ERROR_KEYS.emptyFile:
+      return "emptyFile";
+    case FILE_ERROR_KEYS.unsupportedType:
+    case FILE_ERROR_KEYS.invalidFilename:
       return "unsupported";
     case FILE_ERROR_KEYS.rateLimited:
       return "rateLimited";
@@ -112,6 +121,8 @@ function mapUploadErrorKey(errorKey: string): PublicToolErrorKey | undefined {
       return "limitReached";
     case FILE_ERROR_KEYS.fileNotFound:
       return "filesExpired";
+    case FILE_ERROR_KEYS.cancelled:
+      return "uploadInterrupted";
     case FILE_ERROR_KEYS.networkFailure:
     case FILE_ERROR_KEYS.expiredUpload:
     case FILE_ERROR_KEYS.objectNotUploaded:
@@ -132,7 +143,9 @@ function mapConversionErrorKey(
     case CONVERSION_ERROR_KEYS.unsupportedConversion:
     case CONVERSION_ERROR_KEYS.invalidTargetFormat:
     case CONVERSION_ERROR_KEYS.typeRequired:
-      return "invalidOptions";
+      return "unsupported";
+    case CONVERSION_ERROR_KEYS.invalidFile:
+      return "invalidPdf";
     case CONVERSION_ERROR_KEYS.planLimitReached:
       return "limitReached";
     case CONVERSION_ERROR_KEYS.unauthorized:
@@ -141,7 +154,7 @@ function mapConversionErrorKey(
     case CONVERSION_ERROR_KEYS.notFound:
       return "filesExpired";
     case CONVERSION_ERROR_KEYS.conflict:
-      return "networkFailure";
+      return "duplicateExecution";
     default:
       return undefined;
   }
@@ -154,6 +167,25 @@ export function mapConversionFailure(
     return "processingFailed";
   }
 
+  if (error.code === "invalid_source_format") {
+    return "invalidPdf";
+  }
+
+  if (error.code === "unsupported_conversion") {
+    return "unsupported";
+  }
+
+  if (
+    error.code === "invalid_options" ||
+    error.code === "invalid_target_format"
+  ) {
+    return "invalidOptions";
+  }
+
+  if (error.code === "source_file_unavailable") {
+    return "filesExpired";
+  }
+
   const haystack = `${error.code} ${error.message}`.toLowerCase();
 
   if (
@@ -162,6 +194,15 @@ export function mapConversionFailure(
     haystack.includes("locked")
   ) {
     return "passwordProtected";
+  }
+
+  if (
+    haystack.includes("corrupt") ||
+    haystack.includes("damaged") ||
+    haystack.includes("malformed") ||
+    haystack.includes("invalid pdf")
+  ) {
+    return "corruptedFile";
   }
 
   if (haystack.includes("credit")) {
@@ -180,6 +221,32 @@ export function mapPublicToolError(error: unknown): PublicToolErrorKey {
     return "filesExpired";
   }
 
+  if (error instanceof ConversionApiRequestError) {
+    if (error.clientError.code === "INTERNAL_ERROR") {
+      return "networkFailure";
+    }
+    if (error.clientError.code === "FORBIDDEN") {
+      return "unauthorized";
+    }
+    if (error.clientError.code === "PLAN_LIMIT_REACHED") {
+      const message = error.clientError.message?.toLowerCase() ?? "";
+      return message.includes("credit") ? "creditsExhausted" : "limitReached";
+    }
+
+    const conversionError = mapConversionErrorKey(
+      mapUnknownConversionError(error),
+    );
+    if (conversionError !== undefined) {
+      return conversionError;
+    }
+
+    if (error.clientError.kind === "network") {
+      return "networkFailure";
+    }
+
+    return "unexpected";
+  }
+
   const fileClient =
     error instanceof FileApiRequestError
       ? error.clientError
@@ -188,25 +255,10 @@ export function mapPublicToolError(error: unknown): PublicToolErrorKey {
     return "networkFailure";
   }
   if (fileClient.code === "FORBIDDEN") {
-    return "signInRequired";
+    return "unauthorized";
   }
   if (fileClient.code === "PLAN_LIMIT_REACHED") {
     const message = fileClient.message?.toLowerCase() ?? "";
-    return message.includes("credit") ? "creditsExhausted" : "limitReached";
-  }
-
-  const conversionClient =
-    error instanceof ConversionApiRequestError
-      ? error.clientError
-      : toConversionClientError(error);
-  if (conversionClient.code === "INTERNAL_ERROR") {
-    return "networkFailure";
-  }
-  if (conversionClient.code === "FORBIDDEN") {
-    return "signInRequired";
-  }
-  if (conversionClient.code === "PLAN_LIMIT_REACHED") {
-    const message = conversionClient.message?.toLowerCase() ?? "";
     return message.includes("credit") ? "creditsExhausted" : "limitReached";
   }
 

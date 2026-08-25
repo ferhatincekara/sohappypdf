@@ -324,6 +324,14 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
           return entry;
         }
 
+        if (entry.file.size < 1) {
+          return {
+            ...entry,
+            status: "failed" as const,
+            errorKey: "emptyFile" as const,
+          };
+        }
+
         if (entry.file.size > maxFileSizeBytes) {
           return {
             ...entry,

@@ -80,4 +80,31 @@ describe("public tool errors", () => {
       }),
     ).toBe("passwordProtected");
   });
+
+  test("maps invalid, unsupported, and corrupted processing failures", () => {
+    expect(
+      mapConversionFailure({
+        code: "invalid_source_format",
+        message: "Source format is not pdf",
+      }),
+    ).toBe("invalidPdf");
+    expect(
+      mapConversionFailure({
+        code: "unsupported_conversion",
+        message: "Unsupported conversion",
+      }),
+    ).toBe("unsupported");
+    expect(
+      mapConversionFailure({
+        code: "processing_failed",
+        message: "PDF appears corrupted",
+      }),
+    ).toBe("corruptedFile");
+    expect(
+      mapConversionFailure({
+        code: "source_file_unavailable",
+        message: "Source file unavailable",
+      }),
+    ).toBe("filesExpired");
+  });
 });
