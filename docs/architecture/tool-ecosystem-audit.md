@@ -30,7 +30,7 @@ There is an internal `apps/admin` operator console (allowlisted session auth).
 
 Anonymous UI size/count defaults are read from `@repo/billing/plans` (`ANONYMOUS_WEB_LIMITS`) so public tools do not hardcode plan numbers. Server anonymous config in `@repo/config` stays the enforcement source and is aligned with Free file size (20 MiB), 5 files, and 2 h retention.
 
-Authenticated web upload size currently comes from `MAX_UPLOAD_FILE_SIZE` (default 100 MiB), **not** from Free/Pro `PlanLimits.maxFileSizeBytes` (20 MiB / 100 MiB). That is an entitlement gap.
+Authenticated web upload size is enforced by billing `assertCanUploadFile` using `PlanLimits.maxFileSizeBytes`. The process-wide `MAX_UPLOAD_FILE_SIZE` / `NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE` (default 100 MiB) is a hard ceiling, not a Free-plan allowance.
 
 ## Catalog matrix
 
@@ -117,16 +117,15 @@ Do not claim a dedicated visual experience until one exists.
 
 1. Public copy still said “workspace” / “conversion job” in a few strings (fixed in this audit pass).
 2. Recent executions store status `completed`; product language should say **Ready**.
-3. ~~Anonymous 25 MiB vs Free plan 20 MiB vs env upload 100 MiB — unify in entitlements phase.~~ Addressed: anonymous/Free file size is 20 MiB from the plan catalog; authenticated public tools use billing `limits.maxFileSizeBytes`.
-4. `/app/*` pages still exist; redirects already send users to `/account/*`.
-5. Account conversions copy still uses internal “conversion” wording (account/DX phases).
+3. Anonymous/Free file size is 20 MiB from the plan catalog; authenticated public tools use billing `limits.maxFileSizeBytes`.
+4. Legacy `/app/*` URLs redirect to `/account/*`.
+5. Default-workspace tools still lack dedicated visual UX (see list above).
 6. `jpg-to-pdf` / `png-to-pdf` were listed in convert-tool ids even though the image workspace wins (cleaned up).
 
-## Follow-ups (later phases)
+## Follow-ups
 
-- Global recent executions polish (result filename, Ready status)
-- Lifecycle/download-after-expiry tests
-- Entitlement unification
-- Pricing, developers, account, nav, SEO
-- Security / perf / a11y / mobile audits
-- Admin app (not before that phase)
+- Stuck-processing sweeper beyond queue retries
+- Safe admin job retry only if enqueue stays idempotent
+- Dedicated UX for redact / compare / scan / extract / AI tools
+- Standalone annotate / flatten / resize when engines exist
+- Browser e2e (Playwright) when a runner is added

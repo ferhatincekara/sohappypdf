@@ -19,6 +19,8 @@ Include the admin origin in `API_CORS_ORIGINS` (for example `http://localhost:30
 
 Set `WORKER_HEALTH_URL` if the admin health view should probe the worker.
 
+Apply Drizzle migrations before serving traffic (`bun run db:migrate`). This includes `admin_audit_events` used by the operator audit log.
+
 ## Scripts
 
 - `bun run dev` — start web, API, and worker
