@@ -12,6 +12,7 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import type { PdfjsDocument } from "../../lib/pdfjs-client";
+import { thumbnailOutputScale } from "../lib/thumbnail-output-scale";
 import type { PdfPageRotation } from "../types/pdf-page";
 
 const THUMBNAIL_WIDTH = 160;
@@ -117,7 +118,7 @@ export function PdfPageThumbnail({
         const baseViewport = page.getViewport({ scale: 1 });
         const scale = THUMBNAIL_WIDTH / baseViewport.width;
         const viewport = page.getViewport({ scale });
-        const outputScale = window.devicePixelRatio || 1;
+        const outputScale = thumbnailOutputScale(window.devicePixelRatio || 1);
         canvas.width = Math.floor(viewport.width * outputScale);
         canvas.height = Math.floor(viewport.height * outputScale);
         canvas.style.width = `${Math.floor(viewport.width)}px`;
@@ -151,9 +152,25 @@ export function PdfPageThumbnail({
 
     const observer = new IntersectionObserver(
       (entries) => {
-        visibleRef.current = entries.some((entry) => entry.isIntersecting);
-        if (visibleRef.current) {
+        const isVisible = entries.some((entry) => entry.isIntersecting);
+        visibleRef.current = isVisible;
+
+        if (isVisible) {
           void renderPage();
+          return;
+        }
+
+        renderTask?.cancel();
+        renderTask = null;
+        const canvas = canvasRef.current;
+
+        if (canvas !== null) {
+          canvas.width = 0;
+          canvas.height = 0;
+        }
+
+        if (!cancelled) {
+          setStatus("pending");
         }
       },
       { rootMargin: "160px" },
