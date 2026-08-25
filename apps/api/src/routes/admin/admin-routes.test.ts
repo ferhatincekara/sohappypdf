@@ -29,6 +29,33 @@ function createAdminTestApp(identity: RequestIdentity) {
     adminConfig: { userIds: ["admin_1"], emails: [] },
     adminQueries: createMemoryAdminQueryService({
       actors: [adminActor],
+      users: [
+        {
+          userId: "user_2",
+          email: "member@example.com",
+          name: "Member",
+          createdAt: "2026-08-01T00:00:00.000Z",
+          plan: null,
+        },
+      ],
+      userRecords: [
+        {
+          userId: "user_2",
+          email: "member@example.com",
+          name: "Member",
+          emailVerified: true,
+          createdAt: "2026-08-01T00:00:00.000Z",
+          updatedAt: "2026-08-01T00:00:00.000Z",
+        },
+      ],
+      anonymousSessions: [
+        {
+          id: "11111111-1111-1111-1111-111111111111",
+          createdAt: "2026-08-24T00:00:00.000Z",
+          expiresAt: "2026-08-24T02:00:00.000Z",
+          lastSeenAt: "2026-08-24T01:00:00.000Z",
+        },
+      ],
       overview: {
         users: 4,
         anonymousSessions: 2,
@@ -87,5 +114,26 @@ describe("admin routes", () => {
     expect(body.executions.expiredReady).toBe(3);
     expect(JSON.stringify(body)).not.toContain("password");
     expect(JSON.stringify(body)).not.toContain("token");
+  });
+
+  test("lists users and anonymous sessions without secrets", async () => {
+    const app = createAdminTestApp({
+      kind: "session",
+      userId: "admin_1",
+      sessionId: "session_1",
+    });
+
+    const users = await app.request("/api/v1/admin/users");
+    expect(users.status).toBe(200);
+    const usersBody = await users.json();
+    expect(usersBody.users[0]?.email).toBe("member@example.com");
+    expect(JSON.stringify(usersBody)).not.toContain("password");
+
+    const sessions = await app.request("/api/v1/admin/anonymous-sessions");
+    expect(sessions.status).toBe(200);
+    const sessionsBody = await sessions.json();
+    expect(sessionsBody.sessions).toHaveLength(1);
+    expect(JSON.stringify(sessionsBody)).not.toContain("tokenHash");
+    expect(JSON.stringify(sessionsBody)).not.toContain("token_hash");
   });
 });

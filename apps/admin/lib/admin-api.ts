@@ -1,5 +1,11 @@
 import { getAdminApiV1BaseUrl } from "@/config/public-env";
-import type { AdminActor, AdminOverview } from "./admin-types";
+import type {
+  AdminActor,
+  AdminAnonymousSessionRecord,
+  AdminOverview,
+  AdminUserDetail,
+  AdminUserSummary,
+} from "./admin-types";
 
 export class AdminApiError extends Error {
   readonly status: number;
@@ -40,4 +46,24 @@ export function fetchAdminMe(): Promise<AdminActor> {
 
 export function fetchAdminOverview(): Promise<AdminOverview> {
   return adminRequest<AdminOverview>("/admin/overview");
+}
+
+export async function fetchAdminUsers(): Promise<AdminUserSummary[]> {
+  const body = await adminRequest<{ users: AdminUserSummary[] }>(
+    "/admin/users",
+  );
+  return body.users;
+}
+
+export function fetchAdminUser(userId: string): Promise<AdminUserDetail> {
+  return adminRequest<AdminUserDetail>(`/admin/users/${userId}`);
+}
+
+export async function fetchAdminAnonymousSessions(): Promise<
+  AdminAnonymousSessionRecord[]
+> {
+  const body = await adminRequest<{ sessions: AdminAnonymousSessionRecord[] }>(
+    "/admin/anonymous-sessions",
+  );
+  return body.sessions;
 }

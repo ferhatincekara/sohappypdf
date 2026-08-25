@@ -44,6 +44,7 @@ export function createV1Routes(options: V1RoutesOptions) {
     createAdminRoutes({
       config: options.adminConfig,
       getQueries: options.getAdminQueries,
+      getBillingService: options.getBillingService,
     }),
   );
   return v1;

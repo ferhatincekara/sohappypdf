@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-const LINKS = [{ href: "/", label: "Dashboard" }] as const;
+const LINKS = [
+  { href: "/", label: "Dashboard" },
+  { href: "/users", label: "Users" },
+  { href: "/anonymous", label: "Anonymous" },
+] as const;
 
 export function AdminNav() {
   return (
