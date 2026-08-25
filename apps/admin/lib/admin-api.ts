@@ -2,7 +2,9 @@ import { getAdminApiV1BaseUrl } from "@/config/public-env";
 import type {
   AdminActor,
   AdminAnonymousSessionRecord,
+  AdminExecutionRecord,
   AdminOverview,
+  AdminQueueCounts,
   AdminUserDetail,
   AdminUserSummary,
 } from "./admin-types";
@@ -66,4 +68,17 @@ export async function fetchAdminAnonymousSessions(): Promise<
     "/admin/anonymous-sessions",
   );
   return body.sessions;
+}
+
+export async function fetchAdminExecutions(): Promise<AdminExecutionRecord[]> {
+  const body = await adminRequest<{ executions: AdminExecutionRecord[] }>(
+    "/admin/executions",
+  );
+  return body.executions;
+}
+
+export async function fetchAdminQueues(): Promise<{
+  conversion: AdminQueueCounts | null;
+}> {
+  return adminRequest<{ conversion: AdminQueueCounts | null }>("/admin/queues");
 }

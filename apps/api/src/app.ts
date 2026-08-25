@@ -15,7 +15,11 @@ import {
 } from "@repo/conversions";
 import { type FileService, getFileService } from "@repo/files";
 import { createLogger, type Logger } from "@repo/logger";
-import { type ConversionJobData, enqueueConversion } from "@repo/queue";
+import {
+  type ConversionJobData,
+  type ConversionQueueCounts,
+  enqueueConversion,
+} from "@repo/queue";
 import { Hono } from "hono";
 import type { AdminQueryService } from "./admin/admin-queries.js";
 import { createAdminQueryService } from "./admin/admin-queries.js";
@@ -55,6 +59,7 @@ export type CreateAppOptions = {
   handleAuth?: HandleAuthRequest;
   adminConfig?: AdminConfig;
   adminQueries?: AdminQueryService;
+  getQueueCounts?: () => Promise<ConversionQueueCounts>;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -119,6 +124,7 @@ export function createApp(options: CreateAppOptions = {}) {
         options.checkAnonymousOperationRateLimit,
       adminConfig: options.adminConfig ?? loadAdminConfig(),
       getAdminQueries: () => options.adminQueries ?? createAdminQueryService(),
+      getQueueCounts: options.getQueueCounts,
     }),
   );
 

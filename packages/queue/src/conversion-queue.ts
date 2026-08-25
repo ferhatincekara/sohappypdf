@@ -75,6 +75,32 @@ export async function enqueueConversion(
   return createConversionEnqueue(getConversionQueue())(input);
 }
 
+export type ConversionQueueCounts = {
+  waiting: number;
+  active: number;
+  completed: number;
+  failed: number;
+  delayed: number;
+};
+
+export async function getConversionQueueCounts(): Promise<ConversionQueueCounts> {
+  const counts = await getConversionQueue().getJobCounts(
+    "waiting",
+    "active",
+    "completed",
+    "failed",
+    "delayed",
+  );
+
+  return {
+    waiting: counts.waiting ?? 0,
+    active: counts.active ?? 0,
+    completed: counts.completed ?? 0,
+    failed: counts.failed ?? 0,
+    delayed: counts.delayed ?? 0,
+  };
+}
+
 export async function closeConversionQueue(): Promise<void> {
   if (conversionQueue === undefined) {
     return;

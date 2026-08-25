@@ -16,11 +16,13 @@ export {
 } from "./conversion-job.js";
 export type {
   ConversionJobWriter,
+  ConversionQueueCounts,
   EnqueueConversionResult,
 } from "./conversion-queue.js";
 export {
   createConversionEnqueue,
   enqueueConversion,
+  getConversionQueueCounts,
 } from "./conversion-queue.js";
 export type {
   ConversionJobProcessor,

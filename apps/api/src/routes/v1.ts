@@ -3,7 +3,7 @@ import type { BillingService } from "@repo/billing";
 import type { AdminConfig, AnonymousConfig } from "@repo/config";
 import type { ConversionService } from "@repo/conversions";
 import type { FileService } from "@repo/files";
-import type { ConversionJobData } from "@repo/queue";
+import type { ConversionJobData, ConversionQueueCounts } from "@repo/queue";
 import { Hono } from "hono";
 import type { AdminQueryService } from "../admin/admin-queries.js";
 import type { AppEnv } from "../app-env.js";
@@ -28,6 +28,7 @@ export type V1RoutesOptions = {
   checkAnonymousOperationRateLimit?: CheckRateLimit;
   adminConfig: AdminConfig;
   getAdminQueries: () => AdminQueryService;
+  getQueueCounts?: () => Promise<ConversionQueueCounts>;
 };
 
 export function createV1Routes(options: V1RoutesOptions) {
@@ -45,6 +46,7 @@ export function createV1Routes(options: V1RoutesOptions) {
       config: options.adminConfig,
       getQueries: options.getAdminQueries,
       getBillingService: options.getBillingService,
+      getQueueCounts: options.getQueueCounts,
     }),
   );
   return v1;

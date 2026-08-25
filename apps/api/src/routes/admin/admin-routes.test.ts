@@ -56,6 +56,18 @@ function createAdminTestApp(identity: RequestIdentity) {
           lastSeenAt: "2026-08-24T01:00:00.000Z",
         },
       ],
+      executions: [
+        {
+          id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          ownerId: "user_2",
+          ownerKind: "user",
+          tool: "merge-pdf",
+          status: "failed",
+          createdAt: "2026-08-24T12:00:00.000Z",
+          completedAt: "2026-08-24T12:01:00.000Z",
+          expiresAt: null,
+        },
+      ],
       overview: {
         users: 4,
         anonymousSessions: 2,
@@ -135,5 +147,54 @@ describe("admin routes", () => {
     expect(sessionsBody.sessions).toHaveLength(1);
     expect(JSON.stringify(sessionsBody)).not.toContain("tokenHash");
     expect(JSON.stringify(sessionsBody)).not.toContain("token_hash");
+  });
+
+  test("lists processing executions without object keys", async () => {
+    const app = createAdminTestApp({
+      kind: "session",
+      userId: "admin_1",
+      sessionId: "session_1",
+    });
+
+    const response = await app.request("/api/v1/admin/executions");
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(Array.isArray(body.executions)).toBe(true);
+    expect(JSON.stringify(body)).not.toContain("objectKey");
+    expect(JSON.stringify(body)).not.toContain("s3");
+  });
+
+  test("returns queue counts without connecting when injected", async () => {
+    const app = createApp({
+      config: { corsOrigins: [] },
+      logger: silentLogger,
+      resolveIdentity: async () => ({
+        kind: "session",
+        userId: "admin_1",
+        sessionId: "session_1",
+      }),
+      adminConfig: { userIds: ["admin_1"], emails: [] },
+      adminQueries: createMemoryAdminQueryService({
+        actors: [adminActor],
+      }),
+      getQueueCounts: async () => ({
+        waiting: 2,
+        active: 1,
+        completed: 9,
+        failed: 0,
+        delayed: 0,
+      }),
+    });
+
+    const response = await app.request("/api/v1/admin/queues");
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.conversion).toEqual({
+      waiting: 2,
+      active: 1,
+      completed: 9,
+      failed: 0,
+      delayed: 0,
+    });
   });
 });

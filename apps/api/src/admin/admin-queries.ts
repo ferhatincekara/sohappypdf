@@ -74,6 +74,10 @@ export type AdminQueryService = {
   listAnonymousSessions(input: {
     limit: number;
   }): Promise<AdminAnonymousSessionRecord[]>;
+  listExecutions(input: {
+    limit: number;
+    status?: string;
+  }): Promise<AdminExecutionRecord[]>;
 };
 
 function toCount(value: unknown): number {
@@ -292,6 +296,53 @@ export function createAdminQueryService(
         lastSeenAt: row.lastSeenAt.toISOString(),
       }));
     },
+
+    async listExecutions(input) {
+      const limit = Math.min(Math.max(input.limit, 1), 100);
+      const status = input.status;
+      const now = new Date();
+      const statusFilter =
+        status === "expired"
+          ? and(
+              eq(conversions.status, "completed"),
+              isNotNull(conversions.expiresAt),
+              lt(conversions.expiresAt, now),
+            )
+          : status === "pending" ||
+              status === "queued" ||
+              status === "processing" ||
+              status === "completed" ||
+              status === "failed" ||
+              status === "cancelled"
+            ? eq(conversions.status, status)
+            : undefined;
+      const rows = await db
+        .select({
+          id: conversions.id,
+          ownerId: conversions.ownerId,
+          ownerKind: conversions.ownerKind,
+          tool: conversions.conversionType,
+          status: conversions.status,
+          createdAt: conversions.createdAt,
+          completedAt: conversions.completedAt,
+          expiresAt: conversions.expiresAt,
+        })
+        .from(conversions)
+        .where(statusFilter)
+        .orderBy(desc(conversions.createdAt))
+        .limit(limit);
+
+      return rows.map((row) => ({
+        id: row.id,
+        ownerId: row.ownerId,
+        ownerKind: row.ownerKind,
+        tool: row.tool,
+        status: row.status,
+        createdAt: row.createdAt.toISOString(),
+        completedAt: row.completedAt?.toISOString() ?? null,
+        expiresAt: row.expiresAt?.toISOString() ?? null,
+      }));
+    },
   };
 }
 
@@ -332,6 +383,23 @@ export function createMemoryAdminQueryService(options?: {
     },
     async listAnonymousSessions() {
       return [...anonymous];
+    },
+    async listExecutions(input) {
+      if (input.status === undefined || input.status.trim() === "") {
+        return [...executions];
+      }
+
+      if (input.status === "expired") {
+        const now = Date.now();
+        return executions.filter(
+          (item) =>
+            item.status === "completed" &&
+            item.expiresAt !== null &&
+            Date.parse(item.expiresAt) < now,
+        );
+      }
+
+      return executions.filter((item) => item.status === input.status);
     },
   };
 }

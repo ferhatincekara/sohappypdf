@@ -55,6 +55,14 @@ export type AdminAnonymousSessionRecord = {
   lastSeenAt: string;
 };
 
+export type AdminQueueCounts = {
+  waiting: number;
+  active: number;
+  completed: number;
+  failed: number;
+  delayed: number;
+};
+
 export type AdminUserDetail = {
   user: AdminUserRecord;
   plan: "free" | "pro";

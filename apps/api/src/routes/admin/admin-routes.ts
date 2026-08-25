@@ -1,6 +1,8 @@
 import type { BillingService } from "@repo/billing";
 import type { AdminConfig } from "@repo/config";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
+import type { ConversionQueueCounts } from "@repo/queue";
+import { getConversionQueueCounts } from "@repo/queue";
 import { Hono } from "hono";
 import type { AdminQueryService } from "../../admin/admin-queries.js";
 import type { AppEnv } from "../../app-env.js";
@@ -10,6 +12,7 @@ export type AdminRoutesOptions = {
   config: AdminConfig;
   getQueries: () => AdminQueryService;
   getBillingService: () => BillingService;
+  getQueueCounts?: () => Promise<ConversionQueueCounts>;
 };
 
 function parseLimit(value: string | undefined, fallback: number): number {
@@ -105,6 +108,25 @@ export function createAdminRoutes(options: AdminRoutesOptions) {
     });
 
     return c.json({ sessions });
+  });
+
+  admin.get("/executions", async (c) => {
+    const executions = await options.getQueries().listExecutions({
+      limit: parseLimit(c.req.query("limit"), 50),
+      status: c.req.query("status"),
+    });
+
+    return c.json({ executions });
+  });
+
+  admin.get("/queues", async (c) => {
+    try {
+      const getQueueCounts = options.getQueueCounts ?? getConversionQueueCounts;
+      const counts = await getQueueCounts();
+      return c.json({ conversion: counts });
+    } catch {
+      return c.json({ conversion: null });
+    }
   });
 
   return admin;
