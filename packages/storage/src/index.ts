@@ -10,6 +10,10 @@ export {
   createFileOutputKey,
   createObjectKey,
 } from "./object-key.js";
+export {
+  MAX_PRESIGN_EXPIRES_IN_SECONDS,
+  resolvePresignExpiresInSeconds,
+} from "./presign-expiry.js";
 export type {
   DownloadObjectToFileInput,
   DownloadObjectToFileResult,

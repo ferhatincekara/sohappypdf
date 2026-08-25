@@ -13,9 +13,10 @@ import { getStorageConfig, type StorageConfig } from "./config.js";
 import { toAttachmentContentDisposition } from "./content-disposition.js";
 import { assertObjectByteLimit } from "./object-byte-limit.js";
 import { assertValidObjectKey } from "./object-key.js";
+import { resolvePresignExpiresInSeconds } from "./presign-expiry.js";
 
-export const DEFAULT_PRESIGN_EXPIRES_IN_SECONDS = 15 * 60;
-const MAX_PRESIGN_EXPIRES_IN_SECONDS = 7 * 24 * 60 * 60;
+export { DEFAULT_PRESIGN_EXPIRES_IN_SECONDS } from "./presign-expiry.js";
+
 const MAX_CONTENT_TYPE_LENGTH = 200;
 const HEALTH_OBJECT_KEY = "files/health/ping";
 
@@ -112,20 +113,7 @@ function assertSafeContentType(contentType: string): void {
 }
 
 function resolveExpiresInSeconds(expiresInSeconds: number | undefined): number {
-  const value = expiresInSeconds ?? DEFAULT_PRESIGN_EXPIRES_IN_SECONDS;
-
-  if (
-    !Number.isInteger(value) ||
-    value < 1 ||
-    value > MAX_PRESIGN_EXPIRES_IN_SECONDS
-  ) {
-    throw new AppError({
-      code: APP_ERROR_CODES.VALIDATION_ERROR,
-      message: "Invalid presigned URL expiration",
-    });
-  }
-
-  return value;
+  return resolvePresignExpiresInSeconds(expiresInSeconds);
 }
 
 function isS3NotFound(error: unknown): boolean {
