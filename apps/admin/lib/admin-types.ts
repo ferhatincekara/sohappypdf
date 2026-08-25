@@ -125,6 +125,17 @@ export type AdminCatalogTool = {
   health: "live" | "planned";
 };
 
+export type AdminHealthStatus = "ok" | "error" | "not_configured";
+
+export type AdminSystemHealth = {
+  api: AdminHealthStatus;
+  database: AdminHealthStatus;
+  queue: AdminHealthStatus;
+  storage: AdminHealthStatus;
+  worker: AdminHealthStatus;
+  processingFailures: number;
+};
+
 export type AdminUserDetail = {
   user: AdminUserRecord;
   plan: "free" | "pro";

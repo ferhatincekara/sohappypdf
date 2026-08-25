@@ -6,6 +6,7 @@ import type { ConversionQueueCounts } from "@repo/queue";
 import { getConversionQueueCounts } from "@repo/queue";
 import { isExecutableToolAvailability, listCatalogTools } from "@repo/tools";
 import { Hono } from "hono";
+import type { AdminSystemHealth } from "../../admin/admin-health.js";
 import type { AdminQueryService } from "../../admin/admin-queries.js";
 import type { AppEnv } from "../../app-env.js";
 import { requireAdminMiddleware } from "../../middleware/require-admin.js";
@@ -15,6 +16,7 @@ export type AdminRoutesOptions = {
   getQueries: () => AdminQueryService;
   getBillingService: () => BillingService;
   getQueueCounts?: () => Promise<ConversionQueueCounts>;
+  getSystemHealth: () => Promise<AdminSystemHealth>;
 };
 
 function parseLimit(value: string | undefined, fallback: number): number {
@@ -225,6 +227,10 @@ export function createAdminRoutes(options: AdminRoutesOptions) {
     }));
 
     return c.json({ tools });
+  });
+
+  admin.get("/health", async (c) => {
+    return c.json(await options.getSystemHealth());
   });
 
   return admin;

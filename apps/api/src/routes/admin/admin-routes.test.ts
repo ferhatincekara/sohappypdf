@@ -283,4 +283,41 @@ describe("admin routes", () => {
     expect(body.tools[0]).toHaveProperty("health");
     expect(JSON.stringify(body)).not.toContain("AWS");
   });
+
+  test("returns system health without infrastructure error details", async () => {
+    const app = createApp({
+      config: { corsOrigins: [] },
+      logger: silentLogger,
+      resolveIdentity: async () => ({
+        kind: "session",
+        userId: "admin_1",
+        sessionId: "session_1",
+      }),
+      adminConfig: { userIds: ["admin_1"], emails: [] },
+      adminQueries: createMemoryAdminQueryService({
+        actors: [adminActor],
+      }),
+      billingService: createTestBillingService({
+        userEmails: { admin_1: "ops@example.com" },
+      }),
+      getSystemHealth: async () => ({
+        api: "ok",
+        database: "ok",
+        queue: "error",
+        storage: "ok",
+        worker: "not_configured",
+        processingFailures: 4,
+      }),
+    });
+
+    const response = await app.request("/api/v1/admin/health");
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.api).toBe("ok");
+    expect(body.queue).toBe("error");
+    expect(body.worker).toBe("not_configured");
+    expect(body.processingFailures).toBe(4);
+    expect(JSON.stringify(body)).not.toContain("ECONNREFUSED");
+    expect(JSON.stringify(body)).not.toContain("password");
+  });
 });

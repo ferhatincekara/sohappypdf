@@ -7,6 +7,7 @@ import type {
   AdminExecutionRecord,
   AdminOverview,
   AdminQueueCounts,
+  AdminSystemHealth,
   AdminUserDetail,
   AdminUserSummary,
 } from "./admin-types";
@@ -94,6 +95,10 @@ export async function fetchAdminTools(): Promise<AdminCatalogTool[]> {
     "/admin/tools",
   );
   return body.tools;
+}
+
+export function fetchAdminHealth(): Promise<AdminSystemHealth> {
+  return adminRequest<AdminSystemHealth>("/admin/health");
 }
 
 export async function submitAdminCreditAdjustment(input: {

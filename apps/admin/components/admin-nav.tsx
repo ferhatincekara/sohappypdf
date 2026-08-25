@@ -7,6 +7,7 @@ const LINKS = [
   { href: "/operations", label: "Operations" },
   { href: "/billing", label: "Billing" },
   { href: "/tools", label: "Tools" },
+  { href: "/health", label: "Health" },
 ] as const;
 
 export function AdminNav() {

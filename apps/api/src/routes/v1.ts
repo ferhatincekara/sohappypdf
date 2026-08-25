@@ -5,6 +5,7 @@ import type { ConversionService } from "@repo/conversions";
 import type { FileService } from "@repo/files";
 import type { ConversionJobData, ConversionQueueCounts } from "@repo/queue";
 import { Hono } from "hono";
+import type { AdminSystemHealth } from "../admin/admin-health.js";
 import type { AdminQueryService } from "../admin/admin-queries.js";
 import type { AppEnv } from "../app-env.js";
 import type { CheckRateLimit } from "../middleware/rate-limit.js";
@@ -29,6 +30,7 @@ export type V1RoutesOptions = {
   adminConfig: AdminConfig;
   getAdminQueries: () => AdminQueryService;
   getQueueCounts?: () => Promise<ConversionQueueCounts>;
+  getSystemHealth: () => Promise<AdminSystemHealth>;
 };
 
 export function createV1Routes(options: V1RoutesOptions) {
@@ -47,6 +49,7 @@ export function createV1Routes(options: V1RoutesOptions) {
       getQueries: options.getAdminQueries,
       getBillingService: options.getBillingService,
       getQueueCounts: options.getQueueCounts,
+      getSystemHealth: options.getSystemHealth,
     }),
   );
   return v1;

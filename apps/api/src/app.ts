@@ -21,6 +21,8 @@ import {
   enqueueConversion,
 } from "@repo/queue";
 import { Hono } from "hono";
+import type { AdminSystemHealth } from "./admin/admin-health.js";
+import { collectSystemHealth } from "./admin/admin-health.js";
 import type { AdminQueryService } from "./admin/admin-queries.js";
 import { createAdminQueryService } from "./admin/admin-queries.js";
 import type { AppEnv } from "./app-env.js";
@@ -60,6 +62,7 @@ export type CreateAppOptions = {
   adminConfig?: AdminConfig;
   adminQueries?: AdminQueryService;
   getQueueCounts?: () => Promise<ConversionQueueCounts>;
+  getSystemHealth?: () => Promise<AdminSystemHealth>;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -125,6 +128,17 @@ export function createApp(options: CreateAppOptions = {}) {
       adminConfig: options.adminConfig ?? loadAdminConfig(),
       getAdminQueries: () => options.adminQueries ?? createAdminQueryService(),
       getQueueCounts: options.getQueueCounts,
+      getSystemHealth:
+        options.getSystemHealth ??
+        (() =>
+          collectSystemHealth({
+            getProcessingFailures: async () => {
+              const overview = await (
+                options.adminQueries ?? createAdminQueryService()
+              ).getOverview();
+              return overview.executions.failed;
+            },
+          })),
     }),
   );
 
