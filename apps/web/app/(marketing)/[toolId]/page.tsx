@@ -1,3 +1,4 @@
+import { resolveWebMaxFileSizeBytes } from "@repo/billing/plans";
 import { findRegisteredTool, type ToolId } from "@repo/tools/catalog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -61,7 +62,9 @@ export default async function PublicToolPage({
       tool={tool}
       isAuthenticated={isAuthenticated}
       relatedTools={getRelatedMarketingTools(tool)}
-      maxAuthenticatedFileSizeBytes={getPublicWebEnv().maxUploadFileSizeBytes}
+      maxAuthenticatedFileSizeBytes={resolveWebMaxFileSizeBytes({
+        isAuthenticated: true,
+      })}
     />
   );
 }

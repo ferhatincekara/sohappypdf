@@ -1,7 +1,7 @@
 "use client";
 
+import { DEFAULT_PLAN_LIMITS } from "@repo/billing/plans";
 import { useTranslations } from "next-intl";
-import { getPublicWebEnv } from "@/config/public-env";
 import { useBillingStatus } from "@/features/billing";
 import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
 import { useFileUpload } from "../hooks/use-file-upload";
@@ -19,10 +19,10 @@ export function FileUploadPanel({
   const t = useTranslations("files.upload");
   const tErrors = useTranslations("files.errors");
   const tStatus = useTranslations("files.status");
-  const publicMaxUploadFileSizeBytes = getPublicWebEnv().maxUploadFileSizeBytes;
   const { billing } = useBillingStatus();
   const maxUploadFileSizeBytes =
-    billing?.limits.maxFileSizeBytes ?? publicMaxUploadFileSizeBytes;
+    billing?.limits.maxFileSizeBytes ??
+    DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes;
   const {
     state,
     isBusy,

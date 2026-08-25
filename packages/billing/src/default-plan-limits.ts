@@ -27,3 +27,29 @@ export const DEFAULT_PLAN_LIMITS = {
 };
 
 export const PLAN_IDS = ["free", "pro"] as const;
+
+export const WEB_TIER_IDS = ["anonymous", "free", "pro"] as const;
+
+export type WebTierId = (typeof WEB_TIER_IDS)[number];
+
+export const ANONYMOUS_WEB_LIMITS = {
+  maxFileSizeBytes: DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes,
+  maxFilesPerOperation: 5,
+  retentionHours: 2,
+  operationsPerHour: 10,
+  monthlyWebCredits: 0,
+  monthlyAiCredits: 0,
+} as const;
+
+export function resolveWebMaxFileSizeBytes(input: {
+  isAuthenticated: boolean;
+  planMaxFileSizeBytes?: number | null;
+}): number {
+  if (!input.isAuthenticated) {
+    return ANONYMOUS_WEB_LIMITS.maxFileSizeBytes;
+  }
+
+  return (
+    input.planMaxFileSizeBytes ?? DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes
+  );
+}

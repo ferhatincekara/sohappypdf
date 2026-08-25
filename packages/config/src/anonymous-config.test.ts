@@ -13,7 +13,7 @@ describe("loadAnonymousConfig", () => {
     const config = loadAnonymousConfig({});
 
     expect(config.maxFileSizeBytes).toBe(DEFAULT_ANONYMOUS_MAX_FILE_SIZE_BYTES);
-    expect(config.maxFileSizeBytes).toBe(25 * 1024 * 1024);
+    expect(config.maxFileSizeBytes).toBe(20 * 1024 * 1024);
     expect(config.maxFilesPerOperation).toBe(
       DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION,
     );

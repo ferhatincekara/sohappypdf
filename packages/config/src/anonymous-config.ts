@@ -3,7 +3,7 @@ import { parsePositiveInteger } from "./parse-positive-integer.js";
 
 const MIB = 1024 * 1024;
 
-export const DEFAULT_ANONYMOUS_MAX_FILE_SIZE_BYTES = 25 * MIB;
+export const DEFAULT_ANONYMOUS_MAX_FILE_SIZE_BYTES = 20 * MIB;
 export const DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION = 5;
 export const DEFAULT_ANONYMOUS_OPERATIONS_PER_HOUR = 10;
 export const DEFAULT_ANONYMOUS_RETENTION_HOURS = 2;

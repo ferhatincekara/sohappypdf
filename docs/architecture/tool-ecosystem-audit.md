@@ -28,7 +28,7 @@ There is **no** `apps/admin` yet (later phase).
 | Mobile | sticky action bar exists; editor still desktop-leaning |
 | Accessibility | focus rings and labels present; editors need a dedicated pass |
 
-Anonymous UI size/count defaults are duplicated in `apps/web/features/public-tools/lib/anonymous-limits.ts` because `@repo/config` is server-only. Numbers currently match config defaults (25 MiB, 5 files, 2 h).
+Anonymous UI size/count defaults are read from `@repo/billing/plans` (`ANONYMOUS_WEB_LIMITS`) so public tools do not hardcode plan numbers. Server anonymous config in `@repo/config` stays the enforcement source and is aligned with Free file size (20 MiB), 5 files, and 2 h retention.
 
 Authenticated web upload size currently comes from `MAX_UPLOAD_FILE_SIZE` (default 100 MiB), **not** from Free/Pro `PlanLimits.maxFileSizeBytes` (20 MiB / 100 MiB). That is an entitlement gap.
 
@@ -117,7 +117,7 @@ Do not claim a dedicated visual experience until one exists.
 
 1. Public copy still said “workspace” / “conversion job” in a few strings (fixed in this audit pass).
 2. Recent executions store status `completed`; product language should say **Ready**.
-3. Anonymous 25 MiB vs Free plan 20 MiB vs env upload 100 MiB — unify in entitlements phase.
+3. ~~Anonymous 25 MiB vs Free plan 20 MiB vs env upload 100 MiB — unify in entitlements phase.~~ Addressed: anonymous/Free file size is 20 MiB from the plan catalog; authenticated public tools use billing `limits.maxFileSizeBytes`.
 4. `/app/*` pages still exist; redirects already send users to `/account/*`.
 5. Account conversions copy still uses internal “conversion” wording (account/DX phases).
 6. `jpg-to-pdf` / `png-to-pdf` were listed in convert-tool ids even though the image workspace wins (cleaned up).

@@ -1,9 +1,11 @@
 "use client";
 
+import { resolveWebMaxFileSizeBytes } from "@repo/billing/plans";
 import type { ToolDefinition } from "@repo/tools/catalog";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getPublicWebEnv } from "@/config/public-env";
+import { billingApi } from "@/features/billing/api/billing-api";
+import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
 import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 import { canDownloadConversion } from "@/features/conversions/lib/can-download-conversion";
 import { startBrowserDownload } from "@/features/files/lib/start-browser-download";
@@ -14,7 +16,6 @@ import {
 import { authClient } from "@/lib/auth/auth-client";
 import { createPublicToolApis } from "../api/public-tool-api";
 import { publicToolQueryKeys } from "../api/public-tool-query-keys";
-import { PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES } from "../lib/anonymous-limits";
 import {
   isExpirationResponse,
   isMissingResourceResponse,
@@ -56,10 +57,17 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     () => createPublicToolApis(isAuthenticated),
     [isAuthenticated],
   );
+  const billingQuery = useQuery({
+    queryKey: billingQueryKeys.status(),
+    queryFn: () => billingApi.getStatus(),
+    enabled: isAuthenticated && !session.isPending,
+    staleTime: 60_000,
+  });
   const maxFiles = maxFilesForTool(tool, !isAuthenticated);
-  const maxFileSizeBytes = isAuthenticated
-    ? getPublicWebEnv().maxUploadFileSizeBytes
-    : PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES;
+  const maxFileSizeBytes = resolveWebMaxFileSizeBytes({
+    isAuthenticated,
+    planMaxFileSizeBytes: billingQuery.data?.billing.limits.maxFileSizeBytes,
+  });
   const canUploadNow = tool.allowsAnonymous || isAuthenticated;
   const reorderable = supportsFileReorder(tool);
 

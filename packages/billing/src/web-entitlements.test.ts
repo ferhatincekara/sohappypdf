@@ -1,0 +1,55 @@
+import { describe, expect, test } from "bun:test";
+import {
+  DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION,
+  DEFAULT_ANONYMOUS_OPERATIONS_PER_HOUR,
+  DEFAULT_ANONYMOUS_RETENTION_HOURS,
+} from "@repo/config";
+import {
+  ANONYMOUS_WEB_LIMITS,
+  DEFAULT_PLAN_LIMITS,
+  resolveWebMaxFileSizeBytes,
+} from "./default-plan-limits.js";
+
+describe("web entitlements", () => {
+  test("keeps anonymous file size at or below Free", () => {
+    expect(ANONYMOUS_WEB_LIMITS.maxFileSizeBytes).toBe(
+      DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes,
+    );
+    expect(ANONYMOUS_WEB_LIMITS.maxFileSizeBytes).toBeLessThan(
+      DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes,
+    );
+  });
+
+  test("keeps anonymous operation defaults aligned with server config", () => {
+    expect(ANONYMOUS_WEB_LIMITS.maxFilesPerOperation).toBe(
+      DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION,
+    );
+    expect(ANONYMOUS_WEB_LIMITS.operationsPerHour).toBe(
+      DEFAULT_ANONYMOUS_OPERATIONS_PER_HOUR,
+    );
+    expect(ANONYMOUS_WEB_LIMITS.retentionHours).toBe(
+      DEFAULT_ANONYMOUS_RETENTION_HOURS,
+    );
+  });
+
+  test("uses plan file size for authenticated users and Free as the fallback", () => {
+    expect(
+      resolveWebMaxFileSizeBytes({
+        isAuthenticated: false,
+        planMaxFileSizeBytes: DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes,
+      }),
+    ).toBe(ANONYMOUS_WEB_LIMITS.maxFileSizeBytes);
+    expect(
+      resolveWebMaxFileSizeBytes({
+        isAuthenticated: true,
+        planMaxFileSizeBytes: DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes,
+      }),
+    ).toBe(DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes);
+    expect(
+      resolveWebMaxFileSizeBytes({
+        isAuthenticated: true,
+        planMaxFileSizeBytes: null,
+      }),
+    ).toBe(DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes);
+  });
+});
