@@ -1,4 +1,9 @@
 export type {
+  AdminAuditEventRow,
+  NewAdminAuditEventRow,
+} from "./admin-audit-events.js";
+export { adminAuditEvents } from "./admin-audit-events.js";
+export type {
   AnonymousSessionRow,
   NewAnonymousSessionRow,
 } from "./anonymous-sessions.js";

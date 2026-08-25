@@ -7,7 +7,10 @@ import { getConversionQueueCounts } from "@repo/queue";
 import { isExecutableToolAvailability, listCatalogTools } from "@repo/tools";
 import { Hono } from "hono";
 import type { AdminSystemHealth } from "../../admin/admin-health.js";
-import type { AdminQueryService } from "../../admin/admin-queries.js";
+import {
+  ADMIN_AUDIT_ACTIONS,
+  type AdminQueryService,
+} from "../../admin/admin-queries.js";
 import type { AppEnv } from "../../app-env.js";
 import { requireAdminMiddleware } from "../../middleware/require-admin.js";
 
@@ -205,6 +208,14 @@ export function createAdminRoutes(options: AdminRoutesOptions) {
       actorUserId: actor.userId,
     });
 
+    await options.getQueries().recordAuditEvent({
+      actorUserId: actor.userId,
+      action: ADMIN_AUDIT_ACTIONS.billingAdjustCredits,
+      targetType: "user",
+      targetId: userId,
+      reason,
+    });
+
     return c.json({ ok: true });
   });
 
@@ -231,6 +242,14 @@ export function createAdminRoutes(options: AdminRoutesOptions) {
 
   admin.get("/health", async (c) => {
     return c.json(await options.getSystemHealth());
+  });
+
+  admin.get("/audit", async (c) => {
+    const events = await options.getQueries().listAuditEvents({
+      limit: parseLimit(c.req.query("limit"), 50),
+    });
+
+    return c.json({ events });
   });
 
   return admin;

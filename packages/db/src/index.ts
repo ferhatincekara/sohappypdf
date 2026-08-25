@@ -6,6 +6,11 @@ export type { CreateDatabaseOptions, Database } from "./client.js";
 export { createDatabase, getDb } from "./client.js";
 export { pingDatabase } from "./ping.js";
 export type {
+  AdminAuditEventRow,
+  NewAdminAuditEventRow,
+} from "./schema/admin-audit-events.js";
+export { adminAuditEvents } from "./schema/admin-audit-events.js";
+export type {
   AnonymousSessionRow,
   NewAnonymousSessionRow,
 } from "./schema/anonymous-sessions.js";

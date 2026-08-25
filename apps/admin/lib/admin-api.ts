@@ -2,6 +2,7 @@ import { getAdminApiV1BaseUrl } from "@/config/public-env";
 import type {
   AdminActor,
   AdminAnonymousSessionRecord,
+  AdminAuditEventRecord,
   AdminBillingInsights,
   AdminCatalogTool,
   AdminExecutionRecord,
@@ -99,6 +100,15 @@ export async function fetchAdminTools(): Promise<AdminCatalogTool[]> {
 
 export function fetchAdminHealth(): Promise<AdminSystemHealth> {
   return adminRequest<AdminSystemHealth>("/admin/health");
+}
+
+export async function fetchAdminAuditEvents(): Promise<
+  AdminAuditEventRecord[]
+> {
+  const body = await adminRequest<{ events: AdminAuditEventRecord[] }>(
+    "/admin/audit",
+  );
+  return body.events;
 }
 
 export async function submitAdminCreditAdjustment(input: {

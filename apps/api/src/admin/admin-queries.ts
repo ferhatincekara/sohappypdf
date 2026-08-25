@@ -1,5 +1,6 @@
 import { getUtcMonthPeriod } from "@repo/billing";
 import {
+  adminAuditEvents,
   anonymousSessions,
   billingSubscriptions,
   conversions,
@@ -84,6 +85,32 @@ export type AdminLedgerEntry = {
   createdAt: string;
 };
 
+export const ADMIN_AUDIT_ACTIONS = {
+  billingAdjustCredits: "billing.adjust_credits",
+} as const;
+
+export type AdminAuditEventRecord = {
+  id: string;
+  actorUserId: string;
+  actorEmail: string | null;
+  actorName: string | null;
+  action: string;
+  targetType: string;
+  targetId: string;
+  reason: string | null;
+  createdAt: string;
+};
+
+export type RecordAdminAuditEventInput = {
+  actorUserId: string;
+  actorEmail?: string | null;
+  actorName?: string | null;
+  action: string;
+  targetType: string;
+  targetId: string;
+  reason?: string | null;
+};
+
 export type AdminBillingInsights = {
   usersByPlan: {
     free: number;
@@ -123,6 +150,8 @@ export type AdminQueryService = {
     status?: string;
   }): Promise<AdminExecutionRecord[]>;
   getBillingInsights(now?: Date): Promise<AdminBillingInsights>;
+  recordAuditEvent(input: RecordAdminAuditEventInput): Promise<void>;
+  listAuditEvents(input: { limit: number }): Promise<AdminAuditEventRecord[]>;
 };
 
 function toCount(value: unknown): number {
@@ -459,6 +488,53 @@ export function createAdminQueryService(
         })),
       };
     },
+
+    async recordAuditEvent(input) {
+      const action = input.action.trim();
+      const targetType = input.targetType.trim();
+      const targetId = input.targetId.trim();
+      const reason = input.reason?.trim() ?? "";
+
+      await db.insert(adminAuditEvents).values({
+        actorUserId: input.actorUserId,
+        action,
+        targetType,
+        targetId,
+        reason: reason.length === 0 ? null : reason,
+      });
+    },
+
+    async listAuditEvents(input) {
+      const limit = Math.min(Math.max(input.limit, 1), 100);
+      const rows = await db
+        .select({
+          id: adminAuditEvents.id,
+          actorUserId: adminAuditEvents.actorUserId,
+          actorEmail: user.email,
+          actorName: user.name,
+          action: adminAuditEvents.action,
+          targetType: adminAuditEvents.targetType,
+          targetId: adminAuditEvents.targetId,
+          reason: adminAuditEvents.reason,
+          createdAt: adminAuditEvents.createdAt,
+        })
+        .from(adminAuditEvents)
+        .leftJoin(user, eq(adminAuditEvents.actorUserId, user.id))
+        .orderBy(desc(adminAuditEvents.createdAt))
+        .limit(limit);
+
+      return rows.map((row) => ({
+        id: row.id,
+        actorUserId: row.actorUserId,
+        actorEmail: row.actorEmail,
+        actorName: row.actorName,
+        action: row.action,
+        targetType: row.targetType,
+        targetId: row.targetId,
+        reason: row.reason,
+        createdAt: row.createdAt.toISOString(),
+      }));
+    },
   };
 }
 
@@ -470,6 +546,7 @@ export function createMemoryAdminQueryService(options?: {
   executions?: readonly AdminExecutionRecord[];
   anonymousSessions?: readonly AdminAnonymousSessionRecord[];
   billingInsights?: AdminBillingInsights;
+  auditEvents?: AdminAuditEventRecord[];
 }): AdminQueryService {
   const actors = options?.actors ?? [];
   const overview = options?.overview ?? {
@@ -482,6 +559,7 @@ export function createMemoryAdminQueryService(options?: {
   const executions = options?.executions ?? [];
   const anonymous = options?.anonymousSessions ?? [];
   const billingInsights = options?.billingInsights;
+  const auditEvents = options?.auditEvents ?? [];
 
   return {
     async findActorByUserId(userId) {
@@ -540,6 +618,24 @@ export function createMemoryAdminQueryService(options?: {
         },
         ledger: [],
       };
+    },
+    async recordAuditEvent(input) {
+      const actor =
+        actors.find((item) => item.userId === input.actorUserId) ?? null;
+      auditEvents.unshift({
+        id: crypto.randomUUID(),
+        actorUserId: input.actorUserId,
+        actorEmail: input.actorEmail ?? actor?.email ?? null,
+        actorName: input.actorName ?? actor?.name ?? null,
+        action: input.action.trim(),
+        targetType: input.targetType.trim(),
+        targetId: input.targetId.trim(),
+        reason: input.reason?.trim() ? input.reason.trim() : null,
+        createdAt: new Date().toISOString(),
+      });
+    },
+    async listAuditEvents(input) {
+      return auditEvents.slice(0, Math.min(Math.max(input.limit, 1), 100));
     },
   };
 }

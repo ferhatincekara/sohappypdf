@@ -244,6 +244,22 @@ describe("admin routes", () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
+
+    const audit = await app.request("/api/v1/admin/audit");
+    expect(audit.status).toBe(200);
+    const auditBody = await audit.json();
+    expect(auditBody.events).toHaveLength(1);
+    expect(auditBody.events[0]).toMatchObject({
+      actorUserId: "admin_1",
+      actorEmail: "ops@example.com",
+      action: "billing.adjust_credits",
+      targetType: "user",
+      targetId: "user_2",
+      reason: "support goodwill credit",
+    });
+    expect(JSON.stringify(auditBody)).not.toContain("password");
+    expect(JSON.stringify(auditBody)).not.toContain("token");
+    expect(JSON.stringify(auditBody)).not.toContain("polar");
   });
 
   test("rejects credit adjustments without a reason", async () => {
@@ -265,6 +281,10 @@ describe("admin routes", () => {
     });
 
     expect(response.status).toBe(400);
+
+    const audit = await app.request("/api/v1/admin/audit");
+    expect(audit.status).toBe(200);
+    expect((await audit.json()).events).toEqual([]);
   });
 
   test("lists catalog tools as read-only operational metadata", async () => {

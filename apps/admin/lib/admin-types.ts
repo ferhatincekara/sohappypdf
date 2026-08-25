@@ -55,6 +55,18 @@ export type AdminAnonymousSessionRecord = {
   lastSeenAt: string;
 };
 
+export type AdminAuditEventRecord = {
+  id: string;
+  actorUserId: string;
+  actorEmail: string | null;
+  actorName: string | null;
+  action: string;
+  targetType: string;
+  targetId: string;
+  reason: string | null;
+  createdAt: string;
+};
+
 export type AdminQueueCounts = {
   waiting: number;
   active: number;
