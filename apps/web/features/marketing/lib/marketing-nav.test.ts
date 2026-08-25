@@ -12,7 +12,10 @@ describe("marketing navigation", () => {
   });
 
   test("footer only links to existing public routes", () => {
-    const links = getMarketingFooterLinks(AUTH_PATHS.login);
+    const links = getMarketingFooterLinks({
+      accountHref: AUTH_PATHS.login,
+      isAuthenticated: false,
+    });
 
     expect(links.map((item) => item.href)).toEqual([
       MARKETING_PATHS.tools,
@@ -20,5 +23,15 @@ describe("marketing navigation", () => {
       MARKETING_PATHS.developers,
       AUTH_PATHS.login,
     ]);
+    expect(links.at(-1)?.id).toBe("signIn");
+  });
+
+  test("footer uses Account instead of Sign in when authenticated", () => {
+    const links = getMarketingFooterLinks({
+      accountHref: "/account",
+      isAuthenticated: true,
+    });
+
+    expect(links.at(-1)).toEqual({ id: "account", href: "/account" });
   });
 });

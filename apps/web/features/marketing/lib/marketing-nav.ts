@@ -19,6 +19,7 @@ export const MARKETING_FOOTER_LINK_IDS = [
   "pricing",
   "api",
   "signIn",
+  "account",
 ] as const;
 
 export type MarketingFooterLinkId = (typeof MARKETING_FOOTER_LINK_IDS)[number];
@@ -28,13 +29,16 @@ export type MarketingFooterLink = {
   href: string;
 };
 
-export function getMarketingFooterLinks(
-  signInHref: string,
-): readonly MarketingFooterLink[] {
+export function getMarketingFooterLinks(input: {
+  accountHref: string;
+  isAuthenticated: boolean;
+}): readonly MarketingFooterLink[] {
   return [
     { id: "tools", href: MARKETING_PATHS.tools },
     { id: "pricing", href: MARKETING_PATHS.pricing },
     { id: "api", href: MARKETING_PATHS.developers },
-    { id: "signIn", href: signInHref },
+    input.isAuthenticated
+      ? { id: "account", href: input.accountHref }
+      : { id: "signIn", href: input.accountHref },
   ];
 }

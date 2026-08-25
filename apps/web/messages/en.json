@@ -10,6 +10,7 @@
       "pricing": "Pricing",
       "developers": "Developers",
       "signIn": "Sign in",
+      "account": "Account",
       "getStarted": "Get started",
       "open": "Open menu",
       "close": "Close menu",
@@ -215,7 +216,8 @@
       "tools": "Tools",
       "pricing": "Pricing",
       "api": "API",
-      "signIn": "Sign in"
+      "signIn": "Sign in",
+      "account": "Account"
     },
     "toolsDirectory": {
       "title": "PDF tools",

@@ -10,7 +10,10 @@ export async function MarketingFooter({
   isAuthenticated: boolean;
 }) {
   const t = await getTranslations("marketing.footer");
-  const links = getMarketingFooterLinks(resolveSignInHref(isAuthenticated));
+  const links = getMarketingFooterLinks({
+    accountHref: resolveSignInHref(isAuthenticated),
+    isAuthenticated,
+  });
 
   return (
     <footer className="border-t border-border">

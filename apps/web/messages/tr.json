@@ -10,6 +10,7 @@
       "pricing": "Fiyatlandırma",
       "developers": "Geliştiriciler",
       "signIn": "Giriş yap",
+      "account": "Hesap",
       "getStarted": "Başla",
       "open": "Menüyü aç",
       "close": "Menüyü kapat",
@@ -215,7 +216,8 @@
       "tools": "Araçlar",
       "pricing": "Fiyatlandırma",
       "api": "API",
-      "signIn": "Giriş yap"
+      "signIn": "Giriş yap",
+      "account": "Hesap"
     },
     "toolsDirectory": {
       "title": "PDF araçları",
