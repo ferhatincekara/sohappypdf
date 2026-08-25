@@ -2,6 +2,12 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/config");
 
+export type { AdminConfig } from "./admin-config.js";
+export {
+  EMPTY_ADMIN_CONFIG,
+  isAdminAllowlisted,
+  loadAdminConfig,
+} from "./admin-config.js";
 export type { AiConfig, AiProviderKind } from "./ai-config.js";
 export {
   DEFAULT_AI_MAX_EXTRACTED_CHARS,

@@ -102,7 +102,9 @@ Background PDF conversion and file processing worker.
 
 ### admin
 
-Not present yet. Do not create it unless explicitly requested.
+Internal operator console at `apps/admin`.
+
+Not a customer product. Authorization is an allowlist (`ADMIN_USER_IDS`, `ADMIN_EMAILS`) on top of Better Auth sessions. API keys cannot access admin routes.
 
 ## Package Responsibilities
 

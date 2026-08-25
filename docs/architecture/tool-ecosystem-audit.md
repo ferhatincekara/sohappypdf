@@ -6,7 +6,7 @@ Retention: approximately **2 hours** (`FILE_RETENTION_HOURS` / `ANONYMOUS_RETENT
 
 S3 is object storage. Database records expire/clean via the file and conversion cleanup workers. S3 lifecycle is a safety net.
 
-There is **no** `apps/admin` yet (later phase).
+There is an internal `apps/admin` operator console (allowlisted session auth).
 
 ## Shared pipeline (all executable tools)
 

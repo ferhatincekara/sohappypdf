@@ -1,9 +1,9 @@
 import { type ApiKeyService, getApiKeyService } from "@repo/api-keys";
 import { type AnonymousSessionService, getAuth } from "@repo/auth";
 import { type BillingService, getBillingService } from "@repo/billing";
+import type { AdminConfig, AnonymousConfig, ApiConfig } from "@repo/config";
 import {
-  type AnonymousConfig,
-  type ApiConfig,
+  loadAdminConfig,
   loadAnonymousConfig,
   loadApiConfig,
   loadAppConfig,
@@ -17,6 +17,8 @@ import { type FileService, getFileService } from "@repo/files";
 import { createLogger, type Logger } from "@repo/logger";
 import { type ConversionJobData, enqueueConversion } from "@repo/queue";
 import { Hono } from "hono";
+import type { AdminQueryService } from "./admin/admin-queries.js";
+import { createAdminQueryService } from "./admin/admin-queries.js";
 import type { AppEnv } from "./app-env.js";
 import {
   createDefaultIdentityResolver,
@@ -51,6 +53,8 @@ export type CreateAppOptions = {
   billingService?: BillingService;
   enqueueConversion?: (input: ConversionJobData) => Promise<unknown>;
   handleAuth?: HandleAuthRequest;
+  adminConfig?: AdminConfig;
+  adminQueries?: AdminQueryService;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -113,6 +117,8 @@ export function createApp(options: CreateAppOptions = {}) {
       anonymousConfig,
       checkAnonymousOperationRateLimit:
         options.checkAnonymousOperationRateLimit,
+      adminConfig: options.adminConfig ?? loadAdminConfig(),
+      getAdminQueries: () => options.adminQueries ?? createAdminQueryService(),
     }),
   );
 

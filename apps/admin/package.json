@@ -1,0 +1,28 @@
+{
+  "name": "@repo/admin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --env-file=../../.env next dev --port 3002",
+    "build": "bun --env-file=../../.env next build",
+    "start": "bun --env-file=../../.env next start --port 3002",
+    "check-types": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "better-auth": "^1.7.1",
+    "next": "^16.3.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.18.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "5.9.2"
+  }
+}
