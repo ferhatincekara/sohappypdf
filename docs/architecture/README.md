@@ -48,3 +48,4 @@ Shared UI currently lives under `apps/web/components/ui` (shadcn). There is no `
 
 - `docs/api/` — public API contract (OpenAPI + markdown)
 - `docs/architecture/` — this overview
+- `docs/architecture/tool-ecosystem-audit.md` — catalog vs engine vs UX matrix

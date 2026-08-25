@@ -449,7 +449,7 @@
         "all": "All",
         "queued": "Queued",
         "processing": "Processing",
-        "completed": "Completed",
+        "completed": "Ready",
         "failed": "Failed"
       }
     },
@@ -527,7 +527,7 @@
       "pending": "Preparing",
       "queued": "Queued",
       "processing": "Processing",
-      "completed": "Completed",
+      "completed": "Ready",
       "failed": "Failed",
       "cancelled": "Cancelled",
       "expired": "Expired",
@@ -729,7 +729,7 @@
     "moveDown": "Move down",
     "loading": "Loading…",
     "status": "Status: {status}",
-    "keepWorkspace": "Create a free account to keep your workspace and history.",
+    "keepWorkspace": "Create a free account for usage history, higher limits, and billing.",
     "createAccount": "Create a free account",
     "limits": "Up to {files} files, {sizeMb} MB each. Files are kept for {hours} hours.",
     "overview": {
@@ -746,7 +746,7 @@
         },
         "process": {
           "title": "Process",
-          "description": "We convert your file in the cloud to {detail}."
+          "description": "We process your file to {detail}."
         },
         "download": {
           "title": "Download",
@@ -1001,7 +1001,7 @@
         "invalidFile": "This file couldn't be opened. Please try another file.",
         "expiredTitle": "This file has expired",
         "expiredDescription": "Files are automatically deleted after {hours} hours. Convert another file to continue.",
-        "faqHow": "Upload a file, convert it, then download the result. An account is not required for free conversion tools.",
+        "faqHow": "Upload a file, process it, then download the result. An account is not required for ordinary free tools.",
         "how": {
           "upload": {
             "title": "Upload",
@@ -1577,7 +1577,7 @@
       "uploading": "Uploading",
       "uploadingHint": "Sending your file to secure storage.",
       "preparing": "Preparing",
-      "preparingHint": "Creating the conversion job.",
+      "preparingHint": "Starting the process.",
       "processing": "Processing",
       "processingHint": "Working on your file. This may take a moment.",
       "ready": "Ready",
@@ -1609,7 +1609,7 @@
       "startAgain": "Start again",
       "status": {
         "processing": "Processing",
-        "completed": "Completed",
+        "completed": "Ready",
         "failed": "Failed",
         "expired": "Expired"
       },
@@ -1639,7 +1639,7 @@
       "account": {
         "question": "Do I need an account?",
         "anonymous": "No. You can run this tool without creating an account. A free account is optional if you want history and higher limits.",
-        "required": "Yes. Sign in before processing so the file can be stored in your workspace."
+        "required": "Yes. Sign in before processing. This tool is not available without an account."
       },
       "limits": {
         "question": "What are the current limits?",

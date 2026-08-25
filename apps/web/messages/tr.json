@@ -449,7 +449,7 @@
         "all": "Tümü",
         "queued": "Kuyrukta",
         "processing": "İşleniyor",
-        "completed": "Tamamlandı",
+        "completed": "Hazır",
         "failed": "Başarısız"
       }
     },
@@ -527,7 +527,7 @@
       "pending": "Hazırlanıyor",
       "queued": "Kuyrukta",
       "processing": "İşleniyor",
-      "completed": "Tamamlandı",
+      "completed": "Hazır",
       "failed": "Başarısız",
       "cancelled": "İptal edildi",
       "expired": "Süresi doldu",
@@ -729,7 +729,7 @@
     "moveDown": "Aşağı taşı",
     "loading": "Yükleniyor…",
     "status": "Durum: {status}",
-    "keepWorkspace": "Çalışma alanınızı ve geçmişinizi saklamak için ücretsiz bir hesap oluşturun.",
+    "keepWorkspace": "Kullanım geçmişi, daha yüksek limitler ve faturalama için ücretsiz bir hesap oluşturun.",
     "createAccount": "Ücretsiz hesap oluştur",
     "limits": "En fazla {files} dosya, her biri {sizeMb} MB. Dosyalar {hours} saat saklanır.",
     "overview": {
@@ -746,7 +746,7 @@
         },
         "process": {
           "title": "İşle",
-          "description": "Dosyanızı bulutta {detail} formatına dönüştürürüz."
+          "description": "Dosyanızı {detail} olarak işleriz."
         },
         "download": {
           "title": "İndir",
@@ -1001,7 +1001,7 @@
         "invalidFile": "Bu dosya açılamadı. Lütfen başka bir dosya deneyin.",
         "expiredTitle": "Bu dosyanın süresi doldu",
         "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir dosya dönüştürün.",
-        "faqHow": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. Ücretsiz dönüştürme araçları için hesap gerekmez.",
+        "faqHow": "Bir dosya yükleyin, işleyin ve sonucu indirin. Sıradan ücretsiz araçlar için hesap gerekmez.",
         "how": {
           "upload": {
             "title": "Yükle",
@@ -1577,7 +1577,7 @@
       "uploading": "Yükleniyor",
       "uploadingHint": "Dosyanız güvenli depolamaya gönderiliyor.",
       "preparing": "Hazırlanıyor",
-      "preparingHint": "Dönüşüm işi oluşturuluyor.",
+      "preparingHint": "İşlem başlatılıyor.",
       "processing": "İşleniyor",
       "processingHint": "Dosyanız üzerinde çalışıyoruz. Bu biraz sürebilir.",
       "ready": "Hazır",
@@ -1609,7 +1609,7 @@
       "startAgain": "Yeniden başla",
       "status": {
         "processing": "İşleniyor",
-        "completed": "Tamamlandı",
+        "completed": "Hazır",
         "failed": "Başarısız",
         "expired": "Süresi doldu"
       },
@@ -1639,7 +1639,7 @@
       "account": {
         "question": "Hesap gerekir mi?",
         "anonymous": "Hayır. Bu aracı hesap oluşturmadan kullanabilirsiniz. Geçmiş ve daha yüksek limitler için ücretsiz hesap isteğe bağlıdır.",
-        "required": "Evet. Dosyanın çalışma alanınıza kaydedilmesi için işlemeden önce oturum açın."
+        "required": "Evet. İşlemeden önce oturum açın. Bu araç hesapsız kullanılamaz."
       },
       "limits": {
         "question": "Güncel limitler nelerdir?",

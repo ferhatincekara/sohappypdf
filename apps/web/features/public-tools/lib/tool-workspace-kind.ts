@@ -11,8 +11,6 @@ export const CONVERT_TOOL_IDS = [
   "pdf-to-jpg",
   "pdf-to-png",
   "pdf-to-txt",
-  "jpg-to-pdf",
-  "png-to-pdf",
   "pdf-to-markdown",
   "pdf-to-pdfa",
 ] as const;
