@@ -288,6 +288,7 @@ type TestServices = {
   storage: Storage;
   jobs: ConversionJobData[];
   failEnqueue: boolean;
+  billingService: BillingService;
   createAppFor(identity: RequestIdentity): ReturnType<typeof createApp>;
 };
 
@@ -307,11 +308,13 @@ function createConversionServices(
     files: fileService,
     now,
   });
+  const billing = billingService ?? createTestBillingService();
   const services: TestServices = {
     jobs,
     fileService,
     storage,
     failEnqueue: false,
+    billingService: billing,
     createAppFor(identity) {
       return createApp({
         config: { corsOrigins: [] },
@@ -319,7 +322,7 @@ function createConversionServices(
         resolveIdentity: async () => identity,
         fileService,
         conversionService,
-        billingService: billingService ?? createTestBillingService(),
+        billingService: billing,
         enqueueConversion: async (input) => {
           if (services.failEnqueue) {
             throw new Error("redis unavailable");
@@ -846,6 +849,47 @@ describe("conversion API", () => {
     expect(await second.json()).toMatchObject({
       error: { code: APP_ERROR_CODES.PLAN_LIMIT_REACHED },
     });
+  });
+
+  test("records conversion usage once and enforces the monthly conversion limit", async () => {
+    const context = createConversionApp({
+      identity: sessionIdentity,
+      billingService: createTestBillingService({
+        planCatalog: {
+          ...DEFAULT_PLAN_LIMITS,
+          free: {
+            ...DEFAULT_PLAN_LIMITS.free,
+            monthlyConversions: 1,
+          },
+        },
+      }),
+    });
+    const file = await createReadyFile(context, { ownerId: "user_1" });
+
+    const first = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "jpg",
+      }),
+    });
+    const second = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "png",
+      }),
+    });
+    const usage = await context.billingService.getConversionUsage("user_1");
+
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(403);
+    expect(await second.json()).toMatchObject({
+      error: { code: APP_ERROR_CODES.PLAN_LIMIT_REACHED },
+    });
+    expect(usage.conversionsUsed).toBe(1);
   });
 
   test("rejects an API-key conversion when API credits are insufficient", async () => {

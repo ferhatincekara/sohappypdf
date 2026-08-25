@@ -125,6 +125,7 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
           toolId: conversionToolId,
         });
       }
+      await billing.assertCanCreateConversion(identity.userId);
     }
 
     const conversion = await enqueueCreatedConversion({
@@ -169,6 +170,10 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
             toolId,
           });
         }
+        await billing.recordConversionUsage({
+          userId: identity.userId,
+          conversionId: conversion.id,
+        });
       } catch (error) {
         if (
           isAppError(error) &&
