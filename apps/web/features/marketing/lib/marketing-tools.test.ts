@@ -1,11 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { listCatalogTools, listRegisteredTools } from "@repo/tools/catalog";
 import {
+  findToolCategoryBySlug,
   getMarketingToolDirectoryGroups,
   getMarketingToolDirectoryItems,
   getMarketingToolNavGroups,
   getMarketingToolNavItems,
   getRelatedMarketingTools,
+  toolCategoryPath,
 } from "./marketing-tools";
 
 describe("marketing tool navigation", () => {
@@ -74,5 +76,14 @@ describe("marketing tool navigation", () => {
       true,
     );
     expect(related.some((item) => item.id === "merge-pdf")).toBe(false);
+  });
+
+  test("maps meaningful category landing paths", () => {
+    expect(toolCategoryPath("organize")).toBe("/tools/organize-pdf");
+    expect(toolCategoryPath("convert")).toBe("/tools/convert-pdf");
+    expect(toolCategoryPath("security")).toBe("/tools/security");
+    expect(toolCategoryPath("intelligence")).toBe("/tools/ocr");
+    expect(findToolCategoryBySlug("organize-pdf")).toBe("organize");
+    expect(findToolCategoryBySlug("missing")).toBeUndefined();
   });
 });

@@ -39,9 +39,9 @@
     },
     "hero": {
       "eyebrow": "Online PDF tools",
-      "title": "PDF tools that stay simple for people and APIs.",
+      "title": "Use PDF tools in your browser.",
       "description": "Open a tool, upload a file, process it, and download the result. No account required for basic use.",
-      "primaryCta": "Start for free",
+      "primaryCta": "Choose a tool",
       "secondaryCta": "View API"
     },
     "demo": {
@@ -236,8 +236,8 @@
       }
     },
     "metadata": {
-      "homeTitle": "SohappyPDF — PDF conversion for people and APIs",
-      "homeDescription": "Upload a file, convert it, and download the result. SohappyPDF also exposes the same workflow through a public API.",
+      "homeTitle": "SohappyPDF — Use PDF tools in your browser",
+      "homeDescription": "Open a PDF tool, process a file, and download the result. No account required for basic use.",
       "pricingTitle": "Pricing — Free, Pro, and API",
       "pricingDescription": "Compare Anonymous, Free, and Pro web limits, plus separate API credit packs.",
       "toolsTitle": "PDF tools",

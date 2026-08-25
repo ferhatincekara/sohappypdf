@@ -38,10 +38,10 @@
       }
     },
     "hero": {
-      "eyebrow": "PDF dönüştürme",
-      "title": "İnsanlar ve API’ler için sade PDF dönüştürme.",
-      "description": "Bir dosya yükleyin, dönüşümü seçin ve sonucu indirin. Aynı akış hem panelde hem genel API’de geçerlidir.",
-      "primaryCta": "Ücretsiz başla",
+      "eyebrow": "Çevrimiçi PDF araçları",
+      "title": "PDF araçlarını tarayıcınızda kullanın.",
+      "description": "Bir araç açın, dosya yükleyin, işleyin ve sonucu indirin. Temel kullanım için hesap gerekmez.",
+      "primaryCta": "Bir araç seçin",
       "secondaryCta": "API’yi gör"
     },
     "demo": {
@@ -236,8 +236,8 @@
       }
     },
     "metadata": {
-      "homeTitle": "SohappyPDF — İnsanlar ve API’ler için PDF dönüştürme",
-      "homeDescription": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. SohappyPDF aynı akışı genel bir API ile de sunar.",
+      "homeTitle": "SohappyPDF — PDF araçlarını tarayıcınızda kullanın",
+      "homeDescription": "Bir PDF aracı açın, dosyayı işleyin ve sonucu indirin. Temel kullanım için hesap gerekmez.",
       "pricingTitle": "Fiyatlandırma — Ücretsiz, Pro ve API",
       "pricingDescription": "Anonim, Ücretsiz ve Pro web limitlerini ve ayrı API kredi paketlerini karşılaştırın.",
       "toolsTitle": "PDF araçları",

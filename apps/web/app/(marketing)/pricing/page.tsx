@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { getWebSession } from "@/features/auth/session/get-web-session";
 import { hasWebSession } from "@/features/auth/session/session-state";
 import { PricingPageContent } from "@/features/marketing/components/pricing-page-content";
 import { resolveMarketingCtas } from "@/features/marketing/lib/marketing-cta";
+import { buildMarketingPageMetadata } from "@/features/marketing/lib/marketing-page-metadata";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { getPublicApiPacks } from "@/features/marketing/lib/public-api-packs";
 import {
@@ -14,16 +15,14 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("marketing.metadata");
+  const locale = await getLocale();
 
-  return {
+  return buildMarketingPageMetadata({
     title: t("pricingTitle"),
     description: t("pricingDescription"),
-    openGraph: {
-      title: t("pricingTitle"),
-      description: t("pricingDescription"),
-      type: "website",
-    },
-  };
+    path: MARKETING_PATHS.pricing,
+    locale,
+  });
 }
 
 export default async function PricingRoute() {

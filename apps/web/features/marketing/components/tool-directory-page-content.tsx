@@ -3,7 +3,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { getMarketingToolShortcuts } from "../lib/marketing-tool-shortcuts";
-import type { MarketingToolNavGroup } from "../lib/marketing-tools";
+import {
+  type MarketingToolNavGroup,
+  toolCategoryPath,
+} from "../lib/marketing-tools";
 
 export async function ToolDirectoryPageContent({
   groups,
@@ -54,7 +57,12 @@ export async function ToolDirectoryPageContent({
                 id={`tools-${group.category}`}
                 className="text-xl font-semibold tracking-tight"
               >
-                {tNav(`categories.${group.category}`)}
+                <Link
+                  href={toolCategoryPath(group.category)}
+                  className="hover:underline"
+                >
+                  {tNav(`categories.${group.category}`)}
+                </Link>
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {t(`categories.${group.category}`)}

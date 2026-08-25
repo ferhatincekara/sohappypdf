@@ -27,7 +27,7 @@ export async function MarketingHomePage({
         description={t("metadata.homeDescription")}
         freePlanName={t("pricing.free.name")}
       />
-      <Hero startHref={startHref} />
+      <Hero />
       <ProductDemoSection />
       <FeaturesSection />
       <HowItWorks />

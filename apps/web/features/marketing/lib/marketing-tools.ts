@@ -18,6 +18,38 @@ export const MARKETING_TOOL_CATEGORY_ORDER = [
 export type MarketingToolCategory =
   (typeof MARKETING_TOOL_CATEGORY_ORDER)[number];
 
+export const MARKETING_TOOL_CATEGORY_SLUGS = {
+  organize: "organize-pdf",
+  convert: "convert-pdf",
+  edit: "edit-pdf",
+  optimize: "optimize-pdf",
+  security: "security",
+  document: "images",
+  intelligence: "ocr",
+} as const satisfies Record<MarketingToolCategory, string>;
+
+export type MarketingToolCategorySlug =
+  (typeof MARKETING_TOOL_CATEGORY_SLUGS)[MarketingToolCategory];
+
+const CATEGORY_BY_SLUG = new Map<string, MarketingToolCategory>(
+  MARKETING_TOOL_CATEGORY_ORDER.map((category) => [
+    MARKETING_TOOL_CATEGORY_SLUGS[category],
+    category,
+  ]),
+);
+
+export function toolCategoryPath(
+  category: MarketingToolCategory,
+): `/tools/${MarketingToolCategorySlug}` {
+  return `/tools/${MARKETING_TOOL_CATEGORY_SLUGS[category]}`;
+}
+
+export function findToolCategoryBySlug(
+  slug: string,
+): MarketingToolCategory | undefined {
+  return CATEGORY_BY_SLUG.get(slug);
+}
+
 export type MarketingToolNavItem = {
   id: ToolDefinition["id"];
   href: ToolDefinition["route"];

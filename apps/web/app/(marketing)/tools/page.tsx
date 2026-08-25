@@ -1,25 +1,20 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ToolDirectoryPageContent } from "@/features/marketing/components/tool-directory-page-content";
+import { buildMarketingPageMetadata } from "@/features/marketing/lib/marketing-page-metadata";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { getMarketingToolDirectoryGroups } from "@/features/marketing/lib/marketing-tools";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("marketing.metadata");
+  const locale = await getLocale();
 
-  return {
+  return buildMarketingPageMetadata({
     title: t("toolsTitle"),
     description: t("toolsDescription"),
-    openGraph: {
-      title: t("toolsTitle"),
-      description: t("toolsDescription"),
-      type: "website",
-    },
-    twitter: {
-      card: "summary",
-      title: t("toolsTitle"),
-      description: t("toolsDescription"),
-    },
-  };
+    path: MARKETING_PATHS.tools,
+    locale,
+  });
 }
 
 export default async function ToolsDirectoryPage() {

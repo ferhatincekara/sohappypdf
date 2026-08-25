@@ -4,7 +4,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { MARKETING_PATHS } from "../lib/marketing-paths";
 import { ProductDemo } from "./product-demo";
 
-export async function Hero({ startHref }: { startHref: string }) {
+export async function Hero() {
   const t = await getTranslations("marketing.hero");
 
   return (
@@ -20,7 +20,10 @@ export async function Hero({ startHref }: { startHref: string }) {
           {t("description")}
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Link href={startHref} className={buttonVariants({ size: "lg" })}>
+          <Link
+            href={MARKETING_PATHS.tools}
+            className={buttonVariants({ size: "lg" })}
+          >
             {t("primaryCta")}
           </Link>
           <Link
