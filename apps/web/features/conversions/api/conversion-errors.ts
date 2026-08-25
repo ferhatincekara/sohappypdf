@@ -103,6 +103,10 @@ export function mapConversionError(
     return CONVERSION_ERROR_KEYS.conflict;
   }
 
+  if (error.code === "FILE_EXPIRED" || error.status === 410) {
+    return CONVERSION_ERROR_KEYS.sourceUnavailable;
+  }
+
   if (error.code === "NOT_FOUND" || error.status === 404) {
     return CONVERSION_ERROR_KEYS.notFound;
   }

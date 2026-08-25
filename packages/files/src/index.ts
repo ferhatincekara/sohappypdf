@@ -2,13 +2,18 @@ import { assertServerOnly } from "@repo/core";
 
 assertServerOnly("@repo/files");
 
+export type { TemporaryFileLifecycleState } from "./file-expiration.js";
 export {
   DEFAULT_FILE_RETENTION_MS,
   DEFAULT_FILE_TTL_MS,
+  FILE_EXPIRED_MESSAGE,
   getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
   remainingFileTtlMs,
+  resolveTemporaryFileLifecycleState,
+  TEMPORARY_FILE_LIFECYCLE_STATES,
+  throwIfOwnedFileExpired,
 } from "./file-expiration.js";
 export {
   DEFAULT_FILE_LIST_LIMIT,

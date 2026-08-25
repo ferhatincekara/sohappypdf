@@ -58,7 +58,7 @@ function jsonError(
   c: Context<AppEnv>,
   code: AppErrorCode,
   message: string,
-  status: 400 | 401 | 403 | 404 | 409 | 413 | 429 | 500,
+  status: 400 | 401 | 403 | 404 | 409 | 410 | 413 | 429 | 500,
 ) {
   return c.json(createErrorBody(c, code, message), status);
 }
@@ -85,13 +85,14 @@ export function errorHandler(error: Error, c: Context<AppEnv>) {
 
 function isHandledErrorStatus(
   status: number,
-): status is 400 | 401 | 403 | 404 | 409 | 413 | 429 | 500 {
+): status is 400 | 401 | 403 | 404 | 409 | 410 | 413 | 429 | 500 {
   return (
     status === 400 ||
     status === 401 ||
     status === 403 ||
     status === 404 ||
     status === 409 ||
+    status === 410 ||
     status === 413 ||
     status === 429 ||
     status === 500

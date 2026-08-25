@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { isAppError } from "@repo/core";
 import type { Storage } from "@repo/storage";
 import { createFileOriginalKey } from "@repo/storage";
+import { FILE_EXPIRED_MESSAGE } from "./file-expiration.js";
 import type { FileRepository } from "./file-repository.js";
 import { createFileService } from "./file-service.js";
 import { sumActiveStorageBytesForOwner } from "./file-storage-usage.js";
@@ -395,7 +396,8 @@ describe("file service", () => {
     } catch (error) {
       expect(isAppError(error)).toBe(true);
       if (isAppError(error)) {
-        expect(error.code).toBe("NOT_FOUND");
+        expect(error.code).toBe("FILE_EXPIRED");
+        expect(error.message).toBe(FILE_EXPIRED_MESSAGE);
       }
     }
   });
@@ -502,6 +504,62 @@ describe("file service", () => {
     expect(eligible.map((file) => file.id)).toEqual([expired.id]);
   });
 
+  test("cleans up expired incomplete, stuck, and failed files", async () => {
+    const now = new Date("2026-08-23T21:00:00.000Z");
+    const pending: FileRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440010",
+      ownerId: "user_1",
+      originalFilename: "incomplete.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 10,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440010/original",
+      status: "pending",
+      createdAt: new Date("2026-08-23T18:00:00.000Z"),
+      updatedAt: new Date("2026-08-23T18:00:00.000Z"),
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+      deletedAt: null,
+      purgedAt: null,
+    };
+    const stuck: FileRecord = {
+      ...pending,
+      id: "550e8400-e29b-41d4-a716-446655440011",
+      originalFilename: "stuck.pdf",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440011/original",
+      status: "processing",
+    };
+    const failed: FileRecord = {
+      ...pending,
+      id: "550e8400-e29b-41d4-a716-446655440012",
+      originalFilename: "failed.pdf",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440012/original",
+      status: "failed",
+    };
+    const storage = createMemoryStorage({
+      existingKeys: [pending.objectKey, stuck.objectKey, failed.objectKey],
+    });
+    const service = createFileService({
+      repository: createMemoryRepository([pending, stuck, failed]),
+      storage,
+      now: () => now,
+    });
+
+    const result = await service.cleanupExpiredFiles();
+    const purged = await Promise.all([
+      service.findFileById(pending.id),
+      service.findFileById(stuck.id),
+      service.findFileById(failed.id),
+    ]);
+
+    expect(result).toEqual({
+      scanned: 3,
+      deleted: 3,
+      failed: 0,
+      failureFileIds: [],
+    });
+    expect(storage.objects.size).toBe(0);
+    expect(purged.every((file) => file?.purgedAt !== null)).toBe(true);
+  });
+
   test("assigns the default two-hour expiration when registering conversion output", async () => {
     const storage = createMemoryStorage({
       existingKeys: ["files/550e8400-e29b-41d4-a716-446655440099/output/job"],
@@ -560,7 +618,8 @@ describe("file service", () => {
     } catch (error) {
       expect(isAppError(error)).toBe(true);
       if (isAppError(error)) {
-        expect(error.code).toBe("NOT_FOUND");
+        expect(error.code).toBe("FILE_EXPIRED");
+        expect(error.message).toBe(FILE_EXPIRED_MESSAGE);
       }
     }
   });

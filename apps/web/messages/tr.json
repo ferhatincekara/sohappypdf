@@ -785,8 +785,8 @@
       }
     },
     "expiration": {
-      "title": "Bu sonucun süresi doldu",
-      "description": "Geçici dosyalar yaklaşık {hours} saat saklanır, ardından kaldırılır. Yeni bir dosya işlemek için yeniden başlayın."
+      "title": "Bu dosyanın süresi doldu",
+      "description": "Bu dosyanın süresi doldu. Lütfen yeniden işleyin. Geçici dosyalar yaklaşık {hours} saat saklanır."
     },
     "workspace": {
       "fileList": "Seçilen dosyalar",
@@ -1698,7 +1698,7 @@
       "signInCta": "Devam etmek için giriş yapın",
       "passwordProtected": "Bu PDF parola korumalı. Önce kilidini açın veya Unlock PDF aracını doğru parola ile kullanın.",
       "processingFailed": "İşlem başarısız oldu. Farklı bir dosyayla tekrar deneyin.",
-      "filesExpired": "Yüklenen dosyalar artık kullanılabilir değil. Yeni bir dosyayla yeniden başlayın.",
+      "filesExpired": "Bu dosyanın süresi doldu. Lütfen yeniden işleyin.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "Yükleme başarısız. Bağlantınızı kontrol edip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",

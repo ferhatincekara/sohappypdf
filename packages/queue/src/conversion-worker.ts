@@ -49,6 +49,7 @@ function isPermanentJobError(error: unknown): boolean {
     isAppError(error) &&
     (error.code === APP_ERROR_CODES.VALIDATION_ERROR ||
       error.code === APP_ERROR_CODES.NOT_FOUND ||
+      error.code === APP_ERROR_CODES.FILE_EXPIRED ||
       error.code === APP_ERROR_CODES.CONFLICT)
   );
 }

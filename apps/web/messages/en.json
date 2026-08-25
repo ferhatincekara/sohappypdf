@@ -785,8 +785,8 @@
       }
     },
     "expiration": {
-      "title": "This result has expired",
-      "description": "Temporary files are kept for about {hours} hours, then they are removed. Start again to process a new file."
+      "title": "This file has expired",
+      "description": "This file has expired. Please process it again. Temporary files are kept for about {hours} hours."
     },
     "workspace": {
       "fileList": "Selected files",
@@ -1698,7 +1698,7 @@
       "signInCta": "Sign in to continue",
       "passwordProtected": "This PDF is password protected. Unlock it first, or use Unlock PDF with the correct password.",
       "processingFailed": "Processing failed. Try again with a different file.",
-      "filesExpired": "The uploaded files are no longer available. Start again with a new file.",
+      "filesExpired": "This file has expired. Please process it again.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "Upload failed. Check your connection and try again.",
       "unexpected": "Something went wrong. Try again.",

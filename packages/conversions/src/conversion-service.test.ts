@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { isAppError } from "@repo/core";
-import type { FileRecord } from "@repo/files";
+import { FILE_EXPIRED_MESSAGE, type FileRecord } from "@repo/files";
 import type { ConversionRepository } from "./conversion-repository.js";
 import { createConversionService } from "./conversion-service.js";
 import type { ConversionRecord } from "./conversion-types.js";
@@ -387,10 +387,33 @@ describe("conversion service", () => {
     }
   });
 
-  test("rejects expired and deleted source files as not found", async () => {
+  test("rejects expired source files with a product-level expiry error", async () => {
     const expired = createFile({
       expiresAt: new Date("2026-08-23T18:00:00.000Z"),
     });
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([expired]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+
+    try {
+      await service.createOwnedConversion({
+        ownerId: sourceFile.ownerId,
+        sourceFileId: expired.id,
+        targetFormat: "jpg",
+      });
+      throw new Error("expected expired file to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("FILE_EXPIRED");
+        expect(error.message).toBe(FILE_EXPIRED_MESSAGE);
+      }
+    }
+  });
+
+  test("rejects deleted source files as not found", async () => {
     const deleted = createFile({
       id: "550e8400-e29b-41d4-a716-446655440003",
       objectKey: "files/550e8400-e29b-41d4-a716-446655440003/original",
@@ -399,23 +422,21 @@ describe("conversion service", () => {
     });
     const service = createConversionService({
       repository: createMemoryRepository(),
-      files: createFileLookup([expired, deleted]),
+      files: createFileLookup([deleted]),
       now: () => new Date("2026-08-23T18:30:00.000Z"),
     });
 
-    for (const sourceFileId of [expired.id, deleted.id]) {
-      try {
-        await service.createOwnedConversion({
-          ownerId: sourceFile.ownerId,
-          sourceFileId,
-          targetFormat: "jpg",
-        });
-        throw new Error("expected unavailable file to fail");
-      } catch (error) {
-        expect(isAppError(error)).toBe(true);
-        if (isAppError(error)) {
-          expect(error.code).toBe("NOT_FOUND");
-        }
+    try {
+      await service.createOwnedConversion({
+        ownerId: sourceFile.ownerId,
+        sourceFileId: deleted.id,
+        targetFormat: "jpg",
+      });
+      throw new Error("expected unavailable file to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
       }
     }
   });

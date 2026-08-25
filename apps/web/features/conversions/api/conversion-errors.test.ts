@@ -34,6 +34,13 @@ describe("conversion error mapping", () => {
         message: "Source file unavailable",
       }),
     ).toBe(CONVERSION_ERROR_KEYS.sourceUnavailable);
+    expect(
+      mapConversionError({
+        kind: "api",
+        code: "FILE_EXPIRED",
+        status: 410,
+      }),
+    ).toBe(CONVERSION_ERROR_KEYS.sourceUnavailable);
   });
 
   test("maps a monthly conversion limit", () => {

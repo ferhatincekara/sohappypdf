@@ -469,9 +469,22 @@ describe("file API", () => {
       `/api/v1/files/${createdBody.file.id}/complete`,
       { method: "POST" },
     );
+    const download = await app.request(
+      `/api/v1/files/${createdBody.file.id}/download`,
+      { method: "POST" },
+    );
+    const downloadBody = await download.json();
 
-    expect(response.status).toBe(404);
-    expect(complete.status).toBe(404);
+    expect(response.status).toBe(410);
+    expect(complete.status).toBe(410);
+    expect(download.status).toBe(410);
+    expect(downloadBody).toMatchObject({
+      error: {
+        code: APP_ERROR_CODES.FILE_EXPIRED,
+        message: "This file has expired. Please process it again.",
+      },
+    });
+    expect(JSON.stringify(downloadBody).includes("objectKey")).toBe(false);
   });
 
   test("lists only the authenticated user's files with bounded pagination", async () => {

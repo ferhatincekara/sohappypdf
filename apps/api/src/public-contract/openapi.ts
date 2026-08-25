@@ -492,6 +492,10 @@ export function createOpenApiDocument(): OpenApiDocument {
             "404": errorResponse("File not found or not owned by the caller.", [
               APP_ERROR_CODES.NOT_FOUND,
             ]),
+            "410": errorResponse(
+              "The file has expired and must be processed again.",
+              [APP_ERROR_CODES.FILE_EXPIRED],
+            ),
             ...authErrorResponses(),
           },
         },
@@ -545,6 +549,10 @@ export function createOpenApiDocument(): OpenApiDocument {
             "404": errorResponse("File not found or not owned by the caller.", [
               APP_ERROR_CODES.NOT_FOUND,
             ]),
+            "410": errorResponse(
+              "The file has expired and must be processed again.",
+              [APP_ERROR_CODES.FILE_EXPIRED],
+            ),
             ...authErrorResponses(),
           },
         },
@@ -568,6 +576,10 @@ export function createOpenApiDocument(): OpenApiDocument {
             "404": errorResponse("File not found or not owned by the caller.", [
               APP_ERROR_CODES.NOT_FOUND,
             ]),
+            "410": errorResponse(
+              "The file has expired and must be processed again.",
+              [APP_ERROR_CODES.FILE_EXPIRED],
+            ),
             ...authErrorResponses(),
           },
         },
@@ -629,6 +641,10 @@ export function createOpenApiDocument(): OpenApiDocument {
             "404": errorResponse("Source file not found or not usable.", [
               APP_ERROR_CODES.NOT_FOUND,
             ]),
+            "410": errorResponse(
+              "The source file has expired and must be processed again.",
+              [APP_ERROR_CODES.FILE_EXPIRED],
+            ),
             "409": errorResponse(
               "The conversion conflicts with the current file or job state.",
               [APP_ERROR_CODES.CONFLICT],

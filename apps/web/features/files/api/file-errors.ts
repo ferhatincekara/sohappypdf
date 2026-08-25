@@ -170,6 +170,10 @@ export function mapFileError(error: FileClientError | null): FileErrorKey {
     return FILE_ERROR_KEYS.objectNotUploaded;
   }
 
+  if (error.code === "FILE_EXPIRED" || error.status === 410) {
+    return FILE_ERROR_KEYS.expiredUpload;
+  }
+
   if (error.code === "NOT_FOUND" || error.status === 404) {
     return FILE_ERROR_KEYS.fileNotFound;
   }

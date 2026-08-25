@@ -2,10 +2,13 @@ import { describe, expect, test } from "bun:test";
 import { isAppError } from "@repo/core";
 import {
   DEFAULT_FILE_RETENTION_MS,
+  FILE_EXPIRED_MESSAGE,
   getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
   remainingFileTtlMs,
+  resolveTemporaryFileLifecycleState,
+  throwIfOwnedFileExpired,
 } from "./file-expiration.js";
 import type { FileRecord } from "./file-types.js";
 
@@ -102,5 +105,77 @@ describe("file expiration", () => {
     expect(remainingFileTtlMs(file, new Date("2026-08-23T21:00:00.000Z"))).toBe(
       1,
     );
+  });
+
+  test("maps temporary file lifecycle states without exposing storage details", () => {
+    const now = new Date("2026-08-23T18:00:00.000Z");
+
+    expect(resolveTemporaryFileLifecycleState(createFile(), now)).toBe(
+      "ACTIVE",
+    );
+    expect(
+      resolveTemporaryFileLifecycleState(
+        createFile({ status: "processing" }),
+        now,
+      ),
+    ).toBe("PROCESSING");
+    expect(
+      resolveTemporaryFileLifecycleState(
+        createFile({ status: "completed" }),
+        now,
+      ),
+    ).toBe("READY");
+    expect(
+      resolveTemporaryFileLifecycleState(createFile({ status: "failed" }), now),
+    ).toBe("FAILED");
+    expect(
+      resolveTemporaryFileLifecycleState(
+        createFile({
+          status: "processing",
+          expiresAt: new Date("2026-08-23T17:00:00.000Z"),
+        }),
+        now,
+      ),
+    ).toBe("EXPIRED");
+  });
+
+  test("expired incomplete, stuck, and failed files are eligible for cleanup", () => {
+    const now = new Date("2026-08-23T18:00:00.000Z");
+    const expiredAt = new Date("2026-08-23T17:00:00.000Z");
+
+    expect(
+      isEligibleForCleanup(
+        createFile({ status: "pending", expiresAt: expiredAt }),
+        now,
+      ),
+    ).toBe(true);
+    expect(
+      isEligibleForCleanup(
+        createFile({ status: "processing", expiresAt: expiredAt }),
+        now,
+      ),
+    ).toBe(true);
+    expect(
+      isEligibleForCleanup(
+        createFile({ status: "failed", expiresAt: expiredAt }),
+        now,
+      ),
+    ).toBe(true);
+  });
+
+  test("throws a product-level expiry error for owned expired files", () => {
+    try {
+      throwIfOwnedFileExpired(
+        createFile({ expiresAt: new Date("2026-08-23T17:00:00.000Z") }),
+        new Date("2026-08-23T18:00:00.000Z"),
+      );
+      throw new Error("expected expired file to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("FILE_EXPIRED");
+        expect(error.message).toBe(FILE_EXPIRED_MESSAGE);
+      }
+    }
   });
 });

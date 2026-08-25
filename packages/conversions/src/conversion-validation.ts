@@ -1,5 +1,9 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { type FileRecord, isFileExpired } from "@repo/files";
+import {
+  type FileRecord,
+  isFileExpired,
+  throwIfOwnedFileExpired,
+} from "@repo/files";
 import { type FileFormat, normalizeFileFormat } from "./conversion-format.js";
 import { type ConversionType, isConversionType } from "./conversion-type.js";
 import {
@@ -161,12 +165,16 @@ export function assertOwnedSourceFile(
   ownerId: string,
   now: Date,
 ): FileRecord {
-  if (
-    file === undefined ||
-    file.ownerId !== ownerId ||
-    file.deletedAt !== null ||
-    isFileExpired(file, now)
-  ) {
+  if (file === undefined || file.ownerId !== ownerId) {
+    throw new AppError({
+      code: APP_ERROR_CODES.NOT_FOUND,
+      message: "File not found",
+    });
+  }
+
+  throwIfOwnedFileExpired(file, now);
+
+  if (file.deletedAt !== null) {
     throw new AppError({
       code: APP_ERROR_CODES.NOT_FOUND,
       message: "File not found",

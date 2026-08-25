@@ -59,6 +59,7 @@
                   "STORAGE_LIMIT_REACHED",
                   "API_KEY_LIMIT_REACHED",
                   "FILE_TOO_LARGE",
+                  "FILE_EXPIRED",
                   "INTERNAL_ERROR"
                 ]
               },
@@ -869,6 +870,27 @@
               }
             }
           },
+          "410": {
+            "description": "The file has expired and must be processed again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": {
+                        "code": "FILE_EXPIRED",
+                        "message": "The file has expired and must be processed again.",
+                        "requestId": "req_example"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "429": {
             "description": "Rate limit exceeded. Retry after the indicated delay.",
             "content": {
@@ -1147,6 +1169,27 @@
               }
             }
           },
+          "410": {
+            "description": "The file has expired and must be processed again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": {
+                        "code": "FILE_EXPIRED",
+                        "message": "The file has expired and must be processed again.",
+                        "requestId": "req_example"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "429": {
             "description": "Rate limit exceeded. Retry after the indicated delay.",
             "content": {
@@ -1274,6 +1317,27 @@
                       "error": {
                         "code": "NOT_FOUND",
                         "message": "File not found or not owned by the caller.",
+                        "requestId": "req_example"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "The file has expired and must be processed again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": {
+                        "code": "FILE_EXPIRED",
+                        "message": "The file has expired and must be processed again.",
                         "requestId": "req_example"
                       }
                     }
@@ -1477,6 +1541,27 @@
                       "error": {
                         "code": "CONFLICT",
                         "message": "The conversion conflicts with the current file or job state.",
+                        "requestId": "req_example"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "The source file has expired and must be processed again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "error": {
+                        "code": "FILE_EXPIRED",
+                        "message": "The source file has expired and must be processed again.",
                         "requestId": "req_example"
                       }
                     }

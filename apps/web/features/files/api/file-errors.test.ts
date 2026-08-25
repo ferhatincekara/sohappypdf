@@ -45,6 +45,13 @@ describe("file error mapping", () => {
         status: 403,
       }),
     ).toBe(FILE_ERROR_KEYS.storageLimitReached);
+    expect(
+      mapFileError({
+        kind: "api",
+        code: "FILE_EXPIRED",
+        status: 410,
+      }),
+    ).toBe(FILE_ERROR_KEYS.expiredUpload);
   });
 
   test("does not surface AWS or storage details from Axios errors", () => {

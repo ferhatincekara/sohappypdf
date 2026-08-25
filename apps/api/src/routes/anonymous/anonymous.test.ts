@@ -534,6 +534,49 @@ describe("anonymous tool API", () => {
     });
   });
 
+  test("rejects expired anonymous file downloads with a product-level error", async () => {
+    let current = new Date("2026-08-24T01:00:00.000Z");
+    const { app, fileService, storage } = createAnonymousApp({
+      now: () => current,
+    });
+    const uploaded = await uploadAnonymousFile(app);
+    const ownerId = (await fileService.findFileById(uploaded.body.file.id))
+      ?.ownerId;
+    expect(ownerId).toBeDefined();
+
+    const shortLived = await fileService.createUploadIntent({
+      ownerId: ownerId ?? "",
+      ownerKind: "anonymous_session",
+      originalFilename: "short.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 2048,
+      expiresInMs: 60_000,
+    });
+    await storage.uploadObject({
+      key: shortLived.file.objectKey,
+      body: new Uint8Array(shortLived.file.sizeBytes),
+      contentType: shortLived.file.mimeType,
+    });
+    await fileService.completeUpload(shortLived.file.id, ownerId ?? "");
+    current = new Date("2026-08-24T01:02:00.000Z");
+
+    const download = await app.request(
+      `/api/v1/anonymous/files/${shortLived.file.id}/download`,
+      {
+        method: "POST",
+        headers: { cookie: uploaded.cookie },
+      },
+    );
+
+    expect(download.status).toBe(410);
+    expect(await download.json()).toMatchObject({
+      error: {
+        code: APP_ERROR_CODES.FILE_EXPIRED,
+        message: "This file has expired. Please process it again.",
+      },
+    });
+  });
+
   test("lists recent conversions for the same anonymous session across tools", async () => {
     const { app, fileService, storage } = createAnonymousApp();
     const uploaded = await uploadAnonymousFile(app);

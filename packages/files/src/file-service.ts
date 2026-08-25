@@ -10,6 +10,7 @@ import {
   getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
+  throwIfOwnedFileExpired,
 } from "./file-expiration.js";
 import {
   assertFileListLimit,
@@ -116,7 +117,16 @@ function requireOwnedAccessibleFile(
 ): FileRecord {
   const found = requireFile(file);
 
-  if (!isOwnedBy(found, ownerId) || isUnavailable(found, now)) {
+  if (!isOwnedBy(found, ownerId)) {
+    throw new AppError({
+      code: APP_ERROR_CODES.NOT_FOUND,
+      message: "File not found",
+    });
+  }
+
+  throwIfOwnedFileExpired(found, now);
+
+  if (isUnavailable(found, now)) {
     throw new AppError({
       code: APP_ERROR_CODES.NOT_FOUND,
       message: "File not found",

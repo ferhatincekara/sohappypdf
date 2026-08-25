@@ -509,6 +509,16 @@ describe("conversion API", () => {
       filename: "deleted.pdf",
     });
     await context.fileService.deleteOwnedFile(deleted.id, "user_1");
+
+    const deletedResponse = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: deleted.id,
+        targetFormat: "jpg",
+      }),
+    });
+
     currentTime = new Date("2026-08-23T21:00:00.000Z");
 
     const expiredResponse = await context.app.request("/api/v1/conversions", {
@@ -519,16 +529,14 @@ describe("conversion API", () => {
         targetFormat: "jpg",
       }),
     });
-    const deletedResponse = await context.app.request("/api/v1/conversions", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        sourceFileId: deleted.id,
-        targetFormat: "jpg",
-      }),
-    });
 
-    expect(expiredResponse.status).toBe(404);
+    expect(expiredResponse.status).toBe(410);
+    expect(await expiredResponse.json()).toMatchObject({
+      error: {
+        code: APP_ERROR_CODES.FILE_EXPIRED,
+        message: "This file has expired. Please process it again.",
+      },
+    });
     expect(deletedResponse.status).toBe(404);
   });
 
