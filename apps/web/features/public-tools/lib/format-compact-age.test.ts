@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { compactAgeFrom } from "./format-compact-age";
+import { compactAgeFrom, compactRemainingFrom } from "./format-compact-age";
 
 describe("compactAgeFrom", () => {
   const now = new Date("2026-08-24T12:00:00.000Z");
@@ -20,6 +20,28 @@ describe("compactAgeFrom", () => {
 
   test("uses hours at or above one hour", () => {
     expect(compactAgeFrom("2026-08-24T11:00:00.000Z", now)).toEqual({
+      unit: "hours",
+      count: 1,
+    });
+  });
+});
+
+describe("compactRemainingFrom", () => {
+  const now = new Date("2026-08-24T12:00:00.000Z");
+
+  test("returns null after expiration", () => {
+    expect(compactRemainingFrom("2026-08-24T11:50:00.000Z", now)).toBeNull();
+  });
+
+  test("uses minutes under one hour remaining", () => {
+    expect(compactRemainingFrom("2026-08-24T12:18:00.000Z", now)).toEqual({
+      unit: "minutes",
+      count: 18,
+    });
+  });
+
+  test("uses hours at or above one hour remaining", () => {
+    expect(compactRemainingFrom("2026-08-24T13:48:00.000Z", now)).toEqual({
       unit: "hours",
       count: 1,
     });

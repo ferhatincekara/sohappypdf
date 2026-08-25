@@ -41,9 +41,10 @@ describe("mapRecentExecution", () => {
       toolId: "split-pdf",
       toolRoute: "/split-pdf",
       sourceFilename: "invoice.pdf",
+      resultFilename: "invoice.pdf",
       createdAt: "2026-08-24T11:48:00.000Z",
       expiresAt: "2026-08-24T13:48:00.000Z",
-      status: "completed",
+      status: "ready",
       canDownload: true,
       outputFileId: "550e8400-e29b-41d4-a716-446655440003",
     });
@@ -74,5 +75,19 @@ describe("mapRecentExecution", () => {
         now,
       ).status,
     ).toBe("failed");
+  });
+
+  test("derives a result filename from the source and output format", () => {
+    const mapped = mapRecentExecution(
+      conversion({
+        sourceFilename: "report.pdf",
+        targetFormat: "jpg",
+        type: "pdf-to-jpg",
+      }),
+      now,
+    );
+
+    expect(mapped.resultFilename).toBe("report.jpg");
+    expect(mapped.sourceFilename).toBe("report.pdf");
   });
 });

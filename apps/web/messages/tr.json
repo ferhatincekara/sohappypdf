@@ -1599,24 +1599,29 @@
     "recent": {
       "title": "Son işlemler",
       "notice": "Geçici dosyalar yaklaşık {hours} saat saklanır, ardından süreleri dolar.",
-      "empty": "Henüz son işlem yok. İşlenen dosyalar kısa süre burada görünür.",
-      "error": "Son işlemler yüklenemedi.",
+      "empty": "Henüz son dosya yok. Sonuçlar kısa süre burada kalır, ardından süreleri dolar.",
+      "error": "Son dosyalar yüklenemedi.",
       "retry": "Tekrar dene",
       "unnamedFile": "Adsız dosya",
+      "originalFile": "Kaynak: {filename}",
       "download": "İndir",
       "downloading": "İndirme hazırlanıyor…",
       "openTool": "Aracı aç",
       "startAgain": "Yeniden başla",
       "status": {
         "processing": "İşleniyor",
-        "completed": "Hazır",
+        "ready": "Hazır",
         "failed": "Başarısız",
         "expired": "Süresi doldu"
       },
       "age": {
         "justNow": "Az önce",
-        "minutes": "{count}dk",
-        "hours": "{count}sa"
+        "minutes": "{count}dk önce",
+        "hours": "{count}sa önce"
+      },
+      "expiresIn": {
+        "minutes": "{count}dk içinde sona erer",
+        "hours": "{count}sa içinde sona erer"
       }
     },
     "privacy": {

@@ -1599,24 +1599,29 @@
     "recent": {
       "title": "Recent",
       "notice": "Temporary files are kept for about {hours} hours, then they expire.",
-      "empty": "No recent executions yet. Processed files will appear here for a short time.",
-      "error": "Recent executions could not be loaded.",
+      "empty": "No recent files yet. Results stay here for a short time, then they expire.",
+      "error": "Recent files could not be loaded.",
       "retry": "Try again",
       "unnamedFile": "Untitled file",
+      "originalFile": "From {filename}",
       "download": "Download",
       "downloading": "Preparing download…",
       "openTool": "Open tool",
       "startAgain": "Start again",
       "status": {
         "processing": "Processing",
-        "completed": "Ready",
+        "ready": "Ready",
         "failed": "Failed",
         "expired": "Expired"
       },
       "age": {
         "justNow": "Just now",
-        "minutes": "{count}m",
-        "hours": "{count}h"
+        "minutes": "{count}m ago",
+        "hours": "{count}h ago"
+      },
+      "expiresIn": {
+        "minutes": "Expires in {count}m",
+        "hours": "Expires in {count}h"
       }
     },
     "privacy": {

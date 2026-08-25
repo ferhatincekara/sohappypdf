@@ -30,3 +30,26 @@ export function compactAgeFrom(
     count: Math.max(1, Math.floor(elapsedMs / HOUR_MS)),
   };
 }
+
+export function compactRemainingFrom(
+  expiresAt: string,
+  now: Date = new Date(),
+): CompactAge | null {
+  const remainingMs = new Date(expiresAt).getTime() - now.getTime();
+
+  if (remainingMs <= 0) {
+    return null;
+  }
+
+  if (remainingMs < HOUR_MS) {
+    return {
+      unit: "minutes",
+      count: Math.max(1, Math.floor(remainingMs / MINUTE_MS)),
+    };
+  }
+
+  return {
+    unit: "hours",
+    count: Math.floor(remainingMs / HOUR_MS),
+  };
+}

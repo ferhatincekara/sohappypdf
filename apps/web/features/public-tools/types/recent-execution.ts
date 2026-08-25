@@ -2,7 +2,7 @@ import type { ConversionType } from "@/features/conversions/types/conversion";
 
 export const RECENT_EXECUTION_STATUSES = [
   "processing",
-  "completed",
+  "ready",
   "failed",
   "expired",
 ] as const;
@@ -14,6 +14,7 @@ export type RecentExecution = {
   toolId: ConversionType;
   toolRoute: `/${string}`;
   sourceFilename: string | null;
+  resultFilename: string | null;
   createdAt: string;
   expiresAt: string | null;
   status: RecentExecutionStatus;

@@ -5,6 +5,7 @@ import {
 } from "@/features/conversions/lib/can-download-conversion";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
 import type { RecentExecution } from "../types/recent-execution";
+import { deriveResultFilename } from "./derive-result-filename";
 import { RECENT_EXECUTIONS_FALLBACK_ROUTE } from "./recent-executions";
 
 export function resolveRecentToolRoute(toolId: string): `/${string}` {
@@ -27,6 +28,10 @@ export function mapRecentExecution(
     toolId: conversion.type,
     toolRoute: resolveRecentToolRoute(conversion.type),
     sourceFilename: conversion.sourceFilename,
+    resultFilename: deriveResultFilename(
+      conversion.sourceFilename,
+      conversion.targetFormat,
+    ),
     createdAt: conversion.createdAt,
     expiresAt: conversion.expiresAt,
     status: expired
@@ -34,7 +39,7 @@ export function mapRecentExecution(
       : processing
         ? "processing"
         : conversion.status === "completed"
-          ? "completed"
+          ? "ready"
           : "failed",
     canDownload,
     outputFileId: canDownload ? conversion.outputFileId : null,
