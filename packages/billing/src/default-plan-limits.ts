@@ -41,6 +41,12 @@ export const ANONYMOUS_WEB_LIMITS = {
   monthlyAiCredits: 0,
 } as const;
 
+export const DEFAULT_API_CREDIT_PACKS = {
+  starter: 1_000,
+  growth: 10_000,
+  scale: 100_000,
+} as const;
+
 export function resolveWebMaxFileSizeBytes(input: {
   isAuthenticated: boolean;
   planMaxFileSizeBytes?: number | null;

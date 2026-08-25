@@ -147,26 +147,63 @@
       }
     },
     "pricing": {
-      "title": "Ücretsiz ve Pro planlar",
-      "description": "Limitler, ürünün uyguladığı plan kataloğundan gelir.",
+      "title": "Ücretsiz, Pro ve API",
+      "description": "Web planları ve API kredi paketleri ayrı faturalanır. Limitler, ürünün uyguladığı katalogdan gelir.",
       "viewPage": "Fiyatlandırmayı gör",
-      "note": "Pro yükseltmeleri girişten sonra mevcut Polar ödeme akışını kullanır. Bu sayfa bir fiyat uydurmaz.",
+      "note": "Pro yükseltmeleri ve API kredi paketleri girişten sonra Polar ödeme akışını kullanır. Bu sayfa bir fiyat uydurmaz.",
+      "web": {
+        "title": "Web planları",
+        "description": "PDF araçlarını tarayıcıda kullanın. Krediler, dosya boyutu ve aylık işlem hakkınız web planınızı izler."
+      },
+      "anonymous": {
+        "name": "Anonim",
+        "summary": "Hesap oluşturmadan bir araç açın ve dosyaları işleyin. Günlük ve saatlik limitler geçerlidir.",
+        "noCredits": "Kredi hesabı yok. Kullanım hız sınırlarıyla kısıtlanır.",
+        "cta": "Bir araç seçin"
+      },
       "free": {
         "name": "Ücretsiz",
         "badge": "Dahil",
-        "summary": "Aylık bir hakla dönüştürmeye başlayın.",
+        "summary": "Aylık web kredisi ve daha geniş araç erişimi olan bir hesap.",
         "cta": "Ücretsiz başla"
       },
       "pro": {
         "name": "Pro",
         "badge": "Daha yüksek limitler",
-        "summary": "Daha fazla web kredisi, daha büyük dosyalar ve daha yüksek API kapasitesi.",
+        "summary": "Daha fazla web kredisi, daha büyük dosyalar ve premium AI araçları.",
         "cta": "Pro’ya başla"
+      },
+      "api": {
+        "title": "API kredi paketleri",
+        "description": "API kredileri web kredilerinden ayrıdır. Programatik erişim gerektiğinde paketleri hesabınızdan alın.",
+        "note": "API istek hızı ve anahtar limitleri web planınızı izler. API kredileri yalnızca API kullanımında düşer.",
+        "cta": "Geliştirici belgeleri",
+        "packs": {
+          "starter": {
+            "name": "Starter",
+            "summary": "Genel API’yi denemek için yeterli kredi."
+          },
+          "growth": {
+            "name": "Growth",
+            "summary": "Düzenli entegrasyonlar için daha fazla API kredisi."
+          },
+          "scale": {
+            "name": "Scale",
+            "summary": "Yoğun iş yükleri için daha yüksek API kredi kapasitesi."
+          }
+        }
       },
       "limits": {
         "webCredits": "Ayda {count} web araç kredisi",
         "aiCredits": "Ayda {count} AI kredisi",
+        "operations": "Ayda {count} işlem",
         "fileSize": "Dosya başına en fazla {size}",
+        "filesPerOperation": "İşlem başına en fazla {count} dosya",
+        "hourlyOperations": "Saatte en fazla {count} işlem",
+        "retention": "Dosyalar {hours} saat sonra süresi dolar",
+        "premiumTools": "{count} premium AI aracı",
+        "standardTools": "Standart PDF araçları",
+        "apiCredits": "Paket başına {count} API kredisi",
         "apiKeys": "{count} API anahtarı",
         "apiRate": "Dakikada {count} API isteği",
         "apiAccess": "Genel API erişimi"
@@ -199,8 +236,8 @@
     "metadata": {
       "homeTitle": "SohappyPDF — İnsanlar ve API’ler için PDF dönüştürme",
       "homeDescription": "Bir dosya yükleyin, dönüştürün ve sonucu indirin. SohappyPDF aynı akışı genel bir API ile de sunar.",
-      "pricingTitle": "Fiyatlandırma",
-      "pricingDescription": "Ücretsiz ve Pro planların kredi, dosya boyutu ve API limitlerini karşılaştırın.",
+      "pricingTitle": "Fiyatlandırma — Ücretsiz, Pro ve API",
+      "pricingDescription": "Anonim, Ücretsiz ve Pro web limitlerini ve ayrı API kredi paketlerini karşılaştırın.",
       "toolsTitle": "PDF araçları",
       "toolsDescription": "Organize, Dönüştür, Düzenle, Optimize, Güvenlik ve Zeka PDF araçlarına göz atın."
     }

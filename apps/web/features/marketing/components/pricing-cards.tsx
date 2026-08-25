@@ -8,10 +8,12 @@ export async function PricingCards({
   plans,
   startHref,
   proHref,
+  premiumToolCount,
 }: {
   plans: readonly PublicPlanPresentation[];
   startHref: string;
   proHref: string;
+  premiumToolCount: number;
 }) {
   const t = await getTranslations("marketing.pricing");
 
@@ -42,13 +44,16 @@ export async function PricingCards({
               <li>
                 {t("limits.webCredits", { count: plan.monthlyWebCredits })}
               </li>
-              <li>{t("limits.aiCredits", { count: plan.monthlyAiCredits })}</li>
-              <li>{t("limits.fileSize", { size: plan.maxFileSizeLabel })}</li>
-              <li>{t("limits.apiKeys", { count: plan.maxApiKeys })}</li>
               <li>
-                {t("limits.apiRate", { count: plan.apiRequestsPerMinute })}
+                {t("limits.operations", { count: plan.monthlyConversions })}
               </li>
-              {plan.apiAccess ? <li>{t("limits.apiAccess")}</li> : null}
+              <li>{t("limits.fileSize", { size: plan.maxFileSizeLabel })}</li>
+              <li>{t("limits.aiCredits", { count: plan.monthlyAiCredits })}</li>
+              {isPro && premiumToolCount > 0 ? (
+                <li>{t("limits.premiumTools", { count: premiumToolCount })}</li>
+              ) : (
+                <li>{t("limits.standardTools")}</li>
+              )}
             </ul>
             <Link
               href={href}

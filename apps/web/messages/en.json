@@ -147,26 +147,63 @@
       }
     },
     "pricing": {
-      "title": "Free and Pro plans",
-      "description": "Limits come from the same plan catalog the product enforces.",
+      "title": "Free, Pro, and API",
+      "description": "Web plans and API credit packs are billed separately. Limits come from the same catalog the product enforces.",
       "viewPage": "View pricing",
-      "note": "Pro upgrades use the existing Polar checkout after you sign in. This page does not invent a price.",
+      "note": "Pro upgrades and API credit packs use Polar checkout after you sign in. This page does not invent a price.",
+      "web": {
+        "title": "Web plans",
+        "description": "Use PDF tools in the browser. Credits, file size, and monthly processing follow your web plan."
+      },
+      "anonymous": {
+        "name": "Anonymous",
+        "summary": "Open a tool and process files without creating an account. Daily and hourly limits apply.",
+        "noCredits": "No credit account. Usage is limited by rate limits.",
+        "cta": "Choose a tool"
+      },
       "free": {
         "name": "Free",
         "badge": "Included",
-        "summary": "Start converting with a monthly allowance.",
+        "summary": "An account with monthly web credits and broader tool access.",
         "cta": "Start for free"
       },
       "pro": {
         "name": "Pro",
         "badge": "Higher limits",
-        "summary": "More web credits, larger files, and higher API capacity.",
+        "summary": "More web credits, larger files, and premium AI tools.",
         "cta": "Start Pro"
+      },
+      "api": {
+        "title": "API credit packs",
+        "description": "API credits are separate from web credits. Buy a pack from your account when you need programmatic access.",
+        "note": "API request rates and key limits follow your web plan. API credits are consumed only by API usage.",
+        "cta": "Developer docs",
+        "packs": {
+          "starter": {
+            "name": "Starter",
+            "summary": "Enough credits to try the public API."
+          },
+          "growth": {
+            "name": "Growth",
+            "summary": "More API credits for regular integrations."
+          },
+          "scale": {
+            "name": "Scale",
+            "summary": "Higher API credit capacity for heavier workloads."
+          }
+        }
       },
       "limits": {
         "webCredits": "{count} web tool credits per month",
         "aiCredits": "{count} AI credits per month",
+        "operations": "{count} processing operations per month",
         "fileSize": "Up to {size} per file",
+        "filesPerOperation": "Up to {count} files per operation",
+        "hourlyOperations": "Up to {count} operations per hour",
+        "retention": "Files expire after {hours} hours",
+        "premiumTools": "{count} premium AI tools",
+        "standardTools": "Standard PDF tools",
+        "apiCredits": "{count} API credits per pack",
         "apiKeys": "{count} API keys",
         "apiRate": "{count} API requests per minute",
         "apiAccess": "Public API access"
@@ -199,8 +236,8 @@
     "metadata": {
       "homeTitle": "SohappyPDF — PDF conversion for people and APIs",
       "homeDescription": "Upload a file, convert it, and download the result. SohappyPDF also exposes the same workflow through a public API.",
-      "pricingTitle": "Pricing",
-      "pricingDescription": "Compare Free and Pro limits for credits, file size, and API access.",
+      "pricingTitle": "Pricing — Free, Pro, and API",
+      "pricingDescription": "Compare Anonymous, Free, and Pro web limits, plus separate API credit packs.",
       "toolsTitle": "PDF tools",
       "toolsDescription": "Browse Organize, Convert, Edit, Optimize, Security, and Intelligence PDF tools."
     }

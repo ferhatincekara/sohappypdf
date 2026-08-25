@@ -9,10 +9,12 @@ export async function PricingSection({
   plans,
   startHref,
   proHref,
+  premiumToolCount,
 }: {
   plans: readonly PublicPlanPresentation[];
   startHref: string;
   proHref: string;
+  premiumToolCount: number;
 }) {
   const t = await getTranslations("marketing.pricing");
 
@@ -33,7 +35,12 @@ export async function PricingSection({
             {t("viewPage")}
           </Link>
         </div>
-        <PricingCards plans={plans} startHref={startHref} proHref={proHref} />
+        <PricingCards
+          plans={plans}
+          startHref={startHref}
+          proHref={proHref}
+          premiumToolCount={premiumToolCount}
+        />
         <p className="text-sm text-muted-foreground">{t("note")}</p>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { resolveMarketingCtas } from "../lib/marketing-cta";
-import { getPublicPlans } from "../lib/public-plans";
+import { countPremiumCatalogTools, getPublicPlans } from "../lib/public-plans";
 import { DeveloperSection } from "./developer-section";
 import { FeaturesSection } from "./features-section";
 import { Hero } from "./hero";
@@ -18,6 +18,7 @@ export async function MarketingHomePage({
   const t = await getTranslations("marketing");
   const { startHref, proHref } = resolveMarketingCtas(isAuthenticated);
   const plans = getPublicPlans();
+  const premiumToolCount = countPremiumCatalogTools();
 
   return (
     <>
@@ -32,7 +33,12 @@ export async function MarketingHomePage({
       <HowItWorks />
       <DeveloperSection />
       <SecuritySection />
-      <PricingSection plans={plans} startHref={startHref} proHref={proHref} />
+      <PricingSection
+        plans={plans}
+        startHref={startHref}
+        proHref={proHref}
+        premiumToolCount={premiumToolCount}
+      />
     </>
   );
 }
