@@ -825,7 +825,7 @@
       }
     },
     "upload": {
-      "title": "PDF’yi buraya bırakın",
+      "title": "PDF’nizi buraya bırakın",
       "titleMultiple": "Dosyaları buraya bırakın",
       "browse": "Dosya seç",
       "browseMultiple": "Dosya seç",
@@ -844,13 +844,16 @@
       "empty": {
         "privacy": "Dosyalar geçicidir ve yaklaşık {hours} saat saklanır."
       },
+      "configuring": {
+        "status": "Dosyanızı yapılandırın"
+      },
       "processing": {
         "status": "İşlem durumu",
         "starting": "Başlatılıyor",
-        "startingHint": "İşleme görevi oluşturuluyor.",
-        "queued": "Sırada",
-        "queuedHint": "Dosyanız işlenmek üzere sırada.",
-        "processing": "İşleniyor",
+        "startingHint": "Dosyanız hazırlanıyor.",
+        "queued": "Bekleniyor",
+        "queuedHint": "Dosyanız sıradaki.",
+        "processing": "PDF’niz işleniyor...",
         "processingHint": "Dosyanız üzerinde çalışıyoruz. Bu biraz sürebilir."
       }
     },
@@ -883,7 +886,8 @@
       "pagePreviewFailed": "Önizleme yok",
       "previewFailed": "Bu PDF önizlenemedi.",
       "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
-      "gridLabel": "PDF sayfaları"
+      "gridLabel": "PDF sayfaları",
+      "keyboardHelp": "Sayfalar arasında gezinmek için ok tuşlarını kullanın. Sıralamak için Alt tuşunu basılı tutup ok tuşlarını kullanın. Sayfa ızgarasının üstünde bir dosya seçici de vardır."
     },
     "workspaces": {
       "split": {
@@ -1654,7 +1658,7 @@
       "readyHint": "Sonucunuz indirilmeye hazır."
     },
     "result": {
-      "title": "Dosyanız hazır",
+      "title": "PDF’niz hazır",
       "description": "{source} dosyası {format} formatına dönüştürüldü.",
       "unnamedSource": "Dosyanız",
       "download": "İndir",
@@ -1755,7 +1759,7 @@
       }
     },
     "errors": {
-      "title": "Bir şeye dikkat etmeniz gerekiyor",
+      "title": "Bu dosyayı işleyemedik",
       "noFile": "İşlemek için bir dosya seçin.",
       "tooFewFiles": "Birleştirmek için en az iki PDF seçin.",
       "tooManyFiles": "Bu araç için çok fazla dosya seçildi.",

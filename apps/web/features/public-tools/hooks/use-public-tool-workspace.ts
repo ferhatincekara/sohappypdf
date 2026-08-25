@@ -47,6 +47,7 @@ import {
   supportsFileReorder,
   type WorkspaceFile,
 } from "../lib/workspace-files";
+import { isFileWorkspaceUx } from "../types/tool-ux-state";
 import { useToolExecutionStatus } from "./use-tool-execution-status";
 
 export function usePublicToolWorkspace(tool: ToolDefinition) {
@@ -133,6 +134,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
   }, [execution?.expiresAt]);
 
   const ux = resolveToolUxState({
+    toolId: tool.id,
     files,
     isCreatingExecution,
     executionId,
@@ -154,7 +156,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
 
   const conversionOptions = buildToolConversionOptions(tool.id, workspaceState);
   const canProcess =
-    ux.status === "selected" &&
+    isFileWorkspaceUx(ux) &&
     !isBusy &&
     !session.isPending &&
     validateToolProcess({

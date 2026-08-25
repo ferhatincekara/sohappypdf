@@ -17,7 +17,10 @@ import {
   parseSelectedPagesInput,
 } from "../lib/tool-workspace";
 import { isConvertToolId } from "../lib/tool-workspace-kind";
-import type { ToolSelectedUxState } from "../types/tool-ux-state";
+import {
+  isFileWorkspaceUx,
+  type ToolSelectedUxState,
+} from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
 import { ToolExpiredState } from "./tool-expired-state";
@@ -79,36 +82,35 @@ export function PublicToolWorkspace({
     );
   }
 
-  const defaultSelected =
-    ux.status === "selected" ? (
-      <SelectedToolWorkspace
-        tool={tool}
-        state={ux}
-        accept={accept}
-        multiple={workspace.maxFiles > 1}
-        canAddFiles={workspace.files.length < workspace.maxFiles}
-        formatsLabel={formatsLabel}
-        maxSizeLabel={maxSizeLabel}
-        reorderable={workspace.reorderable}
-        disabled={workspace.isBusy}
-        canProcess={workspace.canProcess}
-        processLabel={processLabel}
-        workspaceState={workspace.workspaceState}
-        setWorkspaceState={workspace.setWorkspaceState}
-        onSelectFiles={workspace.addFiles}
-        onReplaceFiles={workspace.replaceFiles}
-        onMove={workspace.onMove}
-        onReorder={workspace.onReorder}
-        onRemove={workspace.onRemove}
-        onRetryUpload={workspace.onRetryUpload}
-        onProcess={() => {
-          void workspace.onProcess();
-        }}
-      />
-    ) : null;
+  const defaultSelected = isFileWorkspaceUx(ux) ? (
+    <SelectedToolWorkspace
+      tool={tool}
+      state={ux}
+      accept={accept}
+      multiple={workspace.maxFiles > 1}
+      canAddFiles={workspace.files.length < workspace.maxFiles}
+      formatsLabel={formatsLabel}
+      maxSizeLabel={maxSizeLabel}
+      reorderable={workspace.reorderable}
+      disabled={workspace.isBusy}
+      canProcess={workspace.canProcess}
+      processLabel={processLabel}
+      workspaceState={workspace.workspaceState}
+      setWorkspaceState={workspace.setWorkspaceState}
+      onSelectFiles={workspace.addFiles}
+      onReplaceFiles={workspace.replaceFiles}
+      onMove={workspace.onMove}
+      onReorder={workspace.onReorder}
+      onRemove={workspace.onRemove}
+      onRetryUpload={workspace.onRetryUpload}
+      onProcess={() => {
+        void workspace.onProcess();
+      }}
+    />
+  ) : null;
 
   const selected =
-    ux.status === "selected" && defaultSelected !== null
+    isFileWorkspaceUx(ux) && defaultSelected !== null
       ? (renderSelected?.({
           defaultSelected,
           state: ux,

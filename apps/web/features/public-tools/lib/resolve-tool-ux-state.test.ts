@@ -42,6 +42,7 @@ function createExecution(
 }
 
 const baseInput = {
+  toolId: "merge-pdf",
   files: [] as WorkspaceFile[],
   isCreatingExecution: false,
   executionId: null as string | null,
@@ -58,6 +59,7 @@ describe("tool UX state model", () => {
   test("uses a closed set of statuses", () => {
     expect(isToolUxStatus("empty")).toBe(true);
     expect(isToolUxStatus("selected")).toBe(true);
+    expect(isToolUxStatus("configuring")).toBe(true);
     expect(isToolUxStatus("processing")).toBe(true);
     expect(isToolUxStatus("success")).toBe(true);
     expect(isToolUxStatus("error")).toBe(true);
@@ -70,9 +72,10 @@ describe("tool UX state model", () => {
     expect(resolveToolUxState(baseInput)).toEqual({ status: "empty" });
   });
 
-  test("enters selected with files and keeps selection errors in that state", () => {
+  test("enters selected with files when the tool has no extra options", () => {
     const state = resolveToolUxState({
       ...baseInput,
+      toolId: "repair-pdf",
       files: [createFile()],
       selectionError: "tooManyFiles",
     });
@@ -86,6 +89,15 @@ describe("tool UX state model", () => {
       key: "tooManyFiles",
       retryable: false,
     });
+  });
+
+  test("enters configuring when files are selected for an options workspace", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      files: [createFile()],
+    });
+
+    expect(state.status).toBe("configuring");
   });
 
   test("enters processing while creating or running an execution", () => {

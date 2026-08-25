@@ -4,6 +4,7 @@ import type { WorkspaceFile } from "../lib/workspace-files";
 export const TOOL_UX_STATUSES = [
   "empty",
   "selected",
+  "configuring",
   "processing",
   "success",
   "error",
@@ -25,7 +26,7 @@ export type ToolEmptyUxState = {
 };
 
 export type ToolSelectedUxState = {
-  status: "selected";
+  status: "selected" | "configuring";
   files: readonly WorkspaceFile[];
   error: ToolUserError | null;
 };
@@ -69,6 +70,12 @@ export type ToolUxState =
 
 export function isToolUxStatus(value: string): value is ToolUxStatus {
   return TOOL_UX_STATUSES.some((status) => status === value);
+}
+
+export function isFileWorkspaceUx(
+  state: ToolUxState,
+): state is ToolSelectedUxState {
+  return state.status === "selected" || state.status === "configuring";
 }
 
 export function isToolProcessingStatus(

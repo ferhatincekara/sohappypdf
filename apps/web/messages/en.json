@@ -825,7 +825,7 @@
       }
     },
     "upload": {
-      "title": "Drop a PDF here",
+      "title": "Drop your PDF here",
       "titleMultiple": "Drop files here",
       "browse": "Browse files",
       "browseMultiple": "Browse files",
@@ -844,13 +844,16 @@
       "empty": {
         "privacy": "Files are temporary and are kept for about {hours} hours."
       },
+      "configuring": {
+        "status": "Configure your file"
+      },
       "processing": {
         "status": "Processing status",
         "starting": "Starting",
-        "startingHint": "Creating the processing job.",
-        "queued": "Queued",
-        "queuedHint": "Your file is in line to be processed.",
-        "processing": "Processing",
+        "startingHint": "Preparing your file.",
+        "queued": "Waiting",
+        "queuedHint": "Your file is next in line.",
+        "processing": "Processing your PDF...",
         "processingHint": "Working on your file. This may take a moment."
       }
     },
@@ -883,7 +886,8 @@
       "pagePreviewFailed": "Preview unavailable",
       "previewFailed": "This PDF could not be previewed.",
       "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
-      "gridLabel": "PDF pages"
+      "gridLabel": "PDF pages",
+      "keyboardHelp": "Use arrow keys to move between pages. Hold Alt and use arrow keys to reorder pages. A file picker is also available above the page grid."
     },
     "workspaces": {
       "split": {
@@ -1654,7 +1658,7 @@
       "readyHint": "Your result is ready to download."
     },
     "result": {
-      "title": "Your file is ready",
+      "title": "Your PDF is ready",
       "description": "{source} was converted to {format}.",
       "unnamedSource": "Your file",
       "download": "Download",
@@ -1755,7 +1759,7 @@
       }
     },
     "errors": {
-      "title": "Something needs attention",
+      "title": "We couldn't process this file",
       "noFile": "Choose a file to process.",
       "tooFewFiles": "Select at least two PDFs to merge.",
       "tooManyFiles": "Too many files for this tool.",

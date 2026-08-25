@@ -9,9 +9,11 @@ import {
   type PublicToolErrorKey,
   toToolUserError,
 } from "./public-tool-errors";
+import { toolRequiresConfiguration } from "./tool-requires-configuration";
 import type { WorkspaceFile } from "./workspace-files";
 
 export type ResolveToolUxStateInput = {
+  toolId: string;
   files: readonly WorkspaceFile[];
   isCreatingExecution: boolean;
   executionId: string | null;
@@ -135,7 +137,9 @@ export function resolveToolUxState(
 
   if (input.files.length > 0) {
     return {
-      status: "selected",
+      status: toolRequiresConfiguration(input.toolId)
+        ? "configuring"
+        : "selected",
       files: input.files,
       error:
         input.selectionError === null
