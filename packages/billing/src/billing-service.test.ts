@@ -139,6 +139,8 @@ describe("createBillingService", () => {
       await billing.recordConversionUsage({
         userId: "user_1",
         conversionId: "11111111-1111-4111-8111-111111111111",
+        toolId: "pdf-to-jpg",
+        apiKeyId: "key_1",
       }),
     ).toBe(true);
     expect(
@@ -171,6 +173,7 @@ describe("createBillingService", () => {
     expect(status.usage.conversionsLimit).toBe(20);
     expect(status.usage.storageUsedBytes).toBe(1024);
     expect(status.limits.maxFileSizeBytes).toBe(20 * 1024 * 1024);
+    expect(status.limits.apiRequestsPerMinute).toBe(30);
     expect(status.api.creditsLimit).toBe(0);
     expect(status.api.product).toBeNull();
     expect(JSON.stringify(status).includes("polar_at_test")).toBe(false);

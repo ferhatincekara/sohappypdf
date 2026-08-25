@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { getPublicApiV1BaseUrl } from "@/config/public-env";
 import { Link } from "@/lib/i18n/navigation";
 import {
@@ -7,6 +8,7 @@ import {
   pollExample,
   uploadExample,
 } from "../lib/example-snippets";
+import { listPublicApiTools } from "../lib/public-api-tools";
 
 function CodeBlock({ children }: { children: string }) {
   return (
@@ -16,8 +18,10 @@ function CodeBlock({ children }: { children: string }) {
   );
 }
 
-export function DeveloperDocsPage() {
+export async function DeveloperDocsPage() {
   const apiV1BaseUrl = getPublicApiV1BaseUrl();
+  const tTools = await getTranslations("tools");
+  const tools = listPublicApiTools();
 
   return (
     <article className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-12">
@@ -59,6 +63,10 @@ export function DeveloperDocsPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Authentication</h2>
         <CodeBlock>{authorizationExample()}</CodeBlock>
+        <p className="text-sm text-muted-foreground">
+          API credits are billed separately from web tool credits. The raw key
+          is shown only once when you create it.
+        </p>
       </section>
 
       <section className="flex flex-col gap-3">
@@ -86,6 +94,27 @@ export function DeveloperDocsPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-medium">Download result</h2>
         <CodeBlock>{downloadExample(apiV1BaseUrl)}</CodeBlock>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-medium">Supported tools</h2>
+        <p className="text-sm text-muted-foreground">
+          These tools are available on the public API. Credit costs come from
+          the tool catalog. Planned tools are omitted until they ship.
+        </p>
+        <ul className="flex flex-col gap-2 text-sm">
+          {tools.map((tool) => (
+            <li
+              key={tool.id}
+              className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border py-2 last:border-b-0"
+            >
+              <span>{tTools(`${tool.id}.name`)}</span>
+              <span className="text-muted-foreground">
+                {tool.apiCreditCost} API credits
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="flex flex-col gap-3">

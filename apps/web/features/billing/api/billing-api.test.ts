@@ -46,6 +46,7 @@ describe("billing api", () => {
                 limits: {
                   maxFileSizeBytes: 20,
                   apiAccess: true,
+                  apiRequestsPerMinute: 30,
                 },
                 api: {
                   product: null,

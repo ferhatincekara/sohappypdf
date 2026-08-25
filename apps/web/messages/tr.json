@@ -646,7 +646,20 @@
       "description": "Anahtarı Authorization başlığında gönderin. Sorgu parametrelerine veya tarayıcı koduna koymayın.",
       "baseUrlLabel": "API taban URL’si:",
       "rotateHint": "Anahtarı gizli tutun. Sızarsa hemen iptal edin.",
-      "docsLink": "API belgelendirmesini aç"
+      "docsLink": "API belgelendirmesini aç",
+      "statusTitle": "API kullanımı",
+      "statusDescription": "API kredileri web araç kredilerinden ayrıdır. Limitler web planınızı izler.",
+      "credits": "API kredileri",
+      "rate": "API istekleri",
+      "rateValue": "Dakikada {count}",
+      "keys": "API anahtarları",
+      "usageWithoutTool": "API kredileri",
+      "ledger": {
+        "grant": "+{amount} eklendi",
+        "consume": "{amount} kullanıldı",
+        "refund": "{amount} iade edildi",
+        "adjustment": "{amount} düzeltildi"
+      }
     },
     "validation": {
       "nameRequired": "Bir anahtar adı girin.",

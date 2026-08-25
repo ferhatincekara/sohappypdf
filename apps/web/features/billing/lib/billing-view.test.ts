@@ -63,6 +63,7 @@ function createBilling(
     limits: {
       maxFileSizeBytes: 20,
       apiAccess: true,
+      apiRequestsPerMinute: 30,
       ...overrides.limits,
     },
   };

@@ -88,6 +88,8 @@ export type BillingService = {
   recordConversionUsage(input: {
     userId: string;
     conversionId: string;
+    toolId?: string | null;
+    apiKeyId?: string | null;
   }): Promise<boolean>;
   consumeWebCredits(input: {
     userId: string;
@@ -503,6 +505,7 @@ export function createBillingService(
         limits: {
           maxFileSizeBytes: entitlements.limits.maxFileSizeBytes,
           apiAccess: entitlements.limits.apiAccess,
+          apiRequestsPerMinute: entitlements.limits.apiRequestsPerMinute,
         },
       };
     },
@@ -568,6 +571,8 @@ export function createBillingService(
       return options.repository.recordConversionUsage({
         userId: input.userId,
         conversionId: input.conversionId,
+        toolId: input.toolId ?? null,
+        apiKeyId: input.apiKeyId ?? null,
         periodStart: period.start,
         periodEnd: period.end,
       });

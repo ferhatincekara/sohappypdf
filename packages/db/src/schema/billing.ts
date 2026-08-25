@@ -11,6 +11,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { apiKeys } from "./api-keys.js";
 import { user } from "./auth.js";
 
 export const billingPlanEnum = pgEnum("billing_plan", ["free", "pro"]);
@@ -213,6 +214,10 @@ export const conversionUsageEvents = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
+    apiKeyId: uuid("api_key_id").references(() => apiKeys.id, {
+      onDelete: "set null",
+    }),
+    toolId: text("tool_id"),
     periodStart: timestamp("period_start", {
       withTimezone: true,
       mode: "date",
@@ -221,7 +226,10 @@ export const conversionUsageEvents = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (table) => [index("conversion_usage_events_user_id_idx").on(table.userId)],
+  (table) => [
+    index("conversion_usage_events_user_id_idx").on(table.userId),
+    index("conversion_usage_events_api_key_id_idx").on(table.apiKeyId),
+  ],
 );
 
 export const creditLedgerTypeEnum = pgEnum("credit_ledger_type", [

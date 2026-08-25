@@ -119,6 +119,7 @@ export type PublicBillingStatus = {
   limits: {
     maxFileSizeBytes: number;
     apiAccess: boolean;
+    apiRequestsPerMinute: number;
   };
 };
 

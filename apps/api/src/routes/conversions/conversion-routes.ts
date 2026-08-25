@@ -173,6 +173,8 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         await billing.recordConversionUsage({
           userId: identity.userId,
           conversionId: conversion.id,
+          toolId,
+          apiKeyId: identity.kind === "api-key" ? identity.apiKeyId : null,
         });
       } catch (error) {
         if (

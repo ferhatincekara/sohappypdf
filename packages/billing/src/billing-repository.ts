@@ -147,6 +147,8 @@ export type BillingRepository = {
   recordConversionUsage(input: {
     userId: string;
     conversionId: string;
+    toolId?: string | null;
+    apiKeyId?: string | null;
     periodStart: Date;
     periodEnd: Date;
   }): Promise<boolean>;
@@ -1112,6 +1114,8 @@ export function createBillingRepository(db: Database): BillingRepository {
           .values({
             conversionId: input.conversionId,
             userId: input.userId,
+            apiKeyId: input.apiKeyId ?? null,
+            toolId: input.toolId ?? null,
             periodStart: input.periodStart,
           })
           .onConflictDoNothing()

@@ -646,7 +646,20 @@
       "description": "Send the key in the Authorization header. Do not put it in query parameters or browser code.",
       "baseUrlLabel": "API base URL:",
       "rotateHint": "Treat the key as a secret. Revoke it immediately if it leaks.",
-      "docsLink": "Open API documentation"
+      "docsLink": "Open API documentation",
+      "statusTitle": "API usage",
+      "statusDescription": "API credits are separate from web tool credits. Limits follow your web plan.",
+      "credits": "API credits",
+      "rate": "API requests",
+      "rateValue": "{count} per minute",
+      "keys": "API keys",
+      "usageWithoutTool": "API credits",
+      "ledger": {
+        "grant": "+{amount} added",
+        "consume": "{amount} used",
+        "refund": "{amount} returned",
+        "adjustment": "{amount} adjusted"
+      }
     },
     "validation": {
       "nameRequired": "Enter a key name.",
