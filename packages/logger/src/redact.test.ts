@@ -7,6 +7,7 @@ describe("log redaction", () => {
       password: "hunter2",
       apiKey: "shpdf_test",
       token: "session-token",
+      objectKey: "files/original/abc",
       download: {
         url: "https://files.example/object?X-Amz-Signature=abc123",
       },
@@ -16,6 +17,7 @@ describe("log redaction", () => {
     expect(redacted.password).toBe("[redacted]");
     expect(redacted.apiKey).toBe("[redacted]");
     expect(redacted.token).toBe("[redacted]");
+    expect(redacted.objectKey).toBe("[redacted]");
     expect(redacted.download).toEqual({ url: "[redacted]" });
     expect(redacted.safe).toBe("merge-pdf");
   });

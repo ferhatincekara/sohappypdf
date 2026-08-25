@@ -27,6 +27,9 @@ describe("public OpenAPI contract", () => {
     expect(document.paths[PUBLIC_V1_PATHS.conversions]).toBeDefined();
     expect(document.paths["/api/v1/api-keys"]).toBeUndefined();
     expect(document.paths["/api/v1/billing"]).toBeUndefined();
+    expect(
+      Object.keys(document.paths).some((path) => path.includes("/admin")),
+    ).toBe(false);
     expect(serialized).toContain("YOUR_API_KEY");
     expect(serialized).not.toContain("polar_oat_");
     expect(serialized).not.toContain("AWS_SECRET");
