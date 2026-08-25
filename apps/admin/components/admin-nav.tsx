@@ -6,6 +6,7 @@ const LINKS = [
   { href: "/anonymous", label: "Anonymous" },
   { href: "/operations", label: "Operations" },
   { href: "/billing", label: "Billing" },
+  { href: "/tools", label: "Tools" },
 ] as const;
 
 export function AdminNav() {

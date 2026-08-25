@@ -110,6 +110,21 @@ export type AdminBillingInsights = {
   ledger: AdminLedgerEntry[];
 };
 
+export type AdminCatalogTool = {
+  id: string;
+  category: string;
+  availability: string;
+  allowsAnonymous: boolean;
+  requiresAuthentication: boolean;
+  availableOnPlans: readonly string[];
+  premium: boolean;
+  webCreditCost: number;
+  apiCreditCost: number;
+  aiCreditCost: number;
+  processorId: string;
+  health: "live" | "planned";
+};
+
 export type AdminUserDetail = {
   user: AdminUserRecord;
   plan: "free" | "pro";

@@ -266,4 +266,21 @@ describe("admin routes", () => {
 
     expect(response.status).toBe(400);
   });
+
+  test("lists catalog tools as read-only operational metadata", async () => {
+    const app = createAdminTestApp({
+      kind: "session",
+      userId: "admin_1",
+      sessionId: "session_1",
+    });
+
+    const response = await app.request("/api/v1/admin/tools");
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(Array.isArray(body.tools)).toBe(true);
+    expect(body.tools.length).toBeGreaterThan(0);
+    expect(body.tools[0]).toHaveProperty("processorId");
+    expect(body.tools[0]).toHaveProperty("health");
+    expect(JSON.stringify(body)).not.toContain("AWS");
+  });
 });

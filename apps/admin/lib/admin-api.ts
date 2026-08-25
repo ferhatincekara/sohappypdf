@@ -3,6 +3,7 @@ import type {
   AdminActor,
   AdminAnonymousSessionRecord,
   AdminBillingInsights,
+  AdminCatalogTool,
   AdminExecutionRecord,
   AdminOverview,
   AdminQueueCounts,
@@ -86,6 +87,13 @@ export async function fetchAdminQueues(): Promise<{
 
 export function fetchAdminBilling(): Promise<AdminBillingInsights> {
   return adminRequest<AdminBillingInsights>("/admin/billing");
+}
+
+export async function fetchAdminTools(): Promise<AdminCatalogTool[]> {
+  const body = await adminRequest<{ tools: AdminCatalogTool[] }>(
+    "/admin/tools",
+  );
+  return body.tools;
 }
 
 export async function submitAdminCreditAdjustment(input: {

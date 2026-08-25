@@ -4,6 +4,7 @@ import type { AdminConfig } from "@repo/config";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { ConversionQueueCounts } from "@repo/queue";
 import { getConversionQueueCounts } from "@repo/queue";
+import { isExecutableToolAvailability, listCatalogTools } from "@repo/tools";
 import { Hono } from "hono";
 import type { AdminQueryService } from "../../admin/admin-queries.js";
 import type { AppEnv } from "../../app-env.js";
@@ -203,6 +204,27 @@ export function createAdminRoutes(options: AdminRoutesOptions) {
     });
 
     return c.json({ ok: true });
+  });
+
+  admin.get("/tools", (c) => {
+    const tools = listCatalogTools().map((tool) => ({
+      id: tool.id,
+      category: tool.category,
+      availability: tool.availability,
+      allowsAnonymous: tool.allowsAnonymous,
+      requiresAuthentication: tool.requiresAuthentication,
+      availableOnPlans: tool.availableOnPlans,
+      premium: !tool.availableOnPlans.includes("free"),
+      webCreditCost: tool.webCreditCost,
+      apiCreditCost: tool.apiCreditCost,
+      aiCreditCost: tool.aiCreditCost,
+      processorId: tool.processorId,
+      health: isExecutableToolAvailability(tool.availability)
+        ? "live"
+        : "planned",
+    }));
+
+    return c.json({ tools });
   });
 
   return admin;
