@@ -151,6 +151,14 @@ export type BillingService = {
     body: string;
     headers: Record<string, string>;
   }): Promise<{ outcome: "applied" | "duplicate" | "ignored" }>;
+  getPlanCatalog(): PlanCatalog;
+  adjustCredits(input: {
+    userId: string;
+    source: "web" | "api" | "ai";
+    amount: number;
+    reason: string;
+    actorUserId: string;
+  }): Promise<void>;
 };
 
 function checkoutSuccessUrl(config: BillingConfig): string {
@@ -778,6 +786,67 @@ export function createBillingService(
         repository: options.repository,
         verifyWebhook: options.verifyWebhook,
         now,
+      });
+    },
+
+    getPlanCatalog() {
+      return catalog;
+    },
+
+    async adjustCredits(input) {
+      const reason = input.reason.trim();
+      const actorUserId = input.actorUserId.trim();
+
+      if (actorUserId.length === 0) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Administrator identity is required",
+        });
+      }
+
+      if (reason.length < 8 || reason.length > 500) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "A reason between 8 and 500 characters is required",
+        });
+      }
+
+      if (
+        input.source !== "web" &&
+        input.source !== "api" &&
+        input.source !== "ai"
+      ) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Credit source must be web, API, or AI",
+        });
+      }
+
+      if (!Number.isInteger(input.amount) || input.amount < 1) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Adjustment amount must be a positive integer",
+        });
+      }
+
+      const email = await options.repository.findUserEmail(input.userId);
+
+      if (email === undefined || email.length === 0) {
+        throw new AppError({
+          code: APP_ERROR_CODES.NOT_FOUND,
+          message: "User not found",
+        });
+      }
+
+      const period = getUtcMonthPeriod(now());
+      await options.repository.applyManualCreditAdjustment({
+        userId: input.userId,
+        source: input.source,
+        amount: input.amount,
+        reason: `admin:${actorUserId}: ${reason}`,
+        periodStart: period.start,
+        periodEnd: period.end,
+        now: now(),
       });
     },
   };

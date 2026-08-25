@@ -1,4 +1,5 @@
 import type { BillingService } from "@repo/billing";
+import { DEFAULT_API_CREDIT_PACKS } from "@repo/billing/plans";
 import type { AdminConfig } from "@repo/config";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { ConversionQueueCounts } from "@repo/queue";
@@ -27,6 +28,10 @@ function parseLimit(value: string | undefined, fallback: number): number {
   }
 
   return Math.min(parsed, 100);
+}
+
+function isJsonObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 export function createAdminRoutes(options: AdminRoutesOptions) {
@@ -127,6 +132,77 @@ export function createAdminRoutes(options: AdminRoutesOptions) {
     } catch {
       return c.json({ conversion: null });
     }
+  });
+
+  admin.get("/billing", async (c) => {
+    const billing = options.getBillingService();
+    const insights = await options.getQueries().getBillingInsights();
+
+    return c.json({
+      plans: billing.getPlanCatalog(),
+      apiCredits: DEFAULT_API_CREDIT_PACKS,
+      usersByPlan: insights.usersByPlan,
+      usage: insights.usage,
+      ledger: insights.ledger,
+    });
+  });
+
+  admin.post("/billing/adjustments", async (c) => {
+    const actor = c.get("adminActor");
+
+    if (actor === undefined) {
+      throw new AppError({
+        code: APP_ERROR_CODES.FORBIDDEN,
+        message: "Administrator access required",
+      });
+    }
+
+    let body: unknown;
+
+    try {
+      body = await c.req.json();
+    } catch {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid adjustment payload",
+      });
+    }
+
+    if (!isJsonObject(body)) {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid adjustment payload",
+      });
+    }
+
+    const userId = typeof body.userId === "string" ? body.userId.trim() : "";
+    const source = body.source;
+    const amount = body.amount;
+    const reason = typeof body.reason === "string" ? body.reason : "";
+
+    if (source !== "web" && source !== "api" && source !== "ai") {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Credit source must be web, API, or AI",
+      });
+    }
+
+    if (typeof amount !== "number") {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Adjustment amount must be a positive integer",
+      });
+    }
+
+    await options.getBillingService().adjustCredits({
+      userId,
+      source,
+      amount,
+      reason,
+      actorUserId: actor.userId,
+    });
+
+    return c.json({ ok: true });
   });
 
   return admin;

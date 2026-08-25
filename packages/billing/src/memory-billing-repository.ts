@@ -551,6 +551,28 @@ export function createMemoryBillingRepository(options?: {
       return userEmails[userId];
     },
 
+    async applyManualCreditAdjustment(input) {
+      const record = getUsageRecord(input.userId, input.periodStart);
+
+      if (input.source === "web") {
+        record.webCreditsGranted += input.amount;
+      } else if (input.source === "api") {
+        record.apiCreditsGranted += input.amount;
+      } else {
+        record.aiCreditsGranted += input.amount;
+      }
+
+      ledger.push({
+        userId: input.userId,
+        amount: input.amount,
+        type: "adjustment",
+        source: input.source,
+        reason: input.reason,
+        periodStart: input.periodStart,
+        createdAt: input.now,
+      });
+    },
+
     async applySubscriptionWebhook(input) {
       const key = webhookKey(input.provider, input.eventId);
 

@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { createTestBillingService } from "@repo/billing";
 import type { Logger } from "@repo/logger";
 import { createMemoryAdminQueryService } from "../../admin/admin-queries.js";
 import { createApp } from "../../app.js";
@@ -21,12 +22,21 @@ const adminActor = {
   name: "Ops",
 };
 
-function createAdminTestApp(identity: RequestIdentity) {
+function createAdminTestApp(
+  identity: RequestIdentity,
+  billingService = createTestBillingService({
+    userEmails: {
+      admin_1: "ops@example.com",
+      user_2: "member@example.com",
+    },
+  }),
+) {
   return createApp({
     config: { corsOrigins: [] },
     logger: silentLogger,
     resolveIdentity: async () => identity,
     adminConfig: { userIds: ["admin_1"], emails: [] },
+    billingService,
     adminQueries: createMemoryAdminQueryService({
       actors: [adminActor],
       users: [
@@ -196,5 +206,64 @@ describe("admin routes", () => {
       failed: 0,
       delayed: 0,
     });
+  });
+
+  test("returns billing insights without Polar identifiers", async () => {
+    const app = createAdminTestApp({
+      kind: "session",
+      userId: "admin_1",
+      sessionId: "session_1",
+    });
+
+    const response = await app.request("/api/v1/admin/billing");
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.plans.free.monthlyWebCredits).toBeDefined();
+    expect(body.usersByPlan.free).toBe(1);
+    expect(JSON.stringify(body)).not.toContain("polar");
+    expect(JSON.stringify(body)).not.toContain("prod_");
+  });
+
+  test("applies an authorized credit adjustment with a reason", async () => {
+    const app = createAdminTestApp({
+      kind: "session",
+      userId: "admin_1",
+      sessionId: "session_1",
+    });
+
+    const response = await app.request("/api/v1/admin/billing/adjustments", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        userId: "user_2",
+        source: "web",
+        amount: 15,
+        reason: "support goodwill credit",
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+  });
+
+  test("rejects credit adjustments without a reason", async () => {
+    const app = createAdminTestApp({
+      kind: "session",
+      userId: "admin_1",
+      sessionId: "session_1",
+    });
+
+    const response = await app.request("/api/v1/admin/billing/adjustments", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        userId: "user_2",
+        source: "web",
+        amount: 15,
+        reason: "no",
+      }),
+    });
+
+    expect(response.status).toBe(400);
   });
 });

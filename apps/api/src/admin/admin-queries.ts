@@ -1,11 +1,26 @@
+import { getUtcMonthPeriod } from "@repo/billing";
 import {
   anonymousSessions,
+  billingSubscriptions,
   conversions,
   type Database,
   getDb,
+  usagePeriods,
   user,
+  webCreditLedgerEntries,
 } from "@repo/db";
-import { and, count, desc, eq, ilike, isNotNull, lt, or } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  ilike,
+  inArray,
+  isNotNull,
+  lt,
+  or,
+  sql,
+} from "drizzle-orm";
 import type { AdminActor } from "./admin-actor.js";
 
 export type AdminExecutionCounts = {
@@ -59,6 +74,35 @@ export type AdminAnonymousSessionRecord = {
   lastSeenAt: string;
 };
 
+export type AdminLedgerEntry = {
+  id: string;
+  userId: string;
+  amount: number;
+  type: string;
+  source: string;
+  reason: string;
+  createdAt: string;
+};
+
+export type AdminBillingInsights = {
+  usersByPlan: {
+    free: number;
+    pro: number;
+  };
+  usage: {
+    periodStart: string;
+    periodEnd: string;
+    webCreditsUsed: number;
+    webCreditsGranted: number;
+    apiCreditsUsed: number;
+    apiCreditsGranted: number;
+    aiCreditsUsed: number;
+    aiCreditsGranted: number;
+    conversionsUsed: number;
+  };
+  ledger: AdminLedgerEntry[];
+};
+
 export type AdminQueryService = {
   findActorByUserId(userId: string): Promise<AdminActor | null>;
   getOverview(now?: Date): Promise<AdminOverview>;
@@ -78,6 +122,7 @@ export type AdminQueryService = {
     limit: number;
     status?: string;
   }): Promise<AdminExecutionRecord[]>;
+  getBillingInsights(now?: Date): Promise<AdminBillingInsights>;
 };
 
 function toCount(value: unknown): number {
@@ -343,6 +388,77 @@ export function createAdminQueryService(
         expiresAt: row.expiresAt?.toISOString() ?? null,
       }));
     },
+
+    async getBillingInsights(now = new Date()) {
+      const period = getUtcMonthPeriod(now);
+      const [userCountRow] = await db.select({ value: count() }).from(user);
+      const [proRow] = await db
+        .select({
+          value: sql<number>`cast(count(distinct ${billingSubscriptions.userId}) as int)`,
+        })
+        .from(billingSubscriptions)
+        .where(
+          and(
+            eq(billingSubscriptions.plan, "pro"),
+            inArray(billingSubscriptions.status, ["active", "trialing"]),
+          ),
+        );
+      const [usageRow] = await db
+        .select({
+          webCreditsUsed: sql<number>`coalesce(sum(${usagePeriods.webCreditsUsed}), 0)`,
+          webCreditsGranted: sql<number>`coalesce(sum(${usagePeriods.webCreditsGranted}), 0)`,
+          apiCreditsUsed: sql<number>`coalesce(sum(${usagePeriods.apiCreditsUsed}), 0)`,
+          apiCreditsGranted: sql<number>`coalesce(sum(${usagePeriods.apiCreditsGranted}), 0)`,
+          aiCreditsUsed: sql<number>`coalesce(sum(${usagePeriods.aiCreditsUsed}), 0)`,
+          aiCreditsGranted: sql<number>`coalesce(sum(${usagePeriods.aiCreditsGranted}), 0)`,
+          conversionsUsed: sql<number>`coalesce(sum(${usagePeriods.conversionsUsed}), 0)`,
+        })
+        .from(usagePeriods)
+        .where(eq(usagePeriods.periodStart, period.start));
+      const ledgerRows = await db
+        .select({
+          id: webCreditLedgerEntries.id,
+          userId: webCreditLedgerEntries.userId,
+          amount: webCreditLedgerEntries.amount,
+          type: webCreditLedgerEntries.type,
+          source: webCreditLedgerEntries.source,
+          reason: webCreditLedgerEntries.reason,
+          createdAt: webCreditLedgerEntries.createdAt,
+        })
+        .from(webCreditLedgerEntries)
+        .orderBy(desc(webCreditLedgerEntries.createdAt))
+        .limit(50);
+
+      const totalUsers = toCount(userCountRow?.value);
+      const proUsers = toCount(proRow?.value);
+
+      return {
+        usersByPlan: {
+          free: Math.max(0, totalUsers - proUsers),
+          pro: proUsers,
+        },
+        usage: {
+          periodStart: period.start.toISOString(),
+          periodEnd: period.end.toISOString(),
+          webCreditsUsed: toCount(usageRow?.webCreditsUsed),
+          webCreditsGranted: toCount(usageRow?.webCreditsGranted),
+          apiCreditsUsed: toCount(usageRow?.apiCreditsUsed),
+          apiCreditsGranted: toCount(usageRow?.apiCreditsGranted),
+          aiCreditsUsed: toCount(usageRow?.aiCreditsUsed),
+          aiCreditsGranted: toCount(usageRow?.aiCreditsGranted),
+          conversionsUsed: toCount(usageRow?.conversionsUsed),
+        },
+        ledger: ledgerRows.map((row) => ({
+          id: row.id,
+          userId: row.userId,
+          amount: row.amount,
+          type: row.type,
+          source: row.source,
+          reason: row.reason,
+          createdAt: row.createdAt.toISOString(),
+        })),
+      };
+    },
   };
 }
 
@@ -353,6 +469,7 @@ export function createMemoryAdminQueryService(options?: {
   userRecords?: readonly AdminUserRecord[];
   executions?: readonly AdminExecutionRecord[];
   anonymousSessions?: readonly AdminAnonymousSessionRecord[];
+  billingInsights?: AdminBillingInsights;
 }): AdminQueryService {
   const actors = options?.actors ?? [];
   const overview = options?.overview ?? {
@@ -364,6 +481,7 @@ export function createMemoryAdminQueryService(options?: {
   const userRecords = options?.userRecords ?? [];
   const executions = options?.executions ?? [];
   const anonymous = options?.anonymousSessions ?? [];
+  const billingInsights = options?.billingInsights;
 
   return {
     async findActorByUserId(userId) {
@@ -400,6 +518,28 @@ export function createMemoryAdminQueryService(options?: {
       }
 
       return executions.filter((item) => item.status === input.status);
+    },
+    async getBillingInsights(now = new Date()) {
+      if (billingInsights !== undefined) {
+        return billingInsights;
+      }
+
+      const period = getUtcMonthPeriod(now);
+      return {
+        usersByPlan: { free: users.length, pro: 0 },
+        usage: {
+          periodStart: period.start.toISOString(),
+          periodEnd: period.end.toISOString(),
+          webCreditsUsed: 0,
+          webCreditsGranted: 0,
+          apiCreditsUsed: 0,
+          apiCreditsGranted: 0,
+          aiCreditsUsed: 0,
+          aiCreditsGranted: 0,
+          conversionsUsed: 0,
+        },
+        ledger: [],
+      };
     },
   };
 }

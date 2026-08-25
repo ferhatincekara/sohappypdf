@@ -349,4 +349,39 @@ describe("createBillingService", () => {
     expect(checkout.url).toBe("https://polar.example/checkout/api");
     expect(productId).toBe("prod_api_starter");
   });
+
+  test("records an auditable credit adjustment with a required reason", async () => {
+    const billing = createService();
+    const before = await billing.getWebCreditBalance("user_1");
+    await billing.adjustCredits({
+      userId: "user_1",
+      source: "web",
+      amount: 25,
+      reason: "support goodwill credit",
+      actorUserId: "admin_1",
+    });
+
+    const balance = await billing.getWebCreditBalance("user_1");
+    expect(balance.webCreditsGranted).toBe(before.webCreditsGranted + 25);
+  });
+
+  test("rejects credit adjustments without a reason", async () => {
+    const billing = createService();
+
+    try {
+      await billing.adjustCredits({
+        userId: "user_1",
+        source: "web",
+        amount: 10,
+        reason: "short",
+        actorUserId: "admin_1",
+      });
+      throw new Error("expected validation error");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.VALIDATION_ERROR);
+      }
+    }
+  });
 });

@@ -63,6 +63,53 @@ export type AdminQueueCounts = {
   delayed: number;
 };
 
+export type AdminLedgerEntry = {
+  id: string;
+  userId: string;
+  amount: number;
+  type: string;
+  source: string;
+  reason: string;
+  createdAt: string;
+};
+
+export type AdminPlanLimits = {
+  monthlyConversions: number;
+  monthlyWebCredits: number;
+  monthlyAiCredits: number;
+  maxFileSizeBytes: number;
+  maxApiKeys: number;
+  apiRequestsPerMinute: number;
+};
+
+export type AdminBillingInsights = {
+  plans: {
+    free: AdminPlanLimits;
+    pro: AdminPlanLimits;
+  };
+  apiCredits: {
+    starter: number;
+    growth: number;
+    scale: number;
+  };
+  usersByPlan: {
+    free: number;
+    pro: number;
+  };
+  usage: {
+    periodStart: string;
+    periodEnd: string;
+    webCreditsUsed: number;
+    webCreditsGranted: number;
+    apiCreditsUsed: number;
+    apiCreditsGranted: number;
+    aiCreditsUsed: number;
+    aiCreditsGranted: number;
+    conversionsUsed: number;
+  };
+  ledger: AdminLedgerEntry[];
+};
+
 export type AdminUserDetail = {
   user: AdminUserRecord;
   plan: "free" | "pro";

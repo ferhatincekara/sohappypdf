@@ -2,6 +2,7 @@ import { getAdminApiV1BaseUrl } from "@/config/public-env";
 import type {
   AdminActor,
   AdminAnonymousSessionRecord,
+  AdminBillingInsights,
   AdminExecutionRecord,
   AdminOverview,
   AdminQueueCounts,
@@ -81,4 +82,37 @@ export async function fetchAdminQueues(): Promise<{
   conversion: AdminQueueCounts | null;
 }> {
   return adminRequest<{ conversion: AdminQueueCounts | null }>("/admin/queues");
+}
+
+export function fetchAdminBilling(): Promise<AdminBillingInsights> {
+  return adminRequest<AdminBillingInsights>("/admin/billing");
+}
+
+export async function submitAdminCreditAdjustment(input: {
+  userId: string;
+  source: "web" | "api" | "ai";
+  amount: number;
+  reason: string;
+}): Promise<void> {
+  const response = await fetch(
+    `${getAdminApiV1BaseUrl()}/admin/billing/adjustments`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(input),
+    },
+  );
+
+  if (!response.ok) {
+    throw new AdminApiError(
+      response.status,
+      response.status === 400
+        ? "Adjustment was rejected. Check the user, amount, and reason."
+        : "Admin request failed",
+    );
+  }
 }

@@ -153,6 +153,15 @@ export type BillingRepository = {
     periodEnd: Date;
   }): Promise<boolean>;
   findUserEmail(userId: string): Promise<string | undefined>;
+  applyManualCreditAdjustment(input: {
+    userId: string;
+    source: "web" | "api" | "ai";
+    amount: number;
+    reason: string;
+    periodStart: Date;
+    periodEnd: Date;
+    now: Date;
+  }): Promise<void>;
   applySubscriptionWebhook(input: {
     provider: string;
     eventId: string;
@@ -1159,6 +1168,56 @@ export function createBillingRepository(db: Database): BillingRepository {
         .limit(1);
 
       return row?.email;
+    },
+
+    async applyManualCreditAdjustment(input) {
+      const grantedUpdate =
+        input.source === "web"
+          ? {
+              webCreditsGranted: sql`${usagePeriods.webCreditsGranted} + ${input.amount}`,
+            }
+          : input.source === "api"
+            ? {
+                apiCreditsGranted: sql`${usagePeriods.apiCreditsGranted} + ${input.amount}`,
+              }
+            : {
+                aiCreditsGranted: sql`${usagePeriods.aiCreditsGranted} + ${input.amount}`,
+              };
+
+      await db.transaction(async (tx) => {
+        await tx
+          .insert(usagePeriods)
+          .values({
+            userId: input.userId,
+            periodStart: input.periodStart,
+            periodEnd: input.periodEnd,
+            ...emptyUsageCredits(),
+          })
+          .onConflictDoNothing();
+
+        await tx.insert(webCreditLedgerEntries).values({
+          userId: input.userId,
+          amount: input.amount,
+          type: "adjustment",
+          source: input.source,
+          reason: input.reason,
+          periodStart: input.periodStart,
+          createdAt: input.now,
+        });
+
+        await tx
+          .update(usagePeriods)
+          .set({
+            ...grantedUpdate,
+            updatedAt: input.now,
+          })
+          .where(
+            and(
+              eq(usagePeriods.userId, input.userId),
+              eq(usagePeriods.periodStart, input.periodStart),
+            ),
+          );
+      });
     },
 
     async applySubscriptionWebhook(input) {
