@@ -3,7 +3,10 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
-import type { ToolUxState } from "../types/tool-ux-state";
+import { isFileWorkspaceUx, type ToolUxState } from "../types/tool-ux-state";
+
+const MOBILE_BAR_CLASS =
+  "fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden";
 
 export function ToolMobileActionBar({
   ux,
@@ -40,9 +43,9 @@ export function ToolMobileActionBar({
     return null;
   }
 
-  if (ux.status === "selected") {
+  if (isFileWorkspaceUx(ux)) {
     return (
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden">
+      <div className={MOBILE_BAR_CLASS}>
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs text-muted-foreground">
@@ -57,7 +60,7 @@ export function ToolMobileActionBar({
           <Button
             type="button"
             size="lg"
-            className="shrink-0"
+            className="min-h-12 shrink-0 px-5"
             disabled={!canProcess}
             onClick={onProcess}
           >
@@ -70,12 +73,12 @@ export function ToolMobileActionBar({
 
   if (ux.status === "success") {
     return (
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden">
+      <div className={MOBILE_BAR_CLASS}>
         <div className="mx-auto flex w-full max-w-5xl gap-2">
           <Button
             type="button"
             size="lg"
-            className="flex-1"
+            className="min-h-12 flex-1"
             disabled={isDownloading}
             onClick={onDownload}
           >
@@ -87,7 +90,7 @@ export function ToolMobileActionBar({
             type="button"
             size="lg"
             variant="outline"
-            className="flex-1"
+            className="min-h-12 flex-1"
             onClick={onReset}
           >
             {resetLabel ?? t("actions.startAgain")}
@@ -99,13 +102,13 @@ export function ToolMobileActionBar({
 
   if (ux.status === "error") {
     return (
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden">
+      <div className={MOBILE_BAR_CLASS}>
         <div className="mx-auto flex w-full max-w-5xl gap-2">
           {ux.error.retryable ? (
             <Button
               type="button"
               size="lg"
-              className="flex-1"
+              className="min-h-12 flex-1"
               onClick={onRetry}
             >
               {t("actions.retry")}
@@ -115,7 +118,7 @@ export function ToolMobileActionBar({
             type="button"
             size="lg"
             variant={ux.error.retryable ? "outline" : "default"}
-            className="flex-1"
+            className="min-h-12 flex-1"
             onClick={onReset}
           >
             {resetLabel ?? t("actions.startAgain")}
@@ -126,9 +129,14 @@ export function ToolMobileActionBar({
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 md:hidden">
+    <div className={MOBILE_BAR_CLASS}>
       <div className="mx-auto flex w-full max-w-5xl">
-        <Button type="button" size="lg" className="w-full" onClick={onReset}>
+        <Button
+          type="button"
+          size="lg"
+          className="min-h-12 w-full"
+          onClick={onReset}
+        >
           {resetLabel ?? t("actions.startAgain")}
         </Button>
       </div>

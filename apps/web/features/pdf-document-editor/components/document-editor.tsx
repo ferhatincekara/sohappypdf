@@ -133,13 +133,15 @@ export function DocumentEditor({
           disabled={disabled}
           dispatch={dispatch}
         />
-        <EditorPropertiesPanel
-          object={selected}
-          disabled={disabled}
-          onChange={(object: EditorObject) => {
-            dispatch({ type: "updateObject", id: object.id, object });
-          }}
-        />
+        <div className="max-lg:sticky max-lg:bottom-24 max-lg:z-20">
+          <EditorPropertiesPanel
+            object={selected}
+            disabled={disabled}
+            onChange={(object: EditorObject) => {
+              dispatch({ type: "updateObject", id: object.id, object });
+            }}
+          />
+        </div>
       </div>
     </div>
   );
