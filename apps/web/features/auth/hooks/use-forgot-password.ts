@@ -4,16 +4,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { authActions } from "../api/auth-actions";
+import { firstFormErrorMessage } from "../lib/first-form-error-message";
 import {
   createForgotPasswordSchema,
   type ForgotPasswordValues,
 } from "../schemas/forgot-password-schema";
 
 export function useForgotPassword() {
+  const t = useTranslations("auth.forgotPassword");
   const tValidation = useTranslations("auth.validation");
   const tErrors = useTranslations("auth.errors");
-  const [formError, setFormError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const form = useForm<ForgotPasswordValues>({
     resolver: zodResolver(createForgotPasswordSchema(tValidation)),
@@ -22,24 +24,31 @@ export function useForgotPassword() {
     },
   });
 
-  const onSubmit = form.handleSubmit(async (values) => {
-    setFormError(null);
-    const result = await authActions.requestPasswordReset({
-      email: values.email,
-    });
+  const onSubmit = form.handleSubmit(
+    async (values) => {
+      const result = await authActions.requestPasswordReset({
+        email: values.email,
+      });
 
-    if (!result.ok) {
-      setFormError(tErrors(result.messageKey));
-      return;
-    }
+      if (!result.ok) {
+        toast.error(tErrors(result.messageKey));
+        return;
+      }
 
-    setSubmitted(true);
-  });
+      toast.success(t("success"));
+      setSubmitted(true);
+    },
+    (errors) => {
+      const message = firstFormErrorMessage(errors);
+      if (message !== undefined) {
+        toast.error(message);
+      }
+    },
+  );
 
   return {
     form,
     onSubmit,
-    formError,
     submitted,
     isSubmitting: form.formState.isSubmitting,
   };

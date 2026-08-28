@@ -22,7 +22,11 @@ export default async function SignupPage({
   const t = await getTranslations("auth.register");
 
   return (
-    <AuthPageShell title={t("title")} description={t("description")}>
+    <AuthPageShell
+      title={t("title")}
+      description={t("description")}
+      variant="register"
+    >
       <RegisterForm next={next} />
     </AuthPageShell>
   );

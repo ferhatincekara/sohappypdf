@@ -31,7 +31,10 @@ describe("auth redirects", () => {
   });
 
   test("sends authenticated users away from login and register", () => {
-    expect(resolveGuestOnlyRedirect(true, "/account")).toBe(AUTH_PATHS.app);
+    expect(resolveGuestOnlyRedirect(true, "/account")).toBe("/account");
+    expect(resolveGuestOnlyRedirect(true, "/account/settings")).toBe(
+      AUTH_PATHS.app,
+    );
     expect(resolveGuestOnlyRedirect(false, "/account")).toBeNull();
   });
 

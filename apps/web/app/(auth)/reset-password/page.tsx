@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AuthInvalidTokenNotice } from "@/features/auth/components/auth-invalid-token-notice";
 import { AuthPageShell } from "@/features/auth/components/auth-page-shell";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
 
@@ -24,13 +24,18 @@ export default async function ResetPasswordPage({
     token !== undefined && token.length > 0 && params.error !== "INVALID_TOKEN";
 
   return (
-    <AuthPageShell title={t("title")} description={t("description")}>
+    <AuthPageShell
+      title={t("title")}
+      description={t("description")}
+      variant="reset"
+    >
       {hasValidToken && token !== undefined ? (
         <ResetPasswordForm token={token} />
       ) : (
-        <Alert variant="destructive">
-          <AlertDescription>{t("invalidToken")}</AlertDescription>
-        </Alert>
+        <AuthInvalidTokenNotice
+          message={t("invalidToken")}
+          loginLabel={t("loginLink")}
+        />
       )}
     </AuthPageShell>
   );

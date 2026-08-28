@@ -15,7 +15,11 @@ export default async function ForgotPasswordPage() {
   const t = await getTranslations("auth.forgotPassword");
 
   return (
-    <AuthPageShell title={t("title")} description={t("description")}>
+    <AuthPageShell
+      title={t("title")}
+      description={t("description")}
+      variant="reset"
+    >
       <ForgotPasswordForm />
     </AuthPageShell>
   );

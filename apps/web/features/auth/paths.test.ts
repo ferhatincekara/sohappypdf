@@ -6,7 +6,7 @@ describe("auth paths", () => {
     expect(AUTH_PATHS.register).toBe("/register");
     expect(AUTH_PATHS.signup).toBe("/signup");
     expect(AUTH_PATHS.login).toBe("/login");
-    expect(AUTH_PATHS.app).toBe("/account");
+    expect(AUTH_PATHS.app).toBe("/account/settings");
   });
 
   test("builds signup URLs without inventing a destination", () => {

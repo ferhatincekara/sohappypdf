@@ -5,9 +5,16 @@ import {
   createPasswordSchema,
 } from "./password";
 
+export const AUTH_NAME_MAX_LENGTH = 80;
+
 export function createRegisterSchema(t: AuthValidationTranslator) {
   return z
     .object({
+      name: z
+        .string()
+        .trim()
+        .min(1, t("required"))
+        .max(AUTH_NAME_MAX_LENGTH, t("nameMax")),
       email: createEmailSchema(t),
       password: createPasswordSchema(t),
       confirmPassword: z.string().min(1, t("required")),

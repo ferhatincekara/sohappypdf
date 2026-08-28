@@ -33,6 +33,15 @@ describe("mapAuthError", () => {
     );
   });
 
+  test("maps unauthorized sign-in without a Better Auth code", () => {
+    expect(mapAuthError({ status: 401 })).toBe(
+      AUTH_ERROR_KEYS.invalidCredentials,
+    );
+    expect(mapAuthError({ message: "Invalid email or password" })).toBe(
+      AUTH_ERROR_KEYS.invalidCredentials,
+    );
+  });
+
   test("falls back to a generic error", () => {
     expect(mapAuthError({ code: "SOME_INTERNAL_CODE", message: "stack" })).toBe(
       AUTH_ERROR_KEYS.unexpected,

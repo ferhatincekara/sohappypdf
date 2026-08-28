@@ -41,8 +41,9 @@ describe("login schema", () => {
 });
 
 describe("register schema", () => {
-  test("accepts matching passwords that meet Better Auth limits", () => {
+  test("accepts a name with matching passwords that meet Better Auth limits", () => {
     const result = createRegisterSchema(t).safeParse({
+      name: "Ada Lovelace",
       email: "ada@example.com",
       password: "password1234",
       confirmPassword: "password1234",
@@ -51,8 +52,37 @@ describe("register schema", () => {
     expect(result.success).toBe(true);
   });
 
+  test("rejects a missing name", () => {
+    const result = createRegisterSchema(t).safeParse({
+      name: "  ",
+      email: "ada@example.com",
+      password: "password1234",
+      confirmPassword: "password1234",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.name).toContain("required");
+    }
+  });
+
+  test("rejects a name longer than 80 characters", () => {
+    const result = createRegisterSchema(t).safeParse({
+      name: "a".repeat(81),
+      email: "ada@example.com",
+      password: "password1234",
+      confirmPassword: "password1234",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.name).toContain("nameMax");
+    }
+  });
+
   test("rejects a password shorter than 8 characters", () => {
     const result = createRegisterSchema(t).safeParse({
+      name: "Ada Lovelace",
       email: "ada@example.com",
       password: "short",
       confirmPassword: "short",
@@ -68,6 +98,7 @@ describe("register schema", () => {
 
   test("rejects a password confirmation mismatch", () => {
     const result = createRegisterSchema(t).safeParse({
+      name: "Ada Lovelace",
       email: "ada@example.com",
       password: "password1234",
       confirmPassword: "password5678",

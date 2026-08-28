@@ -4,7 +4,7 @@ export const AUTH_PATHS = {
   signup: "/signup",
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
-  app: "/account",
+  app: "/account/settings",
   home: "/",
 } as const;
 

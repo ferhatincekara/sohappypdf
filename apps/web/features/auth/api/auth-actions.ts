@@ -2,6 +2,7 @@ import { getPublicWebEnv } from "@/config/public-env";
 import { authClient } from "@/lib/auth/auth-client";
 import { AUTH_PATHS } from "../paths";
 import {
+  AUTH_ERROR_KEYS,
   type AuthClientError,
   type AuthErrorKey,
   mapAuthError,
@@ -40,6 +41,13 @@ export type AuthBrowserClient = {
     newPassword: string;
     token: string;
   }) => Promise<AuthClientResult>;
+  changePassword: (input: {
+    currentPassword: string;
+    newPassword: string;
+    revokeOtherSessions?: boolean;
+  }) => Promise<AuthClientResult>;
+  updateUser: (input: { name?: string }) => Promise<AuthClientResult>;
+  changeEmail: (input: { newEmail: string }) => Promise<AuthClientResult>;
 };
 
 function toActionResult(result: AuthClientResult): AuthActionResult {
@@ -51,16 +59,6 @@ function toActionResult(result: AuthClientResult): AuthActionResult {
   }
 
   return { ok: true };
-}
-
-export function displayNameFromEmail(email: string): string {
-  const localPart = email.split("@")[0]?.trim() ?? "";
-
-  if (localPart.length === 0) {
-    return "User";
-  }
-
-  return localPart.slice(0, 80);
 }
 
 export function createAuthActions(client: AuthBrowserClient) {
@@ -78,14 +76,15 @@ export function createAuthActions(client: AuthBrowserClient) {
     },
 
     async signUpWithEmail(input: {
+      name: string;
       email: string;
       password: string;
     }): Promise<AuthActionResult> {
       return toActionResult(
         await client.signUp.email({
+          name: input.name,
           email: input.email,
           password: input.password,
-          name: displayNameFromEmail(input.email),
         }),
       );
     },
@@ -116,6 +115,38 @@ export function createAuthActions(client: AuthBrowserClient) {
         await client.resetPassword({
           newPassword: input.password,
           token: input.token,
+        }),
+      );
+    },
+
+    async changePassword(input: {
+      currentPassword: string;
+      password: string;
+    }): Promise<AuthActionResult> {
+      const result = await client.changePassword({
+        currentPassword: input.currentPassword,
+        newPassword: input.password,
+        revokeOtherSessions: true,
+      });
+
+      if (result.error?.code === "INVALID_PASSWORD") {
+        return {
+          ok: false,
+          messageKey: AUTH_ERROR_KEYS.currentPasswordIncorrect,
+        };
+      }
+
+      return toActionResult(result);
+    },
+
+    async updateUser(input: { name: string }): Promise<AuthActionResult> {
+      return toActionResult(await client.updateUser({ name: input.name }));
+    },
+
+    async changeEmail(input: { email: string }): Promise<AuthActionResult> {
+      return toActionResult(
+        await client.changeEmail({
+          newEmail: input.email,
         }),
       );
     },

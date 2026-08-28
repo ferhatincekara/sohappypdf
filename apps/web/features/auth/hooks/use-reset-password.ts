@@ -2,10 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { useRouter } from "@/lib/i18n/navigation";
 import { authActions } from "../api/auth-actions";
+import { firstFormErrorMessage } from "../lib/first-form-error-message";
 import { AUTH_PATHS } from "../paths";
 import {
   createResetPasswordSchema,
@@ -13,10 +14,10 @@ import {
 } from "../schemas/reset-password-schema";
 
 export function useResetPassword(token: string) {
+  const t = useTranslations("auth.resetPassword");
   const tValidation = useTranslations("auth.validation");
   const tErrors = useTranslations("auth.errors");
   const router = useRouter();
-  const [formError, setFormError] = useState<string | null>(null);
   const form = useForm<ResetPasswordValues>({
     resolver: zodResolver(createResetPasswordSchema(tValidation)),
     defaultValues: {
@@ -25,26 +26,33 @@ export function useResetPassword(token: string) {
     },
   });
 
-  const onSubmit = form.handleSubmit(async (values) => {
-    setFormError(null);
-    const result = await authActions.resetPassword({
-      password: values.password,
-      token,
-    });
+  const onSubmit = form.handleSubmit(
+    async (values) => {
+      const result = await authActions.resetPassword({
+        password: values.password,
+        token,
+      });
 
-    if (!result.ok) {
-      setFormError(tErrors(result.messageKey));
-      return;
-    }
+      if (!result.ok) {
+        toast.error(tErrors(result.messageKey));
+        return;
+      }
 
-    router.replace(AUTH_PATHS.login);
-    router.refresh();
-  });
+      toast.success(t("updated"));
+      router.replace(AUTH_PATHS.login);
+      router.refresh();
+    },
+    (errors) => {
+      const message = firstFormErrorMessage(errors);
+      if (message !== undefined) {
+        toast.error(message);
+      }
+    },
+  );
 
   return {
     form,
     onSubmit,
-    formError,
     isSubmitting: form.formState.isSubmitting,
   };
 }

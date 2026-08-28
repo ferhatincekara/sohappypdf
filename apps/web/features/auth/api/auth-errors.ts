@@ -4,6 +4,7 @@ export const AUTH_ERROR_KEYS = {
   invalidEmail: "invalidEmail",
   weakPassword: "weakPassword",
   expiredResetToken: "expiredResetToken",
+  currentPasswordIncorrect: "currentPasswordIncorrect",
   networkFailure: "networkFailure",
   unexpected: "unexpected",
 } as const;
@@ -24,6 +25,7 @@ const ERROR_CODE_MAP: Record<string, AuthErrorKey> = {
   USER_ALREADY_EXISTS: AUTH_ERROR_KEYS.existingAccount,
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: AUTH_ERROR_KEYS.existingAccount,
   INVALID_EMAIL: AUTH_ERROR_KEYS.invalidEmail,
+  CHANGE_EMAIL_DISABLED: AUTH_ERROR_KEYS.unexpected,
   INVALID_PASSWORD: AUTH_ERROR_KEYS.weakPassword,
   PASSWORD_TOO_SHORT: AUTH_ERROR_KEYS.weakPassword,
   PASSWORD_TOO_LONG: AUTH_ERROR_KEYS.weakPassword,
@@ -56,6 +58,19 @@ export function mapAuthError(error: AuthClientError | null): AuthErrorKey {
 
   if (error.code !== undefined && error.code in ERROR_CODE_MAP) {
     return ERROR_CODE_MAP[error.code] ?? AUTH_ERROR_KEYS.unexpected;
+  }
+
+  if (error.status === 401) {
+    return AUTH_ERROR_KEYS.invalidCredentials;
+  }
+
+  const message = error.message?.toLowerCase() ?? "";
+
+  if (
+    message.includes("invalid email or password") ||
+    message.includes("invalid credentials")
+  ) {
+    return AUTH_ERROR_KEYS.invalidCredentials;
   }
 
   return AUTH_ERROR_KEYS.unexpected;

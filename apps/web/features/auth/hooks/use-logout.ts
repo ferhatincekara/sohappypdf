@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useRouter } from "@/lib/i18n/navigation";
 import { authActions } from "../api/auth-actions";
 import { AUTH_PATHS } from "../paths";
@@ -10,7 +11,6 @@ export function useLogout() {
   const tErrors = useTranslations("auth.errors");
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function logout() {
     if (isPending) {
@@ -18,12 +18,11 @@ export function useLogout() {
     }
 
     setIsPending(true);
-    setError(null);
 
     const result = await authActions.signOut();
 
     if (!result.ok) {
-      setError(tErrors(result.messageKey));
+      toast.error(tErrors(result.messageKey));
       setIsPending(false);
       return;
     }
@@ -35,6 +34,5 @@ export function useLogout() {
   return {
     logout,
     isPending,
-    error,
   };
 }

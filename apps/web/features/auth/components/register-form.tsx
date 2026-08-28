@@ -12,26 +12,46 @@ import { Input } from "@/components/ui/input";
 import { Link } from "@/lib/i18n/navigation";
 import { useRegister } from "../hooks/use-register";
 import { AUTH_PATHS, loginPath } from "../paths";
-import { AuthFormError } from "./auth-form-error";
+import { PasswordInput } from "./password-input";
 
 export function RegisterForm({ next }: { next?: string | null }) {
   const t = useTranslations("auth.register");
-  const { form, onSubmit, formError, isSubmitting } = useRegister(next);
+  const tFields = useTranslations("auth.fields");
+  const { form, onSubmit, isSubmitting } = useRegister(next);
   const {
     register,
     formState: { errors },
   } = form;
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6">
-      <AuthFormError message={formError} />
-      <FieldGroup>
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
+      <FieldGroup className="gap-4">
+        <Field data-invalid={errors.name !== undefined || undefined}>
+          <FieldLabel htmlFor="name" className="font-semibold">
+            {t("name")}
+          </FieldLabel>
+          <Input
+            id="name"
+            type="text"
+            autoComplete="name"
+            autoFocus
+            placeholder={t("namePlaceholder")}
+            aria-invalid={errors.name !== undefined}
+            aria-describedby={errors.name ? "name-error" : undefined}
+            disabled={isSubmitting}
+            {...register("name")}
+          />
+          <FieldError id="name-error" errors={[errors.name]} />
+        </Field>
         <Field data-invalid={errors.email !== undefined || undefined}>
-          <FieldLabel htmlFor="email">{t("email")}</FieldLabel>
+          <FieldLabel htmlFor="email" className="font-semibold">
+            {t("email")}
+          </FieldLabel>
           <Input
             id="email"
             type="email"
             autoComplete="email"
+            placeholder={t("emailPlaceholder")}
             aria-invalid={errors.email !== undefined}
             aria-describedby={errors.email ? "email-error" : undefined}
             disabled={isSubmitting}
@@ -40,31 +60,37 @@ export function RegisterForm({ next }: { next?: string | null }) {
           <FieldError id="email-error" errors={[errors.email]} />
         </Field>
         <Field data-invalid={errors.password !== undefined || undefined}>
-          <FieldLabel htmlFor="password">{t("password")}</FieldLabel>
-          <Input
+          <FieldLabel htmlFor="password" className="font-semibold">
+            {t("password")}
+          </FieldLabel>
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="new-password"
+            placeholder={t("passwordPlaceholder")}
             aria-invalid={errors.password !== undefined}
             aria-describedby={errors.password ? "password-error" : undefined}
             disabled={isSubmitting}
+            showLabel={tFields("showPassword")}
+            hideLabel={tFields("hidePassword")}
             {...register("password")}
           />
           <FieldError id="password-error" errors={[errors.password]} />
         </Field>
         <Field data-invalid={errors.confirmPassword !== undefined || undefined}>
-          <FieldLabel htmlFor="confirmPassword">
+          <FieldLabel htmlFor="confirmPassword" className="font-semibold">
             {t("confirmPassword")}
           </FieldLabel>
-          <Input
+          <PasswordInput
             id="confirmPassword"
-            type="password"
             autoComplete="new-password"
+            placeholder={t("passwordPlaceholder")}
             aria-invalid={errors.confirmPassword !== undefined}
             aria-describedby={
               errors.confirmPassword ? "confirm-password-error" : undefined
             }
             disabled={isSubmitting}
+            showLabel={tFields("showPassword")}
+            hideLabel={tFields("hidePassword")}
             {...register("confirmPassword")}
           />
           <FieldError
@@ -73,15 +99,24 @@ export function RegisterForm({ next }: { next?: string | null }) {
           />
         </Field>
       </FieldGroup>
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        size="lg"
+        variant="secondary"
+        className="mt-1 w-full"
+      >
         {isSubmitting ? t("submitting") : t("submit")}
       </Button>
-      <Link
-        className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-        href={next ? loginPath(next) : AUTH_PATHS.login}
-      >
-        {t("loginLink")}
-      </Link>
+      <p className="text-sm text-muted-foreground">
+        {t("switchHint")}{" "}
+        <Link
+          className="font-bold text-foreground underline-offset-4 hover:underline"
+          href={next ? loginPath(next) : AUTH_PATHS.login}
+        >
+          {t("loginLink")}
+        </Link>
+      </p>
     </form>
   );
 }
