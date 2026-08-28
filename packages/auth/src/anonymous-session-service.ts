@@ -53,28 +53,43 @@ export function createAnonymousSessionService(
     };
   }
 
+  async function findValidFromToken(
+    rawToken: string | undefined,
+    currentTime?: Date,
+  ): Promise<AnonymousSession | undefined> {
+    const at = currentTime ?? now();
+
+    if (
+      rawToken === undefined ||
+      rawToken.length === 0 ||
+      !isAnonymousSessionTokenFormat(rawToken)
+    ) {
+      return undefined;
+    }
+
+    const record = await options.repository.findByTokenHash(
+      hashAnonymousSessionToken(rawToken),
+    );
+
+    if (record === undefined || isExpired(record, at)) {
+      return undefined;
+    }
+
+    return toPublicSession(record);
+  }
+
   return {
+    findValidFromToken,
+
     async resolveFromToken(rawToken, currentTime) {
-      const at = currentTime ?? now();
+      const existing = await findValidFromToken(rawToken, currentTime);
 
-      if (
-        rawToken === undefined ||
-        rawToken.length === 0 ||
-        !isAnonymousSessionTokenFormat(rawToken)
-      ) {
-        return createSession();
-      }
-
-      const record = await options.repository.findByTokenHash(
-        hashAnonymousSessionToken(rawToken),
-      );
-
-      if (record === undefined || isExpired(record, at)) {
+      if (existing === undefined || rawToken === undefined) {
         return createSession();
       }
 
       return {
-        session: toPublicSession(record),
+        session: existing,
         rawToken,
         cookieShouldSet: false,
       };

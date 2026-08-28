@@ -126,11 +126,33 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
     async listEligibleForCleanup() {
       return [];
     },
-    async listPurgedAnonymous() {
+    async listPurged() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, now) {
       return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, file] of records.entries()) {
+        if (
+          file.ownerId !== input.fromOwnerId ||
+          (file.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...file,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }

@@ -13,6 +13,11 @@ export {
   isTargetFormatAccepted,
   listConversionCapabilities,
 } from "./conversion-capability.js";
+export {
+  CONVERSION_RETENTION_MS,
+  conversionActiveAfter,
+  isConversionRecordExpired,
+} from "./conversion-expiration.js";
 export type { FileFormat } from "./conversion-format.js";
 export {
   FILE_FORMATS,
@@ -29,6 +34,7 @@ export type {
   EditPdfOperation,
   EditPdfOptions,
   ExtractPagesOptions,
+  ImageToPdfOptions,
   MergePdfOptions,
   OcrOptions,
   OcrOutputMode,

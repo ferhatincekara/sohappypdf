@@ -4,6 +4,7 @@ assertServerOnly("@repo/auth");
 
 export {
   ANONYMOUS_SESSION_COOKIE_NAME,
+  createAnonymousSessionCookieClearOptions,
   createAnonymousSessionCookieOptions,
 } from "./anonymous-session-cookie.js";
 export { createMemoryAnonymousSessionRepository } from "./anonymous-session-memory.js";

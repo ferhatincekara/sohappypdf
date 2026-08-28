@@ -74,7 +74,7 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
     async listEligibleForCleanup() {
       return [];
     },
-    async listPurgedAnonymous() {
+    async listPurged() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, currentTime) {
@@ -83,6 +83,28 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
         ownerId,
         currentTime,
       );
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, file] of records.entries()) {
+        if (
+          file.ownerId !== input.fromOwnerId ||
+          (file.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...file,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -167,11 +189,21 @@ function createPolarClientMock(
     async createCheckout() {
       return { url: "https://polar.example/checkout/cs_1" };
     },
+    async updateSubscription() {},
     async createCustomerPortal() {
       return { url: "https://polar.example/portal/ps_1" };
     },
     async listSubscriptionsByExternalId() {
       return [];
+    },
+    async listSubscriptionsByCustomerId() {
+      return [];
+    },
+    async listSubscriptionsByEmail() {
+      return [];
+    },
+    async getProduct() {
+      return null;
     },
     ...overrides,
   };
@@ -242,6 +274,45 @@ describe("billing API", () => {
     );
   });
 
+  test("returns Polar catalog prices without authentication or Polar IDs", async () => {
+    const app = createBillingApp({
+      identity: { kind: "anonymous" },
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_starter",
+      },
+      polarClient: createPolarClientMock({
+        async getProduct(id) {
+          if (id === "prod_pro") {
+            return {
+              prices: [
+                { amountType: "fixed", priceAmount: 1200, isArchived: false },
+              ],
+            };
+          }
+
+          if (id === "prod_starter") {
+            return {
+              prices: [
+                { amountType: "fixed", priceAmount: 1500, isArchived: false },
+              ],
+            };
+          }
+
+          return null;
+        },
+      }),
+    });
+    const response = await app.request("/api/v1/billing/catalog");
+    const body = await response.json();
+    const serialized = JSON.stringify(body);
+
+    expect(response.status).toBe(200);
+    expect(body.prices.pro.monthlyUsd).toBe(12);
+    expect(body.prices.starter.monthlyUsd).toBe(15);
+    expect(serialized).not.toContain("prod_");
+    expect(serialized).not.toContain("polar_at_test");
+  });
+
   test("returns the free billing status for a user without a subscription", async () => {
     const app = createBillingApp();
     const response = await app.request("/api/v1/billing");
@@ -250,11 +321,13 @@ describe("billing API", () => {
     expect(response.status).toBe(200);
     expect(body.billing.plan).toBe("free");
     expect(body.billing.canUpgrade).toBe(true);
-    expect(body.billing.usage.webCreditsLimit).toBe(100);
-    expect(body.billing.usage.webCreditsRemaining).toBe(100);
+    expect(body.billing.canManage).toBe(false);
+    expect(body.billing.usage.webCreditsLimit).toBe(1_550);
+    expect(body.billing.usage.webCreditsRemaining).toBe(1_550);
     expect(body.billing.usage.aiCreditsLimit).toBe(0);
-    expect(body.billing.usage.conversionsLimit).toBe(20);
-    expect(body.billing.api.creditsLimit).toBe(0);
+    expect(body.billing.usage.conversionsLimit).toBe(5);
+    expect(body.billing.api.creditsLimit).toBe(100);
+    expect(body.billing.prices.pro.monthlyUsd).toBe(5);
     expect(JSON.stringify(body).includes("polar_at_test")).toBe(false);
   });
 
@@ -269,16 +342,16 @@ describe("billing API", () => {
     expect(body.checkout.url).toBe("https://polar.example/checkout/cs_1");
   });
 
-  test("creates an API credit pack checkout from a product key", async () => {
+  test("creates an API starter checkout from a product key", async () => {
     let productId: string | undefined;
     const app = createBillingApp({
       env: {
-        POLAR_API_CREDIT_PACKS: "prod_pack:500",
+        POLAR_API_STARTER_PRODUCT_ID: "prod_starter",
       },
       polarClient: createPolarClientMock({
         async createCheckout(input) {
-          productId = input.productId;
-          return { url: "https://polar.example/checkout/pack" };
+          productId = input.productIds[0];
+          return { url: "https://polar.example/checkout/starter" };
         },
       }),
     });
@@ -286,13 +359,42 @@ describe("billing API", () => {
     const response = await app.request("/api/v1/billing/checkout", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ product: "api-pack" }),
+      body: JSON.stringify({ product: "api-starter" }),
     });
     const body = await response.json();
 
     expect(response.status).toBe(201);
-    expect(body.checkout.url).toBe("https://polar.example/checkout/pack");
-    expect(productId).toBe("prod_pack");
+    expect(body.checkout.url).toBe("https://polar.example/checkout/starter");
+    expect(productId).toBe("prod_starter");
+  });
+
+  test("creates a yearly API starter checkout from the selected interval", async () => {
+    let productIds: readonly string[] | undefined;
+    const app = createBillingApp({
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_starter",
+        POLAR_API_STARTER_YEARLY_PRODUCT_ID: "prod_starter_yearly",
+      },
+      polarClient: createPolarClientMock({
+        async createCheckout(input) {
+          productIds = input.productIds;
+          return { url: "https://polar.example/checkout/starter-yearly" };
+        },
+      }),
+    });
+
+    const response = await app.request("/api/v1/billing/checkout", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ product: "api-starter", interval: "yearly" }),
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(201);
+    expect(body.checkout.url).toBe(
+      "https://polar.example/checkout/starter-yearly",
+    );
+    expect(productIds).toEqual(["prod_starter_yearly"]);
   });
 
   test("activates Pro after a verified webhook", async () => {

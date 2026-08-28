@@ -1,10 +1,19 @@
 import { randomUUID } from "node:crypto";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { DEFAULT_RESOURCE_OWNER_KIND, type FileRecord } from "@repo/files";
+import {
+  DEFAULT_RESOURCE_OWNER_KIND,
+  type FileRecord,
+  type ResourceOwnerTransferInput,
+  type ResourceOwnerTransferResult,
+} from "@repo/files";
 import {
   isConversionSupported,
   isTargetFormatAccepted,
 } from "./conversion-capability.js";
+import {
+  CONVERSION_RETENTION_MS,
+  conversionActiveAfter,
+} from "./conversion-expiration.js";
 import type { FileFormat } from "./conversion-format.js";
 import type { ConversionOptions } from "./conversion-options.js";
 import { parseConversionOptions } from "./conversion-options.js";
@@ -86,6 +95,9 @@ export type ConversionService = {
     deleted: number;
   }>;
   deleteReferencingFile(fileId: string): Promise<number>;
+  transferOwner(
+    input: Omit<ResourceOwnerTransferInput, "now"> & { now?: Date },
+  ): Promise<ResourceOwnerTransferResult>;
 };
 
 function requireConversion(
@@ -128,7 +140,9 @@ function getAdditionalFileIds(
     options.type === "compare-pdf" ||
     options.type === "edit-pdf" ||
     options.type === "sign-pdf" ||
-    options.type === "scan-to-pdf"
+    options.type === "scan-to-pdf" ||
+    options.type === "jpg-to-pdf" ||
+    options.type === "png-to-pdf"
   ) {
     return options.additionalFileIds;
   }
@@ -148,13 +162,6 @@ function assertOutputModeAlignment(
       });
     }
     return;
-  }
-
-  if (options.type === "ai-summarizer" && options.outputMode !== targetFormat) {
-    throw new AppError({
-      code: APP_ERROR_CODES.VALIDATION_ERROR,
-      message: "Invalid target format",
-    });
   }
 }
 
@@ -325,7 +332,9 @@ export function createConversionService(
       queuedAt: null,
       startedAt: null,
       completedAt: null,
-      expiresAt: input.expiresAt ?? null,
+      expiresAt:
+        input.expiresAt ??
+        new Date(createdAt.getTime() + CONVERSION_RETENTION_MS),
     };
 
     return options.repository.insert(conversion);
@@ -408,6 +417,7 @@ export function createConversionService(
         query.targetFormat === undefined
           ? undefined
           : assertFileFormat(query.targetFormat, "Invalid target format");
+      const current = now();
       const records = await options.repository.listByOwner({
         ownerId,
         ownerKind: query.ownerKind,
@@ -415,6 +425,8 @@ export function createConversionService(
         cursor,
         status,
         targetFormat,
+        now: current,
+        activeAfter: conversionActiveAfter(current),
       });
       const hasMore = records.length > limit;
       const page = hasMore ? records.slice(0, limit) : records;
@@ -499,8 +511,10 @@ export function createConversionService(
         });
       }
 
+      const current = now();
       const expired = await options.repository.listExpired({
-        now: now(),
+        now: current,
+        activeAfter: conversionActiveAfter(current),
         limit,
       });
       let deleted = 0;
@@ -520,6 +534,16 @@ export function createConversionService(
       return options.repository.deleteReferencingFile(
         assertFileReferenceId(fileId),
       );
+    },
+
+    async transferOwner(input) {
+      return options.repository.transferOwner({
+        fromOwnerId: assertConversionOwnerId(input.fromOwnerId),
+        fromOwnerKind: input.fromOwnerKind,
+        toOwnerId: assertConversionOwnerId(input.toOwnerId),
+        toOwnerKind: input.toOwnerKind,
+        now: input.now ?? now(),
+      });
     },
   };
 }

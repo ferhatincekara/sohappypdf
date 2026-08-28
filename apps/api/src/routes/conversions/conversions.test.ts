@@ -8,6 +8,7 @@ import {
   type ConversionRecord,
   type ConversionRepository,
   createConversionService,
+  isConversionRecordExpired,
 } from "@repo/conversions";
 import { APP_ERROR_CODES } from "@repo/core";
 import {
@@ -87,11 +88,33 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
     async listEligibleForCleanup() {
       return [];
     },
-    async listPurgedAnonymous() {
+    async listPurged() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, now) {
       return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, file] of records.entries()) {
+        if (
+          file.ownerId !== input.fromOwnerId ||
+          (file.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...file,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -176,6 +199,13 @@ function createMemoryConversionRepository(
           if (
             input.ownerKind !== undefined &&
             conversion.ownerKind !== input.ownerKind
+          ) {
+            return false;
+          }
+
+          if (
+            input.now !== undefined &&
+            isConversionRecordExpired(conversion, input.now)
           ) {
             return false;
           }
@@ -272,13 +302,33 @@ function createMemoryConversionRepository(
     },
     async listExpired(input) {
       return [...records.values()]
-        .filter(
-          (conversion) =>
-            conversion.expiresAt !== null &&
-            conversion.expiresAt.getTime() <= input.now.getTime(),
+        .filter((conversion) =>
+          isConversionRecordExpired(conversion, input.now),
         )
         .slice(0, input.limit)
         .map((conversion) => ({ ...conversion }));
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, conversion] of records.entries()) {
+        if (
+          conversion.ownerId !== input.fromOwnerId ||
+          (conversion.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...conversion,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -851,6 +901,38 @@ describe("conversion API", () => {
     });
   });
 
+  test("records daily usage even when credit consume fails after enqueue", async () => {
+    const inner = createTestBillingService();
+    const billingService: BillingService = {
+      ...inner,
+      async consumeWebCredits() {
+        throw new Error("credit ledger unavailable");
+      },
+    };
+    const context = createConversionApp({
+      identity: sessionIdentity,
+      billingService,
+    });
+    const file = await createReadyFile(context, { ownerId: "user_1" });
+
+    const response = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "jpg",
+      }),
+    });
+    const status = await billingService.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(response.status).toBe(201);
+    expect(status.usage.conversionsUsed).toBe(1);
+  });
+
   test("records conversion usage once and enforces the monthly conversion limit", async () => {
     const context = createConversionApp({
       identity: sessionIdentity,
@@ -892,7 +974,7 @@ describe("conversion API", () => {
     expect(usage.conversionsUsed).toBe(1);
   });
 
-  test("rejects an API-key conversion when API credits are insufficient", async () => {
+  test("allows an API-key conversion using included API credits", async () => {
     const context = createConversionApp({
       identity: apiKeyIdentity,
       billingService: createTestBillingService(),
@@ -912,9 +994,34 @@ describe("conversion API", () => {
       }),
     });
 
+    expect(response.status).toBe(201);
+    expect(await response.json()).toMatchObject({
+      conversion: { type: "png-to-pdf", status: "queued" },
+    });
+  });
+
+  test("rejects a Pro-only tool for a Free session user", async () => {
+    const context = createConversionApp({
+      identity: sessionIdentity,
+    });
+    const file = await createReadyFile(context, { ownerId: "user_1" });
+
+    const response = await context.app.request("/api/v1/conversions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        sourceFileId: file.id,
+        targetFormat: "pdf",
+        type: "ocr-pdf",
+      }),
+    });
+
     expect(response.status).toBe(403);
     expect(await response.json()).toMatchObject({
-      error: { code: APP_ERROR_CODES.PLAN_LIMIT_REACHED },
+      error: {
+        code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+        message: "This tool requires Pro",
+      },
     });
     expect(context.jobs).toHaveLength(0);
   });

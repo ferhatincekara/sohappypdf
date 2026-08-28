@@ -51,7 +51,11 @@ export type {
   RegisterStoredFileInput,
 } from "./file-types.js";
 export { MAX_FILE_SIZE_BYTES } from "./file-validation.js";
-export type { ResourceOwnerKind } from "./resource-owner.js";
+export type {
+  ResourceOwnerKind,
+  ResourceOwnerTransferInput,
+  ResourceOwnerTransferResult,
+} from "./resource-owner.js";
 export {
   DEFAULT_RESOURCE_OWNER_KIND,
   isResourceOwnerKind,

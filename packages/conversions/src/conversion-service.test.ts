@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { isAppError } from "@repo/core";
 import { FILE_EXPIRED_MESSAGE, type FileRecord } from "@repo/files";
+import { isConversionRecordExpired } from "./conversion-expiration.js";
 import type { ConversionRepository } from "./conversion-repository.js";
 import { createConversionService } from "./conversion-service.js";
 import type { ConversionRecord } from "./conversion-types.js";
@@ -61,8 +62,7 @@ function createMemoryRepository(
 
           if (
             input.now !== undefined &&
-            conversion.expiresAt !== null &&
-            conversion.expiresAt.getTime() <= input.now.getTime()
+            isConversionRecordExpired(conversion, input.now)
           ) {
             return false;
           }
@@ -159,13 +159,33 @@ function createMemoryRepository(
     },
     async listExpired(input) {
       return [...records.values()]
-        .filter(
-          (conversion) =>
-            conversion.expiresAt !== null &&
-            conversion.expiresAt.getTime() <= input.now.getTime(),
+        .filter((conversion) =>
+          isConversionRecordExpired(conversion, input.now),
         )
         .slice(0, input.limit)
         .map((conversion) => ({ ...conversion }));
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, conversion] of records.entries()) {
+        if (
+          conversion.ownerId !== input.fromOwnerId ||
+          (conversion.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...conversion,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -629,6 +649,71 @@ describe("conversion service", () => {
     });
   });
 
+  test("omits expired conversions from owned lists", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+    const expired = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+      expiresAt: new Date("2026-08-23T18:00:00.000Z"),
+    });
+    const active = await service.createOwnedConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      targetFormat: "png",
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+    });
+
+    const listed = await service.listOwnedConversions({
+      ownerId: sourceFile.ownerId,
+    });
+
+    expect(listed.conversions.map((item) => item.id)).toEqual([active.id]);
+    expect(listed.conversions.map((item) => item.id)).not.toContain(expired.id);
+  });
+
+  test("omits conversions without expiresAt after the default retention", async () => {
+    const createdAt = new Date("2026-08-23T16:00:00.000Z");
+    const stale: ConversionRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440099",
+      ownerId: sourceFile.ownerId,
+      ownerKind: "user",
+      sourceFileId: sourceFile.id,
+      outputFileId: null,
+      type: "pdf-to-jpg",
+      sourceFormat: "pdf",
+      targetFormat: "jpg",
+      status: "completed",
+      options: { type: "pdf-to-jpg" },
+      errorCode: null,
+      errorMessage: null,
+      idempotencyKey: null,
+      createdAt,
+      updatedAt: createdAt,
+      queuedAt: createdAt,
+      startedAt: createdAt,
+      completedAt: createdAt,
+      expiresAt: null,
+    };
+    const service = createConversionService({
+      repository: createMemoryRepository([stale]),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+
+    const listed = await service.listOwnedConversions({
+      ownerId: sourceFile.ownerId,
+    });
+    const cleaned = await service.cleanupExpiredConversions();
+
+    expect(listed.conversions).toEqual([]);
+    expect(cleaned).toEqual({ scanned: 1, deleted: 1 });
+  });
+
   test("returns expired owned conversions for history metadata", async () => {
     const service = createConversionService({
       repository: createMemoryRepository(),
@@ -700,5 +785,48 @@ describe("conversion service", () => {
       (await service.listOwnedConversions({ ownerId: sourceFile.ownerId }))
         .conversions,
     ).toEqual([]);
+  });
+
+  test("transfers anonymous-owned conversions to an authenticated user", async () => {
+    const sessionId = "550e8400-e29b-41d4-a716-446655440099";
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([
+        createFile({
+          ownerId: sessionId,
+          ownerKind: "anonymous_session",
+        }),
+      ]),
+      now: () => new Date("2026-08-23T18:30:00.000Z"),
+    });
+    const created = await service.createOwnedConversion({
+      ownerId: sessionId,
+      ownerKind: "anonymous_session",
+      sourceFileId: sourceFile.id,
+      targetFormat: "jpg",
+    });
+
+    const first = await service.transferOwner({
+      fromOwnerId: sessionId,
+      fromOwnerKind: "anonymous_session",
+      toOwnerId: "user_1",
+      toOwnerKind: "user",
+    });
+    const second = await service.transferOwner({
+      fromOwnerId: sessionId,
+      fromOwnerKind: "anonymous_session",
+      toOwnerId: "user_1",
+      toOwnerKind: "user",
+    });
+    const listed = await service.listOwnedConversions({
+      ownerId: "user_1",
+      ownerKind: "user",
+    });
+
+    expect(first).toEqual({ transferred: 1 });
+    expect(second).toEqual({ transferred: 0 });
+    expect(listed.conversions.map((conversion) => conversion.id)).toEqual([
+      created.id,
+    ]);
   });
 });

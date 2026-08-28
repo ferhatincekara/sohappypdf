@@ -122,14 +122,33 @@ function createMemoryRepository(seed: FileRecord[] = []): FileRepository {
         .slice(0, input.limit)
         .map((file) => ({ ...file }));
     },
-    async listPurgedAnonymous(input) {
+    async listPurged(input) {
       return [...records.values()]
-        .filter(
-          (file) =>
-            file.ownerKind === "anonymous_session" && file.purgedAt !== null,
-        )
+        .filter((file) => file.purgedAt !== null)
         .slice(0, input.limit)
         .map((file) => ({ ...file }));
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, file] of records.entries()) {
+        if (
+          file.ownerId !== input.fromOwnerId ||
+          (file.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...file,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -769,5 +788,57 @@ describe("file service", () => {
     expect(result.failureFileIds).toEqual([failing.id]);
     expect(failingRow?.purgedAt).toBeNull();
     expect(okRow?.purgedAt).not.toBeNull();
+  });
+
+  test("transfers anonymous-owned files to an authenticated user", async () => {
+    const anonymousFile: FileRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440020",
+      ownerId: "550e8400-e29b-41d4-a716-446655440099",
+      ownerKind: "anonymous_session",
+      originalFilename: "report.pdf",
+      mimeType: "application/pdf",
+      sizeBytes: 10,
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440020/original",
+      status: "uploaded",
+      createdAt: new Date("2026-08-23T18:00:00.000Z"),
+      updatedAt: new Date("2026-08-23T18:00:00.000Z"),
+      expiresAt: new Date("2026-08-23T20:00:00.000Z"),
+      deletedAt: null,
+      purgedAt: null,
+    };
+    const otherFile: FileRecord = {
+      ...anonymousFile,
+      id: "550e8400-e29b-41d4-a716-446655440021",
+      ownerId: "other-session",
+      objectKey: "files/550e8400-e29b-41d4-a716-446655440021/original",
+    };
+    const service = createFileService({
+      repository: createMemoryRepository([anonymousFile, otherFile]),
+      storage: createMemoryStorage({
+        existingKeys: [anonymousFile.objectKey, otherFile.objectKey],
+      }),
+      now: () => new Date("2026-08-23T19:00:00.000Z"),
+    });
+
+    const first = await service.transferOwner({
+      fromOwnerId: anonymousFile.ownerId,
+      fromOwnerKind: "anonymous_session",
+      toOwnerId: "user_1",
+      toOwnerKind: "user",
+    });
+    const second = await service.transferOwner({
+      fromOwnerId: anonymousFile.ownerId,
+      fromOwnerKind: "anonymous_session",
+      toOwnerId: "user_1",
+      toOwnerKind: "user",
+    });
+    const transferred = await service.getOwnedFile(anonymousFile.id, "user_1");
+    const untouched = await service.findFileById(otherFile.id);
+
+    expect(first).toEqual({ transferred: 1 });
+    expect(second).toEqual({ transferred: 0 });
+    expect(transferred.ownerId).toBe("user_1");
+    expect(transferred.ownerKind).toBe("user");
+    expect(untouched?.ownerId).toBe("other-session");
   });
 });

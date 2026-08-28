@@ -32,6 +32,10 @@ export type AnonymousSessionService = {
     rawToken: string | undefined,
     now?: Date,
   ): Promise<ResolveAnonymousSessionResult>;
+  findValidFromToken(
+    rawToken: string | undefined,
+    now?: Date,
+  ): Promise<AnonymousSession | undefined>;
   deleteExpired(input?: {
     now?: Date;
     limit?: number;

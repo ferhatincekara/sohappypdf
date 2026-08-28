@@ -16,7 +16,11 @@ import {
 import type { FileListCursor } from "./file-pagination.js";
 import type { FileStatus } from "./file-status.js";
 import type { FileRecord } from "./file-types.js";
-import { DEFAULT_RESOURCE_OWNER_KIND } from "./resource-owner.js";
+import {
+  DEFAULT_RESOURCE_OWNER_KIND,
+  type ResourceOwnerTransferInput,
+  type ResourceOwnerTransferResult,
+} from "./resource-owner.js";
 
 export type ApiFileListInput = {
   ownerId: string;
@@ -45,8 +49,11 @@ export type FileRepository = {
     now: Date;
     limit: number;
   }): Promise<FileRecord[]>;
-  listPurgedAnonymous(input: { limit: number }): Promise<FileRecord[]>;
+  listPurged(input: { limit: number }): Promise<FileRecord[]>;
   sumActiveStorageBytes(ownerId: string, now: Date): Promise<number>;
+  transferOwner(
+    input: ResourceOwnerTransferInput,
+  ): Promise<ResourceOwnerTransferResult>;
 };
 
 function toFileRecord(row: typeof files.$inferSelect): FileRecord {
@@ -223,6 +230,25 @@ export function createFileRepository(db: Database): FileRepository {
       return Number(row?.total ?? 0);
     },
 
+    async transferOwner(input) {
+      const updated = await db
+        .update(files)
+        .set({
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        })
+        .where(
+          and(
+            eq(files.ownerId, input.fromOwnerId),
+            eq(files.ownerKind, input.fromOwnerKind),
+          ),
+        )
+        .returning({ id: files.id });
+
+      return { transferred: updated.length };
+    },
+
     async listEligibleForCleanup(input) {
       const rows = await db
         .select()
@@ -242,16 +268,11 @@ export function createFileRepository(db: Database): FileRepository {
       return rows.map((row) => toFileRecord(row));
     },
 
-    async listPurgedAnonymous(input) {
+    async listPurged(input) {
       const rows = await db
         .select()
         .from(files)
-        .where(
-          and(
-            eq(files.ownerKind, "anonymous_session"),
-            isNotNull(files.purgedAt),
-          ),
-        )
+        .where(isNotNull(files.purgedAt))
         .limit(input.limit);
 
       return rows.map((row) => toFileRecord(row));

@@ -1,6 +1,10 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import { type ConversionRow, conversions, type Database } from "@repo/db";
-import { DEFAULT_RESOURCE_OWNER_KIND } from "@repo/files";
+import {
+  DEFAULT_RESOURCE_OWNER_KIND,
+  type ResourceOwnerTransferInput,
+  type ResourceOwnerTransferResult,
+} from "@repo/files";
 import { and, desc, eq, gt, isNull, lt, lte, or, sql } from "drizzle-orm";
 import { normalizeFileFormat } from "./conversion-format.js";
 import { parseConversionOptions } from "./conversion-options.js";
@@ -24,6 +28,7 @@ export type ConversionOwnerListInput = {
   status?: ConversionStatus;
   targetFormat?: string;
   now?: Date;
+  activeAfter?: Date;
 };
 
 export type ConversionStatusUpdate = {
@@ -49,7 +54,14 @@ export type ConversionRepository = {
   ): Promise<ConversionRecord | undefined>;
   deleteById(id: string): Promise<void>;
   deleteReferencingFile(fileId: string): Promise<number>;
-  listExpired(input: { now: Date; limit: number }): Promise<ConversionRecord[]>;
+  listExpired(input: {
+    now: Date;
+    activeAfter: Date;
+    limit: number;
+  }): Promise<ConversionRecord[]>;
+  transferOwner(
+    input: ResourceOwnerTransferInput,
+  ): Promise<ResourceOwnerTransferResult>;
 };
 
 function toFailureCode(value: string | null): ConversionFailureCode | null {
@@ -195,10 +207,13 @@ export function createConversionRepository(db: Database): ConversionRepository {
         conditions.push(eq(conversions.ownerKind, input.ownerKind));
       }
 
-      if (input.now !== undefined) {
+      if (input.now !== undefined && input.activeAfter !== undefined) {
         const activeExpiry = or(
-          isNull(conversions.expiresAt),
           gt(conversions.expiresAt, input.now),
+          and(
+            isNull(conversions.expiresAt),
+            gt(conversions.createdAt, input.activeAfter),
+          ),
         );
 
         if (activeExpiry !== undefined) {
@@ -291,14 +306,39 @@ export function createConversionRepository(db: Database): ConversionRepository {
         .select()
         .from(conversions)
         .where(
-          and(
-            sql`${conversions.expiresAt} is not null`,
-            lte(conversions.expiresAt, input.now),
+          or(
+            and(
+              sql`${conversions.expiresAt} is not null`,
+              lte(conversions.expiresAt, input.now),
+            ),
+            and(
+              isNull(conversions.expiresAt),
+              lte(conversions.createdAt, input.activeAfter),
+            ),
           ),
         )
         .limit(input.limit);
 
       return rows.map((row) => toConversionRecord(row));
+    },
+
+    async transferOwner(input) {
+      const updated = await db
+        .update(conversions)
+        .set({
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        })
+        .where(
+          and(
+            eq(conversions.ownerId, input.fromOwnerId),
+            eq(conversions.ownerKind, input.fromOwnerKind),
+          ),
+        )
+        .returning({ id: conversions.id });
+
+      return { transferred: updated.length };
     },
   };
 }

@@ -64,4 +64,21 @@ describe("anonymous session service", () => {
     expect(first).toEqual({ scanned: 1, deleted: 1 });
     expect(second).toEqual({ scanned: 0, deleted: 0 });
   });
+
+  test("looks up a valid token without creating a replacement session", async () => {
+    const service = createAnonymousSessionService({
+      repository: createMemoryAnonymousSessionRepository(),
+      retentionMs: RETENTION_MS,
+      now: () => new Date("2026-08-24T01:00:00.000Z"),
+    });
+    const created = await service.resolveFromToken(undefined);
+
+    const found = await service.findValidFromToken(created.rawToken);
+    const missing = await service.findValidFromToken("anon_not-a-valid-token");
+    const empty = await service.findValidFromToken(undefined);
+
+    expect(found?.id).toBe(created.session.id);
+    expect(missing).toBeUndefined();
+    expect(empty).toBeUndefined();
+  });
 });

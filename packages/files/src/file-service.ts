@@ -35,7 +35,11 @@ import {
   assertOriginalFilename,
   MAX_FILE_SIZE_BYTES,
 } from "./file-validation.js";
-import { DEFAULT_RESOURCE_OWNER_KIND } from "./resource-owner.js";
+import {
+  DEFAULT_RESOURCE_OWNER_KIND,
+  type ResourceOwnerTransferInput,
+  type ResourceOwnerTransferResult,
+} from "./resource-owner.js";
 
 const DEFAULT_CLEANUP_LIMIT = 100;
 const MAX_CLEANUP_LIMIT = 100;
@@ -76,9 +80,12 @@ export type FileService = {
   deleteFile(id: string): Promise<FileRecord>;
   listFilesEligibleForCleanup(limit?: number): Promise<FileRecord[]>;
   cleanupExpiredFiles(limit?: number): Promise<FileCleanupSummary>;
-  listPurgedAnonymousFiles(limit?: number): Promise<FileRecord[]>;
+  listPurgedFiles(limit?: number): Promise<FileRecord[]>;
   hardDeleteFile(id: string): Promise<void>;
   sumActiveStorageBytes(ownerId: string): Promise<number>;
+  transferOwner(
+    input: Omit<ResourceOwnerTransferInput, "now"> & { now?: Date },
+  ): Promise<ResourceOwnerTransferResult>;
 };
 
 function requireFile(file: FileRecord | undefined): FileRecord {
@@ -511,7 +518,7 @@ export function createFileService(options: FileServiceOptions): FileService {
       return summary;
     },
 
-    async listPurgedAnonymousFiles(limit = DEFAULT_CLEANUP_LIMIT) {
+    async listPurgedFiles(limit = DEFAULT_CLEANUP_LIMIT) {
       if (!Number.isInteger(limit) || limit < 1 || limit > MAX_CLEANUP_LIMIT) {
         throw new AppError({
           code: APP_ERROR_CODES.VALIDATION_ERROR,
@@ -519,11 +526,21 @@ export function createFileService(options: FileServiceOptions): FileService {
         });
       }
 
-      return options.repository.listPurgedAnonymous({ limit });
+      return options.repository.listPurged({ limit });
     },
 
     async hardDeleteFile(id) {
       await options.repository.deleteById(assertFileId(id));
+    },
+
+    async transferOwner(input) {
+      return options.repository.transferOwner({
+        fromOwnerId: assertFileOwnerId(input.fromOwnerId),
+        fromOwnerKind: input.fromOwnerKind,
+        toOwnerId: assertFileOwnerId(input.toOwnerId),
+        toOwnerKind: input.toOwnerKind,
+        now: input.now ?? now(),
+      });
     },
   };
 }

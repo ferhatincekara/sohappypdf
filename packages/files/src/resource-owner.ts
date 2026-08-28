@@ -4,6 +4,18 @@ export type ResourceOwnerKind = (typeof RESOURCE_OWNER_KINDS)[number];
 
 export const DEFAULT_RESOURCE_OWNER_KIND: ResourceOwnerKind = "user";
 
+export type ResourceOwnerTransferInput = {
+  fromOwnerId: string;
+  fromOwnerKind: ResourceOwnerKind;
+  toOwnerId: string;
+  toOwnerKind: ResourceOwnerKind;
+  now: Date;
+};
+
+export type ResourceOwnerTransferResult = {
+  transferred: number;
+};
+
 export function isResourceOwnerKind(value: string): value is ResourceOwnerKind {
   return RESOURCE_OWNER_KINDS.some((kind) => kind === value);
 }

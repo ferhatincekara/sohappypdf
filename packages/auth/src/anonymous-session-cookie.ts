@@ -16,3 +16,12 @@ export function createAnonymousSessionCookieOptions(
     maxAge: options.maxAgeSeconds,
   };
 }
+
+export function createAnonymousSessionCookieClearOptions(secure: boolean) {
+  return {
+    httpOnly: true,
+    path: "/",
+    sameSite: "Lax" as const,
+    secure,
+  };
+}

@@ -31,6 +31,7 @@ import {
   type ResolveRequestIdentity,
 } from "./auth/request-identity.js";
 import { anonymousSessionMiddleware } from "./middleware/anonymous-session.js";
+import { claimAnonymousSessionMiddleware } from "./middleware/claim-anonymous-session.js";
 import { corsMiddleware } from "./middleware/cors.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import {
@@ -98,6 +99,16 @@ export function createApp(options: CreateAppOptions = {}) {
       service: options.anonymousSessionService,
       cookieSecure: options.anonymousSessionCookieSecure ?? false,
       cookieMaxAgeSeconds: Math.ceil(anonymousConfig.retentionMs / 1000),
+    }),
+  );
+  app.use(
+    "/api/v1/*",
+    claimAnonymousSessionMiddleware({
+      service: options.anonymousSessionService,
+      getFileService: () => options.fileService ?? getFileService(),
+      getConversionService: () =>
+        options.conversionService ?? getConversionService(),
+      cookieSecure: options.anonymousSessionCookieSecure ?? false,
     }),
   );
 

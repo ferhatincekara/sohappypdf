@@ -10,6 +10,7 @@ import {
   type ConversionRecord,
   type ConversionRepository,
   createConversionService,
+  isConversionRecordExpired,
 } from "@repo/conversions";
 import { APP_ERROR_CODES } from "@repo/core";
 import {
@@ -114,11 +115,33 @@ function createMemoryFileRepository(seed: FileRecord[] = []): FileRepository {
     async listEligibleForCleanup() {
       return [];
     },
-    async listPurgedAnonymous() {
+    async listPurged() {
       return [];
     },
     async sumActiveStorageBytes(ownerId, now) {
       return sumActiveStorageBytesForOwner([...records.values()], ownerId, now);
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, file] of records.entries()) {
+        if (
+          file.ownerId !== input.fromOwnerId ||
+          (file.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...file,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -212,8 +235,7 @@ function createMemoryConversionRepository(
 
           if (
             input.now !== undefined &&
-            conversion.expiresAt !== null &&
-            conversion.expiresAt.getTime() <= input.now.getTime()
+            isConversionRecordExpired(conversion, input.now)
           ) {
             return false;
           }
@@ -310,13 +332,33 @@ function createMemoryConversionRepository(
     },
     async listExpired(input) {
       return [...records.values()]
-        .filter(
-          (conversion) =>
-            conversion.expiresAt !== null &&
-            conversion.expiresAt.getTime() <= input.now.getTime(),
+        .filter((conversion) =>
+          isConversionRecordExpired(conversion, input.now),
         )
         .slice(0, input.limit)
         .map((conversion) => ({ ...conversion }));
+    },
+    async transferOwner(input) {
+      let transferred = 0;
+
+      for (const [id, conversion] of records.entries()) {
+        if (
+          conversion.ownerId !== input.fromOwnerId ||
+          (conversion.ownerKind ?? "user") !== input.fromOwnerKind
+        ) {
+          continue;
+        }
+
+        records.set(id, {
+          ...conversion,
+          ownerId: input.toOwnerId,
+          ownerKind: input.toOwnerKind,
+          updatedAt: input.now,
+        });
+        transferred += 1;
+      }
+
+      return { transferred };
     },
   };
 }
@@ -358,15 +400,16 @@ function createAnonymousApp(options?: {
     now: options?.now,
   });
   const jobs: ConversionJobData[] = [];
+  const anonymousSessionService = createAnonymousSessionService({
+    repository: createMemoryAnonymousSessionRepository(),
+    retentionMs: DEFAULT_ANONYMOUS_CONFIG.retentionMs,
+    now: options?.now,
+  });
   const app = createApp({
     config: { corsOrigins: [] },
     logger: silentLogger,
     resolveIdentity: async () => options?.identity ?? { kind: "anonymous" },
-    anonymousSessionService: createAnonymousSessionService({
-      repository: createMemoryAnonymousSessionRepository(),
-      retentionMs: DEFAULT_ANONYMOUS_CONFIG.retentionMs,
-      now: options?.now,
-    }),
+    anonymousSessionService,
     anonymousConfig: DEFAULT_ANONYMOUS_CONFIG,
     fileService,
     conversionService,
@@ -379,7 +422,14 @@ function createAnonymousApp(options?: {
     },
   });
 
-  return { app, fileService, conversionService, storage, jobs };
+  return {
+    app,
+    fileService,
+    conversionService,
+    storage,
+    jobs,
+    anonymousSessionService,
+  };
 }
 
 async function uploadAnonymousFile(
@@ -624,7 +674,7 @@ describe("anonymous tool API", () => {
     expect(foreignBody.conversions).toEqual([]);
   });
 
-  test("lists expired anonymous conversions as expired history without a downloadable result", async () => {
+  test("omits expired anonymous conversions from recent history", async () => {
     let current = new Date("2026-08-24T01:00:00.000Z");
     const { app, fileService, conversionService, storage } = createAnonymousApp(
       {
@@ -642,7 +692,7 @@ describe("anonymous tool API", () => {
       uploaded.cookie,
       ownerId ?? "",
     );
-    const created = await conversionService.createOwnedConversion({
+    await conversionService.createOwnedConversion({
       ownerId: ownerId ?? "",
       ownerKind: "anonymous_session",
       sourceFileId: uploaded.body.file.id,
@@ -658,13 +708,7 @@ describe("anonymous tool API", () => {
     const listedBody = await listed.json();
 
     expect(listed.status).toBe(200);
-    expect(listedBody.conversions).toHaveLength(1);
-    expect(listedBody.conversions[0]).toMatchObject({
-      id: created.id,
-      expired: true,
-      outputFileId: null,
-      sourceFilename: "report.pdf",
-    });
+    expect(listedBody.conversions).toEqual([]);
   });
 
   test("rate limits anonymous tool executions using session and IP fingerprint together", async () => {
@@ -754,6 +798,69 @@ describe("anonymous tool API", () => {
       }),
     });
     expect(created.status).toBe(201);
+  });
+
+  test("moves anonymous recent conversions onto the account after login", async () => {
+    const created = createAnonymousApp();
+    const uploaded = await uploadAnonymousFile(created.app);
+    const ownerId = (
+      await created.fileService.findFileById(uploaded.body.file.id)
+    )?.ownerId;
+    await completeAnonymousFile(
+      created.app,
+      created.fileService,
+      created.storage,
+      uploaded.body.file.id,
+      uploaded.cookie,
+      ownerId ?? "",
+    );
+    const conversion = await created.app.request(
+      "/api/v1/anonymous/conversions",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          cookie: uploaded.cookie,
+        },
+        body: JSON.stringify({
+          sourceFileId: uploaded.body.file.id,
+          type: "pdf-to-png",
+        }),
+      },
+    );
+    const conversionBody = await conversion.json();
+    const loggedIn = createApp({
+      config: { corsOrigins: [] },
+      logger: silentLogger,
+      resolveIdentity: async () => ({
+        kind: "session",
+        userId: "user_1",
+        sessionId: "session_1",
+      }),
+      anonymousSessionService: created.anonymousSessionService,
+      anonymousConfig: DEFAULT_ANONYMOUS_CONFIG,
+      fileService: created.fileService,
+      conversionService: created.conversionService,
+      billingService: createTestBillingService(),
+      enqueueConversion: async (input) => {
+        created.jobs.push(input);
+        return { jobId: input.conversionId, conversionId: input.conversionId };
+      },
+    });
+    const listed = await loggedIn.request("/api/v1/conversions?limit=8", {
+      headers: { cookie: uploaded.cookie },
+    });
+    const listedBody = await listed.json();
+    const file = await created.fileService.findFileById(uploaded.body.file.id);
+    const setCookie = listed.headers.get("set-cookie") ?? "";
+
+    expect(conversion.status).toBe(201);
+    expect(listed.status).toBe(200);
+    expect(listedBody.conversions).toHaveLength(1);
+    expect(listedBody.conversions[0].id).toBe(conversionBody.conversion.id);
+    expect(file?.ownerId).toBe("user_1");
+    expect(file?.ownerKind).toBe("user");
+    expect(setCookie.includes(ANONYMOUS_SESSION_COOKIE_NAME)).toBe(true);
   });
 
   test("rejects oversized anonymous uploads as FILE_TOO_LARGE", async () => {
