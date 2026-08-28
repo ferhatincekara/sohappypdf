@@ -1,11 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { loginPath } from "@/features/auth/paths";
 import { Link } from "@/lib/i18n/navigation";
+import { cn } from "@/lib/utils";
+import { isPlanUpgradeToolError } from "../lib/public-tool-errors";
 import type { ToolSelectedUxState } from "../types/tool-ux-state";
+import { ToolUpgradeCard } from "./tool-upgrade-card";
 
 export function ToolSelectedActions({
   toolRoute,
@@ -13,6 +15,9 @@ export function ToolSelectedActions({
   canProcess,
   processLabel,
   disabledReason,
+  awaitingSignIn = false,
+  autoProcess = false,
+  fullWidth = false,
   onProcess,
 }: {
   toolRoute: `/${string}`;
@@ -20,47 +25,59 @@ export function ToolSelectedActions({
   canProcess: boolean;
   processLabel: string;
   disabledReason?: string | null;
+  awaitingSignIn?: boolean;
+  autoProcess?: boolean;
+  fullWidth?: boolean;
   onProcess: () => void;
 }) {
   const t = useTranslations("publicTools");
+  const needsSignIn = awaitingSignIn || state.error?.key === "signInRequired";
+  const upgradeErrorKey =
+    state.error !== null && isPlanUpgradeToolError(state.error.key)
+      ? state.error.key
+      : null;
 
   return (
     <div className="flex flex-col gap-4">
-      {state.error !== null ? (
-        <Alert variant="destructive">
-          <AlertTitle>{t("errors.title")}</AlertTitle>
-          <AlertDescription>
-            <p>{t(`errors.${state.error.key}`)}</p>
-            {state.error.key === "signInRequired" ? (
-              <p className="mt-2">
-                <Link
-                  href={loginPath(toolRoute)}
-                  className="font-medium underline-offset-4 hover:underline"
-                >
-                  {t("errors.signInCta")}
-                </Link>
-              </p>
-            ) : null}
-          </AlertDescription>
-        </Alert>
-      ) : null}
+      {upgradeErrorKey === null ? null : (
+        <ToolUpgradeCard errorKey={upgradeErrorKey} />
+      )}
 
       {disabledReason !== null &&
       disabledReason !== undefined &&
       !canProcess &&
-      state.error === null ? (
+      state.error === null &&
+      !autoProcess ? (
         <p className="text-sm text-muted-foreground">{disabledReason}</p>
       ) : null}
 
-      <div className="hidden md:block">
-        <Button
-          type="button"
-          size="lg"
-          disabled={!canProcess}
-          onClick={onProcess}
-        >
-          {processLabel}
-        </Button>
+      {autoProcess && !needsSignIn && state.error === null ? (
+        <p className="text-sm text-muted-foreground" aria-live="polite">
+          {canProcess ? t("autoStart.starting") : t("autoStart.hint")}
+        </p>
+      ) : null}
+
+      <div className={cn("hidden md:block", fullWidth && "w-full")}>
+        {needsSignIn ? (
+          <Button
+            nativeButton={false}
+            size="lg"
+            className={fullWidth ? "w-full" : undefined}
+            render={<Link href={loginPath(toolRoute)} />}
+          >
+            {t("errors.signInCta")}
+          </Button>
+        ) : autoProcess || upgradeErrorKey !== null ? null : (
+          <Button
+            type="button"
+            size="lg"
+            className={fullWidth ? "w-full" : undefined}
+            disabled={!canProcess}
+            onClick={onProcess}
+          >
+            {processLabel}
+          </Button>
+        )}
       </div>
     </div>
   );

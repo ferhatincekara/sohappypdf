@@ -4,20 +4,20 @@ import { GripVerticalIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  formatFileSize,
-  formatUploadProgress,
-} from "@/features/files/lib/format-file-size";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { cn } from "@/lib/utils";
 import {
   fileExtensionLabel,
   type WorkspaceFile,
 } from "../../lib/workspace-files";
 import { PdfPageThumbnail, usePdfDocument } from "../../pdf-workspace";
+import { ToolFileErrorLine } from "../tool-file-error-line";
+import { ToolFileUploadProgress } from "../tool-file-upload-progress";
 
 export function MergeFileList({
   files,
   disabled,
+  maxPagesPerFile = null,
   onMove,
   onReorder,
   onRemove,
@@ -26,6 +26,7 @@ export function MergeFileList({
 }: {
   files: readonly WorkspaceFile[];
   disabled: boolean;
+  maxPagesPerFile?: number | null;
   onMove: (index: number, direction: -1 | 1) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onRemove: (id: string) => void;
@@ -40,7 +41,7 @@ export function MergeFileList({
   }
 
   return (
-    <ul className="flex flex-col gap-2" aria-label={t("workspace.fileList")}>
+    <ul className="divide-y divide-border" aria-label={t("workspace.fileList")}>
       {files.map((entry, index) => (
         <li
           key={entry.id}
@@ -70,7 +71,7 @@ export function MergeFileList({
             dragIndex.current = null;
           }}
           className={cn(
-            "flex items-start gap-3 rounded-xl border border-border bg-card p-3",
+            "flex items-center gap-3 py-3",
             !disabled && "cursor-grab active:cursor-grabbing",
           )}
         >
@@ -79,6 +80,7 @@ export function MergeFileList({
             index={index}
             lastIndex={files.length - 1}
             disabled={disabled}
+            maxPagesPerFile={maxPagesPerFile}
             onMove={onMove}
             onRemove={onRemove}
             onRetry={onRetry}
@@ -95,6 +97,7 @@ function MergeFileRow({
   index,
   lastIndex,
   disabled,
+  maxPagesPerFile,
   onMove,
   onRemove,
   onRetry,
@@ -104,6 +107,7 @@ function MergeFileRow({
   index: number;
   lastIndex: number;
   disabled: boolean;
+  maxPagesPerFile: number | null;
   onMove: (index: number, direction: -1 | 1) => void;
   onRemove: (id: string) => void;
   onRetry: (id: string) => void;
@@ -128,11 +132,11 @@ function MergeFileRow({
           disabled={false}
           interactive={false}
           showLabel={false}
-          className="w-16 shrink-0 p-0 min-h-0"
+          className="w-12 shrink-0 rounded-none p-0 min-h-0"
         />
       ) : (
         <div
-          className="aspect-[3/4] w-16 shrink-0 animate-pulse rounded-lg border border-border bg-muted"
+          className="aspect-3/4 w-12 shrink-0 animate-pulse rounded-1.5 border border-border bg-muted"
           aria-hidden="true"
         />
       )}
@@ -150,14 +154,15 @@ function MergeFileRow({
                 : ` · ${t("workspace.pageCount", { count: pageCount })}`}
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-1">
-            <span className="hidden text-muted-foreground sm:inline">
+          <div className="flex shrink-0 items-center gap-0.5">
+            <span className="hidden px-1 text-muted-foreground sm:inline">
               <GripVerticalIcon className="size-4" aria-hidden="true" />
             </span>
             <Button
               type="button"
               size="icon-xs"
-              variant="outline"
+              variant="ghost"
+              className="rounded-2"
               disabled={disabled || index === 0}
               aria-label={t("moveUp")}
               onClick={() => {
@@ -169,7 +174,8 @@ function MergeFileRow({
             <Button
               type="button"
               size="icon-xs"
-              variant="outline"
+              variant="ghost"
+              className="rounded-2"
               disabled={disabled || index === lastIndex}
               aria-label={t("moveDown")}
               onClick={() => {
@@ -182,6 +188,7 @@ function MergeFileRow({
               type="button"
               size="icon-xs"
               variant="ghost"
+              className="rounded-2"
               disabled={disabled}
               aria-label={t("workspace.removeFile", {
                 name: entry.file.name,
@@ -194,7 +201,12 @@ function MergeFileRow({
             </Button>
           </div>
         </div>
-        <MergeFileStatus entry={entry} disabled={disabled} onRetry={onRetry} />
+        <MergeFileStatus
+          entry={entry}
+          disabled={disabled}
+          maxPagesPerFile={maxPagesPerFile}
+          onRetry={onRetry}
+        />
       </div>
     </>
   );
@@ -203,66 +215,46 @@ function MergeFileRow({
 function MergeFileStatus({
   entry,
   disabled,
+  maxPagesPerFile,
   onRetry,
 }: {
   entry: WorkspaceFile;
   disabled: boolean;
+  maxPagesPerFile: number | null;
   onRetry: (id: string) => void;
 }) {
   const t = useTranslations("publicTools");
 
-  if (entry.status === "uploading") {
-    const percent = entry.progress.percent;
+  if (entry.status === "inspecting") {
     return (
-      <div className="mt-2 flex flex-col gap-1.5">
-        <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-          <span>{t("phases.uploading")}</span>
-          <span className="tabular-nums">
-            {entry.progress.total > 0
-              ? formatUploadProgress(
-                  entry.progress.loaded,
-                  entry.progress.total,
-                )
-              : null}
-          </span>
-        </div>
-        <div
-          role="progressbar"
-          aria-label={t("phases.uploading")}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={percent}
-          className="h-1.5 overflow-hidden rounded-full bg-muted"
-        >
-          <div
-            className="h-full bg-foreground motion-safe:transition-[width] motion-safe:duration-150"
-            style={{ width: `${percent}%` }}
-          />
-        </div>
-      </div>
+      <ToolFileUploadProgress
+        percent={0}
+        label={t("phases.checkingPages")}
+        determinate={false}
+      />
+    );
+  }
+
+  if (entry.status === "uploading" || entry.status === "pending") {
+    return (
+      <ToolFileUploadProgress
+        percent={entry.progress.percent}
+        label={t("phases.uploading")}
+        determinate={entry.progress.total > 0}
+      />
     );
   }
 
   if (entry.status === "failed") {
     return (
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <p className="text-xs text-destructive">
-          {entry.errorKey !== null
-            ? t(`errors.${entry.errorKey}`)
-            : t("errors.networkFailure")}
-        </p>
-        <Button
-          type="button"
-          size="xs"
-          variant="outline"
-          disabled={disabled}
-          onClick={() => {
-            onRetry(entry.id);
-          }}
-        >
-          {t("workspace.retry")}
-        </Button>
-      </div>
+      <ToolFileErrorLine
+        errorKey={entry.errorKey}
+        maxPagesPerFile={maxPagesPerFile}
+        disabled={disabled}
+        onRetry={() => {
+          onRetry(entry.id);
+        }}
+      />
     );
   }
 
@@ -274,9 +266,5 @@ function MergeFileStatus({
     );
   }
 
-  return (
-    <p className="mt-2 text-xs text-muted-foreground">
-      {t("workspace.filePending")}
-    </p>
-  );
+  return null;
 }

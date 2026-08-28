@@ -52,7 +52,7 @@ const baseInput = {
   processError: null,
   downloadError: null,
   resultExpired: false,
-  now: new Date("2026-08-24T01:00:00.000Z"),
+  now: new Date("2026-08-24T00:00:10.000Z"),
 };
 
 describe("tool UX state model", () => {
@@ -134,6 +134,68 @@ describe("tool UX state model", () => {
     });
   });
 
+  test("stays in processing while an execution id exists without status data yet", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      files: [createFile()],
+      executionId: "exec-1",
+      executionIds: ["exec-1"],
+    });
+
+    expect(state).toMatchObject({
+      status: "processing",
+      executionId: "exec-1",
+      processingStatus: "starting",
+      progress: null,
+    });
+  });
+
+  test("does not treat a partial batch as success", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      executionIds: ["exec-1", "exec-2"],
+      executions: [
+        createExecution({
+          status: "completed",
+          outputFileId: "out-1",
+          completedAt: "2026-08-24T00:05:00.000Z",
+        }),
+      ],
+    });
+
+    expect(state.status).toBe("processing");
+  });
+
+  test("enters success only after every expected job is completed", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      executionIds: ["exec-1", "exec-2"],
+      executions: [
+        createExecution({
+          id: "exec-1",
+          status: "completed",
+          outputFileId: "out-1",
+          completedAt: "2026-08-24T00:05:00.000Z",
+        }),
+        createExecution({
+          id: "exec-2",
+          status: "completed",
+          sourceFilename: "b.pdf",
+          outputFileId: "out-2",
+          completedAt: "2026-08-24T00:05:01.000Z",
+        }),
+      ],
+    });
+
+    expect(state.status).toBe("success");
+    if (state.status !== "success") {
+      throw new Error("expected success");
+    }
+    expect(state.outputs).toHaveLength(2);
+  });
+
   test("enters success with download metadata and never invents progress", () => {
     const state = resolveToolUxState({
       ...baseInput,
@@ -153,6 +215,14 @@ describe("tool UX state model", () => {
       outputFileId: "out-1",
       expiresAt: "2026-08-24T02:00:00.000Z",
       downloadError: null,
+      outputs: [
+        {
+          executionId: "exec-1",
+          sourceFilename: "a.pdf",
+          outputFileId: "out-1",
+          targetFormat: "pdf",
+        },
+      ],
     });
   });
 
@@ -175,6 +245,52 @@ describe("tool UX state model", () => {
       retryable: true,
     });
     expect(JSON.stringify(state)).not.toContain("engine crashed");
+  });
+
+  test("keeps a known execution result when a later status fetch fails", () => {
+    const completed = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "completed",
+        outputFileId: "out-1",
+        completedAt: "2026-08-24T00:05:00.000Z",
+      }),
+      executionQueryError: new Error("status fetch failed"),
+      processError: "unexpected",
+    });
+
+    expect(completed.status).toBe("success");
+    if (completed.status !== "success") {
+      throw new Error("expected success");
+    }
+    expect(completed.outputFileId).toBe("out-1");
+
+    const queued = resolveToolUxState({
+      ...baseInput,
+      executionId: "exec-1",
+      execution: createExecution({ status: "queued" }),
+      executionQueryError: new Error("status fetch failed"),
+    });
+    expect(queued.status).toBe("processing");
+  });
+
+  test("treats a conversion that stays queued as a retryable failure", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      now: new Date("2026-08-24T00:02:00.000Z"),
+      executionId: "exec-1",
+      execution: createExecution({ status: "queued" }),
+    });
+
+    expect(state.status).toBe("error");
+    if (state.status !== "error") {
+      throw new Error("expected error");
+    }
+    expect(state.error).toEqual({
+      key: "processingFailed",
+      retryable: true,
+    });
   });
 
   test("treats expiration as a first-class state", () => {

@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { signupPath } from "@/features/auth/paths";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { usePublicToolWorkspace } from "../hooks/use-public-tool-workspace";
+import { useToolErrorToast } from "../hooks/use-tool-error-toast";
 import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
 import { formatAcceptedFormats } from "../lib/format-labels";
 import type { PublicToolErrorKey } from "../lib/public-tool-errors";
@@ -16,16 +17,23 @@ import {
   parseOrganizeOrderInput,
   parseSelectedPagesInput,
 } from "../lib/tool-workspace";
-import { isConvertToolId } from "../lib/tool-workspace-kind";
+import {
+  isConvertToolId,
+  usesCanvasActionSidebar,
+} from "../lib/tool-workspace-kind";
 import {
   isFileWorkspaceUx,
+  resolveToolWorkspaceErrorKey,
   type ToolSelectedUxState,
 } from "../types/tool-ux-state";
 import { ToolEmptyState } from "./tool-empty-state";
 import { ToolErrorState } from "./tool-error-state";
 import { ToolExpiredState } from "./tool-expired-state";
 import { ToolMobileActionBar } from "./tool-mobile-action-bar";
+import { ToolProRequired } from "./tool-pro-required";
 import { ToolProcessingState } from "./tool-processing-state";
+import { ToolSidebarCard } from "./tool-sidebar-card";
+import { ToolStage } from "./tool-stage";
 import { ToolSuccessState } from "./tool-success-state";
 import { SelectedToolWorkspace } from "./workspaces/selected-tool-workspace";
 
@@ -36,22 +44,34 @@ export type PublicToolSelectedSlot = {
 
 export function PublicToolWorkspace({
   tool,
+  isAuthenticated,
+  guide,
+  header,
   renderSelected,
 }: {
   tool: ToolDefinition;
+  isAuthenticated: boolean;
+  guide?: ReactNode;
+  header?: ReactNode;
   renderSelected?: (slot: PublicToolSelectedSlot) => ReactNode;
 }) {
   const t = useTranslations("publicTools");
   const tTools = useTranslations("tools");
-  const workspace = usePublicToolWorkspace(tool);
+  const workspace = usePublicToolWorkspace(tool, {
+    authenticated: isAuthenticated,
+  });
   const formatsLabel = formatAcceptedFormats(
     tool.inputFormats,
     t("upload.conjunction"),
   );
   const maxSizeLabel = formatFileSize(workspace.maxFileSizeBytes);
+  const pageLimit = tool.inputFormats.some((format) => format === "pdf")
+    ? workspace.maxPagesPerFile
+    : null;
   const accept = acceptForTool(tool);
   const processLabel = tTools(`${tool.id}.name`);
   const { ux } = workspace;
+  useToolErrorToast(resolveToolWorkspaceErrorKey(ux), pageLimit);
   const shell = dedicatedToolShellCopy({
     toolId: tool.id,
     t,
@@ -74,11 +94,21 @@ export function PublicToolWorkspace({
     hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
   });
 
-  if (workspace.isSessionPending) {
+  if (workspace.needsPro) {
     return (
-      <div className="rounded-xl border border-border bg-card p-8">
-        <p className="text-sm text-muted-foreground">{t("loading")}</p>
-      </div>
+      <ToolStage
+        main={
+          <div className="flex flex-col gap-6 md:gap-8">
+            {header}
+            <ToolProRequired isAuthenticated={workspace.isAuthenticated} />
+          </div>
+        }
+        sidebar={
+          guide === undefined ? null : (
+            <ToolSidebarCard>{guide}</ToolSidebarCard>
+          )
+        }
+      />
     );
   }
 
@@ -94,6 +124,9 @@ export function PublicToolWorkspace({
       reorderable={workspace.reorderable}
       disabled={workspace.isBusy}
       canProcess={workspace.canProcess}
+      awaitingSignIn={workspace.needsSignIn}
+      autoProcess={workspace.autoProcess}
+      maxPagesPerFile={pageLimit}
       processLabel={processLabel}
       workspaceState={workspace.workspaceState}
       setWorkspaceState={workspace.setWorkspaceState}
@@ -116,70 +149,88 @@ export function PublicToolWorkspace({
           state: ux,
         }) ?? defaultSelected)
       : null;
+  const hideGuideForCanvas =
+    ux.status === "selected" && usesCanvasActionSidebar(tool.id);
+  const sidebar =
+    guide !== undefined && !hideGuideForCanvas ? (
+      <ToolSidebarCard>{guide}</ToolSidebarCard>
+    ) : null;
 
   return (
-    <div className="flex flex-col gap-6 pb-28 md:pb-0">
-      {ux.status === "empty" ? (
-        <ToolEmptyState
-          accept={accept}
-          multiple={workspace.maxFiles > 1}
-          formatsLabel={formatsLabel}
-          maxSizeLabel={maxSizeLabel}
-          onSelectFiles={workspace.addFiles}
-        />
-      ) : null}
+    <div className="flex flex-col gap-6">
+      <ToolStage
+        main={
+          <div className="flex flex-col gap-6 md:gap-8">
+            {header}
 
-      {selected}
+            {ux.status === "empty" ? (
+              <ToolEmptyState
+                accept={accept}
+                multiple={workspace.maxFiles > 1}
+                formatsLabel={formatsLabel}
+                maxSizeLabel={maxSizeLabel}
+                maxPagesPerFile={pageLimit}
+                onSelectFiles={workspace.addFiles}
+              />
+            ) : null}
 
-      {ux.status === "processing" ? (
-        <ToolProcessingState
-          state={ux}
-          title={shell.processingTitle}
-          hint={shell.processingHint}
-        />
-      ) : null}
+            {selected}
 
-      {ux.status === "success" ? (
-        <ToolSuccessState
-          state={ux}
-          signupHref={signupPath(tool.route)}
-          isAuthenticated={workspace.isAuthenticated}
-          isDownloading={workspace.isDownloading}
-          title={shell.successTitle}
-          description={shell.successDescription}
-          downloadLabel={shell.downloadLabel}
-          resetLabel={shell.resetLabel}
-          onDownload={() => {
-            void workspace.onDownload();
-          }}
-          onReset={workspace.resetWorkspace}
-        />
-      ) : null}
+            {ux.status === "processing" ? (
+              <ToolProcessingState
+                key={ux.executionId ?? "creating"}
+                state={ux}
+                title={shell.processingTitle}
+                hint={shell.processingHint}
+              />
+            ) : null}
 
-      {ux.status === "error" ? (
-        <ToolErrorState
-          state={ux}
-          toolRoute={tool.route}
-          message={shell.errorMessage}
-          resetLabel={shell.resetLabel}
-          onRetry={() => {
-            void workspace.onRetry();
-          }}
-          onReset={workspace.resetWorkspace}
-        />
-      ) : null}
+            {ux.status === "success" ? (
+              <ToolSuccessState
+                state={ux}
+                signupHref={signupPath(tool.route)}
+                isAuthenticated={workspace.isAuthenticated}
+                isDownloading={workspace.isDownloading}
+                title={shell.successTitle}
+                description={shell.successDescription}
+                downloadLabel={shell.downloadLabel}
+                resetLabel={shell.resetLabel}
+                onDownload={(outputFileId) => {
+                  void workspace.onDownload(outputFileId);
+                }}
+                onReset={workspace.resetWorkspace}
+              />
+            ) : null}
 
-      {ux.status === "expired" ? (
-        <ToolExpiredState
-          title={shell.expiredTitle}
-          description={shell.expiredDescription}
-          resetLabel={shell.resetLabel}
-          onReset={workspace.resetWorkspace}
-        />
-      ) : null}
+            {ux.status === "error" ? (
+              <ToolErrorState
+                state={ux}
+                toolRoute={tool.route}
+                message={shell.errorMessage}
+                resetLabel={shell.resetLabel}
+                onRetry={() => {
+                  void workspace.onRetry();
+                }}
+                onReset={workspace.resetWorkspace}
+              />
+            ) : null}
+
+            {ux.status === "expired" ? (
+              <ToolExpiredState
+                title={shell.expiredTitle}
+                description={shell.expiredDescription}
+                resetLabel={shell.resetLabel}
+                onReset={workspace.resetWorkspace}
+              />
+            ) : null}
+          </div>
+        }
+        sidebar={sidebar}
+      />
 
       <ToolMobileActionBar
         ux={ux}
+        toolRoute={tool.route}
         canProcess={workspace.canProcess}
         processLabel={processLabel}
         processHint={shell.processHint}
@@ -188,6 +239,8 @@ export function PublicToolWorkspace({
         resetLabel={shell.resetLabel}
         maxFiles={workspace.maxFiles}
         maxFileSizeBytes={workspace.maxFileSizeBytes}
+        awaitingSignIn={workspace.needsSignIn}
+        autoProcess={workspace.autoProcess}
         onProcess={() => {
           void workspace.onProcess();
         }}
@@ -545,24 +598,6 @@ function dedicatedToolShellCopy({
     };
   }
 
-  if (toolId === "pdf-forms") {
-    return {
-      processingTitle: t("workspaces.fill.processing"),
-      processingHint: t("workspaces.fill.processingHint"),
-      successTitle: t("workspaces.fill.successTitle"),
-      successDescription: t("workspaces.fill.successDescription"),
-      downloadLabel: t("workspaces.fill.download"),
-      resetLabel: t("workspaces.fill.fillAnother"),
-      expiredTitle: t("workspaces.fill.expiredTitle"),
-      expiredDescription: t("workspaces.fill.expiredDescription", { hours }),
-      processHint: t("workspaces.fill.output"),
-      errorMessage:
-        errorKey === null
-          ? undefined
-          : resolveFillErrorMessage(errorKey, t, hours),
-    };
-  }
-
   if (toolId === "edit-pdf") {
     return {
       processingTitle: t("workspaces.edit.processing"),
@@ -883,26 +918,6 @@ function resolveSignErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.sign.expiredDescription", { hours });
-  }
-
-  return undefined;
-}
-
-function resolveFillErrorMessage(
-  errorKey: PublicToolErrorKey,
-  t: ReturnType<typeof useTranslations>,
-  hours: number,
-): string | undefined {
-  if (errorKey === "processingFailed") {
-    return t("workspaces.fill.processingFailed");
-  }
-
-  if (errorKey === "unsupported") {
-    return t("workspaces.fill.invalidFile");
-  }
-
-  if (errorKey === "filesExpired") {
-    return t("workspaces.fill.expiredDescription", { hours });
   }
 
   return undefined;

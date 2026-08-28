@@ -7,7 +7,7 @@ import {
   isExpirationResponse,
   isMissingResourceResponse,
 } from "../lib/public-tool-errors";
-import { toolExecutionRefetchInterval } from "../lib/tool-execution-polling";
+import { toolExecutionQueryRefetchInterval } from "../lib/tool-execution-polling";
 
 export function useToolExecutionStatus(options: {
   executionId: string | null;
@@ -29,7 +29,12 @@ export function useToolExecutionStatus(options: {
       return options.getExecution(executionId);
     },
     enabled: executionId !== null,
-    refetchInterval: (query) => toolExecutionRefetchInterval(query.state.data),
+    refetchInterval: (query) =>
+      toolExecutionQueryRefetchInterval({
+        conversion: query.state.data,
+        hasExecutionId: executionId !== null,
+        error: query.state.error,
+      }),
     retry: (failureCount, error) => {
       if (isExpirationResponse(error) || isMissingResourceResponse(error)) {
         return false;

@@ -16,14 +16,14 @@ export function ToolFilePreview({
       <img
         src={entry.previewUrl}
         alt=""
-        className={`${className} shrink-0 rounded-md border border-border object-cover`}
+        className={`${className} shrink-0 rounded-1.5 border border-border object-cover object-top`}
       />
     );
   }
 
   return (
     <span
-      className={`flex ${className} shrink-0 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground`}
+      className={`flex ${className} shrink-0 items-center justify-center rounded-1.5 border border-border bg-muted text-muted-foreground`}
     >
       <FileIcon className="size-5" aria-hidden="true" />
     </span>

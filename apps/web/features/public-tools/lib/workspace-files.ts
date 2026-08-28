@@ -1,4 +1,7 @@
-import type { ToolDefinition } from "@repo/tools/catalog";
+import {
+  type ToolDefinition,
+  toolCombinesSourceFiles,
+} from "@repo/tools/catalog";
 import {
   formatFromPublicFile,
   resolveUploadContentType,
@@ -12,6 +15,7 @@ import type { PublicToolErrorKey } from "./public-tool-errors";
 
 export const WORKSPACE_FILE_STATUSES = [
   "pending",
+  "inspecting",
   "uploading",
   "ready",
   "failed",
@@ -31,7 +35,7 @@ export type WorkspaceFile = {
 };
 
 export function supportsFileReorder(tool: ToolDefinition): boolean {
-  return tool.maxInputCount > 1;
+  return toolCombinesSourceFiles(tool.id);
 }
 
 export function canPreviewFile(file: File): boolean {
@@ -272,5 +276,7 @@ export function areWorkspaceFilesReady(
 export function hasUploadingWorkspaceFiles(
   files: readonly WorkspaceFile[],
 ): boolean {
-  return files.some((entry) => entry.status === "uploading");
+  return files.some(
+    (entry) => entry.status === "uploading" || entry.status === "inspecting",
+  );
 }

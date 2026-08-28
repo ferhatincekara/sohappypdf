@@ -114,7 +114,7 @@ export function SignaturePad({
             height={PAD_HEIGHT}
             aria-label={t("methods.draw")}
             className={cn(
-              "h-40 w-full max-w-lg touch-none rounded-lg border border-border bg-white",
+              "h-40 w-full max-w-lg touch-none rounded-md border border-border bg-white",
             )}
             onPointerDown={(event) => {
               const canvas = canvasRef.current;
@@ -219,7 +219,7 @@ export function SignaturePad({
             }}
           />
           <p
-            className="rounded-lg border border-border bg-white px-4 py-6 text-3xl text-foreground italic"
+            className="rounded-md border border-border bg-white px-4 py-6 text-3xl text-foreground italic"
             style={{ fontFamily: "Georgia, serif" }}
           >
             {typed.trim().length === 0 ? t("typedPlaceholder") : typed}

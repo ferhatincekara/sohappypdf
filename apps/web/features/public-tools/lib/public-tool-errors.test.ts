@@ -4,14 +4,21 @@ import { ConversionApiRequestError } from "@/features/conversions/api/conversion
 import { FileApiRequestError } from "@/features/files/api/file-api";
 import {
   isExpirationResponse,
+  isPlanUpgradeToolError,
   isRetryableToolError,
+  mapConversionFailure,
   mapPublicToolError,
+  publicToolErrorMessageValues,
   toToolUserError,
 } from "./public-tool-errors";
 import { validateToolProcess } from "./validate-tool-process";
 import { createWorkspaceFiles } from "./workspace-files";
 
-function createAxiosError(status: number, code: string): axios.AxiosError {
+function createAxiosError(
+  status: number,
+  code: string,
+  message = "internal stack / AccessDenied",
+): axios.AxiosError {
   return new axios.AxiosError(
     `Request failed with status code ${status}`,
     "ERR_BAD_REQUEST",
@@ -25,7 +32,7 @@ function createAxiosError(status: number, code: string): axios.AxiosError {
       data: {
         error: {
           code,
-          message: "internal stack / AccessDenied",
+          message,
         },
       },
     } as never,
@@ -65,6 +72,40 @@ describe("tool user errors", () => {
     expect(isRetryableToolError("filesExpired")).toBe(false);
   });
 
+  test("maps server failures without calling them upload or network errors", () => {
+    expect(
+      mapPublicToolError(
+        new ConversionApiRequestError(createAxiosError(500, "INTERNAL_ERROR")),
+      ),
+    ).toBe("unexpected");
+    expect(
+      mapPublicToolError(
+        new FileApiRequestError(createAxiosError(500, "CONFIGURATION_ERROR")),
+      ),
+    ).toBe("unexpected");
+  });
+
+  test("maps an unconfigured AI engine to a dedicated unavailable error", () => {
+    expect(
+      mapConversionFailure({
+        code: "processing_failed",
+        message: "AI processing is unavailable",
+      }),
+    ).toBe("aiUnavailable");
+    expect(
+      mapPublicToolError(
+        new ConversionApiRequestError(
+          createAxiosError(
+            500,
+            "CONFIGURATION_ERROR",
+            "AI processing is unavailable",
+          ),
+        ),
+      ),
+    ).toBe("aiUnavailable");
+    expect(isRetryableToolError("aiUnavailable")).toBe(false);
+  });
+
   test("maps empty-file, unauthorized, and duplicate processing without internals", () => {
     expect(
       mapPublicToolError(
@@ -79,6 +120,21 @@ describe("tool user errors", () => {
     expect(isRetryableToolError("uploadInterrupted")).toBe(true);
     expect(isRetryableToolError("unauthorized")).toBe(false);
   });
+
+  test("maps a Pro-only tool rejection to an upgrade error", () => {
+    expect(
+      mapPublicToolError(
+        new ConversionApiRequestError(
+          createAxiosError(403, "PLAN_LIMIT_REACHED", "This tool requires Pro"),
+        ),
+      ),
+    ).toBe("upgradeRequired");
+    expect(isRetryableToolError("upgradeRequired")).toBe(false);
+    expect(isPlanUpgradeToolError("tooManyPages")).toBe(true);
+    expect(isPlanUpgradeToolError("upgradeRequired")).toBe(true);
+    expect(publicToolErrorMessageValues("tooManyPages")).toEqual({ max: 50 });
+    expect(publicToolErrorMessageValues("tooLarge")).toEqual({});
+  });
 });
 
 describe("validate tool process", () => {
@@ -87,6 +143,17 @@ describe("validate tool process", () => {
       [new File(["a"], "a.pdf", { type: "application/pdf" })],
       { createId: () => "1", createPreview: () => null },
     );
+
+    expect(
+      validateToolProcess({
+        toolId: "merge-pdf",
+        allowsAnonymous: true,
+        isAuthenticated: false,
+        files,
+        maxFiles: 1,
+        options: undefined,
+      }),
+    ).toEqual({ ok: false, errorKey: "tooFewFiles" });
 
     expect(
       validateToolProcess({
@@ -131,5 +198,36 @@ describe("validate tool process", () => {
         options: { ranges: [{ start: 1, end: 2 }] },
       }),
     ).toEqual({ ok: true });
+
+    expect(
+      validateToolProcess({
+        toolId: "split-pdf",
+        allowsAnonymous: true,
+        isAuthenticated: false,
+        files: files.map((file) => ({
+          ...file,
+          status: "ready" as const,
+          pageCount: 65,
+        })),
+        maxFiles: 1,
+        maxPagesPerFile: 50,
+        options: { ranges: [{ start: 1, end: 2 }] },
+      }),
+    ).toEqual({ ok: false, errorKey: "tooManyPages" });
+
+    expect(
+      validateToolProcess({
+        toolId: "split-pdf",
+        allowsAnonymous: true,
+        isAuthenticated: false,
+        files: files.map((file) => ({
+          ...file,
+          status: "failed" as const,
+          errorKey: "tooLarge" as const,
+        })),
+        maxFiles: 1,
+        options: { ranges: [{ start: 1, end: 2 }] },
+      }),
+    ).toEqual({ ok: false, errorKey: "tooLarge" });
   });
 });

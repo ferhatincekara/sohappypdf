@@ -1,17 +1,27 @@
 {
   "metadata": {
-    "title": "SohappyPDF",
+    "title": "SoHappyPDF",
     "description": "Convert PDFs and images with a simple workflow and a public API."
   },
   "marketing": {
     "nav": {
-      "brand": "SohappyPDF",
+      "brand": "SoHappyPDF",
       "product": "Product",
       "pricing": "Pricing",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "about": "About",
+      "contact": "Contact",
       "developers": "Developers",
       "signIn": "Sign in",
       "account": "Account",
-      "getStarted": "Get started",
+      "getStarted": "Try for free",
+      "comingSoon": "Soon",
+      "pro": "Pro",
+      "stories": {
+        "pdf-to-word": "Turn a contract into Word and keep working",
+        "compress-pdf": "Shrink a large PDF and keep it readable"
+      },
       "open": "Open menu",
       "close": "Close menu",
       "menu": "Site",
@@ -38,11 +48,222 @@
       }
     },
     "hero": {
-      "eyebrow": "Online PDF tools",
-      "title": "Use PDF tools in your browser.",
-      "description": "Open a tool, upload a file, process it, and download the result. No account required for basic use.",
-      "primaryCta": "Choose a tool",
-      "secondaryCta": "View API"
+      "eyebrow": "{count} PDF tools, one happy place",
+      "title": "Convert, merge, <smile>and manage PDFs.</smile>",
+      "description": "Open a tool, drop a file, and download the result. Basic use does not need an account. Files stay private to your session and expire after about two hours.",
+      "primaryCta": "Start for free",
+      "secondaryCta": "Browse tools",
+      "accountCta": "Open tools",
+      "imageAlt": "A team working together on documents",
+      "chipLabel": "File lifetime",
+      "chipValue": "About 2 hours",
+      "highlights": {
+        "speed": {
+          "title": "Process in the cloud",
+          "text": "Upload, run the tool, and download when the job completes. No desktop app to install."
+        },
+        "quality": {
+          "title": "Keep the layout",
+          "text": "Compress and convert without throwing away the document structure you need."
+        },
+        "privacy": {
+          "title": "Keep files private",
+          "text": "Files belong to your session or account. Downloads use short-lived signed access."
+        }
+      },
+      "convertCard": {
+        "title": "Convert a file",
+        "drop": "Drop a PDF here",
+        "orSelect": "or choose from your computer",
+        "fileName": "Contract.pdf",
+        "fileMeta": "2.4 MB · 12 pages",
+        "conversion": "PDF → Word",
+        "free": "Free",
+        "cta": "Convert"
+      }
+    },
+    "overview": {
+      "eyebrow": "Full picture",
+      "title": "Everything you need, in one glance.",
+      "description": "Convert, merge, compress, and protect. Signed-in accounts can review recent jobs so you know what happened to each file.",
+      "toolsCta": "Browse tools",
+      "weekLabel": "Example week",
+      "weekValue": "48 files",
+      "chartValue": "78%",
+      "activity": {
+        "convert": {
+          "name": "Contract_v4.pdf",
+          "action": "Converted to Word",
+          "time": "Done"
+        },
+        "compress": {
+          "name": "Invoice_March.pdf",
+          "action": "Compressed · 8.4 MB → 1.1 MB",
+          "time": "Done"
+        },
+        "merge": {
+          "name": "Deck.pdf",
+          "action": "Merged · 12 pages",
+          "time": "Done"
+        }
+      }
+    },
+    "spotlights": {
+      "title": "Finish the PDF work. Keep the rest of your day.",
+      "description": "The flow is the same for every job: open a tool, upload a file, and download when processing finishes. Basic use does not need an account.",
+      "convert": {
+        "eyebrow": "Convert any format",
+        "title": "Word, Excel, JPG — PDF in every direction.",
+        "text": "Produce editable documents, extract tables, and turn pages into images. Open the tool, upload, download.",
+        "cta": "Try PDF → Word",
+        "overlay": {
+          "title": "Ready — Contract.docx",
+          "meta": "12 pages · editable",
+          "cta": "Download"
+        }
+      },
+      "compress": {
+        "eyebrow": "Smart compression",
+        "title": "Smaller files, still readable.",
+        "text": "Email limits and slow uploads are real. Compress a PDF and keep the text clear enough to share.",
+        "cta": "Try compress",
+        "overlay": {
+          "title": "Compression",
+          "before": "Before",
+          "beforeSize": "8.4 MB",
+          "after": "After",
+          "afterSize": "1.1 MB"
+        }
+      },
+      "protect": {
+        "eyebrow": "Protect & lock",
+        "title": "Finish the contract without a printer.",
+        "text": "Password-protect sensitive PDFs. Access stays scoped to your session or account, with short-lived download links.",
+        "cta": "Try protect",
+        "overlay": {
+          "title": "Protected",
+          "name": "E. Kaya",
+          "meta": "Password applied"
+        }
+      }
+    },
+    "whyChoose": {
+      "title": "Why SoHappyPDF?",
+      "description": "PDF tools are often cold and crowded. We kept this one round, a little yellow, and focused on finishing the job.",
+      "try": "Try it",
+      "speed": {
+        "title": "No software to install",
+        "text": "Open a tool in the browser, upload a file, and download the result.",
+        "stat": "Cloud jobs"
+      },
+      "privacy": {
+        "title": "Files stay yours",
+        "text": "Files stay on your session or account and expire after about two hours.",
+        "stat": "Short-lived files"
+      },
+      "anywhere": {
+        "title": "Every file, one place",
+        "text": "PDF, Word, Excel, and images in one place. Open a tool — no desktop app.",
+        "stat": "{count} tools"
+      },
+      "visual": {
+        "word": "PDF → Word",
+        "wordFile": "Contract.pdf",
+        "excel": "PDF → Excel",
+        "excelFile": "Invoice.pdf",
+        "fileMark": "PDF",
+        "fileMeta": "~2 hours",
+        "wordOut": "Word",
+        "wordOutMeta": "DOCX",
+        "excelOut": "Excel",
+        "excelOutMeta": "XLSX"
+      }
+    },
+    "testimonials": {
+      "title": "What people say",
+      "description": "Small teams and busy freelancers who wanted PDF work out of the way.",
+      "quotes": {
+        "elif": {
+          "name": "Elif Kaya",
+          "role": "Operations, GreenLeaf",
+          "text": "Turning contracts into Word is a short wait, not a scavenger hunt.",
+          "tag": "Smooth workflow",
+          "initials": "EK"
+        },
+        "mert": {
+          "name": "Mert Aydın",
+          "role": "Freelance designer",
+          "text": "Compression still looks clean. Client files stay light and readable.",
+          "tag": "Fast and reliable",
+          "initials": "MA"
+        },
+        "selin": {
+          "name": "Selin Arslan",
+          "role": "HR lead",
+          "text": "Candidate paperwork finishes in the browser. The folder stops growing.",
+          "tag": "Great service",
+          "initials": "SA"
+        },
+        "can": {
+          "name": "Can Demir",
+          "role": "Finance analyst",
+          "text": "Table export to Excel landed on the first try. I stopped copying invoices by hand.",
+          "tag": "Simple and clear",
+          "initials": "CD"
+        }
+      }
+    },
+    "ctaBanner": {
+      "title": "{count} tools, focused pages, one product.",
+      "description": "Do not get lost on the landing page. Tools, pricing, and your account each have a place — then get back to work.",
+      "toolsCta": "All tools",
+      "startCta": "See plans"
+    },
+    "faq": {
+      "title": "Questions we hear a lot",
+      "description": "Short answers about files, limits, and how the product actually works.",
+      "items": {
+        "files": {
+          "q": "Where do my files go?",
+          "a": "Files are uploaded for processing and scoped to your anonymous session or account. Downloads use short-lived signed URLs. Temporary files expire after about two hours."
+        },
+        "anonymous": {
+          "q": "Do I need an account?",
+          "a": "No. Free covers the same daily limits with or without signing in. An account is optional for history, billing, and API keys."
+        },
+        "formats": {
+          "q": "Which formats can I convert?",
+          "a": "The catalog includes PDF, Word, Excel, PowerPoint, JPG, PNG, and OCR tools. Each tool dropzone shows the formats that tool accepts."
+        },
+        "limits": {
+          "q": "What are the file limits?",
+          "a": "Free is 5 operations per day, 25 MB per file, one file at a time, and 50 pages per file — with or without an account. OCR is Pro-only. Pro is $5 per month for unlimited operations and a 1 GB file limit. Files expire after about two hours. Developer API credits are billed separately."
+        },
+        "account": {
+          "q": "What does signing in change?",
+          "a": "You get recent activity, billing, and API keys. Daily Free limits stay the same. Tool pages stay the same: upload a file, then download the result."
+        },
+        "credits": {
+          "q": "How do credits work?",
+          "a": "Web operations on Free are capped daily. Pro is $5 per month for unlimited web use. API credits are billed separately on Developer packs and meter programmatic usage."
+        },
+        "api": {
+          "q": "Is there a developer API?",
+          "a": "Yes. The public v1 API uses the same upload, process, and download flow with an API key. API credit packs are separate from web plans."
+        },
+        "privacy": {
+          "q": "Are my files private?",
+          "a": "Yes. Files are scoped to your session or account, not a shared library. Downloads use short-lived signed URLs rather than public links."
+        },
+        "pro": {
+          "q": "What does Pro include?",
+          "a": "Pro is $5 per month. It unlocks OCR, editing, e-sign, and AI tools, removes the daily operation cap, and raises the file size limit to 1 GB."
+        },
+        "payment": {
+          "q": "How do payment and cancellation work?",
+          "a": "Checkout runs through Polar after you sign in. Payment methods, invoices, and cancellation are handled in the Polar customer portal. Yearly API packs are 20% off when that product is configured."
+        }
+      }
     },
     "demo": {
       "title": "From upload to download",
@@ -62,7 +283,7 @@
     },
     "features": {
       "title": "What you can do today",
-      "description": "SohappyPDF processes supported files in the cloud and keeps temporary results available for about two hours.",
+      "description": "SoHappyPDF processes supported files in the cloud and keeps temporary results available for about two hours.",
       "items": {
         "conversion": {
           "title": "PDF tools",
@@ -86,7 +307,7 @@
         },
         "limits": {
           "title": "Predictable limits",
-          "description": "Free and Pro plans publish credits, file size, and API limits."
+          "description": "Free and Pro plans publish daily operations, file size, and API limits."
         },
         "security": {
           "title": "Private files",
@@ -148,35 +369,31 @@
       }
     },
     "pricing": {
-      "title": "Free, Pro, and API",
-      "description": "Web plans and API credit packs are billed separately. Limits come from the same catalog the product enforces.",
+      "title": "Free, Pro, and Developer",
+      "description": "Web plans cover browser tools. Developer credit packs are billed separately for the public API.",
       "viewPage": "View pricing",
-      "note": "Pro upgrades and API credit packs use Polar checkout after you sign in. This page does not invent a price.",
+      "note": "Pro is $5 per month. Upgrades and API credit packs use Polar checkout after you sign in.",
+      "interval": "/month",
+      "intervalYear": "/year",
       "web": {
         "title": "Web plans",
-        "description": "Use PDF tools in the browser. Credits, file size, and monthly processing follow your web plan."
-      },
-      "anonymous": {
-        "name": "Anonymous",
-        "summary": "Open a tool and process files without creating an account. Daily and hourly limits apply.",
-        "noCredits": "No credit account. Usage is limited by rate limits.",
-        "cta": "Choose a tool"
+        "description": "Use PDF tools in the browser. Daily operations, file size, and page limits follow your web plan."
       },
       "free": {
         "name": "Free",
         "badge": "Included",
-        "summary": "An account with monthly web credits and broader tool access.",
+        "summary": "Five operations a day, one file at a time, with a 25 MB size cap. Same limits with or without an account. OCR is not included.",
         "cta": "Start for free"
       },
       "pro": {
         "name": "Pro",
-        "badge": "Higher limits",
-        "summary": "More web credits, larger files, and premium AI tools.",
+        "badge": "Unlimited",
+        "summary": "Unlimited browser operations, 1 GB files, OCR, and premium tools.",
         "cta": "Start Pro"
       },
       "api": {
         "title": "API credit packs",
-        "description": "API credits are separate from web credits. Buy a pack from your account when you need programmatic access.",
+        "description": "API credits are separate from web usage. Buy a pack from your account when you need programmatic access.",
         "note": "API request rates and key limits follow your web plan. API credits are consumed only by API usage.",
         "cta": "Developer docs",
         "packs": {
@@ -194,15 +411,47 @@
           }
         }
       },
+      "developer": {
+        "title": "Developer",
+        "description": "API credits are billed separately. Choose a monthly or yearly pack, then see how many tasks those credits cover.",
+        "docsCta": "Developer docs",
+        "cycleTitle": "Choose billing cycle",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "yearlyDiscount": "-20%",
+        "cycleNote": {
+          "monthly": "Credits renew every month. Unused credits expire at the end of the period.",
+          "yearly": "Pay yearly and save 20% at Polar checkout. Credits still renew monthly."
+        },
+        "creditsTitle": "Select number of credits per month",
+        "needMore": "Need more? <contact>Contact us</contact>",
+        "calculatorTitle": "Calculator",
+        "calculatorDescription": "How many files, pages, or tasks can I process per month with <credits></credits> credits?",
+        "calculatorResult": "You can process <count></count> tasks with the tool <tool></tool>.",
+        "cta": "Subscribe",
+        "creditsTableTitle": "Credits & files",
+        "creditsTableDescription": "API credit cost depends on the tool. Higher credit packs cover more tasks. Unused monthly credits expire at the end of the period.",
+        "creditsTableTool": "Tool",
+        "creditsTableCredits": "Credits",
+        "creditsPerTask": "{count, plural, one {# credit per task} other {# credits per task}}"
+      },
       "limits": {
         "webCredits": "{count} web tool credits per month",
-        "aiCredits": "{count} AI credits per month",
         "operations": "{count} processing operations per month",
+        "dailyOperations": "{count} operations per day",
+        "unlimitedOperations": "Unlimited operations",
+        "noAccountRequired": "Use tools without an account",
         "fileSize": "Up to {size} per file",
         "filesPerOperation": "Up to {count} files per operation",
+        "multiFile": "Multiple files per operation",
         "hourlyOperations": "Up to {count} operations per hour",
+        "pagesPerFile": "Up to {count} pages per file",
+        "noPageCap": "No page limit per file",
+        "noOcr": "OCR not included",
+        "noSupport": "No support",
+        "supportIncluded": "Email support",
         "retention": "Files expire after {hours} hours",
-        "premiumTools": "{count} premium AI tools",
+        "premiumTools": "{count} premium tools",
         "standardTools": "Standard PDF tools",
         "apiCredits": "{count} API credits per pack",
         "apiKeys": "{count} API keys",
@@ -211,19 +460,40 @@
       }
     },
     "footer": {
-      "brand": "SohappyPDF",
+      "brand": "SoHappyPDF",
       "menu": "Footer",
+      "product": "Product",
+      "company": "Company",
       "tools": "Tools",
       "pricing": "Pricing",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "about": "About",
+      "contact": "Contact",
       "api": "API",
-      "signIn": "Sign in",
-      "account": "Account"
+      "legal": "Legal",
+      "security": "Security",
+      "privacy": "Privacy policy",
+      "terms": "Terms & conditions",
+      "cookies": "Cookies",
+      "blurb": "Built to make PDF work lighter, faster, and a little more cheerful. Files stay scoped to you, then they expire.",
+      "copyright": "© {year} SoHappyPDF. All rights reserved.",
+      "language": "Language",
+      "languages": {
+        "en": "English",
+        "tr": "Türkçe"
+      },
+      "social": "Social",
+      "instagram": "SoHappyPDF on Instagram",
+      "x": "SoHappyPDF on X",
+      "linkedin": "SoHappyPDF on LinkedIn"
     },
     "toolsDirectory": {
       "title": "PDF tools",
       "description": "Every public tool is a focused workflow. Pick a category, open a tool, upload a file, and download the result.",
       "openTool": "Open tool",
       "comingSoon": "Coming soon",
+      "pro": "Pro",
       "jump": "Popular tools",
       "categories": {
         "organize": "Combine, split, and rearrange PDF pages.",
@@ -236,12 +506,359 @@
       }
     },
     "metadata": {
-      "homeTitle": "SohappyPDF — Use PDF tools in your browser",
-      "homeDescription": "Open a PDF tool, process a file, and download the result. No account required for basic use.",
-      "pricingTitle": "Pricing — Free, Pro, and API",
-      "pricingDescription": "Compare Anonymous, Free, and Pro web limits, plus separate API credit packs.",
+      "homeTitle": "SoHappyPDF — Convert, merge, and manage PDFs",
+      "homeDescription": "Open a PDF tool, process a file, and download the result. No account required for basic use. Files expire after about two hours.",
+      "pricingTitle": "Pricing — Free, Pro, and Developer",
+      "pricingDescription": "Compare Free and Pro web limits, plus Developer API credit packs.",
+      "faqTitle": "FAQ — Files, limits, and accounts",
+      "faqDescription": "Short answers about files, privacy, limits, credits, and the public API.",
+      "blogTitle": "Blog — Practical PDF notes",
+      "blogDescription": "Fewer clicks, cleaner documents. Short notes on converting, compressing, and signing PDFs.",
       "toolsTitle": "PDF tools",
-      "toolsDescription": "Browse Organize, Convert, Edit, Optimize, Security, and Intelligence PDF tools."
+      "toolsDescription": "Browse Organize, Convert, Edit, Optimize, Security, and Intelligence PDF tools.",
+      "developersTitle": "SoHappyPDF API",
+      "developersDescription": "Authenticate with an API key, upload a file, run a tool, poll the job, and download the result.",
+      "aboutTitle": "About — SoHappyPDF",
+      "aboutDescription": "Who we are, how SoHappyPDF works, and why files stay temporary.",
+      "contactTitle": "Contact — SoHappyPDF",
+      "contactDescription": "Email hello@sohappypdf.com for product, billing, and API questions."
+    },
+    "contact": {
+      "title": "Write to us.",
+      "description": "Email is the way in. For limits, files, and plans, the FAQ is faster.",
+      "emailLabel": "Support",
+      "emailHint": "Write in any language. We read mail on weekdays. Do not send files here — upload them on a tool page.",
+      "emailCta": "Send an email",
+      "topics": {
+        "title": "What to write about",
+        "description": "A short subject line helps.",
+        "items": {
+          "product": {
+            "title": "The product",
+            "text": "A tool that failed, a format that is missing, or feedback on the workflow."
+          },
+          "billing": {
+            "title": "Billing",
+            "text": "Invoices, payment methods, and cancellation are in the Polar customer portal after you sign in. Email us if checkout is stuck."
+          },
+          "api": {
+            "title": "The API",
+            "text": "Keys, credit packs, and the public v1 docs. Same tools as the website."
+          }
+        }
+      },
+      "faq": {
+        "title": "Check the FAQ first.",
+        "description": "Files, privacy, daily limits, Pro, and API credits are already answered there.",
+        "cta": "Read the FAQ"
+      }
+    },
+    "about": {
+      "title": "A PDF product you visit, then leave.",
+      "description": "SoHappyPDF has PDF tools for merge, convert, compress, protect, and OCR — plus a public API that runs the same jobs. We keep files temporary on purpose. Basic use does not need an account.",
+      "story": {
+        "title": "Who we are",
+        "lead": "We build PDF tools for people who already have a job to finish. This is not a document library, not a place to park files, and not a dashboard you are meant to live in.",
+        "body": "Each tool is its own page: open it, upload a file, download the result. Signed-in accounts get recent activity, billing, and API keys. Anonymous-allowed tools work without an account. Temporary files expire after about two hours — that is the product, not a missing feature."
+      },
+      "beliefs": {
+        "title": "How we work",
+        "description": "These are the rules we use to design the product.",
+        "items": {
+          "pages": {
+            "title": "The tool page owns the job",
+            "text": "There is no everyday document archive. Finish the file on the page you opened, then move on."
+          },
+          "anonymous": {
+            "title": "An account is optional",
+            "text": "Free daily limits are the same with or without signing in. An account unlocks history, billing, and API keys."
+          },
+          "files": {
+            "title": "Files are temporary",
+            "text": "Uploads and results stay scoped to your session or account, then expire after about two hours."
+          },
+          "api": {
+            "title": "The API is the same product",
+            "text": "The public v1 API runs the same tools. One set of tools, two surfaces: the website and a Bearer token."
+          }
+        }
+      },
+      "questions": {
+        "title": "Questions about us",
+        "description": "Limits, credits, and payment live on the FAQ. These answers are about the product itself.",
+        "items": {
+          "what": {
+            "q": "What is SoHappyPDF?",
+            "a": "PDF tools and a public API. You process a file and download the output. We do not keep a permanent library of your documents."
+          },
+          "who": {
+            "q": "Who is behind it?",
+            "a": "SoHappyPDF is an independent product we build and operate. We process files in the cloud, scope them to your session or account, and expire them on a short timer. We do not claim compliance certifications."
+          },
+          "why": {
+            "q": "Why do files expire?",
+            "a": "Everyday PDF work should not become storage. A short lifetime keeps the product simple and keeps files from lingering after the job is done."
+          },
+          "start": {
+            "q": "How do I start?",
+            "a": "Open a tool, drop a file, and download when processing completes. If you need history or the API, create an account."
+          }
+        }
+      }
+    }
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "updated": "Last updated {date}",
+    "contactHint": "Questions about these pages go to",
+    "security": {
+      "nav": "Security",
+      "metaTitle": "Security — SoHappyPDF",
+      "title": "Security we actually provide",
+      "description": "These are product controls, not third-party compliance certifications. If a badge is not listed here, we do not claim it.",
+      "sections": {
+        "honest": {
+          "title": "What this page is not",
+          "body": "SoHappyPDF does not publish third-party audit reports or compliance certifications. This page describes how the product handles files, accounts, and API keys today."
+        },
+        "files": {
+          "title": "Files stay scoped and temporary",
+          "body": "Uploads and results are tied to your anonymous session or signed-in account, not a shared library. Downloads use short-lived signed URLs rather than public object links. Temporary files expire after about two hours. Presigned upload and download URLs expire after 15 minutes."
+        },
+        "accounts": {
+          "title": "Accounts are authorized on the server",
+          "body": "The account area uses email and password authentication. File, conversion, billing, and API key actions are authorized on the server. Client-side checks are not a permission grant."
+        },
+        "api": {
+          "title": "API keys are secrets",
+          "body": "Programmatic access uses a Bearer API key. Do not put keys in URLs, browser JavaScript, or source control. If a key leaks, revoke it in the account area and create a replacement."
+        },
+        "report": {
+          "title": "Report a security issue",
+          "body": "If you find a vulnerability in SoHappyPDF, email us with enough detail to reproduce it. Do not attach customer files. We will not ask you to send API keys or passwords."
+        }
+      }
+    },
+    "privacy": {
+      "nav": "Privacy policy",
+      "metaTitle": "Privacy policy — SoHappyPDF",
+      "title": "Privacy policy",
+      "description": "How SoHappyPDF handles files, accounts, payments, and cookies. We keep this aligned with how the product works.",
+      "sections": {
+        "overview": {
+          "title": "What we collect",
+          "body": "SoHappyPDF processes PDFs and related files so you can convert, merge, compress, and otherwise transform them. We also store the account data needed to sign in, bill a plan, and issue API keys. We do not sell your files or account data."
+        },
+        "files": {
+          "title": "Files you upload",
+          "body": "Source files and results are stored in private object storage so the tool can run. They are scoped to your session or account. Temporary files expire after about two hours and are then deleted. The product is not a document archive — download results you need to keep."
+        },
+        "accounts": {
+          "title": "Account data",
+          "body": "If you create an account we store your email, name if you provide one, a hashed password, session data, recent activity, and API key metadata. We do not store the raw API key after it is shown once."
+        },
+        "payments": {
+          "title": "Payments",
+          "body": "Checkout, invoices, and cards are handled by Polar. SoHappyPDF stores the subscription and credit-pack status needed to enforce Free, Pro, and API entitlements. Card numbers are not stored in SoHappyPDF."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "body": "We use a small set of first-party cookies to remember language, keep an anonymous tool session, and keep you signed in. We do not run advertising pixels or analytics scripts on the marketing or app pages. Details are on the cookies page."
+        },
+        "retention": {
+          "title": "How long data stays",
+          "body": "Tool files are kept for about two hours. Account, billing, and API key records stay until you close the account or we have to keep them for the payment provider or the law. You can ask us to delete an account by email."
+        },
+        "processors": {
+          "title": "Who else sees data",
+          "body": "Files run through our application, worker, and private object storage. Polar processes payments. Hosting and email delivery providers see the technical data needed to run those services. We do not share files with other customers."
+        },
+        "contact": {
+          "title": "Privacy questions",
+          "body": "Email hello@sohappypdf.com. Do not send files to that address — upload them on a tool page if you need them processed."
+        }
+      }
+    },
+    "terms": {
+      "nav": "Terms & conditions",
+      "metaTitle": "Terms — SoHappyPDF",
+      "title": "Terms of service",
+      "description": "The rules for using SoHappyPDF’s public tools, accounts, and API. Keep a local copy of any file you still need after processing.",
+      "sections": {
+        "service": {
+          "title": "The service",
+          "body": "SoHappyPDF provides web PDF tools and a public API. You may use anonymous-allowed tools without an account, subject to Free daily limits. Signing in unlocks history, billing, and API keys. We may change features, limits, and prices; current limits are published on Pricing."
+        },
+        "accounts": {
+          "title": "Accounts",
+          "body": "You are responsible for the email and password on your account and for any API keys you create. Keep keys secret. Revoke a leaked key. We may suspend an account that abuses the service or these terms."
+        },
+        "acceptableUse": {
+          "title": "Acceptable use",
+          "body": "Do not upload malware, try to break the product, scrape it in a way that harms other users, or use it for unlawful content. You must have the right to process the files you upload. We may refuse or delete jobs that look abusive."
+        },
+        "files": {
+          "title": "Files expire",
+          "body": "Uploads and results are temporary processing assets, not a library. They expire after about two hours. If a download link stops working, process the file again. We are not a backup service."
+        },
+        "billing": {
+          "title": "Plans and Polar",
+          "body": "Free and Pro are web plans. API credit packs are billed separately. Checkout and cancellation run through Polar after you sign in. Polar’s portal is where you update cards, download invoices, and cancel. Unused API credits reset at the end of the pack period."
+        },
+        "api": {
+          "title": "API",
+          "body": "The public v1 API uses the same tools as the website. Rate limits and key limits follow your web plan. API credits meter programmatic usage only. Do not put API keys in client-side code."
+        },
+        "changes": {
+          "title": "Changes",
+          "body": "We may update these terms. The date at the top of this page is the current version. Continued use after an update means you accept the new terms. If you do not, stop using the service and cancel through Polar."
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "For product, billing, or API questions, email hello@sohappypdf.com. Do not attach files to that mailbox."
+        }
+      }
+    },
+    "cookies": {
+      "nav": "Cookies",
+      "metaTitle": "Cookies — SoHappyPDF",
+      "title": "Cookies",
+      "description": "SoHappyPDF uses a small number of first-party cookies to run the site. We do not set advertising or analytics cookies.",
+      "sections": {
+        "overview": {
+          "title": "What we use cookies for",
+          "body": "Cookies are small text files stored by your browser. We use them only to remember your language, keep anonymous tool usage scoped to your browser, and keep a signed-in session. There is no cookie banner because we do not run optional tracking cookies."
+        },
+        "language": {
+          "title": "Language",
+          "body": "Choosing English or Turkish sets an httpOnly cookie named NEXT_LOCALE for up to one year so the site stays in that language. You can change it any time from the language control in the footer."
+        },
+        "session": {
+          "title": "Sessions",
+          "body": "Anonymous tool use may set a first-party cookie named spdf_anon so files stay attached to your browser instead of a shared pool. Signing in sets account session cookies so the account area can load. These cookies are httpOnly. Signing out clears the account session."
+        },
+        "payments": {
+          "title": "Payments",
+          "body": "Checkout happens on Polar. Polar may set its own cookies on its domain while you pay or manage a subscription. Those cookies are Polar’s, not SoHappyPDF marketing or analytics cookies."
+        },
+        "control": {
+          "title": "How to control cookies",
+          "body": "You can delete cookies in your browser. If you block all cookies, language preference and sign-in will not persist. Necessary cookies above are required for those features to work."
+        }
+      }
+    }
+  },
+  "blog": {
+    "title": "Latest posts",
+    "pageTitle": "Blog",
+    "description": "Fewer clicks, cleaner documents. Short notes.",
+    "readAll": "Read all",
+    "back": "All posts",
+    "openTool": "Open the related tool"
+  },
+  "developerDocs": {
+    "eyebrow": "Public v1 API",
+    "title": "Build on the same tools",
+    "description": "Every browser tool is a conversion type. Create an API key, upload with a presigned PUT, then POST /conversions with that type. Poll until the job completes and download the output file.",
+    "createKey": "Create an API key",
+    "viewPricing": "Developer pricing",
+    "baseUrl": "Base URL",
+    "openapi": "OpenAPI",
+    "codeLabel": "Example",
+    "copy": "Copy",
+    "copied": "Copied",
+    "toc": {
+      "label": "On this page",
+      "quickstart": "Quickstart",
+      "auth": "Authentication",
+      "files": "Files",
+      "conversions": "Conversions",
+      "tools": "Tools",
+      "errors": "Errors",
+      "limits": "Limits"
+    },
+    "quickstart": {
+      "title": "Quickstart",
+      "step1": "Create a key in Account → API. It is shown only once.",
+      "step2": "Send Authorization: Bearer YOUR_API_KEY on every request. Never put the key in a URL or browser code.",
+      "step3": "POST /files/upload, PUT the bytes to upload.url, then POST /files/'{id}'/complete.",
+      "step4": "POST /conversions with sourceFileId, targetFormat, and type. Use the tool id as type.",
+      "step5": "Poll GET /conversions/'{id}' every two seconds until completed, then POST /files/'{outputFileId}'/download.",
+      "uploadLabel": "1. Create upload",
+      "putLabel": "2. PUT file bytes",
+      "completeLabel": "3. Complete upload",
+      "convertLabel": "4. Create conversion"
+    },
+    "auth": {
+      "title": "Authentication",
+      "description": "Programmatic access uses API keys. Dashboard cookies are for the web app, not integrations.",
+      "ruleHeader": "Send the key only in the Authorization header.",
+      "ruleSecret": "Treat the key as a secret. Do not commit it.",
+      "ruleBrowser": "Do not ship keys in frontend JavaScript.",
+      "ruleRevoke": "Revoke a leaked key in the dashboard and create a replacement."
+    },
+    "files": {
+      "title": "Files",
+      "description": "Uploads are presigned. The API never holds the file bytes. Complete the upload before you create a conversion.",
+      "expiry": "Temporary files expire after about two hours. Presigned upload and download URLs expire after 15 minutes."
+    },
+    "conversions": {
+      "title": "Conversions",
+      "description": "POST /conversions returns 201 and enqueues a worker job. The type field is the tool id. Options go in options. Extra input files go in additionalFileIds, not inside the file bytes.",
+      "pollHint": "Poll while status is {pending}. Stop on {done}. When completed, conversion.outputFileId is set.",
+      "idempotency": "Send Idempotency-Key (1–128 characters) on create. A replay with the same owner and key returns the original job and does not consume another credit."
+    },
+    "tools": {
+      "title": "Tools",
+      "description": "Use the tool id as conversion type. The JSON below is the POST /conversions body. Credits come from the catalog. Planned tools are omitted until they ship.",
+      "search": "Search tools",
+      "allCategories": "All",
+      "resultCount": "{count, plural, one {# tool} other {# tools}}",
+      "tryInBrowser": "Try in browser",
+      "pro": "Pro",
+      "type": "type",
+      "input": "Input",
+      "output": "Output",
+      "credits": "Credits",
+      "apiCredits": "{count} API credits",
+      "aiCredits": "{count} AI credits",
+      "files": "Files",
+      "filesValue": "{count, plural, one {# file} other {# files}}",
+      "extraFiles": "Extra files",
+      "extra": {
+        "none": "Source file only",
+        "required": "additionalFileIds required",
+        "optional": "additionalFileIds optional"
+      },
+      "options": "options",
+      "required": "required",
+      "optional": "optional",
+      "exampleLabel": "POST /conversions body"
+    },
+    "errors": {
+      "title": "Errors",
+      "description": "Every error uses this envelope. Missing files and conversions both return NOT_FOUND. An expired owned file returns FILE_EXPIRED instead of 404.",
+      "code": "Code",
+      "status": "HTTP",
+      "retry": "429 includes Retry-After, RateLimit-Limit, RateLimit-Remaining, and RateLimit-Reset. Wait, then retry. Do not tight-loop."
+    },
+    "limits": {
+      "title": "Limits and credits",
+      "description": "API credits are separate from web tool credits. Rate limits follow the web plan. Hitting a quota returns 403 PLAN_LIMIT_REACHED.",
+      "free": "Free: {ops} conversions/day, 25 MB files, {rpm} API requests/minute.",
+      "pro": "Pro: unlimited conversions, 1 GB files, {rpm} API requests/minute.",
+      "credits": "Each conversion consumes the tool’s API credit cost. Accounts include {count} API credits each month; buy Developer packs from billing for more.",
+      "webhooks": "Webhooks are not available. Clients must poll."
+    },
+    "notes": {
+      "pagesOneIndexed": "Page numbers are 1-based.",
+      "extraFilesTopLevel": "Pass extra uploads as additionalFileIds on the conversion, after each file is completed.",
+      "explicitType": "Send type explicitly. The API will not infer this tool from formats alone.",
+      "rangesInclusive": "Range start and end are inclusive.",
+      "ocrLanguage": "language is an OCR language code such as eng or tur.",
+      "protectSecret": "Do not log passwords. Rotate them if a request is captured.",
+      "signVisualOnly": "This is a visual stamp, not a cryptographic digital signature.",
+      "compareSecondFile": "Upload both PDFs, then pass the second id in additionalFileIds."
     }
   },
   "app": {
@@ -252,12 +869,13 @@
     "loggingOut": "Logging out…"
   },
   "appShell": {
-    "brand": "SohappyPDF",
+    "brand": "SoHappyPDF",
     "navigation": "Account",
     "openNavigation": "Open navigation",
     "closeNavigation": "Close navigation",
     "breadcrumb": "Breadcrumb",
     "userMenu": "Account menu",
+    "accountNav": "Account pages",
     "logout": "Log out",
     "loggingOut": "Logging out…",
     "nav": {
@@ -329,26 +947,35 @@
       "title": "Sign in",
       "description": "Use your email and password to continue.",
       "email": "Email",
+      "emailPlaceholder": "you@company.com",
       "password": "Password",
+      "passwordPlaceholder": "••••••••",
       "submit": "Sign in",
       "submitting": "Signing in…",
+      "switchHint": "Don't have an account?",
       "registerLink": "Create an account",
       "forgotLink": "Forgot password?"
     },
     "register": {
       "title": "Create an account",
-      "description": "Register with your email and a password.",
+      "description": "Register with your name, email, and a password.",
+      "name": "Name",
+      "namePlaceholder": "Ada Lovelace",
       "email": "Email",
+      "emailPlaceholder": "you@company.com",
       "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
       "confirmPassword": "Confirm password",
       "submit": "Create account",
       "submitting": "Creating account…",
-      "loginLink": "Already have an account? Sign in"
+      "switchHint": "Already have an account?",
+      "loginLink": "Sign in"
     },
     "forgotPassword": {
       "title": "Forgot password",
       "description": "Enter your email and we will send reset instructions if an account exists.",
       "email": "Email",
+      "emailPlaceholder": "you@company.com",
       "submit": "Send reset instructions",
       "submitting": "Sending…",
       "success": "If an account exists for that email, password reset instructions have been sent.",
@@ -358,16 +985,24 @@
       "title": "Reset password",
       "description": "Choose a new password for your account.",
       "password": "New password",
+      "passwordPlaceholder": "At least 8 characters",
       "confirmPassword": "Confirm new password",
       "submit": "Update password",
       "submitting": "Updating password…",
-      "invalidToken": "This reset link is invalid or has expired. Request a new one."
+      "updated": "Your password has been updated. Sign in to continue.",
+      "invalidToken": "This reset link is invalid or has expired. Request a new one.",
+      "loginLink": "Back to sign in"
+    },
+    "fields": {
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "validation": {
       "required": "This field is required.",
       "invalidEmail": "Enter a valid email address.",
       "passwordMin": "Password must be at least 8 characters.",
       "passwordMax": "Password must be at most 128 characters.",
+      "nameMax": "Name must be at most 80 characters.",
       "passwordMismatch": "Passwords do not match."
     },
     "errors": {
@@ -376,13 +1011,48 @@
       "invalidEmail": "Enter a valid email address.",
       "weakPassword": "Choose a stronger password.",
       "expiredResetToken": "This reset link is invalid or has expired.",
+      "currentPasswordIncorrect": "The current password is incorrect.",
       "networkFailure": "The request could not be completed. Try again.",
       "unexpected": "Something went wrong. Try again."
+    },
+    "shell": {
+      "brand": "SoHappyPDF",
+      "home": "Home",
+      "login": {
+        "eyebrow": "Welcome back",
+        "title": "Pick up where you left off.",
+        "text": "Recent jobs, billing, and API keys wait in your account."
+      },
+      "register": {
+        "eyebrow": "Start for free",
+        "title": "Open an account, finish with a smile.",
+        "text": "Basic tools work without signing in. An account adds credits, history, and API access."
+      },
+      "reset": {
+        "eyebrow": "Reset access",
+        "title": "Get back into your account.",
+        "text": "We will email reset instructions if that address has an account."
+      },
+      "perks": {
+        "private": "Files stay scoped to you",
+        "password": "Email and password sign-in",
+        "start": "Start without a paid plan"
+      }
     }
   },
   "errors": {
     "notFound": "This page could not be found.",
+    "notFoundCode": "404",
+    "notFoundTitle": "This page went missing.",
+    "notFoundDescription": "It may have been merged, split, or never existed. You can continue from home.",
+    "notFoundHome": "Back to home",
+    "notFoundTools": "Browse tools",
     "generic": "Something went wrong.",
+    "genericCode": "Error",
+    "genericTitle": "Something went wrong.",
+    "genericDescription": "The page hit an unexpected error. Try again, or go back home.",
+    "genericRetry": "Try again",
+    "genericHome": "Back to home",
     "loading": "Loading"
   },
   "files": {
@@ -483,8 +1153,8 @@
       "convert": "Convert"
     },
     "history": {
-      "title": "Recent Activity",
-      "description": "Execution history for tools you ran while signed in. Temporary files expire after about two hours.",
+      "title": "History",
+      "description": "Jobs you ran while signed in. Temporary files expire after about two hours and cannot be downloaded after they expire.",
       "loading": "Loading activity…",
       "empty": "No recent activity yet.",
       "emptyHint": "Open a PDF tool, process a file, and the result will appear here.",
@@ -501,6 +1171,15 @@
       "expiredHint": "This result has expired and is no longer downloadable.",
       "firstPage": "Newest",
       "nextPage": "Older activity",
+      "age": {
+        "justNow": "Just now",
+        "minutes": "{count}m ago",
+        "hours": "{count}h ago"
+      },
+      "expiresIn": {
+        "minutes": "Expires in {count}m",
+        "hours": "Expires in {count}h"
+      },
       "filters": {
         "label": "Filter activity",
         "all": "All",
@@ -592,6 +1271,10 @@
       "inProgressHint": "Processing continues in the background. This page updates automatically.",
       "expiredHint": "Temporary files for this execution have expired and are no longer available for download.",
       "summary": "{type} → {target}",
+      "started": "Started",
+      "output": "Output",
+      "expires": "Expires",
+      "openTool": "Open tool",
       "backToHistory": "Back to recent activity",
       "browseTools": "Browse tools",
       "backToFiles": "Browse tools"
@@ -608,8 +1291,8 @@
     }
   },
   "apiKeys": {
-    "title": "API Keys",
-    "description": "Create keys to call the SohappyPDF API. The raw key is shown only once.",
+    "title": "API",
+    "description": "Create keys to call the SoHappyPDF API. The raw key is shown only once.",
     "actions": {
       "create": "Create API key",
       "revoke": "Revoke",
@@ -620,7 +1303,7 @@
       "description": "Active keys can authenticate API requests. Revoked keys stop working immediately.",
       "loading": "Loading API keys…",
       "empty": "No API keys yet.",
-      "emptyHint": "Create an API key to start using SohappyPDF programmatically.",
+      "emptyHint": "Create an API key to start using SoHappyPDF programmatically.",
       "createCta": "Create API key",
       "retry": "Try again",
       "created": "Created {date}",
@@ -669,6 +1352,7 @@
       "docsLink": "Open API documentation",
       "statusTitle": "API usage",
       "statusDescription": "API credits are separate from web tool credits. Limits follow your web plan.",
+      "loading": "Loading API usage…",
       "credits": "API credits",
       "rate": "API requests",
       "rateValue": "{count} per minute",
@@ -699,54 +1383,122 @@
   },
   "settings": {
     "title": "Settings",
-    "description": "Manage your account and subscription.",
-    "billing": {
-      "title": "Billing",
-      "description": "Review your web plan, API credits, and Polar billing.",
-      "open": "Open billing"
+    "description": "Update your name, email, password, and language.",
+    "profile": {
+      "title": "Profile",
+      "description": "This is how your account appears in the menu. Email is used to sign in.",
+      "name": "Name",
+      "email": "Email",
+      "submit": "Save profile",
+      "submitting": "Saving…",
+      "updated": "Profile updated."
+    },
+    "password": {
+      "title": "Password",
+      "description": "Choose a new password. Other sessions will be signed out.",
+      "current": "Current password",
+      "newPassword": "New password",
+      "confirm": "Confirm new password",
+      "submit": "Update password",
+      "submitting": "Updating…",
+      "updated": "Password updated."
+    },
+    "language": {
+      "title": "Language",
+      "description": "Choose the language for the site, tools, and account pages."
+    },
+    "session": {
+      "title": "Session",
+      "description": "Sign out of this browser. You can sign back in with the same email.",
+      "logout": "Log out"
     }
   },
   "billing": {
     "title": "Billing",
-    "description": "One place for your web plan, API credits, and AI credits. Polar handles payment methods, invoices, and subscription changes.",
-    "currentPlan": "Current plan",
+    "description": "Web tools and the developer API are billed separately. Polar handles checkout, invoices, and cards.",
     "usage": "Usage",
     "upgrade": "Upgrade",
-    "upgrading": "Redirecting to checkout…",
-    "manage": "Open Polar portal",
-    "openingPortal": "Opening portal…",
-    "portalHint": "Payment methods, invoices, subscription management, and cancellation are handled in the Polar customer portal.",
-    "activating": "Your purchase is being activated.",
-    "noSubscription": "No paid subscription",
+    "upgradeToPro": "Web Pro · {price}/month",
+    "upgrading": "Redirecting to Polar…",
+    "perMonth": "/month",
+    "perYear": "/year",
+    "proPrice": "Pro is {price}/month",
+    "manage": "Open Polar",
+    "openingPortal": "Opening Polar…",
+    "portalHeading": "Payment and invoices",
+    "portalHint": "Update your card, download invoices, or cancel a subscription in Polar.",
+    "providerHint": "Checkout, invoices, and cards are managed in Polar.",
+    "webPlanHint": "This is the web plan for PDF tools. API packs are separate.",
+    "openApiPack": "API: {pack}",
+    "checkoutIntervalHint": "Choose monthly or yearly on the Polar checkout page.",
+    "checkoutYearlyHint": "Yearly is {price} on Polar checkout.",
+    "cycle": {
+      "label": "Billing interval",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "yearlyDiscount": "-{percent}%"
+    },
+    "activating": "Confirming your Polar purchase…",
+    "activated": "Your Polar purchase is active.",
+    "unconfirmed": "Polar has not confirmed this purchase yet. Refresh to check again.",
+    "refreshStatus": "Refresh",
+    "includedOperations": "{count} operations included each day.",
     "cancelsOn": "Cancellation scheduled. Pro remains until {date}.",
     "renewsOn": "Renews on {date}.",
     "creditsResetOn": "Monthly tool credits reset on {date}.",
     "remainingLabel": "Remaining",
     "remaining": "{count} remaining",
     "usedOfLimit": "{used} of {limit} used",
+    "unlimited": "Unlimited",
+    "operationsResetDaily": "Daily operations reset at 00:00 UTC.",
     "backToSettings": "Back to settings",
-    "period": "UTC period {start} – {end}",
+    "period": "{start} – {end}",
     "sections": {
       "web": "Web Plan",
-      "api": "API",
-      "ai": "AI"
+      "api": "API"
     },
     "api": {
       "title": "API",
-      "noProduct": "No API plan",
-      "noSubscription": "No API subscription",
+      "includedTitle": "Included credits",
+      "includedHint": "{count} API credits included each month.",
       "credits": "API credits",
-      "plans": "API plans and packs",
-      "topUp": "Top up",
+      "plans": "API packs",
+      "packCredits": "{count} credits / month",
+      "packPrice": "{price}/month",
+      "packYearlyPrice": "{price}/year",
+      "subscribe": "Subscribe",
+      "switch": "Switch",
+      "switchTo": "Switch to {pack}?",
+      "switchConfirmBody": "Polar will update your current API subscription to {pack} and charge the card on file. The listed price is {price}/month; the difference is prorated for this period.",
+      "switchConfirm": "Confirm switch",
+      "switchCancel": "Cancel",
+      "switchClose": "Close switch confirmation",
+      "current": "Current pack",
+      "webPlanHint": "This is the API pack. The web plan is separate.",
+      "openWebPlan": "Web: {plan}",
       "recentUsage": "Recent API usage",
+      "recentUsageHint": "This list is for the current period only. When the month ends it starts over. Unused credits do not carry into the next month.",
       "noUsage": "No API credit activity in this period.",
+      "usageWithoutTool": "API credits",
+      "resetLabel": "Resets",
+      "creditsResetOn": "Unused API credits reset on {date}.",
+      "showMore": "Show more",
+      "showLess": "Show less",
+      "history": {
+        "reset": "Monthly reset",
+        "pack": "API pack",
+        "grant": "API credits",
+        "consume": "API credits",
+        "refund": "API credits"
+      },
+      "ledger": {
+        "grant": "+{amount} added",
+        "consume": "{amount} used",
+        "refund": "{amount} returned",
+        "adjustment": "{amount} adjusted"
+      },
       "documentation": "API documentation",
       "manageKeys": "API keys"
-    },
-    "ai": {
-      "title": "AI",
-      "description": "AI credits are included with your web plan.",
-      "credits": "AI credits"
     },
     "apiProducts": {
       "starter": "API Starter",
@@ -770,7 +1522,8 @@
     },
     "usageItems": {
       "webCredits": "Web tool credits",
-      "aiCredits": "AI credits",
+      "operations": "Operations today",
+      "fileSize": "Max file size",
       "conversions": "Conversions this month",
       "storage": "Storage",
       "apiKeys": "API keys"
@@ -779,13 +1532,15 @@
       "unauthorized": "Sign in again to manage billing.",
       "conflict": "Your plan already includes this subscription.",
       "configuration": "Billing is not configured yet.",
+      "notFound": "Polar could not open the billing portal for this account. Try again.",
+      "portalUnavailable": "Polar could not open the billing portal. Try again.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "networkFailure": "The request could not be completed. Try again.",
       "unexpected": "Something went wrong. Try again."
     }
   },
   "publicTools": {
-    "metaTitle": "{tool} | SohappyPDF",
+    "metaTitle": "{tool} | SoHappyPDF",
     "description": "Upload a file, process it in the cloud, and download the result. No account required for basic processing.",
     "descriptionAuthenticated": "This tool requires a signed-in account before processing can start.",
     "selectFile": "Choose a file",
@@ -798,8 +1553,13 @@
     "moveUp": "Move up",
     "moveDown": "Move down",
     "loading": "Loading…",
+    "proRequired": {
+      "title": "This tool is included with Pro",
+      "description": "OCR, editing, e-sign, and AI tools are available on the Pro plan.",
+      "cta": "Upgrade to Pro"
+    },
     "status": "Status: {status}",
-    "keepWorkspace": "Create a free account for usage history, higher limits, and billing.",
+    "keepWorkspace": "Create a free account for usage history, billing, and API keys.",
     "createAccount": "Create a free account",
     "limits": "Up to {files} files, {sizeMb} MB each. Files are kept for {hours} hours.",
     "overview": {
@@ -825,7 +1585,7 @@
       }
     },
     "upload": {
-      "title": "Drop your PDF here",
+      "title": "Drop your file here",
       "titleMultiple": "Drop files here",
       "browse": "Browse files",
       "browseMultiple": "Browse files",
@@ -833,7 +1593,12 @@
       "addMoreMultiple": "Add more files",
       "addMoreBrowse": "Browse files",
       "hint": "Supports {formats}. Max {size} per file.",
+      "hintWithPageLimit": "Supports {formats}. Max {size} per file. Free plan allows {pages} pages per file.",
       "conjunction": "and"
+    },
+    "autoStart": {
+      "hint": "Processing starts automatically after the file is uploaded.",
+      "starting": "Starting…"
     },
     "actions": {
       "download": "Download",
@@ -870,6 +1635,7 @@
       "retry": "Retry upload",
       "fileReady": "Ready",
       "filePending": "Waiting to upload",
+      "filePendingSignIn": "Sign in to upload this file",
       "pageCount": "{count, plural, one {# page} other {# pages}}"
     },
     "pages": {
@@ -1055,7 +1821,11 @@
         }
       },
       "convert": {
-        "title": "Ready to convert",
+        "title": "Convert a file",
+        "drop": "Drop {format} here",
+        "orSelect": "or choose from your computer",
+        "free": "Free",
+        "cta": "Convert",
         "hint": "We'll convert this file into the format this tool creates.",
         "excelHint": "Text and tables are extracted into a spreadsheet. Scanned PDFs need PDF to Excel OCR.",
         "wordOcrHint": "Text is recognized first, then converted to Word. This takes longer on scans.",
@@ -1075,7 +1845,7 @@
         "invalidFile": "This file couldn't be opened. Please try another file.",
         "expiredTitle": "This file has expired",
         "expiredDescription": "Files are automatically deleted after {hours} hours. Convert another file to continue.",
-        "faqHow": "Upload a file, process it, then download the result. An account is not required for ordinary free tools.",
+        "faqHow": "Upload a file. Conversion starts automatically, then download the result. An account is not required for ordinary free tools.",
         "how": {
           "upload": {
             "title": "Upload",
@@ -1083,7 +1853,7 @@
           },
           "convert": {
             "title": "Convert",
-            "description": "We'll create the new format for you."
+            "description": "Conversion starts as soon as the file is uploaded."
           },
           "download": {
             "title": "Download",
@@ -1095,7 +1865,7 @@
         "title": "This image will become a PDF",
         "hint": "One image becomes one PDF page at its original size. Page size, margins, and multi-image order are not available for this tool.",
         "output": "1 image → 1 PDF page",
-        "faqHow": "Upload a JPG or PNG, then convert it to a PDF page at the image's original size. An account is not required.",
+        "faqHow": "Upload a JPG or PNG. Conversion starts automatically and creates a PDF page at the image's original size. An account is not required.",
         "how": {
           "upload": {
             "title": "Upload",
@@ -1103,7 +1873,7 @@
           },
           "convert": {
             "title": "Convert",
-            "description": "We'll place it on a matching PDF page."
+            "description": "We'll place it on a matching PDF page as soon as it is uploaded."
           },
           "download": {
             "title": "Download",
@@ -1201,7 +1971,7 @@
         "invalidFile": "This file couldn't be opened. Please try another PDF.",
         "expiredTitle": "This file has expired",
         "expiredDescription": "Files are automatically deleted after {hours} hours. Repair another PDF to continue.",
-        "faqHow": "Upload a PDF and repair it. We'll try to fix damage, then you can download the result. An account is not required.",
+        "faqHow": "Upload a PDF. Repair starts automatically. We'll try to fix damage, then you can download the result. An account is not required.",
         "how": {
           "upload": {
             "title": "Upload",
@@ -1649,6 +2419,7 @@
     },
     "phases": {
       "uploading": "Uploading",
+      "checkingPages": "Checking pages",
       "uploadingHint": "Sending your file to secure storage.",
       "preparing": "Preparing",
       "preparingHint": "Starting the process.",
@@ -1659,12 +2430,17 @@
     },
     "result": {
       "title": "Your PDF is ready",
+      "titleBatch": "Your files are ready",
       "description": "{source} was converted to {format}.",
+      "descriptionBatch": "{count} files were processed.",
       "unnamedSource": "Your file",
       "download": "Download",
+      "downloadAll": "Download all ({count})",
+      "downloadNamed": "Download {name}",
       "downloading": "Preparing download…",
+      "fileList": "Ready files",
       "processAnother": "Process another file",
-      "signupPrompt": "Want history, higher limits, and account usage tracking?",
+      "signupPrompt": "Want history, billing, and account usage tracking?",
       "signupCta": "Create a free account"
     },
     "related": {
@@ -1673,7 +2449,8 @@
     "recent": {
       "title": "Recent",
       "notice": "Temporary files are kept for about {hours} hours, then they expire.",
-      "empty": "No recent files yet. Results stay here for a short time, then they expire.",
+      "empty": "No recent files yet.",
+      "emptyHint": "Process a file on this page and the result will show up here for about {hours} hours.",
       "error": "Recent files could not be loaded.",
       "retry": "Try again",
       "unnamedFile": "Untitled file",
@@ -1709,7 +2486,7 @@
       },
       "how": {
         "question": "How do I use this tool?",
-        "answer": "Upload a supported file, start processing, then download the result when it is ready. An account is not required unless the tool says it is."
+        "answer": "Upload a supported file. If the tool needs no extra options, processing starts automatically. Then download the result when it is ready. An account is not required unless the tool says it is."
       },
       "formats": {
         "question": "Which formats are supported?",
@@ -1717,7 +2494,7 @@
       },
       "account": {
         "question": "Do I need an account?",
-        "anonymous": "No. You can run this tool without creating an account. A free account is optional if you want history and higher limits.",
+        "anonymous": "No. You can run this tool without creating an account. Sign in if you want history, billing, and API keys. Daily Free limits stay the same.",
         "required": "Yes. Sign in before processing. This tool is not available without an account."
       },
       "limits": {
@@ -1761,8 +2538,12 @@
     "errors": {
       "title": "We couldn't process this file",
       "noFile": "Choose a file to process.",
-      "tooFewFiles": "Select at least two PDFs to merge.",
+      "tooFewFiles": "Select at least two files.",
       "tooManyFiles": "Too many files for this tool.",
+      "tooManyPages": "This file has more than {max} pages. The free plan allows {max} pages per file.",
+      "tooManyPagesShort": "Over the {max}-page limit.",
+      "tooManyPagesHint": "Upgrade to Pro to process longer PDFs, or start again with a shorter file.",
+      "upgradeTitle": "Continue on Pro",
       "tooLarge": "That file is larger than the current limit.",
       "emptyFile": "That file is empty. Choose a valid PDF and try again.",
       "unsupported": "That file type is not supported for this tool.",
@@ -1771,11 +2552,14 @@
       "invalidOptions": "Check the tool settings and try again.",
       "creditsExhausted": "You have used all credits for this month. Upgrade to Pro or wait for the next billing period.",
       "limitReached": "You have reached the current usage limit. Try again later or upgrade your plan.",
+      "upgradeRequired": "This tool requires Pro. Upgrade to continue.",
+      "upgradeCta": "Upgrade to Pro",
       "signInRequired": "Sign in to use this tool.",
       "signInCta": "Sign in to continue",
       "unauthorized": "You do not have access to this file.",
       "passwordProtected": "This PDF is password protected. Unlock it first, or use Unlock PDF with the correct password.",
       "processingFailed": "Processing failed. Try again with a different file.",
+      "aiUnavailable": "AI processing is unavailable right now. Try again later.",
       "duplicateExecution": "This file is already being processed. Wait a moment and try again.",
       "uploadInterrupted": "The upload was interrupted. Check your connection and try again.",
       "filesExpired": "This file has expired. Please process it again.",

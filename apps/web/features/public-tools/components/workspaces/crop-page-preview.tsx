@@ -185,7 +185,7 @@ export function CropPagePreview({
         };
 
   return (
-    <div className="relative inline-block overflow-hidden rounded-lg border border-border bg-card shadow-xs">
+    <div className="relative inline-block overflow-hidden rounded-md border border-border bg-white">
       <canvas ref={canvasRef} className="block max-w-full" />
       {box === null ? null : (
         <div
@@ -210,7 +210,7 @@ export function CropPagePreview({
                 start: marginsRef.current,
               };
             }}
-            className="absolute inset-0 cursor-move outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="absolute inset-0 cursor-move outline-none"
           />
           {(["top", "right", "bottom", "left"] as const).map((edge) => (
             <button
@@ -230,7 +230,7 @@ export function CropPagePreview({
                 };
               }}
               className={cn(
-                "absolute bg-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                "absolute bg-foreground outline-none",
                 edge === "top" || edge === "bottom"
                   ? "left-1/2 h-3 w-11 -translate-x-1/2 cursor-ns-resize"
                   : "top-1/2 h-11 w-3 -translate-y-1/2 cursor-ew-resize",

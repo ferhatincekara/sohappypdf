@@ -33,3 +33,13 @@ export async function loadPdfDocument(file: File): Promise<PdfjsDocument> {
   });
   return task.promise;
 }
+
+export async function countPdfPages(file: File): Promise<number> {
+  const document = await loadPdfDocument(file);
+
+  try {
+    return document.numPages;
+  } finally {
+    await document.destroy();
+  }
+}

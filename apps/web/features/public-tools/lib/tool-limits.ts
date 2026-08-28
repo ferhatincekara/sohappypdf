@@ -1,5 +1,9 @@
-import type { ToolDefinition } from "@repo/tools/catalog";
-import { PUBLIC_ANONYMOUS_MAX_FILES_PER_OPERATION } from "./anonymous-limits";
+import { resolveWebMaxFilesPerOperation } from "@repo/billing/plans";
+import {
+  type ToolDefinition,
+  toolCombinesSourceFiles,
+  toolSupportsBatchOperations,
+} from "@repo/tools/catalog";
 
 export function acceptForTool(tool: ToolDefinition): string {
   return tool.inputFormats
@@ -23,11 +27,16 @@ export function acceptForTool(tool: ToolDefinition): string {
 
 export function maxFilesForTool(
   tool: ToolDefinition,
-  anonymous: boolean,
+  input: {
+    anonymous: boolean;
+    maxFilesPerOperation?: number | null;
+  },
 ): number {
-  if (!anonymous) {
-    return tool.maxInputCount;
-  }
-
-  return Math.min(tool.maxInputCount, PUBLIC_ANONYMOUS_MAX_FILES_PER_OPERATION);
+  return resolveWebMaxFilesPerOperation({
+    isAuthenticated: !input.anonymous,
+    toolMaxInputCount: tool.maxInputCount,
+    planMaxFilesPerOperation: input.maxFilesPerOperation,
+    combinesSourceFiles: toolCombinesSourceFiles(tool.id),
+    supportsBatch: toolSupportsBatchOperations(tool.id),
+  });
 }

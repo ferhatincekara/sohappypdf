@@ -76,9 +76,7 @@ export function DocumentEditor({
   }, [disabled, dispatch]);
 
   if (pdf.status === "loading" || pdf.status === "idle") {
-    return (
-      <div className="h-64 animate-pulse rounded-lg border border-border bg-muted" />
-    );
+    return <div className="h-64 animate-pulse rounded-lg bg-muted" />;
   }
 
   if (pdf.status === "error" || pdf.document === null) {
@@ -126,7 +124,7 @@ export function DocumentEditor({
           dispatch({ type: "setCurrentPage", page });
         }}
       />
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_--spacing(64)]">
         <EditorViewport
           document={pdf.document}
           state={state}

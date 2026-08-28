@@ -20,9 +20,7 @@ const TOOLS_REQUIRING_OPTIONS = new Set([
   "protect-pdf",
   "unlock-pdf",
   "sign-pdf",
-  "pdf-forms",
   "edit-pdf",
-  "translate-pdf",
 ]);
 
 export function isToolConversionType(value: string): value is ConversionType {
@@ -40,6 +38,7 @@ export function validateToolProcess(input: {
   isAuthenticated: boolean;
   files: readonly WorkspaceFile[];
   maxFiles: number;
+  maxPagesPerFile?: number | null;
   options: Record<string, unknown> | undefined;
 }): ToolProcessValidation {
   if (!input.allowsAnonymous && !input.isAuthenticated) {
@@ -54,16 +53,32 @@ export function validateToolProcess(input: {
     return { ok: false, errorKey: "tooManyFiles" };
   }
 
-  if (input.toolId === "merge-pdf" && input.files.length < 2) {
-    return { ok: false, errorKey: "tooFewFiles" };
+  const maxPagesPerFile = input.maxPagesPerFile;
+
+  if (
+    maxPagesPerFile !== null &&
+    maxPagesPerFile !== undefined &&
+    input.files.some(
+      (entry) => entry.pageCount !== null && entry.pageCount > maxPagesPerFile,
+    )
+  ) {
+    return { ok: false, errorKey: "tooManyPages" };
+  }
+
+  if (input.toolId === "merge-pdf" || input.toolId === "compare-pdf") {
+    if (input.files.length < 2) {
+      return { ok: false, errorKey: "tooFewFiles" };
+    }
   }
 
   if (!isToolConversionType(input.toolId)) {
     return { ok: false, errorKey: "unsupported" };
   }
 
-  if (input.files.some((entry) => entry.status === "failed")) {
-    return { ok: false, errorKey: "networkFailure" };
+  const failed = input.files.find((entry) => entry.status === "failed");
+
+  if (failed !== undefined) {
+    return { ok: false, errorKey: failed.errorKey ?? "networkFailure" };
   }
 
   if (!areWorkspaceFilesReady(input.files)) {

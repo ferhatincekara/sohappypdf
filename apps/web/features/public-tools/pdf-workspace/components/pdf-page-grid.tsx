@@ -18,7 +18,7 @@ import type { PdfPage } from "../types/pdf-page";
 import { PdfPageThumbnail } from "./pdf-page-thumbnail";
 
 export const PDF_PAGE_GRID_CLASS_NAME =
-  "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6";
+  "grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4";
 
 export function PdfPageGrid({
   document,
@@ -171,7 +171,7 @@ export function PdfPageGrid({
             className={cn(
               dropIndex === index &&
                 draggingIndex !== index &&
-                "rounded-xl ring-2 ring-foreground",
+                "rounded-3 ring-2 ring-foreground",
               draggingIndex === index && "opacity-50",
             )}
           >
@@ -216,8 +216,8 @@ export function PdfPageGridSkeleton() {
       <ul className={PDF_PAGE_GRID_CLASS_NAME} aria-hidden="true">
         {SKELETON_SLOTS.map((slot) => (
           <li key={slot}>
-            <div className="flex flex-col items-center gap-2 rounded-xl p-2">
-              <div className="aspect-[3/4] w-full animate-pulse rounded-lg border-2 border-border bg-muted" />
+            <div className="flex flex-col items-center gap-2 rounded-sm p-2">
+              <div className="aspect-3/4 w-full animate-pulse rounded-1.5 border border-border bg-muted" />
               <div className="h-3 w-6 animate-pulse rounded-sm bg-muted" />
             </div>
           </li>

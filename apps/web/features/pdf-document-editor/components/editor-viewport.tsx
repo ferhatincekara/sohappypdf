@@ -72,7 +72,7 @@ export function EditorViewport({
   }
 
   return (
-    <div className="overflow-auto rounded-lg border border-border bg-muted/40 p-4">
+    <div className="overflow-auto rounded-lg border border-border bg-white p-4">
       <div
         className="relative mx-auto origin-top-left bg-white shadow-xs"
         style={{

@@ -45,7 +45,7 @@ export function SplitAdvancedRanges({
 
   return (
     <details className="group">
-      <summary className="cursor-pointer text-sm font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50">
+      <summary className="cursor-pointer text-sm font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:text-foreground">
         {t("advanced")}
       </summary>
       <div className="mt-3 flex flex-col gap-2">

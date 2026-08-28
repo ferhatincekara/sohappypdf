@@ -1,17 +1,27 @@
 {
   "metadata": {
-    "title": "SohappyPDF",
+    "title": "SoHappyPDF",
     "description": "PDF ve görselleri sade bir akış ve genel bir API ile dönüştürün."
   },
   "marketing": {
     "nav": {
-      "brand": "SohappyPDF",
+      "brand": "SoHappyPDF",
       "product": "Ürün",
       "pricing": "Fiyatlandırma",
+      "faq": "SSS",
+      "blog": "Blog",
+      "about": "Hakkımızda",
+      "contact": "İletişim",
       "developers": "Geliştiriciler",
       "signIn": "Giriş yap",
       "account": "Hesap",
-      "getStarted": "Başla",
+      "getStarted": "Ücretsiz dene",
+      "comingSoon": "Yakında",
+      "pro": "Pro",
+      "stories": {
+        "pdf-to-word": "Sözleşmeyi Word’e çevirip düzenlemeye devam et",
+        "compress-pdf": "Büyük PDF’i küçült, okunabilir kalsın"
+      },
       "open": "Menüyü aç",
       "close": "Menüyü kapat",
       "menu": "Site",
@@ -38,11 +48,222 @@
       }
     },
     "hero": {
-      "eyebrow": "Çevrimiçi PDF araçları",
-      "title": "PDF araçlarını tarayıcınızda kullanın.",
-      "description": "Bir araç açın, dosya yükleyin, işleyin ve sonucu indirin. Temel kullanım için hesap gerekmez.",
-      "primaryCta": "Bir araç seçin",
-      "secondaryCta": "API’yi gör"
+      "eyebrow": "{count} PDF aracı, tek mutlu yer",
+      "title": "PDF’lerini dönüştür, birleştir <smile>ve yönet.</smile>",
+      "description": "Bir araç aç, dosyayı bırak, sonucu indir. Temel kullanım için hesap gerekmez. Dosyalar oturumuna veya hesabına bağlı kalır ve yaklaşık iki saat sonra süresi dolar.",
+      "primaryCta": "Ücretsiz başla",
+      "secondaryCta": "Araçları gör",
+      "accountCta": "Araçlara git",
+      "imageAlt": "Belgeler üzerinde çalışan bir ekip",
+      "chipLabel": "Dosya ömrü",
+      "chipValue": "Yaklaşık 2 saat",
+      "highlights": {
+        "speed": {
+          "title": "Bulutta işle",
+          "text": "Yükle, aracı çalıştır, iş bitince indir. Kurulacak masaüstü uygulama yok."
+        },
+        "quality": {
+          "title": "Düzeni koru",
+          "text": "Sıkıştırırken ve dönüştürürken ihtiyacın olan belge yapısını kaybetme."
+        },
+        "privacy": {
+          "title": "Dosyalar özel kalsın",
+          "text": "Dosyalar oturumuna veya hesabına aittir. İndirmeler kısa ömürlü imzalı erişim kullanır."
+        }
+      },
+      "convertCard": {
+        "title": "Dosyayı dönüştür",
+        "drop": "PDF’yi buraya bırak",
+        "orSelect": "veya bilgisayardan seç",
+        "fileName": "Sozlesme.pdf",
+        "fileMeta": "2,4 MB · 12 sayfa",
+        "conversion": "PDF → Word",
+        "free": "Ücretsiz",
+        "cta": "Dönüştür"
+      }
+    },
+    "overview": {
+      "eyebrow": "Tam bakış",
+      "title": "İhtiyacın olan her şey, tek bakışta.",
+      "description": "Dönüştür, birleştir, sıkıştır, koru. Hesap açınca son işleri görebilirsin — hangi dosyanın ne olduğunu unutmazsın.",
+      "toolsCta": "Araçları incele",
+      "weekLabel": "Örnek hafta",
+      "weekValue": "48 dosya",
+      "chartValue": "%78",
+      "activity": {
+        "convert": {
+          "name": "Sozlesme_v4.pdf",
+          "action": "Word’e dönüştürüldü",
+          "time": "Bitti"
+        },
+        "compress": {
+          "name": "Fatura_Mart.pdf",
+          "action": "Sıkıştırıldı · 8.4 MB → 1.1 MB",
+          "time": "Bitti"
+        },
+        "merge": {
+          "name": "Sunum.pdf",
+          "action": "Birleştirildi · 12 sayfa",
+          "time": "Bitti"
+        }
+      }
+    },
+    "spotlights": {
+      "title": "PDF işi bitsin, günün sana kalsın.",
+      "description": "Hangi iş olursa olsun akış aynı: bir araç aç, dosyayı yükle, işlem bitince indir. Temel kullanım için hesap gerekmez.",
+      "convert": {
+        "eyebrow": "Her formata dönüştür",
+        "title": "Word, Excel, JPG — PDF’in evrensel hali.",
+        "text": "Düzenlenebilir belgeler üret, tabloları çıkar, sayfaları görsele çevir. Aracı aç, yükle, indir.",
+        "cta": "PDF → Word dene",
+        "overlay": {
+          "title": "Hazır — Sozlesme.docx",
+          "meta": "12 sayfa · düzenlenebilir",
+          "cta": "İndir"
+        }
+      },
+      "compress": {
+        "eyebrow": "Akıllı sıkıştırma",
+        "title": "Boyut küçülür, okunabilirlik kalır.",
+        "text": "E-posta limiti ve yavaş yükleme gerçek. PDF’i sıkıştır, metin paylaşılacak kadar net kalsın.",
+        "cta": "Sıkıştırmayı dene",
+        "overlay": {
+          "title": "Sıkıştırma",
+          "before": "Önce",
+          "beforeSize": "8.4 MB",
+          "after": "Sonra",
+          "afterSize": "1.1 MB"
+        }
+      },
+      "protect": {
+        "eyebrow": "Koru ve kilitle",
+        "title": "Sözleşmeyi yazdırmadan bitir.",
+        "text": "Hassas PDF’leri parola ile koru. Erişim oturumuna veya hesabına bağlı kalır, indirme bağlantıları kısa ömürlüdür.",
+        "cta": "Korumayı dene",
+        "overlay": {
+          "title": "Korumalı",
+          "name": "E. Kaya",
+          "meta": "Parola uygulandı"
+        }
+      }
+    },
+    "whyChoose": {
+      "title": "Neden SoHappyPDF?",
+      "description": "PDF araçları genellikle soğuk ve kalabalık olur. Biz sade, yuvarlak ve biraz sarı tuttuk — çünkü işin bitsin istiyoruz.",
+      "try": "Dene",
+      "speed": {
+        "title": "Kurulum yok",
+        "text": "Tarayıcıda aracı aç, dosyayı yükle, işlem bitince sonucu indir.",
+        "stat": "Bulut işleri"
+      },
+      "privacy": {
+        "title": "Dosya sende kalsın",
+        "text": "Dosya oturumuna veya hesabına bağlı kalır, yaklaşık iki saat sonra silinir.",
+        "stat": "Kısa ömürlü dosyalar"
+      },
+      "anywhere": {
+        "title": "Her dosya, tek yer",
+        "text": "PDF, Word, Excel ve görsel tek yerde. Araç sayfasını aç, kurulum yok.",
+        "stat": "{count} araç"
+      },
+      "visual": {
+        "word": "PDF → Word",
+        "wordFile": "sözleşme.pdf",
+        "excel": "PDF → Excel",
+        "excelFile": "fatura.pdf",
+        "fileMark": "PDF",
+        "fileMeta": "~2 saat",
+        "wordOut": "Word",
+        "wordOutMeta": "DOCX",
+        "excelOut": "Excel",
+        "excelOutMeta": "XLSX"
+      }
+    },
+    "testimonials": {
+      "title": "Kullanıcılar ne diyor",
+      "description": "Küçük ekipler ve yoğun freelancer’lar — PDF’i dert olmaktan çıkaranlar.",
+      "quotes": {
+        "elif": {
+          "name": "Elif Kaya",
+          "role": "Operasyon, GreenLeaf",
+          "text": "Sözleşmeleri Word’e çevirmek uzun bir arayış değil, kısa bir bekleme.",
+          "tag": "Akıcı deneyim",
+          "initials": "EK"
+        },
+        "mert": {
+          "name": "Mert Aydın",
+          "role": "Serbest tasarımcı",
+          "text": "Sıkıştırma hâlâ temiz duruyor. Müşteriye giden dosyalar hem hafif hem net.",
+          "tag": "Hızlı ve güvenilir",
+          "initials": "MA"
+        },
+        "selin": {
+          "name": "Selin Arslan",
+          "role": "İK müdürü",
+          "text": "Aday evrakları tarayıcıda bitiyor, klasör şişmiyor.",
+          "tag": "Harika hizmet",
+          "initials": "SA"
+        },
+        "can": {
+          "name": "Can Demir",
+          "role": "Finans analisti",
+          "text": "Excel’e tablo aktarımı ilk seferde tuttu. Faturaları tek tek kopyalamıyorum.",
+          "tag": "Basit ve net",
+          "initials": "CD"
+        }
+      }
+    },
+    "ctaBanner": {
+      "title": "{count} araç, odaklı sayfalar, tek ürün.",
+      "description": "Landing’de kaybolma. Araçlar, fiyat ve hesap kendi yerlerinde — işine doğrudan geç.",
+      "toolsCta": "Tüm araçlar",
+      "startCta": "Planları gör"
+    },
+    "faq": {
+      "title": "Sık sorulan sorular",
+      "description": "Dosyalar, limitler ve ürünün gerçekten nasıl çalıştığı hakkında kısa cevaplar.",
+      "items": {
+        "files": {
+          "q": "Dosyalarım nereye gidiyor?",
+          "a": "Dosyalar işlenmek üzere yüklenir ve anonim oturumuna veya hesabına bağlanır. İndirmeler kısa ömürlü imzalı URL kullanır. Geçici dosyalar yaklaşık iki saat sonra süresi dolar."
+        },
+        "anonymous": {
+          "q": "Hesap açmak zorunda mıyım?",
+          "a": "Hayır. Ücretsiz plan, giriş yapsanız da yapmasanız da aynı günlük limitleri kapsar. Hesap geçmiş, faturalama ve API anahtarları için isteğe bağlıdır."
+        },
+        "formats": {
+          "q": "Hangi formatları dönüştürebilirim?",
+          "a": "Katalogda PDF, Word, Excel, PowerPoint, JPG, PNG ve OCR araçları vardır. Her aracın yükleme alanı kabul ettiği formatları gösterir."
+        },
+        "limits": {
+          "q": "Dosya limitleri neler?",
+          "a": "Ücretsiz plan günde 5 işlem, dosya başına 25 MB, aynı anda 1 dosya ve dosya başına 50 sayfa ile sınırlıdır — hesap olsun olmasın. OCR yalnızca Pro’dadır. Pro aylık 5 dolardır; sınırsız işlem ve 1 GB dosya limiti sunar. Dosyalar yaklaşık iki saat sonra süresi dolar. Geliştirici API kredileri ayrı faturalanır."
+        },
+        "account": {
+          "q": "Giriş yapmak neyi değiştirir?",
+          "a": "Son işlemler, faturalama ve API anahtarları gelir. Ücretsiz günlük limitler aynı kalır. Araç sayfaları aynı kalır: dosya yükle, sonucu indir."
+        },
+        "credits": {
+          "q": "Krediler nasıl işler?",
+          "a": "Ücretsiz web kullanımı günlük işlem tavanıyla ölçülür. Pro aylık 5 dolardır ve web kullanımı sınırsızdır. API kredileri geliştirici paketlerinde ayrı faturalanır ve programatik kullanımı ölçer."
+        },
+        "api": {
+          "q": "Geliştirici API’si var mı?",
+          "a": "Evet. Genel v1 API aynı yükle, işle, indir akışını bir API anahtarıyla sunar. API kredi paketleri web planlarından ayrıdır."
+        },
+        "privacy": {
+          "q": "Dosyalarım gizli mi?",
+          "a": "Evet. Dosyalar oturumuna veya hesabına bağlıdır; ortak bir kütüphane değildir. İndirmeler herkese açık bağlantı değil, kısa ömürlü imzalı URL kullanır."
+        },
+        "pro": {
+          "q": "Pro neleri kapsar?",
+          "a": "Pro aylık 5 dolardır. OCR, düzenleme, e-imza ve yapay zeka araçlarını açar, günlük işlem tavanını kaldırır ve dosya boyutunu 1 GB’a çıkarır."
+        },
+        "payment": {
+          "q": "Ödeme ve iptal nasıl işler?",
+          "a": "Ödeme, girişten sonra Polar üzerinden yapılır. Ödeme yöntemleri, faturalar ve iptal Polar müşteri portalındadır. Yıllık API paketlerinde Polar’da %20 indirim uygulanır."
+        }
+      }
     },
     "demo": {
       "title": "Yüklemeden indirmeye",
@@ -62,7 +283,7 @@
     },
     "features": {
       "title": "Bugün yapabilecekleriniz",
-      "description": "SohappyPDF desteklenen dosyaları bulutta dönüştürür ve geçmişi hesabınızda tutar.",
+      "description": "SoHappyPDF desteklenen dosyaları bulutta dönüştürür ve geçmişi hesabınızda tutar.",
       "items": {
         "conversion": {
           "title": "PDF dönüştürme",
@@ -86,7 +307,7 @@
         },
         "limits": {
           "title": "Öngörülebilir limitler",
-          "description": "Ücretsiz ve Pro planlar aylık dönüşüm, depolama, dosya boyutu ve API limitlerini yayınlar."
+          "description": "Ücretsiz ve Pro planlar günlük işlem, dosya boyutu ve API limitlerini yayınlar."
         },
         "security": {
           "title": "Özel dosyalar",
@@ -148,35 +369,31 @@
       }
     },
     "pricing": {
-      "title": "Ücretsiz, Pro ve API",
-      "description": "Web planları ve API kredi paketleri ayrı faturalanır. Limitler, ürünün uyguladığı katalogdan gelir.",
+      "title": "Ücretsiz, Pro ve Geliştiriciler",
+      "description": "Web planları tarayıcı araçlarını kapsar. Geliştirici kredi paketleri genel API için ayrı faturalanır.",
       "viewPage": "Fiyatlandırmayı gör",
-      "note": "Pro yükseltmeleri ve API kredi paketleri girişten sonra Polar ödeme akışını kullanır. Bu sayfa bir fiyat uydurmaz.",
+      "note": "Pro aylık 5 dolardır. Yükseltmeler ve API kredi paketleri girişten sonra Polar ödeme akışını kullanır.",
+      "interval": "/ay",
+      "intervalYear": "/yıl",
       "web": {
         "title": "Web planları",
-        "description": "PDF araçlarını tarayıcıda kullanın. Krediler, dosya boyutu ve aylık işlem hakkınız web planınızı izler."
-      },
-      "anonymous": {
-        "name": "Anonim",
-        "summary": "Hesap oluşturmadan bir araç açın ve dosyaları işleyin. Günlük ve saatlik limitler geçerlidir.",
-        "noCredits": "Kredi hesabı yok. Kullanım hız sınırlarıyla kısıtlanır.",
-        "cta": "Bir araç seçin"
+        "description": "PDF araçlarını tarayıcıda kullanın. Günlük işlem, dosya boyutu ve sayfa limitleri web planınızı izler."
       },
       "free": {
         "name": "Ücretsiz",
         "badge": "Dahil",
-        "summary": "Aylık web kredisi ve daha geniş araç erişimi olan bir hesap.",
+        "summary": "Günde 5 işlem, aynı anda 1 dosya, 25 MB boyut limiti. Hesap olsa da olmasa da aynı limitler. OCR dahil değildir.",
         "cta": "Ücretsiz başla"
       },
       "pro": {
         "name": "Pro",
-        "badge": "Daha yüksek limitler",
-        "summary": "Daha fazla web kredisi, daha büyük dosyalar ve premium AI araçları.",
+        "badge": "Sınırsız",
+        "summary": "Sınırsız tarayıcı işlemi, 1 GB dosyalar, OCR ve premium araçlar.",
         "cta": "Pro’ya başla"
       },
       "api": {
         "title": "API kredi paketleri",
-        "description": "API kredileri web kredilerinden ayrıdır. Programatik erişim gerektiğinde paketleri hesabınızdan alın.",
+        "description": "API kredileri web kullanımından ayrıdır. Programatik erişim gerektiğinde paketleri hesabınızdan alın.",
         "note": "API istek hızı ve anahtar limitleri web planınızı izler. API kredileri yalnızca API kullanımında düşer.",
         "cta": "Geliştirici belgeleri",
         "packs": {
@@ -194,15 +411,47 @@
           }
         }
       },
+      "developer": {
+        "title": "Geliştiriciler",
+        "description": "API kredileri ayrı faturalanır. Aylık veya yıllık paketi seçin, kredilerin kaç işe yeteceğini görün.",
+        "docsCta": "Geliştirici belgeleri",
+        "cycleTitle": "Fatura dönemini seçin",
+        "monthly": "Aylık",
+        "yearly": "Yıllık",
+        "yearlyDiscount": "-%20",
+        "cycleNote": {
+          "monthly": "Krediler her ay yenilenir. Kullanılmayan krediler dönem sonunda sıfırlanır.",
+          "yearly": "Yıllık ödeyin ve Polar ödemesinde %20 tasarruf edin. Krediler yine aylık yenilenir."
+        },
+        "creditsTitle": "Aylık kredi sayısını seçin",
+        "needMore": "Daha fazlası mı lazım? <contact>Bize yazın</contact>",
+        "calculatorTitle": "Hesaplayıcı",
+        "calculatorDescription": "<credits></credits> kredi ile ayda kaç dosya, sayfa veya işlem yapabilirim?",
+        "calculatorResult": "<tool></tool> aracıyla <count></count> işlem yapabilirsiniz.",
+        "cta": "Abone ol",
+        "creditsTableTitle": "Krediler ve dosyalar",
+        "creditsTableDescription": "API kredi maliyeti çalıştırdığınız araca göre değişir. Daha yüksek paketler daha fazla işe yeter. Kullanılmayan aylık krediler dönem sonunda sıfırlanır.",
+        "creditsTableTool": "Araç",
+        "creditsTableCredits": "Kredi",
+        "creditsPerTask": "işlem başına {count} kredi"
+      },
       "limits": {
         "webCredits": "Ayda {count} web araç kredisi",
-        "aiCredits": "Ayda {count} AI kredisi",
         "operations": "Ayda {count} işlem",
+        "dailyOperations": "Günde {count} işlem",
+        "unlimitedOperations": "Sınırsız işlem",
+        "noAccountRequired": "Hesap olmadan kullan",
         "fileSize": "Dosya başına en fazla {size}",
         "filesPerOperation": "İşlem başına en fazla {count} dosya",
+        "multiFile": "İşlem başına birden fazla dosya",
         "hourlyOperations": "Saatte en fazla {count} işlem",
+        "pagesPerFile": "Dosya başına en fazla {count} sayfa",
+        "noPageCap": "Dosya başına sayfa limiti yok",
+        "noOcr": "OCR dahil değil",
+        "noSupport": "Destek yok",
+        "supportIncluded": "E-posta desteği",
         "retention": "Dosyalar {hours} saat sonra süresi dolar",
-        "premiumTools": "{count} premium AI aracı",
+        "premiumTools": "{count} premium araç",
         "standardTools": "Standart PDF araçları",
         "apiCredits": "Paket başına {count} API kredisi",
         "apiKeys": "{count} API anahtarı",
@@ -211,19 +460,40 @@
       }
     },
     "footer": {
-      "brand": "SohappyPDF",
+      "brand": "SoHappyPDF",
       "menu": "Alt bilgi",
+      "product": "Ürün",
+      "company": "Şirket",
       "tools": "Araçlar",
       "pricing": "Fiyatlandırma",
+      "faq": "SSS",
+      "blog": "Blog",
+      "about": "Hakkımızda",
+      "contact": "İletişim",
       "api": "API",
-      "signIn": "Giriş yap",
-      "account": "Hesap"
+      "legal": "Yasal",
+      "security": "Güvenlik",
+      "privacy": "Gizlilik politikası",
+      "terms": "Şartlar ve koşullar",
+      "cookies": "Çerezler",
+      "blurb": "PDF işlerini zahmetsiz, hızlı ve biraz da neşeli hale getirmek için tasarlandı. Dosyalar sana bağlı kalır, sonra süresi dolar.",
+      "copyright": "© {year} SoHappyPDF. Tüm hakları saklıdır.",
+      "language": "Dil",
+      "languages": {
+        "en": "English",
+        "tr": "Türkçe"
+      },
+      "social": "Sosyal",
+      "instagram": "SoHappyPDF Instagram",
+      "x": "SoHappyPDF X",
+      "linkedin": "SoHappyPDF LinkedIn"
     },
     "toolsDirectory": {
       "title": "PDF araçları",
       "description": "Her genel araç odaklı bir akıştır. Bir kategori seçin, aracı açın, dosya yükleyin ve sonucu indirin.",
       "openTool": "Aracı aç",
       "comingSoon": "Yakında",
+      "pro": "Pro",
       "jump": "Popüler araçlar",
       "categories": {
         "organize": "PDF sayfalarını birleştirin, bölün ve yeniden düzenleyin.",
@@ -236,12 +506,359 @@
       }
     },
     "metadata": {
-      "homeTitle": "SohappyPDF — PDF araçlarını tarayıcınızda kullanın",
-      "homeDescription": "Bir PDF aracı açın, dosyayı işleyin ve sonucu indirin. Temel kullanım için hesap gerekmez.",
-      "pricingTitle": "Fiyatlandırma — Ücretsiz, Pro ve API",
-      "pricingDescription": "Anonim, Ücretsiz ve Pro web limitlerini ve ayrı API kredi paketlerini karşılaştırın.",
+      "homeTitle": "SoHappyPDF — PDF’lerini dönüştür, birleştir ve yönet",
+      "homeDescription": "Bir PDF aracı aç, dosyayı işle ve sonucu indir. Temel kullanım için hesap gerekmez. Dosyalar yaklaşık iki saat sonra süresi dolar.",
+      "pricingTitle": "Fiyatlandırma — Ücretsiz, Pro ve Geliştiriciler",
+      "pricingDescription": "Ücretsiz ve Pro web limitlerini ve geliştirici API kredi paketlerini karşılaştırın.",
+      "faqTitle": "SSS — Dosyalar, limitler ve hesap",
+      "faqDescription": "Dosyalar, gizlilik, limitler, krediler ve API hakkında kısa cevaplar.",
+      "blogTitle": "Blog — Pratik PDF notları",
+      "blogDescription": "Daha az tıklama, daha temiz belgeler. Dönüştürme, sıkıştırma ve imza üzerine kısa notlar.",
       "toolsTitle": "PDF araçları",
-      "toolsDescription": "Organize, Dönüştür, Düzenle, Optimize, Güvenlik ve Zeka PDF araçlarına göz atın."
+      "toolsDescription": "Organize, Dönüştür, Düzenle, Optimize, Güvenlik ve Zeka PDF araçlarına göz atın.",
+      "developersTitle": "SoHappyPDF API",
+      "developersDescription": "Bir API anahtarıyla kimlik doğrulayın, dosya yükleyin, bir araç çalıştırın, işi yoklayın ve sonucu indirin.",
+      "aboutTitle": "Hakkımızda — SoHappyPDF",
+      "aboutDescription": "Kim olduğumuz, SoHappyPDF'in nasıl çalıştığı ve dosyaların neden geçici tutulduğu.",
+      "contactTitle": "İletişim — SoHappyPDF",
+      "contactDescription": "Ürün, faturalama ve API soruları için hello@sohappypdf.com adresine yazın."
+    },
+    "contact": {
+      "title": "Bize yaz.",
+      "description": "Bize e-posta ile ulaş. Limit, dosya ve planlar için SSS daha hızlı.",
+      "emailLabel": "Destek",
+      "emailHint": "Buraya her dilde yazabilirsin. Hafta içi bakıyoruz. Buraya dosya gönderme — araç sayfasından yükle.",
+      "emailCta": "E-posta gönder",
+      "topics": {
+        "title": "Ne yazılır",
+        "description": "Kısa bir konu satırı yeter.",
+        "items": {
+          "product": {
+            "title": "Ürün",
+            "text": "Çalışmayan bir araç, eksik bir format veya akış hakkında geri bildirim."
+          },
+          "billing": {
+            "title": "Faturalama",
+            "text": "Fatura, ödeme yöntemi ve iptal, giriş yaptıktan sonra Polar müşteri portalında. Checkout takılırsa yaz."
+          },
+          "api": {
+            "title": "API",
+            "text": "Anahtarlar, kredi paketleri ve genel v1 belgeler. Sitedeki araçlarla aynı."
+          }
+        }
+      },
+      "faq": {
+        "title": "Önce SSS'ye bak.",
+        "description": "Dosyalar, gizlilik, günlük limitler, Pro ve API kredileri orada cevaplı.",
+        "cta": "SSS'yi oku"
+      }
+    },
+    "about": {
+      "title": "Ziyaret edip çıktığın bir PDF ürünü.",
+      "description": "SoHappyPDF birleştirme, dönüştürme, sıkıştırma, koruma ve OCR için PDF araçları sunar. Aynı işleri genel bir API ile de çalıştırabilirsin. Dosyaları bilinçli olarak geçici tutuyoruz. Temel kullanım için hesap gerekmez.",
+      "story": {
+        "title": "Kimiz",
+        "lead": "Zaten bitirmesi gereken bir işi olan insanlar için PDF araçları yapıyoruz. Burası bir belge arşivi değil, dosya park yeri değil, içinde yaşaman beklenen bir pano da değil.",
+        "body": "Her araç kendi sayfası: aç, dosyayı yükle, sonucu indir. Giriş yapan hesaplar son işlemlere, faturalamaya ve API anahtarlarına ulaşır. Anonim kullanıma açık araçlar hesapsız çalışır. Geçici dosyalar yaklaşık iki saat sonra süresi dolar — bu bir eksik değil, ürünün kendisi."
+      },
+      "beliefs": {
+        "title": "Nasıl çalışıyoruz",
+        "description": "Bunlar ürünü tasarlarken kullandığımız kurallar.",
+        "items": {
+          "pages": {
+            "title": "İşi araç sayfası taşır",
+            "text": "Günlük bir belge arşivi yok. Dosyayı açtığın sayfada bitir, sonra devam et."
+          },
+          "anonymous": {
+            "title": "Hesap isteğe bağlı",
+            "text": "Ücretsiz günlük limitler giriş yapsan da yapmasan da aynı. Hesap geçmişi, faturalamayı ve API anahtarlarını açar."
+          },
+          "files": {
+            "title": "Dosyalar geçicidir",
+            "text": "Yüklemeler ve sonuçlar oturumuna veya hesabına bağlı kalır, sonra yaklaşık iki saat sonra süresi dolar."
+          },
+          "api": {
+            "title": "API aynı üründür",
+            "text": "Genel v1 API aynı araçları çalıştırır. Tek araç seti, iki yüzey: web sitesi ve Bearer token."
+          }
+        }
+      },
+      "questions": {
+        "title": "Bizi soranlar",
+        "description": "Limit, kredi ve ödeme SSS'de. Buradaki cevaplar ürünün kendisi hakkında.",
+        "items": {
+          "what": {
+            "q": "SoHappyPDF nedir?",
+            "a": "PDF araçları ve genel bir API. Dosyayı işlersin, çıktıyı indirirsin. Belgelerinin kalıcı bir arşivini tutmayız."
+          },
+          "who": {
+            "q": "Arkasında kim var?",
+            "a": "SoHappyPDF, bizim yapıp işlettiğimiz bağımsız bir ürün. Dosyaları bulutta işler, oturumuna veya hesabına bağlar ve kısa bir süre sonra süresi dolar. Uyumluluk sertifikası iddiasında bulunmayız."
+          },
+          "why": {
+            "q": "Dosyalar neden süresi doluyor?",
+            "a": "Günlük PDF işi depolamaya dönüşmemeli. Kısa ömür ürünü sade tutar ve iş bittikten sonra dosyaların ortalıkta kalmasını önler."
+          },
+          "start": {
+            "q": "Nasıl başlarım?",
+            "a": "Bir araç aç, dosyayı bırak, işlem bitince indir. Geçmiş veya API lazımsa hesap oluştur."
+          }
+        }
+      }
+    }
+  },
+  "legal": {
+    "eyebrow": "Yasal",
+    "updated": "Son güncelleme {date}",
+    "contactHint": "Bu sayfalarla ilgili sorular için yazın:",
+    "security": {
+      "nav": "Güvenlik",
+      "metaTitle": "Güvenlik — SoHappyPDF",
+      "title": "Gerçekten sağladığımız güvenlik",
+      "description": "Bunlar ürün kontrolleridir, üçüncü taraf uyumluluk sertifikaları değildir. Burada yazmayan bir rozeti iddia etmeyiz.",
+      "sections": {
+        "honest": {
+          "title": "Bu sayfa ne değildir",
+          "body": "SoHappyPDF üçüncü taraf denetim raporları veya uyumluluk sertifikaları yayınlamaz. Bu sayfa dosyaların, hesapların ve API anahtarlarının bugün nasıl ele alındığını anlatır."
+        },
+        "files": {
+          "title": "Dosyalar size bağlı ve geçicidir",
+          "body": "Yüklemeler ve sonuçlar anonim oturumunuza veya hesabınıza bağlıdır; paylaşılan bir kütüphane değildir. İndirmeler herkese açık nesne bağlantıları yerine kısa ömürlü imzalı URL’lerdir. Geçici dosyaların süresi yaklaşık iki saat sonra dolar. Ön imzalı yükleme ve indirme URL’leri 15 dakika sonra geçersiz olur."
+        },
+        "accounts": {
+          "title": "Hesaplar sunucuda yetkilendirilir",
+          "body": "Hesap alanı e-posta ve parola ile giriş kullanır. Dosya, dönüşüm, faturalama ve API anahtarı işlemleri sunucuda yetkilendirilir. İstemci tarafı kontroller izin vermez."
+        },
+        "api": {
+          "title": "API anahtarları gizlidir",
+          "body": "Programatik erişim Bearer API anahtarı kullanır. Anahtarları URL’lere, tarayıcı JavaScript’ine veya kaynak koduna koymayın. Bir anahtar sızarsa hesap alanından iptal edin ve yenisini oluşturun."
+        },
+        "report": {
+          "title": "Güvenlik sorunu bildirin",
+          "body": "SoHappyPDF’te bir zafiyet bulursanız, yeniden üretecek kadar ayrıntıyla e-posta gönderin. Müşteri dosyası eklemeyin. API anahtarı veya parola istemeyiz."
+        }
+      }
+    },
+    "privacy": {
+      "nav": "Gizlilik politikası",
+      "metaTitle": "Gizlilik politikası — SoHappyPDF",
+      "title": "Gizlilik politikası",
+      "description": "SoHappyPDF dosyaları, hesapları, ödemeleri ve çerezleri nasıl işler. Bu metin ürünün gerçek davranışına bağlı kalır.",
+      "sections": {
+        "overview": {
+          "title": "Ne toplarız",
+          "body": "SoHappyPDF, PDF ve ilgili dosyaları dönüştürmek, birleştirmek, sıkıştırmak ve benzer işler için işler. Giriş, faturalama ve API anahtarı için gereken hesap verisini de saklarız. Dosyalarınızı veya hesap verinizi satmayız."
+        },
+        "files": {
+          "title": "Yüklediğiniz dosyalar",
+          "body": "Kaynak dosyalar ve sonuçlar, aracın çalışması için özel nesne deposunda tutulur. Oturumunuza veya hesabınıza bağlıdır. Geçici dosyaların süresi yaklaşık iki saat sonra dolar, ardından silinir. Ürün bir belge arşivi değildir — saklamanız gereken sonucu indirin."
+        },
+        "accounts": {
+          "title": "Hesap verisi",
+          "body": "Hesap oluşturursanız e-postanızı, verdiyseniz adınızı, hash’lenmiş parolayı, oturum verisini, son etkinliği ve API anahtarı üst verisini saklarız. Ham API anahtarını bir kez gösterildikten sonra saklamayız."
+        },
+        "payments": {
+          "title": "Ödemeler",
+          "body": "Ödeme, fatura ve kartlar Polar üzerinden yürür. SoHappyPDF, Ücretsiz, Pro ve API haklarını uygulamak için abonelik ve kredi paketi durumunu saklar. Kart numaraları SoHappyPDF’te tutulmaz."
+        },
+        "cookies": {
+          "title": "Çerezler",
+          "body": "Dili hatırlamak, anonim araç oturumunu tutmak ve girişli kalmak için az sayıda birinci taraf çerez kullanırız. Pazarlama veya uygulama sayfalarında reklam pikseli ya da analitik betiği çalıştırmayız. Ayrıntılar çerezler sayfasındadır."
+        },
+        "retention": {
+          "title": "Veri ne kadar kalır",
+          "body": "Araç dosyaları yaklaşık iki saat saklanır. Hesap, faturalama ve API anahtarı kayıtları hesabı kapatana veya ödeme sağlayıcısı ya da hukuk için tutmamız gerekene kadar kalır. Hesap silinmesini e-posta ile isteyebilirsiniz."
+        },
+        "processors": {
+          "title": "Veriyi başka kim görür",
+          "body": "Dosyalar uygulamamız, işçimiz ve özel nesne depomuz üzerinden geçer. Polar ödemeleri işler. Barındırma ve e-posta sağlayıcıları bu hizmetleri yürütmek için gereken teknik veriyi görür. Dosyaları başka müşterilerle paylaşmayız."
+        },
+        "contact": {
+          "title": "Gizlilik soruları",
+          "body": "hello@sohappypdf.com adresine yazın. O adrese dosya göndermeyin — işlenmesi gerekiyorsa bir araç sayfasından yükleyin."
+        }
+      }
+    },
+    "terms": {
+      "nav": "Şartlar ve koşullar",
+      "metaTitle": "Şartlar — SoHappyPDF",
+      "title": "Kullanım şartları",
+      "description": "SoHappyPDF genel araçları, hesapları ve API’sini kullanma kuralları. İşlemden sonra hâlâ ihtiyacınız olan dosyanın yerel bir kopyasını tutun.",
+      "sections": {
+        "service": {
+          "title": "Hizmet",
+          "body": "SoHappyPDF web PDF araçları ve genel bir API sunar. Anonim kullanıma açık araçları, Ücretsiz günlük limitler içinde hesapsız kullanabilirsiniz. Giriş; geçmiş, faturalama ve API anahtarlarını açar. Özellik, limit ve fiyatları değiştirebiliriz; güncel limitler Fiyatlandırma’da yayınlanır."
+        },
+        "accounts": {
+          "title": "Hesaplar",
+          "body": "Hesabınızdaki e-posta, paroladan ve oluşturduğunuz API anahtarlarından siz sorumlusunuz. Anahtarları gizli tutun. Sızan bir anahtarı iptal edin. Hizmeti veya bu şartları kötüye kullanan hesabı askıya alabiliriz."
+        },
+        "acceptableUse": {
+          "title": "Kabul edilebilir kullanım",
+          "body": "Kötü amaçlı yazılım yüklemeyin, ürünü kırmaya çalışmayın, diğer kullanıcıları zora sokacak şekilde tarama yapmayın veya yasadışı içerik için kullanmayın. Yüklediğiniz dosyaları işleme hakkınız olmalıdır. Kötüye kullanım gibi görünen işleri reddedebilir veya silebiliriz."
+        },
+        "files": {
+          "title": "Dosyaların süresi dolar",
+          "body": "Yüklemeler ve sonuçlar kalıcı bir kütüphane değil, geçici işleme varlıklarıdır. Süreleri yaklaşık iki saat sonra dolar. İndirme bağlantısı durursa dosyayı yeniden işleyin. Yedekleme hizmeti değiliz."
+        },
+        "billing": {
+          "title": "Planlar ve Polar",
+          "body": "Ücretsiz ve Pro web planlarıdır. API kredi paketleri ayrı faturalanır. Ödeme ve iptal, girişten sonra Polar üzerinden yürür. Kart güncelleme, fatura indirme ve iptal Polar portalındadır. Kullanılmayan API kredileri paket dönemi sonunda sıfırlanır."
+        },
+        "api": {
+          "title": "API",
+          "body": "Genel v1 API, sitedeki aynı araçları kullanır. İstek hızı ve anahtar limitleri web planınızı izler. API kredileri yalnızca programatik kullanımı ölçer. API anahtarlarını istemci koduna koymayın."
+        },
+        "changes": {
+          "title": "Değişiklikler",
+          "body": "Bu şartları güncelleyebiliriz. Bu sayfanın üstündeki tarih güncel sürümü gösterir. Güncellemeden sonra kullanmaya devam etmek yeni şartları kabul ettiğiniz anlamına gelir. Kabul etmiyorsanız hizmeti bırakın ve Polar üzerinden iptal edin."
+        },
+        "contact": {
+          "title": "İletişim",
+          "body": "Ürün, faturalama veya API soruları için hello@sohappypdf.com adresine yazın. O kutuya dosya eklemeyin."
+        }
+      }
+    },
+    "cookies": {
+      "nav": "Çerezler",
+      "metaTitle": "Çerezler — SoHappyPDF",
+      "title": "Çerezler",
+      "description": "SoHappyPDF siteyi çalıştırmak için az sayıda birinci taraf çerez kullanır. Reklam veya analitik çerezi koymayız.",
+      "sections": {
+        "overview": {
+          "title": "Çerezleri ne için kullanırız",
+          "body": "Çerezler tarayıcınızın sakladığı küçük metin dosyalarıdır. Yalnızca dilinizi hatırlamak, anonim araç kullanımını tarayıcınıza bağlamak ve girişli oturumu tutmak için kullanırız. İsteğe bağlı izleme çerezi çalıştırmadığımız için bir çerez bandı yoktur."
+        },
+        "language": {
+          "title": "Dil",
+          "body": "İngilizce veya Türkçe seçmek, sitenin o dilde kalması için en fazla bir yıl süren, httpOnly NEXT_LOCALE çerezini yazar. Dili alt bilgideki dil kontrolünden istediğiniz zaman değiştirebilirsiniz."
+        },
+        "session": {
+          "title": "Oturumlar",
+          "body": "Anonim araç kullanımı, dosyaların paylaşılan bir havuz yerine tarayıcınıza bağlı kalması için spdf_anon adlı birinci taraf bir çerez yazabilir. Giriş yapmak, hesap alanının yüklenmesi için hesap oturumu çerezleri yazar. Bu çerezler httpOnly’dir. Çıkış, hesap oturumunu temizler."
+        },
+        "payments": {
+          "title": "Ödemeler",
+          "body": "Ödeme Polar’da olur. Polar, ödeme veya abonelik yönetirken kendi alanında kendi çerezlerini yazabilir. Bunlar Polar’ın çerezleridir; SoHappyPDF pazarlama veya analitik çerezi değildir."
+        },
+        "control": {
+          "title": "Çerezleri nasıl yönetirsiniz",
+          "body": "Çerezleri tarayıcınızdan silebilirsiniz. Tüm çerezleri engellerseniz dil tercihi ve giriş kalıcı olmaz. Yukarıdaki gerekli çerezler bu özelliklerin çalışması içindir."
+        }
+      }
+    }
+  },
+  "blog": {
+    "title": "Son yazılar",
+    "pageTitle": "Blog",
+    "description": "Daha az tıklama, daha temiz belgeler. Kısa notlar.",
+    "readAll": "Tümünü oku",
+    "back": "Tüm yazılar",
+    "openTool": "İlgili aracı aç"
+  },
+  "developerDocs": {
+    "eyebrow": "Genel v1 API",
+    "title": "Aynı araçların üzerine inşa edin",
+    "description": "Tarayıcıdaki her araç bir dönüşüm tipidir. Bir API anahtarı oluşturun, presigned PUT ile yükleyin, ardından type olarak araç kimliğiyle POST /conversions çağırın. İş bitene kadar yoklayın ve çıktı dosyasını indirin.",
+    "createKey": "API anahtarı oluştur",
+    "viewPricing": "Geliştirici fiyatları",
+    "baseUrl": "Temel URL",
+    "openapi": "OpenAPI",
+    "codeLabel": "Örnek",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "toc": {
+      "label": "Bu sayfada",
+      "quickstart": "Hızlı başlangıç",
+      "auth": "Kimlik doğrulama",
+      "files": "Dosyalar",
+      "conversions": "Dönüşümler",
+      "tools": "Araçlar",
+      "errors": "Hatalar",
+      "limits": "Limitler"
+    },
+    "quickstart": {
+      "title": "Hızlı başlangıç",
+      "step1": "Hesap → API bölümünden bir anahtar oluşturun. Anahtar yalnızca bir kez gösterilir.",
+      "step2": "Her istekte Authorization: Bearer YOUR_API_KEY gönderin. Anahtarı URL’ye veya tarayıcı koduna koymayın.",
+      "step3": "POST /files/upload, baytları upload.url adresine PUT edin, ardından POST /files/'{id}'/complete çağırın.",
+      "step4": "POST /conversions gövdesinde sourceFileId, targetFormat ve type gönderin. type, araç kimliğidir.",
+      "step5": "GET /conversions/'{id}' çağrısını tamamlanana kadar iki saniyede bir yoklayın, sonra POST /files/'{outputFileId}'/download.",
+      "uploadLabel": "1. Yükleme oluştur",
+      "putLabel": "2. Dosya baytlarını PUT et",
+      "completeLabel": "3. Yüklemeyi tamamla",
+      "convertLabel": "4. Dönüşüm oluştur"
+    },
+    "auth": {
+      "title": "Kimlik doğrulama",
+      "description": "Programatik erişim API anahtarları kullanır. Dashboard çerezleri web uygulaması içindir, entegrasyonlar için değil.",
+      "ruleHeader": "Anahtarı yalnızca Authorization başlığında gönderin.",
+      "ruleSecret": "Anahtarı gizli tutun. Kaynak kontrole koymayın.",
+      "ruleBrowser": "Anahtarları frontend JavaScript’e gömmeyin.",
+      "ruleRevoke": "Sızan bir anahtarı panelden iptal edin ve yenisini oluşturun."
+    },
+    "files": {
+      "title": "Dosyalar",
+      "description": "Yüklemeler presigned’dır. API dosya baytlarını tutmaz. Dönüşüm oluşturmadan önce yüklemeyi tamamlayın.",
+      "expiry": "Geçici dosyalar yaklaşık iki saat sonra süresi dolar. Presigned yükleme ve indirme URL’leri 15 dakika sonra geçersiz olur."
+    },
+    "conversions": {
+      "title": "Dönüşümler",
+      "description": "POST /conversions 201 döner ve işi kuyruğa alır. type alanı araç kimliğidir. Seçenekler options içindedir. Ek girdi dosyaları additionalFileIds ile gönderilir.",
+      "pollHint": "Durum {pending} iken yoklayın. {done} olunca durun. completed olduğunda conversion.outputFileId doludur.",
+      "idempotency": "Oluştururken Idempotency-Key (1–128 karakter) gönderin. Aynı sahip ve anahtarla tekrar istek orijinal işi döner ve ek kredi düşmez."
+    },
+    "tools": {
+      "title": "Araçlar",
+      "description": "Araç kimliğini conversion type olarak kullanın. Aşağıdaki JSON POST /conversions gövdesidir. Krediler katalogdan gelir. Planlanan araçlar yayınlanana kadar listelenmez.",
+      "search": "Araç ara",
+      "allCategories": "Tümü",
+      "resultCount": "{count, plural, one {# araç} other {# araç}}",
+      "tryInBrowser": "Tarayıcıda dene",
+      "pro": "Pro",
+      "type": "type",
+      "input": "Girdi",
+      "output": "Çıktı",
+      "credits": "Kredi",
+      "apiCredits": "{count} API kredisi",
+      "aiCredits": "{count} AI kredisi",
+      "files": "Dosyalar",
+      "filesValue": "{count, plural, one {# dosya} other {# dosya}}",
+      "extraFiles": "Ek dosyalar",
+      "extra": {
+        "none": "Yalnızca kaynak dosya",
+        "required": "additionalFileIds zorunlu",
+        "optional": "additionalFileIds isteğe bağlı"
+      },
+      "options": "options",
+      "required": "zorunlu",
+      "optional": "isteğe bağlı",
+      "exampleLabel": "POST /conversions gövdesi"
+    },
+    "errors": {
+      "title": "Hatalar",
+      "description": "Her hata bu zarfı kullanır. Eksik dosya ve dönüşüm NOT_FOUND döner. Süresi dolmuş sahip olunan dosya 404 yerine FILE_EXPIRED döner.",
+      "code": "Kod",
+      "status": "HTTP",
+      "retry": "429 yanıtında Retry-After, RateLimit-Limit, RateLimit-Remaining ve RateLimit-Reset vardır. Bekleyip yeniden deneyin. Sık döngüye girmeyin."
+    },
+    "limits": {
+      "title": "Limitler ve krediler",
+      "description": "API kredileri web araç kredilerinden ayrıdır. İstek hızı web planını izler. Kota dolunca 403 PLAN_LIMIT_REACHED döner.",
+      "free": "Ücretsiz: günde {ops} dönüşüm, 25 MB dosya, dakikada {rpm} API isteği.",
+      "pro": "Pro: sınırsız dönüşüm, 1 GB dosya, dakikada {rpm} API isteği.",
+      "credits": "Her dönüşüm, aracın API kredi maliyetini düşer. Hesaplara ayda {count} API kredisi dahildir; fazlası için geliştirici paketlerini faturalamadan alın.",
+      "webhooks": "Webhook yoktur. İstemciler yoklamalıdır."
+    },
+    "notes": {
+      "pagesOneIndexed": "Sayfa numaraları 1’den başlar.",
+      "extraFilesTopLevel": "Ek yüklemeleri, her dosya complete edildikten sonra additionalFileIds ile gönderin.",
+      "explicitType": "type alanını açıkça gönderin. API bu aracı yalnızca formatlardan çıkarmaz.",
+      "rangesInclusive": "Aralık başlangıç ve bitiş dahildir.",
+      "ocrLanguage": "language, eng veya tur gibi bir OCR dil kodudur.",
+      "protectSecret": "Parolaları loglamayın. İstek sızarsa parolayı değiştirin.",
+      "signVisualOnly": "Bu görsel bir damgadır; kriptografik dijital imza değildir.",
+      "compareSecondFile": "İki PDF’i yükleyin, ikinci kimliği additionalFileIds içinde gönderin."
     }
   },
   "app": {
@@ -252,12 +869,13 @@
     "loggingOut": "Çıkış yapılıyor…"
   },
   "appShell": {
-    "brand": "SohappyPDF",
+    "brand": "SoHappyPDF",
     "navigation": "Hesap",
     "openNavigation": "Navigasyonu aç",
     "closeNavigation": "Navigasyonu kapat",
     "breadcrumb": "Sayfa yolu",
     "userMenu": "Hesap menüsü",
+    "accountNav": "Hesap sayfaları",
     "logout": "Çıkış yap",
     "loggingOut": "Çıkış yapılıyor…",
     "nav": {
@@ -329,26 +947,35 @@
       "title": "Giriş yap",
       "description": "Devam etmek için e-posta ve şifrenizi kullanın.",
       "email": "E-posta",
+      "emailPlaceholder": "sen@sirket.com",
       "password": "Şifre",
+      "passwordPlaceholder": "••••••••",
       "submit": "Giriş yap",
       "submitting": "Giriş yapılıyor…",
-      "registerLink": "Hesap oluştur",
-      "forgotLink": "Şifrenizi mi unuttunuz?"
+      "switchHint": "Hesabın yok mu?",
+      "registerLink": "Ücretsiz kayıt ol",
+      "forgotLink": "Şifremi unuttum"
     },
     "register": {
       "title": "Hesap oluştur",
-      "description": "E-posta ve bir şifre ile kayıt olun.",
+      "description": "Adınız, e-posta ve bir şifre ile kayıt olun.",
+      "name": "Ad",
+      "namePlaceholder": "Ayşe Yılmaz",
       "email": "E-posta",
+      "emailPlaceholder": "sen@sirket.com",
       "password": "Şifre",
+      "passwordPlaceholder": "En az 8 karakter",
       "confirmPassword": "Şifreyi doğrula",
       "submit": "Hesap oluştur",
       "submitting": "Hesap oluşturuluyor…",
-      "loginLink": "Zaten hesabınız var mı? Giriş yapın"
+      "switchHint": "Zaten hesabın var mı?",
+      "loginLink": "Giriş yap"
     },
     "forgotPassword": {
       "title": "Şifremi unuttum",
       "description": "E-postanızı girin. Hesap varsa sıfırlama talimatları gönderilir.",
       "email": "E-posta",
+      "emailPlaceholder": "sen@sirket.com",
       "submit": "Sıfırlama talimatı gönder",
       "submitting": "Gönderiliyor…",
       "success": "Bu e-posta ile bir hesap varsa şifre sıfırlama talimatları gönderildi.",
@@ -358,16 +985,24 @@
       "title": "Şifreyi sıfırla",
       "description": "Hesabınız için yeni bir şifre seçin.",
       "password": "Yeni şifre",
+      "passwordPlaceholder": "En az 8 karakter",
       "confirmPassword": "Yeni şifreyi doğrula",
       "submit": "Şifreyi güncelle",
       "submitting": "Şifre güncelleniyor…",
-      "invalidToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir bağlantı isteyin."
+      "updated": "Şifren güncellendi. Devam etmek için giriş yap.",
+      "invalidToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir bağlantı isteyin.",
+      "loginLink": "Girişe dön"
+    },
+    "fields": {
+      "showPassword": "Şifreyi göster",
+      "hidePassword": "Şifreyi gizle"
     },
     "validation": {
       "required": "Bu alan zorunludur.",
       "invalidEmail": "Geçerli bir e-posta adresi girin.",
       "passwordMin": "Şifre en az 8 karakter olmalıdır.",
       "passwordMax": "Şifre en fazla 128 karakter olabilir.",
+      "nameMax": "Ad en fazla 80 karakter olabilir.",
       "passwordMismatch": "Şifreler eşleşmiyor."
     },
     "errors": {
@@ -376,13 +1011,48 @@
       "invalidEmail": "Geçerli bir e-posta adresi girin.",
       "weakPassword": "Daha güçlü bir şifre seçin.",
       "expiredResetToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
+      "currentPasswordIncorrect": "Mevcut şifre yanlış.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "shell": {
+      "brand": "SoHappyPDF",
+      "home": "Ana sayfa",
+      "login": {
+        "eyebrow": "Tekrar hoş geldin",
+        "title": "Kaldığın yerden devam et.",
+        "text": "Son işler, faturalama ve API anahtarların hesabında duruyor."
+      },
+      "register": {
+        "eyebrow": "Ücretsiz başla",
+        "title": "Hesabı aç, gülümseyerek bitir.",
+        "text": "Temel araçlar giriş olmadan da çalışır. Hesap kredi, geçmiş ve API erişimi ekler."
+      },
+      "reset": {
+        "eyebrow": "Erişimi sıfırla",
+        "title": "Hesabına geri dön.",
+        "text": "Bu adreste bir hesap varsa sıfırlama talimatlarını e-posta ile göndeririz."
+      },
+      "perks": {
+        "private": "Dosyalar sana bağlı kalır",
+        "password": "E-posta ve şifre ile giriş",
+        "start": "Ücretli plansız başla"
+      }
     }
   },
   "errors": {
     "notFound": "Bu sayfa bulunamadı.",
+    "notFoundCode": "404",
+    "notFoundTitle": "Bu sayfa kaybolmuş.",
+    "notFoundDescription": "Belki birleştirildi, belki bölündü. Ana sayfadan devam edebilirsin.",
+    "notFoundHome": "Ana sayfaya dön",
+    "notFoundTools": "Araçlara bak",
     "generic": "Bir şeyler ters gitti.",
+    "genericCode": "Hata",
+    "genericTitle": "Bir şeyler ters gitti.",
+    "genericDescription": "Sayfa beklenmeyen bir hatayla karşılaştı. Yeniden dene veya ana sayfaya dön.",
+    "genericRetry": "Yeniden dene",
+    "genericHome": "Ana sayfaya dön",
     "loading": "Yükleniyor"
   },
   "files": {
@@ -483,8 +1153,8 @@
       "convert": "Dönüştür"
     },
     "history": {
-      "title": "Son etkinlik",
-      "description": "Oturum açıkken çalıştırdığınız araçların işlem geçmişi. Geçici dosyalar yaklaşık iki saat sonra sona erer.",
+      "title": "Geçmiş",
+      "description": "Oturum açıkken çalıştırdığınız işler. Geçici dosyalar yaklaşık iki saat sonra sona erer ve süre dolunca indirilemez.",
       "loading": "Etkinlik yükleniyor…",
       "empty": "Henüz etkinlik yok.",
       "emptyHint": "Bir PDF aracı açıp dosya işlediğinizde burada görünür.",
@@ -501,6 +1171,15 @@
       "expiredHint": "Bu sonuç süresi doldu ve artık indirilemez.",
       "firstPage": "En yeni",
       "nextPage": "Daha eski etkinlik",
+      "age": {
+        "justNow": "Az önce",
+        "minutes": "{count}dk önce",
+        "hours": "{count}sa önce"
+      },
+      "expiresIn": {
+        "minutes": "{count}dk içinde sona erer",
+        "hours": "{count}sa içinde sona erer"
+      },
       "filters": {
         "label": "Etkinliği filtrele",
         "all": "Tümü",
@@ -592,6 +1271,10 @@
       "inProgressHint": "İşlem arka planda devam ediyor. Bu sayfa otomatik güncellenir.",
       "expiredHint": "Bu işleme ait geçici dosyaların süresi doldu ve artık indirilemez.",
       "summary": "{type} → {target}",
+      "started": "Başlangıç",
+      "output": "Çıktı",
+      "expires": "Süre",
+      "openTool": "Aracı aç",
       "backToHistory": "Son etkinliğe dön",
       "browseTools": "Araçlara göz at",
       "backToFiles": "Araçlara göz at"
@@ -608,8 +1291,8 @@
     }
   },
   "apiKeys": {
-    "title": "API anahtarları",
-    "description": "SohappyPDF API’sini çağırmak için anahtar oluşturun. Ham anahtar yalnızca bir kez gösterilir.",
+    "title": "API",
+    "description": "SoHappyPDF API’sini çağırmak için anahtar oluşturun. Ham anahtar yalnızca bir kez gösterilir.",
     "actions": {
       "create": "API anahtarı oluştur",
       "revoke": "İptal et",
@@ -620,7 +1303,7 @@
       "description": "Aktif anahtarlar API isteklerini doğrular. İptal edilen anahtarlar hemen çalışmayı durdurur.",
       "loading": "API anahtarları yükleniyor…",
       "empty": "Henüz API anahtarı yok.",
-      "emptyHint": "SohappyPDF’i programatik kullanmaya başlamak için bir API anahtarı oluşturun.",
+      "emptyHint": "SoHappyPDF’i programatik kullanmaya başlamak için bir API anahtarı oluşturun.",
       "createCta": "API anahtarı oluştur",
       "retry": "Tekrar dene",
       "created": "Oluşturuldu {date}",
@@ -669,6 +1352,7 @@
       "docsLink": "API belgelendirmesini aç",
       "statusTitle": "API kullanımı",
       "statusDescription": "API kredileri web araç kredilerinden ayrıdır. Limitler web planınızı izler.",
+      "loading": "API kullanımı yükleniyor…",
       "credits": "API kredileri",
       "rate": "API istekleri",
       "rateValue": "Dakikada {count}",
@@ -699,54 +1383,122 @@
   },
   "settings": {
     "title": "Ayarlar",
-    "description": "Hesabınızı ve aboneliğinizi yönetin.",
-    "billing": {
-      "title": "Faturalandırma",
-      "description": "Web planınızı, API kredilerinizi ve Polar faturalandırmasını inceleyin.",
-      "open": "Faturalandırmayı aç"
+    "description": "Adını, e-postanı, şifreni ve dili güncelle.",
+    "profile": {
+      "title": "Profil",
+      "description": "Menüde böyle görünürsün. E-posta giriş için kullanılır.",
+      "name": "Ad",
+      "email": "E-posta",
+      "submit": "Profili kaydet",
+      "submitting": "Kaydediliyor…",
+      "updated": "Profil güncellendi."
+    },
+    "password": {
+      "title": "Şifre",
+      "description": "Yeni bir şifre seçin. Diğer oturumlar kapatılır.",
+      "current": "Mevcut şifre",
+      "newPassword": "Yeni şifre",
+      "confirm": "Yeni şifreyi doğrula",
+      "submit": "Şifreyi güncelle",
+      "submitting": "Güncelleniyor…",
+      "updated": "Şifre güncellendi."
+    },
+    "language": {
+      "title": "Dil",
+      "description": "Site, araçlar ve hesap sayfaları için dili seçin."
+    },
+    "session": {
+      "title": "Oturum",
+      "description": "Bu tarayıcıdan çıkış yapın. Aynı e-posta ile tekrar giriş yapabilirsiniz.",
+      "logout": "Çıkış yap"
     }
   },
   "billing": {
     "title": "Faturalandırma",
-    "description": "Web planı, API kredileri ve AI kredileri tek yerde. Ödeme yöntemleri, faturalar ve abonelik değişiklikleri Polar üzerinden yönetilir.",
-    "currentPlan": "Mevcut plan",
+    "description": "Web araçları ve geliştirici API’si ayrı faturalandırılır. Ödeme, fatura ve kart Polar üzerinden yönetilir.",
     "usage": "Kullanım",
     "upgrade": "Yükselt",
-    "upgrading": "Ödemeye yönlendiriliyor…",
-    "manage": "Polar portalını aç",
-    "openingPortal": "Portal açılıyor…",
-    "portalHint": "Ödeme yöntemleri, faturalar, abonelik yönetimi ve iptal Polar müşteri portalında yapılır.",
-    "activating": "Satın almanız etkinleştiriliyor.",
-    "noSubscription": "Ücretli abonelik yok",
+    "upgradeToPro": "Web Pro · {price}/ay",
+    "upgrading": "Polar’a yönlendiriliyor…",
+    "perMonth": "/ay",
+    "perYear": "/yıl",
+    "proPrice": "Pro {price}/ay",
+    "manage": "Polar’ı aç",
+    "openingPortal": "Polar açılıyor…",
+    "portalHeading": "Ödeme ve faturalar",
+    "portalHint": "Kartı güncellemek, fatura indirmek veya aboneliği iptal etmek için Polar’ı kullanın.",
+    "providerHint": "Ödeme, fatura ve kart Polar üzerinden yönetilir.",
+    "webPlanHint": "Bu web araçları planıdır. API paketleri ayrıdır.",
+    "openApiPack": "API: {pack}",
+    "checkoutIntervalHint": "Polar ödeme ekranında aylık veya yıllık seçebilirsiniz.",
+    "checkoutYearlyHint": "Yıllık Polar ödemesi {price}.",
+    "cycle": {
+      "label": "Faturalama aralığı",
+      "monthly": "Aylık",
+      "yearly": "Yıllık",
+      "yearlyDiscount": "-{percent}%"
+    },
+    "activating": "Polar satın almanız doğrulanıyor…",
+    "activated": "Polar satın almanız aktif.",
+    "unconfirmed": "Polar bu satın almayı henüz doğrulamadı. Tekrar kontrol etmek için yenileyin.",
+    "refreshStatus": "Yenile",
+    "includedOperations": "Her gün {count} işlem dahil.",
     "cancelsOn": "İptal planlandı. Pro {date} tarihine kadar devam eder.",
     "renewsOn": "Yenileme tarihi: {date}.",
     "creditsResetOn": "Aylık araç kredileri {date} tarihinde yenilenir.",
     "remainingLabel": "Kalan",
     "remaining": "{count} kalan",
     "usedOfLimit": "{used} / {limit} kullanıldı",
+    "unlimited": "Sınırsız",
+    "operationsResetDaily": "Günlük işlem hakkı 00:00 UTC’de sıfırlanır.",
     "backToSettings": "Ayarlara dön",
-    "period": "UTC dönemi {start} – {end}",
+    "period": "{start} – {end}",
     "sections": {
       "web": "Web Planı",
-      "api": "API",
-      "ai": "AI"
+      "api": "API"
     },
     "api": {
       "title": "API",
-      "noProduct": "API planı yok",
-      "noSubscription": "API aboneliği yok",
+      "includedTitle": "Dahil krediler",
+      "includedHint": "Her ay {count} API kredisi dahil.",
       "credits": "API kredileri",
-      "plans": "API planları ve paketler",
-      "topUp": "Kredi yükle",
+      "plans": "API paketleri",
+      "packCredits": "Ayda {count} kredi",
+      "packPrice": "{price}/ay",
+      "packYearlyPrice": "{price}/yıl",
+      "subscribe": "Abone ol",
+      "switch": "Geç",
+      "switchTo": "{pack} paketine geçilsin mi?",
+      "switchConfirmBody": "Polar mevcut API aboneliğini {pack} paketine günceller ve kayıtlı kartınızı çeker. Listelenen fiyat {price}/ay; fark bu dönem için mahsup edilir.",
+      "switchConfirm": "Geçişi onayla",
+      "switchCancel": "Vazgeç",
+      "switchClose": "Geçiş onayını kapat",
+      "current": "Mevcut paket",
+      "webPlanHint": "Bu API paketidir. Web planı ayrıdır.",
+      "openWebPlan": "Web: {plan}",
       "recentUsage": "Son API kullanımı",
+      "recentUsageHint": "Yalnızca bu dönemin hareketleri. Ay bitince liste sıfırlanır; kullanılmayan krediler sonraki aya eklenmez.",
       "noUsage": "Bu dönemde API kredi hareketi yok.",
+      "usageWithoutTool": "API kredileri",
+      "resetLabel": "Sıfırlanır",
+      "creditsResetOn": "Kullanılmayan API kredileri {date} tarihinde sıfırlanır.",
+      "showMore": "Daha fazla",
+      "showLess": "Daha az",
+      "history": {
+        "reset": "Aylık sıfırlama",
+        "pack": "API paketi",
+        "grant": "API kredileri",
+        "consume": "API kredileri",
+        "refund": "API kredileri"
+      },
+      "ledger": {
+        "grant": "+{amount} eklendi",
+        "consume": "{amount} kullanıldı",
+        "refund": "{amount} iade edildi",
+        "adjustment": "{amount} düzeltildi"
+      },
       "documentation": "API dokümantasyonu",
       "manageKeys": "API anahtarları"
-    },
-    "ai": {
-      "title": "AI",
-      "description": "AI kredileri web planınıza dahildir.",
-      "credits": "AI kredileri"
     },
     "apiProducts": {
       "starter": "API Starter",
@@ -770,7 +1522,8 @@
     },
     "usageItems": {
       "webCredits": "Web araç kredileri",
-      "aiCredits": "AI kredileri",
+      "operations": "Bugünkü işlemler",
+      "fileSize": "En büyük dosya",
       "conversions": "Bu ayki dönüşümler",
       "storage": "Depolama",
       "apiKeys": "API anahtarları"
@@ -779,13 +1532,15 @@
       "unauthorized": "Faturalandırmayı yönetmek için tekrar oturum açın.",
       "conflict": "Planınız bu aboneliği zaten içeriyor.",
       "configuration": "Faturalandırma henüz yapılandırılmadı.",
+      "notFound": "Polar bu hesap için fatura portalını açamadı. Tekrar deneyin.",
+      "portalUnavailable": "Polar fatura portalını açamadı. Tekrar deneyin.",
       "rateLimited": "Çok fazla istek gönderildi. Biraz bekleyip tekrar deneyin.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     }
   },
   "publicTools": {
-    "metaTitle": "{tool} | SohappyPDF",
+    "metaTitle": "{tool} | SoHappyPDF",
     "description": "Bir dosya yükleyin, bulutta işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
     "descriptionAuthenticated": "Bu araç işlem başlamadan önce oturum açmanızı gerektirir.",
     "selectFile": "Dosya seçin",
@@ -798,8 +1553,13 @@
     "moveUp": "Yukarı taşı",
     "moveDown": "Aşağı taşı",
     "loading": "Yükleniyor…",
+    "proRequired": {
+      "title": "Bu araç Pro plana dahil",
+      "description": "OCR, düzenleme, e-imza ve yapay zeka araçları Pro planda kullanılabilir.",
+      "cta": "Pro'ya geç"
+    },
     "status": "Durum: {status}",
-    "keepWorkspace": "Kullanım geçmişi, daha yüksek limitler ve faturalama için ücretsiz bir hesap oluşturun.",
+    "keepWorkspace": "Kullanım geçmişi, faturalama ve API anahtarları için ücretsiz bir hesap oluşturun.",
     "createAccount": "Ücretsiz hesap oluştur",
     "limits": "En fazla {files} dosya, her biri {sizeMb} MB. Dosyalar {hours} saat saklanır.",
     "overview": {
@@ -825,7 +1585,7 @@
       }
     },
     "upload": {
-      "title": "PDF’nizi buraya bırakın",
+      "title": "Dosyanızı buraya bırakın",
       "titleMultiple": "Dosyaları buraya bırakın",
       "browse": "Dosya seç",
       "browseMultiple": "Dosya seç",
@@ -833,7 +1593,12 @@
       "addMoreMultiple": "Daha fazla dosya ekle",
       "addMoreBrowse": "Dosya seç",
       "hint": "{formats} desteklenir. Dosya başına en fazla {size}.",
+      "hintWithPageLimit": "{formats} desteklenir. Dosya başına en fazla {size}. Ücretsiz planda dosya başına {pages} sayfa.",
       "conjunction": "ve"
+    },
+    "autoStart": {
+      "hint": "Dosya yüklendikten sonra işlem otomatik başlar.",
+      "starting": "İşlem başlıyor…"
     },
     "actions": {
       "download": "İndir",
@@ -870,6 +1635,7 @@
       "retry": "Yüklemeyi tekrar dene",
       "fileReady": "Hazır",
       "filePending": "Yükleme bekleniyor",
+      "filePendingSignIn": "Bu dosyayı yüklemek için giriş yapın",
       "pageCount": "{count, plural, one {# sayfa} other {# sayfa}}"
     },
     "pages": {
@@ -1055,7 +1821,11 @@
         }
       },
       "convert": {
-        "title": "Dönüştürmeye hazır",
+        "title": "Dosyayı dönüştür",
+        "drop": "{format}’yi buraya bırak",
+        "orSelect": "veya bilgisayardan seç",
+        "free": "Ücretsiz",
+        "cta": "Dönüştür",
         "hint": "Bu dosyayı bu aracın ürettiği formata dönüştüreceğiz.",
         "excelHint": "Metin ve tablolar bir elektronik tabloya çıkarılır. Taranmış PDF’ler için PDF to Excel OCR kullanın.",
         "wordOcrHint": "Önce metin tanınır, sonra Word’e dönüştürülür. Taramalarda daha uzun sürer.",
@@ -1075,7 +1845,7 @@
         "invalidFile": "Bu dosya açılamadı. Lütfen başka bir dosya deneyin.",
         "expiredTitle": "Bu dosyanın süresi doldu",
         "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir dosya dönüştürün.",
-        "faqHow": "Bir dosya yükleyin, işleyin ve sonucu indirin. Sıradan ücretsiz araçlar için hesap gerekmez.",
+        "faqHow": "Bir dosya yükleyin. Dönüştürme otomatik başlar, ardından sonucu indirin. Sıradan ücretsiz araçlar için hesap gerekmez.",
         "how": {
           "upload": {
             "title": "Yükle",
@@ -1083,7 +1853,7 @@
           },
           "convert": {
             "title": "Dönüştür",
-            "description": "Yeni formatı sizin için oluşturacağız."
+            "description": "Dosya yüklenir yüklenmez dönüştürme başlar."
           },
           "download": {
             "title": "İndir",
@@ -1095,7 +1865,7 @@
         "title": "Bu görüntü PDF olacak",
         "hint": "Bir görüntü, orijinal boyutunda tek bir PDF sayfası olur. Bu araçta sayfa boyutu, kenar boşluğu ve birden fazla görüntü sıralaması yok.",
         "output": "1 görüntü → 1 PDF sayfası",
-        "faqHow": "Bir JPG veya PNG yükleyin ve dönüştürün. PDF sayfası görüntü boyutuna uyar. Hesap gerekmez.",
+        "faqHow": "Bir JPG veya PNG yükleyin. Dönüştürme otomatik başlar ve görüntünün orijinal boyutunda bir PDF sayfası oluşturur. Hesap gerekmez.",
         "how": {
           "upload": {
             "title": "Yükle",
@@ -1103,7 +1873,7 @@
           },
           "convert": {
             "title": "Dönüştür",
-            "description": "Orijinal boyutta bir PDF sayfasına yerleştiririz."
+            "description": "Yüklenir yüklenmez orijinal boyutta bir PDF sayfasına yerleştirilir."
           },
           "download": {
             "title": "İndir",
@@ -1201,7 +1971,7 @@
         "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
         "expiredTitle": "Bu dosyanın süresi doldu",
         "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF onarın.",
-        "faqHow": "Bir PDF yükleyin ve onarın. Hasarı gidermeyi deneriz, ardından sonucu indirebilirsiniz. Hesap gerekmez.",
+        "faqHow": "Bir PDF yükleyin. Onarım otomatik başlar. Hasarı gidermeyi deneriz, ardından sonucu indirebilirsiniz. Hesap gerekmez.",
         "how": {
           "upload": {
             "title": "Yükle",
@@ -1649,6 +2419,7 @@
     },
     "phases": {
       "uploading": "Yükleniyor",
+      "checkingPages": "Sayfa sayısı kontrol ediliyor",
       "uploadingHint": "Dosyanız güvenli depolamaya gönderiliyor.",
       "preparing": "Hazırlanıyor",
       "preparingHint": "İşlem başlatılıyor.",
@@ -1659,12 +2430,17 @@
     },
     "result": {
       "title": "PDF’niz hazır",
+      "titleBatch": "Dosyalarınız hazır",
       "description": "{source} dosyası {format} formatına dönüştürüldü.",
+      "descriptionBatch": "{count} dosya işlendi.",
       "unnamedSource": "Dosyanız",
       "download": "İndir",
+      "downloadAll": "Tümünü indir ({count})",
+      "downloadNamed": "{name} dosyasını indir",
       "downloading": "İndirme hazırlanıyor…",
+      "fileList": "Hazır dosyalar",
       "processAnother": "Başka bir dosya işle",
-      "signupPrompt": "Geçmiş, daha yüksek limitler ve hesap kullanım takibi ister misiniz?",
+      "signupPrompt": "Geçmiş, faturalama ve hesap kullanım takibi ister misiniz?",
       "signupCta": "Ücretsiz hesap oluştur"
     },
     "related": {
@@ -1673,7 +2449,8 @@
     "recent": {
       "title": "Son işlemler",
       "notice": "Geçici dosyalar yaklaşık {hours} saat saklanır, ardından süreleri dolar.",
-      "empty": "Henüz son dosya yok. Sonuçlar kısa süre burada kalır, ardından süreleri dolar.",
+      "empty": "Henüz işlem yok.",
+      "emptyHint": "Bu sayfada bir dosya işlediğinde sonucu burada görürsün. Yaklaşık {hours} saat sonra süresi dolar.",
       "error": "Son dosyalar yüklenemedi.",
       "retry": "Tekrar dene",
       "unnamedFile": "Adsız dosya",
@@ -1709,7 +2486,7 @@
       },
       "how": {
         "question": "Bu aracı nasıl kullanırım?",
-        "answer": "Desteklenen bir dosya yükleyin, işlemi başlatın ve hazır olduğunda sonucu indirin. Araç aksi belirtmedikçe hesap gerekmez."
+        "answer": "Desteklenen bir dosya yükleyin. Araç ek seçenek gerektirmiyorsa işlem otomatik başlar. Hazır olduğunda sonucu indirin. Araç aksi belirtmedikçe hesap gerekmez."
       },
       "formats": {
         "question": "Hangi formatlar desteklenir?",
@@ -1717,7 +2494,7 @@
       },
       "account": {
         "question": "Hesap gerekir mi?",
-        "anonymous": "Hayır. Bu aracı hesap oluşturmadan kullanabilirsiniz. Geçmiş ve daha yüksek limitler için ücretsiz hesap isteğe bağlıdır.",
+        "anonymous": "Hayır. Bu aracı hesap oluşturmadan kullanabilirsiniz. Geçmiş, faturalama ve API anahtarları için giriş yapın. Ücretsiz günlük limitler aynı kalır.",
         "required": "Evet. İşlemeden önce oturum açın. Bu araç hesapsız kullanılamaz."
       },
       "limits": {
@@ -1761,9 +2538,13 @@
     "errors": {
       "title": "Bu dosyayı işleyemedik",
       "noFile": "İşlemek için bir dosya seçin.",
-      "tooFewFiles": "Birleştirmek için en az iki PDF seçin.",
+      "tooFewFiles": "En az iki dosya seçin.",
       "tooManyFiles": "Bu araç için çok fazla dosya seçildi.",
-      "tooLarge": "Bu dosya geçerli boyut sınırının üzerinde.",
+      "tooManyPages": "Bu dosya {max} sayfa limitini aşıyor. Ücretsiz planda dosya başına en fazla {max} sayfa işlenir.",
+      "tooManyPagesShort": "{max} sayfa limiti aşıldı.",
+      "tooManyPagesHint": "Daha uzun PDF’ler için Pro’ya geçin veya daha kısa bir dosyayla yeniden başlayın.",
+      "upgradeTitle": "Pro ile devam edin",
+      "tooLarge": "Bu dosya mevcut limitten büyük.",
       "emptyFile": "Bu dosya boş. Geçerli bir PDF seçip tekrar deneyin.",
       "unsupported": "Bu dosya türü bu araç için desteklenmiyor.",
       "invalidPdf": "Bu dosya geçerli bir PDF gibi görünmüyor. Başka bir dosya deneyin.",
@@ -1771,11 +2552,14 @@
       "invalidOptions": "Araç ayarlarını kontrol edip tekrar deneyin.",
       "creditsExhausted": "Bu ayki krediniz bitti. Pro'ya geçin veya yeni dönemi bekleyin.",
       "limitReached": "Geçerli kullanım limitine ulaştınız. Daha sonra tekrar deneyin veya planınızı yükseltin.",
+      "upgradeRequired": "Bu araç Pro plan gerektirir. Devam etmek için yükseltin.",
+      "upgradeCta": "Pro'ya geç",
       "signInRequired": "Bu aracı kullanmak için giriş yapın.",
       "signInCta": "Devam etmek için giriş yapın",
       "unauthorized": "Bu dosyaya erişiminiz yok.",
       "passwordProtected": "Bu PDF parola korumalı. Önce kilidini açın veya Unlock PDF aracını doğru parola ile kullanın.",
       "processingFailed": "İşlem başarısız oldu. Farklı bir dosyayla tekrar deneyin.",
+      "aiUnavailable": "Yapay zeka işlemi şu anda kullanılamıyor. Daha sonra tekrar deneyin.",
       "duplicateExecution": "Bu dosya zaten işleniyor. Biraz bekleyip tekrar deneyin.",
       "uploadInterrupted": "Yükleme kesildi. Bağlantınızı kontrol edip tekrar deneyin.",
       "filesExpired": "Bu dosyanın süresi doldu. Lütfen yeniden işleyin.",

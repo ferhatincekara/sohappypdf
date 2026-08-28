@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { CONVERSION_ERROR_KEYS, mapConversionError } from "./conversion-errors";
+import axios from "axios";
+import {
+  CONVERSION_ERROR_KEYS,
+  mapConversionError,
+  toConversionClientError,
+} from "./conversion-errors";
 
 describe("conversion error mapping", () => {
   test("maps an unsupported conversion without exposing internals", () => {
@@ -51,6 +56,89 @@ describe("conversion error mapping", () => {
         status: 403,
       }),
     ).toBe(CONVERSION_ERROR_KEYS.planLimitReached);
+  });
+
+  test("keeps a safe Pro-only tool message", () => {
+    expect(
+      toConversionClientError(
+        new axios.AxiosError(
+          "Request failed with status code 403",
+          "ERR_BAD_REQUEST",
+          { url: "/api/v1/conversions", method: "post" },
+          undefined,
+          {
+            status: 403,
+            statusText: "Forbidden",
+            headers: {},
+            config: { url: "/api/v1/conversions" },
+            data: {
+              error: {
+                code: "PLAN_LIMIT_REACHED",
+                message: "This tool requires Pro",
+              },
+            },
+          } as never,
+        ),
+      ).message,
+    ).toBe("This tool requires Pro");
+    expect(
+      mapConversionError({
+        kind: "api",
+        code: "PLAN_LIMIT_REACHED",
+        status: 403,
+        message: "This tool requires Pro",
+      }),
+    ).toBe(CONVERSION_ERROR_KEYS.upgradeRequired);
+  });
+
+  test("keeps a safe AI credit limit message", () => {
+    expect(
+      toConversionClientError(
+        new axios.AxiosError(
+          "Request failed with status code 403",
+          "ERR_BAD_REQUEST",
+          { url: "/api/v1/conversions", method: "post" },
+          undefined,
+          {
+            status: 403,
+            statusText: "Forbidden",
+            headers: {},
+            config: { url: "/api/v1/conversions" },
+            data: {
+              error: {
+                code: "PLAN_LIMIT_REACHED",
+                message: "Monthly AI credit limit reached",
+              },
+            },
+          } as never,
+        ),
+      ).message,
+    ).toBe("Monthly AI credit limit reached");
+  });
+
+  test("keeps a safe AI unavailable message", () => {
+    expect(
+      toConversionClientError(
+        new axios.AxiosError(
+          "Request failed with status code 500",
+          "ERR_BAD_RESPONSE",
+          { url: "/api/v1/conversions", method: "post" },
+          undefined,
+          {
+            status: 500,
+            statusText: "Internal Server Error",
+            headers: {},
+            config: { url: "/api/v1/conversions" },
+            data: {
+              error: {
+                code: "CONFIGURATION_ERROR",
+                message: "AI processing is unavailable",
+              },
+            },
+          } as never,
+        ),
+      ).message,
+    ).toBe("AI processing is unavailable");
   });
 
   test("maps a rate-limit response", () => {

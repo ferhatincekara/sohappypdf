@@ -112,6 +112,7 @@ export function EditPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         entry={entry}
         accept={props.accept}
         disabled={props.disabled}
+        maxPagesPerFile={props.maxPagesPerFile}
         onRemove={() => {
           props.onRemove(entry.id);
         }}

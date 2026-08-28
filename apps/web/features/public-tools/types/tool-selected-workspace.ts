@@ -14,6 +14,9 @@ export type ToolSelectedWorkspaceProps = {
   disabled: boolean;
   canProcess: boolean;
   processLabel: string;
+  awaitingSignIn?: boolean;
+  autoProcess?: boolean;
+  maxPagesPerFile?: number | null;
   workspaceState: ToolWorkspaceState;
   setWorkspaceState: (next: ToolWorkspaceState) => void;
   onSelectFiles: (files: FileList | File[]) => void;

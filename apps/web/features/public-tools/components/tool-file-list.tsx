@@ -4,18 +4,19 @@ import { GripVerticalIcon, XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  formatFileSize,
-  formatUploadProgress,
-} from "@/features/files/lib/format-file-size";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { cn } from "@/lib/utils";
 import { fileExtensionLabel, type WorkspaceFile } from "../lib/workspace-files";
+import { ToolFileErrorLine } from "./tool-file-error-line";
 import { ToolFilePreview } from "./tool-file-preview";
+import { ToolFileUploadProgress } from "./tool-file-upload-progress";
 
 export function ToolFileList({
   files,
   reorderable,
   disabled,
+  awaitingSignIn = false,
+  maxPagesPerFile = null,
   onMove,
   onReorder,
   onRemove,
@@ -24,6 +25,8 @@ export function ToolFileList({
   files: readonly WorkspaceFile[];
   reorderable: boolean;
   disabled: boolean;
+  awaitingSignIn?: boolean;
+  maxPagesPerFile?: number | null;
   onMove: (index: number, direction: -1 | 1) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onRemove: (id: string) => void;
@@ -37,7 +40,7 @@ export function ToolFileList({
   }
 
   return (
-    <ul className="flex flex-col gap-2" aria-label={t("workspace.fileList")}>
+    <ul className="divide-y divide-border" aria-label={t("workspace.fileList")}>
       {files.map((entry, index) => (
         <li
           key={entry.id}
@@ -68,11 +71,11 @@ export function ToolFileList({
             dragIndex.current = null;
           }}
           className={cn(
-            "flex items-start gap-3 rounded-lg border border-border bg-card p-3",
+            "flex items-center gap-3 py-3",
             reorderable && !disabled && "cursor-grab active:cursor-grabbing",
           )}
         >
-          <ToolFilePreview entry={entry} />
+          <ToolFilePreview entry={entry} className="size-12" />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
@@ -87,16 +90,17 @@ export function ToolFileList({
                     : ` · ${t("workspace.pageCount", { count: entry.pageCount })}`}
                 </p>
               </div>
-              <div className="flex shrink-0 items-center gap-1">
+              <div className="flex shrink-0 items-center gap-0.5">
                 {reorderable ? (
                   <>
-                    <span className="hidden text-muted-foreground sm:inline">
+                    <span className="hidden px-1 text-muted-foreground sm:inline">
                       <GripVerticalIcon className="size-4" aria-hidden="true" />
                     </span>
                     <Button
                       type="button"
                       size="icon-xs"
-                      variant="outline"
+                      variant="ghost"
+                      className="rounded-2"
                       disabled={disabled || index === 0}
                       aria-label={t("moveUp")}
                       onClick={() => {
@@ -108,7 +112,8 @@ export function ToolFileList({
                     <Button
                       type="button"
                       size="icon-xs"
-                      variant="outline"
+                      variant="ghost"
+                      className="rounded-2"
                       disabled={disabled || index === files.length - 1}
                       aria-label={t("moveDown")}
                       onClick={() => {
@@ -123,6 +128,7 @@ export function ToolFileList({
                   type="button"
                   size="icon-xs"
                   variant="ghost"
+                  className="rounded-2"
                   disabled={disabled}
                   aria-label={t("workspace.removeFile", {
                     name: entry.file.name,
@@ -137,6 +143,8 @@ export function ToolFileList({
             </div>
             <FileStatusRow
               entry={entry}
+              awaitingSignIn={awaitingSignIn}
+              maxPagesPerFile={maxPagesPerFile}
               onRetry={onRetry}
               disabled={disabled}
             />
@@ -149,67 +157,57 @@ export function ToolFileList({
 
 function FileStatusRow({
   entry,
+  awaitingSignIn,
+  maxPagesPerFile,
   onRetry,
   disabled,
 }: {
   entry: WorkspaceFile;
+  awaitingSignIn: boolean;
+  maxPagesPerFile: number | null;
   onRetry: (id: string) => void;
   disabled: boolean;
 }) {
   const t = useTranslations("publicTools");
 
-  if (entry.status === "uploading") {
-    const percent = entry.progress.percent;
+  if (entry.status === "inspecting") {
     return (
-      <div className="mt-2 flex flex-col gap-1.5">
-        <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-          <span>{t("phases.uploading")}</span>
-          <span className="tabular-nums">
-            {entry.progress.total > 0
-              ? formatUploadProgress(
-                  entry.progress.loaded,
-                  entry.progress.total,
-                )
-              : null}
-          </span>
-        </div>
-        <div
-          role="progressbar"
-          aria-label={t("phases.uploading")}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={percent}
-          className="h-1.5 overflow-hidden rounded-full bg-muted"
-        >
-          <div
-            className="h-full bg-foreground motion-safe:transition-[width] motion-safe:duration-150"
-            style={{ width: `${percent}%` }}
-          />
-        </div>
-      </div>
+      <ToolFileUploadProgress
+        percent={0}
+        label={t("phases.checkingPages")}
+        determinate={false}
+      />
+    );
+  }
+
+  if (entry.status === "uploading" || entry.status === "pending") {
+    if (awaitingSignIn && entry.status === "pending") {
+      return (
+        <p className="mt-2 text-xs text-muted-foreground">
+          {t("workspace.filePendingSignIn")}
+        </p>
+      );
+    }
+
+    return (
+      <ToolFileUploadProgress
+        percent={entry.progress.percent}
+        label={t("phases.uploading")}
+        determinate={entry.progress.total > 0}
+      />
     );
   }
 
   if (entry.status === "failed") {
     return (
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <p className="text-xs text-destructive">
-          {entry.errorKey !== null
-            ? t(`errors.${entry.errorKey}`)
-            : t("errors.networkFailure")}
-        </p>
-        <Button
-          type="button"
-          size="xs"
-          variant="outline"
-          disabled={disabled}
-          onClick={() => {
-            onRetry(entry.id);
-          }}
-        >
-          {t("workspace.retry")}
-        </Button>
-      </div>
+      <ToolFileErrorLine
+        errorKey={entry.errorKey}
+        maxPagesPerFile={maxPagesPerFile}
+        disabled={disabled}
+        onRetry={() => {
+          onRetry(entry.id);
+        }}
+      />
     );
   }
 
@@ -221,9 +219,5 @@ function FileStatusRow({
     );
   }
 
-  return (
-    <p className="mt-2 text-xs text-muted-foreground">
-      {t("workspace.filePending")}
-    </p>
-  );
+  return null;
 }

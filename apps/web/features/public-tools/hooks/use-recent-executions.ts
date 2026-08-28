@@ -1,8 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { isConversionExpired } from "@/features/conversions/lib/can-download-conversion";
 import { conversionListRefetchInterval } from "@/features/conversions/lib/conversion-polling";
+import { mapUnknownUploadError } from "@/features/files/api/file-errors";
 import { startBrowserDownload } from "@/features/files/lib/start-browser-download";
 import { authClient } from "@/lib/auth/auth-client";
 import { createPublicToolApis } from "../api/public-tool-api";
@@ -18,9 +22,11 @@ import {
 } from "../lib/recent-executions";
 import type { RecentExecution } from "../types/recent-execution";
 
-export function useRecentExecutions() {
+export function useRecentExecutions(options?: { authenticated?: boolean }) {
+  const tErrors = useTranslations("files.errors");
   const session = authClient.useSession();
-  const isAuthenticated = session.data !== null && session.data !== undefined;
+  const isAuthenticated =
+    options?.authenticated === true || session.data?.user !== undefined;
   const apis = useMemo(
     () => createPublicToolApis(isAuthenticated),
     [isAuthenticated],
@@ -28,13 +34,23 @@ export function useRecentExecutions() {
   const [now, setNow] = useState(() => new Date());
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setNow(new Date());
+    }, 60_000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
   const query = useQuery({
     queryKey: publicToolQueryKeys.recent(isAuthenticated),
     queryFn: () =>
       apis.listConversions({
         limit: RECENT_EXECUTIONS_LIMIT,
       }),
-    enabled: !session.isPending,
+    enabled: options?.authenticated === true || !session.isPending,
     staleTime: RECENT_EXECUTIONS_STALE_TIME_MS,
     refetchInterval: (result) =>
       conversionListRefetchInterval(
@@ -80,19 +96,22 @@ export function useRecentExecutions() {
       if (isExpirationResponse(error) || isMissingResourceResponse(error)) {
         await query.refetch();
       }
+      toast.error(tErrors(mapUnknownUploadError(error)));
     } finally {
       setDownloadingId(null);
     }
   }
 
   return {
-    executions: conversions.map((conversion) =>
-      mapRecentExecution(conversion, now),
-    ),
-    isPending: session.isPending || query.isPending,
+    executions: conversions
+      .filter((conversion) => !isConversionExpired(conversion, now))
+      .map((conversion) => mapRecentExecution(conversion, now)),
+    isPending:
+      (options?.authenticated !== true && session.isPending) || query.isPending,
     isError: query.isError,
     isAuthenticated,
     downloadingId,
+    now,
     refetch: query.refetch,
     download,
   };

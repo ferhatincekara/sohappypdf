@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { convertHintKey } from "../../lib/convert-hint";
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
-import { ConvertResultSummary } from "./convert-result-summary";
+import { ToolWorkspaceFiles } from "../tool-workspace-files";
+import { ConvertFormatBar } from "./convert-format-bar";
 
 export function ConvertPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");
@@ -17,40 +17,38 @@ export function ConvertPdfWorkspace(props: ToolSelectedWorkspaceProps) {
     return null;
   }
 
+  const blocked = props.state.error !== null;
+  const showFree = props.tool.availableOnPlans.includes("free");
+
   return (
     <div className="flex flex-col gap-6">
-      <ToolFileCard
-        entry={entry}
-        accept={props.accept}
-        disabled={props.disabled}
-        onRemove={() => {
-          props.onRemove(entry.id);
-        }}
-        onReplace={props.onReplaceFiles}
-        onRetry={() => {
-          props.onRetryUpload(entry.id);
-        }}
-      />
+      <ToolWorkspaceFiles props={props} />
 
-      <div className="flex flex-col gap-1">
-        <h2 className="text-base font-semibold tracking-tight text-foreground">
-          {t("workspaces.convert.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground text-pretty">
-          {t(`workspaces.convert.${convertHintKey(props.tool.id)}`)}
-        </p>
-      </div>
+      {blocked ? null : (
+        <>
+          <div className="flex flex-col gap-1">
+            <h2 className="text-base font-semibold tracking-tight text-foreground">
+              {t("workspaces.convert.title")}
+            </h2>
+            <p className="text-sm text-muted-foreground text-pretty">
+              {t(`workspaces.convert.${convertHintKey(props.tool.id)}`)}
+            </p>
+          </div>
 
-      <ConvertResultSummary
-        sourceFormat={sourceFormat}
-        targetFormat={targetFormat}
-      />
+          <ConvertFormatBar
+            sourceFormat={sourceFormat}
+            targetFormat={targetFormat}
+            showFree={showFree}
+          />
+        </>
+      )}
 
       <ToolSelectedActions
         toolRoute={props.tool.route}
         state={props.state}
         canProcess={props.canProcess}
-        processLabel={props.processLabel}
+        processLabel={t("workspaces.convert.cta")}
+        autoProcess={props.autoProcess}
         onProcess={props.onProcess}
       />
     </div>

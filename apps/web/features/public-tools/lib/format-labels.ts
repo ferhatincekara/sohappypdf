@@ -13,8 +13,23 @@ const FORMAT_LABELS: Record<string, string> = {
   md: "Markdown",
 };
 
+const CONVERT_FORMAT_LABELS: Record<string, string> = {
+  doc: "Word",
+  docx: "Word",
+  xls: "Excel",
+  xlsx: "Excel",
+  ppt: "PowerPoint",
+  pptx: "PowerPoint",
+  pdfa: "PDF/A",
+};
+
 export function formatLabel(format: string): string {
   return FORMAT_LABELS[format.toLowerCase()] ?? format.toUpperCase();
+}
+
+export function convertFormatLabel(format: string): string {
+  const key = format.toLowerCase();
+  return CONVERT_FORMAT_LABELS[key] ?? formatLabel(format);
 }
 
 export function formatAcceptedFormats(

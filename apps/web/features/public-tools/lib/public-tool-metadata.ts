@@ -27,7 +27,7 @@ export function buildPublicToolMetadata(
   input: PublicToolMetadataInput,
 ): Metadata {
   const url = publicToolCanonicalUrl(input);
-  const title = `${input.name} | SohappyPDF`;
+  const title = `${input.name} | SoHappyPDF`;
 
   return {
     title,

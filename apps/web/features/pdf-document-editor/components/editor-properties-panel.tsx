@@ -18,7 +18,7 @@ export function EditorPropertiesPanel({
 
   if (object === null) {
     return (
-      <aside className="rounded-lg border border-border bg-card p-4">
+      <aside className="flex flex-col gap-3">
         <h2 className="text-sm font-medium text-foreground">
           {t("properties")}
         </h2>
@@ -42,7 +42,7 @@ export function EditorPropertiesPanel({
   }
 
   return (
-    <aside className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4">
+    <aside className="flex flex-col gap-3">
       <h2 className="text-sm font-medium text-foreground">{t("properties")}</h2>
       <p className="text-xs text-muted-foreground">
         {t(`objects.${object.kind}`)}
@@ -93,7 +93,7 @@ export function EditorPropertiesPanel({
                 type="button"
                 disabled={disabled}
                 aria-pressed={object.style === style}
-                className="h-9 rounded-md border border-border px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50 aria-pressed:border-foreground aria-pressed:bg-muted"
+                className="h-9 rounded-md border border-border px-3 text-sm outline-none aria-pressed:border-foreground aria-pressed:bg-muted"
                 onClick={() => {
                   onChange({ ...object, style });
                 }}

@@ -56,4 +56,27 @@ describe("canDownloadConversion", () => {
       canDownloadConversion(createConversion({ expired: true }), now),
     ).toBe(false);
   });
+
+  test("treats missing expiresAt as expired after two hours", () => {
+    const now = new Date("2026-08-24T03:00:00.000Z");
+
+    expect(
+      isConversionExpired(
+        createConversion({
+          createdAt: "2026-08-24T00:00:00.000Z",
+          expiresAt: null,
+        }),
+        now,
+      ),
+    ).toBe(true);
+    expect(
+      isConversionExpired(
+        createConversion({
+          createdAt: "2026-08-24T02:00:00.000Z",
+          expiresAt: null,
+        }),
+        now,
+      ),
+    ).toBe(false);
+  });
 });

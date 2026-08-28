@@ -8,7 +8,6 @@ import { CropPdfWorkspace } from "./crop-pdf-workspace";
 import { DefaultToolWorkspace } from "./default-tool-workspace";
 import { EditPdfWorkspace } from "./edit-pdf-workspace";
 import { ExtractPagesWorkspace } from "./extract-pages-workspace";
-import { FillPdfWorkspace } from "./fill-pdf-workspace";
 import { ImageToPdfWorkspace } from "./image-to-pdf-workspace";
 import { MergePdfWorkspace } from "./merge-pdf-workspace";
 import { OcrPdfWorkspace } from "./ocr-pdf-workspace";
@@ -52,8 +51,6 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <CropPdfWorkspace {...props} />;
     case "sign":
       return <SignPdfWorkspace {...props} />;
-    case "fill":
-      return <FillPdfWorkspace {...props} />;
     case "edit":
       return <EditPdfWorkspace {...props} />;
     case "repair":

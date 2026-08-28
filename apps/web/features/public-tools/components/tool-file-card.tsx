@@ -5,13 +5,16 @@ import { useId, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { fileExtensionLabel, type WorkspaceFile } from "../lib/workspace-files";
+import { ToolFileErrorLine } from "./tool-file-error-line";
 import { ToolFilePreview } from "./tool-file-preview";
+import { ToolFileUploadProgress } from "./tool-file-upload-progress";
 
 export function ToolFileCard({
   entry,
   pageCount,
   accept,
   disabled,
+  maxPagesPerFile = null,
   onRemove,
   onReplace,
   onRetry,
@@ -20,6 +23,7 @@ export function ToolFileCard({
   pageCount?: number | null;
   accept: string;
   disabled: boolean;
+  maxPagesPerFile?: number | null;
   onRemove: () => void;
   onReplace: (files: FileList | File[]) => void;
   onRetry: () => void;
@@ -30,8 +34,8 @@ export function ToolFileCard({
   const pages = pageCount ?? entry.pageCount;
 
   return (
-    <article className="flex items-start gap-3 rounded-xl border border-border bg-card p-3">
-      <ToolFilePreview entry={entry} className="size-14" />
+    <article className="flex items-center gap-3 border-b border-border py-3">
+      <ToolFilePreview entry={entry} className="size-12" />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0">
@@ -87,28 +91,27 @@ export function ToolFileCard({
             </Button>
           </div>
         </div>
-        {entry.status === "uploading" ? (
-          <p className="mt-2 text-xs text-muted-foreground">
-            {t("phases.uploading")}
-          </p>
+        {entry.status === "inspecting" ? (
+          <ToolFileUploadProgress
+            percent={0}
+            label={t("phases.checkingPages")}
+            determinate={false}
+          />
+        ) : null}
+        {entry.status === "uploading" || entry.status === "pending" ? (
+          <ToolFileUploadProgress
+            percent={entry.progress.percent}
+            label={t("phases.uploading")}
+            determinate={entry.progress.total > 0}
+          />
         ) : null}
         {entry.status === "failed" ? (
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <p className="text-xs text-destructive">
-              {entry.errorKey !== null
-                ? t(`errors.${entry.errorKey}`)
-                : t("errors.networkFailure")}
-            </p>
-            <Button
-              type="button"
-              size="xs"
-              variant="outline"
-              disabled={disabled}
-              onClick={onRetry}
-            >
-              {t("workspace.retry")}
-            </Button>
-          </div>
+          <ToolFileErrorLine
+            errorKey={entry.errorKey}
+            maxPagesPerFile={maxPagesPerFile}
+            disabled={disabled}
+            onRetry={onRetry}
+          />
         ) : null}
       </div>
     </article>

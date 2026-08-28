@@ -24,14 +24,14 @@ export function SplitResultSummary({
       <div className="flex flex-col gap-1">
         <h2
           id="split-result-heading"
-          className="text-base font-semibold tracking-tight text-foreground"
+          className="text-base font-extrabold tracking-tight text-foreground"
         >
           {t("modeTitle")}
         </h2>
       </div>
 
-      <div className="rounded-xl border-2 border-foreground bg-card p-4 shadow-xs">
-        <p className="text-sm font-medium text-foreground">
+      <div>
+        <p className="text-sm font-semibold text-foreground">
           {t("modeExtract")}
         </p>
         <p className="mt-1 text-sm text-muted-foreground text-pretty">

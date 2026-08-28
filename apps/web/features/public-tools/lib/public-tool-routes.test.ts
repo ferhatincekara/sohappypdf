@@ -8,7 +8,15 @@ const RESERVED_MARKETING_PATHS = [
   MARKETING_PATHS.home,
   MARKETING_PATHS.tools,
   MARKETING_PATHS.pricing,
+  MARKETING_PATHS.faq,
+  MARKETING_PATHS.blog,
+  MARKETING_PATHS.about,
+  MARKETING_PATHS.contact,
   MARKETING_PATHS.developers,
+  MARKETING_PATHS.security,
+  MARKETING_PATHS.privacy,
+  MARKETING_PATHS.terms,
+  MARKETING_PATHS.cookies,
 ] as const;
 
 describe("public tool routes", () => {
@@ -21,6 +29,9 @@ describe("public tool routes", () => {
     );
     expect(params.every((item) => item.toolId !== "image-to-pdf")).toBe(true);
     expect(params.every((item) => item.toolId !== "web-to-pdf")).toBe(true);
+    expect(params.every((item) => item.toolId !== "ai-summarizer")).toBe(true);
+    expect(params.every((item) => item.toolId !== "translate-pdf")).toBe(true);
+    expect(params.every((item) => item.toolId !== "pdf-forms")).toBe(true);
   });
 
   test("keeps tool URLs from colliding with marketing pages", () => {

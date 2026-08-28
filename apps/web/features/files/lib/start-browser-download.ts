@@ -18,3 +18,19 @@ export function startBrowserDownload(url: string): void {
   anchor.click();
   anchor.remove();
 }
+
+const BULK_DOWNLOAD_GAP_MS = 400;
+
+export async function startBrowserDownloads(
+  urls: readonly string[],
+): Promise<void> {
+  for (const [index, url] of urls.entries()) {
+    startBrowserDownload(url);
+
+    if (index < urls.length - 1) {
+      await new Promise<void>((resolve) => {
+        window.setTimeout(resolve, BULK_DOWNLOAD_GAP_MS);
+      });
+    }
+  }
+}

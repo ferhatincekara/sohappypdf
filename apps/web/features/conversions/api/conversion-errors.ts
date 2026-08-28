@@ -1,3 +1,4 @@
+import { TOOL_REQUIRES_PRO_MESSAGE } from "@repo/tools/catalog";
 import axios from "axios";
 
 export const CONVERSION_ERROR_KEYS = {
@@ -12,6 +13,7 @@ export const CONVERSION_ERROR_KEYS = {
   unauthorized: "unauthorized",
   rateLimited: "rateLimited",
   planLimitReached: "planLimitReached",
+  upgradeRequired: "upgradeRequired",
   networkFailure: "networkFailure",
   unexpected: "unexpected",
 } as const;
@@ -36,6 +38,16 @@ const SAFE_VALIDATION_MESSAGES: Record<string, ConversionErrorKey> = {
 const SAFE_CONFLICT_MESSAGES: Record<string, ConversionErrorKey> = {
   "Source file unavailable": CONVERSION_ERROR_KEYS.sourceUnavailable,
 };
+
+const SAFE_PLAN_LIMIT_MESSAGES = new Set([
+  "Monthly conversion limit reached",
+  "Monthly web tool credit limit reached",
+  "Monthly AI credit limit reached",
+  "API credit limit reached",
+  TOOL_REQUIRES_PRO_MESSAGE,
+]);
+
+const SAFE_CONFIGURATION_MESSAGES = new Set(["AI processing is unavailable"]);
 
 export function toConversionClientError(error: unknown): ConversionClientError {
   if (axios.isAxiosError(error)) {
@@ -120,6 +132,10 @@ export function mapConversionError(
   }
 
   if (error.code === "PLAN_LIMIT_REACHED") {
+    if (error.message === TOOL_REQUIRES_PRO_MESSAGE) {
+      return CONVERSION_ERROR_KEYS.upgradeRequired;
+    }
+
     return CONVERSION_ERROR_KEYS.planLimitReached;
   }
 
@@ -145,7 +161,9 @@ function safeApiMessage(message: string | undefined): string | undefined {
 
   if (
     message in SAFE_VALIDATION_MESSAGES ||
-    message in SAFE_CONFLICT_MESSAGES
+    message in SAFE_CONFLICT_MESSAGES ||
+    SAFE_PLAN_LIMIT_MESSAGES.has(message) ||
+    SAFE_CONFIGURATION_MESSAGES.has(message)
   ) {
     return message;
   }

@@ -3,9 +3,11 @@ import { resolveToolWorkspaceKind } from "./tool-workspace-kind";
 const DEFAULT_WORKSPACE_OPTION_TOOL_IDS = [
   "reorder-pages",
   "page-numbers-pdf",
-  "ai-summarizer",
-  "translate-pdf",
 ] as const;
+
+export function toolAutoStartsWhenReady(toolId: string): boolean {
+  return !toolRequiresConfiguration(toolId);
+}
 
 export function toolRequiresConfiguration(toolId: string): boolean {
   const kind = resolveToolWorkspaceKind(toolId);

@@ -189,7 +189,7 @@ export function PdfPageThumbnail({
     <div
       ref={rootRef}
       className={cn(
-        "group flex w-full min-h-11 flex-col items-center gap-2 rounded-xl p-2 text-left",
+        "group flex w-full min-h-11 flex-col items-center gap-2 rounded-3 p-2 text-left",
         interactive && selected ? "bg-foreground/8" : null,
         interactive && !selected ? "hover:bg-muted/70" : null,
         disabled && "opacity-60",
@@ -198,7 +198,7 @@ export function PdfPageThumbnail({
     >
       <span
         className={cn(
-          "relative flex aspect-[3/4] w-full items-center justify-center overflow-hidden rounded-lg border-2 bg-card shadow-xs",
+          "relative flex aspect-3/4 w-full items-center justify-center overflow-hidden rounded-1.5 border bg-card shadow-xs",
           selected
             ? "border-foreground"
             : "border-border group-hover:border-foreground/40",
@@ -231,10 +231,7 @@ export function PdfPageThumbnail({
             onActivate?.(event);
           }}
           onKeyDown={onKeyDown}
-          className={cn(
-            "absolute inset-0 z-0 flex items-center justify-center outline-none",
-            interactive && "focus-visible:ring-3 focus-visible:ring-ring/50",
-          )}
+          className="absolute inset-0 z-0 flex items-center justify-center outline-none"
         >
           {status === "pending" ? (
             <span
@@ -292,7 +289,7 @@ export function PdfPageThumbnail({
             }}
             className={cn(
               "absolute top-1.5 left-1.5 z-10 flex size-11 items-center justify-center rounded-md bg-background/90 text-muted-foreground shadow-xs",
-              "hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+              "hover:text-foreground outline-none",
               disabled
                 ? "cursor-not-allowed"
                 : "cursor-grab active:cursor-grabbing",

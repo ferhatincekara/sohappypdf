@@ -1,8 +1,9 @@
 "use client";
 
-import { UploadIcon } from "lucide-react";
+import { CloudUploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState } from "react";
+import { createDropInputGate } from "@/features/files/lib/drop-input-gate";
 import { cn } from "@/lib/utils";
 
 export function ToolDropzone({
@@ -11,6 +12,7 @@ export function ToolDropzone({
   disabled,
   formatsLabel,
   maxSizeLabel,
+  maxPagesPerFile = null,
   onSelectFiles,
   variant = "default",
 }: {
@@ -19,6 +21,7 @@ export function ToolDropzone({
   disabled: boolean;
   formatsLabel: string;
   maxSizeLabel: string;
+  maxPagesPerFile?: number | null;
   onSelectFiles: (files: FileList | File[]) => void;
   variant?: "default" | "compact";
 }) {
@@ -26,6 +29,7 @@ export function ToolDropzone({
   const inputId = useId();
   const hintId = useId();
   const dragDepth = useRef(0);
+  const selectionGate = useRef(createDropInputGate());
   const [isDragging, setIsDragging] = useState(false);
   const compact = variant === "compact";
 
@@ -51,10 +55,13 @@ export function ToolDropzone({
     <label
       htmlFor={inputId}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card text-center outline-none transition-colors motion-safe:duration-150",
-        compact ? "px-4 py-6" : "px-6 py-16",
-        "has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50",
-        isDragging && !disabled && "border-foreground bg-muted/50",
+        "relative flex cursor-pointer flex-col items-center text-center outline-none transition-colors motion-safe:duration-150",
+        "border border-dashed border-border",
+        compact
+          ? "flex-row justify-center gap-3 rounded-3 bg-white px-4 py-3"
+          : "gap-4 rounded-7 bg-white px-5 py-12 md:min-h-88 md:px-6 md:py-20",
+        "has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring",
+        isDragging && !disabled && "border-foreground bg-primary/20",
         disabled && "pointer-events-none cursor-not-allowed opacity-60",
       )}
       onDragEnter={(event) => {
@@ -80,13 +87,20 @@ export function ToolDropzone({
       }}
       onDrop={(event) => {
         event.preventDefault();
+        event.stopPropagation();
         resetDragging();
 
         if (disabled) {
           return;
         }
 
-        onSelectFiles(event.dataTransfer.files);
+        const files = selectionGate.current.captureDrop(
+          event.dataTransfer.files,
+        );
+
+        if (files.length > 0) {
+          onSelectFiles(files);
+        }
       }}
     >
       <input
@@ -98,25 +112,48 @@ export function ToolDropzone({
         disabled={disabled}
         aria-describedby={hintId}
         onChange={(event) => {
-          if (event.target.files !== null) {
-            onSelectFiles(event.target.files);
-          }
+          const files = selectionGate.current.captureInput(event.target.files);
           event.target.value = "";
+
+          if (files.length > 0) {
+            onSelectFiles(files);
+          }
         }}
       />
-      <span className="flex size-12 items-center justify-center rounded-full bg-muted/70 text-muted-foreground">
-        <UploadIcon className="size-5" aria-hidden="true" />
+      <CloudUploadIcon
+        className={cn("text-foreground/70", compact ? "size-5" : "size-7")}
+        aria-hidden="true"
+      />
+      <span
+        className={cn(
+          "font-extrabold tracking-tight text-foreground",
+          compact ? "text-sm" : "mt-2 text-lg",
+        )}
+      >
+        {title}
       </span>
-      <span className="text-base font-medium text-foreground">{title}</span>
       <span
         id={hintId}
         className={
-          compact ? "sr-only" : "max-w-md text-sm text-muted-foreground"
+          compact
+            ? "sr-only"
+            : "max-w-sm text-sm leading-relaxed text-muted-foreground"
         }
       >
-        {t("hint", { formats: formatsLabel, size: maxSizeLabel })}
+        {maxPagesPerFile === null
+          ? t("hint", { formats: formatsLabel, size: maxSizeLabel })
+          : t("hintWithPageLimit", {
+              formats: formatsLabel,
+              size: maxSizeLabel,
+              pages: maxPagesPerFile,
+            })}
       </span>
-      <span className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-4 text-sm font-medium text-foreground underline-offset-4 hover:underline">
+      <span
+        className={cn(
+          "inline-flex items-center justify-center rounded-full bg-foreground font-semibold text-background",
+          compact ? "h-8 px-3.5 text-xs" : "mt-1 h-11 px-5 text-sm",
+        )}
+      >
         {browse}
       </span>
     </label>

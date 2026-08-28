@@ -4,14 +4,22 @@ import type { ToolDefinition } from "@repo/tools/catalog";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { ToolWorkspaceState } from "../lib/tool-workspace";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type {
+  CompressionLevel,
+  ToolWorkspaceState,
+} from "../lib/tool-workspace";
 
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {
     case "reorder-pages":
     case "page-numbers-pdf":
-    case "ai-summarizer":
-    case "translate-pdf":
       return true;
     default:
       return false;
@@ -36,23 +44,34 @@ export function ToolOptionsPanel({
       return (
         <div className="flex flex-col gap-2">
           <Label htmlFor="compression-level">{t("compressionLevel")}</Label>
-          <select
-            id="compression-level"
-            className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+          <Select
             value={state.compressionLevel}
             disabled={disabled}
-            onChange={(event) => {
+            items={[
+              { value: "low", label: t("compressionLow") },
+              { value: "medium", label: t("compressionMedium") },
+              { value: "high", label: t("compressionHigh") },
+            ]}
+            onValueChange={(value) => {
+              if (value === null) {
+                return;
+              }
+
               onChange({
                 ...state,
-                compressionLevel: event.target
-                  .value as ToolWorkspaceState["compressionLevel"],
+                compressionLevel: value as CompressionLevel,
               });
             }}
           >
-            <option value="low">{t("compressionLow")}</option>
-            <option value="medium">{t("compressionMedium")}</option>
-            <option value="high">{t("compressionHigh")}</option>
-          </select>
+            <SelectTrigger id="compression-level">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="low">{t("compressionLow")}</SelectItem>
+              <SelectItem value="medium">{t("compressionMedium")}</SelectItem>
+              <SelectItem value="high">{t("compressionHigh")}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       );
     case "reorder-pages":
@@ -104,62 +123,6 @@ export function ToolOptionsPanel({
               onChange({ ...state, password: event.target.value });
             }}
           />
-        </div>
-      );
-    case "ai-summarizer":
-      return (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="output-format">{t("outputFormat")}</Label>
-          <select
-            id="output-format"
-            className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-            value={state.outputFormat === "" ? "txt" : state.outputFormat}
-            disabled={disabled}
-            onChange={(event) => {
-              onChange({ ...state, outputFormat: event.target.value });
-            }}
-          >
-            <option value="txt">TXT</option>
-            <option value="md">Markdown</option>
-          </select>
-        </div>
-      );
-    case "translate-pdf":
-      return (
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="target-language">{t("targetLanguage")}</Label>
-            <select
-              id="target-language"
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-              value={state.targetLanguage}
-              disabled={disabled}
-              onChange={(event) => {
-                onChange({ ...state, targetLanguage: event.target.value });
-              }}
-            >
-              <option value="eng">{t("languages.eng")}</option>
-              <option value="tur">{t("languages.tur")}</option>
-              <option value="deu">{t("languages.deu")}</option>
-              <option value="fra">{t("languages.fra")}</option>
-              <option value="spa">{t("languages.spa")}</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="translate-output-format">{t("outputFormat")}</Label>
-            <select
-              id="translate-output-format"
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-              value={state.outputFormat === "" ? "pdf" : state.outputFormat}
-              disabled={disabled}
-              onChange={(event) => {
-                onChange({ ...state, outputFormat: event.target.value });
-              }}
-            >
-              <option value="pdf">PDF</option>
-              <option value="txt">TXT</option>
-            </select>
-          </div>
         </div>
       );
     default:

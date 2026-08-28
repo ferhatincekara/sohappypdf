@@ -41,21 +41,25 @@ export function MergePdfWorkspace(props: ToolSelectedWorkspaceProps) {
   );
 
   const canMerge = props.canProcess && props.state.files.length >= 2;
+  const blocked = props.state.error !== null;
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-base font-semibold tracking-tight text-foreground">
-          {t("workspaces.merge.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground text-pretty">
-          {t("workspaces.merge.hint")}
-        </p>
-      </div>
+      {blocked ? null : (
+        <div className="flex flex-col gap-1">
+          <h2 className="text-base font-semibold tracking-tight text-foreground">
+            {t("workspaces.merge.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground text-pretty">
+            {t("workspaces.merge.hint")}
+          </p>
+        </div>
+      )}
 
       <MergeFileList
         files={props.state.files}
         disabled={props.disabled}
+        maxPagesPerFile={props.maxPagesPerFile}
         onMove={props.onMove}
         onReorder={props.onReorder}
         onRemove={props.onRemove}
@@ -70,16 +74,19 @@ export function MergePdfWorkspace(props: ToolSelectedWorkspaceProps) {
           disabled={props.disabled}
           formatsLabel={props.formatsLabel}
           maxSizeLabel={props.maxSizeLabel}
+          maxPagesPerFile={props.maxPagesPerFile}
           variant="compact"
           onSelectFiles={props.onSelectFiles}
         />
       ) : null}
 
-      <MergeResultSummary
-        fileCount={props.state.files.length}
-        pageCount={totalPages}
-        fileNames={props.state.files.map((entry) => entry.file.name)}
-      />
+      {blocked ? null : (
+        <MergeResultSummary
+          fileCount={props.state.files.length}
+          pageCount={totalPages}
+          fileNames={props.state.files.map((entry) => entry.file.name)}
+        />
+      )}
 
       <ToolSelectedActions
         toolRoute={props.tool.route}

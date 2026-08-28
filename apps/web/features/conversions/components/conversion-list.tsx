@@ -1,8 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { Link } from "@/lib/i18n/navigation";
 import {
   type ConversionHistoryFilter,
@@ -40,7 +42,7 @@ export function ConversionList({
 
   if (view === "loading") {
     return (
-      <div className="flex flex-col gap-3" aria-busy="true">
+      <div className="flex flex-col gap-2" aria-busy="true">
         <p className="sr-only">{t("loading")}</p>
         <ConversionListSkeleton />
       </div>
@@ -49,12 +51,14 @@ export function ConversionList({
 
   if (view === "error") {
     return (
-      <div className="flex flex-col items-start gap-3">
-        <p className="text-sm text-destructive">{errorMessage}</p>
-        <Button type="button" size="sm" variant="outline" onClick={onRetry}>
+      <HistoryListPanel role="alert">
+        <p className="text-base font-extrabold tracking-tight">
+          {errorMessage}
+        </p>
+        <Button type="button" size="sm" className="mt-4" onClick={onRetry}>
           {t("retry")}
         </Button>
-      </div>
+      </HistoryListPanel>
     );
   }
 
@@ -62,26 +66,35 @@ export function ConversionList({
     const isFiltered = filter !== "all";
 
     return (
-      <div className="flex flex-col items-start gap-3 rounded-xl border border-dashed border-border px-4 py-8">
-        <p className="text-sm text-muted-foreground">
+      <HistoryListPanel>
+        <p className="text-base font-extrabold tracking-tight">
           {isFiltered ? t("emptyFiltered") : t("empty")}
         </p>
-        <p className="text-sm text-muted-foreground">
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
           {isFiltered ? t("emptyFilteredHint") : t("emptyHint")}
         </p>
-        <Link
-          href={isFiltered ? conversionListHref({ filter: "all" }) : "/tools"}
-          className="text-sm font-medium text-foreground underline-offset-4 hover:underline"
+        <Button
+          className="mt-4"
+          nativeButton={false}
+          render={
+            <Link
+              href={
+                isFiltered
+                  ? conversionListHref({ filter: "all" })
+                  : MARKETING_PATHS.tools
+              }
+            />
+          }
         >
           {isFiltered ? t("filters.all") : t("browseTools")}
-        </Link>
-      </div>
+        </Button>
+      </HistoryListPanel>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+    <div className="flex flex-col gap-6">
+      <ul className="flex flex-col gap-2">
         {conversions.map((conversion) => (
           <ConversionListItem key={conversion.id} conversion={conversion} />
         ))}
@@ -110,14 +123,28 @@ export function ConversionList({
   );
 }
 
+function HistoryListPanel({
+  children,
+  role,
+}: {
+  children: ReactNode;
+  role?: "alert";
+}) {
+  return (
+    <div
+      role={role}
+      className="rounded-3xl bg-muted px-5 py-8 md:px-6 md:py-10"
+    >
+      {children}
+    </div>
+  );
+}
+
 function ConversionListSkeleton() {
   return (
-    <div className="divide-y divide-border rounded-xl border border-border bg-card">
+    <div className="flex flex-col gap-2">
       {["one", "two", "three"].map((row) => (
-        <div key={row} className="flex flex-col gap-2 px-4 py-3">
-          <Skeleton className="h-4 w-52" />
-          <Skeleton className="h-3 w-72" />
-        </div>
+        <Skeleton key={row} className="h-20 w-full rounded-md" />
       ))}
     </div>
   );

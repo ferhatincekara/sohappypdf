@@ -36,8 +36,6 @@ export type ToolWorkspaceState = {
   signPageHeight: number;
   signText: string;
   signFileId: string;
-  formFields: Record<string, string>;
-  flattenForm: boolean;
   editOperations: ToolEditOperation[];
   editImageFileId: string;
 };
@@ -71,8 +69,6 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   signPageHeight: 0,
   signText: "",
   signFileId: "",
-  formFields: {},
-  flattenForm: false,
   editOperations: [],
   editImageFileId: "",
 };
@@ -376,22 +372,6 @@ export function buildToolConversionOptions(
         additionalFileIds: [state.signFileId],
       };
     }
-    case "pdf-forms": {
-      const fields = Object.fromEntries(
-        Object.entries(state.formFields).filter(
-          ([name]) => name.trim().length > 0,
-        ),
-      );
-
-      if (Object.keys(fields).length === 0) {
-        return undefined;
-      }
-
-      return {
-        fields,
-        ...(state.flattenForm ? { flatten: true } : {}),
-      };
-    }
     case "edit-pdf": {
       if (state.editOperations.length === 0) {
         return undefined;
@@ -410,15 +390,6 @@ export function buildToolConversionOptions(
         ...(needsImage ? { additionalFileIds: [state.editImageFileId] } : {}),
       };
     }
-    case "ai-summarizer":
-      return {
-        language: "eng",
-        ...(state.outputFormat === "md" ? { outputMode: "md" } : {}),
-      };
-    case "translate-pdf":
-      return state.targetLanguage.trim().length === 0
-        ? undefined
-        : { targetLanguage: state.targetLanguage.trim() };
     default:
       return undefined;
   }

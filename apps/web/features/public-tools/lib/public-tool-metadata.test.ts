@@ -22,10 +22,10 @@ describe("public tool metadata", () => {
       locale: "en",
     });
 
-    expect(merge.title).toBe("Merge PDF | SohappyPDF");
+    expect(merge.title).toBe("Merge PDF | SoHappyPDF");
     expect(merge.description).toBe("Combine multiple PDFs into one file.");
     expect(merge.openGraph).toMatchObject({
-      title: "Merge PDF | SohappyPDF",
+      title: "Merge PDF | SoHappyPDF",
       description: "Combine multiple PDFs into one file.",
       url: "https://sohappypdf.example/merge-pdf",
       type: "website",
@@ -33,7 +33,7 @@ describe("public tool metadata", () => {
     });
     expect(merge.twitter).toMatchObject({
       card: "summary",
-      title: "Merge PDF | SohappyPDF",
+      title: "Merge PDF | SoHappyPDF",
     });
     expect(merge.alternates).toMatchObject({
       canonical: "https://sohappypdf.example/merge-pdf",

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { conversionApi } from "../api/conversion-api";
 import { mapUnknownConversionError } from "../api/conversion-errors";
 import { conversionQueryKeys } from "../api/conversion-query-keys";
+import { isConversionExpired } from "../lib/can-download-conversion";
 import { parseConversionListSearchParams } from "../lib/conversion-list-params";
 import { conversionListRefetchInterval } from "../lib/conversion-polling";
 
@@ -29,7 +30,9 @@ export function useConversions() {
   });
 
   return {
-    conversions: query.data?.conversions ?? [],
+    conversions: (query.data?.conversions ?? []).filter(
+      (conversion) => !isConversionExpired(conversion),
+    ),
     nextCursor: query.data?.nextCursor ?? null,
     params,
     isLoading: query.isPending,

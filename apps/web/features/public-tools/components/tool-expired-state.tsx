@@ -19,18 +19,14 @@ export function ToolExpiredState({
   const t = useTranslations("publicTools");
 
   return (
-    <div
-      className="rounded-lg border border-border bg-card p-5"
-      role="status"
-      aria-live="polite"
-    >
+    <div className="flex flex-col gap-4" role="status" aria-live="polite">
       <div className="flex items-start gap-3">
         <ClockIcon
           className="mt-0.5 size-5 text-foreground"
           aria-hidden="true"
         />
         <div className="min-w-0 flex-1">
-          <h2 className="text-base font-semibold text-foreground">
+          <h2 className="text-lg font-extrabold tracking-tight text-foreground">
             {title ?? t("expiration.title")}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground text-pretty">

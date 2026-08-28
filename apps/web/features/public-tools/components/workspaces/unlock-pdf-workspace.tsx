@@ -4,8 +4,8 @@ import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
+import { ToolWorkspaceFiles } from "../tool-workspace-files";
 
 const MAX_PASSWORD_LENGTH = 128;
 
@@ -22,18 +22,7 @@ export function UnlockPdfWorkspace(props: ToolSelectedWorkspaceProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <ToolFileCard
-        entry={entry}
-        accept={props.accept}
-        disabled={props.disabled}
-        onRemove={() => {
-          props.onRemove(entry.id);
-        }}
-        onReplace={props.onReplaceFiles}
-        onRetry={() => {
-          props.onRetryUpload(entry.id);
-        }}
-      />
+      <ToolWorkspaceFiles props={props} />
       <section
         className="flex max-w-md flex-col gap-4"
         aria-labelledby="unlock-heading"

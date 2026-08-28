@@ -1,14 +1,25 @@
 "use client";
 
-import { resolveWebMaxFileSizeBytes } from "@repo/billing/plans";
-import type { ToolDefinition } from "@repo/tools/catalog";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  resolveWebMaxFileSizeBytes,
+  resolveWebMaxPagesPerFile,
+} from "@repo/billing/plans";
+import {
+  isPremiumTool,
+  type ToolDefinition,
+  toolCombinesSourceFiles,
+} from "@repo/tools/catalog";
+import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { billingApi } from "@/features/billing/api/billing-api";
 import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
 import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 import { canDownloadConversion } from "@/features/conversions/lib/can-download-conversion";
-import { startBrowserDownload } from "@/features/files/lib/start-browser-download";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
+import {
+  startBrowserDownload,
+  startBrowserDownloads,
+} from "@/features/files/lib/start-browser-download";
 import {
   createFileUploadWorkflow,
   type FileUploadWorkflow,
@@ -17,6 +28,10 @@ import { authClient } from "@/lib/auth/auth-client";
 import { createPublicToolApis } from "../api/public-tool-api";
 import { publicToolQueryKeys } from "../api/public-tool-query-keys";
 import {
+  exceedsPlanPageLimit,
+  shouldHoldPdfForPageLimit,
+} from "../lib/plan-page-limit";
+import {
   isExpirationResponse,
   isMissingResourceResponse,
   mapPublicToolError,
@@ -24,7 +39,9 @@ import {
   type PublicToolErrorKey,
 } from "../lib/public-tool-errors";
 import { resolveToolUxState } from "../lib/resolve-tool-ux-state";
+import { toolExecutionQueryRefetchInterval } from "../lib/tool-execution-polling";
 import { maxFilesForTool } from "../lib/tool-limits";
+import { toolAutoStartsWhenReady } from "../lib/tool-requires-configuration";
 import {
   additionalFileIdsFromOptions,
   buildToolConversionOptions,
@@ -48,12 +65,16 @@ import {
   type WorkspaceFile,
 } from "../lib/workspace-files";
 import { isFileWorkspaceUx } from "../types/tool-ux-state";
-import { useToolExecutionStatus } from "./use-tool-execution-status";
 
-export function usePublicToolWorkspace(tool: ToolDefinition) {
+export function usePublicToolWorkspace(
+  tool: ToolDefinition,
+  options?: { authenticated?: boolean },
+) {
   const session = authClient.useSession();
   const queryClient = useQueryClient();
-  const isAuthenticated = session.data !== null && session.data !== undefined;
+  const isAuthenticated =
+    options?.authenticated === true || session.data?.user !== undefined;
+  const authPending = session.isPending && options?.authenticated !== true;
   const apis = useMemo(
     () => createPublicToolApis(isAuthenticated),
     [isAuthenticated],
@@ -61,13 +82,21 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
   const billingQuery = useQuery({
     queryKey: billingQueryKeys.status(),
     queryFn: () => billingApi.getStatus(),
-    enabled: isAuthenticated && !session.isPending,
-    staleTime: 60_000,
+    enabled: isAuthenticated,
+    staleTime: 0,
   });
-  const maxFiles = maxFilesForTool(tool, !isAuthenticated);
+  const maxFiles = maxFilesForTool(tool, {
+    anonymous: !isAuthenticated,
+    maxFilesPerOperation:
+      billingQuery.data?.billing.limits.maxFilesPerOperation,
+  });
   const maxFileSizeBytes = resolveWebMaxFileSizeBytes({
     isAuthenticated,
     planMaxFileSizeBytes: billingQuery.data?.billing.limits.maxFileSizeBytes,
+  });
+  const maxPagesPerFile = resolveWebMaxPagesPerFile({
+    isAuthenticated,
+    planMaxPagesPerFile: billingQuery.data?.billing.limits.maxPagesPerFile,
   });
   const canUploadNow = tool.allowsAnonymous || isAuthenticated;
   const reorderable = supportsFileReorder(tool);
@@ -85,21 +114,57 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     null,
   );
   const [isCreatingExecution, setIsCreatingExecution] = useState(false);
-  const [executionId, setExecutionId] = useState<string | null>(null);
+  const [executionIds, setExecutionIds] = useState<string[]>([]);
   const [isDownloading, setIsDownloading] = useState(false);
   const [resultExpired, setResultExpired] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const workflowsRef = useRef(new Map<string, FileUploadWorkflow>());
   const filesRef = useRef(files);
+  const startUploadRef = useRef<(entry: WorkspaceFile) => void>(() => {});
+  const autoStartLockRef = useRef(false);
+  const inspectStartedRef = useRef(new Set<string>());
+  const inspectEntryRef = useRef<(id: string) => void>(() => {});
+  const onProcessRef = useRef<() => Promise<void>>(async () => {});
   filesRef.current = files;
+  const autoProcess = toolAutoStartsWhenReady(tool.id);
+  const needsSignIn = !tool.allowsAnonymous && !isAuthenticated && !authPending;
+  const isBillingPending = isAuthenticated && billingQuery.isPending;
+  const accessResolved = !authPending && !isBillingPending;
+  const needsPro =
+    isPremiumTool(tool) &&
+    accessResolved &&
+    billingQuery.data?.billing.plan !== "pro";
 
-  const executionQuery = useToolExecutionStatus({
-    executionId,
-    authenticated: isAuthenticated,
-    getExecution: apis.getConversion,
+  const executionQueries = useQueries({
+    queries: executionIds.map((id) => ({
+      queryKey: publicToolQueryKeys.execution(id, isAuthenticated),
+      queryFn: () => apis.getConversion(id),
+      refetchInterval: (query: {
+        state: { data: PublicConversion | undefined; error: unknown };
+      }) =>
+        toolExecutionQueryRefetchInterval({
+          conversion: query.state.data,
+          hasExecutionId: true,
+          error: query.state.error,
+        }),
+      placeholderData: (previousData: PublicConversion | undefined) =>
+        previousData,
+      retry: (failureCount: number, error: unknown) => {
+        if (isExpirationResponse(error) || isMissingResourceResponse(error)) {
+          return false;
+        }
+
+        return failureCount < 2;
+      },
+    })),
   });
-
-  const execution = executionQuery.data;
+  const executions = executionQueries.flatMap((query) =>
+    query.data === undefined ? [] : [query.data],
+  );
+  const execution = executions[0];
+  const executionQueryError =
+    executionQueries.find((query) => query.error !== null)?.error ?? null;
+  const executionId = executionIds[0] ?? null;
 
   useEffect(() => {
     return () => {
@@ -133,13 +198,67 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     };
   }, [execution?.expiresAt]);
 
+  const pendingUploadCount = files.filter(
+    (entry) => entry.status === "pending",
+  ).length;
+  const inspectingCount = files.filter(
+    (entry) => entry.status === "inspecting",
+  ).length;
+
+  useEffect(() => {
+    if (!canUploadNow || authPending || pendingUploadCount === 0) {
+      return;
+    }
+
+    for (const entry of filesRef.current) {
+      if (entry.status === "pending") {
+        startUploadRef.current(entry);
+      }
+    }
+  }, [authPending, canUploadNow, pendingUploadCount]);
+
+  useEffect(() => {
+    if (!accessResolved || inspectingCount === 0) {
+      return;
+    }
+
+    for (const entry of filesRef.current) {
+      if (entry.status === "inspecting") {
+        inspectEntryRef.current(entry.id);
+      }
+    }
+  }, [accessResolved, inspectingCount]);
+
+  const hasActiveJob = executions.some(
+    (job) =>
+      job.status === "pending" ||
+      job.status === "queued" ||
+      job.status === "processing",
+  );
+
+  useEffect(() => {
+    if (!isCreatingExecution && !hasActiveJob) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setNow(new Date());
+    }, 5_000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [hasActiveJob, isCreatingExecution]);
+
   const ux = resolveToolUxState({
     toolId: tool.id,
     files,
     isCreatingExecution,
     executionId,
+    executionIds,
     execution,
-    executionQueryError: executionQuery.error,
+    executions,
+    executionQueryError,
     selectionError,
     processError,
     downloadError,
@@ -150,21 +269,27 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
   const isBusy =
     isCreatingExecution ||
     hasUploadingWorkspaceFiles(files) ||
-    execution?.status === "pending" ||
-    execution?.status === "queued" ||
-    execution?.status === "processing";
+    (executionIds.length > 0 && executions.length < executionIds.length) ||
+    executions.some(
+      (job) =>
+        job.status === "pending" ||
+        job.status === "queued" ||
+        job.status === "processing",
+    );
 
   const conversionOptions = buildToolConversionOptions(tool.id, workspaceState);
   const canProcess =
     isFileWorkspaceUx(ux) &&
     !isBusy &&
-    !session.isPending &&
+    !authPending &&
+    !needsPro &&
     validateToolProcess({
       toolId: tool.id,
       allowsAnonymous: tool.allowsAnonymous,
       isAuthenticated,
       files,
       maxFiles,
+      maxPagesPerFile,
       options: conversionOptions,
     }).ok;
 
@@ -181,7 +306,11 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
   }
 
   function startUpload(entry: WorkspaceFile) {
-    if (!canUploadNow || session.isPending) {
+    if (!canUploadNow || authPending) {
+      return;
+    }
+
+    if (workflowsRef.current.has(entry.id)) {
       return;
     }
 
@@ -209,8 +338,6 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
       );
       return;
     }
-
-    stopWorkflow(entry.id);
 
     const workflow = createFileUploadWorkflow({
       createUpload: apis.createUpload,
@@ -274,6 +401,97 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     workflow.start(entry.file, contentType);
   }
 
+  startUploadRef.current = startUpload;
+
+  function releaseInspection(id: string) {
+    inspectStartedRef.current.delete(id);
+  }
+
+  function continueUpload(id: string) {
+    releaseInspection(id);
+    queueMicrotask(() => {
+      const next = filesRef.current.find((entry) => entry.id === id);
+      if (next?.status === "pending") {
+        startUpload(next);
+      }
+    });
+  }
+
+  function inspectEntry(id: string) {
+    if (inspectStartedRef.current.has(id)) {
+      return;
+    }
+
+    inspectStartedRef.current.add(id);
+
+    const current = filesRef.current.find((entry) => entry.id === id);
+
+    if (current === undefined || current.status !== "inspecting") {
+      releaseInspection(id);
+      return;
+    }
+
+    if (maxPagesPerFile === null) {
+      setFiles((files) =>
+        patchWorkspaceFile(files, id, {
+          status: "pending",
+        }),
+      );
+      continueUpload(id);
+      return;
+    }
+
+    void (async () => {
+      try {
+        const { countPdfPages } = await import("../lib/pdfjs-client");
+        const pageCount = await countPdfPages(current.file);
+        const still = filesRef.current.find((entry) => entry.id === id);
+
+        if (still === undefined || still.status !== "inspecting") {
+          releaseInspection(id);
+          return;
+        }
+
+        if (exceedsPlanPageLimit(pageCount, maxPagesPerFile)) {
+          setFiles((files) =>
+            patchWorkspaceFile(files, id, {
+              status: "failed",
+              pageCount,
+              errorKey: "tooManyPages",
+            }),
+          );
+          setSelectionError("tooManyPages");
+          releaseInspection(id);
+          return;
+        }
+
+        setFiles((files) =>
+          patchWorkspaceFile(files, id, {
+            status: "pending",
+            pageCount,
+          }),
+        );
+        continueUpload(id);
+      } catch {
+        const still = filesRef.current.find((entry) => entry.id === id);
+
+        if (still === undefined || still.status !== "inspecting") {
+          releaseInspection(id);
+          return;
+        }
+
+        setFiles((files) =>
+          patchWorkspaceFile(files, id, {
+            status: "pending",
+          }),
+        );
+        continueUpload(id);
+      }
+    })();
+  }
+
+  inspectEntryRef.current = inspectEntry;
+
   function addFiles(selected: FileList | File[]) {
     ingestFiles(selected, false);
   }
@@ -283,13 +501,15 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
   }
 
   function ingestFiles(selected: FileList | File[], replace: boolean) {
+    autoStartLockRef.current = false;
     setSelectionError(null);
     setProcessError(null);
     setDownloadError(null);
     setResultExpired(false);
-    setExecutionId(null);
+    setExecutionIds([]);
 
     if (replace) {
+      inspectStartedRef.current.clear();
       for (const id of workflowsRef.current.keys()) {
         stopWorkflow(id);
       }
@@ -304,6 +524,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     }
 
     const created = createWorkspaceFiles(selected);
+    const createdIds = new Set(created.map((entry) => entry.id));
 
     setFiles((current) => {
       const base = replace ? clearWorkspaceFiles(current) : current;
@@ -319,7 +540,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
         });
       }
 
-      const validated = next.map((entry) => {
+      return next.map((entry) => {
         if (entry.publicFile !== null || entry.status !== "pending") {
           return entry;
         }
@@ -350,46 +571,60 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
           };
         }
 
+        if (
+          shouldHoldPdfForPageLimit({
+            file: entry.file,
+            accessResolved,
+            maxPagesPerFile,
+          })
+        ) {
+          return {
+            ...entry,
+            status: "inspecting" as const,
+          };
+        }
+
         return entry;
       });
+    });
 
-      const pendingUploads = validated.filter(
-        (entry) => entry.status === "pending",
-      );
-
-      if (canUploadNow && !session.isPending && pendingUploads.length > 0) {
-        queueMicrotask(() => {
-          for (const entry of pendingUploads) {
+    if (canUploadNow && !authPending) {
+      queueMicrotask(() => {
+        for (const entry of filesRef.current) {
+          if (entry.status === "pending" && createdIds.has(entry.id)) {
             startUpload(entry);
           }
-        });
-      }
-
-      return validated;
-    });
+        }
+      });
+    }
   }
 
   function onRemove(id: string) {
+    autoStartLockRef.current = false;
+    inspectStartedRef.current.delete(id);
     stopWorkflow(id);
     setFiles((current) => removeWorkspaceFile(current, id));
     setSelectionError(null);
     setProcessError(null);
-    setExecutionId(null);
+    setExecutionIds([]);
     setResultExpired(false);
   }
 
   function onRetryUpload(id: string) {
     const entry = files.find((file) => file.id === id);
 
-    if (entry === undefined) {
+    if (entry === undefined || entry.errorKey === "tooManyPages") {
       return;
     }
 
     setSelectionError(null);
+    stopWorkflow(id);
     startUpload(entry);
   }
 
   function resetWorkspace() {
+    autoStartLockRef.current = false;
+    inspectStartedRef.current.clear();
     for (const id of workflowsRef.current.keys()) {
       stopWorkflow(id);
     }
@@ -398,7 +633,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     setSelectionError(null);
     setProcessError(null);
     setDownloadError(null);
-    setExecutionId(null);
+    setExecutionIds([]);
     setIsCreatingExecution(false);
     setIsDownloading(false);
     setResultExpired(false);
@@ -409,9 +644,9 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     setProcessError(null);
     setDownloadError(null);
     setResultExpired(false);
-    setExecutionId(null);
+    setExecutionIds([]);
 
-    if (session.isPending) {
+    if (authPending) {
       return;
     }
 
@@ -422,6 +657,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
       isAuthenticated,
       files,
       maxFiles,
+      maxPagesPerFile,
       options,
     });
 
@@ -444,20 +680,7 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
         return;
       }
 
-      if (
-        validation.errorKey === "signInRequired" ||
-        validation.errorKey === "noFile" ||
-        validation.errorKey === "tooFewFiles" ||
-        validation.errorKey === "tooManyFiles" ||
-        validation.errorKey === "invalidOptions" ||
-        validation.errorKey === "unsupported" ||
-        validation.errorKey === "networkFailure"
-      ) {
-        setSelectionError(validation.errorKey);
-        return;
-      }
-
-      setProcessError(validation.errorKey);
+      setSelectionError(validation.errorKey);
       return;
     }
 
@@ -495,26 +718,53 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
 
     try {
       const optionFileIds = additionalFileIdsFromOptions(options);
-      const created = await apis.createConversion({
-        sourceFileId: source.id,
-        type: tool.id,
-        targetFormat,
-        additionalFileIds:
-          optionFileIds ??
-          (uploaded.length < 2
-            ? undefined
-            : uploaded.slice(1).map((file) => file.id)),
-        options,
-      });
+      const combines = toolCombinesSourceFiles(tool.id);
+      const createdIds: string[] = [];
+
+      if (combines || uploaded.length === 1) {
+        const created = await apis.createConversion({
+          sourceFileId: source.id,
+          type: tool.id,
+          targetFormat,
+          additionalFileIds:
+            optionFileIds ??
+            (uploaded.length < 2
+              ? undefined
+              : uploaded.slice(1).map((file) => file.id)),
+          options,
+        });
+        queryClient.setQueryData(
+          publicToolQueryKeys.execution(created.id, isAuthenticated),
+          created,
+        );
+        createdIds.push(created.id);
+      } else {
+        for (const file of uploaded) {
+          const created = await apis.createConversion({
+            sourceFileId: file.id,
+            type: tool.id,
+            targetFormat,
+            options,
+          });
+          queryClient.setQueryData(
+            publicToolQueryKeys.execution(created.id, isAuthenticated),
+            created,
+          );
+          createdIds.push(created.id);
+        }
+      }
 
       setProcessError(null);
-      setExecutionId(created.id);
+      setExecutionIds(createdIds);
       void queryClient.invalidateQueries({
         queryKey: publicToolQueryKeys.recent(isAuthenticated),
       });
       if (isAuthenticated) {
         void queryClient.invalidateQueries({
           queryKey: conversionQueryKeys.lists(),
+        });
+        void queryClient.invalidateQueries({
+          queryKey: billingQueryKeys.status(),
         });
       }
     } catch (error) {
@@ -524,16 +774,30 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     }
   }
 
-  async function onDownload() {
+  async function onDownload(outputFileId?: string) {
     if (ux.status !== "success") {
       return;
     }
 
-    if (
-      execution === undefined ||
-      !canDownloadConversion(execution, now) ||
-      execution.outputFileId === null
-    ) {
+    const fileIds =
+      outputFileId === undefined
+        ? ux.outputs.map((output) => output.outputFileId)
+        : [outputFileId];
+
+    if (fileIds.length === 0 || fileIds.some((fileId) => fileId === "")) {
+      setResultExpired(true);
+      setDownloadError(null);
+      return;
+    }
+
+    const downloadable = fileIds.every((fileId) => {
+      const job =
+        executions.find((item) => item.outputFileId === fileId) ?? execution;
+
+      return job !== undefined && canDownloadConversion(job, now);
+    });
+
+    if (!downloadable) {
       setResultExpired(true);
       setDownloadError(null);
       return;
@@ -543,8 +807,22 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     setDownloadError(null);
 
     try {
-      const result = await apis.createDownloadUrl(execution.outputFileId);
-      startBrowserDownload(result.download.url);
+      const urls: string[] = [];
+
+      for (const fileId of fileIds) {
+        const result = await apis.createDownloadUrl(fileId);
+        urls.push(result.download.url);
+      }
+
+      if (urls.length === 1) {
+        const url = urls[0];
+
+        if (url !== undefined) {
+          startBrowserDownload(url);
+        }
+      } else {
+        await startBrowserDownloads(urls);
+      }
     } catch (error) {
       if (isExpirationResponse(error) || isMissingResourceResponse(error)) {
         setResultExpired(true);
@@ -565,19 +843,33 @@ export function usePublicToolWorkspace(tool: ToolDefinition) {
     await onProcess();
   }
 
+  onProcessRef.current = onProcess;
+
+  useEffect(() => {
+    if (!autoProcess || !canProcess || autoStartLockRef.current) {
+      return;
+    }
+
+    autoStartLockRef.current = true;
+    void onProcessRef.current();
+  }, [autoProcess, canProcess]);
+
   return {
     ux,
     files,
     workspaceState,
     setWorkspaceState,
     isAuthenticated,
-    isSessionPending: session.isPending,
     isBusy,
     canProcess,
+    autoProcess,
     reorderable,
     maxFiles,
     maxFileSizeBytes,
+    maxPagesPerFile,
     isDownloading,
+    needsSignIn,
+    needsPro,
     addFiles,
     replaceFiles,
     onRemove,

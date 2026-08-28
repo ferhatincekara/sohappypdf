@@ -26,26 +26,19 @@ export function RemoveResultSummary({
         {t("resultTitle")}
       </h2>
 
-      <div
-        className={cn(
-          "rounded-xl border p-4",
-          wouldRemoveAll
-            ? "border-destructive/40 bg-destructive/5"
-            : "border-border bg-card",
-        )}
-      >
+      <div className={cn(wouldRemoveAll && "text-destructive")}>
         {selectedCount === 0 ? (
           <p className="text-sm text-muted-foreground text-pretty">
             {t("selectPrompt")}
           </p>
         ) : wouldRemoveAll ? (
-          <p className="text-sm font-medium text-destructive" role="alert">
+          <p className="text-sm font-semibold" role="alert">
             {t("keepOnePage")}
           </p>
         ) : (
           <div className="flex flex-col gap-1">
             <p
-              className="text-sm font-medium text-foreground"
+              className="text-sm font-semibold text-foreground"
               aria-live="polite"
             >
               {t("output", { count: selectedCount })}

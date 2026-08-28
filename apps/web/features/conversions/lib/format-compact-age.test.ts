@@ -40,10 +40,24 @@ describe("compactRemainingFrom", () => {
     });
   });
 
-  test("uses hours at or above one hour remaining", () => {
-    expect(compactRemainingFrom("2026-08-24T13:48:00.000Z", now)).toEqual({
+  test("promotes 60 rounded minutes to one hour", () => {
+    expect(compactRemainingFrom("2026-08-24T12:59:40.000Z", now)).toEqual({
       unit: "hours",
       count: 1,
+    });
+  });
+
+  test("uses hours at or above one hour remaining", () => {
+    expect(compactRemainingFrom("2026-08-24T13:20:00.000Z", now)).toEqual({
+      unit: "hours",
+      count: 1,
+    });
+  });
+
+  test("rounds nearly two hours remaining up to two hours", () => {
+    expect(compactRemainingFrom("2026-08-24T13:56:00.000Z", now)).toEqual({
+      unit: "hours",
+      count: 2,
     });
   });
 });

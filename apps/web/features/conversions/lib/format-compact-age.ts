@@ -42,14 +42,20 @@ export function compactRemainingFrom(
   }
 
   if (remainingMs < HOUR_MS) {
+    const minutes = Math.max(1, Math.round(remainingMs / MINUTE_MS));
+
+    if (minutes >= 60) {
+      return { unit: "hours", count: 1 };
+    }
+
     return {
       unit: "minutes",
-      count: Math.max(1, Math.floor(remainingMs / MINUTE_MS)),
+      count: minutes,
     };
   }
 
   return {
     unit: "hours",
-    count: Math.floor(remainingMs / HOUR_MS),
+    count: Math.max(1, Math.round(remainingMs / HOUR_MS)),
   };
 }

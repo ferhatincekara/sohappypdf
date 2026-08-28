@@ -52,7 +52,7 @@ export function EditorToolbar({
 
   return (
     <div
-      className="flex flex-nowrap items-center gap-1 overflow-x-auto rounded-lg border border-border bg-card p-2 md:flex-wrap"
+      className="flex flex-nowrap items-center gap-1 overflow-x-auto rounded-lg bg-muted p-1 md:flex-wrap"
       role="toolbar"
       aria-label={t("toolbar")}
     >

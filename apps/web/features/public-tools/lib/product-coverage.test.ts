@@ -18,9 +18,10 @@ describe("public product coverage", () => {
       expect(englishErrors[key]).not.toMatch(/s3/i);
     }
 
-    expect(englishErrors.filesExpired).toBe(
-      "This file has expired. Please process it again.",
-    );
+    expect(englishErrors.tooManyPagesShort.length).toBeGreaterThan(0);
+    expect(turkishErrors.tooManyPagesShort.length).toBeGreaterThan(0);
+    expect(englishErrors.upgradeTitle.length).toBeGreaterThan(0);
+    expect(turkishErrors.upgradeTitle.length).toBeGreaterThan(0);
   });
 
   test("exposes a public page for every executable tool", () => {

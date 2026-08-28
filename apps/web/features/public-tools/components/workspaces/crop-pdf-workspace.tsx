@@ -23,6 +23,7 @@ export function CropPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         entry={entry}
         accept={props.accept}
         disabled={props.disabled}
+        maxPagesPerFile={props.maxPagesPerFile}
         onRemove={() => {
           props.onRemove(entry.id);
         }}
@@ -32,45 +33,52 @@ export function CropPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         }}
       />
 
-      <section className="flex flex-col gap-4" aria-labelledby="crop-heading">
-        <div className="flex flex-col gap-1">
-          <h2
-            id="crop-heading"
-            className="text-base font-semibold tracking-tight text-foreground"
+      {props.state.error === null ? (
+        <>
+          <section
+            className="flex flex-col gap-4"
+            aria-labelledby="crop-heading"
           >
-            {t("workspaces.crop.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground text-pretty">
-            {t("workspaces.crop.hint")}
-          </p>
-        </div>
+            <div className="flex flex-col gap-1">
+              <h2
+                id="crop-heading"
+                className="text-base font-semibold tracking-tight text-foreground"
+              >
+                {t("workspaces.crop.title")}
+              </h2>
+              <p className="text-sm text-muted-foreground text-pretty">
+                {t("workspaces.crop.hint")}
+              </p>
+            </div>
 
-        {pdf.status === "ready" && pdf.document !== null ? (
-          <CropPagePreview
-            document={pdf.document}
-            margins={margins}
-            disabled={props.disabled}
-            moveLabel={t("workspaces.crop.move")}
-            edgeLabel={(edge) => t(`workspaces.crop.edges.${edge}`)}
-            onChange={(next) => {
-              props.setWorkspaceState({
-                ...props.workspaceState,
-                cropMargins: next,
-              });
-            }}
-          />
-        ) : (
-          <p className="text-sm text-muted-foreground text-pretty">
-            {pdf.errorKey === "passwordProtected"
-              ? t("workspaces.crop.passwordProtected")
-              : t("workspaces.crop.previewHint")}
-          </p>
-        )}
-      </section>
+            {pdf.status === "ready" && pdf.document !== null ? (
+              <CropPagePreview
+                document={pdf.document}
+                margins={margins}
+                disabled={props.disabled}
+                moveLabel={t("workspaces.crop.move")}
+                edgeLabel={(edge) => t(`workspaces.crop.edges.${edge}`)}
+                onChange={(next) => {
+                  props.setWorkspaceState({
+                    ...props.workspaceState,
+                    cropMargins: next,
+                  });
+                }}
+              />
+            ) : (
+              <p className="text-sm text-muted-foreground text-pretty">
+                {pdf.errorKey === "passwordProtected"
+                  ? t("workspaces.crop.passwordProtected")
+                  : t("workspaces.crop.previewHint")}
+              </p>
+            )}
+          </section>
 
-      <p className="text-sm font-medium text-foreground">
-        {t("workspaces.crop.output")}
-      </p>
+          <p className="text-sm font-medium text-foreground">
+            {t("workspaces.crop.output")}
+          </p>
+        </>
+      ) : null}
 
       <ToolSelectedActions
         toolRoute={props.tool.route}

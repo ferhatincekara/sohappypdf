@@ -1,6 +1,15 @@
-import type { ToolDefinition } from "@repo/tools/catalog";
+import { resolveWebMaxFilesPerOperation } from "@repo/billing/plans";
+import {
+  type ToolDefinition,
+  toolCombinesSourceFiles,
+  toolSupportsBatchOperations,
+} from "@repo/tools/catalog";
+import { ArrowLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { getPublicWebEnv } from "@/config/public-env";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { getMarketingToolIcon } from "@/features/marketing/lib/marketing-tool-icon";
 import { Link } from "@/lib/i18n/navigation";
 import {
   PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES,
@@ -10,8 +19,6 @@ import { dedicatedHowToForTool } from "../lib/dedicated-tool-how-to";
 import { formatAcceptedFormats, formatLabel } from "../lib/format-labels";
 import type { PublicToolFaqItem } from "../lib/public-tool-json-ld";
 import { publicToolCanonicalUrl } from "../lib/public-tool-metadata";
-import { maxFilesForTool } from "../lib/tool-limits";
-import { PublicToolFaq } from "./public-tool-faq";
 import { PublicToolJsonLd } from "./public-tool-json-ld";
 import { PublicToolWorkspace } from "./public-tool-workspace";
 import { RecentExecutions } from "./recent-executions";
@@ -20,6 +27,13 @@ import { ToolHeader } from "./tool-header";
 export type RelatedPublicTool = {
   id: string;
   href: `/${string}`;
+  icon: string;
+};
+
+type HowToStep = {
+  key: string;
+  title: string;
+  description: string;
 };
 
 export async function PublicToolPageContent({
@@ -38,7 +52,12 @@ export async function PublicToolPageContent({
   const tNav = await getTranslations("marketing.nav");
   const name = tTools(`${tool.id}.name`);
   const description = tTools(`${tool.id}.description`);
-  const maxFiles = maxFilesForTool(tool, !isAuthenticated);
+  const maxFiles = resolveWebMaxFilesPerOperation({
+    isAuthenticated,
+    toolMaxInputCount: tool.maxInputCount,
+    combinesSourceFiles: toolCombinesSourceFiles(tool.id),
+    supportsBatch: toolSupportsBatchOperations(tool.id),
+  });
   const maxFileSizeBytes = isAuthenticated
     ? maxAuthenticatedFileSizeBytes
     : PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES;
@@ -95,9 +114,42 @@ export async function PublicToolPageContent({
       }),
     },
   ];
+  const outputLabel = formatLabel(tool.outputFormats[0] ?? "pdf");
+  const howToSteps: readonly HowToStep[] =
+    howTo === null
+      ? [
+          {
+            key: "upload",
+            title: t("overview.steps.upload.title"),
+            description: t("overview.steps.upload.description", {
+              detail: formats,
+            }),
+          },
+          {
+            key: "process",
+            title: t("overview.steps.process.title"),
+            description: t("overview.steps.process.description", {
+              detail: outputLabel,
+            }),
+          },
+          {
+            key: "download",
+            title: t("overview.steps.download.title"),
+            description: t("overview.steps.download.description", {
+              detail: outputLabel,
+            }),
+          },
+        ]
+      : howTo.steps.map((step) => ({
+          key: step,
+          title: t(`workspaces.${howTo.workspace}.how.${step}.title`),
+          description: t(
+            `workspaces.${howTo.workspace}.how.${step}.description`,
+          ),
+        }));
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 py-10 sm:py-14">
+    <div className="pb-6 pt-5 md:pb-16 md:pt-10">
       <PublicToolJsonLd
         name={name}
         description={description}
@@ -107,165 +159,91 @@ export async function PublicToolPageContent({
         })}
         faq={faq}
       />
-      <div className="mx-auto w-full max-w-3xl">
-        <ToolHeader
-          category={tNav(`categories.${tool.category}`)}
-          name={name}
-          description={description}
-          authenticationNotice={
-            tool.allowsAnonymous || isAuthenticated
-              ? null
-              : t("descriptionAuthenticated")
-          }
-        />
-      </div>
-
-      <PublicToolWorkspace tool={tool} />
-
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-10">
-        <RecentExecutions />
-
-        <section
-          aria-labelledby="how-to-heading"
-          className="flex flex-col gap-3"
+      <MarketingContainer>
+        <Link
+          href={MARKETING_PATHS.tools}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
         >
-          <h2
-            id="how-to-heading"
-            className="text-lg font-semibold tracking-tight"
-          >
-            {t("overview.howTitle")}
-          </h2>
-          <ol className="grid gap-3 sm:grid-cols-3">
-            {howTo === null
-              ? (
-                  [
-                    ["upload", formats],
-                    ["process", formatLabel(tool.outputFormats[0] ?? "pdf")],
-                    ["download", formatLabel(tool.outputFormats[0] ?? "pdf")],
-                  ] as const
-                ).map(([step, detail], index) => (
-                  <li
-                    key={step}
-                    className="rounded-lg border border-border bg-card p-4"
-                  >
-                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                      {t("overview.step", { number: index + 1 })}
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {t(`overview.steps.${step}.title`)}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {t(`overview.steps.${step}.description`, { detail })}
-                    </p>
-                  </li>
-                ))
-              : howTo.steps.map((step, index) => (
-                  <li
-                    key={step}
-                    className="rounded-lg border border-border bg-card p-4"
-                  >
-                    <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-                      {t("overview.step", { number: index + 1 })}
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {t(`workspaces.${howTo.workspace}.how.${step}.title`)}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {t(
-                        `workspaces.${howTo.workspace}.how.${step}.description`,
-                      )}
-                    </p>
-                  </li>
-                ))}
-          </ol>
-        </section>
+          <ArrowLeftIcon className="size-4" aria-hidden="true" />
+          {tNav("allTools")}
+        </Link>
 
-        <section
-          aria-labelledby="formats-heading"
-          className="flex flex-col gap-3"
-        >
-          <h2
-            id="formats-heading"
-            className="text-lg font-semibold tracking-tight"
-          >
-            {t("overview.detailsTitle")}
-          </h2>
-          <dl className="grid gap-3 rounded-lg border border-border bg-card p-4 text-sm sm:grid-cols-3">
-            <div>
-              <dt className="font-medium text-foreground">
-                {t("overview.accepts")}
-              </dt>
-              <dd className="mt-1 text-muted-foreground">{formats}</dd>
-            </div>
-            <div>
-              <dt className="font-medium text-foreground">
-                {t("overview.outputs")}
-              </dt>
-              <dd className="mt-1 text-muted-foreground">{outputs}</dd>
-            </div>
-            <div>
-              <dt className="font-medium text-foreground">
-                {t("overview.limits")}
-              </dt>
-              <dd className="mt-1 text-muted-foreground">
-                {t("limits", {
-                  files: maxFiles,
-                  sizeMb,
-                  hours: PUBLIC_ANONYMOUS_RETENTION_HOURS,
-                })}
-              </dd>
-            </div>
-          </dl>
-        </section>
+        <div className="mt-6 md:mt-8">
+          <PublicToolWorkspace
+            tool={tool}
+            isAuthenticated={isAuthenticated}
+            header={
+              <ToolHeader
+                icon={tool.icon}
+                category={tNav(`categories.${tool.category}`)}
+                name={name}
+                description={description}
+                authenticationNotice={
+                  tool.allowsAnonymous || isAuthenticated
+                    ? null
+                    : t("descriptionAuthenticated")
+                }
+              />
+            }
+            guide={
+              <>
+                <h2 className="text-base font-extrabold tracking-tight">
+                  {t("overview.howTitle")}
+                </h2>
+                <ol className="mt-4 space-y-3 md:mt-5 md:space-y-4">
+                  {howToSteps.map((step, index) => (
+                    <li key={step.key} className="flex gap-3">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-xs font-extrabold tabular-nums">
+                        {index + 1}
+                      </span>
+                      <div className="pt-0.5">
+                        <p className="text-sm font-semibold text-foreground">
+                          {step.title}
+                        </p>
+                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                          {step.description}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
 
-        <section
-          aria-labelledby="privacy-heading"
-          className="flex flex-col gap-2"
-        >
-          <h2
-            id="privacy-heading"
-            className="text-lg font-semibold tracking-tight"
-          >
-            {t("privacy.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground text-pretty">
-            {t("privacy.body", { hours: PUBLIC_ANONYMOUS_RETENTION_HOURS })}
-          </p>
-        </section>
+                {relatedTools.length > 0 ? (
+                  <>
+                    <h3 className="mt-5 border-t border-black/10 pt-4 text-xs font-bold tracking-wider text-muted-foreground uppercase md:mt-8 md:pt-6">
+                      {t("related.title")}
+                    </h3>
+                    <ul className="divide-y divide-black/10">
+                      {relatedTools.map((related) => {
+                        const Icon = getMarketingToolIcon(related.icon);
 
-        <PublicToolFaq title={t("faq.title")} items={faq} />
+                        return (
+                          <li key={related.id}>
+                            <Link
+                              href={related.href}
+                              className="flex items-center gap-2.5 py-2.5 text-base font-medium text-foreground transition-opacity hover:opacity-60"
+                            >
+                              <Icon
+                                className="size-4 shrink-0 text-foreground/70"
+                                aria-hidden="true"
+                              />
+                              {tTools(`${related.id}.name`)}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </>
+                ) : null}
+              </>
+            }
+          />
+        </div>
 
-        {relatedTools.length > 0 ? (
-          <section
-            aria-labelledby="related-tools-heading"
-            className="border-t border-border pt-8"
-          >
-            <h2
-              id="related-tools-heading"
-              className="text-lg font-semibold tracking-tight"
-            >
-              {t("related.title")}
-            </h2>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-              {relatedTools.map((related) => (
-                <li key={related.id}>
-                  <Link
-                    href={related.href}
-                    className="block rounded-lg border border-border bg-card p-4 transition-colors hover:bg-muted/40 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-                  >
-                    <p className="text-sm font-medium text-foreground">
-                      {tTools(`${related.id}.name`)}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {tTools(`${related.id}.description`)}
-                    </p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-      </div>
+        <div className="mt-6 md:mt-12">
+          <RecentExecutions isAuthenticated={isAuthenticated} />
+        </div>
+      </MarketingContainer>
     </div>
   );
 }

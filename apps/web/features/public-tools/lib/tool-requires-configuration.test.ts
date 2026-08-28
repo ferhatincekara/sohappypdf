@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { toolRequiresConfiguration } from "./tool-requires-configuration";
+import {
+  toolAutoStartsWhenReady,
+  toolRequiresConfiguration,
+} from "./tool-requires-configuration";
 
 describe("toolRequiresConfiguration", () => {
   test("treats dedicated option workspaces as configuring", () => {
@@ -12,5 +15,14 @@ describe("toolRequiresConfiguration", () => {
     expect(toolRequiresConfiguration("repair-pdf")).toBe(false);
     expect(toolRequiresConfiguration("jpg-to-pdf")).toBe(false);
     expect(toolRequiresConfiguration("pdf-to-jpg")).toBe(false);
+  });
+
+  test("auto-starts convert-style tools after upload", () => {
+    expect(toolAutoStartsWhenReady("pdf-to-word")).toBe(true);
+    expect(toolAutoStartsWhenReady("repair-pdf")).toBe(true);
+    expect(toolAutoStartsWhenReady("jpg-to-pdf")).toBe(true);
+    expect(toolAutoStartsWhenReady("scan-to-pdf")).toBe(true);
+    expect(toolAutoStartsWhenReady("merge-pdf")).toBe(false);
+    expect(toolAutoStartsWhenReady("ocr-pdf")).toBe(false);
   });
 });

@@ -32,7 +32,6 @@ export const TOOL_WORKSPACE_KINDS = [
   "watermark",
   "crop",
   "sign",
-  "fill",
   "edit",
   "repair",
   "ocr",
@@ -100,10 +99,6 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
     return "sign";
   }
 
-  if (toolId === "pdf-forms") {
-    return "fill";
-  }
-
   if (toolId === "edit-pdf") {
     return "edit";
   }
@@ -125,4 +120,16 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
   }
 
   return "default";
+}
+
+export function usesCanvasActionSidebar(toolId: string): boolean {
+  const kind = resolveToolWorkspaceKind(toolId);
+
+  return (
+    kind === "split" ||
+    kind === "extract" ||
+    kind === "remove" ||
+    kind === "rotate" ||
+    kind === "organize"
+  );
 }

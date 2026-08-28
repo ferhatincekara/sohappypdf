@@ -35,6 +35,8 @@ import {
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
 import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
+import { ToolSidebarCard } from "../tool-sidebar-card";
+import { ToolStage } from "../tool-stage";
 import { OrganizeAdvancedOrder } from "./organize-advanced-order";
 import { OrganizePageOverlay } from "./organize-page-overlay";
 import { OrganizePdfToolbar } from "./organize-pdf-toolbar";
@@ -55,80 +57,88 @@ export function OrganizePdfWorkspace(props: ToolSelectedWorkspaceProps) {
     entry.status === "ready";
 
   return (
-    <div className="flex flex-col gap-6">
-      <ToolFileCard
-        entry={entry}
-        pageCount={pdf.status === "ready" ? pdf.pageCount : entry.pageCount}
-        accept={props.accept}
-        disabled={props.disabled}
-        onRemove={() => {
-          props.onRemove(entry.id);
-        }}
-        onReplace={props.onReplaceFiles}
-        onRetry={() => {
-          props.onRetryUpload(entry.id);
-        }}
-      />
-
-      <section
-        className="flex flex-col gap-4"
-        aria-labelledby="organize-pages-heading"
-      >
-        <div className="flex flex-col gap-1">
-          <h2
-            id="organize-pages-heading"
-            className="text-base font-semibold tracking-tight text-foreground"
-          >
-            {t("workspaces.organize.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground text-pretty">
-            {t("workspaces.organize.hint")}
-          </p>
-        </div>
-
-        {pdf.status === "loading" ? <PdfPageGridSkeleton /> : null}
-
-        {pdf.status === "error" ? (
-          <p className="text-sm text-muted-foreground text-pretty">
-            {pdf.errorKey === "passwordProtected"
-              ? t("workspaces.organize.passwordProtected")
-              : t("workspaces.organize.previewFailed")}
-          </p>
-        ) : null}
-
-        {pdf.status === "ready" && pdf.document !== null ? (
-          <OrganizePdfPagesPanel
-            key={entry.id}
-            pdf={pdf}
+    <ToolStage
+      main={
+        <div className="flex flex-col gap-6">
+          <ToolFileCard
+            entry={entry}
+            pageCount={pdf.status === "ready" ? pdf.pageCount : entry.pageCount}
+            accept={props.accept}
             disabled={props.disabled}
-            workspaceState={props.workspaceState}
-            setWorkspaceState={props.setWorkspaceState}
+            maxPagesPerFile={props.maxPagesPerFile}
+            onRemove={() => {
+              props.onRemove(entry.id);
+            }}
+            onReplace={props.onReplaceFiles}
+            onRetry={() => {
+              props.onRetryUpload(entry.id);
+            }}
           />
-        ) : null}
-      </section>
 
-      {pdf.status === "ready" || pdf.status === "error" ? (
-        <OrganizeResultSummary
-          sourcePageCount={pdf.pageCount}
-          resultPageCount={
-            parseOrganizeOrderInput(props.workspaceState.pageOrder)?.length ?? 0
-          }
-        />
-      ) : null}
+          {props.state.error === null ? (
+            <section
+              className="flex flex-col gap-4"
+              aria-labelledby="organize-pages-heading"
+            >
+              <div className="flex flex-col gap-1">
+                <h2
+                  id="organize-pages-heading"
+                  className="text-lg font-extrabold tracking-tight text-foreground"
+                >
+                  {t("workspaces.organize.title")}
+                </h2>
+                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground text-pretty">
+                  {t("workspaces.organize.hint")}
+                </p>
+              </div>
 
-      <ToolSelectedActions
-        toolRoute={props.tool.route}
-        state={props.state}
-        canProcess={canOrganize}
-        processLabel={props.processLabel}
-        disabledReason={
-          parseOrganizeOrderInput(props.workspaceState.pageOrder) === undefined
-            ? t("workspaces.organize.selectPrompt")
-            : null
-        }
-        onProcess={props.onProcess}
-      />
-    </div>
+              {pdf.status === "loading" ? <PdfPageGridSkeleton /> : null}
+
+              {pdf.status === "error" ? (
+                <p className="text-sm text-muted-foreground text-pretty">
+                  {pdf.errorKey === "passwordProtected"
+                    ? t("workspaces.organize.passwordProtected")
+                    : t("workspaces.organize.previewFailed")}
+                </p>
+              ) : null}
+
+              {pdf.status === "ready" && pdf.document !== null ? (
+                <OrganizePdfPagesPanel
+                  key={entry.id}
+                  pdf={pdf}
+                  disabled={props.disabled}
+                  workspaceState={props.workspaceState}
+                  setWorkspaceState={props.setWorkspaceState}
+                />
+              ) : null}
+            </section>
+          ) : null}
+        </div>
+      }
+      sidebar={
+        <ToolSidebarCard className="gap-5">
+          {(pdf.status === "ready" || pdf.status === "error") &&
+          props.state.error === null ? (
+            <OrganizeResultSummary
+              sourcePageCount={pdf.pageCount}
+              resultPageCount={
+                parseOrganizeOrderInput(props.workspaceState.pageOrder)
+                  ?.length ?? 0
+              }
+            />
+          ) : null}
+
+          <ToolSelectedActions
+            toolRoute={props.tool.route}
+            state={props.state}
+            canProcess={canOrganize}
+            processLabel={props.processLabel}
+            fullWidth
+            onProcess={props.onProcess}
+          />
+        </ToolSidebarCard>
+      }
+    />
   );
 }
 

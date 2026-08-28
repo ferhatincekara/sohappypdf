@@ -9,8 +9,8 @@ import {
   usePdfDocument,
 } from "../../pdf-workspace";
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
+import { ToolWorkspaceFiles } from "../tool-workspace-files";
 
 const MIN_OPACITY = 0.05;
 const MAX_OPACITY = 1;
@@ -36,18 +36,7 @@ export function WatermarkPdfWorkspace(props: ToolSelectedWorkspaceProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <ToolFileCard
-        entry={entry}
-        accept={props.accept}
-        disabled={props.disabled}
-        onRemove={() => {
-          props.onRemove(entry.id);
-        }}
-        onReplace={props.onReplaceFiles}
-        onRetry={() => {
-          props.onRetryUpload(entry.id);
-        }}
-      />
+      <ToolWorkspaceFiles props={props} />
 
       <section
         className="flex flex-col gap-4"
@@ -65,7 +54,7 @@ export function WatermarkPdfWorkspace(props: ToolSelectedWorkspaceProps) {
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,--spacing(64))_minmax(0,1fr)]">
           {pdf.status === "ready" &&
           pdf.document !== null &&
           previewPage !== undefined ? (
@@ -127,8 +116,8 @@ export function WatermarkPdfWorkspace(props: ToolSelectedWorkspaceProps) {
               />
             </div>
 
-            <details className="rounded-lg border border-border bg-card p-4">
-              <summary className="cursor-pointer text-sm font-medium text-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
+            <details className="border-t border-border pt-4">
+              <summary className="cursor-pointer text-sm font-medium text-foreground outline-none">
                 {t("workspaces.watermark.more")}
               </summary>
               <div className="mt-4 flex flex-col gap-2">

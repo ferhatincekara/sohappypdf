@@ -9,26 +9,20 @@ export function FileDownloadButton({
   variant = "default",
 }: {
   fileId: string;
-  variant?: "default" | "outline";
+  variant?: "default" | "outline" | "white";
 }) {
   const t = useTranslations("files.actions");
-  const tErrors = useTranslations("files.errors");
-  const { downloadFile, isPending, errorKey } = useFileDownload();
+  const { downloadFile, isPending } = useFileDownload();
 
   return (
-    <div className="flex flex-col items-start gap-1">
-      <Button
-        type="button"
-        size="sm"
-        variant={variant}
-        disabled={isPending}
-        onClick={() => downloadFile(fileId)}
-      >
-        {isPending ? t("downloading") : t("download")}
-      </Button>
-      {errorKey === null ? null : (
-        <p className="text-xs text-destructive">{tErrors(errorKey)}</p>
-      )}
-    </div>
+    <Button
+      type="button"
+      size="sm"
+      variant={variant}
+      disabled={isPending}
+      onClick={() => downloadFile(fileId)}
+    >
+      {isPending ? t("downloading") : t("download")}
+    </Button>
   );
 }

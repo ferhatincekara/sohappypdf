@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
 import { conversionApi } from "../api/conversion-api";
 import { mapUnknownConversionError } from "../api/conversion-errors";
 import { conversionQueryKeys } from "../api/conversion-query-keys";
@@ -24,6 +25,9 @@ export function useCreateConversion() {
       );
       void queryClient.invalidateQueries({
         queryKey: conversionQueryKeys.lists(),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: billingQueryKeys.status(),
       });
     },
   });

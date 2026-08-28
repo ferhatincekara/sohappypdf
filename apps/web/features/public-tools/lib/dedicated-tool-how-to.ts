@@ -17,7 +17,6 @@ export type DedicatedHowToWorkspace =
   | "watermark"
   | "crop"
   | "sign"
-  | "fill"
   | "edit";
 
 export type DedicatedHowTo = {
@@ -81,10 +80,6 @@ const DEDICATED_HOW_TO: Record<string, DedicatedHowTo> = {
   "sign-pdf": {
     workspace: "sign",
     steps: ["upload", "sign", "download"],
-  },
-  "pdf-forms": {
-    workspace: "fill",
-    steps: ["upload", "fill", "download"],
   },
   "edit-pdf": {
     workspace: "edit",

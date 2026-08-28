@@ -4,6 +4,7 @@ import { Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { createDropInputGate } from "../lib/drop-input-gate";
 import { getFileInputAccept } from "../lib/supported-upload-types";
 
 export function FileUploadDropzone({
@@ -19,6 +20,7 @@ export function FileUploadDropzone({
   const inputId = useId();
   const hintId = useId();
   const dragDepth = useRef(0);
+  const selectionGate = useRef(createDropInputGate());
   const [isDragging, setIsDragging] = useState(false);
 
   function resetDragging() {
@@ -31,7 +33,7 @@ export function FileUploadDropzone({
       htmlFor={inputId}
       className={cn(
         "relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border border-dashed border-border bg-card px-6 py-10 text-center outline-none transition-colors",
-        "has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50",
+        "has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring",
         isDragging && !disabled && "border-foreground bg-muted/60",
         disabled && "pointer-events-none cursor-not-allowed opacity-60",
       )}
@@ -58,13 +60,20 @@ export function FileUploadDropzone({
       }}
       onDrop={(event) => {
         event.preventDefault();
+        event.stopPropagation();
         resetDragging();
 
         if (disabled) {
           return;
         }
 
-        onSelectFiles(event.dataTransfer.files);
+        const files = selectionGate.current.captureDrop(
+          event.dataTransfer.files,
+        );
+
+        if (files.length > 0) {
+          onSelectFiles(files);
+        }
       }}
     >
       <input
@@ -76,8 +85,12 @@ export function FileUploadDropzone({
         aria-describedby={hintId}
         onClick={onOpenPicker}
         onChange={(event) => {
-          onSelectFiles(event.target.files);
+          const files = selectionGate.current.captureInput(event.target.files);
           event.target.value = "";
+
+          if (files.length > 0) {
+            onSelectFiles(files);
+          }
         }}
       />
       <span className="flex size-10 items-center justify-center rounded-full bg-muted text-foreground">

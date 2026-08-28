@@ -2,10 +2,17 @@
 
 import { useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
+import { ToolWorkspaceFiles } from "../tool-workspace-files";
 
 const OCR_LANGUAGES = ["eng", "tur", "deu", "fra", "spa"] as const;
 const OCR_OUTPUTS = ["pdf", "txt"] as const;
@@ -28,18 +35,7 @@ export function OcrPdfWorkspace(props: ToolSelectedWorkspaceProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <ToolFileCard
-        entry={entry}
-        accept={props.accept}
-        disabled={props.disabled}
-        onRemove={() => {
-          props.onRemove(entry.id);
-        }}
-        onReplace={props.onReplaceFiles}
-        onRetry={() => {
-          props.onRetryUpload(entry.id);
-        }}
-      />
+      <ToolWorkspaceFiles props={props} />
 
       <section className="flex flex-col gap-3" aria-labelledby="ocr-heading">
         <div className="flex flex-col gap-1">
@@ -56,27 +52,38 @@ export function OcrPdfWorkspace(props: ToolSelectedWorkspaceProps) {
 
         <div className="flex max-w-sm flex-col gap-2">
           <Label htmlFor="ocr-language">{t("workspaces.ocr.language")}</Label>
-          <select
-            id="ocr-language"
-            className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          <Select
             value={language}
             disabled={props.disabled}
-            onChange={(event) => {
+            items={OCR_LANGUAGES.map((code) => ({
+              value: code,
+              label: t(`options.languages.${code}`),
+            }))}
+            onValueChange={(value) => {
+              if (value === null) {
+                return;
+              }
+
               props.setWorkspaceState({
                 ...props.workspaceState,
-                targetLanguage: event.target.value,
+                targetLanguage: value,
               });
             }}
           >
-            {OCR_LANGUAGES.map((code) => (
-              <option key={code} value={code}>
-                {t(`options.languages.${code}`)}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="ocr-language">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {OCR_LANGUAGES.map((code) => (
+                <SelectItem key={code} value={code}>
+                  {t(`options.languages.${code}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="flex flex-col divide-y divide-border">
           {OCR_OUTPUTS.map((mode) => {
             const selected = output === mode;
 
@@ -93,16 +100,14 @@ export function OcrPdfWorkspace(props: ToolSelectedWorkspaceProps) {
                   });
                 }}
                 className={cn(
-                  "rounded-xl border p-4 text-left outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
-                  selected
-                    ? "border-foreground bg-card shadow-xs"
-                    : "border-border bg-card/60 hover:bg-muted/40",
+                  "flex flex-col items-start gap-1 py-4 text-left outline-none transition-opacity",
+                  selected ? "opacity-100" : "opacity-55 hover:opacity-100",
                 )}
               >
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-sm font-semibold text-foreground">
                   {t(`workspaces.ocr.modes.${mode}.title`)}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground text-pretty">
+                <p className="text-sm text-muted-foreground text-pretty">
                   {t(`workspaces.ocr.modes.${mode}.hint`)}
                 </p>
               </button>
@@ -120,6 +125,7 @@ export function OcrPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         state={props.state}
         canProcess={props.canProcess}
         processLabel={props.processLabel}
+        awaitingSignIn={props.awaitingSignIn === true}
         onProcess={props.onProcess}
       />
     </div>

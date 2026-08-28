@@ -25,8 +25,8 @@ export function MergeResultSummary({
       >
         {t("resultTitle")}
       </h2>
-      <div className="rounded-xl border-2 border-foreground bg-card p-4 shadow-xs">
-        <p className="text-sm font-medium text-foreground">
+      <div>
+        <p className="text-sm font-semibold text-foreground">
           {t("resultLabel")}
         </p>
         <p className="mt-1 text-sm text-muted-foreground text-pretty">

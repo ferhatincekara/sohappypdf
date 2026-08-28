@@ -1,4 +1,7 @@
-import type { ToolUserError } from "../lib/public-tool-errors";
+import type {
+  PublicToolErrorKey,
+  ToolUserError,
+} from "../lib/public-tool-errors";
 import type { WorkspaceFile } from "../lib/workspace-files";
 
 export const TOOL_UX_STATUSES = [
@@ -38,6 +41,13 @@ export type ToolProcessingUxState = {
   progress: number | null;
 };
 
+export type ToolSuccessOutput = {
+  executionId: string;
+  sourceFilename: string | null;
+  outputFileId: string;
+  targetFormat: string;
+};
+
 export type ToolSuccessUxState = {
   status: "success";
   executionId: string;
@@ -46,6 +56,7 @@ export type ToolSuccessUxState = {
   outputFileId: string;
   expiresAt: string | null;
   downloadError: ToolUserError | null;
+  outputs: readonly ToolSuccessOutput[];
 };
 
 export type ToolErrorUxState = {
@@ -76,6 +87,20 @@ export function isFileWorkspaceUx(
   state: ToolUxState,
 ): state is ToolSelectedUxState {
   return state.status === "selected" || state.status === "configuring";
+}
+
+export function resolveToolWorkspaceErrorKey(
+  ux: ToolUxState,
+): PublicToolErrorKey | null {
+  if (ux.status === "error") {
+    return ux.error.key;
+  }
+
+  if (isFileWorkspaceUx(ux) && ux.error !== null) {
+    return ux.error.key;
+  }
+
+  return null;
 }
 
 export function isToolProcessingStatus(

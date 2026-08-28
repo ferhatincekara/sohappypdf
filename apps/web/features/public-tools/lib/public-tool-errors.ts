@@ -1,3 +1,4 @@
+import { FREE_MAX_PAGES_PER_FILE } from "@repo/billing/plans";
 import { ConversionApiRequestError } from "@/features/conversions/api/conversion-api";
 import {
   CONVERSION_ERROR_KEYS,
@@ -16,6 +17,7 @@ export const PUBLIC_TOOL_ERROR_KEYS = [
   "noFile",
   "tooFewFiles",
   "tooManyFiles",
+  "tooManyPages",
   "tooLarge",
   "emptyFile",
   "unsupported",
@@ -27,10 +29,12 @@ export const PUBLIC_TOOL_ERROR_KEYS = [
   "uploadInterrupted",
   "creditsExhausted",
   "limitReached",
+  "upgradeRequired",
   "signInRequired",
   "unauthorized",
   "passwordProtected",
   "processingFailed",
+  "aiUnavailable",
   "duplicateExecution",
   "filesExpired",
   "unexpected",
@@ -62,6 +66,29 @@ export function toToolUserError(key: PublicToolErrorKey): ToolUserError {
     key,
     retryable: isRetryableToolError(key),
   };
+}
+
+export function publicToolErrorMessageValues(
+  key: PublicToolErrorKey,
+  maxPagesPerFile?: number | null,
+): { max: number } | Record<string, never> {
+  if (key !== "tooManyPages") {
+    return {};
+  }
+
+  return {
+    max: maxPagesPerFile ?? FREE_MAX_PAGES_PER_FILE,
+  };
+}
+
+export function isPlanUpgradeToolError(key: PublicToolErrorKey): boolean {
+  return key === "tooManyPages" || key === "upgradeRequired";
+}
+
+export function canRetryWorkspaceFileError(
+  key: PublicToolErrorKey | null,
+): boolean {
+  return key !== "tooManyPages";
 }
 
 function readClientStatusAndCode(error: unknown): {
@@ -148,6 +175,8 @@ function mapConversionErrorKey(
       return "invalidPdf";
     case CONVERSION_ERROR_KEYS.planLimitReached:
       return "limitReached";
+    case CONVERSION_ERROR_KEYS.upgradeRequired:
+      return "upgradeRequired";
     case CONVERSION_ERROR_KEYS.unauthorized:
       return "signInRequired";
     case CONVERSION_ERROR_KEYS.sourceUnavailable:
@@ -209,8 +238,20 @@ export function mapConversionFailure(
     return "creditsExhausted";
   }
 
+  if (haystack.includes("page") && haystack.includes("limit")) {
+    return "tooManyPages";
+  }
+
   if (haystack.includes("limit")) {
     return "limitReached";
+  }
+
+  if (
+    haystack.includes("ai processing") ||
+    haystack.includes("ai provider") ||
+    haystack.includes("not configured")
+  ) {
+    return "aiUnavailable";
   }
 
   return "processingFailed";
@@ -223,13 +264,20 @@ export function mapPublicToolError(error: unknown): PublicToolErrorKey {
 
   if (error instanceof ConversionApiRequestError) {
     if (error.clientError.code === "INTERNAL_ERROR") {
-      return "networkFailure";
+      return "unexpected";
+    }
+    if (error.clientError.code === "CONFIGURATION_ERROR") {
+      const message = error.clientError.message?.toLowerCase() ?? "";
+      return message.includes("ai") ? "aiUnavailable" : "unexpected";
     }
     if (error.clientError.code === "FORBIDDEN") {
       return "unauthorized";
     }
     if (error.clientError.code === "PLAN_LIMIT_REACHED") {
       const message = error.clientError.message?.toLowerCase() ?? "";
+      if (message.includes("requires pro")) {
+        return "upgradeRequired";
+      }
       return message.includes("credit") ? "creditsExhausted" : "limitReached";
     }
 
@@ -251,14 +299,20 @@ export function mapPublicToolError(error: unknown): PublicToolErrorKey {
     error instanceof FileApiRequestError
       ? error.clientError
       : toFileClientError(error);
-  if (fileClient.code === "INTERNAL_ERROR") {
-    return "networkFailure";
+  if (
+    fileClient.code === "INTERNAL_ERROR" ||
+    fileClient.code === "CONFIGURATION_ERROR"
+  ) {
+    return "unexpected";
   }
   if (fileClient.code === "FORBIDDEN") {
     return "unauthorized";
   }
   if (fileClient.code === "PLAN_LIMIT_REACHED") {
     const message = fileClient.message?.toLowerCase() ?? "";
+    if (message.includes("requires pro")) {
+      return "upgradeRequired";
+    }
     return message.includes("credit") ? "creditsExhausted" : "limitReached";
   }
 

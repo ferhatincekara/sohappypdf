@@ -61,7 +61,7 @@ export function EditorObjectView({
         dragRef.current = null;
       }}
       className={cn(
-        "absolute overflow-hidden text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "absolute overflow-hidden text-left outline-none",
         selected ? "ring-2 ring-foreground" : "ring-1 ring-transparent",
       )}
       style={{

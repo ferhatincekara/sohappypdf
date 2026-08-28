@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { resolveToolWorkspaceKind } from "./tool-workspace-kind";
+import {
+  resolveToolWorkspaceKind,
+  usesCanvasActionSidebar,
+} from "./tool-workspace-kind";
 
 describe("resolveToolWorkspaceKind", () => {
   test("maps focused tools to specialized workspaces", () => {
@@ -17,9 +20,20 @@ describe("resolveToolWorkspaceKind", () => {
     expect(resolveToolWorkspaceKind("watermark-pdf")).toBe("watermark");
     expect(resolveToolWorkspaceKind("crop-pdf")).toBe("crop");
     expect(resolveToolWorkspaceKind("sign-pdf")).toBe("sign");
-    expect(resolveToolWorkspaceKind("pdf-forms")).toBe("fill");
     expect(resolveToolWorkspaceKind("edit-pdf")).toBe("edit");
     expect(resolveToolWorkspaceKind("repair-pdf")).toBe("repair");
     expect(resolveToolWorkspaceKind("ocr-pdf")).toBe("ocr");
+  });
+});
+
+describe("usesCanvasActionSidebar", () => {
+  test("keeps page-canvas tools on a dedicated action card", () => {
+    expect(usesCanvasActionSidebar("split-pdf")).toBe(true);
+    expect(usesCanvasActionSidebar("extract-pages")).toBe(true);
+    expect(usesCanvasActionSidebar("remove-pages")).toBe(true);
+    expect(usesCanvasActionSidebar("rotate-pdf")).toBe(true);
+    expect(usesCanvasActionSidebar("organize-pdf")).toBe(true);
+    expect(usesCanvasActionSidebar("merge-pdf")).toBe(false);
+    expect(usesCanvasActionSidebar("compress-pdf")).toBe(false);
   });
 });

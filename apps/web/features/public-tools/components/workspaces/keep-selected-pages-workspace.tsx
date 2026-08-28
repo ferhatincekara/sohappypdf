@@ -10,6 +10,8 @@ import {
 import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
 import { ToolFileCard } from "../tool-file-card";
 import { ToolSelectedActions } from "../tool-selected-actions";
+import { ToolSidebarCard } from "../tool-sidebar-card";
+import { ToolStage } from "../tool-stage";
 import { SplitAdvancedRanges } from "./split-advanced-ranges";
 import { SplitResultSummary } from "./split-result-summary";
 
@@ -50,75 +52,86 @@ export function KeepSelectedPagesWorkspace({
     props.canProcess && selectedPages.length > 0 && entry.status === "ready";
 
   return (
-    <div className="flex flex-col gap-6">
-      <ToolFileCard
-        entry={entry}
-        pageCount={pdf.status === "ready" ? pdf.pageCount : entry.pageCount}
-        accept={props.accept}
-        disabled={props.disabled}
-        onRemove={() => {
-          props.onRemove(entry.id);
-        }}
-        onReplace={props.onReplaceFiles}
-        onRetry={() => {
-          props.onRetryUpload(entry.id);
-        }}
-      />
+    <ToolStage
+      main={
+        <div className="flex flex-col gap-6">
+          <ToolFileCard
+            entry={entry}
+            pageCount={pdf.status === "ready" ? pdf.pageCount : entry.pageCount}
+            accept={props.accept}
+            disabled={props.disabled}
+            maxPagesPerFile={props.maxPagesPerFile}
+            onRemove={() => {
+              props.onRemove(entry.id);
+            }}
+            onReplace={props.onReplaceFiles}
+            onRetry={() => {
+              props.onRetryUpload(entry.id);
+            }}
+          />
 
-      <section
-        className="flex flex-col gap-4"
-        aria-labelledby={`${copy}-pages-heading`}
-      >
-        <div className="flex flex-col gap-1">
-          <h2
-            id={`${copy}-pages-heading`}
-            className="text-base font-semibold tracking-tight text-foreground"
-          >
-            {t(`workspaces.${copy}.title`)}
-          </h2>
-          <p className="text-sm text-muted-foreground text-pretty">
-            {t(`workspaces.${copy}.hint`)}
-          </p>
+          {props.state.error === null ? (
+            <section
+              className="flex flex-col gap-4"
+              aria-labelledby={`${copy}-pages-heading`}
+            >
+              <div className="flex flex-col gap-1">
+                <h2
+                  id={`${copy}-pages-heading`}
+                  className="text-lg font-extrabold tracking-tight text-foreground"
+                >
+                  {t(`workspaces.${copy}.title`)}
+                </h2>
+                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground text-pretty">
+                  {t(`workspaces.${copy}.hint`)}
+                </p>
+              </div>
+
+              <PdfPageWorkspace
+                pdf={pdf}
+                selectedPages={selectedPages}
+                onSelectedPagesChange={setSelectedPages}
+                disabled={props.disabled}
+                passwordProtectedMessage={t(
+                  `workspaces.${copy}.passwordProtected`,
+                )}
+                previewFailedMessage={t(`workspaces.${copy}.previewFailed`)}
+              />
+            </section>
+          ) : null}
         </div>
+      }
+      sidebar={
+        <ToolSidebarCard className="gap-5">
+          {(pdf.status === "ready" || pdf.status === "error") &&
+          props.state.error === null ? (
+            <SplitResultSummary
+              copy={copy}
+              selectedCount={selectedPages.length}
+              pageCount={pdf.pageCount}
+              isAllSelected={isAllSelected}
+            />
+          ) : null}
 
-        <PdfPageWorkspace
-          pdf={pdf}
-          selectedPages={selectedPages}
-          onSelectedPagesChange={setSelectedPages}
-          disabled={props.disabled}
-          passwordProtectedMessage={t(`workspaces.${copy}.passwordProtected`)}
-          previewFailedMessage={t(`workspaces.${copy}.previewFailed`)}
-        />
-      </section>
+          {props.state.error === null ? (
+            <SplitAdvancedRanges
+              copy={copy}
+              selectedPages={selectedPages}
+              disabled={props.disabled}
+              onSelectedPagesChange={setSelectedPages}
+            />
+          ) : null}
 
-      {pdf.status === "ready" || pdf.status === "error" ? (
-        <SplitResultSummary
-          copy={copy}
-          selectedCount={selectedPages.length}
-          pageCount={pdf.pageCount}
-          isAllSelected={isAllSelected}
-        />
-      ) : null}
-
-      <SplitAdvancedRanges
-        copy={copy}
-        selectedPages={selectedPages}
-        disabled={props.disabled}
-        onSelectedPagesChange={setSelectedPages}
-      />
-
-      <ToolSelectedActions
-        toolRoute={props.tool.route}
-        state={props.state}
-        canProcess={canExtract}
-        processLabel={props.processLabel}
-        disabledReason={
-          selectedPages.length === 0
-            ? t(`workspaces.${copy}.selectPrompt`)
-            : null
-        }
-        onProcess={props.onProcess}
-      />
-    </div>
+          <ToolSelectedActions
+            toolRoute={props.tool.route}
+            state={props.state}
+            canProcess={canExtract}
+            processLabel={props.processLabel}
+            fullWidth
+            onProcess={props.onProcess}
+          />
+        </ToolSidebarCard>
+      }
+    />
   );
 }

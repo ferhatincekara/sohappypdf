@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import { CONVERSION_POLL_INTERVAL_MS } from "@/features/conversions/lib/conversion-polling";
-import { toolExecutionRefetchInterval } from "./tool-execution-polling";
+import {
+  toolExecutionQueryRefetchInterval,
+  toolExecutionRefetchInterval,
+} from "./tool-execution-polling";
 
 describe("tool execution polling", () => {
   const now = new Date("2026-08-24T01:00:00.000Z");
@@ -54,5 +57,22 @@ describe("tool execution polling", () => {
       }),
     ).toBe(false);
     expect(toolExecutionRefetchInterval(undefined)).toBe(false);
+  });
+
+  test("keeps polling an in-flight execution after a transient status error", () => {
+    expect(
+      toolExecutionQueryRefetchInterval({
+        conversion: undefined,
+        hasExecutionId: true,
+        error: new Error("status fetch failed"),
+      }),
+    ).toBe(CONVERSION_POLL_INTERVAL_MS);
+    expect(
+      toolExecutionQueryRefetchInterval({
+        conversion: undefined,
+        hasExecutionId: false,
+        error: new Error("status fetch failed"),
+      }),
+    ).toBe(false);
   });
 });
