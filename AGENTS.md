@@ -1,8 +1,8 @@
-# SohappyPDF
+# SoHappyPDF
 
 ## Project
 
-SohappyPDF is a tool-first SaaS PDF platform: public PDF tools, temporary file processing, OCR, and a public API.
+SoHappyPDF is a tool-first SaaS PDF platform: public PDF tools, temporary file processing, OCR, and a public API.
 
 The project is a Turborepo monorepo.
 
@@ -75,7 +75,6 @@ packages/
 ├── billing/
 ├── api-keys/
 ├── tools/
-├── ai/
 └── typescript-config/
 
 docs/
@@ -123,7 +122,6 @@ Not a customer product. Authorization is an allowlist (`ADMIN_USER_IDS`, `ADMIN_
 - `billing`: Polar.sh integration, entitlements, credit ledger
 - `api-keys`: API key lifecycle
 - `tools`: Public tool catalog and credit pricing
-- `ai`: AI provider abstraction
 - `typescript-config`: Shared TypeScript configs
 
 ## Product Principles

@@ -4,7 +4,7 @@ This folder documents the live monorepo shape. Prefer this over outdated package
 
 ## Product direction
 
-SohappyPDF is a **tool-first** PDF platform.
+SoHappyPDF is a **tool-first** PDF platform.
 
 - Primary UX: public tool pages (anonymous-friendly), e.g. `/merge-pdf`
 - Secondary UX: authenticated **account** area (`/account`) for usage, billing, API, settings, and recent activity
@@ -40,7 +40,6 @@ Admin is not a customer product. Access is fail-closed via `ADMIN_USER_IDS` / `A
 | `@repo/billing` | Polar + entitlements + credit ledger |
 | `@repo/api-keys` | API key lifecycle |
 | `@repo/tools` | Public tool catalog + credit pricing |
-| `@repo/ai` | AI provider abstraction |
 | `@repo/typescript-config` | Shared TS configs |
 
 Shared UI currently lives under `apps/web/components/ui` (shadcn). There is no `@repo/ui`, `@repo/validation`, or `@repo/api-client` package yet.

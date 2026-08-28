@@ -1,4 +1,4 @@
-# SohappyPDF
+# SoHappyPDF
 
 SaaS platform for PDF conversion, PDF manipulation, OCR, file processing, and public API access.
 

@@ -1,5 +1,5 @@
 ---
-description: Public API design and API contract rules for SohappyPDF
+description: Public API design and API contract rules for SoHappyPDF
 globs:
   - "apps/api/**/*.ts"
   - "docs/api/**/*"

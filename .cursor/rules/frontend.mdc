@@ -1,5 +1,5 @@
 ---
-description: Frontend development rules for SohappyPDF
+description: Frontend development rules for SoHappyPDF
 globs:
   - "apps/web/**/*.{ts,tsx}"
 ---

@@ -1,5 +1,5 @@
 ---
-description: SohappyPDF monorepo architecture and project structure rules
+description: SoHappyPDF monorepo architecture and project structure rules
 alwaysApply: true
 ---
 
@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Project
 
-SohappyPDF is a tool-first SaaS PDF platform: public PDF tools, temporary file processing, OCR, and a public API.
+SoHappyPDF is a tool-first SaaS PDF platform: public PDF tools, temporary file processing, OCR, and a public API.
 
 The repository is a Turborepo monorepo.
 
@@ -46,7 +46,6 @@ packages/
 - billing: Polar.sh integration, entitlements, credit ledger
 - api-keys: API key lifecycle
 - tools: Public tool catalog and credit pricing
-- ai: AI provider abstraction
 - typescript-config: Shared TypeScript configs
 
 Shared UI currently lives in `apps/web/components/ui`. Do not assume `@repo/ui`, `@repo/validation`, or `@repo/api-client` exist unless they are added deliberately.

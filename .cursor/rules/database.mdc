@@ -1,5 +1,5 @@
 ---
-description: Database and Drizzle ORM rules for SohappyPDF
+description: Database and Drizzle ORM rules for SoHappyPDF
 globs:
   - "packages/db/**/*.{ts,sql}"
 ---

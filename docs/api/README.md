@@ -1,6 +1,6 @@
-# SohappyPDF API
+# SoHappyPDF API
 
-Public developer contract for SohappyPDF **v1**.
+Public developer contract for SoHappyPDF **v1**.
 
 The HTTP API is versioned as `/api/v1`. That prefix is stable. Breaking changes require a new version.
 

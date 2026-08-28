@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Canonical SohappyPDF v1 workflow.
+# Canonical SoHappyPDF v1 workflow.
 # Replace API_BASE and YOUR_API_KEY. Do not commit real keys.
 
 set -euo pipefail

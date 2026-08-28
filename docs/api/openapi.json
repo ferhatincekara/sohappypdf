@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "SohappyPDF API",
+    "title": "SoHappyPDF API",
     "version": "1.0.0",
-    "description": "Public developer API for SohappyPDF file upload and asynchronous conversion.\n\nAuthenticate with `Authorization: Bearer YOUR_API_KEY`.\nNever put API keys in URLs, browser JavaScript, or source control.\n\nConversions are asynchronous. Create a conversion, poll its status, then download the result file.\nTemporary files expire after about 2 hours.\nPresigned upload and download URLs expire after 900 seconds.\n\nPlan defaults from the entitlement catalog:\n- Free: 20 conversions/month, 500 MB storage, 20 MB max file, 30 API requests/minute.\n- Pro: 500 conversions/month, 10 GB storage, 100 MB max file, 60 API requests/minute.\n\nAPI key and billing management stay in the dashboard. They are not part of this public key-authenticated surface.\nDeveloper webhooks are not available in this version."
+    "description": "Public developer API for SoHappyPDF file upload and asynchronous conversion.\n\nAuthenticate with `Authorization: Bearer YOUR_API_KEY`.\nNever put API keys in URLs, browser JavaScript, or source control.\n\nConversions are asynchronous. Create a conversion, poll its status, then download the result file.\nTemporary files expire after about 2 hours.\nPresigned upload and download URLs expire after 900 seconds.\n\nPlan defaults from the entitlement catalog:\n- Free: 5 conversions/day, 25 MB max file, 1 file per operation, 50 pages per file, 30 API requests/minute.\n- Pro: unlimited conversions, 1 GB max file, 60 API requests/minute.\n\nAPI key and billing management stay in the dashboard. They are not part of this public key-authenticated surface.\nDeveloper webhooks are not available in this version."
   },
   "servers": [
     {
@@ -159,7 +159,7 @@
           "ai-summarizer",
           "translate-pdf"
         ],
-        "description": "Implemented types: pdf-to-word, pdf-to-word-ocr, pdf-to-excel, pdf-to-excel-ocr, pdf-to-powerpoint, word-to-pdf, excel-to-pdf, powerpoint-to-pdf, office-to-pdf, pdf-to-jpg, pdf-to-png, pdf-to-txt, jpg-to-pdf, png-to-pdf, merge-pdf, split-pdf, extract-pages, compress-pdf, rotate-pdf, organize-pdf, remove-pages, reorder-pages, crop-pdf, repair-pdf, pdf-to-pdfa, watermark-pdf, page-numbers-pdf, edit-pdf, protect-pdf, unlock-pdf, sign-pdf, redact-pdf, compare-pdf, pdf-forms, scan-to-pdf, pdf-extract, pdf-to-markdown, ocr-pdf, ai-summarizer, translate-pdf."
+        "description": "Implemented types: pdf-to-word, pdf-to-word-ocr, pdf-to-excel, pdf-to-excel-ocr, pdf-to-powerpoint, word-to-pdf, excel-to-pdf, powerpoint-to-pdf, office-to-pdf, pdf-to-jpg, pdf-to-png, pdf-to-txt, jpg-to-pdf, png-to-pdf, merge-pdf, split-pdf, extract-pages, compress-pdf, rotate-pdf, organize-pdf, remove-pages, reorder-pages, crop-pdf, repair-pdf, pdf-to-pdfa, watermark-pdf, page-numbers-pdf, edit-pdf, protect-pdf, unlock-pdf, sign-pdf, redact-pdf, compare-pdf, scan-to-pdf, pdf-extract, pdf-to-markdown, ocr-pdf."
       },
       "PublicFile": {
         "type": "object",

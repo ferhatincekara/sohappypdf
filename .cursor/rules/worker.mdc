@@ -1,5 +1,5 @@
 ---
-description: Background conversion worker rules for SohappyPDF
+description: Background conversion worker rules for SoHappyPDF
 globs:
   - "apps/worker/**/*.ts"
   - "docker/worker/**/*"

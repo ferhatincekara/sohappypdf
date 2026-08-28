@@ -1,5 +1,5 @@
 ---
-description: Backend and Hono API development rules for SohappyPDF
+description: Backend and Hono API development rules for SoHappyPDF
 globs:
   - "apps/api/**/*.ts"
   - "packages/core/**/*.ts"
