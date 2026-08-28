@@ -36,7 +36,7 @@ function DropdownMenuContent({
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
           className={cn(
-            "z-50 min-w-40 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-md bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-none",
+            "z-50 min-w-40 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-sm bg-popover p-1 text-base text-popover-foreground shadow-lift outline-none transition-[opacity,transform] duration-300 ease-out-quart data-starting-style:translate-y-1 data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:translate-y-1 data-ending-style:scale-95 data-ending-style:opacity-0 motion-reduce:transition-none motion-reduce:data-starting-style:translate-y-0 motion-reduce:data-starting-style:scale-100 motion-reduce:data-starting-style:opacity-100",
             className,
           )}
           {...props}
@@ -54,7 +54,7 @@ function DropdownMenuLabel({
     <MenuPrimitive.GroupLabel
       data-slot="dropdown-menu-label"
       className={cn(
-        "px-2 py-1.5 text-xs font-medium text-muted-foreground",
+        "px-3 py-2 text-[13px] font-semibold tracking-tight text-muted-foreground",
         className,
       )}
       {...props}
@@ -74,7 +74,7 @@ function DropdownMenuItem({
       data-slot="dropdown-menu-item"
       data-variant={variant}
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-default items-center gap-2.5 rounded-3 px-3 py-2 text-base font-semibold tracking-tight outline-hidden select-none transition-colors duration-200 ease-out-quart focus:bg-muted focus:text-foreground data-highlighted:bg-muted data-highlighted:text-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-[color-mix(in_oklab,var(--destructive)_10%,var(--background))] data-[variant=destructive]:data-highlighted:bg-[color-mix(in_oklab,var(--destructive)_10%,var(--background))] data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -89,7 +89,7 @@ function DropdownMenuSeparator({
   return (
     <MenuPrimitive.Separator
       data-slot="dropdown-menu-separator"
-      className={cn("-mx-1 my-1 h-px bg-border", className)}
+      className={cn("-mx-1 my-1.5 h-px bg-black/5", className)}
       {...props}
     />
   );

@@ -32,7 +32,7 @@ function FieldGroup({ className, ...props }: ComponentProps<"div">) {
 }
 
 const fieldVariants = cva(
-  "group/field m-0 flex w-full min-w-0 gap-3 border-0 p-0 data-[invalid=true]:text-destructive",
+  "group/field m-0 flex w-full min-w-0 gap-3 border-0 p-0",
   {
     variants: {
       orientation: {
