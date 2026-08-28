@@ -1,7 +1,8 @@
-import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { AppShell } from "@/features/app-shell";
+import { AccountSubnav } from "@/features/app-shell";
+import { toAppShellUser } from "@/features/app-shell/lib/to-app-shell-user";
 import { requireWebSession } from "@/features/auth/session/require-web-session";
+import { MarketingShell } from "@/features/marketing/components/marketing-shell";
 
 export default async function AuthenticatedAccountLayout({
   children,
@@ -9,24 +10,19 @@ export default async function AuthenticatedAccountLayout({
   children: ReactNode;
 }) {
   const session = await requireWebSession();
-  const t = await getTranslations("marketing.nav");
 
   return (
-    <>
-      <a
-        href="#account-main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
+    <MarketingShell user={toAppShellUser(session.user)}>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative flex-1 pt-16 md:pt-20 outline-none"
       >
-        {t("skip")}
-      </a>
-      <AppShell
-        user={{
-          name: session.user.name,
-          email: session.user.email,
-        }}
-      >
-        {children}
-      </AppShell>
-    </>
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-8 md:px-8 md:py-12">
+          <AccountSubnav />
+          {children}
+        </div>
+      </main>
+    </MarketingShell>
   );
 }

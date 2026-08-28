@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useApiKeys } from "../hooks/use-api-keys";
 import { useRevokeApiKey } from "../hooks/use-revoke-api-key";
 import type { PublicApiKey } from "../types/api-key";
@@ -34,42 +35,45 @@ export function ApiKeysWorkspace({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-sm font-medium text-foreground">
-            {t("list.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {t("list.description")}
-          </p>
+      <Card className="rounded-7 bg-muted p-6 shadow-none md:p-7">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex max-w-md flex-col gap-1">
+            <h2 className="text-lg font-extrabold tracking-tight">
+              {t("list.title")}
+            </h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {t("list.description")}
+            </p>
+          </div>
+          <Button type="button" onClick={() => setCreateOpen(true)}>
+            {t("actions.create")}
+          </Button>
         </div>
-        <Button type="button" size="sm" onClick={() => setCreateOpen(true)}>
-          {t("actions.create")}
-        </Button>
-      </div>
-      <div aria-live="polite" className="sr-only">
-        {revokeSucceeded ? tRevoke("success") : ""}
-      </div>
-      {revokeSucceeded ? (
-        <p className="text-sm text-foreground">{tRevoke("success")}</p>
-      ) : null}
-      <ApiKeyList
-        apiKeys={apiKeys}
-        isLoading={isLoading}
-        isError={isError}
-        errorMessage={
-          errorKey === null ? tErrors("unexpected") : tErrors(errorKey)
-        }
-        onCreate={() => setCreateOpen(true)}
-        onRevoke={(apiKey) => {
-          reset();
-          setRevokeSucceeded(false);
-          setKeyToRevoke(apiKey);
-        }}
-        onRetry={() => {
-          void refetch();
-        }}
-      />
+        <div aria-live="polite" className="sr-only">
+          {revokeSucceeded ? tRevoke("success") : ""}
+        </div>
+        {revokeSucceeded ? (
+          <p className="mt-4 text-sm font-medium">{tRevoke("success")}</p>
+        ) : null}
+        <div className="mt-6">
+          <ApiKeyList
+            apiKeys={apiKeys}
+            isLoading={isLoading}
+            isError={isError}
+            errorMessage={
+              errorKey === null ? tErrors("unexpected") : tErrors(errorKey)
+            }
+            onRevoke={(apiKey) => {
+              reset();
+              setRevokeSucceeded(false);
+              setKeyToRevoke(apiKey);
+            }}
+            onRetry={() => {
+              void refetch();
+            }}
+          />
+        </div>
+      </Card>
       <ApiKeyUsage apiV1BaseUrl={apiV1BaseUrl} docsHref={docsHref} />
       <ApiKeyCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ApiKeyRevokeDialog

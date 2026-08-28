@@ -4,12 +4,12 @@ import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import type { CreatedApiKeySecret } from "../lib/created-api-key-secret";
 import { ApiKeyCreateForm } from "./api-key-create-form";
 import { ApiKeyCreatedSecret } from "./api-key-created-secret";
@@ -33,7 +33,7 @@ export function ApiKeyCreateDialog({
   };
 
   return (
-    <Sheet
+    <Dialog
       open={open}
       onOpenChange={(nextOpen) => {
         if (!nextOpen) {
@@ -41,40 +41,36 @@ export function ApiKeyCreateDialog({
         }
       }}
     >
-      <SheetContent
-        side="bottom"
+      <DialogContent
         closeLabel={created === null ? t("close") : tCreated("close")}
-        className="max-h-[90dvh] w-full gap-0 rounded-t-xl border-t sm:mx-auto sm:max-w-lg"
       >
-        <SheetHeader className="px-6 pt-6">
-          <SheetTitle>
+        <DialogHeader>
+          <DialogTitle>
             {created === null ? t("title") : tCreated("title")}
-          </SheetTitle>
-          <SheetDescription>
+          </DialogTitle>
+          <DialogDescription>
             {created === null ? t("description") : tCreated("warning")}
-          </SheetDescription>
-        </SheetHeader>
-        <div className="overflow-y-auto px-6 pb-8 pt-2">
-          {created === null ? (
-            <ApiKeyCreateForm
-              onCreated={(next) => {
-                if (!openRef.current) {
-                  return;
-                }
+          </DialogDescription>
+        </DialogHeader>
+        {created === null ? (
+          <ApiKeyCreateForm
+            onCreated={(next) => {
+              if (!openRef.current) {
+                return;
+              }
 
-                setCreated(next);
-              }}
-            />
-          ) : (
-            <div className="flex flex-col gap-6">
-              <ApiKeyCreatedSecret created={created} />
-              <Button type="button" variant="outline" onClick={close}>
-                {tCreated("done")}
-              </Button>
-            </div>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
+              setCreated(next);
+            }}
+          />
+        ) : (
+          <div className="flex flex-col gap-6">
+            <ApiKeyCreatedSecret created={created} />
+            <Button type="button" variant="outline" onClick={close}>
+              {tCreated("done")}
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }

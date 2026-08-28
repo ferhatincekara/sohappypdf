@@ -1,17 +1,16 @@
 import { describe, expect, test } from "bun:test";
 import { APP_PATHS } from "./app-paths";
-import {
-  APP_NAVIGATION,
-  PRIMARY_APP_NAVIGATION,
-  SECONDARY_APP_NAVIGATION,
-} from "./navigation";
+import { APP_NAVIGATION } from "./navigation";
 
 describe("app navigation", () => {
-  test("keeps account routes as the authenticated product surface", () => {
+  test("keeps account destinations in the header menu, not a dashboard", () => {
+    expect(APP_NAVIGATION.map((item) => item.id)).toEqual([
+      "activity",
+      "billing",
+      "apiKeys",
+      "settings",
+    ]);
     expect(APP_NAVIGATION.map((item) => item.href)).toEqual([
-      APP_PATHS.overview,
-      APP_PATHS.usage,
-      APP_PATHS.plan,
       APP_PATHS.activity,
       APP_PATHS.billing,
       APP_PATHS.apiKeys,
@@ -19,22 +18,11 @@ describe("app navigation", () => {
     ]);
   });
 
-  test("separates settings from the primary destinations", () => {
-    expect(PRIMARY_APP_NAVIGATION.map((item) => item.id)).toEqual([
-      "overview",
-      "usage",
-      "plan",
-      "activity",
-      "billing",
-      "apiKeys",
-    ]);
-    expect(SECONDARY_APP_NAVIGATION.map((item) => item.id)).toEqual([
-      "settings",
-    ]);
-  });
+  test("does not expose a file library or overview dashboard", () => {
+    const ids = APP_NAVIGATION.map((item) => item.id);
 
-  test("does not expose a file library as a primary destination", () => {
-    expect(APP_NAVIGATION.some((item) => item.id === "files")).toBe(false);
+    expect(ids).not.toContain("overview");
+    expect(ids).not.toContain("files");
     expect(APP_NAVIGATION.map((item) => item.href).join(" ")).not.toContain(
       "/files",
     );

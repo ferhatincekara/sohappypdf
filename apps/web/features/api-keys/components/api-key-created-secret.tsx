@@ -17,11 +17,9 @@ export function ApiKeyCreatedSecret({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <p className="text-sm font-medium text-foreground">{t("title")}</p>
-        <p className="text-sm text-muted-foreground">{t("warning")}</p>
-        <p className="text-sm text-muted-foreground">{t("store")}</p>
-      </div>
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        {t("store")}
+      </p>
       <div className="flex flex-col gap-2">
         <label
           className="text-sm font-medium text-foreground"
@@ -36,7 +34,7 @@ export function ApiKeyCreatedSecret({
           onFocus={(event) => {
             event.currentTarget.select();
           }}
-          className="w-full min-w-0 rounded-md border border-border bg-muted px-3 py-2 font-mono text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="w-full min-w-0 rounded-2xl border-2 border-input bg-white px-4 py-2 font-mono text-sm text-foreground outline-none"
         />
       </div>
       <div className="flex flex-wrap items-center gap-3">

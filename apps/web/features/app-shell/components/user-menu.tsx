@@ -1,91 +1,100 @@
 "use client";
 
-import { LogOutIcon, SettingsIcon } from "lucide-react";
+import { ChevronDownIcon, LogOutIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/features/auth/hooks/use-logout";
-import { useRouter } from "@/lib/i18n/navigation";
-import { APP_PATHS } from "../config/app-paths";
-import { getUserInitials } from "../lib/user-initials";
+import { Link } from "@/lib/i18n/navigation";
+import { APP_NAVIGATION } from "../config/navigation";
+import {
+  resolveAccountDisplayName,
+  resolveAccountInitial,
+} from "../lib/account-display-name";
 import type { AppShellUser } from "../types";
 
 export function UserMenu({
   user,
   align = "end",
-  compact = false,
 }: {
   user: AppShellUser;
   align?: "start" | "end";
-  compact?: boolean;
 }) {
   const t = useTranslations("appShell");
-  const router = useRouter();
-  const { logout, isPending, error } = useLogout();
-  const initials = getUserInitials(user.name, user.email);
+  const { logout, isPending } = useLogout();
+  const displayName = resolveAccountDisplayName(user.name, user.email);
+  const initial = resolveAccountInitial(displayName);
 
   return (
-    <div className="flex flex-col gap-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button
-              variant="ghost"
-              size={compact ? "icon-sm" : "default"}
-              className={
-                compact
-                  ? undefined
-                  : "h-auto w-full justify-start gap-2 px-2 py-1.5"
-              }
+    <DropdownMenu>
+      <Button
+        variant="secondary"
+        size="sm"
+        render={<DropdownMenuTrigger />}
+        aria-label={t("userMenu")}
+      >
+        {t("navigation")}
+        <ChevronDownIcon className="size-4 opacity-70 transition-transform duration-300 ease-out-quart group-data-popup-open/button:rotate-180" />
+      </Button>
+      <DropdownMenuContent align={align} sideOffset={10} className="min-w-60">
+        <div className="mb-1 flex items-center gap-2.5 rounded-2xl bg-muted px-2 py-2">
+          <Avatar className="size-9 after:hidden">
+            <AvatarImage
+              src={user.imageUrl}
+              alt=""
+              referrerPolicy="no-referrer"
             />
-          }
-          aria-label={t("userMenu")}
-        >
-          <Avatar size="sm">
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="bg-secondary text-[13px] font-bold tracking-tight text-foreground">
+              {initial}
+            </AvatarFallback>
           </Avatar>
-          {compact ? null : (
-            <span className="min-w-0 flex-1 truncate text-left text-sm">
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-base font-semibold tracking-tight">
+              {displayName}
+            </span>
+            <span
+              className="block truncate text-[13px] font-medium text-muted-foreground"
+              title={user.email}
+            >
               {user.email}
             </span>
-          )}
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align={align} className="min-w-56">
-          <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              router.push(APP_PATHS.settings);
-            }}
-          >
-            <SettingsIcon />
-            {t("nav.settings")}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            disabled={isPending}
-            onClick={() => {
-              void logout();
-            }}
-          >
-            <LogOutIcon />
-            {isPending ? t("loggingOut") : t("logout")}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      {error !== null ? (
-        <p className="px-2 text-xs text-destructive" role="alert">
-          {error}
-        </p>
-      ) : null}
-    </div>
+          </span>
+        </div>
+        <DropdownMenuGroup>
+          {APP_NAVIGATION.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <DropdownMenuItem
+                key={item.id}
+                render={<Link href={item.href} />}
+              >
+                <Icon />
+                {t(`nav.${item.id}`)}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant="destructive"
+          disabled={isPending}
+          onClick={() => {
+            void logout();
+          }}
+        >
+          <LogOutIcon />
+          {isPending ? t("loggingOut") : t("logout")}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

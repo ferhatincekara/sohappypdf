@@ -12,7 +12,6 @@ export function ApiKeyList({
   isLoading,
   isError,
   errorMessage,
-  onCreate,
   onRevoke,
   onRetry,
 }: {
@@ -20,7 +19,6 @@ export function ApiKeyList({
   isLoading: boolean;
   isError: boolean;
   errorMessage: string;
-  onCreate: () => void;
   onRevoke: (apiKey: PublicApiKey) => void;
   onRetry: () => void;
 }) {
@@ -53,18 +51,17 @@ export function ApiKeyList({
 
   if (view === "empty") {
     return (
-      <div className="flex flex-col items-start gap-3 rounded-xl border border-dashed border-border px-4 py-8">
-        <p className="text-sm text-muted-foreground">{t("empty")}</p>
-        <p className="text-sm text-muted-foreground">{t("emptyHint")}</p>
-        <Button type="button" size="sm" onClick={onCreate}>
-          {t("createCta")}
-        </Button>
+      <div className="rounded-md bg-white px-5 py-8">
+        <p className="text-lg font-extrabold tracking-tight">{t("empty")}</p>
+        <p className="mt-1 max-w-md text-sm leading-relaxed text-muted-foreground">
+          {t("emptyHint")}
+        </p>
       </div>
     );
   }
 
   return (
-    <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+    <ul className="flex flex-col gap-3">
       {apiKeys.map((apiKey) => (
         <ApiKeyListItem key={apiKey.id} apiKey={apiKey} onRevoke={onRevoke} />
       ))}
@@ -72,13 +69,28 @@ export function ApiKeyList({
   );
 }
 
+const API_KEY_SKELETON_IDS = ["one", "two", "three"] as const;
+
 function ApiKeyListSkeleton() {
   return (
-    <div className="divide-y divide-border rounded-xl border border-border bg-card">
-      {["one", "two"].map((row) => (
-        <div key={row} className="flex flex-col gap-2 px-4 py-3">
-          <Skeleton className="h-4 w-40" />
-          <Skeleton className="h-3 w-56" />
+    <div className="flex flex-col gap-3">
+      {API_KEY_SKELETON_IDS.map((row) => (
+        <div
+          key={row}
+          className="flex flex-col gap-4 rounded-md bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+        >
+          <div className="flex min-w-0 items-start gap-3">
+            <Skeleton className="size-10 shrink-0 rounded-2xl" />
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-5 w-12 rounded-full" />
+              </div>
+              <Skeleton className="mt-2 h-8 w-48 max-w-full rounded-xl" />
+              <Skeleton className="mt-2 h-3 w-52 max-w-full" />
+            </div>
+          </div>
+          <Skeleton className="h-7 w-16 shrink-0 rounded-full" />
         </div>
       ))}
     </div>

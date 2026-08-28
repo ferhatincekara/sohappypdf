@@ -1,3 +1,6 @@
-import { AccountPlanPage } from "@/features/application";
+import { APP_PATHS } from "@/features/app-shell";
+import { redirectTo } from "@/features/auth/session/redirect-to";
 
-export default AccountPlanPage;
+export default function AccountPlanRedirectPage() {
+  redirectTo(APP_PATHS.billing);
+}

@@ -1,7 +1,10 @@
 "use client";
 
+import { KeyRoundIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { isApiKeyRevocable } from "../lib/is-api-key-revocable";
 import { maskApiKeyPrefix } from "../lib/mask-api-key-prefix";
 import {
@@ -21,54 +24,73 @@ export function ApiKeyListItem({
   const tActions = useTranslations("apiKeys.actions");
   const formatter = useFormatter();
   const status = isPublicApiKeyStatus(apiKey.status) ? apiKey.status : "active";
+  const created = t("created", {
+    date: formatter.dateTime(new Date(apiKey.createdAt), {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }),
+  });
+  const used =
+    apiKey.lastUsedAt === null
+      ? t("neverUsed")
+      : t("lastUsed", {
+          date: formatter.dateTime(new Date(apiKey.lastUsedAt), {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }),
+        });
+  const expires =
+    apiKey.expiresAt === null
+      ? null
+      : t("expires", {
+          date: formatter.dateTime(new Date(apiKey.expiresAt), {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }),
+        });
 
   return (
-    <li className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-start sm:justify-between">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">
-          {apiKey.name}
-        </p>
-        <p className="break-all font-mono text-xs text-muted-foreground">
-          {maskApiKeyPrefix(apiKey.keyPrefix)}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {t(`status.${status}`)}
-          <span aria-hidden="true"> · </span>
-          {t("created", {
-            date: formatter.dateTime(new Date(apiKey.createdAt), {
-              dateStyle: "medium",
-              timeStyle: "short",
-            }),
-          })}
-        </p>
-        {apiKey.lastUsedAt === null ? (
-          <p className="text-xs text-muted-foreground">{t("neverUsed")}</p>
-        ) : (
-          <p className="text-xs text-muted-foreground">
-            {t("lastUsed", {
-              date: formatter.dateTime(new Date(apiKey.lastUsedAt), {
-                dateStyle: "medium",
-                timeStyle: "short",
-              }),
-            })}
+    <li
+      className={cn(
+        "flex flex-col gap-4 rounded-md bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5",
+        status !== "active" && "opacity-70",
+      )}
+    >
+      <div className="flex min-w-0 items-start gap-3">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-muted">
+          <KeyRoundIcon
+            className="size-4 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </div>
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="truncate text-base font-bold tracking-tight text-foreground">
+              {apiKey.name}
+            </p>
+            <Badge
+              size="sm"
+              variant={status === "active" ? "secondary" : "muted"}
+            >
+              {t(`status.${status}`)}
+            </Badge>
+          </div>
+          <p className="mt-2 truncate rounded-xl bg-muted px-3 py-1.5 font-mono text-xs text-foreground">
+            {maskApiKeyPrefix(apiKey.keyPrefix)}
           </p>
-        )}
-        {apiKey.expiresAt === null ? null : (
-          <p className="text-xs text-muted-foreground">
-            {t("expires", {
-              date: formatter.dateTime(new Date(apiKey.expiresAt), {
-                dateStyle: "medium",
-                timeStyle: "short",
-              }),
-            })}
-          </p>
-        )}
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs leading-relaxed text-muted-foreground">
+            <span>{created}</span>
+            <span>{used}</span>
+            {expires === null ? null : <span>{expires}</span>}
+          </div>
+        </div>
       </div>
       {isApiKeyRevocable(apiKey) ? (
         <Button
           type="button"
-          size="sm"
-          variant="ghost"
+          size="xs"
+          variant="destructive"
+          className="shrink-0 self-start sm:self-center"
           aria-label={tActions("revokeNamed", { name: apiKey.name })}
           onClick={() => onRevoke(apiKey)}
         >
