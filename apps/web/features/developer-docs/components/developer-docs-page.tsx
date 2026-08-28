@@ -1,131 +1,268 @@
+import {
+  DEFAULT_PLAN_LIMITS,
+  INCLUDED_API_CREDITS_PER_MONTH,
+} from "@repo/billing/plans";
 import { getTranslations } from "next-intl/server";
+import { Button } from "@/components/ui/button";
 import { getPublicApiV1BaseUrl } from "@/config/public-env";
+import { APP_PATHS } from "@/features/app-shell/config/app-paths";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { Link } from "@/lib/i18n/navigation";
+import { DEVELOPER_TOC_IDS } from "../lib/developer-toc";
 import {
   authorizationExample,
+  cancelExample,
+  completeUploadExample,
   conversionExample,
   downloadExample,
+  errorEnvelopeExample,
   pollExample,
+  putUploadExample,
   uploadExample,
 } from "../lib/example-snippets";
-import { listPublicApiTools } from "../lib/public-api-tools";
-
-function CodeBlock({ children }: { children: string }) {
-  return (
-    <pre className="overflow-x-auto rounded-xl border border-border bg-muted px-4 py-3 font-mono text-xs text-foreground">
-      {children}
-    </pre>
-  );
-}
+import {
+  CONVERSION_POLL_STATUSES,
+  CONVERSION_TERMINAL_STATUSES,
+  PUBLIC_API_ERROR_CODES,
+} from "../lib/public-api-errors";
+import {
+  listPublicApiToolCategories,
+  listPublicApiTools,
+} from "../lib/public-api-tools";
+import { CodeBlock } from "./code-block";
+import { DeveloperDocsToc } from "./developer-docs-toc";
+import { DeveloperToolReference } from "./developer-tool-reference";
 
 export async function DeveloperDocsPage() {
   const apiV1BaseUrl = getPublicApiV1BaseUrl();
-  const tTools = await getTranslations("tools");
+  const t = await getTranslations("developerDocs");
   const tools = listPublicApiTools();
+  const categories = listPublicApiToolCategories(tools);
+  const openApiUrl = `${apiV1BaseUrl}/openapi.json`;
 
   return (
-    <article className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-12">
-      <header className="flex flex-col gap-2">
-        <p className="text-sm text-muted-foreground">
-          <Link href="/" className="underline underline-offset-4">
-            Home
-          </Link>
-        </p>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          SohappyPDF API
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          English-first developer reference for the public v1 API. The dashboard
-          stays localized. Machine-readable contract:{" "}
-          <code>{apiV1BaseUrl}/openapi.json</code>.
-        </p>
-      </header>
+    <div className="pb-12 pt-8">
+      <MarketingContainer className="grid gap-12 lg:grid-cols-[--spacing(55)_minmax(0,1fr)]">
+        <DeveloperDocsToc
+          ariaLabel={t("toc.label")}
+          heading={t("toc.label")}
+          items={DEVELOPER_TOC_IDS.map((id) => ({
+            id,
+            label: t(`toc.${id}`),
+          }))}
+        />
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Getting started</h2>
-        <ol className="list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
-          <li>
-            Create a key in{" "}
-            <Link href="/account/api" className="underline underline-offset-4">
-              API Keys
-            </Link>
-            .
-          </li>
-          <li>Send it as a Bearer token. Never put it in a URL.</li>
-          <li>Upload with a presigned PUT, then create a conversion.</li>
-          <li>Poll until completed, then download the output file.</li>
-        </ol>
-        <p className="text-sm text-muted-foreground">
-          Base URL: <code>{apiV1BaseUrl}</code>
-        </p>
-      </section>
+        <article className="flex min-w-0 flex-col gap-16">
+          <header className="flex max-w-3xl flex-col gap-4">
+            <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+              {t("eyebrow")}
+            </p>
+            <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
+              {t("title")}
+            </h1>
+            <p className="text-lg/7 text-muted-foreground">
+              {t("description")}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Button
+                nativeButton={false}
+                render={<Link href={APP_PATHS.apiKeys} />}
+              >
+                {t("createKey")}
+              </Button>
+              <Button
+                variant="outline"
+                nativeButton={false}
+                render={<Link href={MARKETING_PATHS.pricing} />}
+              >
+                {t("viewPricing")}
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t("baseUrl")}: <code>{apiV1BaseUrl}</code>
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {t("openapi")}: <code>{openApiUrl}</code>
+            </p>
+          </header>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Authentication</h2>
-        <CodeBlock>{authorizationExample()}</CodeBlock>
-        <p className="text-sm text-muted-foreground">
-          API credits are billed separately from web tool credits. The raw key
-          is shown only once when you create it.
-        </p>
-      </section>
+          <section id="quickstart" className="scroll-mt-28 flex flex-col gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("quickstart.title")}
+            </h2>
+            <ol className="list-decimal space-y-2 pl-5 text-base leading-relaxed text-muted-foreground">
+              <li>{t("quickstart.step1")}</li>
+              <li>{t("quickstart.step2")}</li>
+              <li>{t("quickstart.step3")}</li>
+              <li>{t("quickstart.step4")}</li>
+              <li>{t("quickstart.step5")}</li>
+            </ol>
+            <CodeBlock
+              label={t("quickstart.uploadLabel")}
+              code={uploadExample(apiV1BaseUrl)}
+            />
+            <CodeBlock
+              label={t("quickstart.putLabel")}
+              code={putUploadExample()}
+            />
+            <CodeBlock
+              label={t("quickstart.completeLabel")}
+              code={completeUploadExample(apiV1BaseUrl)}
+            />
+            <CodeBlock
+              label={t("quickstart.convertLabel")}
+              code={conversionExample(apiV1BaseUrl)}
+            />
+          </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Upload</h2>
-        <CodeBlock>{uploadExample(apiV1BaseUrl)}</CodeBlock>
-        <p className="text-sm text-muted-foreground">
-          PUT the file bytes to <code>upload.url</code>, then POST{" "}
-          <code>/files/FILE_ID/complete</code>.
-        </p>
-      </section>
+          <section id="auth" className="scroll-mt-28 flex flex-col gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("auth.title")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {t("auth.description")}
+            </p>
+            <CodeBlock label="HTTP" code={authorizationExample()} />
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              <li>{t("auth.ruleHeader")}</li>
+              <li>{t("auth.ruleSecret")}</li>
+              <li>{t("auth.ruleBrowser")}</li>
+              <li>{t("auth.ruleRevoke")}</li>
+            </ul>
+          </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Create conversion</h2>
-        <CodeBlock>{conversionExample(apiV1BaseUrl)}</CodeBlock>
-        <p className="text-sm text-muted-foreground">
-          The API returns HTTP 201 and processes the job asynchronously.
-        </p>
-      </section>
+          <section id="files" className="scroll-mt-28 flex flex-col gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("files.title")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {t("files.description")}
+            </p>
+            <CodeBlock
+              label="POST /files/upload → PUT → POST /files/{id}/complete"
+              code={[
+                "POST /files/upload",
+                "PUT  upload.url   (file bytes, not through the API)",
+                "POST /files/{id}/complete",
+              ].join("\n")}
+            />
+            <p className="text-sm text-muted-foreground">{t("files.expiry")}</p>
+          </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Poll conversion</h2>
-        <CodeBlock>{pollExample(apiV1BaseUrl)}</CodeBlock>
-      </section>
+          <section
+            id="conversions"
+            className="scroll-mt-28 flex flex-col gap-4"
+          >
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("conversions.title")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {t("conversions.description")}
+            </p>
+            <CodeBlock
+              label="POST /conversions"
+              code={conversionExample(apiV1BaseUrl)}
+            />
+            <p className="text-sm text-muted-foreground">
+              {t("conversions.pollHint", {
+                pending: CONVERSION_POLL_STATUSES.join(", "),
+                done: CONVERSION_TERMINAL_STATUSES.join(", "),
+              })}
+            </p>
+            <CodeBlock
+              label="GET /conversions/{id}"
+              code={pollExample(apiV1BaseUrl)}
+            />
+            <CodeBlock
+              label="POST /files/{outputFileId}/download"
+              code={downloadExample(apiV1BaseUrl)}
+            />
+            <CodeBlock
+              label="POST /conversions/{id}/cancel"
+              code={cancelExample(apiV1BaseUrl)}
+            />
+            <p className="text-sm text-muted-foreground">
+              {t("conversions.idempotency")}
+            </p>
+          </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Download result</h2>
-        <CodeBlock>{downloadExample(apiV1BaseUrl)}</CodeBlock>
-      </section>
+          <section id="tools" className="scroll-mt-28 flex flex-col gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("tools.title")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {t("tools.description")}
+            </p>
+            <DeveloperToolReference tools={tools} categories={categories} />
+          </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Supported tools</h2>
-        <p className="text-sm text-muted-foreground">
-          These tools are available on the public API. Credit costs come from
-          the tool catalog. Planned tools are omitted until they ship.
-        </p>
-        <ul className="flex flex-col gap-2 text-sm">
-          {tools.map((tool) => (
-            <li
-              key={tool.id}
-              className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border py-2 last:border-b-0"
-            >
-              <span>{tTools(`${tool.id}.name`)}</span>
-              <span className="text-muted-foreground">
-                {tool.apiCreditCost} API credits
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+          <section id="errors" className="scroll-mt-28 flex flex-col gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("errors.title")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {t("errors.description")}
+            </p>
+            <CodeBlock label="JSON" code={errorEnvelopeExample()} />
+            <div className="overflow-x-auto rounded-2xl border border-border">
+              <table className="w-full min-w-md text-left text-sm">
+                <thead className="bg-muted/50">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">
+                      {t("errors.code")}
+                    </th>
+                    <th className="px-4 py-3 font-medium">
+                      {t("errors.status")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {PUBLIC_API_ERROR_CODES.map((item) => (
+                    <tr key={item.code} className="border-t border-border">
+                      <td className="px-4 py-2 font-mono text-xs">
+                        {item.code}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground">
+                        {item.status}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-muted-foreground">{t("errors.retry")}</p>
+          </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium">Errors and limits</h2>
-        <p className="text-sm text-muted-foreground">
-          Errors use{" "}
-          <code>{`{ "error": { "code", "message", "requestId" } }`}</code>. Rate
-          limits return 429 with Retry-After. Plan quotas return 403. Full
-          reference: <code>docs/api/v1.md</code> in the repository.
-        </p>
-      </section>
-    </article>
+          <section id="limits" className="scroll-mt-28 flex flex-col gap-4">
+            <h2 className="text-2xl font-bold tracking-tight">
+              {t("limits.title")}
+            </h2>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              {t("limits.description")}
+            </p>
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              <li>
+                {t("limits.free", {
+                  ops: DEFAULT_PLAN_LIMITS.free.operationsPerDay ?? 0,
+                  rpm: DEFAULT_PLAN_LIMITS.free.apiRequestsPerMinute,
+                })}
+              </li>
+              <li>
+                {t("limits.pro", {
+                  rpm: DEFAULT_PLAN_LIMITS.pro.apiRequestsPerMinute,
+                })}
+              </li>
+              <li>
+                {t("limits.credits", {
+                  count: INCLUDED_API_CREDITS_PER_MONTH,
+                })}
+              </li>
+              <li>{t("limits.webhooks")}</li>
+            </ul>
+          </section>
+        </article>
+      </MarketingContainer>
+    </div>
   );
 }

@@ -11,6 +11,21 @@ export function uploadExample(apiV1BaseUrl: string): string {
   ].join("\n");
 }
 
+export function putUploadExample(): string {
+  return [
+    `curl -X PUT "$UPLOAD_URL" \\`,
+    `  -H "Content-Type: application/pdf" \\`,
+    `  --data-binary @report.pdf`,
+  ].join("\n");
+}
+
+export function completeUploadExample(apiV1BaseUrl: string): string {
+  return [
+    `curl -X POST ${apiV1BaseUrl}/files/FILE_ID/complete \\`,
+    `  -H "${authorizationExample()}"`,
+  ].join("\n");
+}
+
 export function conversionExample(apiV1BaseUrl: string): string {
   return [
     `curl -X POST ${apiV1BaseUrl}/conversions \\`,
@@ -33,4 +48,31 @@ export function downloadExample(apiV1BaseUrl: string): string {
     `curl -X POST ${apiV1BaseUrl}/files/OUTPUT_FILE_ID/download \\`,
     `  -H "${authorizationExample()}"`,
   ].join("\n");
+}
+
+export function cancelExample(apiV1BaseUrl: string): string {
+  return [
+    `curl -X POST ${apiV1BaseUrl}/conversions/CONVERSION_ID/cancel \\`,
+    `  -H "${authorizationExample()}"`,
+  ].join("\n");
+}
+
+export function errorEnvelopeExample(): string {
+  return JSON.stringify(
+    {
+      error: {
+        code: "UNAUTHORIZED",
+        message: "Authentication required",
+        requestId: "req_example",
+      },
+    },
+    null,
+    2,
+  );
+}
+
+export function conversionCreateBodyExample(
+  body: Record<string, unknown>,
+): string {
+  return JSON.stringify(body, null, 2);
 }

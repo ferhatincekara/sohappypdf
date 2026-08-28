@@ -1,9 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import {
   authorizationExample,
+  cancelExample,
+  completeUploadExample,
   conversionExample,
   downloadExample,
+  errorEnvelopeExample,
   pollExample,
+  putUploadExample,
   uploadExample,
 } from "./example-snippets";
 
@@ -13,9 +17,13 @@ describe("developer examples", () => {
     const examples = [
       authorizationExample(),
       uploadExample(apiV1BaseUrl),
+      putUploadExample(),
+      completeUploadExample(apiV1BaseUrl),
       conversionExample(apiV1BaseUrl),
       pollExample(apiV1BaseUrl),
       downloadExample(apiV1BaseUrl),
+      cancelExample(apiV1BaseUrl),
+      errorEnvelopeExample(),
     ].join("\n");
 
     expect(examples).toContain("YOUR_API_KEY");
