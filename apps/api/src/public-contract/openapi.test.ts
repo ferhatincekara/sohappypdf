@@ -42,11 +42,9 @@ describe("public OpenAPI contract", () => {
     const description = createOpenApiDocument().info.description;
 
     expect(description).toContain(
-      String(DEFAULT_PLAN_LIMITS.free.monthlyConversions),
+      String(DEFAULT_PLAN_LIMITS.free.operationsPerDay),
     );
-    expect(description).toContain(
-      String(DEFAULT_PLAN_LIMITS.pro.monthlyConversions),
-    );
+    expect(description).toContain("unlimited conversions");
     expect(description).toContain(
       String(DEFAULT_PLAN_LIMITS.free.apiRequestsPerMinute),
     );

@@ -48,6 +48,12 @@ export function createAuth(options: CreateAuthOptions) {
     emailVerification: {
       sendVerificationEmail,
     },
+    user: {
+      changeEmail: {
+        enabled: true,
+        updateEmailWithoutVerification: true,
+      },
+    },
     session: {
       expiresIn: SESSION_EXPIRES_IN_SECONDS,
       updateAge: SESSION_UPDATE_AGE_SECONDS,
@@ -63,9 +69,9 @@ export function createAuth(options: CreateAuthOptions) {
         secure: options.config.useSecureCookies,
         path: "/",
       },
-      database: {
-        joins: true,
-      },
+    },
+    onAPIError: {
+      throw: true,
     },
   });
 }

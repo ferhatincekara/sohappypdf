@@ -1,7 +1,9 @@
 import type { BillingService } from "@repo/billing";
+import { DEFAULT_PLAN_LIMITS } from "@repo/billing/plans";
 import type { WorkerConfig } from "@repo/config";
 import type { EngineRegistry } from "@repo/conversion-engines";
 import {
+  countPdfPagesFromPath,
   createConversionWorkspace,
   isPermanentConversionError,
   PermanentConversionError,
@@ -61,6 +63,36 @@ async function downloadToFile(input: {
     maxBytes: input.maxBytes,
   });
   return downloaded.sizeBytes;
+}
+
+async function resolveMaxPagesPerFile(input: {
+  billing?: BillingService;
+  ownerId: string;
+  ownerKind?: string;
+}): Promise<number | null> {
+  if (input.ownerKind === "user" && input.billing !== undefined) {
+    const entitlements = await input.billing.getEntitlements(input.ownerId);
+    return entitlements.limits.maxPagesPerFile;
+  }
+
+  return DEFAULT_PLAN_LIMITS.free.maxPagesPerFile;
+}
+
+async function assertPdfPageLimit(input: {
+  path: string;
+  maxPagesPerFile: number | null;
+}): Promise<void> {
+  if (input.maxPagesPerFile === null) {
+    return;
+  }
+
+  const pageCount = await countPdfPagesFromPath(input.path);
+  if (pageCount > input.maxPagesPerFile) {
+    throw new PermanentConversionError(
+      "processing_failed",
+      `File exceeds the ${String(input.maxPagesPerFile)} page limit`,
+    );
+  }
 }
 
 export function createConversionProcessor(
@@ -224,6 +256,28 @@ export function createConversionProcessor(
           "processing_failed",
           "Temporary disk limit exceeded",
         );
+      }
+
+      const maxPagesPerFile = await resolveMaxPagesPerFile({
+        billing: dependencies.billing,
+        ownerId: current.ownerId,
+        ownerKind: current.ownerKind,
+      });
+
+      if (conversion.sourceFormat === "pdf") {
+        await assertPdfPageLimit({
+          path: sourcePath,
+          maxPagesPerFile,
+        });
+      }
+
+      for (const additionalPath of additionalSourcePaths) {
+        if (additionalPath.endsWith(".pdf")) {
+          await assertPdfPageLimit({
+            path: additionalPath,
+            maxPagesPerFile,
+          });
+        }
       }
 
       jobLogger.info("conversion started", { engine: engine.name });

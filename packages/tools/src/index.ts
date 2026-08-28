@@ -42,6 +42,7 @@ export {
   LIVE_PROCESSOR_IDS,
 } from "./tool-processor-ids.js";
 export {
+  assertToolAllowedOnPlan,
   findCatalogTool,
   findRegisteredTool,
   getCatalogTool,
@@ -49,7 +50,11 @@ export {
   groupCatalogToolsByCategory,
   isAnonymousToolAllowed,
   isExecutableTool,
+  isPremiumTool,
   isRegisteredToolId,
   listCatalogTools,
   listRegisteredTools,
+  TOOL_REQUIRES_PRO_MESSAGE,
+  toolCombinesSourceFiles,
+  toolSupportsBatchOperations,
 } from "./tool-registry.js";

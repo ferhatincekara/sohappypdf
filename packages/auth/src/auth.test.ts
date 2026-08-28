@@ -34,6 +34,10 @@ describe("createAuth", () => {
 
     expect(auth.options.emailAndPassword?.enabled).toBe(true);
     expect(auth.options.emailAndPassword?.requireEmailVerification).toBe(false);
+    expect(auth.options.user?.changeEmail?.enabled).toBe(true);
+    expect(auth.options.user?.changeEmail?.updateEmailWithoutVerification).toBe(
+      true,
+    );
     expect(auth.options.emailAndPassword?.password).toBeUndefined();
     expect(auth.options.socialProviders).toBeUndefined();
     expect(auth.options.plugins ?? []).toEqual([]);
@@ -41,6 +45,8 @@ describe("createAuth", () => {
     expect(auth.options.advanced?.useSecureCookies).toBe(false);
     expect(auth.options.advanced?.defaultCookieAttributes?.httpOnly).toBe(true);
     expect(auth.options.telemetry?.enabled).toBe(false);
+    expect(auth.options.advanced?.database?.joins).not.toBe(true);
+    expect(auth.options.onAPIError?.throw).toBe(true);
     expect(auth.options.trustedOrigins).toEqual(["http://localhost:3000"]);
   });
 

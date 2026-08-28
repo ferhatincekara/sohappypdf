@@ -1,3 +1,4 @@
+import { resolveWebMaxFilesPerOperation } from "@repo/billing/plans";
 import type { AnonymousConfig } from "@repo/config";
 import { isConversionType, normalizeFileFormat } from "@repo/conversions";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
@@ -5,6 +6,7 @@ import {
   getRegisteredTool,
   isAnonymousToolAllowed,
   isRegisteredToolId,
+  toolCombinesSourceFiles,
 } from "@repo/tools";
 import { z } from "zod";
 
@@ -76,7 +78,13 @@ export function resolveAnonymousConversionRequest(
     });
   }
 
-  const maxFiles = Math.min(tool.maxInputCount, config.maxFilesPerOperation);
+  const maxFiles = resolveWebMaxFilesPerOperation({
+    isAuthenticated: false,
+    toolMaxInputCount: tool.maxInputCount,
+    planMaxFilesPerOperation: config.maxFilesPerOperation,
+    combinesSourceFiles: toolCombinesSourceFiles(body.type),
+    supportsBatch: false,
+  });
   const maxAdditional = Math.max(0, maxFiles - 1);
   const additionalFileIds = body.additionalFileIds ?? [];
 

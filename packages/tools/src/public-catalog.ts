@@ -152,6 +152,7 @@ export function getToolCreditPricing(toolId: PricedToolId): ToolCreditPricing {
 }
 
 const ALL_PLANS = ["free", "pro"] as const satisfies readonly ToolPlanId[];
+const PRO_ONLY = ["pro"] as const satisfies readonly ToolPlanId[];
 
 type DefineToolInput = {
   category: ToolCategory;
@@ -342,6 +343,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "pdf-pdfa",
@@ -370,6 +372,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["docx"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "office-ocr",
@@ -409,6 +412,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["xlsx"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "office-ocr",
@@ -513,7 +517,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: true,
     requiresAuthentication: false,
-    maxInputCount: 1,
+    maxInputCount: 20,
     availability: "available",
     processorId: "image-pdf",
   }),
@@ -526,7 +530,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: true,
     requiresAuthentication: false,
-    maxInputCount: 1,
+    maxInputCount: 20,
     availability: "available",
     processorId: "image-pdf",
   }),
@@ -554,6 +558,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 2,
     availability: "available",
     processorId: "pdf-edit",
@@ -621,6 +626,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 2,
     availability: "available",
     processorId: "pdf-edit",
@@ -634,6 +640,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "pdf-redact",
@@ -647,6 +654,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["txt"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 2,
     availability: "available",
     processorId: "pdf-compare",
@@ -660,8 +668,9 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
-    availability: "available",
+    availability: "planned",
     processorId: "pdf-forms",
   }),
 
@@ -688,6 +697,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 50,
     availability: "available",
     processorId: "image-pdf",
@@ -701,6 +711,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["txt", "json"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "pdf-extract",
@@ -714,6 +725,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["md"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "pdf-markdown",
@@ -729,6 +741,7 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf", "txt"],
     allowsAnonymous: false,
     requiresAuthentication: true,
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
     availability: "available",
     processorId: "ocr",
@@ -742,9 +755,9 @@ export const TOOL_CATALOG = [
     outputFormats: ["txt", "md"],
     allowsAnonymous: false,
     requiresAuthentication: true,
-    availableOnPlans: ["pro"],
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
-    availability: "available",
+    availability: "planned",
     processorId: "ai",
   }),
   defineTool("translate-pdf", {
@@ -756,9 +769,9 @@ export const TOOL_CATALOG = [
     outputFormats: ["pdf", "txt"],
     allowsAnonymous: false,
     requiresAuthentication: true,
-    availableOnPlans: ["pro"],
+    availableOnPlans: PRO_ONLY,
     maxInputCount: 1,
-    availability: "available",
+    availability: "planned",
     processorId: "ai",
   }),
 ] as const satisfies readonly ToolDefinition[];
@@ -804,6 +817,51 @@ export function isAnonymousToolAllowed(id: string): boolean {
 export function isExecutableTool(tool: ToolDefinition): boolean {
   return isExecutableToolAvailability(tool.availability);
 }
+
+export function isPremiumTool(
+  tool: Pick<ToolDefinition, "availableOnPlans">,
+): boolean {
+  return (
+    tool.availableOnPlans.includes("pro") &&
+    !tool.availableOnPlans.includes("free")
+  );
+}
+
+const COMBINER_TOOL_IDS = new Set([
+  "merge-pdf",
+  "scan-to-pdf",
+  "compare-pdf",
+  "jpg-to-pdf",
+  "png-to-pdf",
+  "image-to-pdf",
+]);
+
+const SINGLE_FILE_WORKSPACE_TOOL_IDS = new Set([
+  "split-pdf",
+  "extract-pages",
+  "organize-pdf",
+  "reorder-pages",
+  "remove-pages",
+  "rotate-pdf",
+  "crop-pdf",
+  "sign-pdf",
+  "edit-pdf",
+  "web-to-pdf",
+  "pdf-forms",
+]);
+
+export function toolCombinesSourceFiles(toolId: string): boolean {
+  return COMBINER_TOOL_IDS.has(toolId);
+}
+
+export function toolSupportsBatchOperations(toolId: string): boolean {
+  return (
+    !COMBINER_TOOL_IDS.has(toolId) &&
+    !SINGLE_FILE_WORKSPACE_TOOL_IDS.has(toolId)
+  );
+}
+
+export const TOOL_REQUIRES_PRO_MESSAGE = "This tool requires Pro";
 
 export function toolPublicPath(toolId: ToolId): `/${ToolId}` {
   const tool = findCatalogTool(toolId);

@@ -46,49 +46,6 @@ describe("ocr engine", () => {
   });
 });
 
-describe("pdf forms engine", () => {
-  test("fills an existing text field and flattens", async () => {
-    const { createPdfFormsEngine } = await import("../pdf/pdf-forms-engine.js");
-    const workspace = await createConversionWorkspace(
-      "550e8400-e29b-41d4-a716-446655440302",
-    );
-
-    try {
-      const sourcePath = workspace.join("form.pdf");
-      const document = await PDFDocument.create();
-      const page = document.addPage([400, 400]);
-      const form = document.getForm();
-      const field = form.createTextField("name");
-      field.addToPage(page, { x: 40, y: 300, width: 200, height: 24 });
-      await writeFile(sourcePath, await document.save());
-
-      const result = await createPdfFormsEngine(
-        DEFAULT_CONVERSION_ENGINE_CONFIG,
-      ).convert({
-        type: "pdf-forms",
-        sourcePath,
-        outputDirectory: workspace.directory,
-        sourceFormat: "pdf",
-        targetFormat: "pdf",
-        options: {
-          type: "pdf-forms",
-          fields: { name: "Ada Lovelace" },
-          flatten: true,
-        },
-        additionalSourcePaths: [],
-      });
-
-      expect(result.filename).toBe("output.pdf");
-      const output = await PDFDocument.load(
-        await Bun.file(result.outputPath).arrayBuffer(),
-      );
-      expect(output.getForm().getFields()).toHaveLength(0);
-    } finally {
-      await workspace.cleanup();
-    }
-  });
-});
-
 describe("pdf edit overlays", () => {
   test("adds text overlays for edit-pdf", async () => {
     const { createPdfEditEngine } = await import("../pdf/pdf-edit-engine.js");

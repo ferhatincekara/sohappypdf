@@ -186,6 +186,27 @@ export async function startConversionWorkerRuntime(
             attemptsMade: job.attemptsMade,
           });
         },
+        async onPermanentFailure(conversionId) {
+          try {
+            const conversions = getConversionService();
+            const current = await conversions.getConversion(conversionId);
+
+            if (
+              current.status === "pending" ||
+              current.status === "queued" ||
+              current.status === "processing"
+            ) {
+              await conversions.markFailed(conversionId, {
+                errorCode: "processing_failed",
+                errorMessage: "Conversion could not be processed",
+              });
+            }
+          } catch {
+            logger.error("permanent conversion failure could not be recorded", {
+              conversionId,
+            });
+          }
+        },
         onError() {
           logger.error("queue worker error");
         },

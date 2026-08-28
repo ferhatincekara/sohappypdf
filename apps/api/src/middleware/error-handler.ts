@@ -1,3 +1,4 @@
+import { readPolarValidationSummary } from "@repo/billing";
 import {
   APP_ERROR_CODES,
   type AppErrorCode,
@@ -33,7 +34,11 @@ export function createErrorBody(
   };
 }
 
-function logPublicError(c: Context<AppEnv>, publicError: PublicError): void {
+function logPublicError(
+  c: Context<AppEnv>,
+  publicError: PublicError,
+  error: Error,
+): void {
   const logger = c.get("logger");
 
   if (logger === undefined) {
@@ -44,6 +49,10 @@ function logPublicError(c: Context<AppEnv>, publicError: PublicError): void {
     logger.error("request failed", {
       status: publicError.status,
       code: publicError.code,
+      name: error.name,
+      message: error.message,
+      causeName: error.cause instanceof Error ? error.cause.name : undefined,
+      polarValidation: readPolarValidationSummary(error.cause),
     });
     return;
   }
@@ -51,6 +60,7 @@ function logPublicError(c: Context<AppEnv>, publicError: PublicError): void {
   logger.warn("request rejected", {
     status: publicError.status,
     code: publicError.code,
+    polarValidation: readPolarValidationSummary(error.cause),
   });
 }
 
@@ -74,7 +84,7 @@ export function notFoundHandler(c: Context<AppEnv>) {
 
 export function errorHandler(error: Error, c: Context<AppEnv>) {
   const publicError = toPublicError(error);
-  logPublicError(c, publicError);
+  logPublicError(c, publicError, error);
 
   const status = isHandledErrorStatus(publicError.status)
     ? publicError.status

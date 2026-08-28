@@ -36,6 +36,18 @@ const FORBIDDEN_PAYLOAD_KEYS = new Set([
   "url",
 ]);
 
+export function conversionIdFromJobData(value: unknown): string | undefined {
+  if (!isRecord(value) || typeof value.conversionId !== "string") {
+    return undefined;
+  }
+
+  if (!UUID_PATTERN.test(value.conversionId)) {
+    return undefined;
+  }
+
+  return value.conversionId;
+}
+
 export function toQueueSafeJobOptions(
   options: Record<string, unknown>,
 ): Record<string, unknown> {

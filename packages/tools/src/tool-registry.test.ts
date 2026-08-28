@@ -1,16 +1,21 @@
 import { describe, expect, test } from "bun:test";
+import { APP_ERROR_CODES, isAppError } from "@repo/core";
 import {
+  assertToolAllowedOnPlan,
   findCatalogTool,
   findRegisteredTool,
   getToolCreditPricing,
   groupCatalogToolsByCategory,
   isAnonymousToolAllowed,
   isExecutableTool,
+  isPremiumTool,
   isRegisteredToolId,
   listCatalogTools,
   listRegisteredTools,
   REGISTERED_TOOLS,
   TOOL_CATALOG,
+  toolCombinesSourceFiles,
+  toolSupportsBatchOperations,
 } from "./index.js";
 import { TOOL_CREDIT_PRICING } from "./tool-credit-pricing.js";
 import { toolPublicPath } from "./tool-path.js";
@@ -77,7 +82,6 @@ describe("tool catalog", () => {
   test("registers only executable tools with live processors", () => {
     expect(REGISTERED_TOOLS.map((tool) => tool.id).sort()).toEqual(
       [
-        "ai-summarizer",
         "compare-pdf",
         "compress-pdf",
         "crop-pdf",
@@ -91,7 +95,6 @@ describe("tool catalog", () => {
         "organize-pdf",
         "page-numbers-pdf",
         "pdf-extract",
-        "pdf-forms",
         "pdf-to-excel",
         "pdf-to-excel-ocr",
         "pdf-to-jpg",
@@ -113,7 +116,6 @@ describe("tool catalog", () => {
         "scan-to-pdf",
         "sign-pdf",
         "split-pdf",
-        "translate-pdf",
         "unlock-pdf",
         "watermark-pdf",
         "word-to-pdf",
@@ -186,7 +188,60 @@ describe("tool catalog", () => {
     expect(isAnonymousToolAllowed("ocr-pdf")).toBe(false);
     expect(isAnonymousToolAllowed("unknown-tool")).toBe(false);
     expect(findCatalogTool("web-to-pdf")?.availability).toBe("planned");
+    expect(findCatalogTool("translate-pdf")?.availability).toBe("planned");
+    expect(findCatalogTool("pdf-forms")?.availability).toBe("planned");
+    expect(findCatalogTool("ai-summarizer")?.availability).toBe("planned");
     expect(findCatalogTool("ocr-pdf")?.availability).toBe("available");
+  });
+
+  test("marks merge and image tools as combiners and compress as batchable", () => {
+    expect(toolCombinesSourceFiles("merge-pdf")).toBe(true);
+    expect(toolCombinesSourceFiles("jpg-to-pdf")).toBe(true);
+    expect(toolCombinesSourceFiles("compress-pdf")).toBe(false);
+    expect(toolSupportsBatchOperations("compress-pdf")).toBe(true);
+    expect(toolSupportsBatchOperations("split-pdf")).toBe(false);
+    expect(toolSupportsBatchOperations("merge-pdf")).toBe(false);
+    expect(findCatalogTool("jpg-to-pdf")?.maxInputCount).toBe(20);
+  });
+
+  test("keeps premium tools off Free and planned tools off the live registry", () => {
+    const merge = findCatalogTool("merge-pdf");
+    const ocr = findCatalogTool("ocr-pdf");
+    const translate = findCatalogTool("translate-pdf");
+
+    expect(merge).toBeDefined();
+    expect(ocr).toBeDefined();
+    expect(translate).toBeDefined();
+    if (merge === undefined || ocr === undefined || translate === undefined) {
+      throw new Error("catalog tools must exist");
+    }
+
+    expect(isPremiumTool(merge)).toBe(false);
+    expect(isPremiumTool(ocr)).toBe(true);
+    expect(isPremiumTool(translate)).toBe(true);
+
+    assertToolAllowedOnPlan("merge-pdf", "free");
+    assertToolAllowedOnPlan("ocr-pdf", "pro");
+
+    try {
+      assertToolAllowedOnPlan("ocr-pdf", "free");
+      throw new Error("expected ocr-pdf to require Pro");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
+      }
+    }
+
+    try {
+      assertToolAllowedOnPlan("translate-pdf", "pro");
+      throw new Error("expected planned tools to be rejected");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.VALIDATION_ERROR);
+      }
+    }
   });
 
   test("maps public pages from catalog routes", () => {

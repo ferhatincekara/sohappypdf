@@ -17,7 +17,7 @@ const MIB = 1024 * 1024;
 const GIB = 1024 * MIB;
 
 export const PUBLIC_API_VERSION = "1.0.0";
-export const PUBLIC_API_TITLE = "SohappyPDF API";
+export const PUBLIC_API_TITLE = "SoHappyPDF API";
 
 type JsonSchema = Record<string, unknown>;
 type OpenApiPathItem = Record<string, unknown>;
@@ -139,7 +139,7 @@ export function createOpenApiDocument(): OpenApiDocument {
       title: PUBLIC_API_TITLE,
       version: PUBLIC_API_VERSION,
       description: [
-        "Public developer API for SohappyPDF file upload and asynchronous conversion.",
+        "Public developer API for SoHappyPDF file upload and asynchronous conversion.",
         "",
         "Authenticate with `Authorization: Bearer YOUR_API_KEY`.",
         "Never put API keys in URLs, browser JavaScript, or source control.",
@@ -149,8 +149,8 @@ export function createOpenApiDocument(): OpenApiDocument {
         `Presigned upload and download URLs expire after ${DOCUMENTED_PRESIGN_EXPIRES_IN_SECONDS} seconds.`,
         "",
         "Plan defaults from the entitlement catalog:",
-        `- Free: ${DEFAULT_PLAN_LIMITS.free.monthlyConversions} conversions/month, ${formatBytes(DEFAULT_PLAN_LIMITS.free.storageBytes)} storage, ${formatBytes(DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes)} max file, ${DEFAULT_PLAN_LIMITS.free.apiRequestsPerMinute} API requests/minute.`,
-        `- Pro: ${DEFAULT_PLAN_LIMITS.pro.monthlyConversions} conversions/month, ${formatBytes(DEFAULT_PLAN_LIMITS.pro.storageBytes)} storage, ${formatBytes(DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes)} max file, ${DEFAULT_PLAN_LIMITS.pro.apiRequestsPerMinute} API requests/minute.`,
+        `- Free: ${String(DEFAULT_PLAN_LIMITS.free.operationsPerDay)} conversions/day, ${formatBytes(DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes)} max file, ${String(DEFAULT_PLAN_LIMITS.free.maxFilesPerOperation)} file per operation, ${String(DEFAULT_PLAN_LIMITS.free.maxPagesPerFile)} pages per file, ${DEFAULT_PLAN_LIMITS.free.apiRequestsPerMinute} API requests/minute.`,
+        `- Pro: unlimited conversions, ${formatBytes(DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes)} max file, ${DEFAULT_PLAN_LIMITS.pro.apiRequestsPerMinute} API requests/minute.`,
         "",
         "API key and billing management stay in the dashboard. They are not part of this public key-authenticated surface.",
         "Developer webhooks are not available in this version.",

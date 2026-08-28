@@ -37,7 +37,7 @@ export function createConfiguredRateLimiters(
     return {};
   }
 
-  const anonymousHourlyLimit = loadAnonymousConfig().operationsPerHour;
+  const anonymousDailyLimit = loadAnonymousConfig().operationsPerDay;
   const freeService = createRateLimitService({
     redis: config.redis,
     policies: createRateLimitPolicies({
@@ -45,12 +45,12 @@ export function createConfiguredRateLimiters(
       authenticatedPerMinute: config.freeAuthenticatedPerMinute,
       apiPerMinute: config.freeApiPerMinute,
     }),
-    anonymousHourlyLimit,
+    anonymousDailyLimit,
   });
   const proService = createRateLimitService({
     redis: config.redis,
     policies: createRateLimitPolicies(config),
-    anonymousHourlyLimit,
+    anonymousDailyLimit,
   });
 
   const resolveService = async (subject: RateLimitSubject) => {
@@ -72,8 +72,8 @@ export function createConfiguredRateLimiters(
           allowed: true,
           failedOpen: false,
           kind: "anonymous",
-          limit: anonymousHourlyLimit,
-          remaining: anonymousHourlyLimit,
+          limit: anonymousDailyLimit,
+          remaining: anonymousDailyLimit,
           resetAtMs: 0,
         };
       }

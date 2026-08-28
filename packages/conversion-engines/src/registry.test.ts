@@ -17,8 +17,6 @@ describe("engine registry", () => {
     expect(registry.resolve("pdf-to-word-ocr").name).toBe("office-ocr");
     expect(registry.resolve("pdf-to-excel-ocr").name).toBe("office-ocr");
     expect(registry.resolve("ocr-pdf").name).toBe("ocr");
-    expect(registry.resolve("ai-summarizer").name).toBe("ai");
-    expect(registry.resolve("translate-pdf").name).toBe("ai");
     expect(
       registry.resolve({
         type: "pdf-to-jpg",
@@ -50,7 +48,6 @@ describe("engine registry", () => {
     expect(registry.resolve("pdf-to-pdfa").name).toBe("pdf-pdfa");
     expect(registry.resolve("redact-pdf").name).toBe("pdf-redact");
     expect(registry.resolve("compare-pdf").name).toBe("pdf-compare");
-    expect(registry.resolve("pdf-forms").name).toBe("pdf-forms");
     expect(registry.resolve("pdf-extract").name).toBe("pdf-extract");
     expect(registry.resolve("pdf-to-markdown").name).toBe("pdf-markdown");
   });
@@ -58,6 +55,13 @@ describe("engine registry", () => {
   test("rejects conversions without an engine", () => {
     try {
       registry.resolve("ocr-image");
+      throw new Error("expected unsupported conversion");
+    } catch (error) {
+      expect(isPermanentConversionError(error)).toBe(true);
+    }
+
+    try {
+      registry.resolve("ai-summarizer");
       throw new Error("expected unsupported conversion");
     } catch (error) {
       expect(isPermanentConversionError(error)).toBe(true);

@@ -9,6 +9,7 @@ export type {
   ConversionJobOptions,
 } from "./conversion-job.js";
 export {
+  conversionIdFromJobData,
   createConversionJob,
   createConversionJobId,
   parseConversionJobData,
@@ -73,5 +74,6 @@ export {
   FILE_CLEANUP_JOB_NAME,
   FILE_CLEANUP_MAX_BATCHES_PER_JOB,
   FILE_CLEANUP_QUEUE_NAME,
+  FILE_CLEANUP_REPEAT,
   FILE_CLEANUP_SCHEDULER_ID,
 } from "./queue-settings.js";

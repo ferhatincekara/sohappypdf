@@ -220,7 +220,7 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     type: "pdf-forms",
     sourceFormats: ["pdf"],
     targetFormats: ["pdf"],
-    implemented: true,
+    implemented: false,
   },
   "scan-to-pdf": {
     type: "scan-to-pdf",
@@ -259,14 +259,14 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
     type: "ai-summarizer",
     sourceFormats: ["pdf"],
     targetFormats: ["txt", "md"],
-    implemented: true,
+    implemented: false,
     requiresExplicitType: true,
   },
   "translate-pdf": {
     type: "translate-pdf",
     sourceFormats: ["pdf"],
     targetFormats: ["pdf", "txt"],
-    implemented: true,
+    implemented: false,
     requiresExplicitType: true,
   },
 };

@@ -2,6 +2,7 @@ import { APP_ERROR_CODES, isAppError } from "@repo/core";
 import { UnrecoverableError, Worker } from "bullmq";
 import {
   type ConversionJobData,
+  conversionIdFromJobData,
   parseConversionJobData,
 } from "./conversion-job.js";
 import { getQueueConnection } from "./queue-connection.js";
@@ -30,6 +31,7 @@ export type ConversionWorkerHooks = {
     attemptsMade: number;
     permanent: boolean;
   }): void;
+  onPermanentFailure?(conversionId: string): Promise<void> | void;
   onError?(): void;
 };
 
@@ -68,6 +70,16 @@ export function createConversionWorker(
         });
       } catch (error) {
         if (isPermanentJobError(error)) {
+          const conversionId = conversionIdFromJobData(job.data);
+
+          if (conversionId !== undefined) {
+            try {
+              await options.hooks?.onPermanentFailure?.(conversionId);
+            } catch {
+              // Conversion may already be terminal.
+            }
+          }
+
           throw new UnrecoverableError(
             error instanceof Error ? error.message : "Conversion failed",
           );

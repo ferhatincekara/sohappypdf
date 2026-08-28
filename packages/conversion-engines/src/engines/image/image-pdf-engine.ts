@@ -73,10 +73,7 @@ export function createImagePdfEngine(): ConversionEngine {
         throw unsupportedConversionError();
       }
 
-      const paths =
-        input.type === "scan-to-pdf"
-          ? [input.sourcePath, ...input.additionalSourcePaths]
-          : [input.sourcePath];
+      const paths = [input.sourcePath, ...input.additionalSourcePaths];
 
       if (paths.length > MAX_SCAN_IMAGES) {
         throw invalidInputError("Too many scan images");

@@ -67,8 +67,9 @@ describe("conversion capabilities", () => {
     expect(isConversionImplemented("pdf-to-word-ocr")).toBe(true);
     expect(isConversionImplemented("ocr-pdf")).toBe(true);
     expect(isConversionImplemented("redact-pdf")).toBe(true);
-    expect(isConversionImplemented("ai-summarizer")).toBe(true);
-    expect(isConversionImplemented("translate-pdf")).toBe(true);
+    expect(isConversionImplemented("ai-summarizer")).toBe(false);
+    expect(isConversionImplemented("translate-pdf")).toBe(false);
+    expect(isConversionImplemented("pdf-forms")).toBe(false);
     expect(isConversionImplemented("ocr-image")).toBe(false);
   });
 });

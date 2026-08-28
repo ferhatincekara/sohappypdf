@@ -10,6 +10,7 @@ import {
   FILE_CLEANUP_INTERVAL_MS,
   FILE_CLEANUP_JOB_NAME,
   FILE_CLEANUP_QUEUE_NAME,
+  FILE_CLEANUP_REPEAT,
 } from "./queue-settings.js";
 
 describe("queue settings", () => {
@@ -41,6 +42,10 @@ describe("queue settings", () => {
   test("schedules file cleanup on a separate queue", () => {
     expect(FILE_CLEANUP_QUEUE_NAME).toBe("file-cleanup");
     expect(FILE_CLEANUP_JOB_NAME).toBe("cleanup-expired");
-    expect(FILE_CLEANUP_INTERVAL_MS).toBe(15 * 60 * 1000);
+    expect(FILE_CLEANUP_INTERVAL_MS).toBe(2 * 60 * 60 * 1000);
+    expect(FILE_CLEANUP_REPEAT).toEqual({
+      every: FILE_CLEANUP_INTERVAL_MS,
+      immediately: true,
+    });
   });
 });

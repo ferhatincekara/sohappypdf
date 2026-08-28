@@ -176,6 +176,27 @@ describe("conversion options", () => {
       type: "compare-pdf",
       additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
     });
+
+    expect(
+      parseConversionOptions("jpg-to-pdf", {
+        additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+      }),
+    ).toEqual({
+      type: "jpg-to-pdf",
+      additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+    });
+
+    expect(parseConversionOptions("scan-to-pdf", undefined)).toEqual({
+      type: "scan-to-pdf",
+    });
+    expect(
+      parseConversionOptions("scan-to-pdf", {
+        additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+      }),
+    ).toEqual({
+      type: "scan-to-pdf",
+      additionalFileIds: ["aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"],
+    });
   });
 
   test("rejects invalid or sensitive options", () => {

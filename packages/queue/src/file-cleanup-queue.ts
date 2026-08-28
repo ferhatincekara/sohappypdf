@@ -5,10 +5,10 @@ import {
   CONVERSION_COMPLETED_JOB_RETENTION,
   CONVERSION_FAILED_JOB_RETENTION,
   CONVERSION_JOB_BACKOFF,
-  FILE_CLEANUP_INTERVAL_MS,
   FILE_CLEANUP_JOB_ATTEMPTS,
   FILE_CLEANUP_JOB_NAME,
   FILE_CLEANUP_QUEUE_NAME,
+  FILE_CLEANUP_REPEAT,
   FILE_CLEANUP_SCHEDULER_ID,
 } from "./queue-settings.js";
 
@@ -42,7 +42,7 @@ export function getFileCleanupQueue(): Queue<FileCleanupJobData> {
 export async function scheduleFileCleanup(): Promise<void> {
   await getFileCleanupQueue().upsertJobScheduler(
     FILE_CLEANUP_SCHEDULER_ID,
-    { every: FILE_CLEANUP_INTERVAL_MS },
+    FILE_CLEANUP_REPEAT,
     {
       name: FILE_CLEANUP_JOB_NAME,
       data: {},

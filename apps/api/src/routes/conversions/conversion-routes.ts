@@ -109,6 +109,10 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         targetFormat: body.targetFormat,
         type: body.type,
       });
+      await billing.assertCanUseTool({
+        userId: identity.userId,
+        toolId: conversionToolId,
+      });
       if (usesAiCredits(conversionToolId)) {
         await billing.assertCanSpendAiCredits({
           userId: identity.userId,
@@ -125,7 +129,14 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
           toolId: conversionToolId,
         });
       }
-      await billing.assertCanCreateConversion(identity.userId);
+      if (identity.kind === "session") {
+        await billing.assertCanCreateConversion(identity.userId);
+        await billing.assertCanUseFileCount({
+          userId: identity.userId,
+          fileCount: 1 + (body.additionalFileIds?.length ?? 0),
+          toolId: conversionToolId,
+        });
+      }
     }
 
     const conversion = await enqueueCreatedConversion({
@@ -170,12 +181,6 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
             toolId,
           });
         }
-        await billing.recordConversionUsage({
-          userId: identity.userId,
-          conversionId: conversion.id,
-          toolId,
-          apiKeyId: identity.kind === "api-key" ? identity.apiKeyId : null,
-        });
       } catch (error) {
         if (
           isAppError(error) &&
@@ -191,9 +196,28 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
               userId: identity.userId,
             });
           }
+
+          throw error;
         }
 
-        throw error;
+        c.get("logger").error("conversion billing failed after enqueue", {
+          conversionId: conversion.id,
+          userId: identity.userId,
+        });
+      }
+
+      try {
+        await billing.recordConversionUsage({
+          userId: identity.userId,
+          conversionId: conversion.id,
+          toolId,
+          apiKeyId: identity.kind === "api-key" ? identity.apiKeyId : null,
+        });
+      } catch {
+        c.get("logger").error("conversion usage record failed", {
+          conversionId: conversion.id,
+          userId: identity.userId,
+        });
       }
     }
 

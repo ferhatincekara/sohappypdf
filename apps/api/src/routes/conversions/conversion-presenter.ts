@@ -1,4 +1,7 @@
-import type { ConversionRecord } from "@repo/conversions";
+import {
+  type ConversionRecord,
+  isConversionRecordExpired,
+} from "@repo/conversions";
 
 export type PublicConversionError = {
   code: string;
@@ -25,10 +28,7 @@ export type PublicConversion = {
 };
 
 function isExpired(conversion: ConversionRecord, now: Date): boolean {
-  return (
-    conversion.expiresAt != null &&
-    conversion.expiresAt.getTime() <= now.getTime()
-  );
+  return isConversionRecordExpired(conversion, now);
 }
 
 export function toPublicConversion(

@@ -33,7 +33,7 @@ describe("file cleanup processor", () => {
             failureFileIds: [],
           };
         },
-        async listPurgedAnonymousFiles() {
+        async listPurgedFiles() {
           return [];
         },
       } as FileService,
@@ -57,7 +57,7 @@ describe("file cleanup processor", () => {
             failureFileIds: ["550e8400-e29b-41d4-a716-446655440000"],
           };
         },
-        async listPurgedAnonymousFiles() {
+        async listPurgedFiles() {
           return [];
         },
       } as FileService,
@@ -77,7 +77,7 @@ describe("file cleanup processor", () => {
     }
   });
 
-  test("removes purged anonymous files after detaching conversions", async () => {
+  test("removes purged files after detaching conversions", async () => {
     const hardDeleted: string[] = [];
     const detached: string[] = [];
     const processor = createFileCleanupProcessor({
@@ -90,7 +90,7 @@ describe("file cleanup processor", () => {
             failureFileIds: [],
           };
         },
-        async listPurgedAnonymousFiles() {
+        async listPurgedFiles() {
           if (hardDeleted.length > 0) {
             return [];
           }
@@ -98,8 +98,8 @@ describe("file cleanup processor", () => {
           return [
             {
               id: "550e8400-e29b-41d4-a716-446655440000",
-              ownerId: "anon",
-              ownerKind: "anonymous_session",
+              ownerId: "user_1",
+              ownerKind: "user",
               originalFilename: "a.pdf",
               mimeType: "application/pdf",
               sizeBytes: 10,

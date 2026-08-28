@@ -14,7 +14,7 @@ export type FileConfig = {
 };
 
 export const DEFAULT_FILE_CONFIG: FileConfig = {
-  maxUploadFileSizeBytes: 100 * 1024 * 1024,
+  maxUploadFileSizeBytes: 1024 * 1024 * 1024,
   retentionMs: DEFAULT_FILE_RETENTION_MS,
   cleanupBatchSize: DEFAULT_FILE_CLEANUP_BATCH_SIZE,
 };

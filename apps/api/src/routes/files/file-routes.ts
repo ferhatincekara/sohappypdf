@@ -29,6 +29,7 @@ export function createFileRoutes(options: FileRoutesOptions) {
       userId: identity.userId,
       sizeBytes: body.size,
       storageUsedBytes,
+      channel: identity.kind === "api-key" ? "api" : "web",
     });
     const result = await options.getFileService().createUploadIntent({
       ownerId: identity.userId,

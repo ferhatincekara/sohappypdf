@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { isAppError } from "@repo/core";
 import {
   type ConversionJobData,
+  conversionIdFromJobData,
   createConversionJob,
   createConversionJobId,
   parseConversionJobData,
@@ -97,5 +98,11 @@ describe("conversion job contract", () => {
       }),
     );
     expectInvalidPayload(() => createConversionJobId("123"));
+  });
+
+  test("reads a conversion id from unparsed job data", () => {
+    expect(conversionIdFromJobData(validJob)).toBe(validJob.conversionId);
+    expect(conversionIdFromJobData({ conversionId: "123" })).toBeUndefined();
+    expect(conversionIdFromJobData(null)).toBeUndefined();
   });
 });

@@ -1,6 +1,6 @@
 # Conversion worker
 
-Long-running conversion consumer for SohappyPDF.
+Long-running conversion consumer for SoHappyPDF.
 
 The API (`apps/api`) stays independently deployable, including on Vercel. This worker is the compute environment. Deploy it as a container to Railway, Google Cloud Run, or any similar platform.
 
@@ -152,7 +152,7 @@ The image runs as the non-root `bun` user. Temporary files live under `/tmp/soha
 
 The same worker process also consumes the `file-cleanup` queue.
 
-On startup it registers a repeatable BullMQ job (`cleanup-expired`) every 15 minutes. The job is empty: the worker queries expired and soft-deleted files from the database in batches of 100.
+On startup it registers a repeatable BullMQ job (`cleanup-expired`) every 2 hours and runs one pass immediately. The job is empty: the worker deletes expired conversion rows, removes the matching S3 objects, then hard-deletes the file rows in batches of 100.
 
 Cleanup is eventually consistent. Files become inaccessible at `expiresAt` even if the S3 object is still present. Physical deletion happens on the next successful cleanup run.
 

@@ -43,7 +43,13 @@ describe("end-to-end product coverage", () => {
 
     expect(registered.length).toBeGreaterThan(0);
     expect(planned.map((tool) => tool.id).sort()).toEqual(
-      ["image-to-pdf", "web-to-pdf"].sort(),
+      [
+        "ai-summarizer",
+        "image-to-pdf",
+        "pdf-forms",
+        "translate-pdf",
+        "web-to-pdf",
+      ].sort(),
     );
 
     for (const tool of registered) {

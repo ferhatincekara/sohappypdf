@@ -1,7 +1,6 @@
 import type { ConversionType } from "@repo/conversions";
 import type { ConversionEngine, ConversionEngineQuery } from "./engine.js";
 import type { ConversionEngineConfig } from "./engine-config.js";
-import { createAiDocumentEngine } from "./engines/ai/ai-document-engine.js";
 import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";
 import { createOfficeEngine } from "./engines/libreoffice/office-engine.js";
 import { createOfficeOcrEngine } from "./engines/libreoffice/office-ocr-engine.js";
@@ -9,7 +8,6 @@ import { createOcrEngine } from "./engines/ocr/ocr-engine.js";
 import { createPdfCompareEngine } from "./engines/pdf/pdf-compare-engine.js";
 import { createPdfEditEngine } from "./engines/pdf/pdf-edit-engine.js";
 import { createPdfExtractEngine } from "./engines/pdf/pdf-extract-engine.js";
-import { createPdfFormsEngine } from "./engines/pdf/pdf-forms-engine.js";
 import { createPdfImageEngine } from "./engines/pdf/pdf-image-engine.js";
 import { createPdfManipulateEngine } from "./engines/pdf/pdf-manipulate-engine.js";
 import { createPdfMarkdownEngine } from "./engines/pdf/pdf-markdown-engine.js";
@@ -45,7 +43,6 @@ export function createEngineRegistry(
     createOfficeEngine(config),
     createOfficeOcrEngine(config),
     createOcrEngine(config),
-    createAiDocumentEngine(config),
     createPdfImageEngine(config),
     createPdfTextEngine(config),
     createImagePdfEngine(),
@@ -56,7 +53,6 @@ export function createEngineRegistry(
     createPdfPdfaEngine(config),
     createPdfRedactEngine(config),
     createPdfCompareEngine(config),
-    createPdfFormsEngine(config),
     createPdfExtractEngine(config),
     createPdfMarkdownEngine(config),
   ];

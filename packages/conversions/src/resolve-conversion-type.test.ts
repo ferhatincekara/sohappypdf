@@ -25,12 +25,13 @@ describe("resolveImplementedConversionType", () => {
     expect(resolveImplementedConversionType("pdf", "pdf", "ocr-pdf")).toBe(
       "ocr-pdf",
     );
-    expect(resolveImplementedConversionType("pdf", "md", "ai-summarizer")).toBe(
-      "ai-summarizer",
-    );
-    expect(
-      resolveImplementedConversionType("pdf", "txt", "translate-pdf"),
-    ).toBe("translate-pdf");
+
+    try {
+      resolveImplementedConversionType("pdf", "md", "ai-summarizer");
+      throw new Error("expected unimplemented type to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+    }
 
     try {
       resolveImplementedConversionType("pdf", "pdf", "ocr-image");

@@ -19,12 +19,12 @@ import type { RateLimitDecision } from "./rate-limit-result.js";
 
 const RATE_LIMIT_PREFIX = "sohappypdf:ratelimit";
 const RATE_LIMIT_TIMEOUT_MS = 1_000;
-const RATE_LIMIT_HOUR_WINDOW = "1 h" as const;
+const RATE_LIMIT_DAY_WINDOW = "1 d" as const;
 
 export type CreateRateLimitServiceOptions = {
   redis: RateLimitRedisConfig;
   policies: RateLimitPolicies;
-  anonymousHourlyLimit?: number;
+  anonymousDailyLimit?: number;
 };
 
 export type RateLimitService = {
@@ -122,23 +122,23 @@ export function createRateLimitService(
     authenticated: createLimiter(redis, options.policies.authenticated),
     api: createLimiter(redis, options.policies.api),
   };
-  const anonymousHourlyLimit = options.anonymousHourlyLimit;
-  const anonymousHourlyLimiter =
-    anonymousHourlyLimit === undefined
+  const anonymousDailyLimit = options.anonymousDailyLimit;
+  const anonymousDailyLimiter =
+    anonymousDailyLimit === undefined
       ? undefined
       : new Ratelimit({
           redis,
-          prefix: `${RATE_LIMIT_PREFIX}:anonymous-hourly`,
+          prefix: `${RATE_LIMIT_PREFIX}:anonymous-daily`,
           limiter: Ratelimit.slidingWindow(
-            anonymousHourlyLimit,
-            RATE_LIMIT_HOUR_WINDOW,
+            anonymousDailyLimit,
+            RATE_LIMIT_DAY_WINDOW,
           ),
           timeout: RATE_LIMIT_TIMEOUT_MS,
           analytics: false,
         });
-  const anonymousHourlyPolicy: RateLimitPolicy = {
+  const anonymousDailyPolicy: RateLimitPolicy = {
     kind: "anonymous",
-    limit: anonymousHourlyLimit ?? options.policies.anonymous.limit,
+    limit: anonymousDailyLimit ?? options.policies.anonymous.limit,
     window: options.policies.anonymous.window,
   };
 
@@ -155,13 +155,13 @@ export function createRateLimitService(
     },
 
     async consumeAnonymousOperation(subject) {
-      if (anonymousHourlyLimiter === undefined) {
-        return failOpenDecision(anonymousHourlyPolicy);
+      if (anonymousDailyLimiter === undefined) {
+        return failOpenDecision(anonymousDailyPolicy);
       }
 
       return consumeAnonymousDual(
-        anonymousHourlyLimiter,
-        anonymousHourlyPolicy,
+        anonymousDailyLimiter,
+        anonymousDailyPolicy,
         subject,
       );
     },

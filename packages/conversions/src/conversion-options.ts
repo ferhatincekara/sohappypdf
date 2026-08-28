@@ -4,6 +4,7 @@ import type { ConversionType } from "./conversion-type.js";
 
 const MAX_MERGE_ADDITIONAL_FILES = 20;
 const MAX_SCAN_ADDITIONAL_FILES = 49;
+const MAX_IMAGE_ADDITIONAL_FILES = 19;
 const MAX_REDACT_REGIONS = 200;
 const MAX_EDIT_OPERATIONS = 50;
 const MAX_FORM_FIELDS = 200;
@@ -45,9 +46,12 @@ export type OfficeConversionOptions = {
     | "excel-to-pdf"
     | "powerpoint-to-pdf"
     | "office-to-pdf"
-    | "jpg-to-pdf"
-    | "png-to-pdf"
     | "pdf-to-txt";
+};
+
+export type ImageToPdfOptions = {
+  type: "jpg-to-pdf" | "png-to-pdf";
+  additionalFileIds?: string[];
 };
 
 export type OfficeOcrConversionOptions = {
@@ -246,6 +250,7 @@ export type TranslatePdfOptions = {
 export type ConversionOptions =
   | PdfPageImageOptions
   | OfficeConversionOptions
+  | ImageToPdfOptions
   | OfficeOcrConversionOptions
   | MergePdfOptions
   | SplitPdfOptions
@@ -1026,14 +1031,14 @@ export function parseConversionOptions(
     }
     case "scan-to-pdf": {
       assertAllowedKeys(record, ["type", "additionalFileIds"]);
-      const additionalFileIds = parseAdditionalFileIds(
+      const additionalFileIds = parseOptionalAdditionalFileIds(
         record.additionalFileIds,
         MAX_SCAN_ADDITIONAL_FILES,
       );
 
       return {
         type,
-        additionalFileIds,
+        ...(additionalFileIds === undefined ? {} : { additionalFileIds }),
       };
     }
     case "pdf-extract":
@@ -1060,11 +1065,22 @@ export function parseConversionOptions(
     case "excel-to-pdf":
     case "powerpoint-to-pdf":
     case "office-to-pdf":
-    case "jpg-to-pdf":
-    case "png-to-pdf":
     case "pdf-to-txt": {
       assertAllowedKeys(record, ["type"]);
       return { type };
+    }
+    case "jpg-to-pdf":
+    case "png-to-pdf": {
+      assertAllowedKeys(record, ["type", "additionalFileIds"]);
+      const additionalFileIds = parseOptionalAdditionalFileIds(
+        record.additionalFileIds,
+        MAX_IMAGE_ADDITIONAL_FILES,
+      );
+
+      return {
+        type,
+        ...(additionalFileIds === undefined ? {} : { additionalFileIds }),
+      };
     }
     case "pdf-to-word-ocr":
     case "pdf-to-excel-ocr": {

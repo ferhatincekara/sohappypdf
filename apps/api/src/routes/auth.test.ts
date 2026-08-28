@@ -90,4 +90,39 @@ describe("Better Auth HTTP routes", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toBeNull();
   });
+
+  test("returns invalid credentials for a wrong password", async () => {
+    const app = createAuthApp();
+    const originHeaders = {
+      Origin: "http://localhost:3000",
+      "Content-Type": "application/json",
+    };
+
+    await app.request("http://localhost:3001/api/auth/sign-up/email", {
+      method: "POST",
+      headers: originHeaders,
+      body: JSON.stringify({
+        name: "Ada Lovelace",
+        email: "ada@example.com",
+        password: TEST_PASSWORD,
+      }),
+    });
+
+    const response = await app.request(
+      "http://localhost:3001/api/auth/sign-in/email",
+      {
+        method: "POST",
+        headers: originHeaders,
+        body: JSON.stringify({
+          email: "ada@example.com",
+          password: "wrong-password",
+        }),
+      },
+    );
+
+    expect(response.status).toBe(401);
+    expect(await response.json()).toMatchObject({
+      code: "INVALID_EMAIL_OR_PASSWORD",
+    });
+  });
 });
