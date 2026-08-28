@@ -1,14 +1,18 @@
-import { getTranslations } from "next-intl/server";
+import { listCatalogTools } from "@repo/tools/catalog";
+import { getLocale, getTranslations } from "next-intl/server";
+import {
+  LatestPostsSection,
+  listBlogPosts,
+  toBlogPostCard,
+} from "@/features/blog";
 import { resolveMarketingCtas } from "../lib/marketing-cta";
-import { countPremiumCatalogTools, getPublicPlans } from "../lib/public-plans";
-import { DeveloperSection } from "./developer-section";
-import { FeaturesSection } from "./features-section";
 import { Hero } from "./hero";
-import { HowItWorks } from "./how-it-works";
-import { PricingSection } from "./pricing-section";
-import { ProductDemoSection } from "./product-demo-section";
+import { HomeCtaBanner } from "./home-cta-banner";
+import { OverviewSection } from "./overview-section";
 import { ProductJsonLd } from "./product-json-ld";
-import { SecuritySection } from "./security-section";
+import { SpotlightsSection } from "./spotlights-section";
+import { TestimonialsSection } from "./testimonials-section";
+import { WhyChooseSection } from "./why-choose-section";
 
 export async function MarketingHomePage({
   isAuthenticated,
@@ -16,9 +20,15 @@ export async function MarketingHomePage({
   isAuthenticated: boolean;
 }) {
   const t = await getTranslations("marketing");
-  const { startHref, proHref } = resolveMarketingCtas(isAuthenticated);
-  const plans = getPublicPlans();
-  const premiumToolCount = countPremiumCatalogTools();
+  const locale = await getLocale();
+  const { startHref } = resolveMarketingCtas(isAuthenticated);
+  const toolCount = listCatalogTools().length;
+  const posts = listBlogPosts(locale).map((post) =>
+    toBlogPostCard(post, locale),
+  );
+  const startLabel = isAuthenticated
+    ? t("hero.secondaryCta")
+    : t("hero.primaryCta");
 
   return (
     <>
@@ -27,18 +37,17 @@ export async function MarketingHomePage({
         description={t("metadata.homeDescription")}
         freePlanName={t("pricing.free.name")}
       />
-      <Hero />
-      <ProductDemoSection />
-      <FeaturesSection />
-      <HowItWorks />
-      <DeveloperSection />
-      <SecuritySection />
-      <PricingSection
-        plans={plans}
+      <Hero
+        isAuthenticated={isAuthenticated}
         startHref={startHref}
-        proHref={proHref}
-        premiumToolCount={premiumToolCount}
+        toolCount={toolCount}
       />
+      <OverviewSection startHref={startHref} startLabel={startLabel} />
+      <SpotlightsSection />
+      <WhyChooseSection toolCount={toolCount} />
+      <TestimonialsSection />
+      <LatestPostsSection posts={posts} />
+      <HomeCtaBanner toolCount={toolCount} />
     </>
   );
 }

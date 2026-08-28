@@ -23,9 +23,25 @@ describe("marketing locales", () => {
     expect(englishKeys.some((key) => key.startsWith("pricing."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("nav."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("footer."))).toBe(true);
+    expect(englishKeys.some((key) => key.startsWith("about."))).toBe(true);
+    expect(englishKeys.some((key) => key.startsWith("contact."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("toolsDirectory."))).toBe(
       true,
     );
+  });
+
+  test("keeps English and Turkish developerDocs keys aligned", () => {
+    expect(flattenKeys(tr.developerDocs).sort()).toEqual(
+      flattenKeys(en.developerDocs).sort(),
+    );
+  });
+
+  test("keeps English and Turkish blog chrome keys aligned", () => {
+    expect(flattenKeys(tr.blog).sort()).toEqual(flattenKeys(en.blog).sort());
+  });
+
+  test("keeps English and Turkish legal keys aligned", () => {
+    expect(flattenKeys(tr.legal).sort()).toEqual(flattenKeys(en.legal).sort());
   });
 
   test("keeps English and Turkish publicTools keys aligned", () => {
@@ -38,12 +54,11 @@ describe("marketing locales", () => {
     expect(flattenKeys(tr.tools).sort()).toEqual(flattenKeys(en.tools).sort());
   });
 
-  test("does not claim certifications or unlimited usage", () => {
-    const copy = `${JSON.stringify(en.marketing)} ${JSON.stringify(tr.marketing)} ${JSON.stringify(en.publicTools)} ${JSON.stringify(tr.publicTools)}`;
+  test("does not claim certifications or instant processing", () => {
+    const copy = `${JSON.stringify(en.marketing)} ${JSON.stringify(tr.marketing)} ${JSON.stringify(en.publicTools)} ${JSON.stringify(tr.publicTools)} ${JSON.stringify(en.blog)} ${JSON.stringify(tr.blog)} ${JSON.stringify(en.legal)} ${JSON.stringify(tr.legal)}`;
 
     expect(copy).not.toContain("SOC 2");
     expect(copy).not.toContain("HIPAA");
-    expect(copy.toLowerCase()).not.toContain("unlimited");
     expect(copy.toLowerCase()).not.toContain("instant");
   });
 

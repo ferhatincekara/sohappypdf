@@ -2,7 +2,7 @@
 
 import { ChevronDownIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,17 +26,10 @@ export function MarketingToolsNav({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <button
-            type="button"
-            className={buttonVariants({ variant: "ghost", size: "sm" })}
-          />
-        }
-      >
+      <Button variant="ghost" size="sm" render={<DropdownMenuTrigger />}>
         {t("tools")}
         <ChevronDownIcon className="size-4" />
-      </DropdownMenuTrigger>
+      </Button>
       <DropdownMenuContent
         align="start"
         className="w-[min(90vw,44rem)] max-h-[min(70vh,36rem)] p-2"

@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/i18n/navigation";
 import { getMarketingApiExample } from "../lib/marketing-api-example";
 import { MARKETING_PATHS } from "../lib/marketing-paths";
@@ -17,15 +17,14 @@ export async function DeveloperSection() {
           </h2>
           <p className="text-muted-foreground">{t("description")}</p>
           <p className="text-sm text-muted-foreground">{t("authHint")}</p>
-          <Link
-            href={MARKETING_PATHS.developers}
-            className={buttonVariants({
-              variant: "outline",
-              className: "w-fit",
-            })}
+          <Button
+            variant="outline"
+            className="w-fit"
+            nativeButton={false}
+            render={<Link href={MARKETING_PATHS.developers} />}
           >
             {t("cta")}
-          </Link>
+          </Button>
         </div>
         <figure className="min-w-0">
           <figcaption className="mb-2 text-sm font-medium">

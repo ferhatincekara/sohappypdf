@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/app",
-        destination: "/account",
+        destination: "/account/settings",
         permanent: true,
       },
       {
@@ -42,6 +42,21 @@ const nextConfig: NextConfig = {
         source: "/app/settings/billing",
         destination: "/account/billing",
         permanent: true,
+      },
+      {
+        source: "/account",
+        destination: "/account/settings",
+        permanent: false,
+      },
+      {
+        source: "/account/usage",
+        destination: "/account/billing",
+        permanent: false,
+      },
+      {
+        source: "/account/plan",
+        destination: "/account/billing",
+        permanent: false,
       },
       {
         source: "/account/history",

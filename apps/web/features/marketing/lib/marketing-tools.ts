@@ -1,5 +1,6 @@
 import {
   groupCatalogToolsByCategory,
+  isPremiumTool,
   listCatalogTools,
   listRegisteredTools,
   type ToolDefinition,
@@ -55,6 +56,8 @@ export type MarketingToolNavItem = {
   href: ToolDefinition["route"];
   category: ToolDefinition["category"];
   availability: ToolDefinition["availability"];
+  icon: ToolDefinition["icon"];
+  premium: boolean;
 };
 
 export type MarketingToolNavGroup = {
@@ -68,7 +71,29 @@ function toNavItem(tool: ToolDefinition): MarketingToolNavItem {
     href: tool.route,
     category: tool.category,
     availability: tool.availability,
+    icon: tool.icon,
+    premium: isPremiumTool(tool),
   };
+}
+
+function marketingToolRank(tool: MarketingToolNavItem): number {
+  if (tool.availability === "planned") {
+    return 2;
+  }
+
+  if (tool.premium) {
+    return 1;
+  }
+
+  return 0;
+}
+
+export function sortMarketingNavTools(
+  tools: readonly MarketingToolNavItem[],
+): MarketingToolNavItem[] {
+  return [...tools].sort(
+    (left, right) => marketingToolRank(left) - marketingToolRank(right),
+  );
 }
 
 /** Executable tools only — safe for live public routes. */
@@ -86,7 +111,7 @@ export function getMarketingToolNavGroups(): readonly MarketingToolNavGroup[] {
       return [];
     }
 
-    return [{ category, tools }];
+    return [{ category, tools: sortMarketingNavTools(tools) }];
   });
 }
 
@@ -110,7 +135,7 @@ export function getMarketingToolDirectoryGroups(): readonly MarketingToolNavGrou
       return [];
     }
 
-    return [{ category, tools }];
+    return [{ category, tools: sortMarketingNavTools(tools) }];
   });
 }
 

@@ -17,14 +17,14 @@ export async function MarketingToolShortcuts() {
           <Link
             key={shortcut.id}
             href={shortcut.href}
-            className="shrink-0 rounded-md px-2.5 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+            className="shrink-0 rounded-md px-2.5 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground outline-none"
           >
             {t(`shortcuts.${shortcut.id}`)}
           </Link>
         ))}
         <Link
           href={MARKETING_PATHS.tools}
-          className="shrink-0 rounded-md px-2.5 py-1 text-sm font-medium text-foreground transition-colors hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          className="shrink-0 rounded-md px-2.5 py-1 text-sm font-medium text-foreground transition-colors hover:bg-muted/60 outline-none"
         >
           {t("allTools")}
         </Link>

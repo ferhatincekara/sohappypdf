@@ -35,7 +35,7 @@ export async function ProductDemo({ compact = false }: { compact?: boolean }) {
           {DEMO_STEPS.map((step, index) => (
             <li
               key={step}
-              className="rounded-md border border-border bg-secondary px-2 py-2 text-center"
+              className="rounded-md border border-border bg-muted px-2 py-2 text-center"
             >
               <span className="block font-medium text-foreground">
                 {index + 1}. {t(step)}

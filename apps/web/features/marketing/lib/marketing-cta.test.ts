@@ -2,18 +2,21 @@ import { describe, expect, test } from "bun:test";
 import { APP_PATHS } from "@/features/app-shell/config/app-paths";
 import { AUTH_PATHS, signupPath } from "@/features/auth/paths";
 import {
+  BILLING_API_HREF,
+  resolveApiBillingHref,
   resolveMarketingCtas,
   resolveProHref,
   resolveSignInHref,
   resolveStartHref,
 } from "./marketing-cta";
+import { MARKETING_PATHS } from "./marketing-paths";
 
 describe("marketing CTAs", () => {
-  test("sends guests to signup and developers to the app", () => {
-    expect(resolveStartHref(false)).toBe(AUTH_PATHS.signup);
-    expect(resolveStartHref(true)).toBe(APP_PATHS.overview);
+  test("sends guests to tools on the Free plan, not signup", () => {
+    expect(resolveStartHref(false)).toBe(MARKETING_PATHS.tools);
+    expect(resolveStartHref(true)).toBe(MARKETING_PATHS.tools);
     expect(resolveSignInHref(false)).toBe(AUTH_PATHS.login);
-    expect(resolveSignInHref(true)).toBe(APP_PATHS.overview);
+    expect(resolveSignInHref(true)).toBe(APP_PATHS.settings);
   });
 
   test("routes Pro through signup then the existing billing flow", () => {
@@ -25,13 +28,23 @@ describe("marketing CTAs", () => {
     );
   });
 
+  test("routes API credit packs through signup then the billing API section", () => {
+    expect(resolveApiBillingHref(false)).toBe(signupPath(BILLING_API_HREF));
+    expect(resolveApiBillingHref(true)).toBe(BILLING_API_HREF);
+    expect(resolveApiBillingHref(false)).toContain("next=");
+    expect(resolveApiBillingHref(false)).toContain(
+      encodeURIComponent(BILLING_API_HREF),
+    );
+  });
   test("does not send authenticated users through signup", () => {
     const ctas = resolveMarketingCtas(true);
 
-    expect(ctas.startHref).toBe(APP_PATHS.overview);
+    expect(ctas.startHref).toBe(MARKETING_PATHS.tools);
     expect(ctas.proHref).toBe(APP_PATHS.billing);
-    expect(ctas.signInHref).toBe(APP_PATHS.overview);
+    expect(ctas.apiHref).toBe(BILLING_API_HREF);
+    expect(ctas.signInHref).toBe(APP_PATHS.settings);
     expect(ctas.startHref).not.toContain("signup");
     expect(ctas.proHref).not.toContain("signup");
+    expect(ctas.apiHref).not.toContain("signup");
   });
 });

@@ -1,37 +1,66 @@
 import { describe, expect, test } from "bun:test";
-import { AUTH_PATHS } from "@/features/auth/paths";
-import { getMarketingFooterLinks, MARKETING_NAV_LINKS } from "./marketing-nav";
+import {
+  MARKETING_FOOTER_COMPANY_LINKS,
+  MARKETING_FOOTER_LEGAL_LINKS,
+  MARKETING_FOOTER_PRODUCT_LINKS,
+  MARKETING_FOOTER_TOOL_LINKS,
+  MARKETING_MOBILE_MENU_LINKS,
+  MARKETING_NAV_LINKS,
+  STATUS_PAGE_RECOVERY_LINKS,
+} from "./marketing-nav";
 import { MARKETING_PATHS } from "./marketing-paths";
 
 describe("marketing navigation", () => {
-  test("uses tools directory companions with pricing and developer routes", () => {
+  test("keeps the header to tools plus pricing and developers", () => {
     expect(MARKETING_NAV_LINKS.map((item) => item.href)).toEqual([
       MARKETING_PATHS.pricing,
       MARKETING_PATHS.developers,
     ]);
   });
 
-  test("footer only links to existing public routes", () => {
-    const links = getMarketingFooterLinks({
-      accountHref: AUTH_PATHS.login,
-      isAuthenticated: false,
-    });
-
-    expect(links.map((item) => item.href)).toEqual([
+  test("status page recovery links match the header destinations", () => {
+    expect(STATUS_PAGE_RECOVERY_LINKS.map((item) => item.href)).toEqual([
       MARKETING_PATHS.tools,
       MARKETING_PATHS.pricing,
       MARKETING_PATHS.developers,
-      AUTH_PATHS.login,
     ]);
-    expect(links.at(-1)?.id).toBe("signIn");
   });
 
-  test("footer uses Account instead of Sign in when authenticated", () => {
-    const links = getMarketingFooterLinks({
-      accountHref: "/account",
-      isAuthenticated: true,
-    });
+  test("mobile menu lists product pages then company pages", () => {
+    expect(MARKETING_MOBILE_MENU_LINKS.map((item) => item.id)).toEqual([
+      "tools",
+      "pricing",
+      "developers",
+      "about",
+      "blog",
+      "faq",
+      "contact",
+    ]);
+  });
 
-    expect(links.at(-1)).toEqual({ id: "account", href: "/account" });
+  test("footer columns stay on public routes and skip account", () => {
+    expect(MARKETING_FOOTER_PRODUCT_LINKS.map((item) => item.href)).toEqual([
+      MARKETING_PATHS.tools,
+      MARKETING_PATHS.pricing,
+      MARKETING_PATHS.developers,
+    ]);
+    expect(MARKETING_FOOTER_COMPANY_LINKS.map((item) => item.href)).toEqual([
+      MARKETING_PATHS.about,
+      MARKETING_PATHS.blog,
+      MARKETING_PATHS.faq,
+      MARKETING_PATHS.contact,
+    ]);
+    expect(MARKETING_FOOTER_LEGAL_LINKS.map((item) => item.href)).toEqual([
+      MARKETING_PATHS.security,
+      MARKETING_PATHS.privacy,
+      MARKETING_PATHS.terms,
+      MARKETING_PATHS.cookies,
+    ]);
+    expect(MARKETING_FOOTER_TOOL_LINKS.map((item) => item.shortcutId)).toEqual([
+      "merge",
+      "compress",
+      "convert",
+      "protect",
+    ]);
   });
 });

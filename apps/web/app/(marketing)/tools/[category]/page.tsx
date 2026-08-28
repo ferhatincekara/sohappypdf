@@ -36,7 +36,7 @@ export async function generateMetadata({
   const locale = await getLocale();
 
   return buildMarketingPageMetadata({
-    title: `${tNav(`categories.${category}`)} | SohappyPDF`,
+    title: `${tNav(`categories.${category}`)} | ${tNav("brand")}`,
     description: tDirectory(`categories.${category}`),
     path: toolCategoryPath(category),
     locale,

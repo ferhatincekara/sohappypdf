@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
+import { toAppShellUser } from "@/features/app-shell/lib/to-app-shell-user";
 import { getWebSession } from "@/features/auth/session/get-web-session";
-import { hasWebSession } from "@/features/auth/session/session-state";
 import { MarketingShell } from "@/features/marketing/components/marketing-shell";
 
 export default async function MarketingLayout({
@@ -9,10 +9,15 @@ export default async function MarketingLayout({
   children: ReactNode;
 }) {
   const session = await getWebSession();
+  const user = session === null ? null : toAppShellUser(session.user);
 
   return (
-    <MarketingShell isAuthenticated={hasWebSession(session)}>
-      <main id="main-content" className="flex-1">
+    <MarketingShell user={user}>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative flex-1 pt-16 md:pt-20 outline-none"
+      >
         {children}
       </main>
     </MarketingShell>

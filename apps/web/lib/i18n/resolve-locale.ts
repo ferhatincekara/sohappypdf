@@ -36,6 +36,35 @@ function parseAcceptLanguage(header: string): LanguageCandidate[] {
     });
 }
 
+export function parseAppLocale(
+  value: string | null | undefined,
+): AppLocale | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  const normalized = value.trim().toLowerCase();
+
+  if (hasLocale(routing.locales, normalized)) {
+    return normalized;
+  }
+
+  return undefined;
+}
+
+export function resolveAppLocale(input: {
+  cookieLocale?: string | null;
+  acceptLanguage?: string | null;
+}): AppLocale {
+  const fromCookie = parseAppLocale(input.cookieLocale);
+
+  if (fromCookie !== undefined) {
+    return fromCookie;
+  }
+
+  return resolveLocaleFromAcceptLanguage(input.acceptLanguage);
+}
+
 export function resolveLocaleFromAcceptLanguage(
   header: string | null | undefined,
 ): AppLocale {

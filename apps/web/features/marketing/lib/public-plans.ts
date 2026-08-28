@@ -1,9 +1,11 @@
 import {
-  ANONYMOUS_WEB_LIMITS,
+  type BillingCatalogPrices,
   DEFAULT_PLAN_LIMITS,
+  fallbackCatalogPrices,
   PLAN_IDS,
+  WEB_PLAN_MONTHLY_PRICE_USD,
 } from "@repo/billing/plans";
-import { listCatalogTools } from "@repo/tools/catalog";
+import { isPremiumTool, listCatalogTools } from "@repo/tools/catalog";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 
 export type PublicPlanId = (typeof PLAN_IDS)[number];
@@ -11,11 +13,16 @@ export type PublicPlanLimits = (typeof DEFAULT_PLAN_LIMITS)[PublicPlanId];
 
 export type PublicPlanPresentation = {
   id: PublicPlanId;
-  monthlyConversions: number;
+  monthlyPriceUsd: number;
+  monthlyConversions: number | null;
+  operationsPerDay: number | null;
   monthlyWebCredits: number;
   monthlyAiCredits: number;
   storageBytes: number;
   maxFileSizeBytes: number;
+  maxFilesPerOperation: number | null;
+  maxPagesPerFile: number | null;
+  hasSupport: boolean;
   maxApiKeys: number;
   apiRequestsPerMinute: number;
   apiAccess: boolean;
@@ -27,14 +34,20 @@ export type PublicPlanPresentation = {
 export function presentPlan(
   id: PublicPlanId,
   limits: PublicPlanLimits,
+  monthlyPriceUsd = WEB_PLAN_MONTHLY_PRICE_USD[id],
 ): PublicPlanPresentation {
   return {
     id,
+    monthlyPriceUsd,
     monthlyConversions: limits.monthlyConversions,
+    operationsPerDay: limits.operationsPerDay,
     monthlyWebCredits: limits.monthlyWebCredits,
     monthlyAiCredits: limits.monthlyAiCredits,
     storageBytes: limits.storageBytes,
     maxFileSizeBytes: limits.maxFileSizeBytes,
+    maxFilesPerOperation: limits.maxFilesPerOperation,
+    maxPagesPerFile: limits.maxPagesPerFile,
+    hasSupport: limits.hasSupport,
     maxApiKeys: limits.maxApiKeys,
     apiRequestsPerMinute: limits.apiRequestsPerMinute,
     apiAccess: limits.apiAccess,
@@ -44,31 +57,20 @@ export function presentPlan(
   };
 }
 
-export function getPublicPlans(): readonly PublicPlanPresentation[] {
-  return PLAN_IDS.map((id) => presentPlan(id, DEFAULT_PLAN_LIMITS[id]));
-}
-
-export type AnonymousPricingPresentation = {
-  maxFileSizeLabel: string;
-  maxFilesPerOperation: number;
-  operationsPerHour: number;
-  retentionHours: number;
-};
-
-export function getAnonymousPricingPresentation(): AnonymousPricingPresentation {
-  return {
-    maxFileSizeLabel: formatFileSize(ANONYMOUS_WEB_LIMITS.maxFileSizeBytes),
-    maxFilesPerOperation: ANONYMOUS_WEB_LIMITS.maxFilesPerOperation,
-    operationsPerHour: ANONYMOUS_WEB_LIMITS.operationsPerHour,
-    retentionHours: ANONYMOUS_WEB_LIMITS.retentionHours,
-  };
+export function getPublicPlans(
+  prices: BillingCatalogPrices = fallbackCatalogPrices(),
+): readonly PublicPlanPresentation[] {
+  return PLAN_IDS.map((id) =>
+    presentPlan(
+      id,
+      DEFAULT_PLAN_LIMITS[id],
+      id === "pro" ? prices.pro.monthlyUsd : WEB_PLAN_MONTHLY_PRICE_USD.free,
+    ),
+  );
 }
 
 export function countPremiumCatalogTools(): number {
   return listCatalogTools().filter(
-    (tool) =>
-      tool.availableOnPlans.includes("pro") &&
-      !tool.availableOnPlans.includes("free") &&
-      tool.availability !== "planned",
+    (tool) => isPremiumTool(tool) && tool.availability !== "planned",
   ).length;
 }

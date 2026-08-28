@@ -11,7 +11,9 @@ export async function ProductDemoSection() {
           <h2 className="text-2xl font-semibold tracking-tight">
             {t("title")}
           </h2>
-          <p className="mt-2 text-muted-foreground">{t("description")}</p>
+          <p className="mt-2 text-lg/7 text-muted-foreground">
+            {t("description")}
+          </p>
         </div>
         <ProductDemo />
       </div>

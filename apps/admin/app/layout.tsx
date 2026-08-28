@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SohappyPDF Admin",
-  description: "Platform operations for SohappyPDF.",
+  title: "SoHappyPDF Admin",
+  description: "Platform operations for SoHappyPDF.",
   robots: {
     index: false,
     follow: false,

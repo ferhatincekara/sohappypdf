@@ -7,6 +7,7 @@ import {
   getMarketingToolNavGroups,
   getMarketingToolNavItems,
   getRelatedMarketingTools,
+  sortMarketingNavTools,
   toolCategoryPath,
 } from "./marketing-tools";
 
@@ -22,6 +23,8 @@ describe("marketing tool navigation", () => {
       registered.map((tool) => tool.route),
     );
     expect(items.every((item) => item.availability !== "planned")).toBe(true);
+    expect(items.find((item) => item.id === "ocr-pdf")?.premium).toBe(true);
+    expect(items.find((item) => item.id === "merge-pdf")?.premium).toBe(false);
   });
 
   test("groups executable tools by category without dropping any", () => {
@@ -62,6 +65,49 @@ describe("marketing tool navigation", () => {
     expect(
       groups.flatMap((group) => group.tools.map((tool) => tool.id)).sort(),
     ).toEqual(catalog.map((tool) => tool.id).sort());
+    expect(
+      items.find((item) => item.id === "translate-pdf")?.availability,
+    ).toBe("planned");
+    expect(items.find((item) => item.id === "translate-pdf")?.premium).toBe(
+      true,
+    );
+    expect(
+      items.find((item) => item.id === "ai-summarizer")?.availability,
+    ).toBe("planned");
+  });
+
+  test("sorts category tools as standard, Pro, then Soon", () => {
+    const rank = (tool: { availability: string; premium: boolean }) => {
+      if (tool.availability === "planned") {
+        return 2;
+      }
+
+      if (tool.premium) {
+        return 1;
+      }
+
+      return 0;
+    };
+
+    const groups = getMarketingToolDirectoryGroups();
+
+    for (const group of groups) {
+      const ranks = group.tools.map(rank);
+      expect(ranks).toEqual([...ranks].sort((left, right) => left - right));
+      expect(sortMarketingNavTools(group.tools).map((tool) => tool.id)).toEqual(
+        group.tools.map((tool) => tool.id),
+      );
+    }
+
+    const intelligence = groups.find(
+      (group) => group.category === "intelligence",
+    );
+    expect(intelligence?.tools[0]?.id).toBe("ocr-pdf");
+    expect(
+      intelligence?.tools
+        .slice(1)
+        .every((tool) => tool.availability === "planned"),
+    ).toBe(true);
   });
 
   test("returns related tools from the same category", () => {

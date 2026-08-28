@@ -6,7 +6,7 @@ export type PublicWebEnv = {
 
 const DEFAULT_APP_URL = "http://localhost:3000";
 const DEFAULT_API_BASE_URL = "http://localhost:3001";
-export const DEFAULT_MAX_UPLOAD_FILE_SIZE_BYTES = 100 * 1024 * 1024;
+export const DEFAULT_MAX_UPLOAD_FILE_SIZE_BYTES = 1024 * 1024 * 1024;
 
 function readPublicUrl(name: string, fallback: string): string {
   const value = process.env[name];

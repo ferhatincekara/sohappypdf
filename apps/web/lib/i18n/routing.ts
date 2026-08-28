@@ -8,3 +8,6 @@ export const routing = defineRouting({
 });
 
 export type AppLocale = (typeof routing.locales)[number];
+
+export const LOCALE_COOKIE_NAME = "NEXT_LOCALE";
+export const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;

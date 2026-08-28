@@ -1,10 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { routing } from "./routing";
+import { LOCALE_COOKIE_NAME, routing } from "./routing";
 
 describe("i18n routing", () => {
   test("keeps locales off the URL", () => {
     expect(routing.locales).toEqual(["en", "tr"]);
     expect(routing.defaultLocale).toBe("en");
     expect(routing.localePrefix).toBe("never");
+    expect(LOCALE_COOKIE_NAME).toBe("NEXT_LOCALE");
   });
 });

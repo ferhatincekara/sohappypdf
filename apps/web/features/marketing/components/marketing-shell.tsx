@@ -1,19 +1,21 @@
 import type { ReactNode } from "react";
+import type { AppShellUser } from "@/features/app-shell";
+import { MarketingCanvas } from "./marketing-canvas";
 import { MarketingFooter } from "./marketing-footer";
 import { MarketingHeader } from "./marketing-header";
 
 export function MarketingShell({
-  isAuthenticated,
+  user,
   children,
 }: {
-  isAuthenticated: boolean;
+  user: AppShellUser | null;
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-h-svh flex-col overflow-x-hidden bg-background">
-      <MarketingHeader isAuthenticated={isAuthenticated} />
+    <MarketingCanvas>
+      <MarketingHeader user={user} />
       {children}
-      <MarketingFooter isAuthenticated={isAuthenticated} />
-    </div>
+      <MarketingFooter />
+    </MarketingCanvas>
   );
 }

@@ -16,13 +16,15 @@ export async function FeaturesSection() {
           <h2 className="text-2xl font-semibold tracking-tight">
             {t("title")}
           </h2>
-          <p className="mt-2 text-muted-foreground">{t("description")}</p>
+          <p className="mt-2 text-lg/7 text-muted-foreground">
+            {t("description")}
+          </p>
         </div>
         <ul className="flex flex-wrap gap-2">
           {toolLabels.map((label) => (
             <li
               key={label}
-              className="rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium"
+              className="rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-medium"
             >
               {label}
             </li>
