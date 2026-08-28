@@ -1,4 +1,5 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { resolveApiLedgerKind } from "./api-ledger-kind.js";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
   AiCreditBalance,
@@ -20,6 +21,7 @@ type UsageRecord = {
 };
 
 type LedgerEntry = {
+  id: string;
   userId: string;
   amount: number;
   type: "grant" | "consume" | "refund" | "adjustment";
@@ -40,7 +42,10 @@ export function createMemoryBillingRepository(options?: {
   const subscriptions = new Map<string, BillingSubscriptionRecord>();
   const apiSubscriptions = new Map<string, ApiSubscriptionRecord>();
   const usage = new Map<string, UsageRecord>();
-  const conversionEvents = new Set<string>();
+  const conversionEvents = new Map<
+    string,
+    { userId: string; createdAt: Date }
+  >();
   const ledger: LedgerEntry[] = [];
   const webhookIds = new Set<string>();
   const userEmails = options?.userEmails ?? {};
@@ -51,6 +56,15 @@ export function createMemoryBillingRepository(options?: {
 
   function webhookKey(provider: string, eventId: string): string {
     return `${provider}:${eventId}`;
+  }
+
+  function appendLedger(entry: Omit<LedgerEntry, "id">): LedgerEntry {
+    const record = {
+      id: crypto.randomUUID(),
+      ...entry,
+    };
+    ledger.push(record);
+    return record;
   }
 
   function getUsageRecord(userId: string, periodStart: Date): UsageRecord {
@@ -224,7 +238,7 @@ export function createMemoryBillingRepository(options?: {
       const record = getUsageRecord(input.userId, input.periodStart);
 
       if (!hasGrant(input.userId, input.periodStart, "web")) {
-        ledger.push({
+        appendLedger({
           userId: input.userId,
           amount: input.grantAmount,
           type: "grant",
@@ -260,7 +274,7 @@ export function createMemoryBillingRepository(options?: {
         });
       }
 
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: input.amount,
         type: "consume",
@@ -294,7 +308,7 @@ export function createMemoryBillingRepository(options?: {
       }
 
       const record = getUsageRecord(input.userId, consumeEntry.periodStart);
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: consumeEntry.amount,
         type: "refund",
@@ -318,7 +332,7 @@ export function createMemoryBillingRepository(options?: {
         input.grantAmount > 0 &&
         !hasGrant(input.userId, input.periodStart, "ai")
       ) {
-        ledger.push({
+        appendLedger({
           userId: input.userId,
           amount: input.grantAmount,
           type: "grant",
@@ -354,7 +368,7 @@ export function createMemoryBillingRepository(options?: {
         });
       }
 
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: input.amount,
         type: "consume",
@@ -388,7 +402,7 @@ export function createMemoryBillingRepository(options?: {
       }
 
       const record = getUsageRecord(input.userId, consumeEntry.periodStart);
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: consumeEntry.amount,
         type: "refund",
@@ -412,7 +426,7 @@ export function createMemoryBillingRepository(options?: {
         input.grantAmount > 0 &&
         !hasGrant(input.userId, input.periodStart, "api")
       ) {
-        ledger.push({
+        appendLedger({
           userId: input.userId,
           amount: input.grantAmount,
           type: "grant",
@@ -446,7 +460,7 @@ export function createMemoryBillingRepository(options?: {
         });
       }
 
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: input.amount,
         type: "consume",
@@ -480,7 +494,7 @@ export function createMemoryBillingRepository(options?: {
       }
 
       const record = getUsageRecord(input.userId, consumeEntry.periodStart);
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: consumeEntry.amount,
         type: "refund",
@@ -505,7 +519,7 @@ export function createMemoryBillingRepository(options?: {
       }
 
       const record = getUsageRecord(input.userId, input.periodStart);
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: input.amount,
         type: "adjustment",
@@ -522,15 +536,23 @@ export function createMemoryBillingRepository(options?: {
     async listApiCreditLedger(input) {
       return ledger
         .filter(
-          (entry) => entry.userId === input.userId && entry.source === "api",
+          (entry) =>
+            entry.userId === input.userId &&
+            entry.source === "api" &&
+            entry.periodStart.getTime() === input.periodStart.getTime(),
         )
         .sort(
           (left, right) => right.createdAt.getTime() - left.createdAt.getTime(),
         )
         .slice(0, input.limit)
         .map((entry) => ({
+          id: entry.id,
           amount: entry.amount,
           type: entry.type,
+          kind: resolveApiLedgerKind({
+            type: entry.type,
+            reason: entry.reason,
+          }),
           toolId: entry.toolId ?? null,
           createdAt: entry.createdAt.toISOString(),
         }));
@@ -541,10 +563,28 @@ export function createMemoryBillingRepository(options?: {
         return false;
       }
 
-      conversionEvents.add(input.conversionId);
+      conversionEvents.set(input.conversionId, {
+        userId: input.userId,
+        createdAt: input.createdAt ?? new Date(),
+      });
       const record = getUsageRecord(input.userId, input.periodStart);
       record.conversionsUsed += 1;
       return true;
+    },
+
+    async countConversionUsageSince(input) {
+      let count = 0;
+
+      for (const event of conversionEvents.values()) {
+        if (
+          event.userId === input.userId &&
+          event.createdAt.getTime() >= input.since.getTime()
+        ) {
+          count += 1;
+        }
+      }
+
+      return count;
     },
 
     async findUserEmail(userId) {
@@ -562,7 +602,7 @@ export function createMemoryBillingRepository(options?: {
         record.aiCreditsGranted += input.amount;
       }
 
-      ledger.push({
+      appendLedger({
         userId: input.userId,
         amount: input.amount,
         type: "adjustment",

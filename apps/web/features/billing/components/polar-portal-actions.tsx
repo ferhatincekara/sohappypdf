@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
@@ -5,10 +7,12 @@ export function PolarPortalActions({
   canManage,
   isPortalPending,
   onManage,
+  tone = "default",
 }: {
   canManage: boolean;
   isPortalPending: boolean;
   onManage: () => void;
+  tone?: "default" | "onDark";
 }) {
   const t = useTranslations("billing");
 
@@ -17,20 +21,16 @@ export function PolarPortalActions({
   }
 
   return (
-    <div className="flex flex-col items-start gap-2">
-      <Button
-        type="button"
-        size="sm"
-        variant="outline"
-        disabled={isPortalPending}
-        aria-busy={isPortalPending}
-        onClick={onManage}
-      >
-        {isPortalPending ? t("openingPortal") : t("manage")}
-      </Button>
-      <p className="max-w-md text-xs text-muted-foreground">
-        {t("portalHint")}
-      </p>
-    </div>
+    <Button
+      type="button"
+      variant={tone === "onDark" ? "white" : "outline"}
+      slideLabel={false}
+      title={t("portalHint")}
+      disabled={isPortalPending}
+      aria-busy={isPortalPending}
+      onClick={onManage}
+    >
+      {isPortalPending ? t("openingPortal") : t("manage")}
+    </Button>
   );
 }

@@ -14,6 +14,12 @@ describe("billing error mapping", () => {
       }),
     ).toBe(BILLING_ERROR_KEYS.configuration);
     expect(
+      mapBillingError({ kind: "api", code: "NOT_FOUND", status: 404 }),
+    ).toBe(BILLING_ERROR_KEYS.notFound);
+    expect(
+      mapBillingError({ kind: "api", code: "VALIDATION_ERROR", status: 422 }),
+    ).toBe(BILLING_ERROR_KEYS.portalUnavailable);
+    expect(
       mapBillingError({ kind: "api", code: "INTERNAL_ERROR", status: 500 }),
     ).toBe(BILLING_ERROR_KEYS.unexpected);
   });

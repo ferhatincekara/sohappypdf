@@ -2,7 +2,6 @@ import { assertPolarWebhookSecret, type PolarConfig } from "@repo/config";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { BillingRepository } from "./billing-repository.js";
 import type { VerifyPolarWebhook } from "./billing-types.js";
-import { apiPackCreditsFromOrder, parsePolarOrder } from "./polar-order.js";
 import {
   apiProductKeyFromPolarProductId,
   isWebProPolarProduct,
@@ -13,7 +12,6 @@ import {
   planFromPolarProductId,
 } from "./polar-subscription.js";
 import { verifyPolarWebhook } from "./polar-webhook.js";
-import { getUtcMonthPeriod } from "./usage-period.js";
 
 export type HandlePolarWebhookInput = {
   body: string;
@@ -31,16 +29,6 @@ export async function handlePolarWebhook(
   const verify = input.verifyWebhook ?? verifyPolarWebhook;
   const event = verify(input.body, input.headers, secret);
   const processedAt = (input.now ?? (() => new Date()))();
-
-  if (event.type === "order.paid") {
-    return handleOrderWebhook(
-      input,
-      event.id,
-      event.type,
-      event.data,
-      processedAt,
-    );
-  }
 
   if (!isSubscriptionWebhookType(event.type)) {
     const claimed = await input.repository.applySubscriptionWebhook({
@@ -109,10 +97,7 @@ export async function handlePolarWebhook(
           userId,
           polarSubscriptionId: parsed.polarSubscriptionId,
           polarProductId: parsed.polarProductId,
-          plan: planFromPolarProductId(
-            parsed.polarProductId,
-            input.config.proProductId,
-          ),
+          plan: planFromPolarProductId(parsed.polarProductId, input.config),
           status: parsed.status,
           cancelAtPeriodEnd: parsed.cancelAtPeriodEnd,
           currentPeriodStart: parsed.currentPeriodStart,
@@ -138,66 +123,23 @@ export async function handlePolarWebhook(
           },
   });
 
-  return { outcome: applied ? "applied" : "duplicate" };
-}
-
-async function handleOrderWebhook(
-  input: HandlePolarWebhookInput,
-  eventId: string,
-  eventType: string,
-  data: unknown,
-  processedAt: Date,
-): Promise<{ outcome: "applied" | "duplicate" | "ignored" }> {
-  const order = parsePolarOrder(data);
-  const credits =
-    order === undefined || !order.paid
-      ? 0
-      : apiPackCreditsFromOrder(order, input.config);
-
-  if (order === undefined || !order.paid || credits < 1) {
-    const claimed = await input.repository.applySubscriptionWebhook({
-      provider: "polar",
-      eventId,
-      eventType,
-      processedAt,
-    });
-
-    return { outcome: claimed ? "ignored" : "duplicate" };
-  }
-
-  const userId = await resolveWebhookUserId(input.repository, order);
-
-  if (userId === undefined) {
-    const claimed = await input.repository.applySubscriptionWebhook({
-      provider: "polar",
-      eventId,
-      eventType,
-      processedAt,
-    });
-
-    return { outcome: claimed ? "ignored" : "duplicate" };
-  }
-
-  const period = getUtcMonthPeriod(processedAt);
-  const applied = await input.repository.applySubscriptionWebhook({
-    provider: "polar",
-    eventId,
-    eventType,
-    processedAt,
-    customer:
-      order.polarCustomerId === null
-        ? undefined
-        : {
-            userId,
-            polarCustomerId: order.polarCustomerId,
-          },
-    apiCreditTopUp: {
+  if (applied && isPro) {
+    await revokeMatchingApiSubscription(
+      input.repository,
       userId,
-      periodStart: period.start,
-      periodEnd: period.end,
-      amount: credits,
-    },
-  });
+      parsed.polarSubscriptionId,
+      processedAt,
+    );
+  }
+
+  if (applied && apiProductKey !== undefined) {
+    await revokeMatchingWebSubscription(
+      input.repository,
+      userId,
+      parsed.polarSubscriptionId,
+      processedAt,
+    );
+  }
 
   return { outcome: applied ? "applied" : "duplicate" };
 }
@@ -221,4 +163,51 @@ async function resolveWebhookUserId(
     parsed.polarCustomerId,
   );
   return customer?.userId;
+}
+
+async function revokeMatchingWebSubscription(
+  repository: BillingRepository,
+  userId: string,
+  polarSubscriptionId: string,
+  processedAt: Date,
+): Promise<void> {
+  const existing = await repository.findLatestSubscriptionByUserId(userId);
+
+  if (
+    existing === undefined ||
+    existing.polarSubscriptionId !== polarSubscriptionId
+  ) {
+    return;
+  }
+
+  await repository.upsertSubscription({
+    ...existing,
+    status: "revoked",
+    cancelAtPeriodEnd: false,
+    endedAt: existing.endedAt ?? processedAt,
+    updatedAt: processedAt,
+  });
+}
+
+async function revokeMatchingApiSubscription(
+  repository: BillingRepository,
+  userId: string,
+  polarSubscriptionId: string,
+  processedAt: Date,
+): Promise<void> {
+  const subscriptions = await repository.listApiSubscriptionsByUserId(userId);
+
+  for (const existing of subscriptions) {
+    if (existing.polarSubscriptionId !== polarSubscriptionId) {
+      continue;
+    }
+
+    await repository.upsertApiSubscription({
+      ...existing,
+      status: "revoked",
+      cancelAtPeriodEnd: false,
+      endedAt: existing.endedAt ?? processedAt,
+      updatedAt: processedAt,
+    });
+  }
 }

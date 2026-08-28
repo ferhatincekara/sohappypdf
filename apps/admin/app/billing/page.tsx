@@ -38,7 +38,9 @@ export default async function AdminBillingPage() {
                   <p className="mt-2 text-muted-foreground">
                     {limits.monthlyWebCredits} web credits ·{" "}
                     {limits.monthlyAiCredits} AI credits ·{" "}
-                    {limits.monthlyConversions} monthly operations
+                    {limits.operationsPerDay === null
+                      ? "unlimited operations"
+                      : `${String(limits.operationsPerDay)} operations/day`}
                   </p>
                   <p className="mt-1 text-muted-foreground">
                     Files up to {formatBytes(limits.maxFileSizeBytes)}

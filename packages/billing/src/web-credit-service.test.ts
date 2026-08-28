@@ -3,6 +3,7 @@ import { loadBillingConfig } from "@repo/config";
 import { APP_ERROR_CODES, isAppError } from "@repo/core";
 import { createBillingService } from "./billing-service.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
+import { DEFAULT_PLAN_LIMITS } from "./plan-config.js";
 import type { PlanCatalog } from "./plan-types.js";
 
 const now = new Date("2026-08-15T12:00:00.000Z");
@@ -10,28 +11,10 @@ const now = new Date("2026-08-15T12:00:00.000Z");
 function createCatalog(overrides?: Partial<PlanCatalog["free"]>): PlanCatalog {
   return {
     free: {
-      monthlyConversions: 20,
-      monthlyWebCredits: 100,
-      monthlyAiCredits: 0,
-      storageBytes: 500 * 1024 * 1024,
-      maxFileSizeBytes: 20 * 1024 * 1024,
-      maxApiKeys: 2,
-      apiAccess: true,
-      authenticatedRequestsPerMinute: 60,
-      apiRequestsPerMinute: 30,
+      ...DEFAULT_PLAN_LIMITS.free,
       ...overrides,
     },
-    pro: {
-      monthlyConversions: 500,
-      monthlyWebCredits: 2_000,
-      monthlyAiCredits: 200,
-      storageBytes: 10 * 1024 * 1024 * 1024,
-      maxFileSizeBytes: 100 * 1024 * 1024,
-      maxApiKeys: 20,
-      apiAccess: true,
-      authenticatedRequestsPerMinute: 120,
-      apiRequestsPerMinute: 60,
-    },
+    pro: DEFAULT_PLAN_LIMITS.pro,
   };
 }
 
@@ -53,10 +36,10 @@ describe("web tool credits", () => {
     const first = await billing.getWebCreditBalance("user_1");
     const second = await billing.getWebCreditBalance("user_1");
 
-    expect(first.webCreditsGranted).toBe(100);
+    expect(first.webCreditsGranted).toBe(1_550);
     expect(first.webCreditsUsed).toBe(0);
-    expect(first.webCreditsRemaining).toBe(100);
-    expect(second.webCreditsGranted).toBe(100);
+    expect(first.webCreditsRemaining).toBe(1_550);
+    expect(second.webCreditsGranted).toBe(1_550);
   });
 
   test("grants pro monthly web credits for the subscription period", async () => {

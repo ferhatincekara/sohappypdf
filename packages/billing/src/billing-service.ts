@@ -4,15 +4,22 @@ import {
   loadApiCreditConfig,
 } from "@repo/config";
 import { isConversionFailureCode } from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
+import {
+  assertToolAllowedOnPlan,
+  findRegisteredTool,
+  toolCombinesSourceFiles,
+} from "@repo/tools";
 import { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 import { shouldRefundAiCredits } from "./ai-credit-refund.js";
 import { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";
+import { resolveApiCreditPeriod } from "./api-credit-period.js";
 import { shouldRefundApiCredits } from "./api-credit-refund.js";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
   AiCreditBalance,
   ApiCreditBalance,
+  BillingCatalogPrices,
   CheckoutProductKey,
   PolarClient,
   PublicBillingStatus,
@@ -20,29 +27,44 @@ import type {
   WebCreditBalance,
 } from "./billing-types.js";
 import {
+  INCLUDED_API_CREDITS_PER_MONTH,
+  includedApiCreditBalance,
+} from "./default-plan-limits.js";
+import {
   assertCanCreateApiKey,
   assertCanCreateConversion,
   assertCanSpendAiCredits,
   assertCanSpendApiCredits,
   assertCanSpendWebCredits,
   assertCanUploadFile,
+  assertCanUseFileCount,
   isActiveApiSubscription,
   resolvePlan,
 } from "./entitlements.js";
-import { buildPlanCatalog, getPlanLimits } from "./plan-config.js";
-import type { PlanCatalog, PlanId, UserEntitlements } from "./plan-types.js";
 import {
+  buildPlanCatalog,
+  DEFAULT_PLAN_LIMITS,
+  getPlanLimits,
+} from "./plan-config.js";
+import type { PlanCatalog, PlanId, UserEntitlements } from "./plan-types.js";
+import { createCatalogPriceLoader } from "./polar-catalog-prices.js";
+import { resolvePolarReturnUrl } from "./polar-client.js";
+import {
+  apiProductKeyFromCheckoutProductKey,
   apiProductKeyFromPolarProductId,
+  type BillingInterval,
+  isApiCheckoutProductKey,
   isWebProPolarProduct,
   listConfiguredCheckoutProducts,
   monthlyApiCreditsForProduct,
-  polarProductIdForCheckout,
+  polarCheckoutProductIds,
+  polarProductIdForSubscriptionUpdate,
 } from "./polar-products.js";
 import {
   parsePolarSubscription,
   planFromPolarProductId,
 } from "./polar-subscription.js";
-import { getUtcMonthPeriod } from "./usage-period.js";
+import { getUtcDayPeriod, getUtcMonthPeriod } from "./usage-period.js";
 import { resolveWebCreditCost } from "./web-credit-cost.js";
 import { resolveWebCreditPeriod } from "./web-credit-period.js";
 import { shouldRefundWebCredits } from "./web-credit-refund.js";
@@ -68,7 +90,14 @@ export type BillingService = {
     storageUsedBytes: number;
     apiKeyCount: number;
   }): Promise<PublicBillingStatus>;
+  getCatalogPrices(): Promise<BillingCatalogPrices>;
   assertCanCreateConversion(userId: string): Promise<void>;
+  assertCanUseFileCount(input: {
+    userId: string;
+    fileCount: number;
+    toolId?: string;
+  }): Promise<void>;
+  assertCanUseTool(input: { userId: string; toolId: string }): Promise<void>;
   assertCanSpendWebCredits(input: {
     userId: string;
     toolId: string;
@@ -83,6 +112,7 @@ export type BillingService = {
     userId: string;
     sizeBytes: number;
     storageUsedBytes: number;
+    channel?: "web" | "api";
   }): Promise<void>;
   assertCanCreateApiKey(input: { userId: string; used: number }): Promise<void>;
   recordConversionUsage(input: {
@@ -145,7 +175,8 @@ export type BillingService = {
   createCheckout(
     userId: string,
     product?: CheckoutProductKey,
-  ): Promise<{ url: string }>;
+    interval?: BillingInterval,
+  ): Promise<{ url: string | null }>;
   createCustomerPortal(userId: string): Promise<{ url: string }>;
   handleWebhook(input: {
     body: string;
@@ -170,6 +201,14 @@ export function createBillingService(
 ): BillingService {
   const now = options.now ?? (() => new Date());
   const catalog = options.planCatalog ?? buildPlanCatalog();
+  const polarClient = options.polarClient;
+  const loadCatalogPrices = createCatalogPriceLoader({
+    polar: options.config.polar,
+    getProduct:
+      polarClient === undefined
+        ? undefined
+        : (id) => polarClient.getProduct(id),
+  });
 
   async function getEntitlements(userId: string): Promise<UserEntitlements> {
     const subscription =
@@ -260,18 +299,111 @@ export function createBillingService(
     return { monthlyCredits, subscription: product };
   }
 
+  async function resolveApiUsageContext(userId: string) {
+    const current = now();
+    const grant = await resolveActiveApiGrant(userId);
+
+    return {
+      monthlyCredits: grant.monthlyCredits,
+      subscription: grant.subscription,
+      period: resolveApiCreditPeriod({
+        subscription: grant.subscription ?? null,
+        now: current,
+      }),
+      now: current,
+    };
+  }
+
   async function ensureApiCreditBalance(
     userId: string,
   ): Promise<ApiCreditBalance> {
-    const period = getUtcMonthPeriod(now());
-    const { monthlyCredits } = await resolveActiveApiGrant(userId);
+    const {
+      monthlyCredits,
+      period,
+      now: current,
+    } = await resolveApiUsageContext(userId);
+
+    if (monthlyCredits === 0) {
+      const balance = await options.repository.ensureApiCreditGrant({
+        userId,
+        periodStart: period.start,
+        periodEnd: period.end,
+        grantAmount: INCLUDED_API_CREDITS_PER_MONTH,
+        now: current,
+      });
+      return includedApiCreditBalance(balance);
+    }
+    const legacyCalendar = getUtcMonthPeriod(period.start);
+    const shouldCarryLegacy =
+      monthlyCredits > 0 &&
+      legacyCalendar.start.getTime() !== period.start.getTime();
+    let initialGrant = monthlyCredits;
+
+    if (shouldCarryLegacy) {
+      const legacy = await options.repository.getOrCreateUsagePeriod({
+        userId,
+        periodStart: legacyCalendar.start,
+        periodEnd: legacyCalendar.end,
+      });
+
+      if (legacy.apiCreditsGranted > 0) {
+        initialGrant = 0;
+      }
+    }
+
+    let balance = await options.repository.ensureApiCreditGrant({
+      userId,
+      periodStart: period.start,
+      periodEnd: period.end,
+      grantAmount: initialGrant,
+      now: current,
+    });
+
+    if (shouldCarryLegacy && balance.apiCreditsGranted === 0) {
+      const legacy = await options.repository.getOrCreateUsagePeriod({
+        userId,
+        periodStart: legacyCalendar.start,
+        periodEnd: legacyCalendar.end,
+      });
+
+      if (legacy.apiCreditsGranted > 0) {
+        await options.repository.grantApiCreditTopUp({
+          userId,
+          periodStart: period.start,
+          periodEnd: period.end,
+          amount: legacy.apiCreditsGranted,
+          providerEventId: `api-period-carry:${userId}:${period.start.toISOString()}`,
+          now: current,
+        });
+        balance = await options.repository.ensureApiCreditGrant({
+          userId,
+          periodStart: period.start,
+          periodEnd: period.end,
+          grantAmount: 0,
+          now: current,
+        });
+      }
+    }
+
+    if (monthlyCredits <= balance.apiCreditsGranted) {
+      return balance;
+    }
+
+    await options.repository.grantApiCreditTopUp({
+      userId,
+      periodStart: period.start,
+      periodEnd: period.end,
+      amount: monthlyCredits - balance.apiCreditsGranted,
+      providerEventId: `api-pack:${userId}:${period.start.toISOString()}:${String(monthlyCredits)}`,
+      now: current,
+    });
 
     return options.repository.ensureApiCreditGrant({
       userId,
       periodStart: period.start,
       periodEnd: period.end,
       grantAmount: monthlyCredits,
-      now: now(),
+      now: current,
     });
   }
 
@@ -286,23 +418,26 @@ export function createBillingService(
     }
 
     const existing = await options.repository.findCustomerByUserId(userId);
+    const remote = await polar.findCustomerByExternalId(userId);
 
-    if (existing !== undefined) {
-      return existing;
+    if (remote !== null) {
+      return options.repository.upsertCustomer({
+        userId,
+        polarCustomerId: remote.id,
+        createdAt: existing?.createdAt ?? now(),
+        updatedAt: now(),
+      });
     }
 
-    const remote = await polar.findCustomerByExternalId(userId);
-    const polarCustomer =
-      remote ??
-      (await polar.createCustomer({
-        email: await requireUserEmail(userId),
-        externalId: userId,
-      }));
+    const polarCustomer = await polar.createCustomer({
+      email: await requireUserEmail(userId),
+      externalId: userId,
+    });
 
     return options.repository.upsertCustomer({
       userId,
       polarCustomerId: polarCustomer.id,
-      createdAt: now(),
+      createdAt: existing?.createdAt ?? now(),
       updatedAt: now(),
     });
   }
@@ -333,7 +468,7 @@ export function createBillingService(
         polarProductId: parsed.polarProductId,
         plan: planFromPolarProductId(
           parsed.polarProductId,
-          options.config.polar.proProductId,
+          options.config.polar,
         ),
         status: parsed.status,
         cancelAtPeriodEnd: parsed.cancelAtPeriodEnd,
@@ -342,6 +477,10 @@ export function createBillingService(
         endedAt: parsed.endedAt,
         updatedAt: now(),
       });
+      await revokeLocalApiSubscriptionIfPolarId(
+        userId,
+        parsed.polarSubscriptionId,
+      );
     }
 
     const apiProductKey = apiProductKeyFromPolarProductId(
@@ -360,6 +499,55 @@ export function createBillingService(
         currentPeriodStart: parsed.currentPeriodStart,
         currentPeriodEnd: parsed.currentPeriodEnd,
         endedAt: parsed.endedAt,
+        updatedAt: now(),
+      });
+      await revokeLocalSubscriptionIfPolarId(
+        userId,
+        parsed.polarSubscriptionId,
+      );
+    }
+  }
+
+  async function revokeLocalSubscriptionIfPolarId(
+    userId: string,
+    polarSubscriptionId: string,
+  ): Promise<void> {
+    const existing =
+      await options.repository.findLatestSubscriptionByUserId(userId);
+
+    if (
+      existing === undefined ||
+      existing.polarSubscriptionId !== polarSubscriptionId
+    ) {
+      return;
+    }
+
+    await options.repository.upsertSubscription({
+      ...existing,
+      status: "revoked",
+      cancelAtPeriodEnd: false,
+      endedAt: existing.endedAt ?? now(),
+      updatedAt: now(),
+    });
+  }
+
+  async function revokeLocalApiSubscriptionIfPolarId(
+    userId: string,
+    polarSubscriptionId: string,
+  ): Promise<void> {
+    const subscriptions =
+      await options.repository.listApiSubscriptionsByUserId(userId);
+
+    for (const existing of subscriptions) {
+      if (existing.polarSubscriptionId !== polarSubscriptionId) {
+        continue;
+      }
+
+      await options.repository.upsertApiSubscription({
+        ...existing,
+        status: "revoked",
+        cancelAtPeriodEnd: false,
+        endedAt: existing.endedAt ?? now(),
         updatedAt: now(),
       });
     }
@@ -382,6 +570,29 @@ export function createBillingService(
     });
   }
 
+  async function revokeLocalApiSubscriptions(userId: string): Promise<void> {
+    const subscriptions =
+      await options.repository.listApiSubscriptionsByUserId(userId);
+
+    for (const existing of subscriptions) {
+      if (
+        existing.status === "revoked" &&
+        existing.endedAt !== null &&
+        existing.endedAt.getTime() <= now().getTime()
+      ) {
+        continue;
+      }
+
+      await options.repository.upsertApiSubscription({
+        ...existing,
+        status: "revoked",
+        cancelAtPeriodEnd: false,
+        endedAt: existing.endedAt ?? now(),
+        updatedAt: now(),
+      });
+    }
+  }
+
   async function reconcileFromPolar(userId: string): Promise<void> {
     const polar = options.polarClient;
 
@@ -390,19 +601,94 @@ export function createBillingService(
     }
 
     try {
-      const remote = await polar.listSubscriptionsByExternalId(userId);
+      const remote = await listRemotePolarSubscriptions(userId);
 
       if (remote.length === 0) {
         await revokeLocalSubscription(userId);
+        await revokeLocalApiSubscriptions(userId);
         return;
       }
 
       for (const subscription of remote) {
         await applyRemoteSubscription(userId, subscription);
       }
+
+      const parsedRemotes = remote.flatMap((subscription) => {
+        const parsed = parsePolarSubscription(subscription);
+        return parsed === undefined ? [] : [parsed];
+      });
+      const hasRemotePro = parsedRemotes.some((subscription) =>
+        isWebProPolarProduct(subscription.polarProductId, options.config.polar),
+      );
+      const hasRemoteApi = parsedRemotes.some(
+        (subscription) =>
+          apiProductKeyFromPolarProductId(
+            subscription.polarProductId,
+            options.config.polar,
+          ) !== undefined,
+      );
+
+      if (!hasRemotePro) {
+        await revokeLocalSubscription(userId);
+      }
+
+      if (!hasRemoteApi) {
+        await revokeLocalApiSubscriptions(userId);
+      }
     } catch {
       return;
     }
+  }
+
+  async function listRemotePolarSubscriptions(
+    userId: string,
+  ): Promise<unknown[]> {
+    const polar = options.polarClient;
+
+    if (polar === undefined) {
+      return [];
+    }
+
+    const byExternalId = await polar.listSubscriptionsByExternalId(userId);
+    if (byExternalId.length > 0) {
+      return byExternalId;
+    }
+
+    let local = await options.repository.findCustomerByUserId(userId);
+    if (local === undefined) {
+      try {
+        local = await ensurePolarCustomer(userId);
+      } catch {
+        local = undefined;
+      }
+    }
+
+    if (local !== undefined) {
+      const byCustomerId = await polar.listSubscriptionsByCustomerId(
+        local.polarCustomerId,
+      );
+      if (byCustomerId.length > 0) {
+        return byCustomerId;
+      }
+    }
+
+    const email = await options.repository.findUserEmail(userId);
+    if (email === undefined || email.length === 0) {
+      return [];
+    }
+
+    return polar.listSubscriptionsByEmail(email);
+  }
+
+  async function hasManagedPolarBilling(userId: string): Promise<boolean> {
+    const web = await options.repository.findLatestSubscriptionByUserId(userId);
+    if (web !== undefined) {
+      return true;
+    }
+
+    const api =
+      await options.repository.findLatestApiSubscriptionByUserId(userId);
+    return api !== undefined;
   }
 
   async function requireUserEmail(userId: string): Promise<string> {
@@ -455,18 +741,19 @@ export function createBillingService(
       const aiBalance = await ensureAiCreditBalance(input.userId);
       const apiBalance = await ensureApiCreditBalance(input.userId);
       const apiGrant = await resolveActiveApiGrant(input.userId);
-      const apiPeriod = getUtcMonthPeriod(now());
-      const conversionPeriod = apiPeriod;
+      const apiPeriod = resolveApiCreditPeriod({
+        subscription: apiGrant.subscription ?? null,
+        now: now(),
+      });
+      const conversionPeriod = getUtcMonthPeriod(now());
       const conversionUsage = await options.repository.getOrCreateUsagePeriod({
         userId: input.userId,
         periodStart: conversionPeriod.start,
         periodEnd: conversionPeriod.end,
       });
-      const customer = await options.repository.findCustomerByUserId(
-        input.userId,
-      );
       const recentUsage = await options.repository.listApiCreditLedger({
         userId: input.userId,
+        periodStart: apiPeriod.start,
         limit: 20,
       });
       const configuredProducts = listConfiguredCheckoutProducts(
@@ -474,13 +761,22 @@ export function createBillingService(
       );
       const apiProducts = configuredProducts.filter((key) => key !== "pro");
 
+      const dailyPeriod = getUtcDayPeriod(now());
+      const dailyUsed =
+        entitlements.limits.operationsPerDay === null
+          ? conversionUsage.conversionsUsed
+          : await options.repository.countConversionUsageSince({
+              userId: input.userId,
+              since: dailyPeriod.start,
+            });
+
       return {
         plan: entitlements.plan,
         subscriptionStatus: entitlements.subscriptionStatus,
         cancelAtPeriodEnd: entitlements.cancelAtPeriodEnd,
         currentPeriodEnd: entitlements.currentPeriodEnd?.toISOString() ?? null,
         canUpgrade: entitlements.plan === "free",
-        canManage: customer !== undefined,
+        canManage: await hasManagedPolarBilling(input.userId),
         usage: {
           webCreditsUsed: balance.webCreditsUsed,
           webCreditsLimit: entitlements.limits.monthlyWebCredits,
@@ -488,8 +784,8 @@ export function createBillingService(
           aiCreditsUsed: aiBalance.aiCreditsUsed,
           aiCreditsLimit: entitlements.limits.monthlyAiCredits,
           aiCreditsRemaining: aiBalance.aiCreditsRemaining,
-          conversionsUsed: conversionUsage.conversionsUsed,
-          conversionsLimit: entitlements.limits.monthlyConversions,
+          conversionsUsed: dailyUsed,
+          conversionsLimit: entitlements.limits.operationsPerDay,
           storageUsedBytes: input.storageUsedBytes,
           storageLimitBytes: entitlements.limits.storageBytes,
           apiKeyCount: input.apiKeyCount,
@@ -504,30 +800,76 @@ export function createBillingService(
           creditsLimit: apiBalance.apiCreditsGranted,
           creditsRemaining: apiBalance.apiCreditsRemaining,
           recentUsage,
-          canSubscribe: apiProducts.some((key) => key !== "api-pack"),
-          canTopUp: apiProducts.includes("api-pack"),
+          canSubscribe: apiProducts.some(
+            (key) =>
+              isApiCheckoutProductKey(key) &&
+              apiProductKeyFromCheckoutProductKey(key) !==
+                apiGrant.subscription?.productKey,
+          ),
           availableProducts: apiProducts,
           periodStart: apiPeriod.start.toISOString(),
           periodEnd: apiPeriod.end.toISOString(),
         },
         limits: {
           maxFileSizeBytes: entitlements.limits.maxFileSizeBytes,
+          maxFilesPerOperation: entitlements.limits.maxFilesPerOperation,
+          maxPagesPerFile: entitlements.limits.maxPagesPerFile,
           apiAccess: entitlements.limits.apiAccess,
           apiRequestsPerMinute: entitlements.limits.apiRequestsPerMinute,
         },
+        prices: await loadCatalogPrices(),
       };
     },
 
     async assertCanCreateConversion(userId) {
       const entitlements = await getEntitlements(userId);
-      const usage = await this.getConversionUsage(userId);
-      assertCanCreateConversion({
-        used: usage.conversionsUsed,
-        limit: entitlements.limits.monthlyConversions,
+      if (entitlements.limits.operationsPerDay !== null) {
+        const dailyPeriod = getUtcDayPeriod(now());
+        const usedToday = await options.repository.countConversionUsageSince({
+          userId,
+          since: dailyPeriod.start,
+        });
+        assertCanCreateConversion({
+          used: usedToday,
+          limit: entitlements.limits.operationsPerDay,
+        });
+      }
+
+      if (entitlements.limits.monthlyConversions !== null) {
+        const usage = await this.getConversionUsage(userId);
+        assertCanCreateConversion({
+          used: usage.conversionsUsed,
+          limit: entitlements.limits.monthlyConversions,
+        });
+      }
+    },
+
+    async assertCanUseFileCount(input) {
+      const entitlements = await getEntitlements(input.userId);
+      const tool =
+        input.toolId === undefined
+          ? undefined
+          : findRegisteredTool(input.toolId);
+      assertCanUseFileCount({
+        fileCount: input.fileCount,
+        maxFilesPerOperation: entitlements.limits.maxFilesPerOperation,
+        toolMaxInputCount: tool?.maxInputCount,
+        combinesSourceFiles:
+          tool === undefined ? false : toolCombinesSourceFiles(tool.id),
       });
     },
 
+    async assertCanUseTool(input) {
+      const entitlements = await getEntitlements(input.userId);
+      assertToolAllowedOnPlan(input.toolId, entitlements.plan);
+    },
+
     async assertCanSpendWebCredits(input) {
+      const entitlements = await getEntitlements(input.userId);
+      if (entitlements.limits.operationsPerDay === null) {
+        return;
+      }
+
       const balance = await ensureWebCreditBalance(input.userId);
       const amount = input.amount ?? resolveWebCreditCost(input.toolId);
       assertCanSpendWebCredits({
@@ -559,10 +901,17 @@ export function createBillingService(
 
     async assertCanUploadFile(input) {
       const entitlements = await getEntitlements(input.userId);
+      const limits =
+        input.channel === "api"
+          ? {
+              ...entitlements.limits,
+              maxFileSizeBytes: DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes,
+            }
+          : entitlements.limits;
       assertCanUploadFile({
         sizeBytes: input.sizeBytes,
         storageUsedBytes: input.storageUsedBytes,
-        limits: entitlements.limits,
+        limits,
       });
     },
 
@@ -583,10 +932,16 @@ export function createBillingService(
         apiKeyId: input.apiKeyId ?? null,
         periodStart: period.start,
         periodEnd: period.end,
+        createdAt: now(),
       });
     },
 
     async consumeWebCredits(input) {
+      const entitlements = await getEntitlements(input.userId);
+      if (entitlements.limits.operationsPerDay === null) {
+        return true;
+      }
+
       const { period } = await resolveUsageContext(input.userId);
       await ensureWebCreditBalance(input.userId);
       const amount = resolveWebCreditCost(input.toolId);
@@ -679,9 +1034,14 @@ export function createBillingService(
         return false;
       }
 
-      const period = getUtcMonthPeriod(now());
-      await ensureApiCreditBalance(input.userId);
+      const { period } = await resolveApiUsageContext(input.userId);
+      const balance = await ensureApiCreditBalance(input.userId);
       const amount = resolveApiCreditCost(input.toolId);
+      assertCanSpendApiCredits({
+        used: balance.apiCreditsUsed,
+        granted: balance.apiCreditsGranted,
+        amount,
+      });
 
       return options.repository.consumeApiCredits({
         userId: input.userId,
@@ -720,14 +1080,15 @@ export function createBillingService(
       });
     },
 
-    async createCheckout(userId, product = "pro") {
+    async createCheckout(userId, product = "pro", interval = "monthly") {
       const polar = options.polarClient;
-      const productId = polarProductIdForCheckout(
+      const productIds = polarCheckoutProductIds(
         product,
         options.config.polar,
+        interval,
       );
 
-      if (polar === undefined || productId === undefined) {
+      if (polar === undefined || productIds.length === 0) {
         if (product === "pro") {
           assertPolarCheckoutConfig(options.config.polar);
         }
@@ -737,6 +1098,8 @@ export function createBillingService(
           message: "Polar checkout is not configured",
         });
       }
+
+      await reconcileFromPolar(userId);
 
       if (product === "pro") {
         assertPolarCheckoutConfig(options.config.polar);
@@ -750,11 +1113,52 @@ export function createBillingService(
         }
       }
 
+      if (isApiCheckoutProductKey(product)) {
+        const apiGrant = await resolveActiveApiGrant(userId);
+        const requestedPack = apiProductKeyFromCheckoutProductKey(product);
+
+        if (apiGrant.subscription !== undefined) {
+          if (apiGrant.subscription.productKey === requestedPack) {
+            throw new AppError({
+              code: APP_ERROR_CODES.CONFLICT,
+              message: "The current plan already includes an API pack",
+            });
+          }
+
+          const productId = polarProductIdForSubscriptionUpdate(
+            product,
+            apiGrant.subscription.polarProductId,
+            options.config.polar,
+          );
+
+          if (productId === undefined) {
+            throw new AppError({
+              code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+              message: "Polar checkout is not configured",
+            });
+          }
+
+          await polar.updateSubscription({
+            subscriptionId: apiGrant.subscription.polarSubscriptionId,
+            productId,
+          });
+          await reconcileFromPolar(userId);
+
+          return { url: null };
+        }
+      }
+
       await ensurePolarCustomer(userId);
+      const customerEmail = await requireUserEmail(userId);
+      const returnUrl = resolvePolarReturnUrl(
+        `${options.config.appUrl}${options.config.successPath}`,
+      );
       const checkout = await polar.createCheckout({
-        productId,
+        productIds,
         externalCustomerId: userId,
+        customerEmail,
         successUrl: checkoutSuccessUrl(options.config),
+        ...(returnUrl === undefined ? {} : { returnUrl }),
       });
 
       return { url: checkout.url };
@@ -770,12 +1174,57 @@ export function createBillingService(
         });
       }
 
-      const customer = await ensurePolarCustomer(userId);
-      const portal = await polar.createCustomerPortal({
-        customerId: customer.polarCustomerId,
-      });
+      if (!(await hasManagedPolarBilling(userId))) {
+        throw new AppError({
+          code: APP_ERROR_CODES.NOT_FOUND,
+          message: "Polar customer portal was not found",
+        });
+      }
 
-      return { url: portal.url };
+      await ensurePolarCustomer(userId);
+      const customer = await options.repository.findCustomerByUserId(userId);
+      const returnUrl = resolvePolarReturnUrl(
+        `${options.config.appUrl}${options.config.successPath}`,
+      );
+
+      try {
+        const portal = await polar.createCustomerPortal({
+          externalCustomerId: userId,
+          customerId: customer?.polarCustomerId,
+          ...(returnUrl === undefined ? {} : { returnUrl }),
+        });
+        return { url: portal.url };
+      } catch (error) {
+        if (
+          !isAppError(error) ||
+          (error.code !== APP_ERROR_CODES.NOT_FOUND &&
+            error.code !== APP_ERROR_CODES.VALIDATION_ERROR)
+        ) {
+          throw error;
+        }
+
+        const remote = await polar.findCustomerByExternalId(userId);
+        const polarCustomer =
+          remote ??
+          (await polar.createCustomer({
+            email: await requireUserEmail(userId),
+            externalId: userId,
+          }));
+
+        await options.repository.upsertCustomer({
+          userId,
+          polarCustomerId: polarCustomer.id,
+          createdAt: now(),
+          updatedAt: now(),
+        });
+
+        const portal = await polar.createCustomerPortal({
+          externalCustomerId: userId,
+          customerId: polarCustomer.id,
+          ...(returnUrl === undefined ? {} : { returnUrl }),
+        });
+        return { url: portal.url };
+      }
     },
 
     async handleWebhook(input) {
@@ -791,6 +1240,10 @@ export function createBillingService(
 
     getPlanCatalog() {
       return catalog;
+    },
+
+    async getCatalogPrices() {
+      return loadCatalogPrices();
     },
 
     async adjustCredits(input) {
@@ -838,7 +1291,10 @@ export function createBillingService(
         });
       }
 
-      const period = getUtcMonthPeriod(now());
+      const period =
+        input.source === "api"
+          ? (await resolveApiUsageContext(input.userId)).period
+          : getUtcMonthPeriod(now());
       await options.repository.applyManualCreditAdjustment({
         userId: input.userId,
         source: input.source,

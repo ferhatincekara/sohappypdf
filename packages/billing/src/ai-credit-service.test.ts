@@ -3,6 +3,7 @@ import { loadBillingConfig } from "@repo/config";
 import { APP_ERROR_CODES, isAppError } from "@repo/core";
 import { createBillingService } from "./billing-service.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
+import { DEFAULT_PLAN_LIMITS } from "./plan-config.js";
 import type { PlanCatalog } from "./plan-types.js";
 
 const now = new Date("2026-08-15T12:00:00.000Z");
@@ -11,28 +12,11 @@ const aiToolId = "ai-summarizer";
 function createCatalog(overrides?: Partial<PlanCatalog["free"]>): PlanCatalog {
   return {
     free: {
-      monthlyConversions: 20,
-      monthlyWebCredits: 100,
+      ...DEFAULT_PLAN_LIMITS.free,
       monthlyAiCredits: 100,
-      storageBytes: 500 * 1024 * 1024,
-      maxFileSizeBytes: 20 * 1024 * 1024,
-      maxApiKeys: 2,
-      apiAccess: true,
-      authenticatedRequestsPerMinute: 60,
-      apiRequestsPerMinute: 30,
       ...overrides,
     },
-    pro: {
-      monthlyConversions: 500,
-      monthlyWebCredits: 2_000,
-      monthlyAiCredits: 200,
-      storageBytes: 10 * 1024 * 1024 * 1024,
-      maxFileSizeBytes: 100 * 1024 * 1024,
-      maxApiKeys: 20,
-      apiAccess: true,
-      authenticatedRequestsPerMinute: 120,
-      apiRequestsPerMinute: 60,
-    },
+    pro: DEFAULT_PLAN_LIMITS.pro,
   };
 }
 

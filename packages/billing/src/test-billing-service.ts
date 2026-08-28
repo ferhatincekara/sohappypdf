@@ -30,6 +30,18 @@ export function createTestBillingService(options?: {
     options?.apiCreditGrants ?? {},
   )) {
     if (amount > 0) {
+      void repository.upsertApiSubscription({
+        userId,
+        polarSubscriptionId: `sub_api_${userId}`,
+        polarProductId: "prod_api_starter",
+        productKey: "starter",
+        status: "active",
+        cancelAtPeriodEnd: false,
+        currentPeriodStart: period.start,
+        currentPeriodEnd: period.end,
+        endedAt: null,
+        updatedAt: now(),
+      });
       void repository.ensureApiCreditGrant({
         userId,
         periodStart: period.start,

@@ -6,6 +6,8 @@ import {
   assertCanCreateConversion,
   assertCanSpendAiCredits,
   assertCanUploadFile,
+  assertCanUseFileCount,
+  assertCanUsePageCount,
   isProSubscription,
   resolvePlan,
 } from "./entitlements.js";
@@ -81,10 +83,51 @@ describe("resolvePlan", () => {
 });
 
 describe("entitlement assertions", () => {
-  test("rejects conversions after the monthly limit", () => {
+  test("rejects conversions after the daily limit", () => {
     try {
       assertCanCreateConversion({ used: 20, limit: 20 });
       throw new Error("expected conversion limit to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
+      }
+    }
+  });
+
+  test("allows conversions when the plan has no operation cap", () => {
+    expect(() => {
+      assertCanCreateConversion({ used: 10_000, limit: null });
+    }).not.toThrow();
+  });
+
+  test("rejects extra files after the plan file cap", () => {
+    try {
+      assertCanUseFileCount({ fileCount: 2, maxFilesPerOperation: 1 });
+      throw new Error("expected file count limit to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
+      }
+    }
+  });
+
+  test("allows combiner jobs to use the tool file count on Free", () => {
+    expect(() => {
+      assertCanUseFileCount({
+        fileCount: 5,
+        maxFilesPerOperation: 1,
+        toolMaxInputCount: 21,
+        combinesSourceFiles: true,
+      });
+    }).not.toThrow();
+  });
+
+  test("rejects PDFs over the plan page cap", () => {
+    try {
+      assertCanUsePageCount({ pageCount: 51, maxPagesPerFile: 50 });
+      throw new Error("expected page limit to fail");
     } catch (error) {
       expect(isAppError(error)).toBe(true);
       if (isAppError(error)) {

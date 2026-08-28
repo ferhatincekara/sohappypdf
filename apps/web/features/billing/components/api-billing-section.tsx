@@ -1,146 +1,248 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import {
+  DEFAULT_API_CREDIT_PACKS,
+  INCLUDED_API_CREDITS_PER_MONTH,
+} from "@repo/billing/plans";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { APP_PATHS } from "@/features/app-shell";
 import { DEVELOPER_PATHS } from "@/features/developer-docs";
 import { Link } from "@/lib/i18n/navigation";
+import { cn } from "@/lib/utils";
 import {
+  apiPackCheckoutAction,
+  apiPackRenewalDate,
   apiProductLabelKey,
   apiSubscribeProducts,
-  toIsoDate,
+  canOpenApiPolarPortal,
+  catalogPriceForCycle,
+  formatUsdAmount,
+  resolveBillingPlanNotice,
 } from "../lib/billing-view";
-import type { CheckoutProductKey, PublicBillingStatus } from "../types/billing";
-import { BillingUsageRow } from "./billing-usage-row";
+import { formatBillingDisplayDate } from "../lib/format-billing-date";
+import type {
+  BillingInterval,
+  CheckoutProductKey,
+  PublicBillingStatus,
+} from "../types/billing";
+import { ApiPackSwitchDialog } from "./api-pack-switch-dialog";
+import { BillingCreditHistoryList } from "./billing-credit-history-list";
+import { BillingOfferCard } from "./billing-offer-card";
+import {
+  BillingPlanHero,
+  BillingSectionCard,
+  billingStatGridClassName,
+} from "./billing-plan-hero";
+import { BillingStat } from "./billing-stat";
 import { PolarPortalActions } from "./polar-portal-actions";
 
 export function ApiBillingSection({
   billing,
+  cycle,
   isCheckoutPending,
   isPortalPending,
   onCheckout,
   onManage,
 }: {
   billing: PublicBillingStatus;
+  cycle: BillingInterval;
   isCheckoutPending: boolean;
   isPortalPending: boolean;
   onCheckout: (product: CheckoutProductKey) => void;
   onManage: () => void;
 }) {
   const t = useTranslations("billing");
+  const tApi = useTranslations("billing.api");
   const tApiProducts = useTranslations("billing.apiProducts");
   const tStatus = useTranslations("billing.subscriptionStatus");
+  const locale = useLocale();
   const subscribeProducts = apiSubscribeProducts(billing.api.availableProducts);
+  const [pendingSwitch, setPendingSwitch] = useState<CheckoutProductKey | null>(
+    null,
+  );
+  const pendingPackId =
+    pendingSwitch === null ? null : apiProductLabelKey(pendingSwitch);
+  const packId = billing.api.product;
+  const hasPack = packId !== null;
+  const packOffer =
+    packId === null
+      ? null
+      : catalogPriceForCycle(billing.prices[packId], "monthly");
+  const notice = resolveBillingPlanNotice({
+    paid: hasPack,
+    cancelAtPeriodEnd: false,
+    periodEnd: apiPackRenewalDate(billing.api),
+    subscriptionStatus: billing.api.subscriptionStatus,
+  });
+  const description =
+    notice.kind === "cancels"
+      ? t("cancelsOn", {
+          date: formatBillingDisplayDate(notice.date, locale),
+        })
+      : notice.kind === "renews"
+        ? t("renewsOn", {
+            date: formatBillingDisplayDate(notice.date, locale),
+          })
+        : notice.kind === "status"
+          ? tStatus(notice.status)
+          : undefined;
 
   return (
-    <>
-      <section className="flex flex-col gap-4 rounded-lg border border-border p-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-sm font-medium text-foreground">
-              {t("api.title")}
-            </h2>
-            <p className="text-lg font-semibold">
-              {billing.api.product === null
-                ? t("api.noProduct")
-                : tApiProducts(billing.api.product)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {billing.api.subscriptionStatus === null
-                ? t("api.noSubscription")
-                : tStatus(billing.api.subscriptionStatus)}
-            </p>
-          </div>
-          <PolarPortalActions
-            canManage={billing.canManage}
-            isPortalPending={isPortalPending}
-            onManage={onManage}
-          />
-        </div>
-        <BillingUsageRow
-          label={t("api.credits")}
-          value={t("usedOfLimit", {
-            used: billing.api.creditsUsed,
-            limit: billing.api.creditsLimit,
-          })}
-        />
-        <BillingUsageRow
-          label={t("remainingLabel")}
-          value={t("remaining", {
-            count: billing.api.creditsRemaining,
-          })}
-        />
-        <p className="text-xs text-muted-foreground">
-          {t("period", {
-            start: toIsoDate(billing.api.periodStart),
-            end: toIsoDate(billing.api.periodEnd),
-          })}
-        </p>
-      </section>
-      {subscribeProducts.length > 0 || billing.api.canTopUp ? (
-        <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
-          <h2 className="text-sm font-medium text-foreground">
-            {t("api.plans")}
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {subscribeProducts.map((product) => (
-              <Button
-                key={product}
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={isCheckoutPending}
-                aria-busy={isCheckoutPending}
-                onClick={() => {
-                  onCheckout(product);
-                }}
-              >
-                {tApiProducts(apiProductLabelKey(product))}
-              </Button>
-            ))}
-            {billing.api.canTopUp ? (
-              <Button
-                type="button"
-                size="sm"
-                disabled={isCheckoutPending}
-                aria-busy={isCheckoutPending}
-                onClick={() => {
-                  onCheckout("api-pack");
-                }}
-              >
-                {t("api.topUp")}
-              </Button>
-            ) : null}
-          </div>
-        </section>
-      ) : null}
-      <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
-        <h2 className="text-sm font-medium text-foreground">
-          {t("api.recentUsage")}
-        </h2>
-        {billing.api.recentUsage.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("api.noUsage")}</p>
-        ) : (
-          billing.api.recentUsage.map((entry) => (
-            <BillingUsageRow
-              key={`${entry.createdAt}-${entry.type}-${entry.toolId ?? "none"}`}
-              label={`${entry.type}${entry.toolId === null ? "" : ` · ${entry.toolId}`}`}
-              value={`${entry.amount}`}
+    <div className="flex flex-col gap-8">
+      {hasPack && packOffer !== null ? (
+        <BillingPlanHero
+          title={tApiProducts(packId)}
+          value={formatUsdAmount(packOffer.amount)}
+          unit={t("perMonth")}
+          description={description}
+          paid
+          actions={
+            <PolarPortalActions
+              canManage={canOpenApiPolarPortal(billing.api)}
+              isPortalPending={isPortalPending}
+              onManage={onManage}
+              tone="onDark"
             />
-          ))
-        )}
-      </section>
-      <section className="flex flex-col gap-2 text-sm">
-        <Link
-          href={DEVELOPER_PATHS.docs}
-          className="underline underline-offset-4"
-        >
-          {t("api.documentation")}
-        </Link>
-        <Link href={APP_PATHS.apiKeys} className="underline underline-offset-4">
-          {t("api.manageKeys")}
-        </Link>
-      </section>
-    </>
+          }
+        />
+      ) : null}
+
+      <BillingSectionCard
+        title={t("usage")}
+        description={
+          hasPack
+            ? t("period", {
+                start: formatBillingDisplayDate(
+                  billing.api.periodStart,
+                  locale,
+                ),
+                end: formatBillingDisplayDate(billing.api.periodEnd, locale),
+              })
+            : tApi("includedHint", {
+                count: INCLUDED_API_CREDITS_PER_MONTH,
+              })
+        }
+        meta={tApi("creditsResetOn", {
+          date: formatBillingDisplayDate(billing.api.periodEnd, locale),
+        })}
+      >
+        <dl className={cn(billingStatGridClassName, "sm:grid-cols-3")}>
+          <BillingStat
+            label={t("api.credits")}
+            value={t("usedOfLimit", {
+              used: billing.api.creditsUsed,
+              limit: billing.api.creditsLimit,
+            })}
+          />
+          <BillingStat
+            label={t("remainingLabel")}
+            value={t("remaining", {
+              count: billing.api.creditsRemaining,
+            })}
+          />
+          <BillingStat
+            label={tApi("resetLabel")}
+            value={formatBillingDisplayDate(billing.api.periodEnd, locale)}
+          />
+        </dl>
+      </BillingSectionCard>
+
+      {subscribeProducts.length > 0 ? (
+        <BillingSectionCard title={tApi("plans")}>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {subscribeProducts.map((product) => {
+              const offerPackId = apiProductLabelKey(product);
+              const offer = catalogPriceForCycle(
+                billing.prices[offerPackId],
+                cycle,
+              );
+              const action = apiPackCheckoutAction(
+                billing.api.product,
+                product,
+              );
+              const isCurrent = action === "current";
+
+              return (
+                <BillingOfferCard
+                  key={product}
+                  title={tApiProducts(offerPackId)}
+                  subtitle={tApi("packCredits", {
+                    count: DEFAULT_API_CREDIT_PACKS[offerPackId],
+                  })}
+                  price={formatUsdAmount(offer.amount)}
+                  unit={
+                    offer.interval === "yearly" ? t("perYear") : t("perMonth")
+                  }
+                  actionLabel={tApi(action)}
+                  isCurrent={isCurrent}
+                  isPending={isCheckoutPending}
+                  cta={action}
+                  onClick={() => {
+                    if (action === "switch") {
+                      setPendingSwitch(product);
+                      return;
+                    }
+
+                    onCheckout(product);
+                  }}
+                />
+              );
+            })}
+          </div>
+          <ApiPackSwitchDialog
+            open={pendingSwitch !== null}
+            packName={pendingPackId === null ? "" : tApiProducts(pendingPackId)}
+            monthlyPrice={
+              pendingPackId === null
+                ? 0
+                : billing.prices[pendingPackId].monthlyUsd
+            }
+            isPending={isCheckoutPending}
+            onOpenChange={(open) => {
+              if (!open) {
+                setPendingSwitch(null);
+              }
+            }}
+            onConfirm={() => {
+              if (pendingSwitch === null) {
+                return;
+              }
+
+              const product = pendingSwitch;
+              setPendingSwitch(null);
+              onCheckout(product);
+            }}
+          />
+        </BillingSectionCard>
+      ) : null}
+
+      <BillingSectionCard
+        title={tApi("recentUsage")}
+        actions={
+          <>
+            <Button
+              variant="white"
+              nativeButton={false}
+              render={<Link href={DEVELOPER_PATHS.docs} />}
+            >
+              {tApi("documentation")}
+            </Button>
+            <Button
+              nativeButton={false}
+              render={<Link href={APP_PATHS.apiKeys} />}
+            >
+              {tApi("manageKeys")}
+            </Button>
+          </>
+        }
+      >
+        <p className="mb-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          {tApi("recentUsageHint")}
+        </p>
+        <BillingCreditHistoryList entries={billing.api.recentUsage} />
+      </BillingSectionCard>
+    </div>
   );
 }

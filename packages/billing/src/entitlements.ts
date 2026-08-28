@@ -1,5 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import type { BillingSubscriptionRecord } from "./billing-types.js";
+import { resolveWebMaxFilesPerOperation } from "./default-plan-limits.js";
 import type { PlanLimits } from "./plan-types.js";
 
 export function isProSubscription(
@@ -78,12 +79,54 @@ export function resolvePlan(
 
 export function assertCanCreateConversion(input: {
   used: number;
-  limit: number;
+  limit: number | null;
 }): void {
+  if (input.limit === null) {
+    return;
+  }
+
   if (input.used >= input.limit) {
     throw new AppError({
       code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
-      message: "Monthly conversion limit reached",
+      message: "Daily processing limit reached",
+    });
+  }
+}
+
+export function assertCanUseFileCount(input: {
+  fileCount: number;
+  maxFilesPerOperation: number | null;
+  toolMaxInputCount?: number;
+  combinesSourceFiles?: boolean;
+}): void {
+  const maxFiles = resolveWebMaxFilesPerOperation({
+    isAuthenticated: true,
+    toolMaxInputCount: input.toolMaxInputCount ?? 1,
+    planMaxFilesPerOperation: input.maxFilesPerOperation,
+    combinesSourceFiles: input.combinesSourceFiles === true,
+    supportsBatch: false,
+  });
+
+  if (input.fileCount > maxFiles) {
+    throw new AppError({
+      code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+      message: "Too many files for the current plan",
+    });
+  }
+}
+
+export function assertCanUsePageCount(input: {
+  pageCount: number;
+  maxPagesPerFile: number | null;
+}): void {
+  if (input.maxPagesPerFile === null) {
+    return;
+  }
+
+  if (input.pageCount > input.maxPagesPerFile) {
+    throw new AppError({
+      code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
+      message: `File exceeds the ${String(input.maxPagesPerFile)} page limit`,
     });
   }
 }

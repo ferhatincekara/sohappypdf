@@ -2,6 +2,7 @@ import type { AxiosInstance } from "axios";
 import { apiClient } from "@/lib/api/client";
 import type {
   BillingCheckoutResponse,
+  BillingInterval,
   BillingPortalResponse,
   BillingStatusResponse,
   CheckoutProductKey,
@@ -22,6 +23,7 @@ export type BillingApi = {
   getStatus: () => Promise<BillingStatusResponse>;
   createCheckout: (
     product?: CheckoutProductKey,
+    interval?: BillingInterval,
   ) => Promise<BillingCheckoutResponse>;
   createPortal: () => Promise<BillingPortalResponse>;
 };
@@ -40,11 +42,14 @@ export function createBillingApi(
       }
     },
 
-    async createCheckout(product: CheckoutProductKey = "pro") {
+    async createCheckout(
+      product: CheckoutProductKey = "pro",
+      interval: BillingInterval = "monthly",
+    ) {
       try {
         const response = await client.post<BillingCheckoutResponse>(
           "/api/v1/billing/checkout",
-          { product },
+          { product, interval },
         );
         return response.data;
       } catch (error) {

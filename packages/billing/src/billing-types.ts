@@ -1,6 +1,12 @@
 import type { ApiProductKey } from "@repo/config";
+import type { BillingCatalogPrices } from "./default-plan-limits.js";
 import type { BillingSubscriptionStatus, PlanId } from "./plan-types.js";
 import type { CheckoutProductKey } from "./polar-products.js";
+
+export type {
+  BillingCatalogPrices,
+  CatalogOfferPrice,
+} from "./default-plan-limits.js";
 
 export type BillingCustomerRecord = {
   userId: string;
@@ -55,9 +61,18 @@ export type ApiCreditBalance = {
   apiCreditsRemaining: number;
 };
 
+export type ApiCreditLedgerKind =
+  | "reset"
+  | "pack"
+  | "grant"
+  | "consume"
+  | "refund";
+
 export type ApiCreditLedgerEntry = {
+  id: string;
   amount: number;
   type: "grant" | "consume" | "refund" | "adjustment";
+  kind: ApiCreditLedgerKind;
   toolId: string | null;
   createdAt: string;
 };
@@ -95,7 +110,7 @@ export type PublicBillingStatus = {
     aiCreditsLimit: number;
     aiCreditsRemaining: number;
     conversionsUsed: number;
-    conversionsLimit: number;
+    conversionsLimit: number | null;
     storageUsedBytes: number;
     storageLimitBytes: number;
     apiKeyCount: number;
@@ -111,16 +126,18 @@ export type PublicBillingStatus = {
     creditsRemaining: number;
     recentUsage: readonly ApiCreditLedgerEntry[];
     canSubscribe: boolean;
-    canTopUp: boolean;
     availableProducts: readonly CheckoutProductKey[];
     periodStart: string;
     periodEnd: string;
   };
   limits: {
     maxFileSizeBytes: number;
+    maxFilesPerOperation: number | null;
+    maxPagesPerFile: number | null;
     apiAccess: boolean;
     apiRequestsPerMinute: number;
   };
+  prices: BillingCatalogPrices;
 };
 
 export type PolarCustomer = {
@@ -144,14 +161,25 @@ export type PolarClient = {
     externalId: string;
   }) => Promise<PolarCustomer>;
   createCheckout: (input: {
-    productId: string;
+    productIds: readonly string[];
     externalCustomerId: string;
+    customerEmail: string;
     successUrl: string;
+    returnUrl?: string;
   }) => Promise<PolarCheckout>;
+  updateSubscription: (input: {
+    subscriptionId: string;
+    productId: string;
+  }) => Promise<void>;
   createCustomerPortal: (input: {
-    customerId: string;
+    externalCustomerId: string;
+    customerId?: string;
+    returnUrl?: string;
   }) => Promise<PolarCustomerPortal>;
   listSubscriptionsByExternalId: (externalId: string) => Promise<unknown[]>;
+  listSubscriptionsByCustomerId: (customerId: string) => Promise<unknown[]>;
+  listSubscriptionsByEmail: (email: string) => Promise<unknown[]>;
+  getProduct: (id: string) => Promise<unknown | null>;
 };
 
 export type PolarWebhookEvent = {

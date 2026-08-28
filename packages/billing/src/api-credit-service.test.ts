@@ -1,7 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { loadBillingConfig } from "@repo/config";
+import { DEFAULT_API_STARTER_CREDITS, loadBillingConfig } from "@repo/config";
 import { APP_ERROR_CODES, isAppError } from "@repo/core";
 import { createBillingService } from "./billing-service.js";
+import { INCLUDED_API_CREDITS_PER_MONTH } from "./default-plan-limits.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
 import { getUtcMonthPeriod } from "./usage-period.js";
 
@@ -12,15 +13,15 @@ const toolId = "pdf-to-jpg";
 function createService(options?: {
   repository?: ReturnType<typeof createMemoryBillingRepository>;
   env?: Record<string, string | undefined>;
+  now?: Date;
 }) {
   return createBillingService({
     repository: options?.repository ?? createMemoryBillingRepository(),
     config: loadBillingConfig({
       POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
-      POLAR_API_CREDIT_PACKS: "prod_pack:500",
       ...options?.env,
     }),
-    now: () => now,
+    now: () => options?.now ?? now,
   });
 }
 
@@ -38,8 +39,25 @@ async function grantApiCredits(
   });
 }
 
+async function seedApiSubscription(
+  repository: ReturnType<typeof createMemoryBillingRepository>,
+) {
+  await repository.upsertApiSubscription({
+    userId: "user_1",
+    polarSubscriptionId: "sub_api",
+    polarProductId: "prod_api_starter",
+    productKey: "starter",
+    status: "active",
+    cancelAtPeriodEnd: false,
+    currentPeriodStart: period.start,
+    currentPeriodEnd: period.end,
+    endedAt: null,
+    updatedAt: now,
+  });
+}
+
 describe("API credits", () => {
-  test("does not grant API credits from the web Free or Pro plan", async () => {
+  test("includes monthly API credits without an API pack", async () => {
     const repository = createMemoryBillingRepository();
     await repository.upsertSubscription({
       userId: "user_1",
@@ -58,8 +76,8 @@ describe("API credits", () => {
     const api = await billing.getApiCreditBalance("user_1");
 
     expect(web.webCreditsGranted).toBeGreaterThan(0);
-    expect(api.apiCreditsGranted).toBe(0);
-    expect(api.apiCreditsRemaining).toBe(0);
+    expect(api.apiCreditsGranted).toBe(INCLUDED_API_CREDITS_PER_MONTH);
+    expect(api.apiCreditsRemaining).toBe(INCLUDED_API_CREDITS_PER_MONTH);
   });
 
   test("grants recurring API credits from an active API subscription", async () => {
@@ -79,13 +97,137 @@ describe("API credits", () => {
     const billing = createService({ repository });
     const balance = await billing.getApiCreditBalance("user_1");
 
-    expect(balance.apiCreditsGranted).toBe(1_000);
+    expect(balance.apiCreditsGranted).toBe(DEFAULT_API_STARTER_CREDITS);
     expect(balance.apiCreditsUsed).toBe(0);
+  });
+
+  test("does not keep granted API credits after the pack is revoked", async () => {
+    const repository = createMemoryBillingRepository();
+    await seedApiSubscription(repository);
+    const billing = createService({ repository });
+    await billing.getApiCreditBalance("user_1");
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "revoked",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: period.start,
+      currentPeriodEnd: period.end,
+      endedAt: now,
+      updatedAt: now,
+    });
+
+    const balance = await billing.getApiCreditBalance("user_1");
+    expect(balance.apiCreditsGranted).toBe(INCLUDED_API_CREDITS_PER_MONTH);
+    expect(balance.apiCreditsRemaining).toBe(INCLUDED_API_CREDITS_PER_MONTH);
+
+    await billing.consumeApiCredits({
+      userId: "user_1",
+      conversionId: "11111111-1111-4111-8111-111111111111",
+      toolId,
+    });
+    const after = await billing.getApiCreditBalance("user_1");
+    expect(after.apiCreditsUsed).toBe(1);
+    expect(after.apiCreditsRemaining).toBe(INCLUDED_API_CREDITS_PER_MONTH - 1);
+  });
+
+  test("uses the Polar payment day as the API credit period", async () => {
+    const repository = createMemoryBillingRepository();
+    const paidAt = new Date("2026-08-27T14:00:00.000Z");
+    const current = new Date("2026-08-27T17:00:00.000Z");
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: paidAt,
+      currentPeriodEnd: new Date("2026-09-27T14:00:00.000Z"),
+      endedAt: null,
+      updatedAt: current,
+    });
+    const billing = createService({ repository, now: current });
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(status.api.periodStart).toBe(paidAt.toISOString());
+    expect(status.api.periodEnd).toBe("2026-09-27T14:00:00.000Z");
+    expect(status.api.creditsLimit).toBe(DEFAULT_API_STARTER_CREDITS);
+  });
+
+  test("does not grant a second pack of credits when leaving the calendar-month bucket", async () => {
+    const repository = createMemoryBillingRepository();
+    const current = new Date("2026-08-27T17:00:00.000Z");
+    await grantApiCredits(repository, DEFAULT_API_STARTER_CREDITS);
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: new Date("2026-08-27T14:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-09-27T14:00:00.000Z"),
+      endedAt: null,
+      updatedAt: current,
+    });
+    const billing = createService({ repository, now: current });
+    const balance = await billing.getApiCreditBalance("user_1");
+
+    expect(balance.apiCreditsGranted).toBe(DEFAULT_API_STARTER_CREDITS);
+    expect(balance.apiCreditsRemaining).toBe(DEFAULT_API_STARTER_CREDITS);
+  });
+
+  test("adds the credit difference when the API pack is upgraded in the same period", async () => {
+    const repository = createMemoryBillingRepository();
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: period.start,
+      currentPeriodEnd: period.end,
+      endedAt: null,
+      updatedAt: now,
+    });
+    const billing = createService({
+      repository,
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
+        POLAR_API_GROWTH_PRODUCT_ID: "prod_api_growth",
+      },
+    });
+
+    await billing.getApiCreditBalance("user_1");
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api",
+      polarProductId: "prod_api_growth",
+      productKey: "growth",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: period.start,
+      currentPeriodEnd: period.end,
+      endedAt: null,
+      updatedAt: now,
+    });
+
+    const upgraded = await billing.getApiCreditBalance("user_1");
+    expect(upgraded.apiCreditsGranted).toBe(10_000);
+    expect(upgraded.apiCreditsRemaining).toBe(10_000);
   });
 
   test("consumes API credits for a tool execution", async () => {
     const repository = createMemoryBillingRepository();
-    await grantApiCredits(repository, 10);
+    await seedApiSubscription(repository);
     const billing = createService({ repository });
 
     await billing.consumeApiCredits({
@@ -97,13 +239,13 @@ describe("API credits", () => {
     const api = await billing.getApiCreditBalance("user_1");
     const web = await billing.getWebCreditBalance("user_1");
     expect(api.apiCreditsUsed).toBe(1);
-    expect(api.apiCreditsRemaining).toBe(9);
+    expect(api.apiCreditsRemaining).toBe(DEFAULT_API_STARTER_CREDITS - 1);
     expect(web.webCreditsUsed).toBe(0);
   });
 
   test("keeps web and API balances independent", async () => {
     const repository = createMemoryBillingRepository();
-    await grantApiCredits(repository, 10);
+    await seedApiSubscription(repository);
     const billing = createService({ repository });
 
     await billing.consumeWebCredits({
@@ -125,14 +267,17 @@ describe("API credits", () => {
 
   test("rejects consumption when API credits are insufficient", async () => {
     const repository = createMemoryBillingRepository();
-    await grantApiCredits(repository, 1);
+    await seedApiSubscription(repository);
     const billing = createService({ repository });
+    await billing.getApiCreditBalance("user_1");
 
-    await billing.consumeApiCredits({
-      userId: "user_1",
-      conversionId: "11111111-1111-4111-8111-111111111111",
-      toolId,
-    });
+    for (let index = 0; index < DEFAULT_API_STARTER_CREDITS; index += 1) {
+      await billing.consumeApiCredits({
+        userId: "user_1",
+        conversionId: `11111111-1111-4111-8111-${String(index).padStart(12, "0")}`,
+        toolId,
+      });
+    }
 
     try {
       await billing.consumeApiCredits({
@@ -149,26 +294,18 @@ describe("API credits", () => {
     }
   });
 
-  test("assertCanSpendApiCredits blocks before execution", async () => {
+  test("assertCanSpendApiCredits allows included credits before a pack", async () => {
     const billing = createService();
 
-    try {
-      await billing.assertCanSpendApiCredits({
-        userId: "user_1",
-        toolId,
-      });
-      throw new Error("expected limit");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-      if (isAppError(error)) {
-        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
-      }
-    }
+    await billing.assertCanSpendApiCredits({
+      userId: "user_1",
+      toolId,
+    });
   });
 
   test("refunds consumed API credits", async () => {
     const repository = createMemoryBillingRepository();
-    await grantApiCredits(repository, 10);
+    await seedApiSubscription(repository);
     const billing = createService({ repository });
     const conversionId = "11111111-1111-4111-8111-111111111111";
 
@@ -187,23 +324,32 @@ describe("API credits", () => {
 
     const balance = await billing.getApiCreditBalance("user_1");
     expect(balance.apiCreditsUsed).toBe(0);
-    expect(balance.apiCreditsRemaining).toBe(10);
+    expect(balance.apiCreditsRemaining).toBe(DEFAULT_API_STARTER_CREDITS);
   });
 
   test("handles concurrent API consumption safely", async () => {
     const repository = createMemoryBillingRepository();
-    await grantApiCredits(repository, 1);
+    await seedApiSubscription(repository);
     const billing = createService({ repository });
+    await billing.getApiCreditBalance("user_1");
+
+    for (let index = 0; index < DEFAULT_API_STARTER_CREDITS - 1; index += 1) {
+      await billing.consumeApiCredits({
+        userId: "user_1",
+        conversionId: `11111111-1111-4111-8111-${String(index).padStart(12, "0")}`,
+        toolId,
+      });
+    }
 
     const results = await Promise.allSettled([
       billing.consumeApiCredits({
         userId: "user_1",
-        conversionId: "11111111-1111-4111-8111-111111111111",
+        conversionId: "11111111-1111-4111-8111-aaaaaaaaaaa1",
         toolId,
       }),
       billing.consumeApiCredits({
         userId: "user_1",
-        conversionId: "22222222-2222-4222-8222-222222222222",
+        conversionId: "22222222-2222-4222-8222-bbbbbbbbbbb2",
         toolId,
       }),
     ]);
@@ -215,7 +361,59 @@ describe("API credits", () => {
     expect(rejected).toHaveLength(1);
 
     const balance = await billing.getApiCreditBalance("user_1");
-    expect(balance.apiCreditsUsed).toBe(1);
+    expect(balance.apiCreditsUsed).toBe(DEFAULT_API_STARTER_CREDITS);
     expect(balance.apiCreditsRemaining).toBe(0);
+  });
+
+  test("shows only the current period in recent API usage", async () => {
+    const repository = createMemoryBillingRepository();
+    const previous = getUtcMonthPeriod(new Date("2026-07-15T12:00:00.000Z"));
+    await repository.grantApiCreditTopUp({
+      userId: "user_1",
+      periodStart: previous.start,
+      periodEnd: previous.end,
+      amount: 50,
+      providerEventId: "evt_previous_grant",
+      now: previous.start,
+    });
+    await repository.consumeApiCredits({
+      userId: "user_1",
+      periodStart: previous.start,
+      periodEnd: previous.end,
+      amount: 8,
+      toolId,
+      executionId: "11111111-1111-4111-8111-previous0001",
+      reason: "tool_execution",
+      now: previous.start,
+    });
+    await grantApiCredits(repository, DEFAULT_API_STARTER_CREDITS);
+    await repository.consumeApiCredits({
+      userId: "user_1",
+      periodStart: period.start,
+      periodEnd: period.end,
+      amount: 3,
+      toolId,
+      executionId: "11111111-1111-4111-8111-current00001",
+      reason: "tool_execution",
+      now,
+    });
+    const billing = createService({ repository });
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+
+    expect(
+      status.api.recentUsage.some(
+        (entry) => entry.type === "consume" && entry.amount === 3,
+      ),
+    ).toBe(true);
+    expect(status.api.recentUsage.some((entry) => entry.amount === 8)).toBe(
+      false,
+    );
+    expect(status.api.recentUsage.some((entry) => entry.amount === 50)).toBe(
+      false,
+    );
   });
 });

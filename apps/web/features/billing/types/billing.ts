@@ -23,14 +23,38 @@ export type CheckoutProductKey =
   | "pro"
   | "api-starter"
   | "api-growth"
-  | "api-scale"
-  | "api-pack";
+  | "api-scale";
+
+export const BILLING_INTERVALS = ["monthly", "yearly"] as const;
+
+export type BillingInterval = (typeof BILLING_INTERVALS)[number];
+
+export type ApiCreditLedgerKind =
+  | "reset"
+  | "pack"
+  | "grant"
+  | "consume"
+  | "refund";
 
 export type ApiCreditLedgerEntry = {
+  id: string;
   amount: number;
   type: "grant" | "consume" | "refund" | "adjustment";
+  kind: ApiCreditLedgerKind;
   toolId: string | null;
   createdAt: string;
+};
+
+export type CatalogOfferPrice = {
+  monthlyUsd: number;
+  yearlyUsd: number | null;
+};
+
+export type BillingCatalogPrices = {
+  pro: CatalogOfferPrice;
+  starter: CatalogOfferPrice;
+  growth: CatalogOfferPrice;
+  scale: CatalogOfferPrice;
 };
 
 export type PublicBillingStatus = {
@@ -48,7 +72,7 @@ export type PublicBillingStatus = {
     aiCreditsLimit: number;
     aiCreditsRemaining: number;
     conversionsUsed: number;
-    conversionsLimit: number;
+    conversionsLimit: number | null;
     storageUsedBytes: number;
     storageLimitBytes: number;
     apiKeyCount: number;
@@ -64,16 +88,18 @@ export type PublicBillingStatus = {
     creditsRemaining: number;
     recentUsage: readonly ApiCreditLedgerEntry[];
     canSubscribe: boolean;
-    canTopUp: boolean;
     availableProducts: readonly CheckoutProductKey[];
     periodStart: string;
     periodEnd: string;
   };
   limits: {
     maxFileSizeBytes: number;
+    maxFilesPerOperation: number | null;
+    maxPagesPerFile: number | null;
     apiAccess: boolean;
     apiRequestsPerMinute: number;
   };
+  prices: BillingCatalogPrices;
 };
 
 export type BillingStatusResponse = {
@@ -82,7 +108,7 @@ export type BillingStatusResponse = {
 
 export type BillingCheckoutResponse = {
   checkout: {
-    url: string;
+    url: string | null;
   };
 };
 

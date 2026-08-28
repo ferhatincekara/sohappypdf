@@ -3,6 +3,7 @@ import {
   apiSubscriptions,
   billingCustomers,
   billingSubscriptions,
+  conversions,
   conversionUsageEvents,
   type Database,
   usagePeriods,
@@ -10,7 +11,8 @@ import {
   webCreditLedgerEntries,
   webhookEvents,
 } from "@repo/db";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, gte, ne, sql } from "drizzle-orm";
+import { resolveApiLedgerKind } from "./api-ledger-kind.js";
 import type {
   AiCreditBalance,
   ApiCreditBalance,
@@ -142,6 +144,7 @@ export type BillingRepository = {
   }): Promise<boolean>;
   listApiCreditLedger(input: {
     userId: string;
+    periodStart: Date;
     limit: number;
   }): Promise<readonly ApiCreditLedgerEntry[]>;
   recordConversionUsage(input: {
@@ -151,7 +154,12 @@ export type BillingRepository = {
     apiKeyId?: string | null;
     periodStart: Date;
     periodEnd: Date;
+    createdAt?: Date;
   }): Promise<boolean>;
+  countConversionUsageSince(input: {
+    userId: string;
+    since: Date;
+  }): Promise<number>;
   findUserEmail(userId: string): Promise<string | undefined>;
   applyManualCreditAdjustment(input: {
     userId: string;
@@ -1093,8 +1101,10 @@ export function createBillingRepository(db: Database): BillingRepository {
     async listApiCreditLedger(input) {
       const rows = await db
         .select({
+          id: webCreditLedgerEntries.id,
           amount: webCreditLedgerEntries.amount,
           type: webCreditLedgerEntries.type,
+          reason: webCreditLedgerEntries.reason,
           toolId: webCreditLedgerEntries.toolId,
           createdAt: webCreditLedgerEntries.createdAt,
         })
@@ -1103,14 +1113,17 @@ export function createBillingRepository(db: Database): BillingRepository {
           and(
             eq(webCreditLedgerEntries.userId, input.userId),
             eq(webCreditLedgerEntries.source, "api"),
+            eq(webCreditLedgerEntries.periodStart, input.periodStart),
           ),
         )
         .orderBy(desc(webCreditLedgerEntries.createdAt))
         .limit(input.limit);
 
       return rows.map((row) => ({
+        id: row.id,
         amount: row.amount,
         type: row.type,
+        kind: resolveApiLedgerKind({ type: row.type, reason: row.reason }),
         toolId: row.toolId,
         createdAt: row.createdAt.toISOString(),
       }));
@@ -1126,6 +1139,7 @@ export function createBillingRepository(db: Database): BillingRepository {
             apiKeyId: input.apiKeyId ?? null,
             toolId: input.toolId ?? null,
             periodStart: input.periodStart,
+            createdAt: input.createdAt ?? new Date(),
           })
           .onConflictDoNothing()
           .returning();
@@ -1158,6 +1172,38 @@ export function createBillingRepository(db: Database): BillingRepository {
 
         return true;
       });
+    },
+
+    async countConversionUsageSince(input) {
+      const [eventRow] = await db
+        .select({
+          count: sql<number>`count(*)::int`,
+        })
+        .from(conversionUsageEvents)
+        .where(
+          and(
+            eq(conversionUsageEvents.userId, input.userId),
+            gte(conversionUsageEvents.createdAt, input.since),
+          ),
+        );
+      const [conversionRow] = await db
+        .select({
+          count: sql<number>`count(*)::int`,
+        })
+        .from(conversions)
+        .where(
+          and(
+            eq(conversions.ownerId, input.userId),
+            eq(conversions.ownerKind, "user"),
+            ne(conversions.status, "cancelled"),
+            gte(conversions.createdAt, input.since),
+          ),
+        );
+
+      return Math.max(
+        Number(eventRow?.count ?? 0),
+        Number(conversionRow?.count ?? 0),
+      );
     },
 
     async findUserEmail(userId) {

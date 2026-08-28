@@ -1,47 +1,73 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { PillTabs } from "@/components/ui/pill-tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { APP_PATHS } from "@/features/app-shell";
-import { Link } from "@/lib/i18n/navigation";
 import { useBillingActions } from "../hooks/use-billing-actions";
 import { useBillingStatus } from "../hooks/use-billing-status";
 import { useCheckoutReturn } from "../hooks/use-checkout-return";
 import {
   type BillingCenterSection,
   listBillingCenterSections,
+  parseBillingCenterSection,
   resolveBillingCenterSection,
+  shouldShowBillingCycleToggle,
 } from "../lib/billing-view";
-import { isCheckoutActivationPending } from "../lib/checkout-activation";
-import { AiBillingSection } from "./ai-billing-section";
+import {
+  isCheckoutActivationPending,
+  resolveCheckoutBanner,
+} from "../lib/checkout-activation";
+import type { BillingInterval } from "../types/billing";
 import { ApiBillingSection } from "./api-billing-section";
+import { BillingCycleToggle } from "./billing-cycle-toggle";
 import { WebPlanSection } from "./web-plan-section";
 
 function BillingWorkspaceInner() {
   const t = useTranslations("billing");
   const tErrors = useTranslations("billing.errors");
-  const checkoutReturn = useCheckoutReturn();
-  const { billing, isLoading, isError, errorKey } = useBillingStatus({
-    pollWhileFree: checkoutReturn,
+  const { phase, dismiss } = useCheckoutReturn();
+  const { billing, isLoading, isError, errorKey, refetch } = useBillingStatus({
+    pollWhileConfirming: phase === "confirming",
   });
-  const {
-    startCheckout,
-    openPortal,
-    isCheckoutPending,
-    isPortalPending,
-    errorKey: actionErrorKey,
-  } = useBillingActions();
+  const { startCheckout, openPortal, isCheckoutPending, isPortalPending } =
+    useBillingActions();
+  const searchParams = useSearchParams();
   const [requestedSection, setRequestedSection] =
-    useState<BillingCenterSection>("web");
+    useState<BillingCenterSection>(() =>
+      parseBillingCenterSection(searchParams.get("section")),
+    );
+  const [cycle, setCycle] = useState<BillingInterval>("monthly");
+  const didAnnounceActivation = useRef(false);
+
+  useEffect(() => {
+    if (billing === undefined || didAnnounceActivation.current) {
+      return;
+    }
+
+    if (phase !== "confirming" && phase !== "unconfirmed") {
+      return;
+    }
+
+    if (isCheckoutActivationPending(billing)) {
+      return;
+    }
+
+    didAnnounceActivation.current = true;
+    toast.success(t("activated"));
+    dismiss();
+  }, [billing, dismiss, phase, t]);
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-32 w-full" />
+      <div className="flex flex-col gap-8">
+        <Skeleton className="h-14 w-48 rounded-full" />
+        <Skeleton className="h-48 w-full rounded-7" />
+        <Skeleton className="h-40 w-full rounded-7" />
       </div>
     );
   }
@@ -56,72 +82,83 @@ function BillingWorkspaceInner() {
     );
   }
 
-  const activating = checkoutReturn && isCheckoutActivationPending(billing);
-  const sections = listBillingCenterSections(billing);
+  const banner = resolveCheckoutBanner({
+    phase,
+    pending: isCheckoutActivationPending(billing),
+  });
+  const sections = listBillingCenterSections();
   const section = resolveBillingCenterSection(requestedSection, sections);
+  const showCycle = shouldShowBillingCycleToggle({ section, billing });
 
   return (
-    <div className="flex flex-col gap-8">
-      {activating ? (
+    <div className="flex flex-col gap-6 md:gap-8">
+      {banner === "confirming" ? (
         <Alert>
           <AlertDescription>{t("activating")}</AlertDescription>
         </Alert>
       ) : null}
-      {actionErrorKey === null ? null : (
-        <Alert variant="destructive">
-          <AlertDescription>{tErrors(actionErrorKey)}</AlertDescription>
+      {banner === "unconfirmed" ? (
+        <Alert>
+          <AlertDescription>{t("unconfirmed")}</AlertDescription>
+          <div className="mt-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                void refetch();
+              }}
+            >
+              {t("refreshStatus")}
+            </Button>
+          </div>
         </Alert>
-      )}
-      <div className="flex flex-wrap gap-2">
-        {sections.map((item) => (
-          <Button
-            key={item}
-            type="button"
-            size="sm"
-            variant={section === item ? "default" : "outline"}
-            onClick={() => {
-              setRequestedSection(item);
-            }}
-          >
-            {t(`sections.${item}`)}
-          </Button>
-        ))}
+      ) : null}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <PillTabs
+          layoutId="billing-section"
+          stretch
+          value={section}
+          onValueChange={(id) => {
+            setRequestedSection(id as BillingCenterSection);
+          }}
+          items={sections.map((item) => ({
+            id: item,
+            label: t(`sections.${item}`),
+          }))}
+        />
+        {showCycle ? (
+          <BillingCycleToggle value={cycle} onChange={setCycle} />
+        ) : null}
       </div>
       {section === "web" ? (
         <WebPlanSection
           billing={billing}
+          cycle={cycle}
           isCheckoutPending={isCheckoutPending}
           isPortalPending={isPortalPending}
           onUpgrade={() => {
-            void startCheckout("pro");
+            startCheckout({ product: "pro", interval: cycle });
           }}
           onManage={() => {
-            void openPortal();
+            openPortal();
           }}
         />
       ) : null}
       {section === "api" ? (
         <ApiBillingSection
           billing={billing}
+          cycle={cycle}
           isCheckoutPending={isCheckoutPending}
           isPortalPending={isPortalPending}
           onCheckout={(product) => {
-            void startCheckout(product);
+            startCheckout({ product, interval: cycle });
           }}
           onManage={() => {
-            void openPortal();
+            openPortal();
           }}
         />
       ) : null}
-      {section === "ai" ? <AiBillingSection billing={billing} /> : null}
-      <p className="text-sm text-muted-foreground">
-        <Link
-          href={APP_PATHS.settings}
-          className="underline underline-offset-4"
-        >
-          {t("backToSettings")}
-        </Link>
-      </p>
     </div>
   );
 }

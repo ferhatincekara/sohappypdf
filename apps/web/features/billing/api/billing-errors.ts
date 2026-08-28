@@ -4,6 +4,8 @@ export const BILLING_ERROR_KEYS = {
   unauthorized: "unauthorized",
   conflict: "conflict",
   configuration: "configuration",
+  notFound: "notFound",
+  portalUnavailable: "portalUnavailable",
   rateLimited: "rateLimited",
   networkFailure: "networkFailure",
   unexpected: "unexpected",
@@ -62,6 +64,14 @@ export function mapBillingError(
 
   if (error.code === "CONFIGURATION_ERROR") {
     return BILLING_ERROR_KEYS.configuration;
+  }
+
+  if (error.code === "NOT_FOUND" || error.status === 404) {
+    return BILLING_ERROR_KEYS.notFound;
+  }
+
+  if (error.code === "VALIDATION_ERROR" || error.status === 422) {
+    return BILLING_ERROR_KEYS.portalUnavailable;
   }
 
   if (error.code === "RATE_LIMITED" || error.status === 429) {

@@ -1,24 +1,36 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
+import { cn } from "@/lib/utils";
 import {
-  toIsoDate,
-  webCreditsResetDate,
+  canOpenWebPolarPortal,
+  catalogPriceForCycle,
+  formatUsdAmount,
+  resolveBillingPlanNotice,
   webPlanRenewalDate,
 } from "../lib/billing-view";
-import type { PublicBillingStatus } from "../types/billing";
-import { BillingUsageRow } from "./billing-usage-row";
+import { formatBillingDisplayDate } from "../lib/format-billing-date";
+import type { BillingInterval, PublicBillingStatus } from "../types/billing";
+import {
+  BillingPlanHero,
+  BillingSectionCard,
+  billingStatGridClassName,
+} from "./billing-plan-hero";
+import { BillingStat } from "./billing-stat";
 import { PolarPortalActions } from "./polar-portal-actions";
 
 export function WebPlanSection({
   billing,
+  cycle,
   isCheckoutPending,
   isPortalPending,
   onUpgrade,
   onManage,
 }: {
   billing: PublicBillingStatus;
+  cycle: BillingInterval;
   isCheckoutPending: boolean;
   isPortalPending: boolean;
   onUpgrade: () => void;
@@ -27,81 +39,116 @@ export function WebPlanSection({
   const t = useTranslations("billing");
   const tPlans = useTranslations("billing.plans");
   const tStatus = useTranslations("billing.subscriptionStatus");
-  const renewalDate = webPlanRenewalDate(billing);
-  const resetDate = webCreditsResetDate(billing);
+  const locale = useLocale();
+  const isPro = billing.plan === "pro";
+  const operationsLimit = billing.usage.conversionsLimit;
+  const notice = resolveBillingPlanNotice({
+    paid: isPro,
+    cancelAtPeriodEnd: billing.cancelAtPeriodEnd,
+    periodEnd: webPlanRenewalDate(billing) ?? billing.currentPeriodEnd,
+    subscriptionStatus: billing.subscriptionStatus,
+  });
+  const description =
+    notice.kind === "cancels"
+      ? t("cancelsOn", {
+          date: formatBillingDisplayDate(notice.date, locale),
+        })
+      : notice.kind === "renews"
+        ? t("renewsOn", {
+            date: formatBillingDisplayDate(notice.date, locale),
+          })
+        : notice.kind === "status"
+          ? tStatus(notice.status)
+          : undefined;
+  const canOpenPolar = canOpenWebPolarPortal(billing);
+  const offer = catalogPriceForCycle(
+    billing.prices.pro,
+    billing.canUpgrade ? cycle : "monthly",
+  );
 
   return (
-    <>
-      <section className="flex flex-col gap-4 rounded-lg border border-border p-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-sm font-medium text-foreground">
-              {t("currentPlan")}
-            </h2>
-            <p className="text-lg font-semibold">{tPlans(billing.plan)}</p>
-            <p className="text-sm text-muted-foreground">
-              {billing.plan === "free"
-                ? t("noSubscription")
-                : billing.cancelAtPeriodEnd && billing.currentPeriodEnd !== null
-                  ? t("cancelsOn", {
-                      date: toIsoDate(billing.currentPeriodEnd),
-                    })
-                  : billing.subscriptionStatus === null
-                    ? t("noSubscription")
-                    : tStatus(billing.subscriptionStatus)}
-            </p>
-            {renewalDate === null ? (
-              <p className="text-sm text-muted-foreground">
-                {t("creditsResetOn", { date: resetDate })}
-              </p>
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                {t("renewsOn", { date: renewalDate })}
-              </p>
-            )}
-          </div>
-          <div className="flex flex-col items-end gap-3">
-            {billing.canUpgrade ? (
-              <Button
-                type="button"
-                size="sm"
-                disabled={isCheckoutPending}
-                aria-busy={isCheckoutPending}
-                onClick={onUpgrade}
-              >
-                {isCheckoutPending ? t("upgrading") : t("upgrade")}
-              </Button>
-            ) : null}
-            <PolarPortalActions
-              canManage={billing.canManage}
-              isPortalPending={isPortalPending}
-              onManage={onManage}
+    <div className="flex flex-col gap-8">
+      <BillingPlanHero
+        title={tPlans("pro")}
+        value={formatUsdAmount(offer.amount)}
+        unit={offer.interval === "yearly" ? t("perYear") : t("perMonth")}
+        description={description}
+        paid={isPro}
+        actions={
+          billing.canUpgrade || canOpenPolar ? (
+            <>
+              {billing.canUpgrade ? (
+                <Button
+                  type="button"
+                  disabled={isCheckoutPending}
+                  aria-busy={isCheckoutPending}
+                  onClick={onUpgrade}
+                >
+                  {isCheckoutPending ? t("upgrading") : t("upgrade")}
+                </Button>
+              ) : null}
+              <PolarPortalActions
+                canManage={canOpenPolar}
+                isPortalPending={isPortalPending}
+                onManage={onManage}
+                tone={isPro ? "onDark" : "default"}
+              />
+            </>
+          ) : undefined
+        }
+      />
+
+      <BillingSectionCard
+        title={t("usage")}
+        description={
+          billing.plan === "free"
+            ? t("includedOperations", {
+                count: operationsLimit ?? 0,
+              })
+            : t("period", {
+                start: formatBillingDisplayDate(
+                  billing.usage.periodStart,
+                  locale,
+                ),
+                end: formatBillingDisplayDate(billing.usage.periodEnd, locale),
+              })
+        }
+        meta={billing.plan === "free" ? t("operationsResetDaily") : undefined}
+      >
+        <dl
+          className={cn(
+            billingStatGridClassName,
+            operationsLimit === null ? null : "lg:grid-cols-3",
+          )}
+        >
+          <BillingStat
+            label={t("usageItems.operations")}
+            value={
+              operationsLimit === null
+                ? t("unlimited")
+                : t("usedOfLimit", {
+                    used: billing.usage.conversionsUsed,
+                    limit: operationsLimit,
+                  })
+            }
+          />
+          {operationsLimit === null ? null : (
+            <BillingStat
+              label={t("remainingLabel")}
+              value={t("remaining", {
+                count: Math.max(
+                  0,
+                  operationsLimit - billing.usage.conversionsUsed,
+                ),
+              })}
             />
-          </div>
-        </div>
-      </section>
-      <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
-        <h2 className="text-sm font-medium text-foreground">{t("usage")}</h2>
-        <BillingUsageRow
-          label={t("usageItems.webCredits")}
-          value={t("usedOfLimit", {
-            used: billing.usage.webCreditsUsed,
-            limit: billing.usage.webCreditsLimit,
-          })}
-        />
-        <BillingUsageRow
-          label={t("remainingLabel")}
-          value={t("remaining", {
-            count: billing.usage.webCreditsRemaining,
-          })}
-        />
-        <p className="text-xs text-muted-foreground">
-          {t("period", {
-            start: toIsoDate(billing.usage.periodStart),
-            end: toIsoDate(billing.usage.periodEnd),
-          })}
-        </p>
-      </section>
-    </>
+          )}
+          <BillingStat
+            label={t("usageItems.fileSize")}
+            value={formatFileSize(billing.limits.maxFileSizeBytes)}
+          />
+        </dl>
+      </BillingSectionCard>
+    </div>
   );
 }

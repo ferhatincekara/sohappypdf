@@ -1,11 +1,7 @@
-import { getRegisteredTool, isRegisteredToolId } from "@repo/tools";
+import { findCatalogTool } from "@repo/tools";
 
 export function resolveAiCreditCost(toolId: string): number {
-  if (!isRegisteredToolId(toolId)) {
-    return 0;
-  }
-
-  return getRegisteredTool(toolId).aiCreditCost;
+  return findCatalogTool(toolId)?.aiCreditCost ?? 0;
 }
 
 export function usesAiCredits(toolId: string): boolean {

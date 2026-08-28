@@ -1,7 +1,9 @@
 import type { ApiKeyService } from "@repo/api-keys";
 import {
+  type BillingInterval,
   type BillingService,
   type CheckoutProductKey,
+  isBillingInterval,
   isCheckoutProductKey,
 } from "@repo/billing";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
@@ -36,6 +38,11 @@ function webhookHeaders(request: Request): Record<string, string> {
 export function createBillingRoutes(options: BillingRoutesOptions) {
   const billing = new Hono<AppEnv>();
   const managed = new Hono<AppEnv>();
+
+  billing.get("/catalog", async (c) => {
+    const prices = await options.getBillingService().getCatalogPrices();
+    return c.json({ prices });
+  });
 
   billing.post("/webhooks", async (c) => {
     const body = await c.req.text();
@@ -85,10 +92,17 @@ export function createBillingRoutes(options: BillingRoutesOptions) {
 
   managed.post("/checkout", async (c) => {
     const identity = requireSessionIdentity(c.get("identity"));
-    const product = await parseCheckoutProduct(c.req.raw);
+    const { product, interval } = await parseCheckoutRequest(c.req.raw);
     const checkout = await options
       .getBillingService()
-      .createCheckout(identity.userId, product);
+      .createCheckout(identity.userId, product, interval);
+
+    if (checkout.url === null) {
+      c.get("logger").info("billing api pack updated", {
+        userId: identity.userId,
+      });
+      return c.json({ checkout });
+    }
 
     c.get("logger").info("billing checkout created", {
       userId: identity.userId,
@@ -114,13 +128,14 @@ export function createBillingRoutes(options: BillingRoutesOptions) {
   return billing;
 }
 
-async function parseCheckoutProduct(
-  request: Request,
-): Promise<CheckoutProductKey> {
+async function parseCheckoutRequest(request: Request): Promise<{
+  product: CheckoutProductKey;
+  interval: BillingInterval;
+}> {
   const text = await request.text();
 
   if (text.trim().length === 0) {
-    return "pro";
+    return { product: "pro", interval: "monthly" };
   }
 
   let parsed: unknown;
@@ -141,19 +156,36 @@ async function parseCheckoutProduct(
     });
   }
 
-  if (!("product" in parsed) || parsed.product === undefined) {
-    return "pro";
+  let product: CheckoutProductKey = "pro";
+  let interval: BillingInterval = "monthly";
+
+  if ("product" in parsed && parsed.product !== undefined) {
+    if (
+      typeof parsed.product !== "string" ||
+      !isCheckoutProductKey(parsed.product)
+    ) {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid checkout product",
+      });
+    }
+
+    product = parsed.product;
   }
 
-  if (
-    typeof parsed.product !== "string" ||
-    !isCheckoutProductKey(parsed.product)
-  ) {
-    throw new AppError({
-      code: APP_ERROR_CODES.VALIDATION_ERROR,
-      message: "Invalid checkout product",
-    });
+  if ("interval" in parsed && parsed.interval !== undefined) {
+    if (
+      typeof parsed.interval !== "string" ||
+      !isBillingInterval(parsed.interval)
+    ) {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid checkout interval",
+      });
+    }
+
+    interval = parsed.interval;
   }
 
-  return parsed.product;
+  return { product, interval };
 }

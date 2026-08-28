@@ -5,6 +5,7 @@ assertServerOnly("@repo/billing");
 export { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 export { shouldRefundAiCredits } from "./ai-credit-refund.js";
 export { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";
+export { resolveApiCreditPeriod } from "./api-credit-period.js";
 export { shouldRefundApiCredits } from "./api-credit-refund.js";
 export type { BillingRepository } from "./billing-repository.js";
 export { createBillingRepository } from "./billing-repository.js";
@@ -20,8 +21,10 @@ export type {
   ApiCreditLedgerEntry,
   ApiProductKey,
   ApiSubscriptionRecord,
+  BillingCatalogPrices,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
+  CatalogOfferPrice,
   CheckoutProductKey,
   PolarClient,
   PolarWebhookEvent,
@@ -37,6 +40,8 @@ export {
   assertCanSpendApiCredits,
   assertCanSpendWebCredits,
   assertCanUploadFile,
+  assertCanUseFileCount,
+  assertCanUsePageCount,
   isProSubscription,
   resolvePlan,
 } from "./entitlements.js";
@@ -58,9 +63,16 @@ export {
   isPlanId,
   PLANS,
 } from "./plan-types.js";
-export { createPolarClient } from "./polar-client.js";
 export {
+  createPolarClient,
+  readPolarValidationSummary,
+} from "./polar-client.js";
+export type { BillingInterval } from "./polar-products.js";
+export {
+  BILLING_INTERVALS,
   CHECKOUT_PRODUCT_KEYS,
+  isApiCheckoutProductKey,
+  isBillingInterval,
   isCheckoutProductKey,
 } from "./polar-products.js";
 export {
@@ -70,7 +82,7 @@ export {
 } from "./polar-subscription.js";
 export { verifyPolarWebhook } from "./polar-webhook.js";
 export { createTestBillingService } from "./test-billing-service.js";
-export { getUtcMonthPeriod } from "./usage-period.js";
+export { getUtcDayPeriod, getUtcMonthPeriod } from "./usage-period.js";
 export { resolveWebCreditCost } from "./web-credit-cost.js";
 export { resolveWebCreditPeriod } from "./web-credit-period.js";
 export { shouldRefundWebCredits } from "./web-credit-refund.js";

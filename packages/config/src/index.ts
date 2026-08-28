@@ -8,11 +8,8 @@ export {
   isAdminAllowlisted,
   loadAdminConfig,
 } from "./admin-config.js";
-export type { AiConfig, AiProviderKind } from "./ai-config.js";
+export type { AiConfig } from "./ai-config.js";
 export {
-  DEFAULT_AI_MAX_EXTRACTED_CHARS,
-  DEFAULT_AI_MAX_PAGES,
-  DEFAULT_AI_MAX_REQUEST_CHARS,
   DEFAULT_FREE_AI_CREDITS,
   DEFAULT_PRO_AI_CREDITS,
   loadAiConfig,
@@ -22,7 +19,8 @@ export {
   DEFAULT_ANONYMOUS_CONFIG,
   DEFAULT_ANONYMOUS_MAX_FILE_SIZE_BYTES,
   DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION,
-  DEFAULT_ANONYMOUS_OPERATIONS_PER_HOUR,
+  DEFAULT_ANONYMOUS_MAX_PAGES_PER_FILE,
+  DEFAULT_ANONYMOUS_OPERATIONS_PER_DAY,
   DEFAULT_ANONYMOUS_RETENTION_HOURS,
   DEFAULT_ANONYMOUS_RETENTION_MS,
   loadAnonymousConfig,
@@ -32,7 +30,6 @@ export { loadApiConfig } from "./api-config.js";
 export type {
   ApiCreditConfig,
   ApiProductKey,
-  PolarApiPackProduct,
 } from "./api-credit-config.js";
 export {
   API_PRODUCT_KEYS,
@@ -41,7 +38,6 @@ export {
   DEFAULT_API_STARTER_CREDITS,
   isApiProductKey,
   loadApiCreditConfig,
-  parsePolarApiCreditPacks,
 } from "./api-credit-config.js";
 export type { AppConfig, LogLevel, RuntimeEnv } from "./app-config.js";
 export { LOG_LEVELS, loadAppConfig, RUNTIME_ENVS } from "./app-config.js";

@@ -18,11 +18,15 @@ export type BillingSubscriptionStatus =
   (typeof BILLING_SUBSCRIPTION_STATUSES)[number];
 
 export type PlanLimits = {
-  monthlyConversions: number;
+  monthlyConversions: number | null;
+  operationsPerDay: number | null;
   monthlyWebCredits: number;
   monthlyAiCredits: number;
   storageBytes: number;
   maxFileSizeBytes: number;
+  maxFilesPerOperation: number | null;
+  maxPagesPerFile: number | null;
+  hasSupport: boolean;
   maxApiKeys: number;
   apiAccess: boolean;
   authenticatedRequestsPerMinute: number;

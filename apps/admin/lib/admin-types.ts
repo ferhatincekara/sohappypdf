@@ -86,10 +86,13 @@ export type AdminLedgerEntry = {
 };
 
 export type AdminPlanLimits = {
-  monthlyConversions: number;
+  monthlyConversions: number | null;
+  operationsPerDay: number | null;
   monthlyWebCredits: number;
   monthlyAiCredits: number;
   maxFileSizeBytes: number;
+  maxFilesPerOperation: number | null;
+  maxPagesPerFile: number | null;
   maxApiKeys: number;
   apiRequestsPerMinute: number;
 };

@@ -45,6 +45,8 @@ describe("billing api", () => {
                 },
                 limits: {
                   maxFileSizeBytes: 20,
+                  maxFilesPerOperation: 1,
+                  maxPagesPerFile: 50,
                   apiAccess: true,
                   apiRequestsPerMinute: 30,
                 },
@@ -56,10 +58,15 @@ describe("billing api", () => {
                   creditsRemaining: 0,
                   recentUsage: [],
                   canSubscribe: false,
-                  canTopUp: false,
                   availableProducts: [],
                   periodStart: "2026-08-01T00:00:00.000Z",
                   periodEnd: "2026-09-01T00:00:00.000Z",
+                },
+                prices: {
+                  pro: { monthlyUsd: 5, yearlyUsd: null },
+                  starter: { monthlyUsd: 9, yearlyUsd: 86 },
+                  growth: { monthlyUsd: 29, yearlyUsd: 278 },
+                  scale: { monthlyUsd: 99, yearlyUsd: 950 },
                 },
               },
             },
@@ -71,6 +78,24 @@ describe("billing api", () => {
     const result = await api.getStatus();
     expect(result.billing.plan).toBe("free");
     expect(JSON.stringify(result).includes("polar")).toBe(false);
+  });
+
+  test("posts the selected checkout interval", async () => {
+    const api = createBillingApi(
+      createClient({
+        post: (async (url, body) => {
+          expect(url).toBe("/api/v1/billing/checkout");
+          expect(body).toEqual({
+            product: "api-starter",
+            interval: "yearly",
+          });
+          return { data: { checkout: { url: "https://polar.example/c" } } };
+        }) as AxiosInstance["post"],
+      }),
+    );
+
+    const result = await api.createCheckout("api-starter", "yearly");
+    expect(result.checkout.url).toBe("https://polar.example/c");
   });
 
   test("wraps checkout failures", async () => {
@@ -85,6 +110,23 @@ describe("billing api", () => {
     try {
       await api.createCheckout();
       throw new Error("expected checkout to fail");
+    } catch (error) {
+      expect(error).toBeInstanceOf(BillingApiRequestError);
+    }
+  });
+
+  test("wraps portal failures", async () => {
+    const api = createBillingApi(
+      createClient({
+        post: (async () => {
+          throw new Error("network");
+        }) as AxiosInstance["post"],
+      }),
+    );
+
+    try {
+      await api.createPortal();
+      throw new Error("expected portal to fail");
     } catch (error) {
       expect(error).toBeInstanceOf(BillingApiRequestError);
     }

@@ -37,11 +37,26 @@ export function isSubscriptionWebhookType(
 
 export function planFromPolarProductId(
   polarProductId: string,
-  proProductId: string | undefined,
+  polar: {
+    proProductId: string | undefined;
+    proYearlyProductId?: string | undefined;
+  },
 ): PlanId {
-  return proProductId !== undefined && polarProductId === proProductId
-    ? "pro"
-    : "free";
+  if (
+    polar.proProductId !== undefined &&
+    polarProductId === polar.proProductId
+  ) {
+    return "pro";
+  }
+
+  if (
+    polar.proYearlyProductId !== undefined &&
+    polarProductId === polar.proYearlyProductId
+  ) {
+    return "pro";
+  }
+
+  return "free";
 }
 
 export function isBillingSubscriptionStatus(

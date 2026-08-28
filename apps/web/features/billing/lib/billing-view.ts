@@ -1,6 +1,14 @@
-import type { CheckoutProductKey, PublicBillingStatus } from "../types/billing";
+import type {
+  BillingInterval,
+  BillingSubscriptionStatus,
+  CatalogOfferPrice,
+  CheckoutProductKey,
+  PublicBillingStatus,
+} from "../types/billing";
 
-export const BILLING_CENTER_SECTIONS = ["web", "api", "ai"] as const;
+export { formatUsdAmount } from "@repo/billing/plans";
+
+export const BILLING_CENTER_SECTIONS = ["web", "api"] as const;
 
 export type BillingCenterSection = (typeof BILLING_CENTER_SECTIONS)[number];
 
@@ -9,20 +17,10 @@ export type BillingCenterFlags = {
   isFree: boolean;
   isPro: boolean;
   hasApiPlan: boolean;
-  hasAi: boolean;
 };
 
 export function canOpenBillingDashboard(isAuthenticated: boolean): boolean {
   return isAuthenticated;
-}
-
-export function hasAiBilling(
-  usage: Pick<
-    PublicBillingStatus["usage"],
-    "aiCreditsLimit" | "aiCreditsRemaining"
-  >,
-): boolean {
-  return usage.aiCreditsLimit > 0 || usage.aiCreditsRemaining > 0;
 }
 
 export function hasApiBilling(
@@ -31,29 +29,45 @@ export function hasApiBilling(
   return api.product !== null || api.creditsLimit > 0;
 }
 
-export function listBillingCenterSections(
-  billing: Pick<PublicBillingStatus, "usage">,
-): readonly BillingCenterSection[] {
-  if (hasAiBilling(billing.usage)) {
-    return BILLING_CENTER_SECTIONS;
-  }
+export function canOpenWebPolarPortal(
+  billing: Pick<PublicBillingStatus, "plan" | "subscriptionStatus">,
+): boolean {
+  return billing.plan === "pro";
+}
 
-  return ["web", "api"];
+export function canOpenApiPolarPortal(
+  api: Pick<PublicBillingStatus["api"], "product">,
+): boolean {
+  return api.product !== null;
+}
+
+export function listBillingCenterSections(): readonly BillingCenterSection[] {
+  return BILLING_CENTER_SECTIONS;
+}
+
+export function isBillingCenterSection(
+  value: string | null | undefined,
+): value is BillingCenterSection {
+  return value === "web" || value === "api";
+}
+
+export function parseBillingCenterSection(
+  value: string | null | undefined,
+): BillingCenterSection {
+  return isBillingCenterSection(value) ? value : "web";
 }
 
 export function resolveBillingCenterSection(
-  requested: BillingCenterSection,
+  requested: string | null | undefined,
   sections: readonly BillingCenterSection[],
 ): BillingCenterSection {
-  if (sections.includes(requested)) {
-    return requested;
+  const section = parseBillingCenterSection(requested);
+
+  if (sections.includes(section)) {
+    return section;
   }
 
   return "web";
-}
-
-export function toIsoDate(value: string): string {
-  return value.slice(0, 10);
 }
 
 export function webPlanRenewalDate(
@@ -63,21 +77,60 @@ export function webPlanRenewalDate(
     return null;
   }
 
-  return toIsoDate(billing.currentPeriodEnd);
+  return billing.currentPeriodEnd;
+}
+
+export function apiPackRenewalDate(
+  api: Pick<PublicBillingStatus["api"], "product" | "periodEnd">,
+): string | null {
+  if (api.product === null) {
+    return null;
+  }
+
+  return api.periodEnd;
+}
+
+export type BillingPlanNotice =
+  | { kind: "included" }
+  | { kind: "renews"; date: string }
+  | { kind: "cancels"; date: string }
+  | { kind: "status"; status: BillingSubscriptionStatus };
+
+export function resolveBillingPlanNotice(input: {
+  paid: boolean;
+  cancelAtPeriodEnd: boolean;
+  periodEnd: string | null;
+  subscriptionStatus: BillingSubscriptionStatus | null;
+}): BillingPlanNotice {
+  if (!input.paid) {
+    return { kind: "included" };
+  }
+
+  if (input.cancelAtPeriodEnd && input.periodEnd !== null) {
+    return { kind: "cancels", date: input.periodEnd };
+  }
+
+  if (input.subscriptionStatus === "active" && input.periodEnd !== null) {
+    return { kind: "renews", date: input.periodEnd };
+  }
+
+  if (input.subscriptionStatus === null) {
+    return { kind: "included" };
+  }
+
+  return { kind: "status", status: input.subscriptionStatus };
 }
 
 export function webCreditsResetDate(
   billing: Pick<PublicBillingStatus, "usage">,
 ): string {
-  return toIsoDate(billing.usage.periodEnd);
+  return billing.usage.periodEnd;
 }
 
 export function apiSubscribeProducts(
   availableProducts: readonly CheckoutProductKey[],
 ): CheckoutProductKey[] {
-  return availableProducts.filter(
-    (product) => product !== "api-pack" && product !== "pro",
-  );
+  return availableProducts.filter((product) => product !== "pro");
 }
 
 export function apiProductLabelKey(
@@ -94,6 +147,50 @@ export function apiProductLabelKey(
   return "starter";
 }
 
+export function apiPackCheckoutAction(
+  current: PublicBillingStatus["api"]["product"],
+  product: CheckoutProductKey,
+): "current" | "subscribe" | "switch" {
+  if (current === null) {
+    return "subscribe";
+  }
+
+  if (apiProductLabelKey(product) === current) {
+    return "current";
+  }
+
+  return "switch";
+}
+
+export function catalogPriceForCycle(
+  offer: CatalogOfferPrice,
+  interval: BillingInterval,
+): { amount: number; interval: BillingInterval } {
+  if (interval === "yearly" && offer.yearlyUsd !== null) {
+    return { amount: offer.yearlyUsd, interval: "yearly" };
+  }
+
+  return { amount: offer.monthlyUsd, interval: "monthly" };
+}
+
+export function shouldShowBillingCycleToggle(input: {
+  section: BillingCenterSection;
+  billing: PublicBillingStatus;
+}): boolean {
+  if (input.section === "web") {
+    return (
+      input.billing.canUpgrade && input.billing.prices.pro.yearlyUsd !== null
+    );
+  }
+
+  return (
+    input.billing.api.product === null &&
+    (input.billing.prices.starter.yearlyUsd !== null ||
+      input.billing.prices.growth.yearlyUsd !== null ||
+      input.billing.prices.scale.yearlyUsd !== null)
+  );
+}
+
 export function resolveBillingCenterFlags(input: {
   isAuthenticated: boolean;
   billing: PublicBillingStatus | null;
@@ -104,7 +201,6 @@ export function resolveBillingCenterFlags(input: {
       isFree: false,
       isPro: false,
       hasApiPlan: false,
-      hasAi: false,
     };
   }
 
@@ -113,6 +209,5 @@ export function resolveBillingCenterFlags(input: {
     isFree: input.billing.plan === "free",
     isPro: input.billing.plan === "pro",
     hasApiPlan: hasApiBilling(input.billing.api),
-    hasAi: hasAiBilling(input.billing.usage),
   };
 }

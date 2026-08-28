@@ -6,10 +6,20 @@ export const CHECKOUT_PRODUCT_KEYS = [
   "api-starter",
   "api-growth",
   "api-scale",
-  "api-pack",
 ] as const;
 
+export const BILLING_INTERVALS = ["monthly", "yearly"] as const;
+
 export type CheckoutProductKey = (typeof CHECKOUT_PRODUCT_KEYS)[number];
+export type ApiCheckoutProductKey = Exclude<CheckoutProductKey, "pro">;
+export type BillingInterval = (typeof BILLING_INTERVALS)[number];
+
+function matchesPolarId(
+  polarProductId: string,
+  ...ids: Array<string | undefined>
+): boolean {
+  return ids.some((id) => id !== undefined && id === polarProductId);
+}
 
 export function isCheckoutProductKey(
   value: string,
@@ -17,27 +27,59 @@ export function isCheckoutProductKey(
   return CHECKOUT_PRODUCT_KEYS.some((key) => key === value);
 }
 
+export function isBillingInterval(value: string): value is BillingInterval {
+  return BILLING_INTERVALS.some((interval) => interval === value);
+}
+
+export function isApiCheckoutProductKey(
+  value: string,
+): value is ApiCheckoutProductKey {
+  return value !== "pro" && isCheckoutProductKey(value);
+}
+
+export function apiProductKeyFromCheckoutProductKey(
+  key: ApiCheckoutProductKey,
+): ApiProductKey {
+  switch (key) {
+    case "api-starter":
+      return "starter";
+    case "api-growth":
+      return "growth";
+    case "api-scale":
+      return "scale";
+  }
+}
+
 export function apiProductKeyFromPolarProductId(
   polarProductId: string,
   polar: PolarConfig,
 ): ApiProductKey | undefined {
   if (
-    polar.apiStarterProductId !== undefined &&
-    polarProductId === polar.apiStarterProductId
+    matchesPolarId(
+      polarProductId,
+      polar.apiStarterProductId,
+      polar.apiStarterYearlyProductId,
+    )
   ) {
     return "starter";
   }
 
   if (
-    polar.apiGrowthProductId !== undefined &&
-    polarProductId === polar.apiGrowthProductId
+    matchesPolarId(
+      polarProductId,
+      polar.apiGrowthProductId,
+      polar.apiGrowthYearlyProductId,
+    )
   ) {
     return "growth";
   }
 
   if (
-    polar.apiScaleProductId !== undefined &&
-    polarProductId === polar.apiScaleProductId
+    matchesPolarId(
+      polarProductId,
+      polar.apiScaleProductId,
+      polar.apiScaleYearlyProductId,
+    )
   ) {
     return "scale";
   }
@@ -49,19 +91,24 @@ export function isWebProPolarProduct(
   polarProductId: string,
   polar: PolarConfig,
 ): boolean {
-  return (
-    polar.proProductId !== undefined && polarProductId === polar.proProductId
+  return matchesPolarId(
+    polarProductId,
+    polar.proProductId,
+    polar.proYearlyProductId,
   );
 }
 
-export function packCreditsForPolarProduct(
+export function isPolarYearlyProductId(
   polarProductId: string,
   polar: PolarConfig,
-): number | undefined {
-  const pack = polar.apiCreditPacks.find(
-    (item) => item.productId === polarProductId,
+): boolean {
+  return matchesPolarId(
+    polarProductId,
+    polar.proYearlyProductId,
+    polar.apiStarterYearlyProductId,
+    polar.apiGrowthYearlyProductId,
+    polar.apiScaleYearlyProductId,
   );
-  return pack?.credits;
 }
 
 export function monthlyApiCreditsForProduct(
@@ -91,9 +138,55 @@ export function polarProductIdForCheckout(
       return polar.apiGrowthProductId;
     case "api-scale":
       return polar.apiScaleProductId;
-    case "api-pack":
-      return polar.apiCreditPacks[0]?.productId;
   }
+}
+
+export function polarYearlyProductIdForCheckout(
+  key: CheckoutProductKey,
+  polar: PolarConfig,
+): string | undefined {
+  switch (key) {
+    case "pro":
+      return polar.proYearlyProductId;
+    case "api-starter":
+      return polar.apiStarterYearlyProductId;
+    case "api-growth":
+      return polar.apiGrowthYearlyProductId;
+    case "api-scale":
+      return polar.apiScaleYearlyProductId;
+  }
+}
+
+export function polarCheckoutProductIds(
+  key: CheckoutProductKey,
+  polar: PolarConfig,
+  interval: BillingInterval = "monthly",
+): string[] {
+  if (interval === "yearly") {
+    const yearly = polarYearlyProductIdForCheckout(key, polar);
+
+    if (yearly !== undefined) {
+      return [yearly];
+    }
+  }
+
+  const monthly = polarProductIdForCheckout(key, polar);
+  return monthly === undefined ? [] : [monthly];
+}
+
+export function polarProductIdForSubscriptionUpdate(
+  key: ApiCheckoutProductKey,
+  currentPolarProductId: string,
+  polar: PolarConfig,
+): string | undefined {
+  if (isPolarYearlyProductId(currentPolarProductId, polar)) {
+    return (
+      polarYearlyProductIdForCheckout(key, polar) ??
+      polarProductIdForCheckout(key, polar)
+    );
+  }
+
+  return polarProductIdForCheckout(key, polar);
 }
 
 export function listConfiguredCheckoutProducts(
@@ -112,9 +205,6 @@ export function listConfiguredCheckoutProducts(
   }
   if (polar.apiScaleProductId !== undefined) {
     keys.push("api-scale");
-  }
-  if (polar.apiCreditPacks.length > 0) {
-    keys.push("api-pack");
   }
 
   return keys;

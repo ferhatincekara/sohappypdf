@@ -6,12 +6,15 @@ import { mapUnknownBillingError } from "../api/billing-errors";
 import { billingQueryKeys } from "../api/billing-query-keys";
 import { isCheckoutActivationPending } from "../lib/checkout-activation";
 
-export function useBillingStatus(options?: { pollWhileFree?: boolean }) {
+export function useBillingStatus(options?: { pollWhileConfirming?: boolean }) {
   const query = useQuery({
     queryKey: billingQueryKeys.status(),
     queryFn: () => billingApi.getStatus(),
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
     refetchInterval: (current) => {
-      if (!options?.pollWhileFree) {
+      if (!options?.pollWhileConfirming) {
         return false;
       }
 
