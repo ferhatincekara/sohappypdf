@@ -1709,31 +1709,32 @@
       },
       "extract": {
         "title": "Choose pages to extract",
-        "hint": "Select the pages to keep. They stay in order in one new PDF.",
-        "modeTitle": "What you will get",
-        "modeExtract": "Extract selected pages",
-        "modeExtractHint": "Create one PDF containing only the pages you selected.",
-        "output": "{count, plural, one {# selected page → 1 PDF} other {# selected pages → 1 PDF}}",
-        "allSelectedOutput": "All {count} pages → 1 PDF",
-        "advanced": "Advanced",
-        "advancedTitle": "Enter page ranges",
-        "advancedHint": "Use this if you already know the page numbers. Visual selection stays in sync.",
-        "advancedExample": "Example: 1-3, 5, 8-10",
-        "advancedError": "Check the page numbers. Use commas and dashes, like 1-3, 5.",
+        "hint": "Select the pages you want to take out. At least one page must remain.",
         "selectPrompt": "Select at least one page to extract.",
+        "keepOnePage": "Keep at least one page in the PDF.",
+        "willRemoveBadge": "Extract",
+        "resultTitle": "What you will get",
+        "output": "{count, plural, one {# page will be extracted.} other {# pages will be extracted.}}",
+        "remaining": "{count, plural, one {The PDF will have # page.} other {The PDF will have # pages.}}",
+        "advanced": "Advanced",
+        "advancedTitle": "Enter pages to extract",
+        "advancedHint": "Use page numbers or ranges, for example 2, 5-7.",
+        "advancedPlaceholder": "e.g. 2, 5-7",
+        "advancedExample": "Example: 2, 5-7",
+        "advancedError": "Check the page numbers. Use commas and ranges like 2, 5-7.",
         "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
         "previewFailed": "This PDF couldn't be previewed. You can still enter page numbers in Advanced.",
         "processing": "Extracting pages...",
-        "processingHint": "Creating a new PDF with the pages you selected.",
+        "processingHint": "Creating a new PDF without the pages you selected.",
         "successTitle": "Your PDF is ready",
-        "successDescription": "Download the new PDF with the pages you selected.",
+        "successDescription": "Download the PDF with those pages taken out.",
         "download": "Download PDF",
         "extractAnother": "Extract pages from another PDF",
         "processingFailed": "We couldn't extract those pages. Please try again.",
         "invalidFile": "This file couldn't be opened. Please try another PDF.",
         "expiredTitle": "This file has expired",
         "expiredDescription": "Files are automatically deleted after {hours} hours. Extract pages from another PDF to continue.",
-        "faqHow": "Upload a PDF, select the pages to keep, then extract. You'll get one new PDF with those pages. An account is not required.",
+        "faqHow": "Upload a PDF, select the pages to take out, then extract. At least one page must remain. An account is not required.",
         "how": {
           "upload": {
             "title": "Upload",
@@ -1741,11 +1742,11 @@
           },
           "select": {
             "title": "Select pages",
-            "description": "Tap the pages to keep, or select all."
+            "description": "Choose the pages that should be taken out."
           },
           "download": {
             "title": "Download",
-            "description": "Get one PDF with only those pages."
+            "description": "Get a PDF without those pages."
           }
         }
       },
@@ -2593,7 +2594,7 @@
     "extract-pages": {
       "name": "Extract PDF pages",
       "metaTitle": "Extract pages from PDF",
-      "description": "Extract selected pages from a PDF and save them as a new file. Choose pages visually, then download."
+      "description": "Take selected pages out of a PDF and save the rest as a new file. Choose pages visually, then download."
     },
     "organize-pdf": {
       "name": "Organize PDF",

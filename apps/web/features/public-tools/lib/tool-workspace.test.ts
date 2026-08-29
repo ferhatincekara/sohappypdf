@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   buildToolConversionOptions,
   DEFAULT_TOOL_WORKSPACE_STATE,
+  keepRangesFromRemovedPages,
   parseOrganizeOrderInput,
   parseOrganizeRotationsInput,
   parsePageListInput,
@@ -45,11 +46,36 @@ describe("tool workspace helpers", () => {
     ).toEqual({ degrees: 90, pages: [1, 2] });
 
     expect(
-      buildToolConversionOptions("extract-pages", {
-        ...DEFAULT_TOOL_WORKSPACE_STATE,
-        splitRanges: "1-2",
-      }),
-    ).toEqual({ ranges: [{ start: 1, end: 2 }] });
+      buildToolConversionOptions(
+        "extract-pages",
+        {
+          ...DEFAULT_TOOL_WORKSPACE_STATE,
+          pagesToRemove: "2",
+        },
+        4,
+      ),
+    ).toEqual({
+      ranges: [
+        { start: 1, end: 1 },
+        { start: 3, end: 4 },
+      ],
+    });
+
+    expect(
+      buildToolConversionOptions(
+        "extract-pages",
+        {
+          ...DEFAULT_TOOL_WORKSPACE_STATE,
+          pagesToRemove: "1-2",
+        },
+        2,
+      ),
+    ).toBeUndefined();
+
+    expect(keepRangesFromRemovedPages([2], 5)).toEqual([
+      { start: 1, end: 1 },
+      { start: 3, end: 5 },
+    ]);
 
     expect(
       buildToolConversionOptions("split-pdf", {

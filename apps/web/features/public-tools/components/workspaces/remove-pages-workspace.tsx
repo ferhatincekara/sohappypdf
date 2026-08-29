@@ -15,7 +15,12 @@ import {
 } from "@/features/public-tools/pdf-workspace";
 import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
-export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
+export type RemovePagesCopy = "remove" | "extract";
+
+export function RemovePagesWorkspace({
+  copy = "remove",
+  ...props
+}: ToolSelectedWorkspaceProps & { copy?: RemovePagesCopy }) {
   const t = useTranslations("publicTools");
   const entry = props.state.files[0];
   const pdf = usePdfDocument(entry?.file ?? null);
@@ -54,9 +59,9 @@ export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
 
   const disabledReason =
     selected.length === 0
-      ? t("workspaces.remove.selectPrompt")
+      ? t(`workspaces.${copy}.selectPrompt`)
       : wouldRemoveAll
-        ? t("workspaces.remove.keepOnePage")
+        ? t(`workspaces.${copy}.keepOnePage`)
         : null;
 
   return (
@@ -81,17 +86,17 @@ export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
           {props.state.error === null ? (
             <section
               className="flex flex-col gap-4"
-              aria-labelledby="remove-heading"
+              aria-labelledby={`${copy}-heading`}
             >
               <div className="flex flex-col gap-1">
                 <h2
-                  id="remove-heading"
+                  id={`${copy}-heading`}
                   className="text-lg font-extrabold tracking-tight text-foreground"
                 >
-                  {t("workspaces.remove.title")}
+                  {t(`workspaces.${copy}.title`)}
                 </h2>
                 <p className="max-w-xl text-sm leading-relaxed text-muted-foreground text-pretty">
-                  {t("workspaces.remove.hint")}
+                  {t(`workspaces.${copy}.hint`)}
                 </p>
               </div>
 
@@ -101,14 +106,14 @@ export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
                 onSelectedPagesChange={setSelectedPages}
                 disabled={props.disabled}
                 passwordProtectedMessage={t(
-                  "workspaces.remove.passwordProtected",
+                  `workspaces.${copy}.passwordProtected`,
                 )}
-                previewFailedMessage={t("workspaces.remove.previewFailed")}
+                previewFailedMessage={t(`workspaces.${copy}.previewFailed`)}
                 renderPageOverlay={(page) =>
                   page.selected ? (
                     <span className="absolute inset-x-0 bottom-1 z-10 flex justify-center">
                       <span className="rounded-full bg-destructive px-2 py-0.5 text-[10px] font-medium text-destructive-foreground">
-                        {t("workspaces.remove.willRemoveBadge")}
+                        {t(`workspaces.${copy}.willRemoveBadge`)}
                       </span>
                     </span>
                   ) : null
@@ -123,6 +128,7 @@ export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
           {(pdf.status === "ready" || pdf.status === "error") &&
           props.state.error === null ? (
             <RemoveResultSummary
+              copy={copy}
               selectedCount={selected.length}
               remainingCount={remaining}
               wouldRemoveAll={wouldRemoveAll}
@@ -131,6 +137,7 @@ export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
 
           {props.state.error === null ? (
             <RemovePagesAdvanced
+              copy={copy}
               selectedPages={selected}
               disabled={props.disabled}
               onSelectedPagesChange={setSelectedPages}

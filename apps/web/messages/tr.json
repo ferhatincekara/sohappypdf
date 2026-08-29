@@ -1709,31 +1709,32 @@
       },
       "extract": {
         "title": "Çıkarılacak sayfaları seçin",
-        "hint": "Tutulacak sayfaları seçin. Yeni PDF’de sıraları korunur.",
-        "modeTitle": "Ne alırsınız",
-        "modeExtract": "Seçilen sayfaları çıkar",
-        "modeExtractHint": "Yalnızca seçtiğiniz sayfaları içeren tek bir PDF oluşturun.",
-        "output": "{count, plural, one {# seçili sayfa → 1 PDF} other {# seçili sayfa → 1 PDF}}",
-        "allSelectedOutput": "Tüm {count} sayfa → 1 PDF",
-        "advanced": "Gelişmiş",
-        "advancedTitle": "Sayfa aralıklarını yazın",
-        "advancedHint": "Sayfa numaralarını biliyorsanız bunu kullanın. Görsel seçim senkron kalır.",
-        "advancedExample": "Örnek: 1-3, 5, 8-10",
-        "advancedError": "Sayfa numaralarını kontrol edin. Virgül ve tire kullanın, örneğin 1-3, 5.",
+        "hint": "Kaldırmak istediğiniz sayfaları seçin. En az bir sayfa kalmalıdır.",
         "selectPrompt": "Çıkarmak için en az bir sayfa seçin.",
+        "keepOnePage": "PDF’de en az bir sayfa bırakın.",
+        "willRemoveBadge": "Çıkar",
+        "resultTitle": "Ne alırsınız",
+        "output": "{count, plural, one {# sayfa çıkarılacak.} other {# sayfa çıkarılacak.}}",
+        "remaining": "{count, plural, one {PDF # sayfa olacak.} other {PDF # sayfa olacak.}}",
+        "advanced": "Gelişmiş",
+        "advancedTitle": "Çıkarılacak sayfaları yazın",
+        "advancedHint": "Sayfa numaraları veya aralıklar kullanın, örneğin 2, 5-7.",
+        "advancedPlaceholder": "ör. 2, 5-7",
+        "advancedExample": "Örnek: 2, 5-7",
+        "advancedError": "Sayfa numaralarını kontrol edin. Virgül ve 2, 5-7 gibi aralıklar kullanın.",
         "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
         "previewFailed": "Bu PDF önizlenemedi. Yine de Gelişmiş bölümünden sayfa numarası girebilirsiniz.",
         "processing": "Sayfalar çıkarılıyor...",
-        "processingHint": "Seçtiğiniz sayfalarla yeni bir PDF oluşturuluyor.",
+        "processingHint": "Seçtiğiniz sayfalar olmadan yeni bir PDF oluşturuluyor.",
         "successTitle": "PDF’niz hazır",
-        "successDescription": "Seçtiğiniz sayfaları içeren yeni PDF’i indirin.",
+        "successDescription": "Seçtiğiniz sayfaların çıkarıldığı PDF’i indirin.",
         "download": "PDF’i indir",
         "extractAnother": "Başka bir PDF’den sayfa çıkar",
         "processingFailed": "Bu sayfalar çıkarılamadı. Lütfen tekrar deneyin.",
         "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
         "expiredTitle": "Bu dosyanın süresi doldu",
         "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF’den sayfa çıkarın.",
-        "faqHow": "Bir PDF yükleyin, tutulacak sayfaları seçin ve çıkarın. Bu sayfaları içeren tek bir PDF alırsınız. Hesap gerekmez.",
+        "faqHow": "Bir PDF yükleyin, çıkarılacak sayfaları seçin ve çıkarın. En az bir sayfa kalmalıdır. Hesap gerekmez.",
         "how": {
           "upload": {
             "title": "Yükle",
@@ -1741,11 +1742,11 @@
           },
           "select": {
             "title": "Sayfa seç",
-            "description": "Tutulacak sayfalara dokunun veya tümünü seçin."
+            "description": "Kaldırılması gereken sayfalara dokunun."
           },
           "download": {
             "title": "İndir",
-            "description": "Yalnızca bu sayfaları içeren tek bir PDF alın."
+            "description": "Bu sayfalar olmadan bir PDF alın."
           }
         }
       },
@@ -2593,7 +2594,7 @@
     "extract-pages": {
       "name": "PDF sayfa çıkar",
       "metaTitle": "PDF sayfa çıkarma",
-      "description": "Seçtiğiniz sayfaları PDF’den çıkarıp yeni bir dosya olarak kaydedin."
+      "description": "Seçtiğiniz sayfaları PDF’den çıkarın; kalan sayfalarla yeni bir dosya alın."
     },
     "organize-pdf": {
       "name": "PDF sayfalarını düzenle",

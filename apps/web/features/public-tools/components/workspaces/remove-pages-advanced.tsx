@@ -10,15 +10,17 @@ import {
 } from "@/features/public-tools/pdf-workspace";
 
 export function RemovePagesAdvanced({
+  copy = "remove",
   selectedPages,
   disabled,
   onSelectedPagesChange,
 }: {
+  copy?: "remove" | "extract";
   selectedPages: readonly number[];
   disabled: boolean;
   onSelectedPagesChange: (pages: number[]) => void;
 }) {
-  const t = useTranslations("publicTools.workspaces.remove");
+  const t = useTranslations(`publicTools.workspaces.${copy}`);
   const committed = pagesToRangeInput(selectedPages);
   const [draft, setDraft] = useState<string | null>(null);
   const value = draft ?? committed;
@@ -59,7 +61,7 @@ export function RemovePagesAdvanced({
           aria-label={t("advancedTitle")}
           aria-invalid={invalid}
           aria-describedby={
-            invalid ? "remove-range-error" : "remove-range-example"
+            invalid ? `${copy}-range-error` : `${copy}-range-example`
           }
           onChange={(event) => {
             applyDraft(event.target.value);
@@ -68,11 +70,14 @@ export function RemovePagesAdvanced({
             setDraft(null);
           }}
         />
-        <p id="remove-range-example" className="text-xs text-muted-foreground">
+        <p
+          id={`${copy}-range-example`}
+          className="text-xs text-muted-foreground"
+        >
           {t("advancedExample")}
         </p>
         {invalid ? (
-          <p id="remove-range-error" className="text-xs text-destructive">
+          <p id={`${copy}-range-error`} className="text-xs text-destructive">
             {t("advancedError")}
           </p>
         ) : null}

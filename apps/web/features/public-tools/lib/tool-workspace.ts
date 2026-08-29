@@ -223,6 +223,46 @@ export function parseSplitRangesInput(
   return ranges.length === 0 ? undefined : ranges;
 }
 
+export function keepRangesFromRemovedPages(
+  pagesToRemove: readonly number[],
+  pageCount: number,
+): { start: number; end: number }[] | undefined {
+  if (pageCount < 1 || pagesToRemove.length === 0) {
+    return undefined;
+  }
+
+  const removeSet = new Set(pagesToRemove);
+  const keep: number[] = [];
+
+  for (let page = 1; page <= pageCount; page += 1) {
+    if (!removeSet.has(page)) {
+      keep.push(page);
+    }
+  }
+
+  if (keep.length === 0) {
+    return undefined;
+  }
+
+  const ranges: { start: number; end: number }[] = [];
+  let start = keep[0] ?? 1;
+  let previous = start;
+
+  for (const page of keep.slice(1)) {
+    if (page === previous + 1) {
+      previous = page;
+      continue;
+    }
+
+    ranges.push({ start, end: previous });
+    start = page;
+    previous = page;
+  }
+
+  ranges.push({ start, end: previous });
+  return ranges;
+}
+
 export function parseSelectedPagesInput(value: string): number[] | undefined {
   const trimmed = value.trim();
 
@@ -252,6 +292,7 @@ export function parseSelectedPagesInput(value: string): number[] | undefined {
 export function buildToolConversionOptions(
   toolId: string,
   state: ToolWorkspaceState,
+  pageCount?: number,
 ): Record<string, unknown> | undefined {
   switch (toolId) {
     case "compress-pdf":
@@ -265,9 +306,22 @@ export function buildToolConversionOptions(
 
       return { degrees: state.rotationDegrees, pages };
     }
-    case "split-pdf":
-    case "extract-pages": {
+    case "split-pdf": {
       const ranges = parseSplitRangesInput(state.splitRanges);
+      return ranges === undefined ? undefined : { ranges };
+    }
+    case "extract-pages": {
+      const pages = parseSelectedPagesInput(state.pagesToRemove);
+
+      if (
+        pages === undefined ||
+        pages.length === 0 ||
+        pageCount === undefined
+      ) {
+        return undefined;
+      }
+
+      const ranges = keepRangesFromRemovedPages(pages, pageCount);
       return ranges === undefined ? undefined : { ranges };
     }
     case "organize-pdf": {

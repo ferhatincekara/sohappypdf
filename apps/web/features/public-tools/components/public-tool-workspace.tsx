@@ -332,9 +332,9 @@ function dedicatedToolShellCopy({
         hours,
       }),
       processHint:
-        splitSelectedCount === 0
+        removeSelectedCount === 0
           ? t("workspaces.extract.selectPrompt")
-          : t("workspaces.extract.output", { count: splitSelectedCount }),
+          : t("workspaces.extract.output", { count: removeSelectedCount }),
       errorMessage:
         errorKey === null
           ? undefined

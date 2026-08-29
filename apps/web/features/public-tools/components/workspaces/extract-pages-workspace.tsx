@@ -1,8 +1,8 @@
 "use client";
 
-import { KeepSelectedPagesWorkspace } from "@/features/public-tools/components/workspaces/keep-selected-pages-workspace";
+import { RemovePagesWorkspace } from "@/features/public-tools/components/workspaces/remove-pages-workspace";
 import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function ExtractPagesWorkspace(props: ToolSelectedWorkspaceProps) {
-  return <KeepSelectedPagesWorkspace {...props} copy="extract" />;
+  return <RemovePagesWorkspace {...props} copy="extract" />;
 }
