@@ -78,11 +78,21 @@ export function createPdfManipulateEngine(
           [input.sourcePath, ...input.additionalSourcePaths],
           outputPath,
         );
-      } else if (
-        input.options.type === "split-pdf" ||
-        input.options.type === "extract-pages"
-      ) {
+      } else if (input.options.type === "split-pdf") {
         await splitPdf(input.sourcePath, input.options.ranges, outputPath);
+      } else if (input.options.type === "extract-pages") {
+        if (
+          input.options.pages !== undefined &&
+          input.options.pages.length > 0
+        ) {
+          await removePdfPages({
+            sourcePath: input.sourcePath,
+            outputPath,
+            pagesToRemove: input.options.pages,
+          });
+        } else {
+          await splitPdf(input.sourcePath, input.options.ranges, outputPath);
+        }
       } else if (input.options.type === "compress-pdf") {
         await compressPdf({
           config,

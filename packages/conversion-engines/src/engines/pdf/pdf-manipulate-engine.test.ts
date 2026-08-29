@@ -77,6 +77,23 @@ describe("pdf manipulate engine", () => {
         await readFile(extracted.outputPath),
       );
       expect(extractedPdf.getPageCount()).toBe(1);
+
+      const removed = await engine.convert({
+        type: "extract-pages",
+        sourcePath: extractSource,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: {
+          type: "extract-pages",
+          pages: [2],
+        },
+        additionalSourcePaths: [],
+      });
+      const removedPdf = await PDFDocument.load(
+        await readFile(removed.outputPath),
+      );
+      expect(removedPdf.getPageCount()).toBe(1);
     } finally {
       await workspace.cleanup();
     }

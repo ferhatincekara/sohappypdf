@@ -149,7 +149,7 @@ export function RemovePagesWorkspace({
             state={props.state}
             canProcess={canRemove}
             processLabel={props.processLabel}
-            disabledReason={wouldRemoveAll ? disabledReason : null}
+            disabledReason={canRemove ? null : disabledReason}
             fullWidth
             onProcess={props.onProcess}
           />

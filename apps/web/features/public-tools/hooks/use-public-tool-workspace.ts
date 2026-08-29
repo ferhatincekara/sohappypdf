@@ -301,11 +301,7 @@ export function usePublicToolWorkspace(
         job.status === "processing",
     );
 
-  const conversionOptions = buildToolConversionOptions(
-    tool.id,
-    workspaceState,
-    files[0]?.pageCount ?? undefined,
-  );
+  const conversionOptions = buildToolConversionOptions(tool.id, workspaceState);
   const canProcess =
     isFileWorkspaceUx(ux) &&
     !isBusy &&
@@ -680,11 +676,7 @@ export function usePublicToolWorkspace(
       return;
     }
 
-    const options = buildToolConversionOptions(
-      tool.id,
-      workspaceState,
-      files[0]?.pageCount ?? undefined,
-    );
+    const options = buildToolConversionOptions(tool.id, workspaceState);
     const validation = validateToolProcess({
       toolId: tool.id,
       allowsAnonymous: tool.allowsAnonymous,

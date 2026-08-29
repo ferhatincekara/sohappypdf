@@ -72,6 +72,7 @@ export type SplitPdfOptions = {
 export type ExtractPagesOptions = {
   type: "extract-pages";
   ranges?: readonly { start: number; end: number }[];
+  pages?: number[];
 };
 
 export type CompressPdfOptions = {
@@ -822,14 +823,25 @@ export function parseConversionOptions(
         additionalFileIds: parseAdditionalFileIds(record.additionalFileIds),
       };
     }
-    case "split-pdf":
-    case "extract-pages": {
+    case "split-pdf": {
       assertAllowedKeys(record, ["type", "ranges"]);
       const ranges = parseRanges(record.ranges);
 
       return {
         type,
         ...(ranges === undefined ? {} : { ranges }),
+      };
+    }
+    case "extract-pages": {
+      assertAllowedKeys(record, ["type", "ranges", "pages"]);
+      const ranges = parseRanges(record.ranges);
+      const pages =
+        record.pages === undefined ? undefined : parsePageList(record.pages, 1);
+
+      return {
+        type,
+        ...(ranges === undefined ? {} : { ranges }),
+        ...(pages === undefined ? {} : { pages }),
       };
     }
     case "compress-pdf": {

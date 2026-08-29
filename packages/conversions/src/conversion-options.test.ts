@@ -26,6 +26,15 @@ describe("conversion options", () => {
     });
 
     expect(
+      parseConversionOptions("extract-pages", {
+        pages: [2],
+      }),
+    ).toEqual({
+      type: "extract-pages",
+      pages: [2],
+    });
+
+    expect(
       parseConversionOptions("watermark-pdf", { text: "Draft", opacity: 0.4 }),
     ).toEqual({
       type: "watermark-pdf",
