@@ -281,7 +281,7 @@ export function createPolarClient(
 
   return {
     async findCustomerByExternalId(externalId) {
-      return findPolarCustomerByExternalId(polar, externalId);
+      return fetchPolarCustomerByExternalId(options, externalId);
     },
 
     async createCustomer(input) {
@@ -292,6 +292,7 @@ export function createPolarClient(
           method: "POST",
           path: "/v1/customers",
           body: {
+            type: "individual",
             email: input.email,
             external_id: input.externalId,
           },
@@ -309,6 +310,7 @@ export function createPolarClient(
       } catch (error) {
         const recovered = await recoverExistingPolarCustomer(
           polar,
+          options,
           input,
           error,
         );
@@ -482,6 +484,7 @@ async function openPolarCustomerPortal(
 
 async function recoverExistingPolarCustomer(
   polar: Polar,
+  options: CreatePolarClientOptions,
   input: { email: string; externalId: string },
   error: unknown,
 ): Promise<{ id: string } | null> {
@@ -492,8 +495,8 @@ async function recoverExistingPolarCustomer(
   }
 
   const existing =
-    (await findPolarCustomerByExternalId(polar, input.externalId)) ??
-    (await findPolarCustomerByEmail(polar, input.email));
+    (await fetchPolarCustomerByExternalId(options, input.externalId)) ??
+    (await fetchPolarCustomerByEmail(options, input.email));
 
   if (existing === null) {
     return null;
@@ -506,19 +509,54 @@ async function recoverExistingPolarCustomer(
   return { id: existing.id };
 }
 
-async function findPolarCustomerByExternalId(
-  polar: Polar,
+async function fetchPolarCustomerByExternalId(
+  options: CreatePolarClientOptions,
   externalId: string,
 ): Promise<{ id: string; externalId: string | null } | null> {
   try {
-    const customer = await polar.customers.getExternal({
-      externalId,
+    const customer = await polarApiJson({
+      accessToken: options.accessToken,
+      server: options.server,
+      method: "GET",
+      path: `/v1/customers/external/${encodeURIComponent(externalId)}`,
     });
 
     return toPolarCustomerRecord(customer);
   } catch {
     return null;
   }
+}
+
+async function fetchPolarCustomerByEmail(
+  options: CreatePolarClientOptions,
+  email: string,
+): Promise<{ id: string; externalId: string | null } | null> {
+  try {
+    const page = await polarApiJson({
+      accessToken: options.accessToken,
+      server: options.server,
+      method: "GET",
+      path: `/v1/customers?email=${encodeURIComponent(email)}&limit=1`,
+    });
+
+    return readPolarCustomerListItem(page);
+  } catch {
+    return null;
+  }
+}
+
+function readPolarCustomerListItem(
+  page: unknown,
+): { id: string; externalId: string | null } | null {
+  if (typeof page !== "object" || page === null || !("items" in page)) {
+    return null;
+  }
+
+  if (!Array.isArray(page.items)) {
+    return null;
+  }
+
+  return toPolarCustomerRecord(page.items[0]);
 }
 
 async function findPolarCustomerByEmail(
