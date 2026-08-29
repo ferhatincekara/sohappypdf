@@ -3,6 +3,17 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 
+const productionApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.trim() ?? "";
+
+if (
+  process.env.VERCEL_ENV === "production" &&
+  (productionApiBaseUrl === "" || productionApiBaseUrl.includes("localhost"))
+) {
+  throw new Error(
+    "NEXT_PUBLIC_API_BASE_URL must be the public API origin for production builds.",
+  );
+}
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
   agentRules: false,

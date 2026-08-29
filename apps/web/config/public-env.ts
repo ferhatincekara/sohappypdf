@@ -8,9 +8,7 @@ const DEFAULT_APP_URL = "http://localhost:3000";
 const DEFAULT_API_BASE_URL = "http://localhost:3001";
 export const DEFAULT_MAX_UPLOAD_FILE_SIZE_BYTES = 1024 * 1024 * 1024;
 
-function readPublicUrl(name: string, fallback: string): string {
-  const value = process.env[name];
-
+function readPublicUrl(value: string | undefined, fallback: string): string {
   if (value === undefined || value.trim() === "") {
     return fallback;
   }
@@ -18,9 +16,10 @@ function readPublicUrl(name: string, fallback: string): string {
   return value.replace(/\/$/, "");
 }
 
-function readPublicPositiveInteger(name: string, fallback: number): number {
-  const value = process.env[name];
-
+function readPublicPositiveInteger(
+  value: string | undefined,
+  fallback: number,
+): number {
   if (value === undefined || value.trim() === "") {
     return fallback;
   }
@@ -35,11 +34,17 @@ function readPublicPositiveInteger(name: string, fallback: number): number {
 }
 
 export function getPublicWebEnv(): PublicWebEnv {
+  // Next.js only inlines static `process.env.NEXT_PUBLIC_*` reads into the
+  // browser bundle. `process.env[name]` stays undefined in the client and
+  // falls back to localhost even when Vercel has the production URL.
   return {
-    appUrl: readPublicUrl("NEXT_PUBLIC_APP_URL", DEFAULT_APP_URL),
-    apiBaseUrl: readPublicUrl("NEXT_PUBLIC_API_BASE_URL", DEFAULT_API_BASE_URL),
+    appUrl: readPublicUrl(process.env.NEXT_PUBLIC_APP_URL, DEFAULT_APP_URL),
+    apiBaseUrl: readPublicUrl(
+      process.env.NEXT_PUBLIC_API_BASE_URL,
+      DEFAULT_API_BASE_URL,
+    ),
     maxUploadFileSizeBytes: readPublicPositiveInteger(
-      "NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE",
+      process.env.NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE,
       DEFAULT_MAX_UPLOAD_FILE_SIZE_BYTES,
     ),
   };
