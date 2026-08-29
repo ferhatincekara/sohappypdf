@@ -2,6 +2,7 @@ import { Polar } from "@polar-sh/sdk";
 import type { PolarServer } from "@sohappypdf/config";
 import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import type { PolarClient } from "./billing-types.js";
+import { polarApiJson } from "./polar-http.js";
 
 export type CreatePolarClientOptions = {
   accessToken: string;
@@ -140,6 +141,19 @@ function isPublicHostname(hostname: string): boolean {
   return !/^\d{1,3}(?:\.\d{1,3}){3}$/.test(hostname);
 }
 
+function readPolarCheckoutUrl(checkout: unknown): string | undefined {
+  if (
+    typeof checkout !== "object" ||
+    checkout === null ||
+    !("url" in checkout) ||
+    typeof checkout.url !== "string"
+  ) {
+    return undefined;
+  }
+
+  return checkout.url;
+}
+
 function readPolarCustomerId(customer: unknown): string | null {
   if (
     typeof customer !== "object" ||
@@ -272,9 +286,15 @@ export function createPolarClient(
 
     async createCustomer(input) {
       try {
-        const customer = await polar.customers.create({
-          email: input.email,
-          externalId: input.externalId,
+        const customer = await polarApiJson({
+          accessToken: options.accessToken,
+          server: options.server,
+          method: "POST",
+          path: "/v1/customers",
+          body: {
+            email: input.email,
+            external_id: input.externalId,
+          },
         });
         const id = readPolarCustomerId(customer);
 
@@ -305,15 +325,23 @@ export function createPolarClient(
       const returnUrl = resolvePolarReturnUrl(input.returnUrl);
 
       try {
-        const checkout = await polar.checkouts.create({
-          products: [...input.productIds],
-          externalCustomerId: input.externalCustomerId,
-          customerEmail: input.customerEmail,
-          successUrl: input.successUrl,
-          ...(returnUrl === undefined ? {} : { returnUrl }),
+        const checkout = await polarApiJson({
+          accessToken: options.accessToken,
+          server: options.server,
+          method: "POST",
+          path: "/v1/checkouts/",
+          body: {
+            products: [...input.productIds],
+            external_customer_id: input.externalCustomerId,
+            customer_email: input.customerEmail,
+            success_url: input.successUrl,
+            ...(returnUrl === undefined ? {} : { return_url: returnUrl }),
+          },
         });
 
-        return { url: requireUrl(checkout.url, "checkout") };
+        return {
+          url: requireUrl(readPolarCheckoutUrl(checkout), "checkout"),
+        };
       } catch (error) {
         throw mapPolarRequestError(error, "checkout");
       }
