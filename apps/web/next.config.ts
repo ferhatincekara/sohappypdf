@@ -6,12 +6,6 @@ const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 const nextConfig: NextConfig = {
   typedRoutes: true,
   agentRules: false,
-  outputFileTracingIncludes: {
-    "/**": [
-      "./features/blog/posts/**/*.md",
-      "./apps/web/features/blog/posts/**/*.md",
-    ],
-  },
   async redirects() {
     return [
       {

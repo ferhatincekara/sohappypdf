@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "bun --env-file=../../.env next dev --port 3000",
-    "build": "next build",
+    "build": "bun run scripts/embed-blog-posts.ts && next build",
     "start": "bun --env-file=../../.env next start --port 3000",
     "check-types": "bun --env-file=../../.env next typegen && tsc --noEmit",
+    "embed-blog-posts": "bun run scripts/embed-blog-posts.ts",
     "test": "bun test"
   },
   "dependencies": {
