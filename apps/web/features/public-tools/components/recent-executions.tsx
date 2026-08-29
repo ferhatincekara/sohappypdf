@@ -11,7 +11,6 @@ import {
   activityRemainingFrom,
   activityRemainingLabel,
 } from "@/features/conversions/lib/activity-time-copy";
-import { FileDownloadButton } from "@/features/files/components/file-download-button";
 import { useRecentExecutions } from "@/features/public-tools/hooks/use-recent-executions";
 import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "@/features/public-tools/lib/anonymous-limits";
 import type { RecentExecution } from "@/features/public-tools/types/recent-execution";
@@ -94,6 +93,8 @@ export function RecentExecutions({
               execution={execution}
               now={recent.now}
               toolName={tTools(`${execution.toolId}.name`)}
+              downloading={recent.downloadingId === execution.id}
+              onDownload={recent.download}
             />
           ))}
         </ul>
@@ -123,12 +124,17 @@ function RecentExecutionItem({
   execution,
   now,
   toolName,
+  downloading,
+  onDownload,
 }: {
   execution: RecentExecution;
   now: Date;
   toolName: string;
+  downloading: boolean;
+  onDownload: (execution: RecentExecution) => Promise<void>;
 }) {
   const t = useTranslations("publicTools.recent");
+  const tActions = useTranslations("files.actions");
   const tAge = useTranslations("publicTools.recent.age");
   const tExpires = useTranslations("publicTools.recent.expiresIn");
   const resultName = execution.resultFilename ?? t("unnamedFile");
@@ -164,7 +170,16 @@ function RecentExecutionItem({
       actions={
         <>
           {execution.canDownload && execution.outputFileId !== null ? (
-            <FileDownloadButton fileId={execution.outputFileId} />
+            <Button
+              type="button"
+              size="sm"
+              disabled={downloading}
+              onClick={() => {
+                void onDownload(execution);
+              }}
+            >
+              {downloading ? tActions("downloading") : tActions("download")}
+            </Button>
           ) : null}
           <Button
             variant="white"
