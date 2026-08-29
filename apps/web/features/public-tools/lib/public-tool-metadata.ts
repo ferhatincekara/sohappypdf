@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
+import {
+  brandedTitle,
+  OPENGRAPH_IMAGE_ALT,
+  OPENGRAPH_IMAGE_PATH,
+  SITE_NAME,
+} from "@/features/seo/lib/site-brand";
 
 export type PublicToolMetadataInput = {
   name: string;
+  metaTitle?: string;
   description: string;
   path: `/${string}`;
   appUrl: string;
@@ -27,7 +34,8 @@ export function buildPublicToolMetadata(
   input: PublicToolMetadataInput,
 ): Metadata {
   const url = publicToolCanonicalUrl(input);
-  const title = `${input.name} | SoHappyPDF`;
+  const title = input.metaTitle ?? input.name;
+  const socialTitle = brandedTitle(title);
 
   return {
     title,
@@ -36,16 +44,24 @@ export function buildPublicToolMetadata(
       canonical: url,
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description: input.description,
       url,
+      siteName: SITE_NAME,
       type: "website",
       locale: openGraphLocale(input.locale),
+      images: [
+        {
+          url: OPENGRAPH_IMAGE_PATH,
+          alt: OPENGRAPH_IMAGE_ALT,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
-      title,
+      card: "summary_large_image",
+      title: socialTitle,
       description: input.description,
+      images: [OPENGRAPH_IMAGE_PATH],
     },
   };
 }

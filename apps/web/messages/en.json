@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "SoHappyPDF",
-    "description": "Convert PDFs and images with a simple workflow and a public API."
+    "title": "Online PDF tools to merge, convert and compress - SoHappyPDF",
+    "description": "Free online PDF tools to merge, split, compress, convert, OCR, and protect files. No account needed for basic use. Files expire after two hours."
   },
   "marketing": {
     "nav": {
@@ -506,22 +506,31 @@
       }
     },
     "metadata": {
-      "homeTitle": "SoHappyPDF — Convert, merge, and manage PDFs",
-      "homeDescription": "Open a PDF tool, process a file, and download the result. No account required for basic use. Files expire after about two hours.",
-      "pricingTitle": "Pricing — Free, Pro, and Developer",
-      "pricingDescription": "Compare Free and Pro web limits, plus Developer API credit packs.",
-      "faqTitle": "FAQ — Files, limits, and accounts",
-      "faqDescription": "Short answers about files, privacy, limits, credits, and the public API.",
-      "blogTitle": "Blog — Practical PDF notes",
-      "blogDescription": "Fewer clicks, cleaner documents. Short notes on converting, compressing, and signing PDFs.",
-      "toolsTitle": "PDF tools",
-      "toolsDescription": "Browse Organize, Convert, Edit, Optimize, Security, and Intelligence PDF tools.",
-      "developersTitle": "SoHappyPDF API",
-      "developersDescription": "Authenticate with an API key, upload a file, run a tool, poll the job, and download the result.",
-      "aboutTitle": "About — SoHappyPDF",
-      "aboutDescription": "Who we are, how SoHappyPDF works, and why files stay temporary.",
-      "contactTitle": "Contact — SoHappyPDF",
-      "contactDescription": "Email hello@sohappypdf.com for product, billing, and API questions."
+      "homeTitle": "Online PDF tools to merge, convert and compress",
+      "homeDescription": "Free online PDF tools to merge, split, compress, convert, OCR, and protect files. Open a tool, drop a file, and download the result. No account needed for basic use. Files expire after two hours.",
+      "pricingTitle": "Pricing",
+      "pricingDescription": "Compare Free and Pro limits for web PDF tools, plus Developer API credit packs.",
+      "faqTitle": "FAQ",
+      "faqDescription": "Answers about file expiry, privacy, daily limits, Pro plans, and the public API.",
+      "blogTitle": "Blog",
+      "blogDescription": "Short guides on converting, compressing, merging, and signing PDFs.",
+      "toolsTitle": "All online PDF tools",
+      "toolsDescription": "Browse free online PDF tools to merge, convert, compress, edit, protect, and run OCR. Open a tool, upload a file, and download the result.",
+      "categoryTitles": {
+        "organize": "Merge, split and organize PDFs",
+        "convert": "PDF converters",
+        "edit": "Edit PDF files online",
+        "optimize": "Compress and optimize PDFs",
+        "security": "Protect and unlock PDFs",
+        "document": "Convert Office and images to PDF",
+        "intelligence": "OCR and AI PDF tools"
+      },
+      "developersTitle": "Public API",
+      "developersDescription": "Upload a file, run a PDF tool, poll the job, and download the result with an API key.",
+      "aboutTitle": "About",
+      "aboutDescription": "SoHappyPDF is a tool-first PDF product. Files stay temporary on purpose — about two hours, not a document library.",
+      "contactTitle": "Contact",
+      "contactDescription": "Email hello@sohappypdf.com for product, billing, and API questions. Do not attach files."
     },
     "contact": {
       "title": "Write to us.",
@@ -613,7 +622,7 @@
     "contactHint": "Questions about these pages go to",
     "security": {
       "nav": "Security",
-      "metaTitle": "Security — SoHappyPDF",
+      "metaTitle": "Security",
       "title": "Security we actually provide",
       "description": "These are product controls, not third-party compliance certifications. If a badge is not listed here, we do not claim it.",
       "sections": {
@@ -641,7 +650,7 @@
     },
     "privacy": {
       "nav": "Privacy policy",
-      "metaTitle": "Privacy policy — SoHappyPDF",
+      "metaTitle": "Privacy policy",
       "title": "Privacy policy",
       "description": "How SoHappyPDF handles files, accounts, payments, and cookies. We keep this aligned with how the product works.",
       "sections": {
@@ -681,7 +690,7 @@
     },
     "terms": {
       "nav": "Terms & conditions",
-      "metaTitle": "Terms — SoHappyPDF",
+      "metaTitle": "Terms",
       "title": "Terms of service",
       "description": "The rules for using SoHappyPDF’s public tools, accounts, and API. Keep a local copy of any file you still need after processing.",
       "sections": {
@@ -721,7 +730,7 @@
     },
     "cookies": {
       "nav": "Cookies",
-      "metaTitle": "Cookies — SoHappyPDF",
+      "metaTitle": "Cookies",
       "title": "Cookies",
       "description": "SoHappyPDF uses a small number of first-party cookies to run the site. We do not set advertising or analytics cookies.",
       "sections": {
@@ -945,7 +954,7 @@
   "auth": {
     "login": {
       "title": "Sign in",
-      "description": "Use your email and password to continue.",
+      "description": "Sign in to SoHappyPDF for higher limits, recent activity, billing, and API keys.",
       "email": "Email",
       "emailPlaceholder": "you@company.com",
       "password": "Password",
@@ -958,7 +967,7 @@
     },
     "register": {
       "title": "Create an account",
-      "description": "Register with your name, email, and a password.",
+      "description": "Create a free SoHappyPDF account for higher limits, history, billing, and API access.",
       "name": "Name",
       "namePlaceholder": "Ada Lovelace",
       "email": "Email",
@@ -1540,7 +1549,7 @@
     }
   },
   "publicTools": {
-    "metaTitle": "{tool} | SoHappyPDF",
+    "metaTitle": "{tool} - SoHappyPDF",
     "description": "Upload a file, process it in the cloud, and download the result. No account required for basic processing.",
     "descriptionAuthenticated": "This tool requires a signed-in account before processing can start.",
     "selectFile": "Choose a file",
@@ -2573,171 +2582,213 @@
   "tools": {
     "merge-pdf": {
       "name": "Merge PDF",
-      "description": "Combine multiple PDFs into one file."
+      "metaTitle": "Merge PDF files online",
+      "description": "Combine multiple PDF files into one document. Upload the files, set the order, and download a single PDF. No account needed for basic use."
     },
     "split-pdf": {
       "name": "Split PDF",
-      "description": "Choose the pages you want and extract them into a new PDF."
+      "metaTitle": "Split PDF files online",
+      "description": "Split a PDF into a new file with only the pages you need. Select pages visually, then download the result."
     },
     "extract-pages": {
-      "name": "Extract pages",
-      "description": "Select pages visually and save them as a new PDF."
+      "name": "Extract PDF pages",
+      "metaTitle": "Extract pages from PDF",
+      "description": "Extract selected pages from a PDF and save them as a new file. Choose pages visually, then download."
     },
     "organize-pdf": {
       "name": "Organize PDF",
-      "description": "Rearrange, rotate, and manage PDF pages in one place."
+      "metaTitle": "Organize PDF pages online",
+      "description": "Rearrange, rotate, and manage PDF pages in one place, then download the updated file."
     },
     "remove-pages": {
-      "name": "Remove pages",
-      "description": "Delete unwanted pages from a PDF."
+      "name": "Remove PDF pages",
+      "metaTitle": "Remove pages from PDF",
+      "description": "Delete unwanted pages from a PDF and keep the rest in a new file."
     },
     "reorder-pages": {
-      "name": "Reorder pages",
-      "description": "Change the page order of a PDF."
+      "name": "Reorder PDF pages",
+      "metaTitle": "Reorder PDF pages online",
+      "description": "Change the page order of a PDF, then download the rearranged file."
     },
     "rotate-pdf": {
       "name": "Rotate PDF",
-      "description": "Rotate pages in a PDF document."
+      "metaTitle": "Rotate PDF pages online",
+      "description": "Rotate one or more pages in a PDF, then download the corrected file."
     },
     "crop-pdf": {
       "name": "Crop PDF",
-      "description": "Crop page margins and content areas."
+      "metaTitle": "Crop PDF pages online",
+      "description": "Crop page margins and extra space from a PDF, then download the result."
     },
     "compress-pdf": {
       "name": "Compress PDF",
-      "description": "Reduce PDF file size while keeping quality usable."
+      "metaTitle": "Compress PDF online",
+      "description": "Reduce PDF file size while keeping the document readable. Choose a compression level and download a smaller PDF."
     },
     "repair-pdf": {
       "name": "Repair PDF",
-      "description": "Attempt to fix damaged or corrupted PDF files."
+      "metaTitle": "Repair PDF files online",
+      "description": "Attempt to fix a damaged or unreadable PDF, then download a repaired copy."
     },
     "pdf-to-pdfa": {
       "name": "PDF to PDF/A",
-      "description": "Convert a PDF into an archival PDF/A format."
+      "metaTitle": "Convert PDF to PDF/A",
+      "description": "Convert a PDF into an archival PDF/A file for longer-term storage."
     },
     "pdf-to-word": {
       "name": "PDF to Word",
-      "description": "Convert a PDF into an editable Word document."
+      "metaTitle": "PDF to Word converter",
+      "description": "Convert a PDF into an editable Word document. Upload a PDF and download a DOC or DOCX file."
     },
     "pdf-to-word-ocr": {
       "name": "PDF to Word OCR",
-      "description": "Convert scanned PDFs to Word with OCR."
+      "metaTitle": "PDF to Word with OCR",
+      "description": "Convert a scanned PDF to Word with OCR so the text can be edited."
     },
     "pdf-to-powerpoint": {
       "name": "PDF to PowerPoint",
-      "description": "Convert a PDF into a PowerPoint presentation."
+      "metaTitle": "PDF to PowerPoint converter",
+      "description": "Convert a PDF into a PowerPoint presentation you can edit and present."
     },
     "pdf-to-excel": {
       "name": "PDF to Excel",
-      "description": "Convert a PDF into an Excel spreadsheet."
+      "metaTitle": "PDF to Excel converter",
+      "description": "Convert tables in a PDF into an Excel spreadsheet you can sort and edit."
     },
     "pdf-to-excel-ocr": {
       "name": "PDF to Excel OCR",
+      "metaTitle": "PDF to Excel with OCR",
       "description": "Convert scanned PDF tables to Excel with OCR."
     },
     "pdf-to-jpg": {
       "name": "PDF to JPG",
-      "description": "Convert PDF pages into JPG images."
+      "metaTitle": "PDF to JPG converter",
+      "description": "Convert PDF pages into JPG images you can save or share."
     },
     "pdf-to-png": {
       "name": "PDF to PNG",
-      "description": "Convert PDF pages into PNG images."
+      "metaTitle": "PDF to PNG converter",
+      "description": "Convert PDF pages into PNG images with a transparent or clean background."
     },
     "pdf-to-txt": {
       "name": "PDF to text",
-      "description": "Extract plain text from a PDF."
+      "metaTitle": "PDF to text converter",
+      "description": "Extract plain text from a PDF and download it as a text file."
     },
     "word-to-pdf": {
       "name": "Word to PDF",
-      "description": "Convert Word documents into PDF."
+      "metaTitle": "Word to PDF converter",
+      "description": "Convert a Word document into a PDF you can share or print."
     },
     "powerpoint-to-pdf": {
       "name": "PowerPoint to PDF",
-      "description": "Convert PowerPoint presentations into PDF."
+      "metaTitle": "PowerPoint to PDF converter",
+      "description": "Convert a PowerPoint presentation into a PDF."
     },
     "excel-to-pdf": {
       "name": "Excel to PDF",
-      "description": "Convert Excel spreadsheets into PDF."
+      "metaTitle": "Excel to PDF converter",
+      "description": "Convert an Excel spreadsheet into a PDF."
     },
     "image-to-pdf": {
       "name": "Image to PDF",
-      "description": "Combine images into a single PDF."
+      "metaTitle": "Image to PDF converter",
+      "description": "Combine JPG, PNG, or other images into a single PDF."
     },
     "jpg-to-pdf": {
       "name": "JPG to PDF",
-      "description": "Convert a JPG image into a PDF."
+      "metaTitle": "JPG to PDF converter",
+      "description": "Convert a JPG image into a PDF file."
     },
     "png-to-pdf": {
       "name": "PNG to PDF",
-      "description": "Convert a PNG image into a PDF."
+      "metaTitle": "PNG to PDF converter",
+      "description": "Convert a PNG image into a PDF file."
     },
     "office-to-pdf": {
       "name": "Office to PDF",
-      "description": "Convert Office documents into PDF."
+      "metaTitle": "Office to PDF converter",
+      "description": "Convert Word, Excel, or PowerPoint files into PDF."
     },
     "edit-pdf": {
       "name": "Edit PDF",
+      "metaTitle": "Edit PDF online",
       "description": "Add text, highlights, shapes, and images on top of a PDF. Existing text stays as it is."
     },
     "watermark-pdf": {
       "name": "Watermark PDF",
-      "description": "Add a text or image watermark to a PDF."
+      "metaTitle": "Add watermark to PDF",
+      "description": "Add a text or image watermark across every page of a PDF."
     },
     "page-numbers-pdf": {
-      "name": "Page numbers",
-      "description": "Add page numbers to a PDF."
+      "name": "Add PDF page numbers",
+      "metaTitle": "Add page numbers to PDF",
+      "description": "Add page numbers to a PDF, then download the numbered file."
     },
     "protect-pdf": {
       "name": "Protect PDF",
-      "description": "Add password protection to a PDF."
+      "metaTitle": "Protect PDF with password",
+      "description": "Add a password so others need it to open or use the PDF."
     },
     "unlock-pdf": {
       "name": "Unlock PDF",
-      "description": "Remove password protection from a PDF you own."
+      "metaTitle": "Unlock PDF password",
+      "description": "Remove password protection from a PDF you own, then download an unlocked copy."
     },
     "sign-pdf": {
       "name": "Sign PDF",
+      "metaTitle": "Sign PDF online",
       "description": "Add a visual signature image or text stamp. This is not a cryptographic digital signature."
     },
     "redact-pdf": {
       "name": "Redact PDF",
-      "description": "Permanently black out sensitive content."
+      "metaTitle": "Redact PDF online",
+      "description": "Permanently black out sensitive text or areas in a PDF before you share it."
     },
     "compare-pdf": {
       "name": "Compare PDF",
-      "description": "Compare two PDF versions and highlight differences."
+      "metaTitle": "Compare PDF files",
+      "description": "Compare two PDF versions and see what changed."
     },
     "pdf-forms": {
-      "name": "PDF forms",
-      "description": "Fill existing fields in an interactive PDF form."
+      "name": "Fill PDF forms",
+      "metaTitle": "Fill PDF forms online",
+      "description": "Fill existing fields in an interactive PDF form, then download the completed file."
     },
     "web-to-pdf": {
       "name": "Web to PDF",
-      "description": "Capture a web page as a PDF."
+      "metaTitle": "Convert web page to PDF",
+      "description": "Capture a web page as a PDF you can save or share."
     },
     "scan-to-pdf": {
       "name": "Scan to PDF",
-      "description": "Turn scanned images into a PDF."
+      "metaTitle": "Scan to PDF online",
+      "description": "Turn scanned images into a single PDF."
     },
     "pdf-extract": {
-      "name": "PDF extract",
-      "description": "Extract structured content from a PDF."
+      "name": "Extract PDF content",
+      "metaTitle": "Extract content from PDF",
+      "description": "Extract structured content from a PDF for reuse in other files."
     },
     "pdf-to-markdown": {
       "name": "PDF to Markdown",
-      "description": "Convert PDF content into Markdown."
+      "metaTitle": "PDF to Markdown converter",
+      "description": "Convert PDF content into Markdown you can edit in a text editor."
     },
     "ocr-pdf": {
       "name": "OCR PDF",
-      "description": "Make scanned PDFs searchable with OCR."
+      "metaTitle": "OCR PDF online",
+      "description": "Make a scanned PDF searchable with OCR, or extract the recognized text."
     },
     "ai-summarizer": {
-      "name": "AI summarizer",
-      "description": "Summarize PDF content with AI."
+      "name": "Summarize PDF",
+      "metaTitle": "Summarize PDF with AI",
+      "description": "Summarize a PDF with AI so you can read the main points without opening every page."
     },
     "translate-pdf": {
       "name": "Translate PDF",
-      "description": "Translate PDF content into another language."
+      "metaTitle": "Translate PDF online",
+      "description": "Translate PDF content into another language and download the result."
     }
   }
 }

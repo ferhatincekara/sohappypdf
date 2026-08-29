@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { AuthPageShell } from "@/features/auth/components/auth-page-shell";
 import { LoginForm } from "@/features/auth/components/login-form";
+import { buildAuthPageMetadata } from "@/features/auth/lib/auth-page-metadata";
+import { AUTH_PATHS } from "@/features/auth/paths";
 import { redirectIfAuthenticated } from "@/features/auth/session/redirect-if-authenticated";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("auth.login");
-
-  return {
-    title: t("title"),
-  };
+  return buildAuthPageMetadata({
+    page: "login",
+    path: AUTH_PATHS.login,
+  });
 }
 
 export default async function LoginPage({

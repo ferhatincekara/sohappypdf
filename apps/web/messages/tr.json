@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "SoHappyPDF",
-    "description": "PDF ve görselleri sade bir akış ve genel bir API ile dönüştürün."
+    "title": "PDF birleştirme, dönüştürme ve sıkıştırma - SoHappyPDF",
+    "description": "PDF birleştirme, bölme, sıkıştırma, dönüştürme, OCR ve koruma araçları. Temel kullanım için hesap gerekmez. Dosyalar iki saat sonra süresi dolar."
   },
   "marketing": {
     "nav": {
@@ -506,22 +506,31 @@
       }
     },
     "metadata": {
-      "homeTitle": "SoHappyPDF — PDF’lerini dönüştür, birleştir ve yönet",
-      "homeDescription": "Bir PDF aracı aç, dosyayı işle ve sonucu indir. Temel kullanım için hesap gerekmez. Dosyalar yaklaşık iki saat sonra süresi dolar.",
-      "pricingTitle": "Fiyatlandırma — Ücretsiz, Pro ve Geliştiriciler",
-      "pricingDescription": "Ücretsiz ve Pro web limitlerini ve geliştirici API kredi paketlerini karşılaştırın.",
-      "faqTitle": "SSS — Dosyalar, limitler ve hesap",
-      "faqDescription": "Dosyalar, gizlilik, limitler, krediler ve API hakkında kısa cevaplar.",
-      "blogTitle": "Blog — Pratik PDF notları",
-      "blogDescription": "Daha az tıklama, daha temiz belgeler. Dönüştürme, sıkıştırma ve imza üzerine kısa notlar.",
-      "toolsTitle": "PDF araçları",
-      "toolsDescription": "Organize, Dönüştür, Düzenle, Optimize, Güvenlik ve Zeka PDF araçlarına göz atın.",
-      "developersTitle": "SoHappyPDF API",
-      "developersDescription": "Bir API anahtarıyla kimlik doğrulayın, dosya yükleyin, bir araç çalıştırın, işi yoklayın ve sonucu indirin.",
-      "aboutTitle": "Hakkımızda — SoHappyPDF",
-      "aboutDescription": "Kim olduğumuz, SoHappyPDF'in nasıl çalıştığı ve dosyaların neden geçici tutulduğu.",
-      "contactTitle": "İletişim — SoHappyPDF",
-      "contactDescription": "Ürün, faturalama ve API soruları için hello@sohappypdf.com adresine yazın."
+      "homeTitle": "PDF birleştirme, dönüştürme ve sıkıştırma",
+      "homeDescription": "PDF birleştirme, bölme, sıkıştırma, dönüştürme, OCR ve koruma araçları. Bir araç aç, dosyayı bırak, sonucu indir. Temel kullanım için hesap gerekmez. Dosyalar iki saat sonra süresi dolar.",
+      "pricingTitle": "Fiyatlandırma",
+      "pricingDescription": "Web PDF araçları için Ücretsiz ve Pro limitlerini ve geliştirici API kredi paketlerini karşılaştırın.",
+      "faqTitle": "SSS",
+      "faqDescription": "Dosya süresi, gizlilik, günlük limitler, Pro planlar ve genel API hakkında cevaplar.",
+      "blogTitle": "Blog",
+      "blogDescription": "PDF dönüştürme, sıkıştırma, birleştirme ve imzalama üzerine kısa rehberler.",
+      "toolsTitle": "Tüm çevrimiçi PDF araçları",
+      "toolsDescription": "PDF birleştirme, dönüştürme, sıkıştırma, düzenleme, koruma ve OCR araçları. Bir araç aç, dosya yükle, sonucu indir.",
+      "categoryTitles": {
+        "organize": "PDF birleştirme, bölme ve düzenleme",
+        "convert": "PDF dönüştürücüler",
+        "edit": "PDF düzenleme araçları",
+        "optimize": "PDF sıkıştırma ve optimize",
+        "security": "PDF koruma ve kilit açma",
+        "document": "Ofis ve görselden PDF",
+        "intelligence": "PDF OCR ve yapay zeka"
+      },
+      "developersTitle": "Genel API",
+      "developersDescription": "Bir API anahtarıyla dosya yükleyin, bir PDF aracı çalıştırın, işi yoklayın ve sonucu indirin.",
+      "aboutTitle": "Hakkımızda",
+      "aboutDescription": "SoHappyPDF araç odaklı bir PDF ürünüdür. Dosyalar bilinçli olarak geçicidir — yaklaşık iki saat, kalıcı bir arşiv değil.",
+      "contactTitle": "İletişim",
+      "contactDescription": "Ürün, faturalama ve API soruları için hello@sohappypdf.com adresine yazın. Dosya eklemeyin."
     },
     "contact": {
       "title": "Bize yaz.",
@@ -613,7 +622,7 @@
     "contactHint": "Bu sayfalarla ilgili sorular için yazın:",
     "security": {
       "nav": "Güvenlik",
-      "metaTitle": "Güvenlik — SoHappyPDF",
+      "metaTitle": "Güvenlik",
       "title": "Gerçekten sağladığımız güvenlik",
       "description": "Bunlar ürün kontrolleridir, üçüncü taraf uyumluluk sertifikaları değildir. Burada yazmayan bir rozeti iddia etmeyiz.",
       "sections": {
@@ -641,7 +650,7 @@
     },
     "privacy": {
       "nav": "Gizlilik politikası",
-      "metaTitle": "Gizlilik politikası — SoHappyPDF",
+      "metaTitle": "Gizlilik politikası",
       "title": "Gizlilik politikası",
       "description": "SoHappyPDF dosyaları, hesapları, ödemeleri ve çerezleri nasıl işler. Bu metin ürünün gerçek davranışına bağlı kalır.",
       "sections": {
@@ -681,7 +690,7 @@
     },
     "terms": {
       "nav": "Şartlar ve koşullar",
-      "metaTitle": "Şartlar — SoHappyPDF",
+      "metaTitle": "Şartlar",
       "title": "Kullanım şartları",
       "description": "SoHappyPDF genel araçları, hesapları ve API’sini kullanma kuralları. İşlemden sonra hâlâ ihtiyacınız olan dosyanın yerel bir kopyasını tutun.",
       "sections": {
@@ -721,7 +730,7 @@
     },
     "cookies": {
       "nav": "Çerezler",
-      "metaTitle": "Çerezler — SoHappyPDF",
+      "metaTitle": "Çerezler",
       "title": "Çerezler",
       "description": "SoHappyPDF siteyi çalıştırmak için az sayıda birinci taraf çerez kullanır. Reklam veya analitik çerezi koymayız.",
       "sections": {
@@ -945,7 +954,7 @@
   "auth": {
     "login": {
       "title": "Giriş yap",
-      "description": "Devam etmek için e-posta ve şifrenizi kullanın.",
+      "description": "Daha yüksek limitler, son işlemler, faturalama ve API anahtarları için SoHappyPDF’e giriş yapın.",
       "email": "E-posta",
       "emailPlaceholder": "sen@sirket.com",
       "password": "Şifre",
@@ -958,7 +967,7 @@
     },
     "register": {
       "title": "Hesap oluştur",
-      "description": "Adınız, e-posta ve bir şifre ile kayıt olun.",
+      "description": "Daha yüksek limitler, geçmiş, faturalama ve API erişimi için ücretsiz SoHappyPDF hesabı oluşturun.",
       "name": "Ad",
       "namePlaceholder": "Ayşe Yılmaz",
       "email": "E-posta",
@@ -1540,7 +1549,7 @@
     }
   },
   "publicTools": {
-    "metaTitle": "{tool} | SoHappyPDF",
+    "metaTitle": "{tool} - SoHappyPDF",
     "description": "Bir dosya yükleyin, bulutta işleyin ve sonucu indirin. Temel işlem için hesap gerekmez.",
     "descriptionAuthenticated": "Bu araç işlem başlamadan önce oturum açmanızı gerektirir.",
     "selectFile": "Dosya seçin",
@@ -2573,171 +2582,213 @@
   "tools": {
     "merge-pdf": {
       "name": "PDF birleştir",
-      "description": "Birden fazla PDF dosyasını tek dosyada birleştirin."
+      "metaTitle": "PDF birleştirme",
+      "description": "Birden fazla PDF dosyasını tek belgede birleştirin. Dosyaları yükleyin, sırayı ayarlayın, tek PDF indirin. Temel kullanım için hesap gerekmez."
     },
     "split-pdf": {
       "name": "PDF böl",
-      "description": "İstediğiniz sayfaları seçin ve yeni bir PDF olarak çıkarın."
+      "metaTitle": "PDF bölme",
+      "description": "PDF’yi yalnızca ihtiyaç duyduğunuz sayfalarla yeni bir dosyaya bölün. Sayfaları görsel seçin, sonucu indirin."
     },
     "extract-pages": {
-      "name": "Sayfa çıkar",
-      "description": "Sayfaları görsel olarak seçin ve yeni bir PDF olarak kaydedin."
+      "name": "PDF sayfa çıkar",
+      "metaTitle": "PDF sayfa çıkarma",
+      "description": "Seçtiğiniz sayfaları PDF’den çıkarıp yeni bir dosya olarak kaydedin."
     },
     "organize-pdf": {
-      "name": "PDF düzenle",
-      "description": "Sayfaları yeniden sıralayın, döndürün ve yönetin."
+      "name": "PDF sayfalarını düzenle",
+      "metaTitle": "PDF sayfa düzenleme",
+      "description": "PDF sayfalarını yeniden sıralayın, döndürün ve yönetin, ardından güncel dosyayı indirin."
     },
     "remove-pages": {
-      "name": "Sayfa sil",
-      "description": "PDF'den istenmeyen sayfaları kaldırın."
+      "name": "PDF sayfa sil",
+      "metaTitle": "PDF sayfa silme",
+      "description": "PDF’den istenmeyen sayfaları silin, kalanları yeni dosyada tutun."
     },
     "reorder-pages": {
-      "name": "Sayfa sırası",
-      "description": "PDF sayfalarının sırasını değiştirin."
+      "name": "PDF sayfa sırası",
+      "metaTitle": "PDF sayfa sıralama",
+      "description": "PDF sayfalarının sırasını değiştirin ve düzenlenmiş dosyayı indirin."
     },
     "rotate-pdf": {
       "name": "PDF döndür",
-      "description": "PDF sayfalarını döndürün."
+      "metaTitle": "PDF döndürme",
+      "description": "PDF’deki sayfaları döndürün ve düzeltilmiş dosyayı indirin."
     },
     "crop-pdf": {
       "name": "PDF kırp",
-      "description": "Sayfa kenarlarını ve içerik alanlarını kırpın."
+      "metaTitle": "PDF kırpma",
+      "description": "PDF sayfalarındaki fazla kenarları kırpın ve sonucu indirin."
     },
     "compress-pdf": {
       "name": "PDF sıkıştır",
-      "description": "PDF dosya boyutunu kullanılabilir kaliteyle küçültün."
+      "metaTitle": "PDF sıkıştırma",
+      "description": "PDF dosya boyutunu okunabilir tutarak küçültün. Sıkıştırma düzeyini seçin, daha küçük bir PDF indirin."
     },
     "repair-pdf": {
       "name": "PDF onar",
-      "description": "Hasarlı veya bozuk PDF dosyalarını onarmayı deneyin."
+      "metaTitle": "PDF onarma",
+      "description": "Hasarlı veya açılamayan bir PDF’yi onarmayı deneyin, ardından onarılmış kopyayı indirin."
     },
     "pdf-to-pdfa": {
       "name": "PDF'den PDF/A'ya",
-      "description": "PDF'yi arşiv PDF/A biçimine dönüştürün."
+      "metaTitle": "PDF'den PDF/A'ya dönüştürme",
+      "description": "PDF’yi uzun süreli saklama için arşiv PDF/A dosyasına dönüştürün."
     },
     "pdf-to-word": {
       "name": "PDF'den Word'e",
-      "description": "PDF'yi düzenlenebilir Word belgesine dönüştürün."
+      "metaTitle": "PDF'den Word'e dönüştürme",
+      "description": "PDF’yi düzenlenebilir bir Word belgesine dönüştürün. PDF yükleyin, DOC veya DOCX indirin."
     },
     "pdf-to-word-ocr": {
       "name": "PDF'den Word OCR",
-      "description": "Taranmış PDF'leri OCR ile Word'e dönüştürün."
+      "metaTitle": "OCR ile PDF'den Word'e",
+      "description": "Taranmış bir PDF’yi OCR ile Word’e dönüştürün; metin düzenlenebilir olur."
     },
     "pdf-to-powerpoint": {
       "name": "PDF'den PowerPoint'e",
-      "description": "PDF'yi PowerPoint sunumuna dönüştürün."
+      "metaTitle": "PDF'den PowerPoint'e dönüştürme",
+      "description": "PDF’yi düzenleyip sunabileceğiniz bir PowerPoint dosyasına dönüştürün."
     },
     "pdf-to-excel": {
       "name": "PDF'den Excel'e",
-      "description": "PDF'yi Excel tablosuna dönüştürün."
+      "metaTitle": "PDF'den Excel'e dönüştürme",
+      "description": "PDF’deki tabloları sıralayıp düzenleyebileceğiniz bir Excel dosyasına dönüştürün."
     },
     "pdf-to-excel-ocr": {
       "name": "PDF'den Excel OCR",
-      "description": "Taranmış PDF tablolarını OCR ile Excel'e dönüştürün."
+      "metaTitle": "OCR ile PDF'den Excel'e",
+      "description": "Taranmış PDF tablolarını OCR ile Excel’e dönüştürün."
     },
     "pdf-to-jpg": {
       "name": "PDF'den JPG'ye",
-      "description": "PDF sayfalarını JPG görüntülere dönüştürün."
+      "metaTitle": "PDF'den JPG'ye dönüştürme",
+      "description": "PDF sayfalarını kaydedip paylaşabileceğiniz JPG görüntülere dönüştürün."
     },
     "pdf-to-png": {
       "name": "PDF'den PNG'ye",
+      "metaTitle": "PDF'den PNG'ye dönüştürme",
       "description": "PDF sayfalarını PNG görüntülere dönüştürün."
     },
     "pdf-to-txt": {
       "name": "PDF'den metne",
-      "description": "PDF'den düz metin çıkarın."
+      "metaTitle": "PDF'den metne dönüştürme",
+      "description": "PDF’den düz metin çıkarın ve metin dosyası olarak indirin."
     },
     "word-to-pdf": {
       "name": "Word'den PDF'e",
-      "description": "Word belgelerini PDF'ye dönüştürün."
+      "metaTitle": "Word'den PDF'e dönüştürme",
+      "description": "Word belgesini paylaşabileceğiniz veya yazdırabileceğiniz bir PDF’ye dönüştürün."
     },
     "powerpoint-to-pdf": {
       "name": "PowerPoint'ten PDF'e",
-      "description": "PowerPoint sunumlarını PDF'ye dönüştürün."
+      "metaTitle": "PowerPoint'ten PDF'e dönüştürme",
+      "description": "PowerPoint sunumunu PDF’ye dönüştürün."
     },
     "excel-to-pdf": {
       "name": "Excel'den PDF'e",
-      "description": "Excel tablolarını PDF'ye dönüştürün."
+      "metaTitle": "Excel'den PDF'e dönüştürme",
+      "description": "Excel tablosunu PDF’ye dönüştürün."
     },
     "image-to-pdf": {
       "name": "Görüntüden PDF'e",
-      "description": "Görüntüleri tek bir PDF'de birleştirin."
+      "metaTitle": "Görüntüden PDF'e dönüştürme",
+      "description": "JPG, PNG veya diğer görselleri tek bir PDF’de birleştirin."
     },
     "jpg-to-pdf": {
       "name": "JPG'den PDF'e",
-      "description": "JPG görüntüyü PDF'ye dönüştürün."
+      "metaTitle": "JPG'den PDF'e dönüştürme",
+      "description": "JPG görüntüyü PDF dosyasına dönüştürün."
     },
     "png-to-pdf": {
       "name": "PNG'den PDF'e",
-      "description": "PNG görüntüyü PDF'ye dönüştürün."
+      "metaTitle": "PNG'den PDF'e dönüştürme",
+      "description": "PNG görüntüyü PDF dosyasına dönüştürün."
     },
     "office-to-pdf": {
       "name": "Office'ten PDF'e",
-      "description": "Office belgelerini PDF'ye dönüştürün."
+      "metaTitle": "Office'ten PDF'e dönüştürme",
+      "description": "Word, Excel veya PowerPoint dosyalarını PDF’ye dönüştürün."
     },
     "edit-pdf": {
       "name": "PDF düzenle",
+      "metaTitle": "PDF düzenleme",
       "description": "Bir PDF’in üzerine metin, vurgu, şekil ve görsel ekleyin. Mevcut metin olduğu gibi kalır."
     },
     "watermark-pdf": {
       "name": "PDF filigran",
-      "description": "PDF'ye metin veya görüntü filigranı ekleyin."
+      "metaTitle": "PDF filigran ekleme",
+      "description": "PDF’nin her sayfasına metin veya görsel filigran ekleyin."
     },
     "page-numbers-pdf": {
-      "name": "Sayfa numaraları",
-      "description": "PDF'ye sayfa numaraları ekleyin."
+      "name": "PDF sayfa numarası",
+      "metaTitle": "PDF sayfa numarası ekleme",
+      "description": "PDF’ye sayfa numaraları ekleyin ve numaralı dosyayı indirin."
     },
     "protect-pdf": {
       "name": "PDF koru",
-      "description": "PDF'ye parola koruması ekleyin."
+      "metaTitle": "PDF parola koruma",
+      "description": "PDF’yi açmak veya kullanmak için parola gerektirin."
     },
     "unlock-pdf": {
       "name": "PDF kilidini aç",
-      "description": "Sahibi olduğunuz PDF'nin parola korumasını kaldırın."
+      "metaTitle": "PDF kilit açma",
+      "description": "Sahibi olduğunuz PDF’nin parola korumasını kaldırın ve kilitsiz kopyayı indirin."
     },
     "sign-pdf": {
       "name": "PDF imzala",
-      "description": "Görsel imza görseli veya metin damgası ekleyin. Kriptografik dijital imza değildir."
+      "metaTitle": "PDF imzalama",
+      "description": "Görsel imza veya metin damgası ekleyin. Kriptografik dijital imza değildir."
     },
     "redact-pdf": {
       "name": "PDF karart",
-      "description": "Hassas içeriği kalıcı olarak karartın."
+      "metaTitle": "PDF karartma",
+      "description": "Paylaşmadan önce PDF’deki hassas metni veya alanları kalıcı olarak karartın."
     },
     "compare-pdf": {
       "name": "PDF karşılaştır",
-      "description": "İki PDF sürümünü karşılaştırın."
+      "metaTitle": "PDF karşılaştırma",
+      "description": "İki PDF sürümünü karşılaştırın ve nelerin değiştiğini görün."
     },
     "pdf-forms": {
-      "name": "PDF formları",
-      "description": "Etkileşimli bir PDF formundaki mevcut alanları doldurun."
+      "name": "PDF form doldur",
+      "metaTitle": "PDF form doldurma",
+      "description": "Etkileşimli bir PDF formundaki alanları doldurun ve tamamlanmış dosyayı indirin."
     },
     "web-to-pdf": {
       "name": "Web'den PDF'e",
-      "description": "Bir web sayfasını PDF olarak kaydedin."
+      "metaTitle": "Web sayfasından PDF",
+      "description": "Bir web sayfasını kaydedip paylaşabileceğiniz bir PDF olarak alın."
     },
     "scan-to-pdf": {
       "name": "Tarama PDF",
-      "description": "Taranmış görüntüleri PDF'ye dönüştürün."
+      "metaTitle": "Tarama PDF oluşturma",
+      "description": "Taranmış görüntüleri tek bir PDF’ye dönüştürün."
     },
     "pdf-extract": {
-      "name": "PDF çıkar",
-      "description": "PDF'den yapılandırılmış içerik çıkarın."
+      "name": "PDF içerik çıkar",
+      "metaTitle": "PDF içerik çıkarma",
+      "description": "PDF’den yapılandırılmış içerik çıkarıp başka dosyalarda kullanın."
     },
     "pdf-to-markdown": {
       "name": "PDF'den Markdown'a",
-      "description": "PDF içeriğini Markdown'a dönüştürün."
+      "metaTitle": "PDF'den Markdown'a dönüştürme",
+      "description": "PDF içeriğini metin editöründe düzenleyebileceğiniz Markdown’a dönüştürün."
     },
     "ocr-pdf": {
       "name": "PDF OCR",
-      "description": "Taranmış PDF'leri OCR ile aranabilir yapın."
+      "metaTitle": "PDF OCR",
+      "description": "Taranmış bir PDF’yi OCR ile aranabilir yapın veya tanınan metni çıkarın."
     },
     "ai-summarizer": {
-      "name": "AI özetleyici",
-      "description": "PDF içeriğini yapay zeka ile özetleyin."
+      "name": "PDF özetle",
+      "metaTitle": "PDF özetleme",
+      "description": "PDF’yi yapay zeka ile özetleyin; her sayfayı açmadan ana noktaları görün."
     },
     "translate-pdf": {
       "name": "PDF çevir",
-      "description": "PDF içeriğini başka bir dile çevirin."
+      "metaTitle": "PDF çeviri",
+      "description": "PDF içeriğini başka bir dile çevirin ve sonucu indirin."
     }
   }
 }

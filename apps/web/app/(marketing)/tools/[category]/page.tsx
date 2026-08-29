@@ -31,12 +31,12 @@ export async function generateMetadata({
     return {};
   }
 
-  const tNav = await getTranslations("marketing.nav");
+  const tMeta = await getTranslations("marketing.metadata");
   const tDirectory = await getTranslations("marketing.toolsDirectory");
   const locale = await getLocale();
 
   return buildMarketingPageMetadata({
-    title: `${tNav(`categories.${category}`)} | ${tNav("brand")}`,
+    title: tMeta(`categoryTitles.${category}`),
     description: tDirectory(`categories.${category}`),
     path: toolCategoryPath(category),
     locale,

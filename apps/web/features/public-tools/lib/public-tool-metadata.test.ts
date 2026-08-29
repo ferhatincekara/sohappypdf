@@ -9,6 +9,7 @@ describe("public tool metadata", () => {
   test("builds unique title, description, OpenGraph, and canonical URL", () => {
     const merge = buildPublicToolMetadata({
       name: "Merge PDF",
+      metaTitle: "Merge PDF files online",
       description: "Combine multiple PDFs into one file.",
       path: "/merge-pdf",
       appUrl: "https://sohappypdf.example",
@@ -22,18 +23,20 @@ describe("public tool metadata", () => {
       locale: "en",
     });
 
-    expect(merge.title).toBe("Merge PDF | SoHappyPDF");
+    expect(merge.title).toBe("Merge PDF files online");
     expect(merge.description).toBe("Combine multiple PDFs into one file.");
     expect(merge.openGraph).toMatchObject({
-      title: "Merge PDF | SoHappyPDF",
+      title: "Merge PDF files online - SoHappyPDF",
       description: "Combine multiple PDFs into one file.",
       url: "https://sohappypdf.example/merge-pdf",
+      siteName: "SoHappyPDF",
       type: "website",
       locale: "en_US",
+      images: [{ url: "/opengraph-image.png" }],
     });
     expect(merge.twitter).toMatchObject({
-      card: "summary",
-      title: "Merge PDF | SoHappyPDF",
+      card: "summary_large_image",
+      title: "Merge PDF files online - SoHappyPDF",
     });
     expect(merge.alternates).toMatchObject({
       canonical: "https://sohappypdf.example/merge-pdf",

@@ -36,6 +36,7 @@ export async function generateMetadata({
 
   return buildPublicToolMetadata({
     name: tTools(`${tool.id}.name`),
+    metaTitle: tTools(`${tool.id}.metaTitle`),
     description: tTools(`${tool.id}.description`),
     path: tool.route,
     appUrl: env.appUrl,

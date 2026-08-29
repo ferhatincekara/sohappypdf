@@ -3,13 +3,15 @@ import { getTranslations } from "next-intl/server";
 import { AuthInvalidTokenNotice } from "@/features/auth/components/auth-invalid-token-notice";
 import { AuthPageShell } from "@/features/auth/components/auth-page-shell";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
+import { buildAuthPageMetadata } from "@/features/auth/lib/auth-page-metadata";
+import { AUTH_PATHS } from "@/features/auth/paths";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("auth.resetPassword");
-
-  return {
-    title: t("title"),
-  };
+  return buildAuthPageMetadata({
+    page: "resetPassword",
+    path: AUTH_PATHS.resetPassword,
+    index: false,
+  });
 }
 
 export default async function ResetPasswordPage({

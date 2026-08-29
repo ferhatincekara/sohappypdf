@@ -76,9 +76,19 @@ describe("marketing locales", () => {
       const turkish = tr.tools[tool.id as keyof typeof tr.tools];
 
       expect(english.name.length).toBeGreaterThan(0);
+      expect(english.metaTitle.length).toBeGreaterThan(0);
       expect(english.description.length).toBeGreaterThan(0);
       expect(turkish.name.length).toBeGreaterThan(0);
+      expect(turkish.metaTitle.length).toBeGreaterThan(0);
       expect(turkish.description.length).toBeGreaterThan(0);
     }
+  });
+
+  test("has unique English tool meta titles", () => {
+    const titles = listCatalogTools().map(
+      (tool) => en.tools[tool.id as keyof typeof en.tools].metaTitle,
+    );
+
+    expect(new Set(titles).size).toBe(titles.length);
   });
 });
