@@ -9,6 +9,7 @@ import { RemovePagesAdvanced } from "@/features/public-tools/components/workspac
 import { RemoveResultSummary } from "@/features/public-tools/components/workspaces/remove-result-summary";
 import { parseSelectedPagesInput } from "@/features/public-tools/lib/tool-workspace";
 import {
+  allPages,
   PdfPageWorkspace,
   pagesToRangeInput,
   usePdfDocument,
@@ -46,14 +47,21 @@ export function RemovePagesWorkspace({
   }
 
   function setSelectedPages(pages: readonly number[]): void {
+    const pageCount =
+      pdf.status === "ready" ? pdf.pageCount : (entry.pageCount ?? 0);
     const next =
-      pdf.status === "ready"
-        ? pages.filter((page) => page >= 1 && page <= pdf.pageCount)
+      pageCount > 0
+        ? pages.filter((page) => page >= 1 && page <= pageCount)
         : [...pages];
+    const keep =
+      copy === "extract" && pageCount > 0 && next.length > 0
+        ? allPages(pageCount).filter((page) => !next.includes(page))
+        : [];
 
     props.setWorkspaceState({
       ...props.workspaceState,
       pagesToRemove: pagesToRangeInput(next),
+      ...(copy === "extract" ? { splitRanges: pagesToRangeInput(keep) } : {}),
     });
   }
 

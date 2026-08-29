@@ -6,6 +6,7 @@ import {
   countPdfPagesFromPath,
   createConversionWorkspace,
   isPermanentConversionError,
+  isRetryableConversionError,
   PermanentConversionError,
   toSafeFailure,
   validateConversionOutput,
@@ -345,7 +346,10 @@ export function createConversionProcessor(
         outputBytes: output.sizeBytes,
       });
     } catch (error) {
-      if (isPermanentConversionError(error)) {
+      if (
+        isPermanentConversionError(error) ||
+        !isRetryableConversionError(error)
+      ) {
         const failure = toSafeFailure(error);
         await dependencies.conversions.markFailed(current.id, failure);
 
@@ -383,7 +387,9 @@ export function createConversionProcessor(
         jobLogger.warn("conversion failed", {
           durationMs: Date.now() - startedAt,
           errorCode: failure.errorCode,
-          ...(error.details === undefined ? {} : { details: error.details }),
+          ...(isPermanentConversionError(error) && error.details !== undefined
+            ? { details: error.details }
+            : {}),
         });
       } else {
         jobLogger.error("conversion failed", {

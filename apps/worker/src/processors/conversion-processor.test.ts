@@ -174,6 +174,77 @@ describe("conversion processor", () => {
     ]);
   });
 
+  test("marks invalid conversion options as failed", async () => {
+    const failed: unknown[] = [];
+    const processor = createConversionProcessor({
+      conversions: {
+        async getConversion() {
+          return createConversion({
+            type: "extract-pages",
+            sourceFormat: "pdf",
+            targetFormat: "pdf",
+            status: "queued",
+            options: { type: "extract-pages", unexpected: true },
+          });
+        },
+        async markProcessing() {
+          return createConversion({
+            type: "extract-pages",
+            sourceFormat: "pdf",
+            targetFormat: "pdf",
+            status: "processing",
+            options: { type: "extract-pages", unexpected: true },
+          });
+        },
+        async markFailed(_id, input) {
+          failed.push(input);
+          return createConversion({ status: "failed" });
+        },
+        async findFileById() {
+          return undefined;
+        },
+      } as unknown as ConversionService,
+      files: {
+        async findFileById() {
+          return createFile({
+            mimeType: "application/pdf",
+            originalFilename: "doc.pdf",
+          });
+        },
+      } as unknown as FileService,
+      storage: {
+        async objectExists() {
+          return false;
+        },
+      } as unknown as Storage,
+      engines: {
+        resolve() {
+          throw new Error("engine should not run");
+        },
+      },
+      config: DEFAULT_WORKER_CONFIG,
+      logger: createLogger({ level: "error" }),
+    });
+
+    await expect(
+      processor(
+        createJob({
+          conversionType: "extract-pages",
+          sourceFormat: "pdf",
+          targetFormat: "pdf",
+          options: { type: "extract-pages", unexpected: true },
+        }),
+      ),
+    ).rejects.toBeTruthy();
+
+    expect(failed).toEqual([
+      {
+        errorCode: "invalid_options",
+        errorMessage: "Invalid conversion options",
+      },
+    ]);
+  });
+
   test("does not rerun work when a deterministic output already exists", async () => {
     const converted: string[] = [];
     const processor = createConversionProcessor({

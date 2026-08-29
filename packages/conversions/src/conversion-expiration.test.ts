@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import {
   CONVERSION_RETENTION_MS,
+  CONVERSION_STALE_IN_PROGRESS_MS,
   conversionActiveAfter,
+  isConversionInProgressStale,
   isConversionRecordExpired,
 } from "./conversion-expiration.js";
 
@@ -48,6 +50,42 @@ describe("conversion expiration", () => {
         now,
       ),
     ).toBe(false);
+  });
+
+  test("flags in-progress conversions after the stale window", () => {
+    const startedAt = new Date("2026-08-24T03:57:00.000Z");
+
+    expect(
+      isConversionInProgressStale(
+        {
+          status: "processing",
+          createdAt: startedAt,
+          startedAt,
+        },
+        now,
+      ),
+    ).toBe(true);
+    expect(
+      isConversionInProgressStale(
+        {
+          status: "processing",
+          createdAt: now,
+          startedAt: now,
+        },
+        now,
+      ),
+    ).toBe(false);
+    expect(
+      isConversionInProgressStale(
+        {
+          status: "completed",
+          createdAt: startedAt,
+          startedAt,
+        },
+        now,
+      ),
+    ).toBe(false);
+    expect(CONVERSION_STALE_IN_PROGRESS_MS).toBe(120_000);
   });
 
   test("computes the list cutoff from retention", () => {

@@ -67,11 +67,35 @@ describe("mapRecentExecution", () => {
 
   test("maps processing and failed terminal states", () => {
     expect(
-      mapRecentExecution(conversion({ status: "queued" }), now).status,
+      mapRecentExecution(
+        conversion({
+          status: "queued",
+          createdAt: "2026-08-24T11:59:30.000Z",
+          queuedAt: "2026-08-24T11:59:30.000Z",
+          startedAt: null,
+        }),
+        now,
+      ).status,
     ).toBe("processing");
     expect(
       mapRecentExecution(
         conversion({ status: "failed", outputFileId: null }),
+        now,
+      ).status,
+    ).toBe("failed");
+  });
+
+  test("treats a long-running in-progress job as failed", () => {
+    expect(
+      mapRecentExecution(
+        conversion({
+          status: "processing",
+          createdAt: "2026-08-24T11:50:00.000Z",
+          queuedAt: "2026-08-24T11:50:00.000Z",
+          startedAt: "2026-08-24T11:50:01.000Z",
+          completedAt: null,
+          outputFileId: null,
+        }),
         now,
       ).status,
     ).toBe("failed");

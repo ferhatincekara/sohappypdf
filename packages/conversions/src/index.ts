@@ -15,7 +15,10 @@ export {
 } from "./conversion-capability.js";
 export {
   CONVERSION_RETENTION_MS,
+  CONVERSION_STALE_IN_PROGRESS_MS,
   conversionActiveAfter,
+  conversionInProgressReferenceAt,
+  isConversionInProgressStale,
   isConversionRecordExpired,
 } from "./conversion-expiration.js";
 export type { FileFormat } from "./conversion-format.js";

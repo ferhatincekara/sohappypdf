@@ -47,9 +47,14 @@ describe("tool workspace helpers", () => {
     expect(
       buildToolConversionOptions("extract-pages", {
         ...DEFAULT_TOOL_WORKSPACE_STATE,
-        pagesToRemove: "2",
+        splitRanges: "1, 3-4",
       }),
-    ).toEqual({ pages: [2] });
+    ).toEqual({
+      ranges: [
+        { start: 1, end: 1 },
+        { start: 3, end: 4 },
+      ],
+    });
 
     expect(
       buildToolConversionOptions("extract-pages", DEFAULT_TOOL_WORKSPACE_STATE),

@@ -265,18 +265,10 @@ export function buildToolConversionOptions(
 
       return { degrees: state.rotationDegrees, pages };
     }
-    case "split-pdf": {
+    case "split-pdf":
+    case "extract-pages": {
       const ranges = parseSplitRangesInput(state.splitRanges);
       return ranges === undefined ? undefined : { ranges };
-    }
-    case "extract-pages": {
-      const pages = parseSelectedPagesInput(state.pagesToRemove);
-
-      if (pages === undefined || pages.length === 0) {
-        return undefined;
-      }
-
-      return { pages };
     }
     case "organize-pdf": {
       const order = parseOrganizeOrderInput(state.pageOrder);

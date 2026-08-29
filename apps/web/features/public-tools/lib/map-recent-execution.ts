@@ -3,6 +3,7 @@ import {
   canDownloadConversion,
   isConversionExpired,
 } from "@/features/conversions/lib/can-download-conversion";
+import { isPublicConversionInProgressStale } from "@/features/conversions/lib/conversion-stale";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
 import { deriveResultFilename } from "@/features/public-tools/lib/derive-result-filename";
 import { RECENT_EXECUTIONS_FALLBACK_ROUTE } from "@/features/public-tools/lib/recent-executions";
@@ -18,10 +19,12 @@ export function mapRecentExecution(
 ): RecentExecution {
   const expired = isConversionExpired(conversion, now);
   const canDownload = canDownloadConversion(conversion, now);
+  const timedOut = isPublicConversionInProgressStale(conversion, now);
   const processing =
-    conversion.status === "pending" ||
-    conversion.status === "queued" ||
-    conversion.status === "processing";
+    !timedOut &&
+    (conversion.status === "pending" ||
+      conversion.status === "queued" ||
+      conversion.status === "processing");
 
   return {
     id: conversion.id,
@@ -38,7 +41,7 @@ export function mapRecentExecution(
       ? "expired"
       : processing
         ? "processing"
-        : conversion.status === "completed"
+        : conversion.status === "completed" && !timedOut
           ? "ready"
           : "failed",
     canDownload,

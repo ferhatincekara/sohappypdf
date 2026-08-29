@@ -895,4 +895,47 @@ describe("conversion service", () => {
       created.id,
     ]);
   });
+
+  test("fails conversions that stay in progress too long", async () => {
+    const startedAt = new Date("2026-08-23T16:00:00.000Z");
+    const stale: ConversionRecord = {
+      id: "550e8400-e29b-41d4-a716-446655440098",
+      ownerId: sourceFile.ownerId,
+      ownerKind: "user",
+      sourceFileId: sourceFile.id,
+      outputFileId: null,
+      type: "extract-pages",
+      sourceFormat: "pdf",
+      targetFormat: "pdf",
+      status: "processing",
+      options: { type: "extract-pages" },
+      errorCode: null,
+      errorMessage: null,
+      idempotencyKey: null,
+      createdAt: startedAt,
+      updatedAt: startedAt,
+      queuedAt: startedAt,
+      startedAt,
+      completedAt: null,
+      expiresAt: new Date("2026-08-23T18:00:00.000Z"),
+    };
+    const service = createConversionService({
+      repository: createMemoryRepository([stale]),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T16:03:00.000Z"),
+    });
+
+    const loaded = await service.getOwnedConversion(
+      stale.id,
+      sourceFile.ownerId,
+    );
+    const listed = await service.listOwnedConversions({
+      ownerId: sourceFile.ownerId,
+    });
+
+    expect(loaded.status).toBe("failed");
+    expect(loaded.errorCode).toBe("processing_failed");
+    expect(loaded.errorMessage).toBe("Conversion timed out");
+    expect(listed.conversions[0]?.status).toBe("failed");
+  });
 });

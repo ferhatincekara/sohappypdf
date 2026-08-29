@@ -1,4 +1,5 @@
 import { isConversionExpired } from "@/features/conversions/lib/can-download-conversion";
+import { isPublicConversionInProgressStale } from "@/features/conversions/lib/conversion-stale";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
 import {
   isExpirationResponse,
@@ -114,7 +115,11 @@ export function resolveToolUxState(
     };
   }
 
-  const stalled = jobs.find((job) => isQueuedConversionStalled(job, input.now));
+  const stalled = jobs.find(
+    (job) =>
+      isQueuedConversionStalled(job, input.now) ||
+      isPublicConversionInProgressStale(job, input.now),
+  );
 
   if (stalled !== undefined) {
     return {

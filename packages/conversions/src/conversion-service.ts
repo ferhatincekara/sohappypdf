@@ -13,6 +13,7 @@ import {
 import {
   CONVERSION_RETENTION_MS,
   conversionActiveAfter,
+  isConversionInProgressStale,
 } from "./conversion-expiration.js";
 import type { FileFormat } from "./conversion-format.js";
 import type { ConversionOptions } from "./conversion-options.js";
@@ -225,6 +226,30 @@ export function createConversionService(
     return conversion;
   }
 
+  async function failStaleInProgress(
+    conversion: ConversionRecord,
+  ): Promise<ConversionRecord> {
+    if (!isConversionInProgressStale(conversion, now())) {
+      return conversion;
+    }
+
+    const updated = await options.repository.updateStatus({
+      id: conversion.id,
+      from: conversion.status,
+      to: "failed",
+      now: now(),
+      errorCode: "processing_failed",
+      errorMessage: "Conversion timed out",
+    });
+
+    if (updated !== undefined) {
+      return updated;
+    }
+
+    const latest = await options.repository.findById(conversion.id);
+    return latest ?? conversion;
+  }
+
   async function createConversion(
     input: CreateConversionInput,
   ): Promise<ConversionRecord> {
@@ -390,11 +415,11 @@ export function createConversionService(
     },
 
     async getConversion(id) {
-      return requireCurrent(id);
+      return failStaleInProgress(await requireCurrent(id));
     },
 
     async getOwnedConversion(id, ownerId) {
-      return requireOwned(id, ownerId);
+      return failStaleInProgress(await requireOwned(id, ownerId));
     },
 
     async findOwnedByIdempotencyKey(ownerId, idempotencyKey) {
@@ -435,10 +460,16 @@ export function createConversionService(
       });
       const hasMore = records.length > limit;
       const page = hasMore ? records.slice(0, limit) : records;
-      const last = page[page.length - 1];
+      const conversions: ConversionRecord[] = [];
+
+      for (const record of page) {
+        conversions.push(await failStaleInProgress(record));
+      }
+
+      const last = conversions[conversions.length - 1];
 
       return {
-        conversions: page,
+        conversions,
         nextCursor:
           hasMore && last !== undefined
             ? encodeConversionListCursor(last)

@@ -275,6 +275,27 @@ describe("tool UX state model", () => {
     expect(queued.status).toBe("processing");
   });
 
+  test("treats a conversion that stays processing as a retryable failure", () => {
+    const state = resolveToolUxState({
+      ...baseInput,
+      now: new Date("2026-08-24T00:03:00.000Z"),
+      executionId: "exec-1",
+      execution: createExecution({
+        status: "processing",
+        startedAt: "2026-08-24T00:00:05.000Z",
+      }),
+    });
+
+    expect(state.status).toBe("error");
+    if (state.status !== "error") {
+      throw new Error("expected error");
+    }
+    expect(state.error).toEqual({
+      key: "processingFailed",
+      retryable: true,
+    });
+  });
+
   test("treats a conversion that stays queued as a retryable failure", () => {
     const state = resolveToolUxState({
       ...baseInput,
