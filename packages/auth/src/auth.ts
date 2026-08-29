@@ -63,6 +63,13 @@ export function createAuth(options: CreateAuthOptions) {
     },
     advanced: {
       useSecureCookies: options.config.useSecureCookies,
+      crossSubDomainCookies:
+        options.config.cookieDomain === undefined
+          ? undefined
+          : {
+              enabled: true,
+              domain: options.config.cookieDomain,
+            },
       defaultCookieAttributes: {
         httpOnly: true,
         sameSite: "lax",

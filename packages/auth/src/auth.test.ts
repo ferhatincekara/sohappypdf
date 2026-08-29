@@ -43,6 +43,7 @@ describe("createAuth", () => {
     expect(auth.options.plugins ?? []).toEqual([]);
     expect(auth.options.session?.cookieCache?.enabled).toBe(false);
     expect(auth.options.advanced?.useSecureCookies).toBe(false);
+    expect(auth.options.advanced?.crossSubDomainCookies).toBeUndefined();
     expect(auth.options.advanced?.defaultCookieAttributes?.httpOnly).toBe(true);
     expect(auth.options.telemetry?.enabled).toBe(false);
     expect(auth.options.advanced?.database?.joins).not.toBe(true);
@@ -71,6 +72,29 @@ describe("createAuth", () => {
       "http://localhost:3001",
       "http://localhost:3000",
     ]);
+  });
+
+  test("sets a parent cookie domain for split web and API hosts", () => {
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "https://api.sohappypdf.com",
+        runtimeEnv: "production",
+        useSecureCookies: true,
+        cookieDomain: "sohappypdf.com",
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+    });
+
+    expect(auth.options.advanced?.crossSubDomainCookies).toEqual({
+      enabled: true,
+      domain: "sohappypdf.com",
+    });
   });
 
   test("creates a user with a hashed credential and a server session", async () => {

@@ -14,6 +14,18 @@ describe("loadAuthConfig", () => {
     expect(config.baseUrl).toBe("http://localhost:3000");
     expect(config.runtimeEnv).toBe("development");
     expect(config.useSecureCookies).toBe(false);
+    expect(config.cookieDomain).toBeUndefined();
+  });
+
+  test("shares session cookies across the API and site hosts", () => {
+    const config = loadAuthConfig({
+      BETTER_AUTH_SECRET: "a".repeat(32),
+      BETTER_AUTH_URL: "https://api.sohappypdf.com",
+      APP_URL: "https://sohappypdf.com",
+      NODE_ENV: "production",
+    });
+
+    expect(config.cookieDomain).toBe("sohappypdf.com");
   });
 
   test("requires HTTPS and secure cookies in production", () => {

@@ -1,6 +1,7 @@
 import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { loadAppConfig, type RuntimeEnv } from "./app-config.js";
-import { type EnvSource, getRequiredEnv } from "./env.js";
+import { resolveAuthCookieDomain } from "./auth-cookie-domain.js";
+import { type EnvSource, getOptionalEnv, getRequiredEnv } from "./env.js";
 
 const MIN_AUTH_SECRET_LENGTH = 32;
 
@@ -9,6 +10,7 @@ export type AuthConfig = {
   baseUrl: string;
   runtimeEnv: RuntimeEnv;
   useSecureCookies: boolean;
+  cookieDomain?: string;
 };
 
 function parseAuthSecret(value: string): string {
@@ -61,11 +63,28 @@ export function loadAuthConfig(source: EnvSource = process.env): AuthConfig {
     runtimeEnv,
   );
 
+  const explicitCookieDomain = getOptionalEnv("AUTH_COOKIE_DOMAIN", source);
+  const cookieDomain = resolveAuthCookieDomain({
+    authBaseUrl: baseUrl,
+    appUrl:
+      getOptionalEnv("APP_URL", source) ??
+      getOptionalEnv("NEXT_PUBLIC_APP_URL", source),
+    cookieDomain: explicitCookieDomain,
+  });
+
+  if (explicitCookieDomain !== undefined && cookieDomain === undefined) {
+    throw new AppError({
+      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+      message: "Invalid AUTH_COOKIE_DOMAIN",
+    });
+  }
+
   return {
     secret: parseAuthSecret(getRequiredEnv("BETTER_AUTH_SECRET", source)),
     baseUrl,
     runtimeEnv,
     useSecureCookies:
       runtimeEnv === "production" || new URL(baseUrl).protocol === "https:",
+    cookieDomain,
   };
 }
