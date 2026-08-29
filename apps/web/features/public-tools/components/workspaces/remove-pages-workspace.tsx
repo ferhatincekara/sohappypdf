@@ -46,9 +46,11 @@ export function RemovePagesWorkspace({
     return null;
   }
 
+  const currentEntry = entry;
+
   function setSelectedPages(pages: readonly number[]): void {
     const pageCount =
-      pdf.status === "ready" ? pdf.pageCount : (entry.pageCount ?? 0);
+      pdf.status === "ready" ? pdf.pageCount : (currentEntry.pageCount ?? 0);
     const next =
       pageCount > 0
         ? pages.filter((page) => page >= 1 && page <= pageCount)
