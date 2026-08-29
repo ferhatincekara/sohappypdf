@@ -68,30 +68,13 @@ export async function enqueueCreatedConversion(
         userId: conversion.ownerId,
       });
     } else {
-      options.logger.error("conversion queue failed", {
+      options.logger.warn("conversion queue unavailable; worker will pick up", {
         conversionId: conversion.id,
         sourceFileId: conversion.sourceFileId,
         userId: conversion.ownerId,
         targetFormat: conversion.targetFormat,
       });
-
-      try {
-        await options.conversions.markFailed(conversion.id, {
-          errorCode: "processing_failed",
-          errorMessage: "Conversion could not be queued",
-        });
-      } catch {
-        options.logger.error("conversion queue failure could not be recorded", {
-          conversionId: conversion.id,
-          userId: conversion.ownerId,
-        });
-      }
-
-      throw new AppError({
-        code: APP_ERROR_CODES.INTERNAL_ERROR,
-        message: "Conversion could not be queued",
-        cause: error,
-      });
+      return conversion;
     }
   }
 

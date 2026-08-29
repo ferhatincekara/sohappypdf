@@ -333,6 +333,20 @@ function createMemoryConversionRepository(
 
       return deleted;
     },
+    async listPendingForProcessing(input) {
+      return [...records.values()]
+        .filter(
+          (conversion) =>
+            conversion.status === "pending" &&
+            !isConversionRecordExpired(conversion, input.now),
+        )
+        .sort((left, right) => {
+          const created = left.createdAt.getTime() - right.createdAt.getTime();
+          return created === 0 ? left.id.localeCompare(right.id) : created;
+        })
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
+    },
     async listExpired(input) {
       return [...records.values()]
         .filter((conversion) =>

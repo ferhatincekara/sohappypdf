@@ -90,6 +90,7 @@ export type ConversionService = {
   ): Promise<ConversionRecord>;
   cancelConversion(id: string): Promise<ConversionRecord>;
   cancelOwnedConversion(id: string, ownerId: string): Promise<ConversionRecord>;
+  listPendingForProcessing(limit?: number): Promise<ConversionRecord[]>;
   cleanupExpiredConversions(limit?: number): Promise<{
     scanned: number;
     deleted: number;
@@ -500,6 +501,22 @@ export function createConversionService(
       return transition(await requireOwned(id, ownerId), "cancelled", {
         errorCode: "cancelled",
         errorMessage: "Conversion cancelled",
+      });
+    },
+
+    async listPendingForProcessing(limit = 10) {
+      if (!Number.isInteger(limit) || limit < 1 || limit > 50) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid pending conversion limit",
+        });
+      }
+
+      const current = now();
+      return options.repository.listPendingForProcessing({
+        now: current,
+        activeAfter: conversionActiveAfter(current),
+        limit,
       });
     },
 

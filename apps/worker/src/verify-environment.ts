@@ -84,15 +84,30 @@ export function createWorkerEnvironmentChecks(): WorkerEnvironmentChecks {
   };
 }
 
+export type WorkerEnvironmentReport = {
+  binaries: NativeBinaryProbe[];
+  queueAvailable: boolean;
+};
+
 export async function verifyWorkerEnvironment(
   config: WorkerConfig,
   checks: WorkerEnvironmentChecks = createWorkerEnvironmentChecks(),
-): Promise<NativeBinaryProbe[]> {
+): Promise<WorkerEnvironmentReport> {
   const binaries = checks.probeBinaries(config);
 
   await pingRequiredService("database", checks.pingDatabase);
-  await pingRequiredService("queue", checks.pingQueue);
   await pingRequiredService("storage", checks.pingStorage);
 
-  return binaries;
+  let queueAvailable = true;
+
+  try {
+    await pingRequiredService("queue", checks.pingQueue);
+  } catch {
+    queueAvailable = false;
+  }
+
+  return {
+    binaries,
+    queueAvailable,
+  };
 }

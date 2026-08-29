@@ -5,7 +5,7 @@ import { verifyWorkerEnvironment } from "./verify-environment.js";
 
 describe("verifyWorkerEnvironment", () => {
   test("returns native binary probes when infrastructure is available", async () => {
-    const probes = await verifyWorkerEnvironment(DEFAULT_WORKER_CONFIG, {
+    const report = await verifyWorkerEnvironment(DEFAULT_WORKER_CONFIG, {
       probeBinaries() {
         return [
           { command: "soffice", available: true, version: "LibreOffice 24.2" },
@@ -16,9 +16,10 @@ describe("verifyWorkerEnvironment", () => {
       async pingStorage() {},
     });
 
-    expect(probes).toEqual([
+    expect(report.binaries).toEqual([
       { command: "soffice", available: true, version: "LibreOffice 24.2" },
     ]);
+    expect(report.queueAvailable).toBe(true);
   });
 
   test("fails startup when a required binary is missing", async () => {
@@ -35,6 +36,22 @@ describe("verifyWorkerEnvironment", () => {
     } catch (error) {
       expect(error).toBeInstanceOf(Error);
     }
+  });
+
+  test("starts without Redis when the queue is unavailable", async () => {
+    const report = await verifyWorkerEnvironment(DEFAULT_WORKER_CONFIG, {
+      probeBinaries() {
+        return [{ command: "soffice", available: true }];
+      },
+      async pingDatabase() {},
+      async pingQueue() {
+        throw new Error("redis quota exceeded");
+      },
+      async pingStorage() {},
+    });
+
+    expect(report.queueAvailable).toBe(false);
+    expect(report.binaries).toEqual([{ command: "soffice", available: true }]);
   });
 
   test("fails startup when infrastructure is unavailable", async () => {

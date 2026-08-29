@@ -5,7 +5,7 @@ import {
   type ResourceOwnerTransferInput,
   type ResourceOwnerTransferResult,
 } from "@sohappypdf/files";
-import { and, desc, eq, gt, isNull, lt, lte, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, isNull, lt, lte, or, sql } from "drizzle-orm";
 import { normalizeFileFormat } from "./conversion-format.js";
 import { parseConversionOptions } from "./conversion-options.js";
 import type { ConversionListCursor } from "./conversion-pagination.js";
@@ -55,6 +55,11 @@ export type ConversionRepository = {
   deleteById(id: string): Promise<void>;
   deleteReferencingFile(fileId: string): Promise<number>;
   listExpired(input: {
+    now: Date;
+    activeAfter: Date;
+    limit: number;
+  }): Promise<ConversionRecord[]>;
+  listPendingForProcessing(input: {
     now: Date;
     activeAfter: Date;
     limit: number;
@@ -299,6 +304,25 @@ export function createConversionRepository(db: Database): ConversionRepository {
         .returning({ id: conversions.id });
 
       return deleted.length;
+    },
+
+    async listPendingForProcessing(input) {
+      const activeExpiry = or(
+        gt(conversions.expiresAt, input.now),
+        and(
+          isNull(conversions.expiresAt),
+          gt(conversions.createdAt, input.activeAfter),
+        ),
+      );
+
+      const rows = await db
+        .select()
+        .from(conversions)
+        .where(and(eq(conversions.status, "pending"), activeExpiry))
+        .orderBy(asc(conversions.createdAt), asc(conversions.id))
+        .limit(input.limit);
+
+      return rows.map((row) => toConversionRecord(row));
     },
 
     async listExpired(input) {

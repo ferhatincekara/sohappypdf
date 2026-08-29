@@ -35,6 +35,7 @@ import {
 import { loadWorkerRuntimeConfig } from "./load-runtime-config.js";
 import { createConversionProcessor } from "./processors/conversion-processor.js";
 import { createFileCleanupProcessor } from "./processors/file-cleanup-processor.js";
+import { startPendingConversionPoller } from "./processors/pending-conversion-poller.js";
 import { createWorkerShutdown } from "./shutdown.js";
 import {
   createWorkerEnvironmentChecks,
@@ -55,6 +56,7 @@ export type StartConversionWorkerRuntimeOptions = {
   }) => ConversionJobProcessor;
   createQueueWorker?: typeof createConversionWorker;
   enableFileCleanup?: boolean;
+  enablePendingPoller?: boolean;
   listenHealth?: boolean;
 };
 
@@ -109,6 +111,8 @@ export async function startConversionWorkerRuntime(
   let status: WorkerHealthStatus = "starting";
   const shutdownController = createWorkerShutdown({
     async closeWorker(force) {
+      stopPendingPoller?.();
+      stopFileCleanupFallback?.();
       await Promise.all([
         worker?.close(force) ?? Promise.resolve(),
         cleanupWorker?.close(force) ?? Promise.resolve(),
@@ -126,6 +130,8 @@ export async function startConversionWorkerRuntime(
   let health: WorkerHealthServer | undefined;
   let worker: ConversionWorker | undefined;
   let cleanupWorker: ConversionWorker | undefined;
+  let stopPendingPoller: (() => void) | undefined;
+  let stopFileCleanupFallback: (() => void) | undefined;
 
   logger.info("worker starting");
 
@@ -142,11 +148,17 @@ export async function startConversionWorkerRuntime(
   }
 
   try {
-    const binaries = await verifyWorkerEnvironment(
+    const environment = await verifyWorkerEnvironment(
       runtimeConfig.worker,
       options.checks ?? createWorkerEnvironmentChecks(),
     );
-    logStartupSummary(logger, runtimeConfig.worker, binaries);
+    logStartupSummary(logger, runtimeConfig.worker, environment.binaries);
+
+    if (!environment.queueAvailable) {
+      logger.warn(
+        "queue unavailable; processing pending conversions from the database",
+      );
+    }
 
     const createQueueWorker =
       options.createQueueWorker ?? createConversionWorker;
@@ -165,89 +177,123 @@ export async function startConversionWorkerRuntime(
         billing: getBillingService(),
       });
 
-    worker = createQueueWorker({
-      processJob,
-      concurrency: runtimeConfig.worker.concurrency,
-      lockDurationMs: runtimeConfig.worker.conversionTimeoutMs + 30_000,
-      hooks: {
-        onReady() {
-          logger.info("queue connected", { queueName: CONVERSION_QUEUE_NAME });
-        },
-        onCompleted(job) {
-          logger.info("job completed", {
-            jobId: job.id,
-            conversionId: job.conversionId,
-          });
-        },
-        onFailed(job) {
-          logger.warn(job.permanent ? "job failed" : "job retrying", {
-            jobId: job.id,
-            conversionId: job.conversionId,
-            attemptsMade: job.attemptsMade,
-          });
-        },
-        async onPermanentFailure(conversionId) {
-          try {
-            const conversions = getConversionService();
-            const current = await conversions.getConversion(conversionId);
-
-            if (
-              current.status === "pending" ||
-              current.status === "queued" ||
-              current.status === "processing"
-            ) {
-              await conversions.markFailed(conversionId, {
-                errorCode: "processing_failed",
-                errorMessage: "Conversion could not be processed",
-              });
-            }
-          } catch {
-            logger.error("permanent conversion failure could not be recorded", {
-              conversionId,
-            });
-          }
-        },
-        onError() {
-          logger.error("queue worker error");
-        },
-      },
-    });
-
-    if (options.enableFileCleanup !== false) {
-      const fileConfig = loadFileConfig(options.env);
-      cleanupWorker = createFileCleanupWorker({
-        processJob: createFileCleanupProcessor({
-          files: getFileService(),
-          conversions: getConversionService(),
-          anonymousSessions: getAnonymousSessionService(),
-          logger,
-          batchSize: fileConfig.cleanupBatchSize,
-        }),
+    try {
+      worker = createQueueWorker({
+        processJob,
+        concurrency: runtimeConfig.worker.concurrency,
+        lockDurationMs: runtimeConfig.worker.conversionTimeoutMs + 30_000,
         hooks: {
           onReady() {
             logger.info("queue connected", {
-              queueName: FILE_CLEANUP_QUEUE_NAME,
+              queueName: CONVERSION_QUEUE_NAME,
             });
           },
           onCompleted(job) {
-            logger.info("file cleanup job completed", { jobId: job.id });
+            logger.info("job completed", {
+              jobId: job.id,
+              conversionId: job.conversionId,
+            });
           },
           onFailed(job) {
-            logger.warn("file cleanup job retrying", {
+            logger.warn(job.permanent ? "job failed" : "job retrying", {
               jobId: job.id,
+              conversionId: job.conversionId,
               attemptsMade: job.attemptsMade,
             });
           },
+          async onPermanentFailure(conversionId) {
+            try {
+              const conversions = getConversionService();
+              const current = await conversions.getConversion(conversionId);
+
+              if (
+                current.status === "pending" ||
+                current.status === "queued" ||
+                current.status === "processing"
+              ) {
+                await conversions.markFailed(conversionId, {
+                  errorCode: "processing_failed",
+                  errorMessage: "Conversion could not be processed",
+                });
+              }
+            } catch {
+              logger.error(
+                "permanent conversion failure could not be recorded",
+                {
+                  conversionId,
+                },
+              );
+            }
+          },
           onError() {
-            logger.error("file cleanup worker error");
+            logger.error("queue worker error");
           },
         },
       });
-      await scheduleFileCleanup();
-      logger.info("file cleanup scheduled", {
-        intervalMs: FILE_CLEANUP_INTERVAL_MS,
+    } catch {
+      logger.warn("queue worker unavailable; using database fallback");
+    }
+
+    if (options.enablePendingPoller !== false) {
+      stopPendingPoller = startPendingConversionPoller({
+        conversions: getConversionService(),
+        files: getFileService(),
+        processJob,
+        logger,
+        isShuttingDown: () => shutdownController.isShuttingDown(),
+      }).stop;
+    }
+
+    if (options.enableFileCleanup !== false) {
+      const fileConfig = loadFileConfig(options.env);
+      const processCleanup = createFileCleanupProcessor({
+        files: getFileService(),
+        conversions: getConversionService(),
+        anonymousSessions: getAnonymousSessionService(),
+        logger,
         batchSize: fileConfig.cleanupBatchSize,
       });
+
+      try {
+        cleanupWorker = createFileCleanupWorker({
+          processJob: processCleanup,
+          hooks: {
+            onReady() {
+              logger.info("queue connected", {
+                queueName: FILE_CLEANUP_QUEUE_NAME,
+              });
+            },
+            onCompleted(job) {
+              logger.info("file cleanup job completed", { jobId: job.id });
+            },
+            onFailed(job) {
+              logger.warn("file cleanup job retrying", {
+                jobId: job.id,
+                attemptsMade: job.attemptsMade,
+              });
+            },
+            onError() {
+              logger.error("file cleanup worker error");
+            },
+          },
+        });
+        await scheduleFileCleanup();
+        logger.info("file cleanup scheduled", {
+          intervalMs: FILE_CLEANUP_INTERVAL_MS,
+          batchSize: fileConfig.cleanupBatchSize,
+        });
+      } catch {
+        const timer = setInterval(() => {
+          void processCleanup({
+            id: "db:file-cleanup",
+            attemptsMade: 0,
+          });
+        }, FILE_CLEANUP_INTERVAL_MS);
+        stopFileCleanupFallback = () => {
+          clearInterval(timer);
+        };
+        logger.warn("file cleanup queue unavailable; using interval fallback");
+      }
     }
 
     status = "ready";

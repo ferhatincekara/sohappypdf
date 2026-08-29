@@ -1,5 +1,4 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@sohappypdf/core";
 import { startConversionWorkerRuntime } from "./start-worker.js";
 
 const validEnv = {
@@ -21,6 +20,7 @@ describe("startConversionWorkerRuntime", () => {
       env: validEnv,
       listenHealth: false,
       enableFileCleanup: false,
+      enablePendingPoller: false,
       checks: {
         probeBinaries() {
           return [{ command: "soffice", available: true, version: "24.2" }];
@@ -44,32 +44,30 @@ describe("startConversionWorkerRuntime", () => {
     expect(await runtime.shutdown("SIGTERM")).toBe(0);
   });
 
-  test("does not start when required infrastructure is unavailable", async () => {
-    try {
-      await startConversionWorkerRuntime({
-        env: validEnv,
-        listenHealth: false,
-        enableFileCleanup: false,
-        checks: {
-          probeBinaries() {
-            return [{ command: "soffice", available: true }];
-          },
-          async pingDatabase() {},
-          async pingQueue() {
-            throw new Error("redis down");
-          },
-          async pingStorage() {},
+  test("starts when the queue is unavailable and uses the database fallback", async () => {
+    const runtime = await startConversionWorkerRuntime({
+      env: validEnv,
+      listenHealth: false,
+      enableFileCleanup: false,
+      enablePendingPoller: false,
+      checks: {
+        probeBinaries() {
+          return [{ command: "soffice", available: true }];
         },
-        createProcessor() {
-          return async () => undefined;
+        async pingDatabase() {},
+        async pingQueue() {
+          throw new Error("redis down");
         },
-        createQueueWorker() {
-          throw new Error("worker should not start");
-        },
-      });
-      throw new Error("expected startup to fail");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-    }
+        async pingStorage() {},
+      },
+      createProcessor() {
+        return async () => undefined;
+      },
+      createQueueWorker() {
+        throw new Error("queue worker should be optional");
+      },
+    });
+
+    expect(await runtime.shutdown("SIGTERM")).toBe(0);
   });
 });

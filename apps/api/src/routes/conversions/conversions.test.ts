@@ -300,6 +300,20 @@ function createMemoryConversionRepository(
 
       return deleted;
     },
+    async listPendingForProcessing(input) {
+      return [...records.values()]
+        .filter(
+          (conversion) =>
+            conversion.status === "pending" &&
+            !isConversionRecordExpired(conversion, input.now),
+        )
+        .sort((left, right) => {
+          const created = left.createdAt.getTime() - right.createdAt.getTime();
+          return created === 0 ? left.id.localeCompare(right.id) : created;
+        })
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
+    },
     async listExpired(input) {
       return [...records.values()]
         .filter((conversion) =>
@@ -713,7 +727,7 @@ describe("conversion API", () => {
     expect(response.status).toBe(409);
   });
 
-  test("marks the conversion failed when enqueueing fails", async () => {
+  test("keeps the conversion pending when enqueueing fails", async () => {
     const context = createConversionApp({ identity: sessionIdentity });
     const file = await createReadyFile(context, { ownerId: "user_1" });
     context.failEnqueue = true;
@@ -726,14 +740,10 @@ describe("conversion API", () => {
         targetFormat: "jpg",
       }),
     });
+    const body = await response.json();
 
-    expect(response.status).toBe(500);
-    expect(await response.json()).toMatchObject({
-      error: {
-        code: APP_ERROR_CODES.INTERNAL_ERROR,
-        message: "Conversion could not be queued",
-      },
-    });
+    expect(response.status).toBe(201);
+    expect(body.conversion.status).toBe("pending");
 
     context.failEnqueue = false;
     const replay = await context.app.request("/v1/conversions", {

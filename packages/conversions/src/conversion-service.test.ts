@@ -157,6 +157,20 @@ function createMemoryRepository(
 
       return deleted;
     },
+    async listPendingForProcessing(input) {
+      return [...records.values()]
+        .filter(
+          (conversion) =>
+            conversion.status === "pending" &&
+            !isConversionRecordExpired(conversion, input.now),
+        )
+        .sort((left, right) => {
+          const created = left.createdAt.getTime() - right.createdAt.getTime();
+          return created === 0 ? left.id.localeCompare(right.id) : created;
+        })
+        .slice(0, input.limit)
+        .map((conversion) => ({ ...conversion }));
+    },
     async listExpired(input) {
       return [...records.values()]
         .filter((conversion) =>
@@ -338,6 +352,35 @@ describe("conversion service", () => {
     expect(completed.completedAt?.toISOString()).toBe(
       "2026-08-23T18:40:00.000Z",
     );
+  });
+
+  test("lists unexpired pending conversions for the worker fallback", async () => {
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+      now: () => new Date("2026-08-23T18:40:00.000Z"),
+    });
+    const pending = await service.createConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      type: "pdf-to-png",
+      sourceFormat: "pdf",
+      targetFormat: "png",
+    });
+    await service.createConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      type: "pdf-to-jpg",
+      sourceFormat: "pdf",
+      targetFormat: "jpg",
+    });
+    await service.markQueued(pending.id);
+
+    const listed = await service.listPendingForProcessing();
+
+    expect(listed).toHaveLength(1);
+    expect(listed[0]?.targetFormat).toBe("jpg");
+    expect(listed[0]?.status).toBe("pending");
   });
 
   test("rejects invalid status transitions", async () => {
