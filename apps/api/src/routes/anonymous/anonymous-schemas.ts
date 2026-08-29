@@ -45,10 +45,31 @@ export type AnonymousCreateConversionBody = {
   options?: Record<string, unknown>;
 };
 
+function requireParsedString(
+  value: string | undefined,
+  message: string,
+): string {
+  if (value === undefined || value.length === 0) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message,
+    });
+  }
+
+  return value;
+}
+
 export function parseCreateAnonymousConversion(
   value: unknown,
 ): AnonymousCreateConversionBody {
-  return parseWithSchema(createAnonymousConversionSchema, value);
+  const parsed = parseWithSchema(createAnonymousConversionSchema, value);
+
+  return {
+    sourceFileId: requireParsedString(parsed.sourceFileId, "Invalid file id"),
+    type: requireParsedString(parsed.type, "Unsupported conversion"),
+    additionalFileIds: parsed.additionalFileIds,
+    options: parsed.options,
+  };
 }
 
 export function resolveAnonymousConversionRequest(

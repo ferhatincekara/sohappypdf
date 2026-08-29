@@ -81,8 +81,33 @@ const idempotencyKeySchema = z
   .min(1, "Invalid idempotency key")
   .max(128, "Invalid idempotency key");
 
+function requireParsedString(
+  value: string | undefined,
+  message: string,
+): string {
+  if (value === undefined || value.length === 0) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message,
+    });
+  }
+
+  return value;
+}
+
 export function parseCreateConversion(value: unknown) {
-  return parseWithSchema(createConversionSchema, value);
+  const parsed = parseWithSchema(createConversionSchema, value);
+
+  return {
+    sourceFileId: requireParsedString(parsed.sourceFileId, "Invalid file id"),
+    targetFormat: requireParsedString(
+      parsed.targetFormat,
+      "Invalid target format",
+    ),
+    type: parsed.type,
+    additionalFileIds: parsed.additionalFileIds,
+    options: parsed.options,
+  };
 }
 
 export function parseConversionId(value: string) {
