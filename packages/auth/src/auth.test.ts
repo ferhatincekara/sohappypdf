@@ -95,6 +95,11 @@ describe("createAuth", () => {
       enabled: true,
       domain: "sohappypdf.com",
     });
+    expect(auth.options.advanced?.useSecureCookies).toBe(true);
+    expect(auth.options.advanced?.defaultCookieAttributes?.sameSite).toBe(
+      "none",
+    );
+    expect(auth.options.advanced?.defaultCookieAttributes?.secure).toBe(true);
   });
 
   test("creates a user with a hashed credential and a server session", async () => {

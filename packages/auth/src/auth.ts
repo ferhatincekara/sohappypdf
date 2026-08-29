@@ -25,6 +25,7 @@ export function createAuth(options: CreateAuthOptions) {
     options.sendVerificationEmail ?? sendAuthEmailUnimplemented;
   const sendResetPassword =
     options.sendResetPassword ?? sendAuthEmailUnimplemented;
+  const cookieDomain = options.config.cookieDomain;
 
   return betterAuth({
     database: options.database,
@@ -62,18 +63,19 @@ export function createAuth(options: CreateAuthOptions) {
       },
     },
     advanced: {
-      useSecureCookies: options.config.useSecureCookies,
+      useSecureCookies:
+        options.config.useSecureCookies || cookieDomain !== undefined,
       crossSubDomainCookies:
-        options.config.cookieDomain === undefined
+        cookieDomain === undefined
           ? undefined
           : {
               enabled: true,
-              domain: options.config.cookieDomain,
+              domain: cookieDomain,
             },
       defaultCookieAttributes: {
         httpOnly: true,
-        sameSite: "lax",
-        secure: options.config.useSecureCookies,
+        sameSite: cookieDomain === undefined ? "lax" : "none",
+        secure: options.config.useSecureCookies || cookieDomain !== undefined,
         path: "/",
       },
     },

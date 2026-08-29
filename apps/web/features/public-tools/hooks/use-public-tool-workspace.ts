@@ -39,6 +39,7 @@ import {
   mapUploadWorkflowErrorKey,
   type PublicToolErrorKey,
 } from "@/features/public-tools/lib/public-tool-errors";
+import { resolvePublicToolAuthState } from "@/features/public-tools/lib/resolve-public-tool-auth-state";
 import { resolveToolUxState } from "@/features/public-tools/lib/resolve-tool-ux-state";
 import { toolExecutionQueryRefetchInterval } from "@/features/public-tools/lib/tool-execution-polling";
 import { maxFilesForTool } from "@/features/public-tools/lib/tool-limits";
@@ -77,9 +78,10 @@ export function usePublicToolWorkspace(
 ) {
   const session = authClient.useSession();
   const queryClient = useQueryClient();
-  const isAuthenticated =
-    options?.authenticated === true || session.data?.user !== undefined;
-  const authPending = session.isPending && options?.authenticated !== true;
+  const { isAuthenticated, authPending } = resolvePublicToolAuthState({
+    sessionPending: session.isPending,
+    hasSessionUser: session.data?.user !== undefined,
+  });
   const apis = useMemo(
     () => createPublicToolApis(isAuthenticated),
     [isAuthenticated],

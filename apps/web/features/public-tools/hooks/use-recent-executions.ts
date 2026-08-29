@@ -19,14 +19,17 @@ import {
   RECENT_EXECUTIONS_LIMIT,
   RECENT_EXECUTIONS_STALE_TIME_MS,
 } from "@/features/public-tools/lib/recent-executions";
+import { resolvePublicToolAuthState } from "@/features/public-tools/lib/resolve-public-tool-auth-state";
 import type { RecentExecution } from "@/features/public-tools/types/recent-execution";
 import { authClient } from "@/lib/auth/auth-client";
 
-export function useRecentExecutions(options?: { authenticated?: boolean }) {
+export function useRecentExecutions(_options?: { authenticated?: boolean }) {
   const tErrors = useTranslations("files.errors");
   const session = authClient.useSession();
-  const isAuthenticated =
-    options?.authenticated === true || session.data?.user !== undefined;
+  const { isAuthenticated, authPending } = resolvePublicToolAuthState({
+    sessionPending: session.isPending,
+    hasSessionUser: session.data?.user !== undefined,
+  });
   const apis = useMemo(
     () => createPublicToolApis(isAuthenticated),
     [isAuthenticated],
@@ -50,7 +53,7 @@ export function useRecentExecutions(options?: { authenticated?: boolean }) {
       apis.listConversions({
         limit: RECENT_EXECUTIONS_LIMIT,
       }),
-    enabled: options?.authenticated === true || !session.isPending,
+    enabled: !authPending,
     staleTime: RECENT_EXECUTIONS_STALE_TIME_MS,
     refetchInterval: (result) =>
       conversionListRefetchInterval(
@@ -106,8 +109,7 @@ export function useRecentExecutions(options?: { authenticated?: boolean }) {
     executions: conversions
       .filter((conversion) => !isConversionExpired(conversion, now))
       .map((conversion) => mapRecentExecution(conversion, now)),
-    isPending:
-      (options?.authenticated !== true && session.isPending) || query.isPending,
+    isPending: authPending || query.isPending,
     isError: query.isError,
     isAuthenticated,
     downloadingId,
