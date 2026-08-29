@@ -1,5 +1,4 @@
 import {
-  groupCatalogToolsByCategory,
   isPremiumTool,
   listCatalogTools,
   listRegisteredTools,
@@ -115,28 +114,41 @@ export function getMarketingToolNavGroups(): readonly MarketingToolNavGroup[] {
   });
 }
 
-/** Full metadata-driven directory, including planned tools. */
+/** Live public directory — planned catalog entries stay off /tools pages. */
 export function getMarketingToolDirectoryItems(): readonly MarketingToolNavItem[] {
-  return listCatalogTools().map(toNavItem);
+  return getMarketingToolNavItems();
 }
 
 export function getMarketingToolDirectoryGroups(): readonly MarketingToolNavGroup[] {
-  const grouped = new Map(
-    groupCatalogToolsByCategory().map((group) => [
-      group.category,
-      group.tools.map(toNavItem),
-    ]),
-  );
+  return getMarketingToolNavGroups();
+}
+
+const MEGA_MENU_TOOL_LIMIT = 6;
+
+/** Header menu can preview planned tools; they stay unlinked. */
+export function getMarketingToolMenuGroups(): readonly MarketingToolNavGroup[] {
+  const items = listCatalogTools().map(toNavItem);
 
   return MARKETING_TOOL_CATEGORY_ORDER.flatMap((category) => {
-    const tools = grouped.get(category);
+    const tools = items.filter((item) => item.category === category);
 
-    if (tools === undefined || tools.length === 0) {
+    if (tools.length === 0) {
       return [];
     }
 
     return [{ category, tools: sortMarketingNavTools(tools) }];
   });
+}
+
+export function visibleMegaMenuTools(
+  tools: readonly MarketingToolNavItem[],
+  limit = MEGA_MENU_TOOL_LIMIT,
+): MarketingToolNavItem[] {
+  const planned = tools.filter((tool) => tool.availability === "planned");
+  const live = tools.filter((tool) => tool.availability !== "planned");
+  const liveLimit = Math.max(0, limit - planned.length);
+
+  return [...live.slice(0, liveLimit), ...planned];
 }
 
 export function getRelatedMarketingTools(

@@ -1,4 +1,4 @@
-import { listCatalogTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@repo/tools/catalog";
 import { getLocale, getTranslations } from "next-intl/server";
 import {
   LatestPostsSection,
@@ -22,7 +22,7 @@ export async function MarketingHomePage({
   const t = await getTranslations("marketing");
   const locale = await getLocale();
   const { startHref } = resolveMarketingCtas(isAuthenticated);
-  const toolCount = listCatalogTools().length;
+  const toolCount = listRegisteredTools().length;
   const posts = listBlogPosts(locale).map((post) =>
     toBlogPostCard(post, locale),
   );

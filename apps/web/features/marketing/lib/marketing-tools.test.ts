@@ -1,14 +1,16 @@
 import { describe, expect, test } from "bun:test";
-import { listCatalogTools, listRegisteredTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@repo/tools/catalog";
 import {
   findToolCategoryBySlug,
   getMarketingToolDirectoryGroups,
   getMarketingToolDirectoryItems,
+  getMarketingToolMenuGroups,
   getMarketingToolNavGroups,
   getMarketingToolNavItems,
   getRelatedMarketingTools,
   sortMarketingNavTools,
   toolCategoryPath,
+  visibleMegaMenuTools,
 } from "./marketing-tools";
 
 describe("marketing tool navigation", () => {
@@ -45,43 +47,27 @@ describe("marketing tool navigation", () => {
     ).toEqual(items.map((item) => item.id).sort());
   });
 
-  test("builds the full tool directory from catalog metadata", () => {
-    const catalog = listCatalogTools();
+  test("keeps the public directory on executable tools only", () => {
+    const registered = listRegisteredTools();
     const items = getMarketingToolDirectoryItems();
     const groups = getMarketingToolDirectoryGroups();
 
     expect(items.map((item) => item.id).sort()).toEqual(
-      catalog.map((tool) => tool.id).sort(),
+      registered.map((tool) => tool.id).sort(),
     );
-    expect(groups.map((group) => group.category)).toEqual([
-      "organize",
-      "convert",
-      "edit",
-      "optimize",
-      "security",
-      "document",
-      "intelligence",
-    ]);
+    expect(items.every((item) => item.availability !== "planned")).toBe(true);
+    expect(items.some((item) => item.id === "translate-pdf")).toBe(false);
+    expect(items.some((item) => item.id === "ai-summarizer")).toBe(false);
+    expect(items.some((item) => item.id === "web-to-pdf")).toBe(false);
+    expect(items.some((item) => item.id === "pdf-forms")).toBe(false);
+    expect(items.some((item) => item.id === "image-to-pdf")).toBe(false);
     expect(
       groups.flatMap((group) => group.tools.map((tool) => tool.id)).sort(),
-    ).toEqual(catalog.map((tool) => tool.id).sort());
-    expect(
-      items.find((item) => item.id === "translate-pdf")?.availability,
-    ).toBe("planned");
-    expect(items.find((item) => item.id === "translate-pdf")?.premium).toBe(
-      true,
-    );
-    expect(
-      items.find((item) => item.id === "ai-summarizer")?.availability,
-    ).toBe("planned");
+    ).toEqual(registered.map((tool) => tool.id).sort());
   });
 
-  test("sorts category tools as standard, Pro, then Soon", () => {
+  test("sorts category tools as standard, then Pro", () => {
     const rank = (tool: { availability: string; premium: boolean }) => {
-      if (tool.availability === "planned") {
-        return 2;
-      }
-
       if (tool.premium) {
         return 1;
       }
@@ -102,12 +88,36 @@ describe("marketing tool navigation", () => {
     const intelligence = groups.find(
       (group) => group.category === "intelligence",
     );
-    expect(intelligence?.tools[0]?.id).toBe("ocr-pdf");
+    expect(intelligence?.tools.map((tool) => tool.id)).toEqual(["ocr-pdf"]);
+  });
+
+  test("shows planned tools in the header menu only", () => {
+    const groups = getMarketingToolMenuGroups();
+    const ids = groups.flatMap((group) => group.tools.map((tool) => tool.id));
+
+    expect(ids).toContain("translate-pdf");
+    expect(ids).toContain("ai-summarizer");
+    expect(ids).toContain("web-to-pdf");
+    expect(ids).toContain("pdf-forms");
+    expect(ids).toContain("image-to-pdf");
     expect(
-      intelligence?.tools
-        .slice(1)
-        .every((tool) => tool.availability === "planned"),
-    ).toBe(true);
+      groups
+        .find((group) => group.category === "intelligence")
+        ?.tools.map((tool) => tool.id),
+    ).toEqual(["ocr-pdf", "ai-summarizer", "translate-pdf"]);
+  });
+
+  test("keeps coming soon tools visible when a menu group is full", () => {
+    const convert =
+      getMarketingToolMenuGroups().find((group) => group.category === "convert")
+        ?.tools ?? [];
+    const visible = visibleMegaMenuTools(convert);
+
+    expect(visible.some((tool) => tool.id === "image-to-pdf")).toBe(true);
+    expect(visible.filter((tool) => tool.availability === "planned")).toEqual([
+      expect.objectContaining({ id: "image-to-pdf" }),
+    ]);
+    expect(visible.length).toBeLessThanOrEqual(6);
   });
 
   test("returns related tools from the same category", () => {

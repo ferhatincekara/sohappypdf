@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { listRegisteredTools } from "@repo/tools/catalog";
+import { getMarketingToolDirectoryItems } from "@/features/marketing/lib/marketing-tools";
 import {
   buildConversionExampleBody,
   listGuidedToolIds,
@@ -14,6 +15,14 @@ describe("public API tools", () => {
     expect(tools.length).toBeGreaterThan(0);
     expect(tools.map((tool) => tool.id)).toEqual(
       registered.map((tool) => tool.id),
+    );
+    expect(tools.some((tool) => tool.id === "translate-pdf")).toBe(false);
+    expect(tools.some((tool) => tool.id === "ai-summarizer")).toBe(false);
+    expect(tools.some((tool) => tool.id === "web-to-pdf")).toBe(false);
+    expect(tools.some((tool) => tool.id === "pdf-forms")).toBe(false);
+    expect(tools.some((tool) => tool.id === "image-to-pdf")).toBe(false);
+    expect(tools.map((tool) => tool.id)).toEqual(
+      getMarketingToolDirectoryItems().map((item) => item.id),
     );
   });
 

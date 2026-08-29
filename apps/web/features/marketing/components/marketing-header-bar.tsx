@@ -13,9 +13,10 @@ import { cn } from "@/lib/utils";
 import { MARKETING_NAV_LINKS } from "../lib/marketing-nav";
 import { MARKETING_PATHS } from "../lib/marketing-paths";
 import { getMarketingToolIcon } from "../lib/marketing-tool-icon";
-import type {
-  MarketingToolNavGroup,
-  MarketingToolNavItem,
+import {
+  type MarketingToolNavGroup,
+  type MarketingToolNavItem,
+  visibleMegaMenuTools,
 } from "../lib/marketing-tools";
 import { isMobileNavEscapeKey } from "../lib/mobile-nav-state";
 import { MarketingMenuToggleIcon } from "./marketing-menu-toggle-icon";
@@ -375,7 +376,7 @@ function MegaMenuToolGroup({
     <div className="min-w-0 overflow-hidden">
       <p className="mb-2 text-sm font-bold text-foreground">{categoryLabel}</p>
       <ul>
-        {group.tools.slice(0, 6).map((tool) => {
+        {visibleMegaMenuTools(group.tools).map((tool) => {
           const Icon = getMarketingToolIcon(tool.icon);
           const isAvailable = tool.availability !== "planned";
           const inner = (

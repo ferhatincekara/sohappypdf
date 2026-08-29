@@ -1,6 +1,5 @@
 import {
-  isExecutableToolAvailability,
-  listCatalogTools,
+  listRegisteredTools,
   TOOL_CATEGORIES,
   type ToolCategory,
 } from "@repo/tools/catalog";
@@ -28,12 +27,8 @@ export type DeveloperCalculatorToolGroup = {
 };
 
 export function listDeveloperCalculatorTools(): readonly DeveloperCalculatorTool[] {
-  return listCatalogTools()
-    .filter(
-      (tool) =>
-        isExecutableToolAvailability(tool.availability) &&
-        tool.apiCreditCost > 0,
-    )
+  return listRegisteredTools()
+    .filter((tool) => tool.apiCreditCost > 0)
     .map((tool) => ({
       id: tool.id,
       category: tool.category,

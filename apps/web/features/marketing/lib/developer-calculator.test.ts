@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { listRegisteredTools } from "@repo/tools/catalog";
 import {
   groupDeveloperCalculatorTools,
   listDeveloperCalculatorTools,
@@ -20,6 +21,13 @@ describe("developer calculator", () => {
     expect(merge?.apiCreditCost).toBe(1);
     expect(merge?.category).toBe("organize");
     expect(tools.every((tool) => tool.apiCreditCost > 0)).toBe(true);
+    expect(tools.map((tool) => tool.id).sort()).toEqual(
+      listRegisteredTools()
+        .filter((tool) => tool.apiCreditCost > 0)
+        .map((tool) => tool.id)
+        .sort(),
+    );
+    expect(tools.some((tool) => tool.id === "translate-pdf")).toBe(false);
   });
 
   test("groups calculator tools by catalog category", () => {

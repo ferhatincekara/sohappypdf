@@ -1,7 +1,7 @@
 import type { ToolDefinition } from "@repo/tools/catalog";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import {
-  getMarketingToolDirectoryGroups,
+  getMarketingToolNavGroups,
   getMarketingToolNavItems,
 } from "@/features/marketing/lib/marketing-tools";
 
@@ -34,7 +34,7 @@ export function getMarketingToolShortcuts(): readonly MarketingToolShortcut[] {
   const tools = new Map(
     getMarketingToolNavItems().map((item) => [item.id, item]),
   );
-  const hasConvert = getMarketingToolDirectoryGroups().some(
+  const hasConvert = getMarketingToolNavGroups().some(
     (group) => group.category === "convert",
   );
   const shortcuts: MarketingToolShortcut[] = [];
