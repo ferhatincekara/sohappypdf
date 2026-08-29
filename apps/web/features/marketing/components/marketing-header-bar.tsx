@@ -334,6 +334,7 @@ export function MarketingHeaderBar({
                               alt=""
                               fill
                               sizes="240px"
+                              loading="eager"
                               className="object-cover"
                             />
                             <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent" />

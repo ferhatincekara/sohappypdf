@@ -73,6 +73,7 @@
         "@hookform/resolvers": "^5.2.2",
         "@repo/billing": "workspace:*",
         "@repo/tools": "workspace:*",
+        "@repo/utils": "workspace:*",
         "@tanstack/react-query": "^5.102.2",
         "axios": "^1.19.0",
         "better-auth": "^1.7.1",
@@ -189,6 +190,7 @@
         "@repo/config": "workspace:*",
         "@repo/conversions": "workspace:*",
         "@repo/core": "workspace:*",
+        "@repo/utils": "workspace:*",
         "pdf-lib": "^1.17.1",
       },
       "devDependencies": {

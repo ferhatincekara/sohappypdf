@@ -21,6 +21,7 @@ export {
 export type { FileFormat } from "./conversion-format.js";
 export {
   FILE_FORMATS,
+  fileFormatFromFilename,
   isFileFormat,
   normalizeFileFormat,
 } from "./conversion-format.js";

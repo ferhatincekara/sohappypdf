@@ -1,14 +1,20 @@
 import { describe, expect, test } from "bun:test";
+import { writeFile } from "node:fs/promises";
 import { DEFAULT_WORKER_CONFIG } from "@repo/config";
 import type {
   ConversionEngine,
   EngineRegistry,
 } from "@repo/conversion-engines";
-import type { ConversionRecord, ConversionService } from "@repo/conversions";
+import type {
+  ConversionOptions,
+  ConversionRecord,
+  ConversionService,
+} from "@repo/conversions";
 import type { FileRecord, FileService } from "@repo/files";
 import { createLogger } from "@repo/logger";
 import type { ConversionJobData } from "@repo/queue";
 import type { Storage } from "@repo/storage";
+import { PDFDocument } from "pdf-lib";
 import { PermanentConversionError } from "../job-errors.js";
 import { createConversionProcessor } from "./conversion-processor.js";
 
@@ -221,5 +227,115 @@ describe("conversion processor", () => {
 
     await processor(createJob());
     expect(converted).toEqual([]);
+  });
+
+  test("loads protect-pdf password from the conversion record", async () => {
+    const receivedOptions: ConversionOptions[] = [];
+    const protectOptions = {
+      type: "protect-pdf",
+      password: "secret",
+    } as const;
+
+    const processor = createConversionProcessor({
+      conversions: {
+        async getConversion() {
+          return createConversion({
+            type: "protect-pdf",
+            sourceFormat: "pdf",
+            targetFormat: "pdf",
+            status: "queued",
+            options: protectOptions,
+          });
+        },
+        async markProcessing() {
+          return createConversion({
+            type: "protect-pdf",
+            sourceFormat: "pdf",
+            targetFormat: "pdf",
+            status: "processing",
+            options: protectOptions,
+          });
+        },
+        async markCompleted() {
+          return createConversion({
+            status: "completed",
+            outputFileId: conversionId,
+          });
+        },
+      } as unknown as ConversionService,
+      files: {
+        async findFileById(id: string) {
+          if (id === conversionId) {
+            return undefined;
+          }
+
+          return createFile({
+            originalFilename: "doc.pdf",
+            mimeType: "application/pdf",
+          });
+        },
+        async registerStoredFile() {
+          return createFile({
+            id: conversionId,
+            originalFilename: "output.pdf",
+            mimeType: "application/pdf",
+          });
+        },
+      } as unknown as FileService,
+      storage: {
+        async objectExists() {
+          return false;
+        },
+        async getObjectMetadata() {
+          return { contentLength: 32 };
+        },
+        async downloadObjectToFile(input: { destination: string }) {
+          const document = await PDFDocument.create();
+          document.addPage([200, 200]);
+          await writeFile(input.destination, await document.save());
+          return { sizeBytes: 32 };
+        },
+        async uploadObjectFromFile() {},
+      } as unknown as Storage,
+      engines: {
+        resolve() {
+          return {
+            name: "pdf-security",
+            types: ["protect-pdf"],
+            canHandle() {
+              return true;
+            },
+            supports() {
+              return true;
+            },
+            async convert(input) {
+              receivedOptions.push(input.options);
+              const document = await PDFDocument.create();
+              document.addPage([200, 200]);
+              const outputPath = `${input.outputDirectory}/output.pdf`;
+              await writeFile(outputPath, await document.save());
+              return {
+                outputPath,
+                mimeType: "application/pdf",
+                filename: "output.pdf",
+              };
+            },
+          } satisfies ConversionEngine;
+        },
+      },
+      config: DEFAULT_WORKER_CONFIG,
+      logger: createLogger({ level: "error" }),
+    });
+
+    await processor(
+      createJob({
+        conversionType: "protect-pdf",
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: { type: "protect-pdf" },
+      }),
+    );
+
+    expect(receivedOptions).toEqual([protectOptions]);
   });
 });

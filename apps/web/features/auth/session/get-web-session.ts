@@ -1,15 +1,35 @@
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { cache } from "react";
-import { authClient } from "@/lib/auth/auth-client";
+import { serverAuthClient } from "@/lib/auth/server-auth-client";
+import { cookieHeaderFromStore } from "./session-request-headers";
 
-export type WebSession = NonNullable<typeof authClient.$Infer.Session>;
+export type WebSession = NonNullable<typeof serverAuthClient.$Infer.Session>;
+
+const SESSION_FETCH_ATTEMPTS = 2;
 
 export const getWebSession = cache(async (): Promise<WebSession | null> => {
-  const result = await authClient.getSession({
-    fetchOptions: {
-      headers: await headers(),
-    },
-  });
+  const cookie = cookieHeaderFromStore((await cookies()).getAll());
 
-  return result.data ?? null;
+  if (cookie === undefined) {
+    return null;
+  }
+
+  for (let attempt = 0; attempt < SESSION_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const result = await serverAuthClient.getSession({
+        fetchOptions: {
+          headers: { cookie },
+          cache: "no-store",
+        },
+      });
+
+      return result.data ?? null;
+    } catch {
+      if (attempt === SESSION_FETCH_ATTEMPTS - 1) {
+        return null;
+      }
+    }
+  }
+
+  return null;
 });

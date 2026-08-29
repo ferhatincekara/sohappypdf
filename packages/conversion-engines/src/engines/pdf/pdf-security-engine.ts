@@ -19,6 +19,9 @@ const TYPES = [
   "unlock-pdf",
 ] as const satisfies readonly ConversionType[];
 
+// qpdf 12: 0 success, 2 errors, 3 warnings. Older qpdf: 3 recovered errors.
+const QPDF_ACCEPT_EXIT_CODES = [0, 3] as const;
+
 export function createPdfSecurityEngine(
   config: ConversionEngineConfig,
   options: { runCommand?: RunAllowedCommand } = {},
@@ -49,6 +52,7 @@ export function createPdfSecurityEngine(
         await runCommand({
           command: config.qpdfBin,
           args: [
+            "--warning-exit-0",
             "--encrypt",
             input.options.password,
             input.options.password,
@@ -59,11 +63,13 @@ export function createPdfSecurityEngine(
           ],
           cwd: input.outputDirectory,
           timeoutMs: config.conversionTimeoutMs,
+          acceptExitCodes: QPDF_ACCEPT_EXIT_CODES,
         });
       } else if (input.options.type === "unlock-pdf") {
         await runCommand({
           command: config.qpdfBin,
           args: [
+            "--warning-exit-0",
             `--password=${input.options.password}`,
             "--decrypt",
             input.sourcePath,
@@ -71,6 +77,7 @@ export function createPdfSecurityEngine(
           ],
           cwd: input.outputDirectory,
           timeoutMs: config.conversionTimeoutMs,
+          acceptExitCodes: QPDF_ACCEPT_EXIT_CODES,
         });
       } else {
         throw unsupportedConversionError();

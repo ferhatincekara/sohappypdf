@@ -2,7 +2,7 @@ import {
   type BillingCatalogPrices,
   fallbackCatalogPrices,
 } from "@repo/billing/plans";
-import { getPublicApiV1BaseUrl } from "@/config/public-env";
+import { getServerApiV1BaseUrl } from "@/config/public-env";
 
 const CATALOG_REVALIDATE_SECONDS = 15 * 60;
 
@@ -70,7 +70,7 @@ export function parseBillingCatalogPrices(
 
 export async function loadPublicPricingCatalog(): Promise<BillingCatalogPrices> {
   try {
-    const response = await fetch(`${getPublicApiV1BaseUrl()}/billing/catalog`, {
+    const response = await fetch(`${getServerApiV1BaseUrl()}/billing/catalog`, {
       next: { revalidate: CATALOG_REVALIDATE_SECONDS },
     });
 

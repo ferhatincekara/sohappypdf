@@ -12,6 +12,8 @@ export type QueueConnectionOptions = {
   username: "default";
   password: string;
   tls: Record<string, never>;
+  family: 4;
+  connectTimeout: number;
   maxRetriesPerRequest: number | null;
   enableReadyCheck: false;
 };
@@ -57,6 +59,8 @@ export function createQueueConnectionOptions(
     username: "default",
     password: config.restToken,
     tls: {},
+    family: 4,
+    connectTimeout: 10_000,
     maxRetriesPerRequest: role === "worker" ? null : 20,
     enableReadyCheck: false,
   };

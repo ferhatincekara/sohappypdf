@@ -48,6 +48,10 @@ export function conversionIdFromJobData(value: unknown): string | undefined {
   return value.conversionId;
 }
 
+/**
+ * Redis job payloads must not contain secrets. Workers load those
+ * fields from the conversion record instead.
+ */
 export function toQueueSafeJobOptions(
   options: Record<string, unknown>,
 ): Record<string, unknown> {

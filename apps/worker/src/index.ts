@@ -24,9 +24,20 @@ try {
     onSignal("SIGINT");
   });
 } catch (error) {
+  const cause = error instanceof Error ? error.cause : undefined;
+  const causeCode =
+    typeof cause === "object" &&
+    cause !== null &&
+    "code" in cause &&
+    typeof cause.code === "string"
+      ? cause.code
+      : undefined;
+
   logger.error("worker startup failed", {
     code: isAppError(error) ? error.code : "INTERNAL_ERROR",
     reason: isAppError(error) ? error.message : "An unexpected error occurred",
+    causeName: cause instanceof Error ? cause.name : undefined,
+    causeCode,
   });
   process.exit(1);
 }

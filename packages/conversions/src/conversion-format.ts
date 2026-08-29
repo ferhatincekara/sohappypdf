@@ -13,6 +13,7 @@ export const FILE_FORMATS = [
   "txt",
   "md",
   "json",
+  "zip",
 ] as const;
 
 export type FileFormat = (typeof FILE_FORMATS)[number];
@@ -38,4 +39,16 @@ export function normalizeFileFormat(value: string): FileFormat | undefined {
   }
 
   return undefined;
+}
+
+export function fileFormatFromFilename(
+  filename: string,
+): FileFormat | undefined {
+  const separator = filename.lastIndexOf(".");
+
+  if (separator < 0 || separator === filename.length - 1) {
+    return undefined;
+  }
+
+  return normalizeFileFormat(filename.slice(separator + 1));
 }

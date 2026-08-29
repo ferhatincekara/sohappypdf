@@ -30,6 +30,7 @@ function matchesExpectedFormat(format: FileFormat, bytes: Uint8Array): boolean {
     case "docx":
     case "xlsx":
     case "pptx":
+    case "zip":
       return hasPrefix(bytes, [80, 75]);
     case "txt":
     case "md":

@@ -5,13 +5,18 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./src/public-zip.ts",
+      "default": "./src/public-zip.ts"
+    },
+    "./zip": {
+      "types": "./src/public-zip.ts",
+      "default": "./src/public-zip.ts"
     }
   },
   "scripts": {
     "build": "tsc",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "bun test"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

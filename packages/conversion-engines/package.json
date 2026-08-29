@@ -18,6 +18,7 @@
     "@repo/config": "workspace:*",
     "@repo/conversions": "workspace:*",
     "@repo/core": "workspace:*",
+    "@repo/utils": "workspace:*",
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {

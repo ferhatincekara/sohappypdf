@@ -131,6 +131,7 @@ export function Hero({
             width={1800}
             height={1200}
             priority
+            loading="eager"
             sizes="(max-width: 1180px) 100vw, 1180px"
             className="h-85 w-full object-cover sm:h-105 md:h-130"
           />

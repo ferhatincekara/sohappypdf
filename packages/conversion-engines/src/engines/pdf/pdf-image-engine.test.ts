@@ -42,9 +42,9 @@ describe("pdf image engine", () => {
       expect(calls[0]?.command).toBe("pdftoppm");
       expect(calls[0]?.args).toEqual([
         "-png",
-        "-singlefile",
         "-r",
         "72",
+        "-singlefile",
         "-f",
         "2",
         "-l",
@@ -53,6 +53,38 @@ describe("pdf image engine", () => {
         workspace.join("page"),
       ]);
       expect(result.filename).toBe("output.png");
+    } finally {
+      await workspace.cleanup();
+    }
+  });
+
+  test("zips every rendered page when no page option is set", async () => {
+    const workspace = await createConversionWorkspace(
+      "550e8400-e29b-41d4-a716-446655440222",
+    );
+
+    try {
+      const sourcePath = workspace.join("source.pdf");
+      await writeFile(sourcePath, "%PDF-1.4\n");
+      const engine = createPdfImageEngine(DEFAULT_CONVERSION_ENGINE_CONFIG, {
+        async runCommand() {
+          await writeFile(workspace.join("page-1.png"), ONE_PIXEL_PNG);
+          await writeFile(workspace.join("page-2.png"), ONE_PIXEL_PNG);
+        },
+      });
+
+      const result = await engine.convert({
+        type: "pdf-to-png",
+        sourcePath,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "png",
+        options: { type: "pdf-to-png" },
+        additionalSourcePaths: [],
+      });
+
+      expect(result.filename).toBe("output.zip");
+      expect(result.mimeType).toBe("application/zip");
     } finally {
       await workspace.cleanup();
     }

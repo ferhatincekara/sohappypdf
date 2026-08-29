@@ -16,6 +16,7 @@ export type RunCommandInput = {
   args: readonly string[];
   cwd: string;
   timeoutMs: number;
+  acceptExitCodes?: readonly number[];
 };
 
 export type RunProcessResult = {
@@ -180,7 +181,12 @@ export async function runAllowedCommand(input: RunCommandInput): Promise<void> {
     timeoutMs: input.timeoutMs,
   });
 
-  if (result.exitCode !== 0 || hasLibreOfficeExportFilterError(result.stderr)) {
+  const acceptedExitCodes = input.acceptExitCodes ?? [0];
+
+  if (
+    !acceptedExitCodes.includes(result.exitCode) ||
+    hasLibreOfficeExportFilterError(result.stderr)
+  ) {
     const details = `${command} exited ${String(result.exitCode)}: ${result.stderr
       .trim()
       .slice(0, 800)}`;

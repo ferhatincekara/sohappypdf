@@ -83,4 +83,14 @@ describe("command execution", () => {
       expect(isPermanentConversionError(error)).toBe(true);
     }
   });
+
+  test("accepts configured non-zero exit codes", async () => {
+    await runAllowedCommand({
+      command: "pdftoppm",
+      args: ["--not-a-real-flag"],
+      cwd: tmpdir(),
+      timeoutMs: 1_000,
+      acceptExitCodes: [0, 1, 2, 99],
+    });
+  });
 });

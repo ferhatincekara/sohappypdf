@@ -16,6 +16,8 @@ describe("queue connection", () => {
     expect(connection.username).toBe("default");
     expect(connection.password).toBe(config.restToken);
     expect(connection.tls).toEqual({});
+    expect(connection.family).toBe(4);
+    expect(connection.connectTimeout).toBe(10_000);
     expect(connection.maxRetriesPerRequest).toBe(20);
     expect(connection.enableReadyCheck).toBe(false);
   });

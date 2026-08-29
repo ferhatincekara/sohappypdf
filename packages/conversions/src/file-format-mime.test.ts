@@ -15,6 +15,8 @@ describe("upload MIME types", () => {
     expect(supported).toContain("image/jpeg");
     expect(supported).not.toContain("image/webp");
     expect(supported).not.toContain("text/plain");
+    expect(supported).not.toContain("application/zip");
+    expect(mimeTypeForFileFormat("zip")).toBe("application/zip");
     expect(isSupportedUploadMimeType("application/pdf")).toBe(true);
     expect(isSupportedUploadMimeType("image/webp")).toBe(false);
     expect(fileFormatFromMimeType("image/jpeg")).toBe("jpg");

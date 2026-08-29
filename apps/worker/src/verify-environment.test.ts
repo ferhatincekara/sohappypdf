@@ -54,6 +54,7 @@ describe("verifyWorkerEnvironment", () => {
       expect(isAppError(error)).toBe(true);
       if (isAppError(error)) {
         expect(error.code).toBe("INTERNAL_ERROR");
+        expect(error.message).toBe("Worker database is unavailable");
       }
     }
   });

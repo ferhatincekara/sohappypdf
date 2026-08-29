@@ -12,6 +12,7 @@ import {
 } from "@repo/conversion-engines";
 import {
   type ConversionService,
+  fileFormatFromFilename,
   isConversionImplemented,
   isConversionType,
   parseConversionOptions,
@@ -183,7 +184,7 @@ export function createConversionProcessor(
 
       const parsedOptions = parseConversionOptions(
         job.data.conversionType,
-        job.data.options,
+        current.options,
         { targetFormat: conversion.targetFormat },
       );
       const engine = dependencies.engines.resolve({
@@ -294,7 +295,8 @@ export function createConversionProcessor(
 
       const output = await validateConversionOutput({
         outputPath: result.outputPath,
-        expectedFormat: conversion.targetFormat,
+        expectedFormat:
+          fileFormatFromFilename(result.filename) ?? conversion.targetFormat,
         maxBytes: dependencies.config.maxOutputFileSizeBytes,
       });
 

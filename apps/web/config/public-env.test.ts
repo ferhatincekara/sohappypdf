@@ -1,5 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { getPublicApiV1BaseUrl, getPublicWebEnv } from "./public-env";
+import {
+  getPublicApiV1BaseUrl,
+  getPublicWebEnv,
+  getServerApiV1BaseUrl,
+  toServerApiBaseUrl,
+} from "./public-env";
 
 describe("getPublicWebEnv", () => {
   test("exposes only browser-safe public URLs", () => {
@@ -19,5 +24,20 @@ describe("getPublicWebEnv", () => {
       `${getPublicWebEnv().apiBaseUrl}/api/v1`,
     );
     expect(getPublicApiV1BaseUrl()).not.toContain("YOUR_API_KEY");
+  });
+
+  test("rewrites localhost to 127.0.0.1 for server-to-server fetches", () => {
+    expect(toServerApiBaseUrl("http://localhost:3001")).toBe(
+      "http://127.0.0.1:3001",
+    );
+    expect(toServerApiBaseUrl("http://localhost:3001/")).toBe(
+      "http://127.0.0.1:3001",
+    );
+    expect(toServerApiBaseUrl("https://api.sohappypdf.com")).toBe(
+      "https://api.sohappypdf.com",
+    );
+    expect(getServerApiV1BaseUrl()).toBe(
+      `${toServerApiBaseUrl(getPublicWebEnv().apiBaseUrl)}/api/v1`,
+    );
   });
 });

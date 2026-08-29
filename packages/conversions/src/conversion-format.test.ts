@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { isFileFormat, normalizeFileFormat } from "./conversion-format.js";
+import {
+  fileFormatFromFilename,
+  isFileFormat,
+  normalizeFileFormat,
+} from "./conversion-format.js";
 
 describe("conversion format", () => {
   test("accepts the catalogued formats", () => {
@@ -13,5 +17,11 @@ describe("conversion format", () => {
     expect(normalizeFileFormat("JPEG")).toBe("jpg");
     expect(normalizeFileFormat("jpg")).toBe("jpg");
     expect(normalizeFileFormat("unknown")).toBeUndefined();
+  });
+
+  test("reads the output format from a filename", () => {
+    expect(fileFormatFromFilename("output.zip")).toBe("zip");
+    expect(fileFormatFromFilename("page-1.JPEG")).toBe("jpg");
+    expect(fileFormatFromFilename("output")).toBeUndefined();
   });
 });

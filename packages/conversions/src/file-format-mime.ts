@@ -20,6 +20,7 @@ const FILE_FORMAT_MIME_TYPES: Record<FileFormat, readonly string[]> = {
   txt: ["text/plain"],
   md: ["text/markdown", "text/plain"],
   json: ["application/json"],
+  zip: ["application/zip"],
 };
 
 export function normalizeContentType(value: string): string {

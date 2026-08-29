@@ -16,6 +16,7 @@ import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
 import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 import { canDownloadConversion } from "@/features/conversions/lib/can-download-conversion";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
+import { bulkDownloadEntryName } from "@/features/files/lib/bulk-download-name";
 import {
   startBrowserDownload,
   startBrowserDownloads,
@@ -807,21 +808,32 @@ export function usePublicToolWorkspace(
     setDownloadError(null);
 
     try {
-      const urls: string[] = [];
+      const items: Array<{ url: string; filename: string }> = [];
 
-      for (const fileId of fileIds) {
+      for (const [index, fileId] of fileIds.entries()) {
         const result = await apis.createDownloadUrl(fileId);
-        urls.push(result.download.url);
+        const output = ux.outputs.find(
+          (entry) => entry.outputFileId === fileId,
+        );
+
+        items.push({
+          url: result.download.url,
+          filename: bulkDownloadEntryName({
+            sourceFilename: output?.sourceFilename ?? ux.sourceFilename,
+            targetFormat: output?.targetFormat ?? ux.targetFormat,
+            index,
+          }),
+        });
       }
 
-      if (urls.length === 1) {
-        const url = urls[0];
+      if (items.length === 1) {
+        const item = items[0];
 
-        if (url !== undefined) {
-          startBrowserDownload(url);
+        if (item !== undefined) {
+          startBrowserDownload(item.url, item.filename);
         }
       } else {
-        await startBrowserDownloads(urls);
+        await startBrowserDownloads(items);
       }
     } catch (error) {
       if (isExpirationResponse(error) || isMissingResourceResponse(error)) {
