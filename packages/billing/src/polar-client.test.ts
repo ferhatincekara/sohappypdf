@@ -1,11 +1,18 @@
-import { describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, test } from "bun:test";
 import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import {
+  createPolarClient,
   mapPolarRequestError,
   readPolarPortalUrl,
   readPolarValidationSummary,
   resolvePolarReturnUrl,
 } from "./polar-client.js";
+
+const originalFetch = globalThis.fetch;
+
+afterEach(() => {
+  globalThis.fetch = originalFetch;
+});
 
 describe("mapPolarRequestError", () => {
   test("maps Polar auth failures to configuration errors", () => {
@@ -75,5 +82,39 @@ describe("readPolarPortalUrl", () => {
         }),
       }),
     ).toBe("https://polar.sh/portal/session");
+  });
+});
+
+describe("createPolarClient.createCustomerPortal", () => {
+  test("opens Polar portal through HTTP customer sessions", async () => {
+    globalThis.fetch = async (input, init) => {
+      expect(String(input)).toBe("https://api.polar.sh/v1/customer-sessions/");
+      expect(init?.method).toBe("POST");
+      expect(new Headers(init?.headers).get("Authorization")).toBe(
+        "Bearer polar_oat_test",
+      );
+      expect(init?.body).toBe(
+        JSON.stringify({
+          customer_id: "00000000-0000-4000-8000-000000000001",
+        }),
+      );
+
+      return Response.json(
+        { customer_portal_url: "https://polar.sh/portal/session" },
+        { status: 201 },
+      );
+    };
+
+    const polar = createPolarClient({
+      accessToken: "polar_oat_test",
+      server: "production",
+    });
+
+    await expect(
+      polar.createCustomerPortal({
+        externalCustomerId: "user_1",
+        customerId: "00000000-0000-4000-8000-000000000001",
+      }),
+    ).resolves.toEqual({ url: "https://polar.sh/portal/session" });
   });
 });

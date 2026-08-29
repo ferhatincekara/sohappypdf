@@ -141,6 +141,28 @@ function isPublicHostname(hostname: string): boolean {
   return !/^\d{1,3}(?:\.\d{1,3}){3}$/.test(hostname);
 }
 
+function readPolarCustomerPortalUrl(session: unknown): string | undefined {
+  if (typeof session !== "object" || session === null) {
+    return undefined;
+  }
+
+  if (
+    "customer_portal_url" in session &&
+    typeof session.customer_portal_url === "string"
+  ) {
+    return session.customer_portal_url;
+  }
+
+  if (
+    "customerPortalUrl" in session &&
+    typeof session.customerPortalUrl === "string"
+  ) {
+    return session.customerPortalUrl;
+  }
+
+  return undefined;
+}
+
 function readPolarCheckoutUrl(checkout: unknown): string | undefined {
   if (
     typeof checkout !== "object" ||
@@ -364,7 +386,7 @@ export function createPolarClient(
     },
 
     async createCustomerPortal(input) {
-      return openPolarCustomerPortal(polar, input);
+      return openPolarCustomerPortal(options, input);
     },
 
     async getProduct(id) {
@@ -428,7 +450,7 @@ type PolarPortalIdentity =
   | { customerId: string; returnUrl?: string };
 
 async function openPolarCustomerPortal(
-  polar: Polar,
+  options: CreatePolarClientOptions,
   input: {
     externalCustomerId: string;
     customerId?: string;
@@ -448,7 +470,7 @@ async function openPolarCustomerPortal(
 
   for (const identity of identities) {
     try {
-      return await createPolarPortalSession(polar, {
+      return await createPolarPortalSession(options, {
         ...identity,
         ...(returnUrl === undefined ? {} : { returnUrl }),
       });
@@ -463,7 +485,7 @@ async function openPolarCustomerPortal(
 
       if (status === 422 && returnUrl !== undefined) {
         try {
-          return await createPolarPortalSession(polar, identity);
+          return await createPolarPortalSession(options, identity);
         } catch (retryError) {
           const retryUrl = readPolarPortalUrl(retryError);
           if (retryUrl !== null) {
@@ -618,12 +640,28 @@ function toPolarCustomerRecord(
 }
 
 async function createPolarPortalSession(
-  polar: Polar,
+  options: CreatePolarClientOptions,
   request: PolarPortalIdentity,
 ): Promise<{ url: string }> {
-  const session = await polar.customerSessions.create(request);
+  const body: Record<string, unknown> =
+    "customerId" in request
+      ? { customer_id: request.customerId }
+      : { external_customer_id: request.externalCustomerId };
+
+  if (request.returnUrl !== undefined) {
+    body.return_url = request.returnUrl;
+  }
+
+  const session = await polarApiJson({
+    accessToken: options.accessToken,
+    server: options.server,
+    method: "POST",
+    path: "/v1/customer-sessions/",
+    body,
+  });
+
   return {
-    url: requireUrl(session.customerPortalUrl, "customer portal"),
+    url: requireUrl(readPolarCustomerPortalUrl(session), "customer portal"),
   };
 }
 
