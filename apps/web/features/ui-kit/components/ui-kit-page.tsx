@@ -140,7 +140,7 @@ export function UiKitPage() {
               </p>
               <div className="mt-6 flex gap-3">
                 <Button variant="white">Start</Button>
-                <Button variant="white">Browse tools</Button>
+                <Button variant="outline">Browse tools</Button>
               </div>
             </div>
           </div>

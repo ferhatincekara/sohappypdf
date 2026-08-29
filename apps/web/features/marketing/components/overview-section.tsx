@@ -69,7 +69,7 @@ export function OverviewSection({
                 {startLabel}
               </Button>
               <Button
-                variant="white"
+                variant="ghost"
                 nativeButton={false}
                 render={<Link href={MARKETING_PATHS.tools} />}
               >
