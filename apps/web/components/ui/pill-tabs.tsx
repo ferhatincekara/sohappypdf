@@ -1,7 +1,7 @@
 "use client";
 
 import { LayoutGroup, motion } from "motion/react";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,7 @@ const PILL_TRANSITION = {
 export type PillTabItem = {
   id: string;
   label: ReactNode;
-  href?: string;
+  href?: ComponentProps<typeof Link>["href"];
 };
 
 export function PillTabs({

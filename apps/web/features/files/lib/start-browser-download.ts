@@ -82,7 +82,10 @@ export async function startBrowserDownloads(
       }),
     );
 
-    const blob = new Blob([buildZipArchive(files)], {
+    const archive = buildZipArchive(files);
+    const zipBytes = new Uint8Array(archive.byteLength);
+    zipBytes.set(archive);
+    const blob = new Blob([zipBytes], {
       type: "application/zip",
     });
     const objectUrl = URL.createObjectURL(blob);

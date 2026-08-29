@@ -34,7 +34,7 @@ export type PublicPlanPresentation = {
 export function presentPlan(
   id: PublicPlanId,
   limits: PublicPlanLimits,
-  monthlyPriceUsd = WEB_PLAN_MONTHLY_PRICE_USD[id],
+  monthlyPriceUsd: number = WEB_PLAN_MONTHLY_PRICE_USD[id],
 ): PublicPlanPresentation {
   return {
     id,

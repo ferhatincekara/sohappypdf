@@ -15,7 +15,6 @@ export function StatusPageFrame({ children }: { children: ReactNode }) {
 
   return (
     <StatusPageChrome
-      brand={brand}
       renderLogo={() => <BrandLogo title={brand} />}
       homeHref={MARKETING_PATHS.home}
       homeLabel={tErrors("genericHome")}
