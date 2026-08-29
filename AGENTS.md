@@ -99,12 +99,6 @@ Public Hono API.
 
 Background PDF conversion and file processing worker.
 
-### admin
-
-Internal operator console at `apps/admin`.
-
-Not a customer product. Authorization is an allowlist (`ADMIN_USER_IDS`, `ADMIN_EMAILS`) on top of Better Auth sessions. API keys cannot access admin routes.
-
 ## Package Responsibilities
 
 - `core`: Shared domain primitives and application errors

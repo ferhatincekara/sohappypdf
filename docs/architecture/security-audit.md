@@ -17,7 +17,7 @@ This document does **not** claim PDF malware risk is solved.
 - CORS cannot be `*`. Anonymous, session, and API-key rate limits are separate.
 - Conversion job payloads strip secret-like option keys before queue persistence.
 - Worker temp workspaces reject user-controlled path traversal.
-- Admin is session-only and fail-closed. Successful credit adjustments write `admin_audit_events` (actor, action, target, reason, timestamp) without secrets, tokens, or Polar identifiers.
+- There is no operator console in this revision. Privileged account changes stay out of the public API.
 
 ## Residual risks
 
@@ -25,5 +25,5 @@ This document does **not** claim PDF malware risk is solved.
 - MIME sniffing is limited; we verify size and declared type against stored object metadata, not a complete file-format allowlist for every engine.
 - Presigned URLs are bearer capabilities while they live. Keep them short and never log them.
 - Anonymous sessions are abuse-limited, not identity-proof. Rate limits and file-size caps are the primary control.
-- Admin audit currently covers mutating credit adjustments. Queue retries are not offered because conversion enqueue is not guaranteed idempotent for every tool.
+- Queue retries are not offered because conversion enqueue is not guaranteed idempotent for every tool.
 - Authenticated upload still has a process-wide ceiling (`MAX_UPLOAD_FILE_SIZE`, default 100 MiB) in addition to plan limits. Plan limits are enforced first.

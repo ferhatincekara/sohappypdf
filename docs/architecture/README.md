@@ -17,9 +17,6 @@ SoHappyPDF is a **tool-first** PDF platform.
 | `apps/web` | Next.js customer app (marketing, tools, account) |
 | `apps/api` | Hono public API + Better Auth |
 | `apps/worker` | BullMQ conversion + cleanup worker |
-| `apps/admin` | Internal operator console (allowlisted session auth) |
-
-Admin is not a customer product. Access is fail-closed via `ADMIN_USER_IDS` / `ADMIN_EMAILS`. Mutating admin actions (currently credit adjustments) are written to `admin_audit_events`.
 
 ## Live packages
 

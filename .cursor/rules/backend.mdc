@@ -124,7 +124,6 @@ This allows the same business logic to be reused by:
 
 - API
 - Worker
-- Admin
 - Background jobs
 
 ## Database

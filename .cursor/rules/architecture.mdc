@@ -50,8 +50,6 @@ packages/
 
 Shared UI currently lives in `apps/web/components/ui`. Do not assume `@repo/ui`, `@repo/validation`, or `@repo/api-client` exist unless they are added deliberately.
 
-Admin lives in `apps/admin` and is an operator console, not a customer product.
-
 ## Application Boundaries
 
 Applications must not import source code from another application.

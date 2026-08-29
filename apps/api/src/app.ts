@@ -1,9 +1,8 @@
 import { type ApiKeyService, getApiKeyService } from "@repo/api-keys";
 import { type AnonymousSessionService, getAuth } from "@repo/auth";
 import { type BillingService, getBillingService } from "@repo/billing";
-import type { AdminConfig, AnonymousConfig, ApiConfig } from "@repo/config";
+import type { AnonymousConfig, ApiConfig } from "@repo/config";
 import {
-  loadAdminConfig,
   loadAnonymousConfig,
   loadApiConfig,
   loadAppConfig,
@@ -15,16 +14,8 @@ import {
 } from "@repo/conversions";
 import { type FileService, getFileService } from "@repo/files";
 import { createLogger, type Logger } from "@repo/logger";
-import {
-  type ConversionJobData,
-  type ConversionQueueCounts,
-  enqueueConversion,
-} from "@repo/queue";
+import { type ConversionJobData, enqueueConversion } from "@repo/queue";
 import { Hono } from "hono";
-import type { AdminSystemHealth } from "./admin/admin-health.js";
-import { collectSystemHealth } from "./admin/admin-health.js";
-import type { AdminQueryService } from "./admin/admin-queries.js";
-import { createAdminQueryService } from "./admin/admin-queries.js";
 import type { AppEnv } from "./app-env.js";
 import {
   createDefaultIdentityResolver,
@@ -61,10 +52,6 @@ export type CreateAppOptions = {
   billingService?: BillingService;
   enqueueConversion?: (input: ConversionJobData) => Promise<unknown>;
   handleAuth?: HandleAuthRequest;
-  adminConfig?: AdminConfig;
-  adminQueries?: AdminQueryService;
-  getQueueCounts?: () => Promise<ConversionQueueCounts>;
-  getSystemHealth?: () => Promise<AdminSystemHealth>;
 };
 
 export function createApp(options: CreateAppOptions = {}) {
@@ -140,20 +127,6 @@ export function createApp(options: CreateAppOptions = {}) {
       anonymousConfig,
       checkAnonymousOperationRateLimit:
         options.checkAnonymousOperationRateLimit,
-      adminConfig: options.adminConfig ?? loadAdminConfig(),
-      getAdminQueries: () => options.adminQueries ?? createAdminQueryService(),
-      getQueueCounts: options.getQueueCounts,
-      getSystemHealth:
-        options.getSystemHealth ??
-        (() =>
-          collectSystemHealth({
-            getProcessingFailures: async () => {
-              const overview = await (
-                options.adminQueries ?? createAdminQueryService()
-              ).getOverview();
-              return overview.executions.failed;
-            },
-          })),
     }),
   );
 
