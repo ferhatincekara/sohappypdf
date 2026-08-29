@@ -26,6 +26,7 @@ Use:
 - Upstash Redis
 - BullMQ
 - Polar.sh
+- Resend
 
 ## API Architecture
 

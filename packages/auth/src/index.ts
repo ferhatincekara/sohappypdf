@@ -52,3 +52,8 @@ export {
   requireAuthSession,
   toSessionAuthIdentity,
 } from "./auth-session.js";
+export { createResendEmailSender } from "./resend-email.js";
+export {
+  buildResetPasswordEmail,
+  createResetPasswordEmailSender,
+} from "./reset-password-email.js";

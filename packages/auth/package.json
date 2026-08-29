@@ -19,7 +19,9 @@
     "@sohappypdf/config": "workspace:*",
     "@sohappypdf/core": "workspace:*",
     "@sohappypdf/db": "workspace:*",
-    "better-auth": "^1.7.1"
+    "@sohappypdf/logger": "workspace:*",
+    "better-auth": "^1.7.1",
+    "resend": "^6.25.0"
   },
   "devDependencies": {
     "@sohappypdf/typescript-config": "workspace:*",

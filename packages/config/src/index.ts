@@ -52,6 +52,11 @@ export {
 export type { DatabaseConfig } from "./database-config.js";
 export { loadDatabaseConfig } from "./database-config.js";
 export { isLocalDevelopmentOrigin } from "./dev-cors.js";
+export type { EmailConfig } from "./email-config.js";
+export {
+  DEFAULT_RESEND_FROM_EMAIL,
+  loadEmailConfig,
+} from "./email-config.js";
 export type { EnvSource } from "./env.js";
 export { getOptionalEnv, getRequiredEnv } from "./env.js";
 export { loadEnvFile } from "./env-file.js";

@@ -18,6 +18,7 @@ This document does **not** claim PDF malware risk is solved.
 - Conversion job payloads strip secret-like option keys before queue persistence.
 - Worker temp workspaces reject user-controlled path traversal.
 - There is no operator console in this revision. Privileged account changes stay out of the public API.
+- Password reset mail goes through Resend. Reset URLs and tokens are not logged. Delivery failures do not reveal whether an account exists.
 
 ## Residual risks
 

@@ -36,7 +36,7 @@ packages/
 - logger: Structured logging
 - config: Environment and application configuration
 - db: Drizzle ORM and database schema
-- auth: Better Auth + anonymous sessions
+- auth: Better Auth + anonymous sessions + Resend password reset
 - storage: S3 abstraction
 - queue: BullMQ configuration and jobs
 - rate-limit: Upstash rate limiting

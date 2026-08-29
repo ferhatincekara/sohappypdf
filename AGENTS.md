@@ -43,6 +43,7 @@ Detailed architecture and implementation rules are defined in `.cursor/rules/`.
 - Upstash Redis
 - BullMQ
 - Docker
+- Resend
 
 ### Billing
 
