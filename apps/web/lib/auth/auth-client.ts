@@ -1,9 +1,9 @@
 import { createAuthClient } from "better-auth/react";
-import { getPublicWebEnv } from "@/config/public-env";
+import { getBrowserApiBaseUrl } from "@/config/public-env";
 
 export function createWebAuthClient() {
   return createAuthClient({
-    baseURL: getPublicWebEnv().apiBaseUrl,
+    baseURL: getBrowserApiBaseUrl(),
     fetchOptions: {
       credentials: "include",
     },

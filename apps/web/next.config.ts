@@ -14,9 +14,36 @@ if (
   );
 }
 
+function resolveApiRewriteOrigin(): string {
+  const configured = process.env.NEXT_PUBLIC_API_BASE_URL?.trim().replace(
+    /\/$/,
+    "",
+  );
+
+  if (configured !== undefined && configured !== "") {
+    return configured;
+  }
+
+  return "http://127.0.0.1:3001";
+}
+
+const apiRewriteOrigin = resolveApiRewriteOrigin();
+
 const nextConfig: NextConfig = {
   typedRoutes: true,
   agentRules: false,
+  async rewrites() {
+    return [
+      {
+        source: "/v1/:path*",
+        destination: `${apiRewriteOrigin}/v1/:path*`,
+      },
+      {
+        source: "/api/auth/:path*",
+        destination: `${apiRewriteOrigin}/api/auth/:path*`,
+      },
+    ];
+  },
   async redirects() {
     return [
       {

@@ -57,7 +57,7 @@ export function getPublicApiV1BaseUrl(): string {
 /**
  * Server-to-server API origin. Rewrites localhost to 127.0.0.1 so Node/undici
  * does not race IPv6 (::1) against Bun, which can close the socket.
- * Browser clients must keep using the public localhost URL for cookies.
+ * Browser clients use the web origin and Next.js rewrites instead.
  */
 export function toServerApiBaseUrl(apiBaseUrl: string): string {
   let parsed: URL;
@@ -81,4 +81,16 @@ export function getServerApiBaseUrl(): string {
 
 export function getServerApiV1BaseUrl(): string {
   return `${getServerApiBaseUrl()}/v1`;
+}
+
+/**
+ * Browser clients call the web origin. Next.js rewrites `/v1` and `/api/auth`
+ * to the API host so session cookies stay first-party.
+ */
+export function getBrowserApiBaseUrl(): string {
+  if (typeof window === "undefined") {
+    return getServerApiBaseUrl();
+  }
+
+  return "";
 }

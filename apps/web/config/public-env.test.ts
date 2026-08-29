@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import {
+  getBrowserApiBaseUrl,
   getPublicApiV1BaseUrl,
   getPublicWebEnv,
+  getServerApiBaseUrl,
   getServerApiV1BaseUrl,
   toServerApiBaseUrl,
 } from "@/config/public-env";
@@ -17,6 +19,10 @@ describe("getPublicWebEnv", () => {
     expect(env).not.toHaveProperty("secret");
     expect(env).not.toHaveProperty("awsAccessKeyId");
     expect(env).not.toHaveProperty("s3BucketName");
+  });
+
+  test("uses the server API origin from Node and same-origin in the browser", () => {
+    expect(getBrowserApiBaseUrl()).toBe(getServerApiBaseUrl());
   });
 
   test("derives the public v1 API base from the API origin", () => {

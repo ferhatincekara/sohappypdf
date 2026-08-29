@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { createApiClient } from "@/lib/api/client";
 
 describe("api client", () => {
-  test("initializes a single Axios instance against the public API URL", () => {
+  test("initializes a credentialed Axios instance for first-party API calls", () => {
     const client = createApiClient();
 
     expect(client.defaults.baseURL).toBeDefined();
