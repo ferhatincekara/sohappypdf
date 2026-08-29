@@ -1,5 +1,5 @@
 import { neonConfig, Pool } from "@neondatabase/serverless";
-import { loadDatabaseConfig } from "@repo/config";
+import { loadDatabaseConfig } from "@sohappypdf/config";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import * as schema from "./schema/index.js";
 

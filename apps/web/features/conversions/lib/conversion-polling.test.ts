@@ -4,7 +4,7 @@ import {
   conversionListRefetchInterval,
   conversionRefetchInterval,
   isActiveConversionStatus,
-} from "./conversion-polling";
+} from "@/features/conversions/lib/conversion-polling";
 
 describe("conversion polling", () => {
   test("polls only while the conversion is active", () => {

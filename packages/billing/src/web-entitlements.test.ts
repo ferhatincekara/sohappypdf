@@ -6,7 +6,7 @@ import {
   DEFAULT_API_GROWTH_CREDITS,
   DEFAULT_API_SCALE_CREDITS,
   DEFAULT_API_STARTER_CREDITS,
-} from "@repo/config";
+} from "@sohappypdf/config";
 import {
   ANONYMOUS_WEB_LIMITS,
   DEFAULT_API_CREDIT_PACKS,

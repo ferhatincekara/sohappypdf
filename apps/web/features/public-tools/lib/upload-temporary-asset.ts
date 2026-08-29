@@ -1,6 +1,6 @@
 import { createFileUploadWorkflow } from "@/features/files/lib/upload-workflow";
 import type { PublicFile } from "@/features/files/types/file";
-import { createPublicToolApis } from "../api/public-tool-api";
+import { createPublicToolApis } from "@/features/public-tools/api/public-tool-api";
 
 export async function uploadTemporaryAsset(input: {
   file: File;

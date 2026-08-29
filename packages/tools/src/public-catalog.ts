@@ -1,5 +1,5 @@
 /**
- * Turbopack-safe leaf module for `@repo/tools/catalog`.
+ * Turbopack-safe leaf module for `@sohappypdf/tools/catalog`.
  * Keep this file free of relative imports so Next can resolve it.
  */
 

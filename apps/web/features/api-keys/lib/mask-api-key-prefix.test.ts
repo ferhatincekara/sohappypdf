@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { maskApiKeyPrefix } from "./mask-api-key-prefix";
+import { maskApiKeyPrefix } from "@/features/api-keys/lib/mask-api-key-prefix";
 
 describe("maskApiKeyPrefix", () => {
   test("shows the backend prefix and does not invent a secret", () => {

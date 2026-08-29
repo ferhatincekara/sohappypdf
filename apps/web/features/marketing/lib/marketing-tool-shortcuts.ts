@@ -1,4 +1,4 @@
-import type { ToolDefinition } from "@repo/tools/catalog";
+import type { ToolDefinition } from "@sohappypdf/tools/catalog";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import {
   getMarketingToolNavGroups,

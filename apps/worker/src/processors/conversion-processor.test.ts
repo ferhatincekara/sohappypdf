@@ -1,19 +1,19 @@
 import { describe, expect, test } from "bun:test";
 import { writeFile } from "node:fs/promises";
-import { DEFAULT_WORKER_CONFIG } from "@repo/config";
+import { DEFAULT_WORKER_CONFIG } from "@sohappypdf/config";
 import type {
   ConversionEngine,
   EngineRegistry,
-} from "@repo/conversion-engines";
+} from "@sohappypdf/conversion-engines";
 import type {
   ConversionOptions,
   ConversionRecord,
   ConversionService,
-} from "@repo/conversions";
-import type { FileRecord, FileService } from "@repo/files";
-import { createLogger } from "@repo/logger";
-import type { ConversionJobData } from "@repo/queue";
-import type { Storage } from "@repo/storage";
+} from "@sohappypdf/conversions";
+import type { FileRecord, FileService } from "@sohappypdf/files";
+import { createLogger } from "@sohappypdf/logger";
+import type { ConversionJobData } from "@sohappypdf/queue";
+import type { Storage } from "@sohappypdf/storage";
 import { PDFDocument } from "pdf-lib";
 import { PermanentConversionError } from "../job-errors.js";
 import { createConversionProcessor } from "./conversion-processor.js";

@@ -4,10 +4,10 @@ import { FileIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FileConvertButton } from "@/features/conversions/components/file-convert-button";
-import { formatFileSize } from "../lib/format-file-size";
-import type { PublicFile } from "../types/file";
-import type { FileUploadState } from "../types/upload-state";
-import { FileUploadProgress } from "./file-upload-progress";
+import { FileUploadProgress } from "@/features/files/components/file-upload-progress";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
+import type { PublicFile } from "@/features/files/types/file";
+import type { FileUploadState } from "@/features/files/types/upload-state";
 
 export function FileUploadItem({
   state,

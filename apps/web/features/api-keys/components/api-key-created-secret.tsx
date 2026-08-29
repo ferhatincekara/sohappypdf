@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { copyTextToClipboard } from "../lib/copy-text";
-import type { CreatedApiKeySecret } from "../lib/created-api-key-secret";
+import { copyTextToClipboard } from "@/features/api-keys/lib/copy-text";
+import type { CreatedApiKeySecret } from "@/features/api-keys/lib/created-api-key-secret";
 
 export function ApiKeyCreatedSecret({
   created,

@@ -1,13 +1,13 @@
-import type { ApiKeyService } from "@repo/api-keys";
+import type { ApiKeyService } from "@sohappypdf/api-keys";
 import {
   type BillingInterval,
   type BillingService,
   type CheckoutProductKey,
   isBillingInterval,
   isCheckoutProductKey,
-} from "@repo/billing";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import type { FileService } from "@repo/files";
+} from "@sohappypdf/billing";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import type { FileService } from "@sohappypdf/files";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireSessionIdentity } from "../../auth/request-identity.js";

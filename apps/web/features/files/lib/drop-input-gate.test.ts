@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { createDropInputGate, listSelectedFiles } from "./drop-input-gate";
+import {
+  createDropInputGate,
+  listSelectedFiles,
+} from "@/features/files/lib/drop-input-gate";
 
 function pdf(name: string): File {
   return new File([new Uint8Array(4)], name, { type: "application/pdf" });

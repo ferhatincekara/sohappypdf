@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { Logger } from "@repo/logger";
+import type { Logger } from "@sohappypdf/logger";
 import { createApp } from "../app.js";
 import { createOpenApiDocument } from "../public-contract/openapi.js";
 

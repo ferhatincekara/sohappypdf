@@ -1,4 +1,4 @@
-import { getDb } from "@repo/db";
+import { getDb } from "@sohappypdf/db";
 import { createApiKeyRepository } from "./api-key-repository.js";
 import { type ApiKeyService, createApiKeyService } from "./api-key-service.js";
 

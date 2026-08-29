@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { convertHintKey } from "./convert-hint";
+import { convertHintKey } from "@/features/public-tools/lib/convert-hint";
 
 describe("convertHintKey", () => {
   test("selects tool-specific conversion copy", () => {

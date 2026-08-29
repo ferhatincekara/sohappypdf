@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { formatBlogDate } from "./format-blog-date";
+import { formatBlogDate } from "@/features/blog/lib/format-blog-date";
 
 describe("formatBlogDate", () => {
   test("formats the reference post dates without a timezone shift", () => {

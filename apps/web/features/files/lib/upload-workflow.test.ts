@@ -1,8 +1,14 @@
 import { describe, expect, test } from "bun:test";
-import { FileApiRequestError } from "../api/file-api";
-import { FILE_ERROR_KEYS, StorageUploadError } from "../api/file-errors";
-import type { CreateUploadResponse, PublicFile } from "../types/file";
-import { createFileUploadWorkflow } from "./upload-workflow";
+import { FileApiRequestError } from "@/features/files/api/file-api";
+import {
+  FILE_ERROR_KEYS,
+  StorageUploadError,
+} from "@/features/files/api/file-errors";
+import { createFileUploadWorkflow } from "@/features/files/lib/upload-workflow";
+import type {
+  CreateUploadResponse,
+  PublicFile,
+} from "@/features/files/types/file";
 
 function createBrowserFile(): File {
   return new File([new Uint8Array(8)], "report.pdf", {

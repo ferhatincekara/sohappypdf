@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { fallbackCatalogPrices } from "@repo/billing/plans";
-import type { PublicBillingStatus } from "../types/billing";
+import { fallbackCatalogPrices } from "@sohappypdf/billing/plans";
 import {
   apiPackCheckoutAction,
   apiPackRenewalDate,
@@ -19,7 +18,8 @@ import {
   shouldShowBillingCycleToggle,
   webCreditsResetDate,
   webPlanRenewalDate,
-} from "./billing-view";
+} from "@/features/billing/lib/billing-view";
+import type { PublicBillingStatus } from "@/features/billing/types/billing";
 
 const periodStart = "2026-08-01T00:00:00.000Z";
 const periodEnd = "2026-09-01T00:00:00.000Z";

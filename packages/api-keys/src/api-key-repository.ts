@@ -1,5 +1,5 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { apiKeys, type Database } from "@repo/db";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import { apiKeys, type Database } from "@sohappypdf/db";
 import { and, desc, eq, isNull, lte, or } from "drizzle-orm";
 import type { StoredApiKeyRecord } from "./api-key-types.js";
 

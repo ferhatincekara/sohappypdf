@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import axios, { type AxiosInstance } from "axios";
-import type { PublicConversion } from "../types/conversion";
 import {
   ConversionApiRequestError,
   createConversionApi,
-} from "./conversion-api";
+} from "@/features/conversions/api/conversion-api";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
 
 function createConversion(): PublicConversion {
   return {

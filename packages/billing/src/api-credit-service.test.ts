@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_API_STARTER_CREDITS, loadBillingConfig } from "@repo/config";
-import { APP_ERROR_CODES, isAppError } from "@repo/core";
+import {
+  DEFAULT_API_STARTER_CREDITS,
+  loadBillingConfig,
+} from "@sohappypdf/config";
+import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import { createBillingService } from "./billing-service.js";
 import { INCLUDED_API_CREDITS_PER_MONTH } from "./default-plan-limits.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";

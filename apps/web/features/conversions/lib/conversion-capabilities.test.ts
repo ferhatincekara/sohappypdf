@@ -4,7 +4,7 @@ import {
   listCreatableConversionTypes,
   listTargetFormats,
   resolveCreatableConversionType,
-} from "./conversion-capabilities";
+} from "@/features/conversions/lib/conversion-capabilities";
 
 describe("conversion capabilities", () => {
   test("offers implemented output formats for a PDF source", () => {

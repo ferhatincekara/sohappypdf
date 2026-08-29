@@ -3,7 +3,7 @@ import type {
   EditorRectangleObject,
   EditorSignatureObject,
   EditorTextObject,
-} from "../types/editor-object";
+} from "@/features/pdf-document-editor/types/editor-object";
 
 export function createEditorId(): string {
   return crypto.randomUUID();

@@ -11,7 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { PublicFile } from "../types/file";
+import type { PublicFile } from "@/features/files/types/file";
 
 export function FileDeleteDialog({
   file,

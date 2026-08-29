@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicConversion } from "../types/conversion";
 import {
   canDownloadConversion,
   isConversionExpired,
-} from "./can-download-conversion";
+} from "@/features/conversions/lib/can-download-conversion";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
 
 function createConversion(
   overrides: Partial<PublicConversion> = {},

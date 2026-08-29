@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 
 const MAX_OBJECT_KEY_LENGTH = 1024;
 const SEGMENT_PATTERN = /^[A-Za-z0-9._-]+$/;

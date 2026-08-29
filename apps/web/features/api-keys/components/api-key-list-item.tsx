@@ -4,14 +4,14 @@ import { KeyRoundIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { isApiKeyRevocable } from "../lib/is-api-key-revocable";
-import { maskApiKeyPrefix } from "../lib/mask-api-key-prefix";
+import { isApiKeyRevocable } from "@/features/api-keys/lib/is-api-key-revocable";
+import { maskApiKeyPrefix } from "@/features/api-keys/lib/mask-api-key-prefix";
 import {
   PUBLIC_API_KEY_STATUSES,
   type PublicApiKey,
   type PublicApiKeyStatus,
-} from "../types/api-key";
+} from "@/features/api-keys/types/api-key";
+import { cn } from "@/lib/utils";
 
 export function ApiKeyListItem({
   apiKey,

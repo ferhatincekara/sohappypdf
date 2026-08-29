@@ -9,7 +9,7 @@ import {
   pollExample,
   putUploadExample,
   uploadExample,
-} from "./example-snippets";
+} from "@/features/developer-docs/lib/example-snippets";
 
 describe("developer examples", () => {
   test("use placeholders instead of secrets", () => {

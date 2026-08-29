@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import type { EditorTextObject } from "../types/editor-object";
 import {
   documentEditorReducer,
   INITIAL_DOCUMENT_EDITOR_STATE,
   selectedEditorObject,
-} from "./document-editor-state";
+} from "@/features/pdf-document-editor/lib/document-editor-state";
+import type { EditorTextObject } from "@/features/pdf-document-editor/types/editor-object";
 
 const sampleText = (id: string): EditorTextObject => ({
   id,

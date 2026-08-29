@@ -1,10 +1,10 @@
-import { readPolarValidationSummary } from "@repo/billing";
+import { readPolarValidationSummary } from "@sohappypdf/billing";
 import {
   APP_ERROR_CODES,
   type AppErrorCode,
   type PublicError,
   toPublicError,
-} from "@repo/core";
+} from "@sohappypdf/core";
 import type { Context } from "hono";
 import type { AppEnv } from "../app-env.js";
 

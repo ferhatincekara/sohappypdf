@@ -1,5 +1,5 @@
-import type { AppShellUser } from "../types";
-import { gravatarUrl } from "./gravatar-url";
+import { gravatarUrl } from "@/features/app-shell/lib/gravatar-url";
+import type { AppShellUser } from "@/features/app-shell/types";
 
 export function toAppShellUser(user: {
   name: string;

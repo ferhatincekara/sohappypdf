@@ -4,10 +4,13 @@ import { useTranslations } from "next-intl";
 import { useId, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
-import { fileExtensionLabel, type WorkspaceFile } from "../lib/workspace-files";
-import { ToolFileErrorLine } from "./tool-file-error-line";
-import { ToolFilePreview } from "./tool-file-preview";
-import { ToolFileUploadProgress } from "./tool-file-upload-progress";
+import { ToolFileErrorLine } from "@/features/public-tools/components/tool-file-error-line";
+import { ToolFilePreview } from "@/features/public-tools/components/tool-file-preview";
+import { ToolFileUploadProgress } from "@/features/public-tools/components/tool-file-upload-progress";
+import {
+  fileExtensionLabel,
+  type WorkspaceFile,
+} from "@/features/public-tools/lib/workspace-files";
 
 export function ToolFileCard({
   entry,

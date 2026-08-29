@@ -3,14 +3,14 @@ import {
   isCreatableConversion,
   listCreatableConversionTypes,
   resolveCreatableConversionType,
-} from "../lib/conversion-capabilities";
-import type { ConversionSourceFormat } from "../types/conversion";
+} from "@/features/conversions/lib/conversion-capabilities";
+import type { ConversionSourceFormat } from "@/features/conversions/types/conversion";
 import {
   CONVERSION_TARGET_FORMATS,
   CONVERSION_TYPES,
   type ConversionTargetFormat,
   type ConversionType,
-} from "../types/conversion";
+} from "@/features/conversions/types/conversion";
 
 export const FILE_ID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

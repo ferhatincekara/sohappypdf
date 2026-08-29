@@ -1,4 +1,4 @@
-import { FREE_MAX_PAGES_PER_FILE } from "@repo/billing/plans";
+import { FREE_MAX_PAGES_PER_FILE } from "@sohappypdf/billing/plans";
 import { ConversionApiRequestError } from "@/features/conversions/api/conversion-api";
 import {
   CONVERSION_ERROR_KEYS,

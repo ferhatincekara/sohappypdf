@@ -1,5 +1,5 @@
 {
-  "name": "@repo/worker",
+  "name": "@sohappypdf/worker",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,20 +11,20 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@repo/auth": "workspace:*",
-    "@repo/billing": "workspace:*",
-    "@repo/config": "workspace:*",
-    "@repo/conversion-engines": "workspace:*",
-    "@repo/conversions": "workspace:*",
-    "@repo/core": "workspace:*",
-    "@repo/db": "workspace:*",
-    "@repo/files": "workspace:*",
-    "@repo/logger": "workspace:*",
-    "@repo/queue": "workspace:*",
-    "@repo/storage": "workspace:*"
+    "@sohappypdf/auth": "workspace:*",
+    "@sohappypdf/billing": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/conversion-engines": "workspace:*",
+    "@sohappypdf/conversions": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
+    "@sohappypdf/db": "workspace:*",
+    "@sohappypdf/files": "workspace:*",
+    "@sohappypdf/logger": "workspace:*",
+    "@sohappypdf/queue": "workspace:*",
+    "@sohappypdf/storage": "workspace:*"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "@types/node": "^22.18.0",
     "typescript": "5.9.2"
   }

@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/files");
+assertServerOnly("@sohappypdf/files");
 
 export type { TemporaryFileLifecycleState } from "./file-expiration.js";
 export {

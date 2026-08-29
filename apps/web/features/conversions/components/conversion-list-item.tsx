@@ -2,24 +2,27 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { FileDownloadButton } from "@/features/files/components/file-download-button";
-import { Link } from "@/lib/i18n/navigation";
+import {
+  ConversionActivityRow,
+  type ConversionActivityStatusTone,
+} from "@/features/conversions/components/conversion-activity-row";
 import {
   activityAgeFrom,
   activityAgeLabel,
   activityRemainingFrom,
   activityRemainingLabel,
-} from "../lib/activity-time-copy";
+} from "@/features/conversions/lib/activity-time-copy";
 import {
   canDownloadConversion,
   isConversionExpired,
-} from "../lib/can-download-conversion";
-import { conversionPath } from "../paths";
-import type { ConversionStatus, PublicConversion } from "../types/conversion";
-import {
-  ConversionActivityRow,
-  type ConversionActivityStatusTone,
-} from "./conversion-activity-row";
+} from "@/features/conversions/lib/can-download-conversion";
+import { conversionPath } from "@/features/conversions/paths";
+import type {
+  ConversionStatus,
+  PublicConversion,
+} from "@/features/conversions/types/conversion";
+import { FileDownloadButton } from "@/features/files/components/file-download-button";
+import { Link } from "@/lib/i18n/navigation";
 
 export function ConversionListItem({
   conversion,

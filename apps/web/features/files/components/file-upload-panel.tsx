@@ -1,15 +1,15 @@
 "use client";
 
-import { DEFAULT_PLAN_LIMITS } from "@repo/billing/plans";
+import { DEFAULT_PLAN_LIMITS } from "@sohappypdf/billing/plans";
 import { useTranslations } from "next-intl";
 import { useBillingStatus } from "@/features/billing";
 import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
-import { useFileUpload } from "../hooks/use-file-upload";
-import { formatFileSize } from "../lib/format-file-size";
-import type { PublicFile } from "../types/file";
-import { FileUploadDropzone } from "./file-upload-dropzone";
-import { FileUploadError } from "./file-upload-error";
-import { FileUploadItem } from "./file-upload-item";
+import { FileUploadDropzone } from "@/features/files/components/file-upload-dropzone";
+import { FileUploadError } from "@/features/files/components/file-upload-error";
+import { FileUploadItem } from "@/features/files/components/file-upload-item";
+import { useFileUpload } from "@/features/files/hooks/use-file-upload";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
+import type { PublicFile } from "@/features/files/types/file";
 
 export function FileUploadPanel({
   onConvert,

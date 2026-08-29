@@ -3,12 +3,12 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ConversionCreateDialog } from "@/features/conversions/components/conversion-create-dialog";
-import { useDeleteFile } from "../hooks/use-delete-file";
-import { useFiles } from "../hooks/use-files";
-import type { PublicFile } from "../types/file";
-import { FileDeleteDialog } from "./file-delete-dialog";
-import { FileList } from "./file-list";
-import { FileUploadPanel } from "./file-upload-panel";
+import { FileDeleteDialog } from "@/features/files/components/file-delete-dialog";
+import { FileList } from "@/features/files/components/file-list";
+import { FileUploadPanel } from "@/features/files/components/file-upload-panel";
+import { useDeleteFile } from "@/features/files/hooks/use-delete-file";
+import { useFiles } from "@/features/files/hooks/use-files";
+import type { PublicFile } from "@/features/files/types/file";
 
 export function FilesWorkspace() {
   const t = useTranslations("files.list");

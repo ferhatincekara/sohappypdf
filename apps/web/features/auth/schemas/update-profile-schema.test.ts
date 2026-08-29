@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createUpdateProfileSchema } from "./update-profile-schema";
+import { createUpdateProfileSchema } from "@/features/auth/schemas/update-profile-schema";
 
 const t = (key: string) => key;
 

@@ -1,4 +1,4 @@
-import type { RateLimitSubject } from "@repo/rate-limit";
+import type { RateLimitSubject } from "@sohappypdf/rate-limit";
 import { fingerprintClientIp } from "./auth/ip-fingerprint.js";
 import type { RequestIdentity } from "./auth/request-identity.js";
 import {

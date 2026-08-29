@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { loadBillingConfig } from "@repo/config";
-import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
+import { loadBillingConfig } from "@sohappypdf/config";
+import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import type { PolarWebhookEvent, VerifyPolarWebhook } from "./billing-types.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
 import { handlePolarWebhook } from "./webhook-service.js";

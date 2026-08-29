@@ -1,6 +1,9 @@
 import axios from "axios";
-import type { UploadProgress } from "../types/upload-state";
-import { isCancelError, StorageUploadError } from "./file-errors";
+import {
+  isCancelError,
+  StorageUploadError,
+} from "@/features/files/api/file-errors";
+import type { UploadProgress } from "@/features/files/types/upload-state";
 
 export { StorageUploadError };
 

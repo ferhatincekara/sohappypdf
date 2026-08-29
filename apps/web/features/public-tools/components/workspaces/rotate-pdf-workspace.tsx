@@ -3,20 +3,20 @@
 import { RotateCcwIcon, RotateCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { RotationDegrees } from "../../lib/tool-workspace";
-import { parseSelectedPagesInput } from "../../lib/tool-workspace";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolSidebarCard } from "@/features/public-tools/components/tool-sidebar-card";
+import { ToolStage } from "@/features/public-tools/components/tool-stage";
+import type { RotationDegrees } from "@/features/public-tools/lib/tool-workspace";
+import { parseSelectedPagesInput } from "@/features/public-tools/lib/tool-workspace";
 import {
   type PdfPage,
   PdfPageWorkspace,
   pagesToRangeInput,
   usePdfDocument,
-} from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolSidebarCard } from "../tool-sidebar-card";
-import { ToolStage } from "../tool-stage";
+} from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
+import { cn } from "@/lib/utils";
 
 export function RotatePdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

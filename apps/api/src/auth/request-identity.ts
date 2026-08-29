@@ -1,4 +1,4 @@
-import { getApiKeyService, isApiKeyFormat } from "@repo/api-keys";
+import { getApiKeyService, isApiKeyFormat } from "@sohappypdf/api-keys";
 import {
   type Auth,
   type AuthIdentity,
@@ -7,8 +7,8 @@ import {
   getAuthSession,
   type SessionAuthIdentity,
   toSessionAuthIdentity,
-} from "@repo/auth";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+} from "@sohappypdf/auth";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { getBearerToken } from "./bearer-token.js";
 
 export type AnonymousRequestIdentity = {

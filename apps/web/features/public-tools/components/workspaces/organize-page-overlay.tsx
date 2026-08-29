@@ -3,7 +3,7 @@
 import { RotateCwIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import type { PdfPage } from "../../pdf-workspace";
+import type { PdfPage } from "@/features/public-tools/pdf-workspace";
 
 export function OrganizePageOverlay({
   page,

@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
 
 export const DEFAULT_FREE_WEB_TOOL_CREDITS = 1_550;

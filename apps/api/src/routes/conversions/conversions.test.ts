@@ -3,24 +3,24 @@ import {
   type BillingService,
   createTestBillingService,
   DEFAULT_PLAN_LIMITS,
-} from "@repo/billing";
+} from "@sohappypdf/billing";
 import {
   type ConversionRecord,
   type ConversionRepository,
   createConversionService,
   isConversionRecordExpired,
-} from "@repo/conversions";
-import { APP_ERROR_CODES } from "@repo/core";
+} from "@sohappypdf/conversions";
+import { APP_ERROR_CODES } from "@sohappypdf/core";
 import {
   createFileService,
   type FileRecord,
   type FileRepository,
   type FileService,
   sumActiveStorageBytesForOwner,
-} from "@repo/files";
-import type { Logger } from "@repo/logger";
-import type { ConversionJobData } from "@repo/queue";
-import type { Storage } from "@repo/storage";
+} from "@sohappypdf/files";
+import type { Logger } from "@sohappypdf/logger";
+import type { ConversionJobData } from "@sohappypdf/queue";
+import type { Storage } from "@sohappypdf/storage";
 import { createApp } from "../../app.js";
 import type { RequestIdentity } from "../../auth/request-identity.js";
 
@@ -818,9 +818,7 @@ describe("conversion API", () => {
       body: JSON.stringify({ sourceFileId: second.id, targetFormat: "png" }),
     });
 
-    const tooLarge = await context.app.request(
-      "/v1/conversions?limit=1000000",
-    );
+    const tooLarge = await context.app.request("/v1/conversions?limit=1000000");
     const page = await context.app.request("/v1/conversions?limit=1");
     const pageBody = await page.json();
     const next = await context.app.request(

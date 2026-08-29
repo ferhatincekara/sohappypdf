@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { APP_ERROR_CODES, isAppError } from "@repo/core";
+import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import {
   assertToolAllowedOnPlan,
   findCatalogTool,

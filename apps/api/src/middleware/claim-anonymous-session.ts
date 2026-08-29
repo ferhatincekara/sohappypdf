@@ -2,9 +2,9 @@ import {
   ANONYMOUS_SESSION_COOKIE_NAME,
   type AnonymousSessionService,
   createAnonymousSessionCookieClearOptions,
-} from "@repo/auth";
-import type { ConversionService } from "@repo/conversions";
-import type { FileService } from "@repo/files";
+} from "@sohappypdf/auth";
+import type { ConversionService } from "@sohappypdf/conversions";
+import type { FileService } from "@sohappypdf/files";
 import type { MiddlewareHandler } from "hono";
 import { deleteCookie, getCookie } from "hono/cookie";
 import { claimAnonymousSession } from "../anonymous/claim-anonymous-session.js";

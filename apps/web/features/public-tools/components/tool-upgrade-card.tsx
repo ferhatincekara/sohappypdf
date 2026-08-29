@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { resolveProHref } from "@/features/marketing/lib/marketing-cta";
+import type { PublicToolErrorKey } from "@/features/public-tools/lib/public-tool-errors";
 import { authClient } from "@/lib/auth/auth-client";
 import { Link } from "@/lib/i18n/navigation";
-import type { PublicToolErrorKey } from "../lib/public-tool-errors";
 
 export function ToolUpgradeCard({
   errorKey,

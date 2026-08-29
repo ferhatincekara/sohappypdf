@@ -9,10 +9,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { AuthInlineNotice } from "@/features/auth/components/auth-inline-notice";
+import { useForgotPassword } from "@/features/auth/hooks/use-forgot-password";
+import { AUTH_PATHS } from "@/features/auth/paths";
 import { Link } from "@/lib/i18n/navigation";
-import { useForgotPassword } from "../hooks/use-forgot-password";
-import { AUTH_PATHS } from "../paths";
-import { AuthInlineNotice } from "./auth-inline-notice";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth.forgotPassword");

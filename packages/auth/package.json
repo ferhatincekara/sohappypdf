@@ -1,5 +1,5 @@
 {
-  "name": "@repo/auth",
+  "name": "@sohappypdf/auth",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,13 +16,13 @@
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.7.1",
-    "@repo/config": "workspace:*",
-    "@repo/core": "workspace:*",
-    "@repo/db": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
+    "@sohappypdf/db": "workspace:*",
     "better-auth": "^1.7.1"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

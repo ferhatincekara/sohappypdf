@@ -1,12 +1,12 @@
-import { findRegisteredTool } from "@repo/tools/catalog";
+import { findRegisteredTool } from "@sohappypdf/tools/catalog";
 import {
   canDownloadConversion,
   isConversionExpired,
 } from "@/features/conversions/lib/can-download-conversion";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
-import type { RecentExecution } from "../types/recent-execution";
-import { deriveResultFilename } from "./derive-result-filename";
-import { RECENT_EXECUTIONS_FALLBACK_ROUTE } from "./recent-executions";
+import { deriveResultFilename } from "@/features/public-tools/lib/derive-result-filename";
+import { RECENT_EXECUTIONS_FALLBACK_ROUTE } from "@/features/public-tools/lib/recent-executions";
+import type { RecentExecution } from "@/features/public-tools/types/recent-execution";
 
 export function resolveRecentToolRoute(toolId: string): `/${string}` {
   return findRegisteredTool(toolId)?.route ?? RECENT_EXECUTIONS_FALLBACK_ROUTE;

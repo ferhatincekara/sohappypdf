@@ -1,5 +1,5 @@
-import { assertPolarWebhookSecret, type PolarConfig } from "@repo/config";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { assertPolarWebhookSecret, type PolarConfig } from "@sohappypdf/config";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { BillingRepository } from "./billing-repository.js";
 import type { VerifyPolarWebhook } from "./billing-types.js";
 import {

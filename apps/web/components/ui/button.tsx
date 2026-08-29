@@ -1,7 +1,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
+import { SlideLabel } from "@/components/ui/slide-label";
 import { cn } from "@/lib/utils";
-import { SlideLabel } from "./slide-label";
 
 const iconButtonSizes = new Set(["icon", "icon-xs", "icon-sm", "icon-lg"]);
 

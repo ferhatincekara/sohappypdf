@@ -2,18 +2,18 @@
   "name": "sohappypdf",
   "private": true,
   "scripts": {
-    "dev": "turbo run dev --continue --filter=@repo/web --filter=@repo/api --filter=@repo/worker",
+    "dev": "turbo run dev --continue --filter=@sohappypdf/web --filter=@sohappypdf/api --filter=@sohappypdf/worker",
     "build": "turbo run build",
     "lint": "biome check .",
     "format": "biome check --write .",
     "check-types": "turbo run check-types",
     "typecheck": "turbo run check-types",
-    "db:generate": "bun --env-file=.env run --filter @repo/db db:generate",
-    "db:migrate": "bun --env-file=.env run --filter @repo/db db:migrate"
+    "db:generate": "bun --env-file=.env run --filter @sohappypdf/db db:generate",
+    "db:migrate": "bun --env-file=.env run --filter @sohappypdf/db db:migrate"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.10",
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "@types/node": "^22.18.0",
     "drizzle-kit": "^0.31.10",
     "turbo": "^2.10.11",

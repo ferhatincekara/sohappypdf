@@ -2,8 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_PLAN_LIMITS } from "@repo/billing";
-import { APP_ERROR_CODES, APP_ERROR_STATUS } from "@repo/core";
+import { DEFAULT_PLAN_LIMITS } from "@sohappypdf/billing";
+import { APP_ERROR_CODES, APP_ERROR_STATUS } from "@sohappypdf/core";
 import {
   createOpenApiDocument,
   DOCUMENTED_PRESIGN_EXPIRES_IN_SECONDS,

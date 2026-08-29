@@ -1,5 +1,5 @@
 {
-  "name": "@repo/core",
+  "name": "@sohappypdf/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

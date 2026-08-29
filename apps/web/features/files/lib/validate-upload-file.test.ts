@@ -4,7 +4,7 @@ import {
   UPLOAD_VALIDATION_KEYS,
   validateSelectedFiles,
   validateUploadFile,
-} from "./validate-upload-file";
+} from "@/features/files/lib/validate-upload-file";
 
 function createBrowserFile(name: string, type: string, size = 32): File {
   const file = new File([new Uint8Array(size > 0 ? 1 : 0)], name, { type });

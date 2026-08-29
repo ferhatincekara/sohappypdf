@@ -4,10 +4,10 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { loginPath } from "@/features/auth/paths";
+import { ToolUpgradeCard } from "@/features/public-tools/components/tool-upgrade-card";
+import { isPlanUpgradeToolError } from "@/features/public-tools/lib/public-tool-errors";
+import type { ToolErrorUxState } from "@/features/public-tools/types/tool-ux-state";
 import { Link } from "@/lib/i18n/navigation";
-import { isPlanUpgradeToolError } from "../lib/public-tool-errors";
-import type { ToolErrorUxState } from "../types/tool-ux-state";
-import { ToolUpgradeCard } from "./tool-upgrade-card";
 
 export function ToolErrorState({
   state,

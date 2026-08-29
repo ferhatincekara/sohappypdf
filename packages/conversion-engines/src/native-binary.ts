@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { ConversionEngineConfig } from "./engine-config.js";
 
 const VERSION_FLAGS: Record<string, readonly string[]> = {

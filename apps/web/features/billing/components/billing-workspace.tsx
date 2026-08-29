@@ -8,24 +8,24 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { PillTabs } from "@/components/ui/pill-tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useBillingActions } from "../hooks/use-billing-actions";
-import { useBillingStatus } from "../hooks/use-billing-status";
-import { useCheckoutReturn } from "../hooks/use-checkout-return";
+import { ApiBillingSection } from "@/features/billing/components/api-billing-section";
+import { BillingCycleToggle } from "@/features/billing/components/billing-cycle-toggle";
+import { WebPlanSection } from "@/features/billing/components/web-plan-section";
+import { useBillingActions } from "@/features/billing/hooks/use-billing-actions";
+import { useBillingStatus } from "@/features/billing/hooks/use-billing-status";
+import { useCheckoutReturn } from "@/features/billing/hooks/use-checkout-return";
 import {
   type BillingCenterSection,
   listBillingCenterSections,
   parseBillingCenterSection,
   resolveBillingCenterSection,
   shouldShowBillingCycleToggle,
-} from "../lib/billing-view";
+} from "@/features/billing/lib/billing-view";
 import {
   isCheckoutActivationPending,
   resolveCheckoutBanner,
-} from "../lib/checkout-activation";
-import type { BillingInterval } from "../types/billing";
-import { ApiBillingSection } from "./api-billing-section";
-import { BillingCycleToggle } from "./billing-cycle-toggle";
-import { WebPlanSection } from "./web-plan-section";
+} from "@/features/billing/lib/checkout-activation";
+import type { BillingInterval } from "@/features/billing/types/billing";
 
 function BillingWorkspaceInner() {
   const t = useTranslations("billing");

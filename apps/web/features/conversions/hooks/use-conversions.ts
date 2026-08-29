@@ -2,12 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { conversionApi } from "../api/conversion-api";
-import { mapUnknownConversionError } from "../api/conversion-errors";
-import { conversionQueryKeys } from "../api/conversion-query-keys";
-import { isConversionExpired } from "../lib/can-download-conversion";
-import { parseConversionListSearchParams } from "../lib/conversion-list-params";
-import { conversionListRefetchInterval } from "../lib/conversion-polling";
+import { conversionApi } from "@/features/conversions/api/conversion-api";
+import { mapUnknownConversionError } from "@/features/conversions/api/conversion-errors";
+import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
+import { isConversionExpired } from "@/features/conversions/lib/can-download-conversion";
+import { parseConversionListSearchParams } from "@/features/conversions/lib/conversion-list-params";
+import { conversionListRefetchInterval } from "@/features/conversions/lib/conversion-polling";
 
 export function useConversions() {
   const searchParams = useSearchParams();

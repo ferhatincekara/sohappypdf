@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { blogUrlTransform, isInternalMarkdownHref } from "./blog-url-transform";
+import {
+  blogUrlTransform,
+  isInternalMarkdownHref,
+} from "@/features/blog/lib/blog-url-transform";
 
 describe("blogUrlTransform", () => {
   test("keeps in-app tool links", () => {

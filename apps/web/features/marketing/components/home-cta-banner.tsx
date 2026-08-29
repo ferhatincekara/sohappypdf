@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { Link } from "@/lib/i18n/navigation";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { MarketingContainer } from "./marketing-container";
 
 export async function HomeCtaBanner({ toolCount }: { toolCount: number }) {
   const t = await getTranslations("marketing.ctaBanner");

@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/auth");
+assertServerOnly("@sohappypdf/auth");
 
 export {
   ANONYMOUS_SESSION_COOKIE_NAME,

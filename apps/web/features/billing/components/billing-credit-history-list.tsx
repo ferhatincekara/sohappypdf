@@ -4,14 +4,14 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { billingTileClassName } from "@/features/billing/components/billing-plan-hero";
 import {
   API_CREDIT_HISTORY_PREVIEW_COUNT,
   apiHistoryMotion,
   summarizeApiCreditHistory,
-} from "../lib/summarize-api-credit-history";
-import type { ApiCreditLedgerEntry } from "../types/billing";
-import { billingTileClassName } from "./billing-plan-hero";
+} from "@/features/billing/lib/summarize-api-credit-history";
+import type { ApiCreditLedgerEntry } from "@/features/billing/types/billing";
+import { cn } from "@/lib/utils";
 
 export function BillingCreditHistoryList({
   entries,

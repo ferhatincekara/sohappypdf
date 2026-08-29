@@ -12,14 +12,14 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
-import { useCreateApiKey } from "../hooks/use-create-api-key";
-import type { CreatedApiKeySecret } from "../lib/created-api-key-secret";
-import { takeCreatedApiKeySecret } from "../lib/created-api-key-secret";
+import { useCreateApiKey } from "@/features/api-keys/hooks/use-create-api-key";
+import type { CreatedApiKeySecret } from "@/features/api-keys/lib/created-api-key-secret";
+import { takeCreatedApiKeySecret } from "@/features/api-keys/lib/created-api-key-secret";
 import {
   type CreateApiKeyFormValues,
   createApiKeyFormSchema,
-} from "../schemas/create-api-key-schema";
+} from "@/features/api-keys/schemas/create-api-key-schema";
+import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
 
 export function ApiKeyCreateForm({
   onCreated,

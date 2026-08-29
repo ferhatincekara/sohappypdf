@@ -4,7 +4,7 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { copyTextToClipboard } from "../lib/copy-text";
+import { copyTextToClipboard } from "@/features/developer-docs/lib/copy-text";
 
 export function CodeBlock({ code, label }: { code: string; label?: string }) {
   const t = useTranslations("developerDocs");

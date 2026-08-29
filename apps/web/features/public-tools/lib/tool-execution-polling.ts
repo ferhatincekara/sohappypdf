@@ -7,7 +7,7 @@ import type { PublicConversion } from "@/features/conversions/types/conversion";
 import {
   isExpirationResponse,
   isMissingResourceResponse,
-} from "./public-tool-errors";
+} from "@/features/public-tools/lib/public-tool-errors";
 
 export function toolExecutionRefetchInterval(
   conversion:

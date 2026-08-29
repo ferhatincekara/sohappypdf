@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, isAppError } from "@repo/core";
+import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import { UnrecoverableError, Worker } from "bullmq";
 import {
   type ConversionJobData,

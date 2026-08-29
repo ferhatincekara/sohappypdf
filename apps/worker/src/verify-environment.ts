@@ -1,12 +1,12 @@
-import type { WorkerConfig } from "@repo/config";
+import type { WorkerConfig } from "@sohappypdf/config";
 import {
   assertRequiredConversionBinaries,
   type NativeBinaryProbe,
-} from "@repo/conversion-engines";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { pingDatabase } from "@repo/db";
-import { pingQueueConnection } from "@repo/queue";
-import { getStorage } from "@repo/storage";
+} from "@sohappypdf/conversion-engines";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import { pingDatabase } from "@sohappypdf/db";
+import { pingQueueConnection } from "@sohappypdf/queue";
+import { getStorage } from "@sohappypdf/storage";
 
 export type WorkerInfrastructureName = "database" | "queue" | "storage";
 

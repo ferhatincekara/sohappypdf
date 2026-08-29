@@ -1,5 +1,5 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import { type Database, schema } from "@repo/db";
+import { type Database, schema } from "@sohappypdf/db";
 
 export function createAuthAdapterSchema() {
   return {

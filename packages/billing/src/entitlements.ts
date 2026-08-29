@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { BillingSubscriptionRecord } from "./billing-types.js";
 import { resolveWebMaxFilesPerOperation } from "./default-plan-limits.js";
 import type { PlanLimits } from "./plan-types.js";

@@ -1,5 +1,5 @@
-import { loadAnonymousConfig } from "@repo/config";
-import { getDb } from "@repo/db";
+import { loadAnonymousConfig } from "@sohappypdf/config";
+import { getDb } from "@sohappypdf/db";
 import { createAnonymousSessionRepository } from "./anonymous-session-repository.js";
 import { createAnonymousSessionService } from "./anonymous-session-service.js";
 import type { AnonymousSessionService } from "./anonymous-session-types.js";

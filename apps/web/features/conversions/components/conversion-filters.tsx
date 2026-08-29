@@ -6,7 +6,7 @@ import {
   CONVERSION_HISTORY_FILTERS,
   type ConversionHistoryFilter,
   conversionListHref,
-} from "../lib/conversion-list-params";
+} from "@/features/conversions/lib/conversion-list-params";
 
 export function ConversionFilters({
   filter,

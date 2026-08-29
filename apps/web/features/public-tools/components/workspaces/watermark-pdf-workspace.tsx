@@ -3,14 +3,14 @@
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolWorkspaceFiles } from "@/features/public-tools/components/tool-workspace-files";
 import {
   createPdfPages,
   PdfPageThumbnail,
   usePdfDocument,
-} from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolWorkspaceFiles } from "../tool-workspace-files";
+} from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 const MIN_OPACITY = 0.05;
 const MAX_OPACITY = 1;

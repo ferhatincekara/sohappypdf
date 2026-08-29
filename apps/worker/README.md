@@ -72,7 +72,7 @@ Every conversion has a maximum execution time (`CONVERSION_TIMEOUT_MS`). The pro
 
 ## Retries
 
-Queue settings in `@repo/queue`:
+Queue settings in `@sohappypdf/queue`:
 
 - 5 attempts
 - exponential backoff starting at 2 seconds (2s, 4s, 8s, 16s, 32s)

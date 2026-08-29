@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
-import type { Storage } from "@repo/storage";
-import { createFileOriginalKey } from "@repo/storage";
+import { isAppError } from "@sohappypdf/core";
+import type { Storage } from "@sohappypdf/storage";
+import { createFileOriginalKey } from "@sohappypdf/storage";
 import { FILE_EXPIRED_MESSAGE } from "./file-expiration.js";
 import type { FileRepository } from "./file-repository.js";
 import { createFileService } from "./file-service.js";

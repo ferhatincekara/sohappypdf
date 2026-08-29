@@ -1,6 +1,6 @@
-import { listRegisteredTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
 import { getTranslations } from "next-intl/server";
-import { MARKETING_FEATURE_IDS } from "../lib/feature-ids";
+import { MARKETING_FEATURE_IDS } from "@/features/marketing/lib/feature-ids";
 
 export async function FeaturesSection() {
   const t = await getTranslations("marketing.features");

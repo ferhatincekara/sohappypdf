@@ -1,6 +1,6 @@
-import type { ToolDefinition } from "@repo/tools/catalog";
-import type { ToolWorkspaceState } from "../lib/tool-workspace";
-import type { ToolSelectedUxState } from "./tool-ux-state";
+import type { ToolDefinition } from "@sohappypdf/tools/catalog";
+import type { ToolWorkspaceState } from "@/features/public-tools/lib/tool-workspace";
+import type { ToolSelectedUxState } from "@/features/public-tools/types/tool-ux-state";
 
 export type ToolSelectedWorkspaceProps = {
   tool: ToolDefinition;

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { formatBillingDisplayDate } from "./format-billing-date";
+import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
 
 describe("formatBillingDisplayDate", () => {
   test("formats UTC calendar dates for the active locale", () => {

@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useConversions } from "../hooks/use-conversions";
-import { ConversionFilters } from "./conversion-filters";
-import { ConversionList } from "./conversion-list";
+import { ConversionFilters } from "@/features/conversions/components/conversion-filters";
+import { ConversionList } from "@/features/conversions/components/conversion-list";
+import { useConversions } from "@/features/conversions/hooks/use-conversions";
 
 export function ConversionHistoryWorkspace() {
   const tErrors = useTranslations("conversions.errors");

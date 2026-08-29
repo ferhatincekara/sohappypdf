@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/billing");
+assertServerOnly("@sohappypdf/billing");
 
 export { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 export { shouldRefundAiCredits } from "./ai-credit-refund.js";

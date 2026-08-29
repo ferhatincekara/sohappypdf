@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { AccountPageHeader } from "@/features/app-shell";
-import { BillingWorkspace } from "./billing-workspace";
+import { BillingWorkspace } from "@/features/billing/components/billing-workspace";
 
 export async function BillingPageContent() {
   const t = await getTranslations("billing");

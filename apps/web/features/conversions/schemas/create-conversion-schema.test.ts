@@ -3,7 +3,7 @@ import {
   createConversionFormSchema,
   isConversionId,
   toCreateConversionInput,
-} from "./create-conversion-schema";
+} from "@/features/conversions/schemas/create-conversion-schema";
 
 const t = (key: string) => key;
 const fileId = "11111111-1111-4111-8111-111111111111";

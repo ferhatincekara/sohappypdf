@@ -1,4 +1,7 @@
-import { isConvertToolId, isImageToPdfToolId } from "./tool-workspace-kind";
+import {
+  isConvertToolId,
+  isImageToPdfToolId,
+} from "@/features/public-tools/lib/tool-workspace-kind";
 
 export type DedicatedHowToWorkspace =
   | "split"

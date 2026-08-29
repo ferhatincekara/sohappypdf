@@ -1,13 +1,13 @@
 import type { AxiosInstance } from "axios";
-import { apiClient } from "@/lib/api/client";
+import { toBillingClientError } from "@/features/billing/api/billing-errors";
 import type {
   BillingCheckoutResponse,
   BillingInterval,
   BillingPortalResponse,
   BillingStatusResponse,
   CheckoutProductKey,
-} from "../types/billing";
-import { toBillingClientError } from "./billing-errors";
+} from "@/features/billing/types/billing";
+import { apiClient } from "@/lib/api/client";
 
 export class BillingApiRequestError extends Error {
   readonly clientError: ReturnType<typeof toBillingClientError>;
@@ -34,8 +34,7 @@ export function createBillingApi(
   return {
     async getStatus() {
       try {
-        const response =
-          await client.get<BillingStatusResponse>("/v1/billing");
+        const response = await client.get<BillingStatusResponse>("/v1/billing");
         return response.data;
       } catch (error) {
         throw new BillingApiRequestError(error);
@@ -59,9 +58,8 @@ export function createBillingApi(
 
     async createPortal() {
       try {
-        const response = await client.post<BillingPortalResponse>(
-          "/v1/billing/portal",
-        );
+        const response =
+          await client.post<BillingPortalResponse>("/v1/billing/portal");
         return response.data;
       } catch (error) {
         throw new BillingApiRequestError(error);

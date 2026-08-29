@@ -1,5 +1,5 @@
-import type { ConversionType } from "@repo/conversions";
-import { isConversionSupported } from "@repo/conversions";
+import type { ConversionType } from "@sohappypdf/conversions";
+import { isConversionSupported } from "@sohappypdf/conversions";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";

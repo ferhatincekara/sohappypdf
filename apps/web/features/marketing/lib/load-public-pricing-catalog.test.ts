@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { fallbackCatalogPrices } from "@repo/billing/plans";
-import { parseBillingCatalogPrices } from "./load-public-pricing-catalog";
+import { fallbackCatalogPrices } from "@sohappypdf/billing/plans";
+import { parseBillingCatalogPrices } from "@/features/marketing/lib/load-public-pricing-catalog";
 
 describe("public pricing catalog", () => {
   test("accepts Polar catalog amounts from the billing API", () => {

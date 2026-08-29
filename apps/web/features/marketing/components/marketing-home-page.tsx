@@ -1,18 +1,18 @@
-import { listRegisteredTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
 import { getLocale, getTranslations } from "next-intl/server";
 import {
   LatestPostsSection,
   listBlogPosts,
   toBlogPostCard,
 } from "@/features/blog";
-import { resolveMarketingCtas } from "../lib/marketing-cta";
-import { Hero } from "./hero";
-import { HomeCtaBanner } from "./home-cta-banner";
-import { OverviewSection } from "./overview-section";
-import { ProductJsonLd } from "./product-json-ld";
-import { SpotlightsSection } from "./spotlights-section";
-import { TestimonialsSection } from "./testimonials-section";
-import { WhyChooseSection } from "./why-choose-section";
+import { Hero } from "@/features/marketing/components/hero";
+import { HomeCtaBanner } from "@/features/marketing/components/home-cta-banner";
+import { OverviewSection } from "@/features/marketing/components/overview-section";
+import { ProductJsonLd } from "@/features/marketing/components/product-json-ld";
+import { SpotlightsSection } from "@/features/marketing/components/spotlights-section";
+import { TestimonialsSection } from "@/features/marketing/components/testimonials-section";
+import { WhyChooseSection } from "@/features/marketing/components/why-choose-section";
+import { resolveMarketingCtas } from "@/features/marketing/lib/marketing-cta";
 
 export async function MarketingHomePage({
   isAuthenticated,

@@ -1,5 +1,5 @@
-import { INCLUDED_API_CREDITS_PER_MONTH } from "@repo/billing/plans";
-import type { PublicBillingStatus } from "../types/billing";
+import { INCLUDED_API_CREDITS_PER_MONTH } from "@sohappypdf/billing/plans";
+import type { PublicBillingStatus } from "@/features/billing/types/billing";
 
 export const CHECKOUT_ACTIVATION_WAIT_MS = 20_000;
 

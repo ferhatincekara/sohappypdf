@@ -1,5 +1,5 @@
-import type { ApiKeyService } from "@repo/api-keys";
-import type { BillingService } from "@repo/billing";
+import type { ApiKeyService } from "@sohappypdf/api-keys";
+import type { BillingService } from "@sohappypdf/billing";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireSessionIdentity } from "../../auth/request-identity.js";

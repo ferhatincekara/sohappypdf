@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import type { LegalPageId } from "@/features/legal/lib/legal-paths";
+import { LEGAL_PATHS } from "@/features/legal/lib/legal-paths";
 import { buildMarketingPageMetadata } from "@/features/marketing/lib/marketing-page-metadata";
-import type { LegalPageId } from "./legal-paths";
-import { LEGAL_PATHS } from "./legal-paths";
 
 export async function legalPageMetadata(pageId: LegalPageId) {
   const t = await getTranslations(`legal.${pageId}`);

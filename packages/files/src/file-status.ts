@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 
 export const FILE_STATUSES = [
   "pending",

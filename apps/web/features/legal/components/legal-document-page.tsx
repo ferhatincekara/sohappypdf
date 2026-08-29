@@ -1,15 +1,15 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { MarketingContainer } from "@/features/marketing/components/marketing-container";
-import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
-import { MARKETING_SUPPORT_EMAIL } from "@/features/marketing/lib/marketing-contact";
-import { Link } from "@/lib/i18n/navigation";
 import {
   LEGAL_PAGE_IDS,
   LEGAL_PAGE_SECTIONS,
   LEGAL_PATHS,
   LEGAL_UPDATED_AT,
   type LegalPageId,
-} from "../lib/legal-paths";
+} from "@/features/legal/lib/legal-paths";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
+import { MARKETING_SUPPORT_EMAIL } from "@/features/marketing/lib/marketing-contact";
+import { Link } from "@/lib/i18n/navigation";
 
 export async function LegalDocumentPage({ pageId }: { pageId: LegalPageId }) {
   const t = await getTranslations("legal");

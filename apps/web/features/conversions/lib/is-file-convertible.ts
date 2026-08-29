@@ -1,6 +1,6 @@
+import { listTargetFormats } from "@/features/conversions/lib/conversion-capabilities";
+import { sourceFormatFromPublicFile } from "@/features/conversions/lib/source-format";
 import type { PublicFile, PublicFileStatus } from "@/features/files/types/file";
-import { listTargetFormats } from "./conversion-capabilities";
-import { sourceFormatFromPublicFile } from "./source-format";
 
 export const CONVERTIBLE_FILE_STATUSES: readonly PublicFileStatus[] = [
   "uploaded",

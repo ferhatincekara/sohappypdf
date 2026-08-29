@@ -2,15 +2,15 @@ import {
   assertPolarCheckoutConfig,
   type BillingConfig,
   loadApiCreditConfig,
-} from "@repo/config";
-import { isConversionFailureCode } from "@repo/conversions";
-import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
+} from "@sohappypdf/config";
+import { isConversionFailureCode } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import {
   assertToolAllowedOnPlan,
   findRegisteredTool,
   toolCombinesSourceFiles,
   toolSupportsBatchOperations,
-} from "@repo/tools";
+} from "@sohappypdf/tools";
 import { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 import { shouldRefundAiCredits } from "./ai-credit-refund.js";
 import { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";

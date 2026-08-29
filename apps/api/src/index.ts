@@ -1,6 +1,6 @@
-import { getAnonymousSessionService } from "@repo/auth";
-import { getBillingService } from "@repo/billing";
-import { loadAuthConfig } from "@repo/config";
+import { getAnonymousSessionService } from "@sohappypdf/auth";
+import { getBillingService } from "@sohappypdf/billing";
+import { loadAuthConfig } from "@sohappypdf/config";
 import { createApp } from "./app.js";
 import { createConfiguredRateLimiters } from "./rate-limit-factory.js";
 

@@ -1,4 +1,4 @@
-import { MARKETING_PATHS } from "./marketing-paths";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 export const MARKETING_NAV_LINK_IDS = ["pricing", "developers"] as const;
 

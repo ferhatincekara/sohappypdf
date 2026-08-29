@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { gravatarUrl } from "./gravatar-url";
+import { gravatarUrl } from "@/features/app-shell/lib/gravatar-url";
 
 describe("gravatarUrl", () => {
   test("hashes a trimmed lowercase email with SHA-256", () => {

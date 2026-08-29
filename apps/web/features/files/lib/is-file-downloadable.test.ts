@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicFile } from "../types/file";
-import { isFileDownloadable } from "./is-file-downloadable";
+import { isFileDownloadable } from "@/features/files/lib/is-file-downloadable";
+import type { PublicFile } from "@/features/files/types/file";
 
 function createFile(status: PublicFile["status"]): PublicFile {
   return {

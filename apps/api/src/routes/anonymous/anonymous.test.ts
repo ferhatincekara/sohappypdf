@@ -3,27 +3,30 @@ import {
   ANONYMOUS_SESSION_COOKIE_NAME,
   createAnonymousSessionService,
   createMemoryAnonymousSessionRepository,
-} from "@repo/auth";
-import { createTestBillingService } from "@repo/billing";
-import { DEFAULT_ANONYMOUS_CONFIG } from "@repo/config";
+} from "@sohappypdf/auth";
+import { createTestBillingService } from "@sohappypdf/billing";
+import { DEFAULT_ANONYMOUS_CONFIG } from "@sohappypdf/config";
 import {
   type ConversionRecord,
   type ConversionRepository,
   createConversionService,
   isConversionRecordExpired,
-} from "@repo/conversions";
-import { APP_ERROR_CODES } from "@repo/core";
+} from "@sohappypdf/conversions";
+import { APP_ERROR_CODES } from "@sohappypdf/core";
 import {
   createFileService,
   type FileRecord,
   type FileRepository,
   type FileService,
   sumActiveStorageBytesForOwner,
-} from "@repo/files";
-import type { Logger } from "@repo/logger";
-import type { ConversionJobData } from "@repo/queue";
-import type { RateLimitDecision, RateLimitSubject } from "@repo/rate-limit";
-import type { Storage } from "@repo/storage";
+} from "@sohappypdf/files";
+import type { Logger } from "@sohappypdf/logger";
+import type { ConversionJobData } from "@sohappypdf/queue";
+import type {
+  RateLimitDecision,
+  RateLimitSubject,
+} from "@sohappypdf/rate-limit";
+import type { Storage } from "@sohappypdf/storage";
 import { createApp } from "../../app.js";
 import type { RequestIdentity } from "../../auth/request-identity.js";
 
@@ -814,20 +817,17 @@ describe("anonymous tool API", () => {
       uploaded.cookie,
       ownerId ?? "",
     );
-    const conversion = await created.app.request(
-      "/v1/anonymous/conversions",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          cookie: uploaded.cookie,
-        },
-        body: JSON.stringify({
-          sourceFileId: uploaded.body.file.id,
-          type: "pdf-to-png",
-        }),
+    const conversion = await created.app.request("/v1/anonymous/conversions", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        cookie: uploaded.cookie,
       },
-    );
+      body: JSON.stringify({
+        sourceFileId: uploaded.body.file.id,
+        type: "pdf-to-png",
+      }),
+    });
     const conversionBody = await conversion.json();
     const loggedIn = createApp({
       config: { corsOrigins: [] },

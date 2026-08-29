@@ -1,13 +1,13 @@
 import { getPublicWebEnv } from "@/config/public-env";
-import { authClient } from "@/lib/auth/auth-client";
-import { AUTH_PATHS } from "../paths";
 import {
   AUTH_ERROR_KEYS,
   type AuthClientError,
   type AuthErrorKey,
   mapAuthError,
   shouldTreatForgotPasswordAsSuccess,
-} from "./auth-errors";
+} from "@/features/auth/api/auth-errors";
+import { AUTH_PATHS } from "@/features/auth/paths";
+import { authClient } from "@/lib/auth/auth-client";
 
 export type AuthActionResult =
   | { ok: true }

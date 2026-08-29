@@ -1,8 +1,8 @@
-import type { AnonymousConfig } from "@repo/config";
-import type { ConversionService } from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import type { FileService } from "@repo/files";
-import type { ConversionJobData } from "@repo/queue";
+import type { AnonymousConfig } from "@sohappypdf/config";
+import type { ConversionService } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import type { FileService } from "@sohappypdf/files";
+import type { ConversionJobData } from "@sohappypdf/queue";
 import { type Context, Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireAnonymousIdentity } from "../../auth/request-identity.js";

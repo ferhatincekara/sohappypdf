@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import { loadWorkerRuntimeConfig } from "./load-runtime-config.js";
 
 const validEnv = {

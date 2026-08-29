@@ -1,1 +1,1 @@
-export { PublicToolPageContent } from "./components/public-tool-page";
+export { PublicToolPageContent } from "@/features/public-tools/components/public-tool-page";

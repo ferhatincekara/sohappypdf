@@ -1,4 +1,4 @@
-import { FILE_ERROR_KEYS } from "../api/file-errors";
+import { FILE_ERROR_KEYS } from "@/features/files/api/file-errors";
 import {
   createInitialUploadState,
   type FileUploadState,
@@ -8,7 +8,7 @@ import {
   type UploadFailureStage,
   type UploadRetryAction,
   type UploadStatus,
-} from "../types/upload-state";
+} from "@/features/files/types/upload-state";
 
 const ACTIVE_UPLOAD_STATUSES: readonly UploadStatus[] = [
   "preparing",

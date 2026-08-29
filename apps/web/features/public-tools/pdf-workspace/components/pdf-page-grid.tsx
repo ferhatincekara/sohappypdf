@@ -8,14 +8,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "@/lib/utils";
-import type { PdfjsDocument } from "../../lib/pdfjs-client";
+import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
+import { PdfPageThumbnail } from "@/features/public-tools/pdf-workspace/components/pdf-page-thumbnail";
 import {
   type PageActivationModifiers,
   pageActivationFromPointerEvent,
-} from "../lib/page-selection";
-import type { PdfPage } from "../types/pdf-page";
-import { PdfPageThumbnail } from "./pdf-page-thumbnail";
+} from "@/features/public-tools/pdf-workspace/lib/page-selection";
+import type { PdfPage } from "@/features/public-tools/pdf-workspace/types/pdf-page";
+import { cn } from "@/lib/utils";
 
 export const PDF_PAGE_GRID_CLASS_NAME =
   "grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4";

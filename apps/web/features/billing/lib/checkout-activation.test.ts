@@ -3,7 +3,7 @@ import {
   CHECKOUT_ACTIVATION_WAIT_MS,
   isCheckoutActivationPending,
   resolveCheckoutBanner,
-} from "./checkout-activation";
+} from "@/features/billing/lib/checkout-activation";
 
 describe("isCheckoutActivationPending", () => {
   test("is pending only while checkout has not produced a subscription yet", () => {

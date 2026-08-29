@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { convertFormatLabel, formatLabel } from "./format-labels";
+import {
+  convertFormatLabel,
+  formatLabel,
+} from "@/features/public-tools/lib/format-labels";
 
 describe("convertFormatLabel", () => {
   test("uses friendly names for office formats", () => {

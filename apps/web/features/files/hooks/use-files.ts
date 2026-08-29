@@ -2,10 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { listFiles } from "../api/file-api";
-import { mapUnknownUploadError } from "../api/file-errors";
-import { filesQueryKeys } from "../api/file-query-keys";
-import { parseFileListSearchParams } from "../lib/file-list-params";
+import { listFiles } from "@/features/files/api/file-api";
+import { mapUnknownUploadError } from "@/features/files/api/file-errors";
+import { filesQueryKeys } from "@/features/files/api/file-query-keys";
+import { parseFileListSearchParams } from "@/features/files/lib/file-list-params";
 
 export function useFiles() {
   const searchParams = useSearchParams();

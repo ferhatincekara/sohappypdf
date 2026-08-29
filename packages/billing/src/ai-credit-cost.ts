@@ -1,4 +1,4 @@
-import { findCatalogTool } from "@repo/tools";
+import { findCatalogTool } from "@sohappypdf/tools";
 
 export function resolveAiCreditCost(toolId: string): number {
   return findCatalogTool(toolId)?.aiCreditCost ?? 0;

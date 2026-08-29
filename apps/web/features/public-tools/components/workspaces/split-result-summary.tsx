@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { KeepSelectedPagesCopy } from "./keep-selected-pages-workspace";
+import type { KeepSelectedPagesCopy } from "@/features/public-tools/components/workspaces/keep-selected-pages-workspace";
 
 export function SplitResultSummary({
   copy = "split",

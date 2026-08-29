@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { estimateProcessingPercent } from "./estimate-processing-progress";
+import { estimateProcessingPercent } from "@/features/public-tools/lib/estimate-processing-progress";
 
 describe("estimateProcessingPercent", () => {
   test("keeps queued jobs in a low band instead of looking finished", () => {

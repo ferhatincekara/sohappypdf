@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { ConversionRecord } from "./conversion-types.js";
 import {
   DEFAULT_CONVERSION_LIST_LIMIT,

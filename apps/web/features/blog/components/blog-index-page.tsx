@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import type { BlogPostCardModel } from "@/features/blog/lib/blog-card";
 import { MarketingContainer } from "@/features/marketing/components/marketing-container";
 import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
 import { Link } from "@/lib/i18n/navigation";
-import type { BlogPostCardModel } from "../lib/blog-card";
 
 export async function BlogIndexPage({
   posts,

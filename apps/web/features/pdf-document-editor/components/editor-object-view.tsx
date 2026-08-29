@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import type { EditorObject } from "@/features/pdf-document-editor/types/editor-object";
 import { cn } from "@/lib/utils";
-import type { EditorObject } from "../types/editor-object";
 
 export function EditorObjectView({
   object,

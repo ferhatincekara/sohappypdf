@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { ApiCreditLedgerEntry } from "../types/billing";
-import { summarizeApiCreditHistory } from "./summarize-api-credit-history";
+import { summarizeApiCreditHistory } from "@/features/billing/lib/summarize-api-credit-history";
+import type { ApiCreditLedgerEntry } from "@/features/billing/types/billing";
 
 function entry(
   overrides: Partial<ApiCreditLedgerEntry> & Pick<ApiCreditLedgerEntry, "id">,

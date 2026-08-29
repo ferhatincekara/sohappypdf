@@ -1,11 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { usePdfDocument } from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { CropPagePreview } from "./crop-page-preview";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { CropPagePreview } from "@/features/public-tools/components/workspaces/crop-page-preview";
+import { usePdfDocument } from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function CropPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

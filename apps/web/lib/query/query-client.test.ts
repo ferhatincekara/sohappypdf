@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createAppQueryClient } from "./query-client";
+import { createAppQueryClient } from "@/lib/query/query-client";
 
 describe("query client", () => {
   test("uses conservative defaults without fetching data", () => {

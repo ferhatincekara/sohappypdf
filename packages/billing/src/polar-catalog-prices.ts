@@ -1,4 +1,4 @@
-import type { PolarConfig } from "@repo/config";
+import type { PolarConfig } from "@sohappypdf/config";
 import {
   apiPackYearlyPriceUsd,
   type BillingCatalogPrices,

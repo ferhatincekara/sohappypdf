@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import type { MarketingToolNavItem } from "@/features/marketing/lib/marketing-tools";
 import { cn } from "@/lib/utils";
-import type { MarketingToolNavItem } from "../lib/marketing-tools";
 
 export function MarketingToolStatusBadges({
   availability,

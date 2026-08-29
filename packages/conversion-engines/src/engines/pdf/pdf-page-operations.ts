@@ -1,5 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { OrganizeRotation, RotationDegrees } from "@repo/conversions";
+import type {
+  OrganizeRotation,
+  RotationDegrees,
+} from "@sohappypdf/conversions";
 import { degrees, PDFDocument, type PDFPage } from "pdf-lib";
 import { invalidInputError, PermanentConversionError } from "../../errors.js";
 

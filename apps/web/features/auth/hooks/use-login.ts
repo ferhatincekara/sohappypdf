@@ -4,11 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { authActions } from "@/features/auth/api/auth-actions";
+import { firstFormErrorMessage } from "@/features/auth/lib/first-form-error-message";
+import { resolvePostAuthPath } from "@/features/auth/safe-redirect";
+import {
+  createLoginSchema,
+  type LoginValues,
+} from "@/features/auth/schemas/login-schema";
 import { useRouter } from "@/lib/i18n/navigation";
-import { authActions } from "../api/auth-actions";
-import { firstFormErrorMessage } from "../lib/first-form-error-message";
-import { resolvePostAuthPath } from "../safe-redirect";
-import { createLoginSchema, type LoginValues } from "../schemas/login-schema";
 
 export function useLogin(next?: string | null) {
   const tValidation = useTranslations("auth.validation");

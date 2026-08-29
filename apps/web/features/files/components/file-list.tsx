@@ -3,11 +3,11 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FileListItem } from "@/features/files/components/file-list-item";
+import { fileListHref } from "@/features/files/lib/file-list-params";
+import { fileListView } from "@/features/files/lib/file-list-view";
+import type { PublicFile } from "@/features/files/types/file";
 import { Link } from "@/lib/i18n/navigation";
-import { fileListHref } from "../lib/file-list-params";
-import { fileListView } from "../lib/file-list-view";
-import type { PublicFile } from "../types/file";
-import { FileListItem } from "./file-list-item";
 
 export function FileList({
   files,

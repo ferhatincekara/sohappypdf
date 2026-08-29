@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   DEFAULT_RESOURCE_OWNER_KIND,
   type FileRecord,
   type ResourceOwnerTransferInput,
   type ResourceOwnerTransferResult,
-} from "@repo/files";
+} from "@sohappypdf/files";
 import {
   isConversionSupported,
   isTargetFormatAccepted,

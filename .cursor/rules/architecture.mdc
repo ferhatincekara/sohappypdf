@@ -48,7 +48,7 @@ packages/
 - tools: Public tool catalog and credit pricing
 - typescript-config: Shared TypeScript configs
 
-Shared UI currently lives in `apps/web/components/ui`. Do not assume `@repo/ui`, `@repo/validation`, or `@repo/api-client` exist unless they are added deliberately.
+Shared UI currently lives in `apps/web/components/ui`. Do not assume `@sohappypdf/ui`, `@sohappypdf/validation`, or `@sohappypdf/api-client` exist unless they are added deliberately.
 
 ## Application Boundaries
 

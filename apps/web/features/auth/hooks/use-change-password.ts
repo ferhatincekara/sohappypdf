@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { authActions } from "../api/auth-actions";
-import { firstFormErrorMessage } from "../lib/first-form-error-message";
+import { authActions } from "@/features/auth/api/auth-actions";
+import { firstFormErrorMessage } from "@/features/auth/lib/first-form-error-message";
 import {
   type ChangePasswordValues,
   createChangePasswordSchema,
-} from "../schemas/change-password-schema";
+} from "@/features/auth/schemas/change-password-schema";
 
 export function useChangePassword() {
   const tSettings = useTranslations("settings.password");

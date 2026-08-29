@@ -1,25 +1,25 @@
 "use client";
 
-import { resolveToolWorkspaceKind } from "../../lib/tool-workspace-kind";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { CompressPdfWorkspace } from "./compress-pdf-workspace";
-import { ConvertPdfWorkspace } from "./convert-pdf-workspace";
-import { CropPdfWorkspace } from "./crop-pdf-workspace";
-import { DefaultToolWorkspace } from "./default-tool-workspace";
-import { EditPdfWorkspace } from "./edit-pdf-workspace";
-import { ExtractPagesWorkspace } from "./extract-pages-workspace";
-import { ImageToPdfWorkspace } from "./image-to-pdf-workspace";
-import { MergePdfWorkspace } from "./merge-pdf-workspace";
-import { OcrPdfWorkspace } from "./ocr-pdf-workspace";
-import { OrganizePdfWorkspace } from "./organize-pdf-workspace";
-import { ProtectPdfWorkspace } from "./protect-pdf-workspace";
-import { RemovePagesWorkspace } from "./remove-pages-workspace";
-import { RepairPdfWorkspace } from "./repair-pdf-workspace";
-import { RotatePdfWorkspace } from "./rotate-pdf-workspace";
-import { SignPdfWorkspace } from "./sign-pdf-workspace";
-import { SplitPdfWorkspace } from "./split-pdf-workspace";
-import { UnlockPdfWorkspace } from "./unlock-pdf-workspace";
-import { WatermarkPdfWorkspace } from "./watermark-pdf-workspace";
+import { CompressPdfWorkspace } from "@/features/public-tools/components/workspaces/compress-pdf-workspace";
+import { ConvertPdfWorkspace } from "@/features/public-tools/components/workspaces/convert-pdf-workspace";
+import { CropPdfWorkspace } from "@/features/public-tools/components/workspaces/crop-pdf-workspace";
+import { DefaultToolWorkspace } from "@/features/public-tools/components/workspaces/default-tool-workspace";
+import { EditPdfWorkspace } from "@/features/public-tools/components/workspaces/edit-pdf-workspace";
+import { ExtractPagesWorkspace } from "@/features/public-tools/components/workspaces/extract-pages-workspace";
+import { ImageToPdfWorkspace } from "@/features/public-tools/components/workspaces/image-to-pdf-workspace";
+import { MergePdfWorkspace } from "@/features/public-tools/components/workspaces/merge-pdf-workspace";
+import { OcrPdfWorkspace } from "@/features/public-tools/components/workspaces/ocr-pdf-workspace";
+import { OrganizePdfWorkspace } from "@/features/public-tools/components/workspaces/organize-pdf-workspace";
+import { ProtectPdfWorkspace } from "@/features/public-tools/components/workspaces/protect-pdf-workspace";
+import { RemovePagesWorkspace } from "@/features/public-tools/components/workspaces/remove-pages-workspace";
+import { RepairPdfWorkspace } from "@/features/public-tools/components/workspaces/repair-pdf-workspace";
+import { RotatePdfWorkspace } from "@/features/public-tools/components/workspaces/rotate-pdf-workspace";
+import { SignPdfWorkspace } from "@/features/public-tools/components/workspaces/sign-pdf-workspace";
+import { SplitPdfWorkspace } from "@/features/public-tools/components/workspaces/split-pdf-workspace";
+import { UnlockPdfWorkspace } from "@/features/public-tools/components/workspaces/unlock-pdf-workspace";
+import { WatermarkPdfWorkspace } from "@/features/public-tools/components/workspaces/watermark-pdf-workspace";
+import { resolveToolWorkspaceKind } from "@/features/public-tools/lib/tool-workspace-kind";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
   switch (resolveToolWorkspaceKind(props.tool.id)) {

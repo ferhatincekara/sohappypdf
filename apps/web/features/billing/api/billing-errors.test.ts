@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { BILLING_ERROR_KEYS, mapBillingError } from "./billing-errors";
+import {
+  BILLING_ERROR_KEYS,
+  mapBillingError,
+} from "@/features/billing/api/billing-errors";
 
 describe("billing error mapping", () => {
   test("maps unauthorized and configuration failures", () => {

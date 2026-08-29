@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/api-keys");
+assertServerOnly("@sohappypdf/api-keys");
 
 export {
   API_KEY_LAST_USED_UPDATE_INTERVAL_MS,

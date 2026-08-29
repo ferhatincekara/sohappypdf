@@ -1,19 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { selectedPagesFromSplitRanges } from "../../lib/split-selection";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolSidebarCard } from "@/features/public-tools/components/tool-sidebar-card";
+import { ToolStage } from "@/features/public-tools/components/tool-stage";
+import { SplitAdvancedRanges } from "@/features/public-tools/components/workspaces/split-advanced-ranges";
+import { SplitResultSummary } from "@/features/public-tools/components/workspaces/split-result-summary";
+import { selectedPagesFromSplitRanges } from "@/features/public-tools/lib/split-selection";
 import {
   PdfPageWorkspace,
   pagesToRangeInput,
   usePdfDocument,
-} from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolSidebarCard } from "../tool-sidebar-card";
-import { ToolStage } from "../tool-stage";
-import { SplitAdvancedRanges } from "./split-advanced-ranges";
-import { SplitResultSummary } from "./split-result-summary";
+} from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export type KeepSelectedPagesCopy = "split" | "extract";
 

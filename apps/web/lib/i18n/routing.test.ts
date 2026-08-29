@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { LOCALE_COOKIE_NAME, routing } from "./routing";
+import { LOCALE_COOKIE_NAME, routing } from "@/lib/i18n/routing";
 
 describe("i18n routing", () => {
   test("keeps locales off the URL", () => {

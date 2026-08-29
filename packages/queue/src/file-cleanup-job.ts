@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { FILE_CLEANUP_JOB_NAME } from "./queue-settings.js";
 
 export type FileCleanupJobData = Record<string, never>;

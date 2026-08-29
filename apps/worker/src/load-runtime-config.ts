@@ -8,8 +8,8 @@ import {
   loadWorkerConfig,
   type QueueConfig,
   type WorkerConfig,
-} from "@repo/config";
-import { getStorageConfig, type StorageConfig } from "@repo/storage";
+} from "@sohappypdf/config";
+import { getStorageConfig, type StorageConfig } from "@sohappypdf/storage";
 
 export type WorkerRuntimeConfig = {
   app: AppConfig;

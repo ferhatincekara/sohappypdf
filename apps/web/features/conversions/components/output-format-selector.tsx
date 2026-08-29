@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import type { ConversionTargetFormat } from "../types/conversion";
+import type { ConversionTargetFormat } from "@/features/conversions/types/conversion";
 
 export function OutputFormatSelector({
   formats,

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   conversionListHref,
   parseConversionListSearchParams,
-} from "./conversion-list-params";
+} from "@/features/conversions/lib/conversion-list-params";
 
 describe("conversion list params", () => {
   test("maps status query values onto history filters", () => {

@@ -1,4 +1,4 @@
-import type { MarketingSocialLinkId } from "../lib/marketing-social";
+import type { MarketingSocialLinkId } from "@/features/marketing/lib/marketing-social";
 
 const SOCIAL_ICON_PATHS: Record<MarketingSocialLinkId, string> = {
   instagram:

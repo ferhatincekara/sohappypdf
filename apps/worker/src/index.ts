@@ -1,6 +1,6 @@
 import process from "node:process";
-import { isAppError } from "@repo/core";
-import { createLogger } from "@repo/logger";
+import { isAppError } from "@sohappypdf/core";
+import { createLogger } from "@sohappypdf/logger";
 import { startConversionWorkerRuntime } from "./start-worker.js";
 
 const logger = createLogger({

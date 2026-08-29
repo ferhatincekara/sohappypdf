@@ -2,12 +2,12 @@ import {
   CONVERSION_TYPES,
   type ConversionType,
 } from "@/features/conversions/types/conversion";
-import type { PublicToolErrorKey } from "./public-tool-errors";
+import type { PublicToolErrorKey } from "@/features/public-tools/lib/public-tool-errors";
 import {
   areWorkspaceFilesReady,
   hasUploadingWorkspaceFiles,
   type WorkspaceFile,
-} from "./workspace-files";
+} from "@/features/public-tools/lib/workspace-files";
 
 const TOOLS_REQUIRING_OPTIONS = new Set([
   "split-pdf",

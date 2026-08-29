@@ -3,7 +3,7 @@ import {
   clampCropMargins,
   moveCropMargins,
   resizeCropEdge,
-} from "./crop-margins";
+} from "@/features/public-tools/lib/crop-margins";
 
 describe("crop margins", () => {
   test("keeps a usable crop area inside the page", () => {

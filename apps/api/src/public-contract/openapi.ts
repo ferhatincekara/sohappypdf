@@ -1,14 +1,14 @@
-import { DEFAULT_PLAN_LIMITS } from "@repo/billing";
-import { DEFAULT_FILE_RETENTION_HOURS } from "@repo/config";
+import { DEFAULT_PLAN_LIMITS } from "@sohappypdf/billing";
+import { DEFAULT_FILE_RETENTION_HOURS } from "@sohappypdf/config";
 import {
   CONVERSION_STATUSES,
   CONVERSION_TYPES,
   FILE_FORMATS,
   listConversionCapabilities,
   listSupportedUploadMimeTypes,
-} from "@repo/conversions";
-import { APP_ERROR_CODES, APP_ERROR_STATUS } from "@repo/core";
-import { FILE_STATUSES } from "@repo/files";
+} from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, APP_ERROR_STATUS } from "@sohappypdf/core";
+import { FILE_STATUSES } from "@sohappypdf/files";
 import {
   PUBLIC_API_PRODUCTION_ORIGIN,
   PUBLIC_V1_PATHS,

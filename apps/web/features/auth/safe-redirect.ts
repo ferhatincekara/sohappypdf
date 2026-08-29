@@ -1,4 +1,4 @@
-import { AUTH_PATHS, loginPath } from "./paths";
+import { AUTH_PATHS, loginPath } from "@/features/auth/paths";
 
 function decodeRedirectCandidate(value: string): string | null {
   try {

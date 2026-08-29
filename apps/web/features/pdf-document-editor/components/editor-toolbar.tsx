@@ -17,8 +17,8 @@ import {
   type DocumentEditorState,
   MAX_EDITOR_ZOOM,
   MIN_EDITOR_ZOOM,
-} from "../lib/document-editor-state";
-import type { EditorTool } from "../types/editor-object";
+} from "@/features/pdf-document-editor/lib/document-editor-state";
+import type { EditorTool } from "@/features/pdf-document-editor/types/editor-object";
 
 const TOOLS: readonly EditorTool[] = ["select", "text", "shape", "signature"];
 

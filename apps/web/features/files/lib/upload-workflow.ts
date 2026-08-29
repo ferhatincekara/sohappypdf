@@ -1,28 +1,31 @@
 import {
   completeUpload as completeUploadRequest,
   createUpload as createUploadRequest,
-} from "../api/file-api";
+} from "@/features/files/api/file-api";
 import {
   FILE_ERROR_KEYS,
   isCancelError,
   mapUnknownUploadError,
-} from "../api/file-errors";
-import { putPresignedObject } from "../api/put-presigned-object";
-import type { CreateUploadInput, PublicFile } from "../types/file";
-import {
-  createInitialUploadState,
-  type FileUploadState,
-  type UploadAction,
-  type UploadProgress,
-  type UploadRetryAction,
-} from "../types/upload-state";
+} from "@/features/files/api/file-errors";
+import { putPresignedObject } from "@/features/files/api/put-presigned-object";
 import {
   isPresignedUploadExpired,
   reduceUploadState,
   resolveRetryAction,
   stageFromStatus,
   toPreparedUpload,
-} from "./upload-state";
+} from "@/features/files/lib/upload-state";
+import type {
+  CreateUploadInput,
+  PublicFile,
+} from "@/features/files/types/file";
+import {
+  createInitialUploadState,
+  type FileUploadState,
+  type UploadAction,
+  type UploadProgress,
+  type UploadRetryAction,
+} from "@/features/files/types/upload-state";
 
 export type FileUploadWorkflowDependencies = {
   createUpload?: (

@@ -1,5 +1,5 @@
 import type { AxiosInstance } from "axios";
-import { apiClient } from "@/lib/api/client";
+import { toConversionClientError } from "@/features/conversions/api/conversion-errors";
 import type {
   ConversionListQuery,
   ConversionListResponse,
@@ -7,8 +7,8 @@ import type {
   CreateConversionResponse,
   GetConversionResponse,
   PublicConversion,
-} from "../types/conversion";
-import { toConversionClientError } from "./conversion-errors";
+} from "@/features/conversions/types/conversion";
+import { apiClient } from "@/lib/api/client";
 
 export class ConversionApiRequestError extends Error {
   readonly clientError: ReturnType<typeof toConversionClientError>;

@@ -1,6 +1,6 @@
 import { mkdir, readdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import type { FileFormat } from "@repo/conversions";
+import type { FileFormat } from "@sohappypdf/conversions";
 import type { ConversionEngineResult } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";

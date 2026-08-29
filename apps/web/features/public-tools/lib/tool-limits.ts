@@ -1,9 +1,9 @@
-import { resolveWebMaxFilesPerOperation } from "@repo/billing/plans";
+import { resolveWebMaxFilesPerOperation } from "@sohappypdf/billing/plans";
 import {
   type ToolDefinition,
   toolCombinesSourceFiles,
   toolSupportsBatchOperations,
-} from "@repo/tools/catalog";
+} from "@sohappypdf/tools/catalog";
 
 export function acceptForTool(tool: ToolDefinition): string {
   return tool.inputFormats

@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   assertValidObjectKey,
   createFileOriginalKey,
   type Storage,
-} from "@repo/storage";
-import { buildZipArchive } from "@repo/utils/zip";
+} from "@sohappypdf/storage";
+import { buildZipArchive } from "@sohappypdf/utils/zip";
 import {
   DEFAULT_FILE_TTL_MS,
   getFileExpirationDate,

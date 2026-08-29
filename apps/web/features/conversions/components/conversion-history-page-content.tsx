@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AccountPageHeader } from "@/features/app-shell";
-import { ConversionHistoryWorkspace } from "./conversion-history-workspace";
+import { ConversionHistoryWorkspace } from "@/features/conversions/components/conversion-history-workspace";
 
 export async function ConversionHistoryPageContent() {
   const t = await getTranslations("conversions.history");

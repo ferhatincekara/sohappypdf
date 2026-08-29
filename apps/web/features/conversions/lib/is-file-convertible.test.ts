@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
+import { isFileConvertible } from "@/features/conversions/lib/is-file-convertible";
 import type { PublicFile } from "@/features/files/types/file";
-import { isFileConvertible } from "./is-file-convertible";
 
 function createFile(overrides: Partial<PublicFile> = {}): PublicFile {
   return {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { parseWebToolBilling } from "./web-tool-billing";
+import { parseWebToolBilling } from "@/features/billing/lib/web-tool-billing";
 
 describe("parseWebToolBilling", () => {
   test("reads plan file limits from a billing status payload", () => {

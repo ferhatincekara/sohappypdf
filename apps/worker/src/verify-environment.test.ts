@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_WORKER_CONFIG } from "@repo/config";
-import { isAppError } from "@repo/core";
+import { DEFAULT_WORKER_CONFIG } from "@sohappypdf/config";
+import { isAppError } from "@sohappypdf/core";
 import { verifyWorkerEnvironment } from "./verify-environment.js";
 
 describe("verifyWorkerEnvironment", () => {

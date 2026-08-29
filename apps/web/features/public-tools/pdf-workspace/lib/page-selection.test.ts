@@ -1,5 +1,4 @@
 import { describe, expect, test } from "bun:test";
-import { createPdfPages } from "../types/pdf-page";
 import {
   allPages,
   applyPageActivation,
@@ -8,7 +7,8 @@ import {
   pagesToRanges,
   rangesToPages,
   togglePage,
-} from "./page-selection";
+} from "@/features/public-tools/pdf-workspace/lib/page-selection";
+import { createPdfPages } from "@/features/public-tools/pdf-workspace/types/pdf-page";
 
 describe("page selection", () => {
   test("collapses consecutive pages into ranges", () => {

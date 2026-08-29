@@ -4,8 +4,12 @@ import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { fadeUp, stagger, viewportOnce } from "../lib/motion-tokens";
-import { MarketingContainer } from "./marketing-container";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import {
+  fadeUp,
+  stagger,
+  viewportOnce,
+} from "@/features/marketing/lib/motion-tokens";
 
 const QUOTE_IDS = ["elif", "mert", "selin", "can"] as const;
 

@@ -1,4 +1,4 @@
-import type { ConversionFailureCode } from "@repo/conversions";
+import type { ConversionFailureCode } from "@sohappypdf/conversions";
 
 const REFUNDABLE_FAILURE_CODES = new Set<ConversionFailureCode>([
   "processing_failed",

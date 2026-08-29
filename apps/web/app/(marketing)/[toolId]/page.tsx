@@ -1,5 +1,5 @@
-import { resolveWebMaxFileSizeBytes } from "@repo/billing/plans";
-import { findRegisteredTool, type ToolId } from "@repo/tools/catalog";
+import { resolveWebMaxFileSizeBytes } from "@sohappypdf/billing/plans";
+import { findRegisteredTool, type ToolId } from "@sohappypdf/tools/catalog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";

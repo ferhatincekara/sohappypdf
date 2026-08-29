@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { createForgotPasswordSchema } from "./forgot-password-schema";
-import { createLoginSchema } from "./login-schema";
-import { createRegisterSchema } from "./register-schema";
-import { createResetPasswordSchema } from "./reset-password-schema";
+import { createForgotPasswordSchema } from "@/features/auth/schemas/forgot-password-schema";
+import { createLoginSchema } from "@/features/auth/schemas/login-schema";
+import { createRegisterSchema } from "@/features/auth/schemas/register-schema";
+import { createResetPasswordSchema } from "@/features/auth/schemas/reset-password-schema";
 
 const t = (key: string) => key;
 

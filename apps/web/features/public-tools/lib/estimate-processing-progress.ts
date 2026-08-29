@@ -1,4 +1,4 @@
-import type { ToolProcessingStatus } from "../types/tool-ux-state";
+import type { ToolProcessingStatus } from "@/features/public-tools/types/tool-ux-state";
 
 function easeBetween(
   elapsedMs: number,

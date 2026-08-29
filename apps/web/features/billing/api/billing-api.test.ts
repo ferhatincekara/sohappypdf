@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import type { AxiosInstance } from "axios";
-import { BillingApiRequestError, createBillingApi } from "./billing-api";
+import {
+  BillingApiRequestError,
+  createBillingApi,
+} from "@/features/billing/api/billing-api";
 
 function createClient(overrides: {
   get?: AxiosInstance["get"];

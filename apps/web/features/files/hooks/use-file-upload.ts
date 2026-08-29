@@ -2,17 +2,20 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { filesQueryKeys } from "../api/file-query-keys";
-import { isUploadInFlight, resolveRetryAction } from "../lib/upload-state";
+import { filesQueryKeys } from "@/features/files/api/file-query-keys";
+import {
+  isUploadInFlight,
+  resolveRetryAction,
+} from "@/features/files/lib/upload-state";
 import {
   createFileUploadWorkflow,
   type FileUploadWorkflow,
-} from "../lib/upload-workflow";
-import { validateSelectedFiles } from "../lib/validate-upload-file";
+} from "@/features/files/lib/upload-workflow";
+import { validateSelectedFiles } from "@/features/files/lib/validate-upload-file";
 import {
   createInitialUploadState,
   type FileUploadState,
-} from "../types/upload-state";
+} from "@/features/files/types/upload-state";
 
 export function useFileUpload(maxUploadFileSizeBytes?: number) {
   const queryClient = useQueryClient();

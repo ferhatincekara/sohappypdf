@@ -7,8 +7,8 @@ import {
   isValidOrganizeOrder,
   type OrganizeSlot,
   organizeSlotsFromOrder,
-} from "../../lib/organize-pages";
-import { parseOrganizeOrderInput } from "../../lib/tool-workspace";
+} from "@/features/public-tools/lib/organize-pages";
+import { parseOrganizeOrderInput } from "@/features/public-tools/lib/tool-workspace";
 
 export function OrganizeAdvancedOrder({
   slots,

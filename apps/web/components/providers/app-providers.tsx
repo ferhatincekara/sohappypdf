@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { QueryProvider } from "@/components/providers/query-provider";
+import { ScrollToTopOnNavigate } from "@/components/providers/scroll-to-top";
 import { Toaster } from "@/components/ui/sonner";
-import { QueryProvider } from "./query-provider";
-import { ScrollToTopOnNavigate } from "./scroll-to-top";
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (

@@ -1,4 +1,4 @@
-import type { Logger } from "@repo/logger";
+import type { Logger } from "@sohappypdf/logger";
 import type { RequestIdentity } from "./auth/request-identity.js";
 
 export type AppEnv = {

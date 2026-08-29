@@ -3,7 +3,7 @@ import {
   buildPublicToolMetadata,
   openGraphLocale,
   publicToolCanonicalUrl,
-} from "./public-tool-metadata";
+} from "@/features/public-tools/lib/public-tool-metadata";
 
 describe("public tool metadata", () => {
   test("builds unique title, description, OpenGraph, and canonical URL", () => {

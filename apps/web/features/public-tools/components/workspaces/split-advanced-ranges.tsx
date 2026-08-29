@@ -3,9 +3,12 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { parseSplitRangesInput } from "../../lib/tool-workspace";
-import { pagesToRangeInput, rangesToPages } from "../../pdf-workspace";
-import type { KeepSelectedPagesCopy } from "./keep-selected-pages-workspace";
+import type { KeepSelectedPagesCopy } from "@/features/public-tools/components/workspaces/keep-selected-pages-workspace";
+import { parseSplitRangesInput } from "@/features/public-tools/lib/tool-workspace";
+import {
+  pagesToRangeInput,
+  rangesToPages,
+} from "@/features/public-tools/pdf-workspace";
 
 export function SplitAdvancedRanges({
   copy = "split",

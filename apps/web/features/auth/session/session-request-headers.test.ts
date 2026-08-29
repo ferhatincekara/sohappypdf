@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { cookieHeaderFromStore } from "./session-request-headers";
+import { cookieHeaderFromStore } from "@/features/auth/session/session-request-headers";
 
 describe("cookieHeaderFromStore", () => {
   test("returns undefined when there are no cookies", () => {

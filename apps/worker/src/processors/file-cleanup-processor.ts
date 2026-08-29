@@ -1,11 +1,11 @@
-import type { ConversionService } from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import type { FileCleanupSummary, FileService } from "@repo/files";
-import type { Logger } from "@repo/logger";
+import type { ConversionService } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import type { FileCleanupSummary, FileService } from "@sohappypdf/files";
+import type { Logger } from "@sohappypdf/logger";
 import {
   FILE_CLEANUP_MAX_BATCHES_PER_JOB,
   type FileCleanupWorkerJob,
-} from "@repo/queue";
+} from "@sohappypdf/queue";
 
 export type AnonymousSessionCleanup = {
   deleteExpired(input: {

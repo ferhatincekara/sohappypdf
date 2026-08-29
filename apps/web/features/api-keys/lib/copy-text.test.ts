@@ -1,5 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
-import { copyTextToClipboard } from "./copy-text";
+import { copyTextToClipboard } from "@/features/api-keys/lib/copy-text";
 
 describe("copyTextToClipboard", () => {
   const originalNavigator = globalThis.navigator;

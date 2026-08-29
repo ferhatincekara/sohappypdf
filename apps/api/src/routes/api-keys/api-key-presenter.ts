@@ -1,4 +1,4 @@
-import type { ApiKeyPublicRecord } from "@repo/api-keys";
+import type { ApiKeyPublicRecord } from "@sohappypdf/api-keys";
 
 export const PUBLIC_API_KEY_STATUSES = [
   "active",

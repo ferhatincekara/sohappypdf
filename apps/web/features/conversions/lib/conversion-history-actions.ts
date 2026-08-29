@@ -1,5 +1,5 @@
-import type { PublicConversion } from "../types/conversion";
-import { canDownloadConversion } from "./can-download-conversion";
+import { canDownloadConversion } from "@/features/conversions/lib/can-download-conversion";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
 
 export function conversionHistoryActions(conversion: PublicConversion): {
   canView: true;

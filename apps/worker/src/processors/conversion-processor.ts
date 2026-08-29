@@ -1,7 +1,7 @@
-import type { BillingService } from "@repo/billing";
-import { DEFAULT_PLAN_LIMITS } from "@repo/billing/plans";
-import type { WorkerConfig } from "@repo/config";
-import type { EngineRegistry } from "@repo/conversion-engines";
+import type { BillingService } from "@sohappypdf/billing";
+import { DEFAULT_PLAN_LIMITS } from "@sohappypdf/billing/plans";
+import type { WorkerConfig } from "@sohappypdf/config";
+import type { EngineRegistry } from "@sohappypdf/conversion-engines";
 import {
   countPdfPagesFromPath,
   createConversionWorkspace,
@@ -9,22 +9,22 @@ import {
   PermanentConversionError,
   toSafeFailure,
   validateConversionOutput,
-} from "@repo/conversion-engines";
+} from "@sohappypdf/conversion-engines";
 import {
   type ConversionService,
   fileFormatFromFilename,
   isConversionImplemented,
   isConversionType,
   parseConversionOptions,
-} from "@repo/conversions";
+} from "@sohappypdf/conversions";
 import {
   DEFAULT_RESOURCE_OWNER_KIND,
   type FileService,
   remainingFileTtlMs,
-} from "@repo/files";
-import type { Logger } from "@repo/logger";
-import type { ConversionWorkerJob } from "@repo/queue";
-import { createFileOutputKey, type Storage } from "@repo/storage";
+} from "@sohappypdf/files";
+import type { Logger } from "@sohappypdf/logger";
+import type { ConversionWorkerJob } from "@sohappypdf/queue";
+import { createFileOutputKey, type Storage } from "@sohappypdf/storage";
 
 export type ConversionProcessorDependencies = {
   conversions: ConversionService;

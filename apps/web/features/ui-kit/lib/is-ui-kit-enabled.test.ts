@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isUiKitEnabled } from "./is-ui-kit-enabled";
+import { isUiKitEnabled } from "@/features/ui-kit/lib/is-ui-kit-enabled";
 
 describe("ui kit availability", () => {
   test("stays off outside next dev", () => {

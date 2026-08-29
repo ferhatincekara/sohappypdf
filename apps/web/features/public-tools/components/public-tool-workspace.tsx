@@ -1,42 +1,42 @@
 "use client";
 
-import type { ToolDefinition } from "@repo/tools/catalog";
+import type { ToolDefinition } from "@sohappypdf/tools/catalog";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { signupPath } from "@/features/auth/paths";
 import type { WebToolBilling } from "@/features/billing/lib/web-tool-billing";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
-import { usePublicToolWorkspace } from "../hooks/use-public-tool-workspace";
-import { useToolErrorToast } from "../hooks/use-tool-error-toast";
-import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
-import { formatAcceptedFormats } from "../lib/format-labels";
-import type { PublicToolErrorKey } from "../lib/public-tool-errors";
-import { selectedPagesFromSplitRanges } from "../lib/split-selection";
-import { acceptForTool } from "../lib/tool-limits";
+import { ToolEmptyState } from "@/features/public-tools/components/tool-empty-state";
+import { ToolErrorState } from "@/features/public-tools/components/tool-error-state";
+import { ToolExpiredState } from "@/features/public-tools/components/tool-expired-state";
+import { ToolMobileActionBar } from "@/features/public-tools/components/tool-mobile-action-bar";
+import { ToolProRequired } from "@/features/public-tools/components/tool-pro-required";
+import { ToolProcessingState } from "@/features/public-tools/components/tool-processing-state";
+import { ToolSidebarCard } from "@/features/public-tools/components/tool-sidebar-card";
+import { ToolStage } from "@/features/public-tools/components/tool-stage";
+import { ToolSuccessState } from "@/features/public-tools/components/tool-success-state";
+import { SelectedToolWorkspace } from "@/features/public-tools/components/workspaces/selected-tool-workspace";
+import { usePublicToolWorkspace } from "@/features/public-tools/hooks/use-public-tool-workspace";
+import { useToolErrorToast } from "@/features/public-tools/hooks/use-tool-error-toast";
+import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "@/features/public-tools/lib/anonymous-limits";
+import { formatAcceptedFormats } from "@/features/public-tools/lib/format-labels";
+import type { PublicToolErrorKey } from "@/features/public-tools/lib/public-tool-errors";
+import { selectedPagesFromSplitRanges } from "@/features/public-tools/lib/split-selection";
+import { acceptForTool } from "@/features/public-tools/lib/tool-limits";
 import {
   type CompressionLevel,
   parseOrganizeOrderInput,
   parseSelectedPagesInput,
-} from "../lib/tool-workspace";
+} from "@/features/public-tools/lib/tool-workspace";
 import {
   isConvertToolId,
   usesCanvasActionSidebar,
-} from "../lib/tool-workspace-kind";
+} from "@/features/public-tools/lib/tool-workspace-kind";
 import {
   isFileWorkspaceUx,
   resolveToolWorkspaceErrorKey,
   type ToolSelectedUxState,
-} from "../types/tool-ux-state";
-import { ToolEmptyState } from "./tool-empty-state";
-import { ToolErrorState } from "./tool-error-state";
-import { ToolExpiredState } from "./tool-expired-state";
-import { ToolMobileActionBar } from "./tool-mobile-action-bar";
-import { ToolProRequired } from "./tool-pro-required";
-import { ToolProcessingState } from "./tool-processing-state";
-import { ToolSidebarCard } from "./tool-sidebar-card";
-import { ToolStage } from "./tool-stage";
-import { ToolSuccessState } from "./tool-success-state";
-import { SelectedToolWorkspace } from "./workspaces/selected-tool-workspace";
+} from "@/features/public-tools/types/tool-ux-state";
 
 export type PublicToolSelectedSlot = {
   defaultSelected: ReactNode;

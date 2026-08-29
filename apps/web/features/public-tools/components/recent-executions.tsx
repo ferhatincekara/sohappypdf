@@ -12,10 +12,10 @@ import {
   activityRemainingLabel,
 } from "@/features/conversions/lib/activity-time-copy";
 import { FileDownloadButton } from "@/features/files/components/file-download-button";
+import { useRecentExecutions } from "@/features/public-tools/hooks/use-recent-executions";
+import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "@/features/public-tools/lib/anonymous-limits";
+import type { RecentExecution } from "@/features/public-tools/types/recent-execution";
 import { Link } from "@/lib/i18n/navigation";
-import { useRecentExecutions } from "../hooks/use-recent-executions";
-import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
-import type { RecentExecution } from "../types/recent-execution";
 
 export function RecentExecutions({
   isAuthenticated,

@@ -8,24 +8,24 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { BillingUpgradeLink } from "@/features/billing/components/billing-upgrade-link";
-import type { PublicFile } from "@/features/files/types/file";
-import { useCreateConversion } from "../hooks/use-create-conversion";
+import { ConversionTypeSelector } from "@/features/conversions/components/conversion-type-selector";
+import { OutputFormatSelector } from "@/features/conversions/components/output-format-selector";
+import { useCreateConversion } from "@/features/conversions/hooks/use-create-conversion";
 import {
   listCreatableConversionTypes,
   listTargetFormats,
-} from "../lib/conversion-capabilities";
-import { sourceFormatFromPublicFile } from "../lib/source-format";
+} from "@/features/conversions/lib/conversion-capabilities";
+import { sourceFormatFromPublicFile } from "@/features/conversions/lib/source-format";
 import {
   type CreateConversionFormValues,
   createConversionFormSchema,
   toCreateConversionInput,
-} from "../schemas/create-conversion-schema";
+} from "@/features/conversions/schemas/create-conversion-schema";
 import type {
   ConversionTargetFormat,
   ConversionType,
-} from "../types/conversion";
-import { ConversionTypeSelector } from "./conversion-type-selector";
-import { OutputFormatSelector } from "./output-format-selector";
+} from "@/features/conversions/types/conversion";
+import type { PublicFile } from "@/features/files/types/file";
 
 export function ConversionForm({
   file,

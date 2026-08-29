@@ -5,12 +5,12 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { authActions } from "../api/auth-actions";
-import { firstFormErrorMessage } from "../lib/first-form-error-message";
+import { authActions } from "@/features/auth/api/auth-actions";
+import { firstFormErrorMessage } from "@/features/auth/lib/first-form-error-message";
 import {
   createForgotPasswordSchema,
   type ForgotPasswordValues,
-} from "../schemas/forgot-password-schema";
+} from "@/features/auth/schemas/forgot-password-schema";
 
 export function useForgotPassword() {
   const t = useTranslations("auth.forgotPassword");

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import { DEFAULT_CONVERSION_ENGINE_CONFIG } from "./engine-config.js";
 import {
   assertRequiredConversionBinaries,

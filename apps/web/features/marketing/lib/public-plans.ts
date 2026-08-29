@@ -4,8 +4,8 @@ import {
   fallbackCatalogPrices,
   PLAN_IDS,
   WEB_PLAN_MONTHLY_PRICE_USD,
-} from "@repo/billing/plans";
-import { isPremiumTool, listCatalogTools } from "@repo/tools/catalog";
+} from "@sohappypdf/billing/plans";
+import { isPremiumTool, listCatalogTools } from "@sohappypdf/tools/catalog";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 
 export type PublicPlanId = (typeof PLAN_IDS)[number];

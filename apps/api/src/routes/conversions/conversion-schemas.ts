@@ -4,8 +4,8 @@ import {
   DEFAULT_CONVERSION_LIST_LIMIT,
   MAX_CONVERSION_LIST_LIMIT,
   normalizeFileFormat,
-} from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+} from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { z } from "zod";
 
 const CONVERSION_ID_PATTERN =

@@ -1,9 +1,9 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   type FileRecord,
   isFileExpired,
   throwIfOwnedFileExpired,
-} from "@repo/files";
+} from "@sohappypdf/files";
 import { type FileFormat, normalizeFileFormat } from "./conversion-format.js";
 import { type ConversionType, isConversionType } from "./conversion-type.js";
 import {

@@ -3,7 +3,7 @@ import {
   listCatalogTools,
   listRegisteredTools,
   type ToolDefinition,
-} from "@repo/tools/catalog";
+} from "@sohappypdf/tools/catalog";
 
 export const MARKETING_TOOL_CATEGORY_ORDER = [
   "organize",

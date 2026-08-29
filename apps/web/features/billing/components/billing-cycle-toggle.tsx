@@ -1,9 +1,9 @@
 "use client";
 
-import { API_PACK_YEARLY_DISCOUNT_PERCENT } from "@repo/billing/plans";
+import { API_PACK_YEARLY_DISCOUNT_PERCENT } from "@sohappypdf/billing/plans";
 import { useTranslations } from "next-intl";
 import { PillTabs } from "@/components/ui/pill-tabs";
-import type { BillingInterval } from "../types/billing";
+import type { BillingInterval } from "@/features/billing/types/billing";
 
 export function BillingCycleToggle({
   value,

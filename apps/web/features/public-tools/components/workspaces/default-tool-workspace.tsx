@@ -1,15 +1,15 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { resolveDefaultWorkspaceHeading } from "../../lib/workspace-heading";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolDropzone } from "../tool-dropzone";
-import { ToolFileList } from "../tool-file-list";
+import { ToolDropzone } from "@/features/public-tools/components/tool-dropzone";
+import { ToolFileList } from "@/features/public-tools/components/tool-file-list";
 import {
   ToolOptionsPanel,
   toolHasWorkspaceOptions,
-} from "../tool-options-panel";
-import { ToolSelectedActions } from "../tool-selected-actions";
+} from "@/features/public-tools/components/tool-options-panel";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { resolveDefaultWorkspaceHeading } from "@/features/public-tools/lib/workspace-heading";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function DefaultToolWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

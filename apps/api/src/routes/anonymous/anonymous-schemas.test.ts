@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_ANONYMOUS_CONFIG } from "@repo/config";
-import { isAppError } from "@repo/core";
+import { DEFAULT_ANONYMOUS_CONFIG } from "@sohappypdf/config";
+import { isAppError } from "@sohappypdf/core";
 import { resolveAnonymousConversionRequest } from "./anonymous-schemas.js";
 
 describe("resolveAnonymousConversionRequest", () => {

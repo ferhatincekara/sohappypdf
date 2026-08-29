@@ -1,9 +1,9 @@
-import type { ApiKeyService } from "@repo/api-keys";
-import type { BillingService } from "@repo/billing";
-import type { AnonymousConfig } from "@repo/config";
-import type { ConversionService } from "@repo/conversions";
-import type { FileService } from "@repo/files";
-import type { ConversionJobData } from "@repo/queue";
+import type { ApiKeyService } from "@sohappypdf/api-keys";
+import type { BillingService } from "@sohappypdf/billing";
+import type { AnonymousConfig } from "@sohappypdf/config";
+import type { ConversionService } from "@sohappypdf/conversions";
+import type { FileService } from "@sohappypdf/files";
+import type { ConversionJobData } from "@sohappypdf/queue";
 import { Hono } from "hono";
 import type { AppEnv } from "../app-env.js";
 import type { CheckRateLimit } from "../middleware/rate-limit.js";

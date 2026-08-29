@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
-import { convertFormatLabel } from "../../lib/format-labels";
+import { convertFormatLabel } from "@/features/public-tools/lib/format-labels";
 
 export function ConvertFormatBar({
   sourceFormat,

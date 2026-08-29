@@ -1,6 +1,6 @@
-import { loadFileConfig, loadRetentionPolicy } from "@repo/config";
-import { getDb } from "@repo/db";
-import { getStorage } from "@repo/storage";
+import { loadFileConfig, loadRetentionPolicy } from "@sohappypdf/config";
+import { getDb } from "@sohappypdf/db";
+import { getStorage } from "@sohappypdf/storage";
 import { createFileRepository } from "./file-repository.js";
 import { createFileService, type FileService } from "./file-service.js";
 

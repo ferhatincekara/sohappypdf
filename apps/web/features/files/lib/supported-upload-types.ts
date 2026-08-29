@@ -1,7 +1,7 @@
 /**
  * Client-safe mirror of supported upload source formats from the conversion
  * domain. Keep aligned with `listSourceFileFormats` + MIME mappings.
- * Do not import `@repo/conversions` in browser code.
+ * Do not import `@sohappypdf/conversions` in browser code.
  */
 const SUPPORTED_UPLOAD_TYPES = [
   {

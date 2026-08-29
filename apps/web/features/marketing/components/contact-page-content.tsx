@@ -1,13 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
 import {
   MARKETING_SUPPORT_EMAIL,
   MARKETING_SUPPORT_MAILTO,
-} from "../lib/marketing-contact";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingPageHeader } from "./marketing-page-header";
+} from "@/features/marketing/lib/marketing-contact";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { Link } from "@/lib/i18n/navigation";
 
 const TOPICS = ["product", "billing", "api"] as const;
 

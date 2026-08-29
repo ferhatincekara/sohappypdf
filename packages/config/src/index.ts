@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/config");
+assertServerOnly("@sohappypdf/config");
 
 export type { AiConfig } from "./ai-config.js";
 export {

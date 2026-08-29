@@ -1,4 +1,4 @@
-import type { CreateFileResult, FileRecord } from "@repo/files";
+import type { CreateFileResult, FileRecord } from "@sohappypdf/files";
 
 export type PublicFile = {
   id: string;

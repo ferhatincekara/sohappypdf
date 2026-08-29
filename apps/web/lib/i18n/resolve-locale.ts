@@ -1,5 +1,5 @@
 import { hasLocale } from "next-intl";
-import { type AppLocale, routing } from "./routing";
+import { type AppLocale, routing } from "@/lib/i18n/routing";
 
 type LanguageCandidate = {
   tag: string;

@@ -6,10 +6,10 @@ import { useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { fadeUp, viewportOnce } from "@/features/marketing/lib/motion-tokens";
 import { Link } from "@/lib/i18n/navigation";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { fadeUp, viewportOnce } from "../lib/motion-tokens";
-import { MarketingContainer } from "./marketing-container";
 
 const ACTIVITY_IDS = ["convert", "compress", "merge"] as const;
 

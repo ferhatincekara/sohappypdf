@@ -1,6 +1,6 @@
-import type { AnonymousSessionService } from "@repo/auth";
-import type { ConversionService } from "@repo/conversions";
-import type { FileService } from "@repo/files";
+import type { AnonymousSessionService } from "@sohappypdf/auth";
+import type { ConversionService } from "@sohappypdf/conversions";
+import type { FileService } from "@sohappypdf/files";
 
 export type ClaimAnonymousSessionInput = {
   rawToken: string | undefined;

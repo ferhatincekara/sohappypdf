@@ -2,8 +2,8 @@ import {
   ANONYMOUS_SESSION_COOKIE_NAME,
   type AnonymousSessionService,
   createAnonymousSessionCookieOptions,
-} from "@repo/auth";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+} from "@sohappypdf/auth";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { MiddlewareHandler } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
 import type { AppEnv } from "../app-env.js";

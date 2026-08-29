@@ -1,4 +1,4 @@
-import type { ApiCreditLedgerEntry } from "../types/billing";
+import type { ApiCreditLedgerEntry } from "@/features/billing/types/billing";
 
 export type ApiLedgerMotion = "grant" | "consume" | "refund";
 

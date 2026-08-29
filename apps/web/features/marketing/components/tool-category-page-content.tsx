@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
+import { MarketingToolCard } from "@/features/marketing/components/marketing-tool-card";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import type { MarketingToolNavGroup } from "@/features/marketing/lib/marketing-tools";
 import { Link } from "@/lib/i18n/navigation";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import type { MarketingToolNavGroup } from "../lib/marketing-tools";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingPageHeader } from "./marketing-page-header";
-import { MarketingToolCard } from "./marketing-tool-card";
 
 export async function ToolCategoryPageContent({
   group,

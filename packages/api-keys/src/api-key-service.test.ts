@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import { API_KEY_LAST_USED_UPDATE_INTERVAL_MS } from "./api-key-last-used.js";
 import type { ApiKeyRepository } from "./api-key-repository.js";
 import { hashApiKey, isApiKeyFormat } from "./api-key-secret.js";

@@ -2,7 +2,7 @@ import {
   buildPublicToolFaqJsonLd,
   buildPublicToolWebPageJsonLd,
   type PublicToolFaqItem,
-} from "../lib/public-tool-json-ld";
+} from "@/features/public-tools/lib/public-tool-json-ld";
 
 function serializeJsonLd(data: Record<string, unknown>): string {
   return JSON.stringify(data).replaceAll("<", "\\u003c");

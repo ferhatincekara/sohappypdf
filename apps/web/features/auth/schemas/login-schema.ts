@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { type AuthValidationTranslator, createEmailSchema } from "./password";
+import {
+  type AuthValidationTranslator,
+  createEmailSchema,
+} from "@/features/auth/schemas/password";
 
 export function createLoginSchema(t: AuthValidationTranslator) {
   return z.object({

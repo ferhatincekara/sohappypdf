@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { selectedPagesFromSplitRanges } from "./split-selection";
+import { selectedPagesFromSplitRanges } from "@/features/public-tools/lib/split-selection";
 
 describe("split selection", () => {
   test("expands valid ranges and ignores invalid input", () => {

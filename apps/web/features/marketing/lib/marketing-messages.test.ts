@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { listCatalogTools } from "@repo/tools/catalog";
-import en from "../../../messages/en.json";
-import tr from "../../../messages/tr.json";
+import { listCatalogTools } from "@sohappypdf/tools/catalog";
+import en from "@/messages/en.json";
+import tr from "@/messages/tr.json";
 
 function flattenKeys(value: unknown, prefix = ""): string[] {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {

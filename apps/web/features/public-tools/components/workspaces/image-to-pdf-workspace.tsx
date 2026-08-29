@@ -1,10 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolWorkspaceFiles } from "../tool-workspace-files";
-import { ConvertFormatBar } from "./convert-format-bar";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolWorkspaceFiles } from "@/features/public-tools/components/tool-workspace-files";
+import { ConvertFormatBar } from "@/features/public-tools/components/workspaces/convert-format-bar";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function ImageToPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

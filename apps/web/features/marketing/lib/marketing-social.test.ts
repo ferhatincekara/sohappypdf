@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   MARKETING_SOCIAL_LINK_IDS,
   MARKETING_SOCIAL_LINKS,
-} from "./marketing-social";
+} from "@/features/marketing/lib/marketing-social";
 
 describe("marketing social links", () => {
   test("exposes Instagram, X, and LinkedIn on the sohappypdf handle", () => {

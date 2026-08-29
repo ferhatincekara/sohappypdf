@@ -1,4 +1,7 @@
-import type { EditorObject, EditorTool } from "../types/editor-object";
+import type {
+  EditorObject,
+  EditorTool,
+} from "@/features/pdf-document-editor/types/editor-object";
 
 export const MIN_EDITOR_ZOOM = 0.5;
 export const MAX_EDITOR_ZOOM = 3;

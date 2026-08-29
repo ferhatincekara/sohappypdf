@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { findRegisteredTool } from "@repo/tools/catalog";
-import { MARKETING_PATHS } from "./marketing-paths";
-import { getMarketingToolShortcuts } from "./marketing-tool-shortcuts";
+import { findRegisteredTool } from "@sohappypdf/tools/catalog";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { getMarketingToolShortcuts } from "@/features/marketing/lib/marketing-tool-shortcuts";
 
 describe("marketing tool shortcuts", () => {
   test("exposes Merge, Split, Compress, Convert, OCR, and Protect from the registry", () => {

@@ -1,5 +1,5 @@
-import { loadBillingConfig } from "@repo/config";
-import { getDb } from "@repo/db";
+import { loadBillingConfig } from "@sohappypdf/config";
+import { getDb } from "@sohappypdf/db";
 import { createBillingRepository } from "./billing-repository.js";
 import {
   type BillingService,

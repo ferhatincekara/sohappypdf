@@ -4,15 +4,15 @@ import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
-import { Link } from "@/lib/i18n/navigation";
+import { ConversionListItem } from "@/features/conversions/components/conversion-list-item";
 import {
   type ConversionHistoryFilter,
   conversionListHref,
-} from "../lib/conversion-list-params";
-import { conversionListView } from "../lib/conversion-list-view";
-import type { PublicConversion } from "../types/conversion";
-import { ConversionListItem } from "./conversion-list-item";
+} from "@/features/conversions/lib/conversion-list-params";
+import { conversionListView } from "@/features/conversions/lib/conversion-list-view";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { Link } from "@/lib/i18n/navigation";
 
 export function ConversionList({
   conversions,

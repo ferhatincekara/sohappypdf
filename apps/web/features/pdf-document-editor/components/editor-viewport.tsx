@@ -1,20 +1,23 @@
 "use client";
 
 import { type PointerEvent, useCallback, useState } from "react";
-import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
+import { EditorObjectView } from "@/features/pdf-document-editor/components/editor-object-view";
+import { EditorPageCanvas } from "@/features/pdf-document-editor/components/editor-page-canvas";
 import {
   createRectangleObject,
   createSignatureObject,
   createTextObject,
-} from "../lib/create-editor-object";
+} from "@/features/pdf-document-editor/lib/create-editor-object";
 import type {
   DocumentEditorAction,
   DocumentEditorState,
-} from "../lib/document-editor-state";
-import { objectsOnPage } from "../lib/document-editor-state";
-import type { EditorObject, EditorTool } from "../types/editor-object";
-import { EditorObjectView } from "./editor-object-view";
-import { EditorPageCanvas } from "./editor-page-canvas";
+} from "@/features/pdf-document-editor/lib/document-editor-state";
+import { objectsOnPage } from "@/features/pdf-document-editor/lib/document-editor-state";
+import type {
+  EditorObject,
+  EditorTool,
+} from "@/features/pdf-document-editor/types/editor-object";
+import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
 
 const VIEW_WIDTH = 560;
 

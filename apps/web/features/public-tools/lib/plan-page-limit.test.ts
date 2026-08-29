@@ -3,7 +3,7 @@ import {
   exceedsPlanPageLimit,
   isPdfUploadFile,
   shouldHoldPdfForPageLimit,
-} from "./plan-page-limit";
+} from "@/features/public-tools/lib/plan-page-limit";
 
 describe("plan page limit", () => {
   test("detects PDF uploads by type or extension", () => {

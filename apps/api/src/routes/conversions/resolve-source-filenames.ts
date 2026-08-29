@@ -1,4 +1,4 @@
-import type { FileService } from "@repo/files";
+import type { FileService } from "@sohappypdf/files";
 
 export async function resolveSourceFilename(
   files: FileService,

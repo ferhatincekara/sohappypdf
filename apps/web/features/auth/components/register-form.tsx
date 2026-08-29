@@ -9,10 +9,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/features/auth/components/password-input";
+import { useRegister } from "@/features/auth/hooks/use-register";
+import { AUTH_PATHS, loginPath } from "@/features/auth/paths";
 import { Link } from "@/lib/i18n/navigation";
-import { useRegister } from "../hooks/use-register";
-import { AUTH_PATHS, loginPath } from "../paths";
-import { PasswordInput } from "./password-input";
 
 export function RegisterForm({ next }: { next?: string | null }) {
   const t = useTranslations("auth.register");

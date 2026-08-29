@@ -7,7 +7,7 @@ import {
   parsePageListInput,
   parseSelectedPagesInput,
   parseSplitRangesInput,
-} from "./tool-workspace";
+} from "@/features/public-tools/lib/tool-workspace";
 
 describe("tool workspace helpers", () => {
   test("parses page lists and split ranges", () => {

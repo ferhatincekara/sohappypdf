@@ -1,6 +1,6 @@
 import { APP_PATHS } from "@/features/app-shell/config/app-paths";
 import { AUTH_PATHS, signupPath } from "@/features/auth/paths";
-import { MARKETING_PATHS } from "./marketing-paths";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 export function resolveStartHref(
   _isAuthenticated: boolean,

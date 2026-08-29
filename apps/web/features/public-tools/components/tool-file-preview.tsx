@@ -1,7 +1,7 @@
 "use client";
 
 import { FileIcon } from "lucide-react";
-import type { WorkspaceFile } from "../lib/workspace-files";
+import type { WorkspaceFile } from "@/features/public-tools/lib/workspace-files";
 
 export function ToolFilePreview({
   entry,

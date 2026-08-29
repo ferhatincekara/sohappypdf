@@ -23,8 +23,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MarketingContainer } from "@/features/marketing/components/marketing-container";
-import { UI_KIT_COLOR_TOKENS } from "../lib/ui-kit-tokens";
-import { UiKitPlayground } from "./ui-kit-playground";
+import { UiKitPlayground } from "@/features/ui-kit/components/ui-kit-playground";
+import { UI_KIT_COLOR_TOKENS } from "@/features/ui-kit/lib/ui-kit-tokens";
 
 const UI_KIT_SELECT_ITEMS = [
   { value: "merge-pdf", label: "Merge PDF" },

@@ -10,9 +10,9 @@ import {
   mapPublicToolError,
   publicToolErrorMessageValues,
   toToolUserError,
-} from "./public-tool-errors";
-import { validateToolProcess } from "./validate-tool-process";
-import { createWorkspaceFiles } from "./workspace-files";
+} from "@/features/public-tools/lib/public-tool-errors";
+import { validateToolProcess } from "@/features/public-tools/lib/validate-tool-process";
+import { createWorkspaceFiles } from "@/features/public-tools/lib/workspace-files";
 
 function createAxiosError(
   status: number,

@@ -3,7 +3,7 @@ import {
   DEVELOPER_TOC_IDS,
   DEVELOPER_TOC_OFFSET_PX,
   resolveActiveTocId,
-} from "./developer-toc";
+} from "@/features/developer-docs/lib/developer-toc";
 
 describe("developer toc", () => {
   test("keeps the documented section order", () => {

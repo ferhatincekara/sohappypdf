@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { APP_ERROR_CODES } from "@repo/core";
-import type { Logger } from "@repo/logger";
-import type { RateLimitDecision, RateLimitSubject } from "@repo/rate-limit";
+import { APP_ERROR_CODES } from "@sohappypdf/core";
+import type { Logger } from "@sohappypdf/logger";
+import type {
+  RateLimitDecision,
+  RateLimitSubject,
+} from "@sohappypdf/rate-limit";
 import { createApp } from "../app.js";
 import { applyRateLimitHeaders } from "./rate-limit.js";
 

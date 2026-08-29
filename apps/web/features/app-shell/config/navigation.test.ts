@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { APP_PATHS } from "./app-paths";
-import { APP_NAVIGATION } from "./navigation";
+import { APP_PATHS } from "@/features/app-shell/config/app-paths";
+import { APP_NAVIGATION } from "@/features/app-shell/config/navigation";
 
 describe("app navigation", () => {
   test("keeps account destinations in the header menu, not a dashboard", () => {

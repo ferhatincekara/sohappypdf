@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   buildProductJsonLd,
   productJsonLdContainsReviews,
-} from "./product-json-ld";
+} from "@/features/marketing/lib/product-json-ld";
 
 describe("product structured data", () => {
   test("describes the product without fake reviews or organization details", () => {

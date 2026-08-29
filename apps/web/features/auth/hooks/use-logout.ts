@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
+import { authActions } from "@/features/auth/api/auth-actions";
+import { AUTH_PATHS } from "@/features/auth/paths";
 import { useRouter } from "@/lib/i18n/navigation";
-import { authActions } from "../api/auth-actions";
-import { AUTH_PATHS } from "../paths";
 
 export function useLogout() {
   const tErrors = useTranslations("auth.errors");

@@ -3,16 +3,16 @@
 import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { FileConvertButton } from "@/features/conversions/components/file-convert-button";
-import { formatFileSize } from "../lib/format-file-size";
-import { isFileDeletable } from "../lib/is-file-deletable";
-import { isFileDownloadable } from "../lib/is-file-downloadable";
-import { formatFromPublicFile } from "../lib/supported-upload-types";
+import { FileDownloadButton } from "@/features/files/components/file-download-button";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
+import { isFileDeletable } from "@/features/files/lib/is-file-deletable";
+import { isFileDownloadable } from "@/features/files/lib/is-file-downloadable";
+import { formatFromPublicFile } from "@/features/files/lib/supported-upload-types";
 import {
   PUBLIC_FILE_STATUSES,
   type PublicFile,
   type PublicFileStatus,
-} from "../types/file";
-import { FileDownloadButton } from "./file-download-button";
+} from "@/features/files/types/file";
 
 export function FileListItem({
   file,

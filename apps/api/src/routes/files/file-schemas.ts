@@ -1,12 +1,12 @@
-import { isSupportedUploadMimeType } from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { isSupportedUploadMimeType } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   DEFAULT_FILE_LIST_LIMIT,
   MAX_ARCHIVE_FILES,
   MAX_FILE_LIST_LIMIT,
   MAX_FILE_SIZE_BYTES,
   MIN_ARCHIVE_FILES,
-} from "@repo/files";
+} from "@sohappypdf/files";
 import { z } from "zod";
 
 const FILE_ID_PATTERN =

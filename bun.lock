@@ -12,7 +12,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.10",
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
         "drizzle-kit": "^0.31.10",
         "turbo": "^2.10.11",
@@ -20,41 +20,41 @@
       },
     },
     "apps/api": {
-      "name": "@repo/api",
+      "name": "@sohappypdf/api",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/api-keys": "workspace:*",
-        "@repo/auth": "workspace:*",
-        "@repo/billing": "workspace:*",
-        "@repo/config": "workspace:*",
-        "@repo/conversions": "workspace:*",
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
-        "@repo/files": "workspace:*",
-        "@repo/logger": "workspace:*",
-        "@repo/queue": "workspace:*",
-        "@repo/rate-limit": "workspace:*",
-        "@repo/storage": "workspace:*",
-        "@repo/tools": "workspace:*",
+        "@sohappypdf/api-keys": "workspace:*",
+        "@sohappypdf/auth": "workspace:*",
+        "@sohappypdf/billing": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/conversions": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
+        "@sohappypdf/files": "workspace:*",
+        "@sohappypdf/logger": "workspace:*",
+        "@sohappypdf/queue": "workspace:*",
+        "@sohappypdf/rate-limit": "workspace:*",
+        "@sohappypdf/storage": "workspace:*",
+        "@sohappypdf/tools": "workspace:*",
         "drizzle-orm": "^0.45.2",
         "hono": "^4.13.3",
         "zod": "^3.25.76",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
         "typescript": "5.9.2",
       },
     },
     "apps/web": {
-      "name": "@repo/web",
+      "name": "@sohappypdf/web",
       "version": "0.0.0",
       "dependencies": {
         "@base-ui/react": "^1.3.0",
         "@hookform/resolvers": "^5.2.2",
-        "@repo/billing": "workspace:*",
-        "@repo/tools": "workspace:*",
-        "@repo/utils": "workspace:*",
+        "@sohappypdf/billing": "workspace:*",
+        "@sohappypdf/tools": "workspace:*",
+        "@sohappypdf/utils": "workspace:*",
         "@tanstack/react-query": "^5.102.2",
         "axios": "^1.19.0",
         "better-auth": "^1.7.1",
@@ -76,7 +76,7 @@
         "zod": "^3.25.76",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@tailwindcss/postcss": "^4.3.3",
         "@types/node": "^22.18.0",
         "@types/react": "^19.2.18",
@@ -86,227 +86,227 @@
       },
     },
     "apps/worker": {
-      "name": "@repo/worker",
+      "name": "@sohappypdf/worker",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/auth": "workspace:*",
-        "@repo/billing": "workspace:*",
-        "@repo/config": "workspace:*",
-        "@repo/conversion-engines": "workspace:*",
-        "@repo/conversions": "workspace:*",
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
-        "@repo/files": "workspace:*",
-        "@repo/logger": "workspace:*",
-        "@repo/queue": "workspace:*",
-        "@repo/storage": "workspace:*",
+        "@sohappypdf/auth": "workspace:*",
+        "@sohappypdf/billing": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/conversion-engines": "workspace:*",
+        "@sohappypdf/conversions": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
+        "@sohappypdf/files": "workspace:*",
+        "@sohappypdf/logger": "workspace:*",
+        "@sohappypdf/queue": "workspace:*",
+        "@sohappypdf/storage": "workspace:*",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
         "typescript": "5.9.2",
       },
     },
     "packages/api-keys": {
-      "name": "@repo/api-keys",
+      "name": "@sohappypdf/api-keys",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/auth": {
-      "name": "@repo/auth",
+      "name": "@sohappypdf/auth",
       "version": "0.0.0",
       "dependencies": {
         "@better-auth/drizzle-adapter": "^1.7.1",
-        "@repo/config": "workspace:*",
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
         "better-auth": "^1.7.1",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/billing": {
-      "name": "@repo/billing",
+      "name": "@sohappypdf/billing",
       "version": "0.0.0",
       "dependencies": {
         "@polar-sh/sdk": "^0.49.0",
-        "@repo/config": "workspace:*",
-        "@repo/conversions": "workspace:*",
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
-        "@repo/tools": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/conversions": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
+        "@sohappypdf/tools": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/config": {
-      "name": "@repo/config",
+      "name": "@sohappypdf/config",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/core": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
         "typescript": "5.9.2",
       },
     },
     "packages/conversion-engines": {
-      "name": "@repo/conversion-engines",
+      "name": "@sohappypdf/conversion-engines",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/config": "workspace:*",
-        "@repo/conversions": "workspace:*",
-        "@repo/core": "workspace:*",
-        "@repo/utils": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/conversions": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/utils": "workspace:*",
         "pdf-lib": "^1.17.1",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/conversions": {
-      "name": "@repo/conversions",
+      "name": "@sohappypdf/conversions",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
-        "@repo/files": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
+        "@sohappypdf/files": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/core": {
-      "name": "@repo/core",
+      "name": "@sohappypdf/core",
       "version": "0.0.0",
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/db": {
-      "name": "@repo/db",
+      "name": "@sohappypdf/db",
       "version": "0.0.0",
       "dependencies": {
         "@neondatabase/serverless": "^1.1.0",
-        "@repo/config": "workspace:*",
-        "@repo/core": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
         "drizzle-kit": "^0.31.10",
         "typescript": "5.9.2",
       },
     },
     "packages/files": {
-      "name": "@repo/files",
+      "name": "@sohappypdf/files",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/config": "workspace:*",
-        "@repo/core": "workspace:*",
-        "@repo/db": "workspace:*",
-        "@repo/storage": "workspace:*",
-        "@repo/utils": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
+        "@sohappypdf/db": "workspace:*",
+        "@sohappypdf/storage": "workspace:*",
+        "@sohappypdf/utils": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/logger": {
-      "name": "@repo/logger",
+      "name": "@sohappypdf/logger",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/core": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "@types/node": "^22.18.0",
         "typescript": "5.9.2",
       },
     },
     "packages/queue": {
-      "name": "@repo/queue",
+      "name": "@sohappypdf/queue",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/config": "workspace:*",
-        "@repo/core": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
         "bullmq": "^6.2.0",
         "ioredis": "^5.8.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/rate-limit": {
-      "name": "@repo/rate-limit",
+      "name": "@sohappypdf/rate-limit",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/config": "workspace:*",
-        "@repo/core": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
         "@upstash/ratelimit": "^2.0.8",
         "@upstash/redis": "^1.38.2",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/storage": {
-      "name": "@repo/storage",
+      "name": "@sohappypdf/storage",
       "version": "0.0.0",
       "dependencies": {
         "@aws-sdk/client-s3": "^3.1116.0",
         "@aws-sdk/s3-request-presigner": "^3.1116.0",
-        "@repo/config": "workspace:*",
-        "@repo/core": "workspace:*",
+        "@sohappypdf/config": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/tools": {
-      "name": "@repo/tools",
+      "name": "@sohappypdf/tools",
       "version": "0.0.0",
       "dependencies": {
-        "@repo/core": "workspace:*",
+        "@sohappypdf/core": "workspace:*",
       },
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
     "packages/typescript-config": {
-      "name": "@repo/typescript-config",
+      "name": "@sohappypdf/typescript-config",
       "version": "0.0.0",
     },
     "packages/utils": {
-      "name": "@repo/utils",
+      "name": "@sohappypdf/utils",
       "version": "0.0.0",
       "devDependencies": {
-        "@repo/typescript-config": "workspace:*",
+        "@sohappypdf/typescript-config": "workspace:*",
         "typescript": "5.9.2",
       },
     },
@@ -632,44 +632,6 @@
 
     "@polar-sh/sdk": ["@polar-sh/sdk@0.49.0", "", { "dependencies": { "standardwebhooks": "^1.0.0", "zod": "^3.25.65 || ^4.0.0" } }, "sha512-9UYb70iKjJCtWYlu0OF5HLYBLmkxHwqr2RlXwuxXQgRGqq56IQWlVG+NO7e1YJ7I5GW0CBHhGIjRbQ9hYM6ycQ=="],
 
-    "@repo/api": ["@repo/api@workspace:apps/api"],
-
-    "@repo/api-keys": ["@repo/api-keys@workspace:packages/api-keys"],
-
-    "@repo/auth": ["@repo/auth@workspace:packages/auth"],
-
-    "@repo/billing": ["@repo/billing@workspace:packages/billing"],
-
-    "@repo/config": ["@repo/config@workspace:packages/config"],
-
-    "@repo/conversion-engines": ["@repo/conversion-engines@workspace:packages/conversion-engines"],
-
-    "@repo/conversions": ["@repo/conversions@workspace:packages/conversions"],
-
-    "@repo/core": ["@repo/core@workspace:packages/core"],
-
-    "@repo/db": ["@repo/db@workspace:packages/db"],
-
-    "@repo/files": ["@repo/files@workspace:packages/files"],
-
-    "@repo/logger": ["@repo/logger@workspace:packages/logger"],
-
-    "@repo/queue": ["@repo/queue@workspace:packages/queue"],
-
-    "@repo/rate-limit": ["@repo/rate-limit@workspace:packages/rate-limit"],
-
-    "@repo/storage": ["@repo/storage@workspace:packages/storage"],
-
-    "@repo/tools": ["@repo/tools@workspace:packages/tools"],
-
-    "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
-
-    "@repo/utils": ["@repo/utils@workspace:packages/utils"],
-
-    "@repo/web": ["@repo/web@workspace:apps/web"],
-
-    "@repo/worker": ["@repo/worker@workspace:apps/worker"],
-
     "@schummar/icu-type-parser": ["@schummar/icu-type-parser@1.21.5", "", {}, "sha512-bXHSaW5jRTmke9Vd0h5P7BtWZG9Znqb8gSDxZnxaGSJnGwPLDPfS+3g0BKzeWqzgZPsIVZkM7m2tbo18cm5HBw=="],
 
     "@smithy/core": ["@smithy/core@3.33.3", "", { "dependencies": { "@smithy/types": "^4.17.2", "tslib": "^2.6.2" } }, "sha512-CsOeKq/9kA3y6VJHt+/+VTCtBaxJ4OTFpgrjIUhPpDIKxBci1k2bJaQASF2h/ELWrulGp+t97DZ0mevfAD8idg=="],
@@ -683,6 +645,44 @@
     "@smithy/signature-v4": ["@smithy/signature-v4@5.7.3", "", { "dependencies": { "@smithy/core": "^3.33.3", "@smithy/types": "^4.17.2", "tslib": "^2.6.2" } }, "sha512-7ImGm+FkHRLcBaRttIAMZ6bzJZWb2cJGoYjq46F2UjycujWzrL9GEN9h4w7eQyXJYnltrUhxbbieBAIRrdqpow=="],
 
     "@smithy/types": ["@smithy/types@4.17.2", "", { "dependencies": { "tslib": "^2.6.2" } }, "sha512-FOKpVZob9MPTn2znRzGrnsMHv7BOsKVw3XiP/cOyYLDVZ9qKp4nifIiSCuUU/fIj5Vu0UOAxCFr+qRAtG0NUkA=="],
+
+    "@sohappypdf/api": ["@sohappypdf/api@workspace:apps/api"],
+
+    "@sohappypdf/api-keys": ["@sohappypdf/api-keys@workspace:packages/api-keys"],
+
+    "@sohappypdf/auth": ["@sohappypdf/auth@workspace:packages/auth"],
+
+    "@sohappypdf/billing": ["@sohappypdf/billing@workspace:packages/billing"],
+
+    "@sohappypdf/config": ["@sohappypdf/config@workspace:packages/config"],
+
+    "@sohappypdf/conversion-engines": ["@sohappypdf/conversion-engines@workspace:packages/conversion-engines"],
+
+    "@sohappypdf/conversions": ["@sohappypdf/conversions@workspace:packages/conversions"],
+
+    "@sohappypdf/core": ["@sohappypdf/core@workspace:packages/core"],
+
+    "@sohappypdf/db": ["@sohappypdf/db@workspace:packages/db"],
+
+    "@sohappypdf/files": ["@sohappypdf/files@workspace:packages/files"],
+
+    "@sohappypdf/logger": ["@sohappypdf/logger@workspace:packages/logger"],
+
+    "@sohappypdf/queue": ["@sohappypdf/queue@workspace:packages/queue"],
+
+    "@sohappypdf/rate-limit": ["@sohappypdf/rate-limit@workspace:packages/rate-limit"],
+
+    "@sohappypdf/storage": ["@sohappypdf/storage@workspace:packages/storage"],
+
+    "@sohappypdf/tools": ["@sohappypdf/tools@workspace:packages/tools"],
+
+    "@sohappypdf/typescript-config": ["@sohappypdf/typescript-config@workspace:packages/typescript-config"],
+
+    "@sohappypdf/utils": ["@sohappypdf/utils@workspace:packages/utils"],
+
+    "@sohappypdf/web": ["@sohappypdf/web@workspace:apps/web"],
+
+    "@sohappypdf/worker": ["@sohappypdf/worker@workspace:apps/worker"],
 
     "@stablelib/base64": ["@stablelib/base64@1.0.1", "", {}, "sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ=="],
 

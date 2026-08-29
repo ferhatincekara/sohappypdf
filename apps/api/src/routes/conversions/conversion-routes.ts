@@ -1,15 +1,15 @@
-import type { BillingService } from "@repo/billing";
-import { usesAiCredits } from "@repo/billing";
-import { loadRetentionPolicy } from "@repo/config";
-import type { ConversionService } from "@repo/conversions";
+import type { BillingService } from "@sohappypdf/billing";
+import { usesAiCredits } from "@sohappypdf/billing";
+import { loadRetentionPolicy } from "@sohappypdf/config";
+import type { ConversionService } from "@sohappypdf/conversions";
 import {
   fileFormatFromMimeType,
   normalizeFileFormat,
   resolveImplementedConversionType,
-} from "@repo/conversions";
-import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
-import type { FileService } from "@repo/files";
-import type { ConversionJobData } from "@repo/queue";
+} from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
+import type { FileService } from "@sohappypdf/files";
+import type { ConversionJobData } from "@sohappypdf/queue";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireAuthenticatedIdentity } from "../../auth/request-identity.js";

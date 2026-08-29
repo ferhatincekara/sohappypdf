@@ -2,11 +2,14 @@ import type {
   ConversionRecord,
   ConversionService,
   CreateOwnedConversionInput,
-} from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import type { FileRecord } from "@repo/files";
-import type { Logger } from "@repo/logger";
-import { type ConversionJobData, toQueueSafeJobOptions } from "@repo/queue";
+} from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import type { FileRecord } from "@sohappypdf/files";
+import type { Logger } from "@sohappypdf/logger";
+import {
+  type ConversionJobData,
+  toQueueSafeJobOptions,
+} from "@sohappypdf/queue";
 
 export type EnqueueCreatedConversionOptions = {
   conversions: ConversionService;

@@ -1,5 +1,5 @@
 {
-  "name": "@repo/db",
+  "name": "@sohappypdf/db",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,12 +17,12 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
-    "@repo/config": "workspace:*",
-    "@repo/core": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
     "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "@types/node": "^22.18.0",
     "drizzle-kit": "^0.31.10",
     "typescript": "5.9.2"

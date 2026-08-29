@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createChangePasswordSchema } from "./change-password-schema";
+import { createChangePasswordSchema } from "@/features/auth/schemas/change-password-schema";
 
 const t = (key: string) => key;
 

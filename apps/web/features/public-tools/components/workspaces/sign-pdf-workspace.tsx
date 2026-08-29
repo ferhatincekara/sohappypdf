@@ -7,13 +7,16 @@ import {
   DocumentEditor,
   useDocumentEditor,
 } from "@/features/pdf-document-editor";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import {
+  type SignatureAsset,
+  SignaturePad,
+} from "@/features/public-tools/components/workspaces/signature-pad";
+import { uploadTemporaryAsset } from "@/features/public-tools/lib/upload-temporary-asset";
+import { usePdfDocument } from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 import { authClient } from "@/lib/auth/auth-client";
-import { uploadTemporaryAsset } from "../../lib/upload-temporary-asset";
-import { usePdfDocument } from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { type SignatureAsset, SignaturePad } from "./signature-pad";
 
 export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

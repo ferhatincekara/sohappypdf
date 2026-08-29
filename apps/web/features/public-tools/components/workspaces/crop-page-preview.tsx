@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
 import {
   type CropEdge,
   type CropMargins,
   moveCropMargins,
   resizeCropEdge,
-} from "../../lib/crop-margins";
-import type { PdfjsDocument } from "../../lib/pdfjs-client";
+} from "@/features/public-tools/lib/crop-margins";
+import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
+import { cn } from "@/lib/utils";
 
 const PREVIEW_WIDTH = 320;
 

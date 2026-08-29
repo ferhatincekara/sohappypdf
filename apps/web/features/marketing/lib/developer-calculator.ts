@@ -2,7 +2,7 @@ import {
   listRegisteredTools,
   TOOL_CATEGORIES,
   type ToolCategory,
-} from "@repo/tools/catalog";
+} from "@sohappypdf/tools/catalog";
 
 export function tasksForCredits(
   credits: number,

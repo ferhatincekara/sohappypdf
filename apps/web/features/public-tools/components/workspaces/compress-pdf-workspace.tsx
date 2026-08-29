@@ -1,11 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolWorkspaceFiles } from "@/features/public-tools/components/tool-workspace-files";
+import type { CompressionLevel } from "@/features/public-tools/lib/tool-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 import { cn } from "@/lib/utils";
-import type { CompressionLevel } from "../../lib/tool-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolWorkspaceFiles } from "../tool-workspace-files";
 
 const LEVELS: readonly CompressionLevel[] = ["high", "medium", "low"];
 

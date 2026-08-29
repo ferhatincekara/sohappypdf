@@ -1,6 +1,5 @@
 import { isConversionExpired } from "@/features/conversions/lib/can-download-conversion";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
-import type { ToolProcessingStatus, ToolUxState } from "../types/tool-ux-state";
 import {
   isExpirationResponse,
   isMissingResourceResponse,
@@ -8,9 +7,13 @@ import {
   mapPublicToolError,
   type PublicToolErrorKey,
   toToolUserError,
-} from "./public-tool-errors";
-import { toolRequiresConfiguration } from "./tool-requires-configuration";
-import type { WorkspaceFile } from "./workspace-files";
+} from "@/features/public-tools/lib/public-tool-errors";
+import { toolRequiresConfiguration } from "@/features/public-tools/lib/tool-requires-configuration";
+import type { WorkspaceFile } from "@/features/public-tools/lib/workspace-files";
+import type {
+  ToolProcessingStatus,
+  ToolUxState,
+} from "@/features/public-tools/types/tool-ux-state";
 
 export const QUEUED_CONVERSION_STALL_MS = 90_000;
 

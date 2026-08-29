@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/db");
+assertServerOnly("@sohappypdf/db");
 
 export type { CreateDatabaseOptions, Database } from "./client.js";
 export { createDatabase, getDb } from "./client.js";

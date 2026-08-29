@@ -3,7 +3,7 @@ import {
   LEGAL_PAGE_IDS,
   LEGAL_PAGE_SECTIONS,
   LEGAL_PATHS,
-} from "./legal-paths";
+} from "@/features/legal/lib/legal-paths";
 
 describe("legal paths", () => {
   test("keeps the four documents on stable public URLs", () => {

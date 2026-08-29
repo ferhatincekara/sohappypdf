@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { listRegisteredTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
 import {
   findToolCategoryBySlug,
   getMarketingToolDirectoryGroups,
@@ -11,7 +11,7 @@ import {
   sortMarketingNavTools,
   toolCategoryPath,
   visibleMegaMenuTools,
-} from "./marketing-tools";
+} from "@/features/marketing/lib/marketing-tools";
 
 describe("marketing tool navigation", () => {
   test("lists every executable public tool path from the catalog", () => {

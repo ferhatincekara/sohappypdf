@@ -1,5 +1,5 @@
 {
-  "name": "@repo/conversion-engines",
+  "name": "@sohappypdf/conversion-engines",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,14 +15,14 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@repo/config": "workspace:*",
-    "@repo/conversions": "workspace:*",
-    "@repo/core": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/conversions": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
+    "@sohappypdf/utils": "workspace:*",
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

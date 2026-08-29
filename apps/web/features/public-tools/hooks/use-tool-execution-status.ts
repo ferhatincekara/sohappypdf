@@ -2,12 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
-import { publicToolQueryKeys } from "../api/public-tool-query-keys";
+import { publicToolQueryKeys } from "@/features/public-tools/api/public-tool-query-keys";
 import {
   isExpirationResponse,
   isMissingResourceResponse,
-} from "../lib/public-tool-errors";
-import { toolExecutionQueryRefetchInterval } from "../lib/tool-execution-polling";
+} from "@/features/public-tools/lib/public-tool-errors";
+import { toolExecutionQueryRefetchInterval } from "@/features/public-tools/lib/tool-execution-polling";
 
 export function useToolExecutionStatus(options: {
   executionId: string | null;

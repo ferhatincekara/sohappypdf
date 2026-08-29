@@ -1,5 +1,5 @@
-import { DEFAULT_FILE_CONFIG } from "@repo/config";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { DEFAULT_FILE_CONFIG } from "@sohappypdf/config";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 
 const MAX_FILENAME_LENGTH = 255;
 const MAX_MIME_TYPE_LENGTH = 200;

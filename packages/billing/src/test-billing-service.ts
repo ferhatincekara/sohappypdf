@@ -1,4 +1,4 @@
-import { loadBillingConfig } from "@repo/config";
+import { loadBillingConfig } from "@sohappypdf/config";
 import {
   type BillingService,
   createBillingService,

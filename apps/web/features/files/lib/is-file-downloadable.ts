@@ -1,4 +1,4 @@
-import type { PublicFile, PublicFileStatus } from "../types/file";
+import type { PublicFile, PublicFileStatus } from "@/features/files/types/file";
 
 export const DOWNLOADABLE_FILE_STATUSES: readonly PublicFileStatus[] = [
   "uploaded",

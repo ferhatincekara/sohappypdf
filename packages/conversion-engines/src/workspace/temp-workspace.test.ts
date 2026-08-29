@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { access } from "node:fs/promises";
 import { join } from "node:path";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import {
   assertPathInside,
   createConversionWorkspace,

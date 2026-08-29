@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolWorkspaceFiles } from "../tool-workspace-files";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolWorkspaceFiles } from "@/features/public-tools/components/tool-workspace-files";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 const MAX_PASSWORD_LENGTH = 128;
 

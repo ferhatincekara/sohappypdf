@@ -13,8 +13,8 @@ import {
   canDeleteSelectedOrganizeSlots,
   hasSelectedOrganizeSlots,
   type OrganizeSlot,
-} from "../../lib/organize-pages";
-import { PdfPageSelectionToolbar } from "../../pdf-workspace";
+} from "@/features/public-tools/lib/organize-pages";
+import { PdfPageSelectionToolbar } from "@/features/public-tools/pdf-workspace";
 
 export function OrganizePdfToolbar({
   slots,

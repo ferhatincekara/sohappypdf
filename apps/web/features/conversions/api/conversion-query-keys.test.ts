@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { conversionQueryKeys } from "./conversion-query-keys";
+import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 
 describe("conversion query keys", () => {
   test("keeps history list keys under a shared prefix for invalidation", () => {

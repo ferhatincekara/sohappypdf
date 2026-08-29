@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicFile } from "../types/file";
-import { isFileDeletable } from "./is-file-deletable";
+import { isFileDeletable } from "@/features/files/lib/is-file-deletable";
+import type { PublicFile } from "@/features/files/types/file";
 
 function createFile(status: PublicFile["status"]): PublicFile {
   return {

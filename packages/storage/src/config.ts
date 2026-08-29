@@ -2,8 +2,8 @@ import {
   type EnvSource,
   loadStorageConfig,
   type StorageConfig,
-} from "@repo/config";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+} from "@sohappypdf/config";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 
 export type { StorageConfig };
 

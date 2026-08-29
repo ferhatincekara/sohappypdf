@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
-import { mapRecentExecution } from "./map-recent-execution";
+import { mapRecentExecution } from "@/features/public-tools/lib/map-recent-execution";
 
 function conversion(
   overrides: Partial<PublicConversion> = {},

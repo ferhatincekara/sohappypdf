@@ -1,5 +1,5 @@
-import { rangesToPages } from "../pdf-workspace/lib/page-selection";
-import { parseSplitRangesInput } from "./tool-workspace";
+import { parseSplitRangesInput } from "@/features/public-tools/lib/tool-workspace";
+import { rangesToPages } from "@/features/public-tools/pdf-workspace/lib/page-selection";
 
 export function selectedPagesFromSplitRanges(value: string): number[] {
   const ranges = parseSplitRangesInput(value);

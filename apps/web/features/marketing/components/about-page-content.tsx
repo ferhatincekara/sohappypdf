@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { AboutQuestions } from "./about-questions";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingPageHeader } from "./marketing-page-header";
+import { AboutQuestions } from "@/features/marketing/components/about-questions";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
 
 const BELIEFS = ["pages", "anonymous", "files", "api"] as const;
 

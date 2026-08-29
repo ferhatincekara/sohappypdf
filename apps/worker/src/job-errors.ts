@@ -3,4 +3,4 @@ export {
   isRetryableConversionError,
   PermanentConversionError,
   toSafeFailure,
-} from "@repo/conversion-engines";
+} from "@sohappypdf/conversion-engines";

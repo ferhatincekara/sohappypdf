@@ -1,4 +1,4 @@
-import { TOOL_REQUIRES_PRO_MESSAGE } from "@repo/tools/catalog";
+import { TOOL_REQUIRES_PRO_MESSAGE } from "@sohappypdf/tools/catalog";
 import axios from "axios";
 
 export const CONVERSION_ERROR_KEYS = {

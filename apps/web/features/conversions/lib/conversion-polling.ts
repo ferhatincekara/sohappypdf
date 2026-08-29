@@ -1,4 +1,4 @@
-import type { ConversionStatus } from "../types/conversion";
+import type { ConversionStatus } from "@/features/conversions/types/conversion";
 
 export const ACTIVE_CONVERSION_STATUSES: readonly ConversionStatus[] = [
   "pending",

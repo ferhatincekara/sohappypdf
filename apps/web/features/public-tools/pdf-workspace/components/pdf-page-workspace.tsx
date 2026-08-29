@@ -2,12 +2,18 @@
 
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
-import type { PdfDocumentState } from "../hooks/use-pdf-document";
-import { usePdfPageSelection } from "../hooks/use-pdf-page-selection";
-import type { PageSelectionMode } from "../lib/page-selection";
-import { createPdfPages, type PdfPage } from "../types/pdf-page";
-import { PdfPageGrid, PdfPageGridSkeleton } from "./pdf-page-grid";
-import { PdfPageSelectionToolbar } from "./pdf-page-selection-toolbar";
+import {
+  PdfPageGrid,
+  PdfPageGridSkeleton,
+} from "@/features/public-tools/pdf-workspace/components/pdf-page-grid";
+import { PdfPageSelectionToolbar } from "@/features/public-tools/pdf-workspace/components/pdf-page-selection-toolbar";
+import type { PdfDocumentState } from "@/features/public-tools/pdf-workspace/hooks/use-pdf-document";
+import { usePdfPageSelection } from "@/features/public-tools/pdf-workspace/hooks/use-pdf-page-selection";
+import type { PageSelectionMode } from "@/features/public-tools/pdf-workspace/lib/page-selection";
+import {
+  createPdfPages,
+  type PdfPage,
+} from "@/features/public-tools/pdf-workspace/types/pdf-page";
 
 export function PdfPageWorkspace({
   pdf,

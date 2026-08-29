@@ -5,7 +5,7 @@ import {
   documentEditorReducer,
   INITIAL_DOCUMENT_EDITOR_STATE,
   selectedEditorObject,
-} from "../lib/document-editor-state";
+} from "@/features/pdf-document-editor/lib/document-editor-state";
 
 export function useDocumentEditor(pageCount: number) {
   const [state, dispatch] = useReducer(

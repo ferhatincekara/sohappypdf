@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { editorObjectsToEditOperations } from "./edit-pdf-operations";
+import { editorObjectsToEditOperations } from "@/features/public-tools/lib/edit-pdf-operations";
 
 describe("editorObjectsToEditOperations", () => {
   test("converts overlay objects into edit-pdf operations", () => {

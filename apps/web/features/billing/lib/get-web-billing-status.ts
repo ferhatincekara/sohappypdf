@@ -2,7 +2,10 @@ import { cookies } from "next/headers";
 import { cache } from "react";
 import { getServerApiV1BaseUrl } from "@/config/public-env";
 import { cookieHeaderFromStore } from "@/features/auth/session/session-request-headers";
-import { parseWebToolBilling, type WebToolBilling } from "./web-tool-billing";
+import {
+  parseWebToolBilling,
+  type WebToolBilling,
+} from "@/features/billing/lib/web-tool-billing";
 
 export type { WebToolBilling };
 

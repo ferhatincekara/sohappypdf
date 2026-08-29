@@ -1,5 +1,5 @@
+import { billingTileClassName } from "@/features/billing/components/billing-plan-hero";
 import { cn } from "@/lib/utils";
-import { billingTileClassName } from "./billing-plan-hero";
 
 export function BillingStat({
   label,

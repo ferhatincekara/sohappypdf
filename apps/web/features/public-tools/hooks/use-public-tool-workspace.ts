@@ -3,12 +3,12 @@
 import {
   resolveWebMaxFileSizeBytes,
   resolveWebMaxPagesPerFile,
-} from "@repo/billing/plans";
+} from "@sohappypdf/billing/plans";
 import {
   isPremiumTool,
   type ToolDefinition,
   toolCombinesSourceFiles,
-} from "@repo/tools/catalog";
+} from "@sohappypdf/tools/catalog";
 import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { billingApi } from "@/features/billing/api/billing-api";
@@ -26,33 +26,32 @@ import {
   createFileUploadWorkflow,
   type FileUploadWorkflow,
 } from "@/features/files/lib/upload-workflow";
-import { authClient } from "@/lib/auth/auth-client";
-import { createPublicToolApis } from "../api/public-tool-api";
-import { publicToolQueryKeys } from "../api/public-tool-query-keys";
+import { createPublicToolApis } from "@/features/public-tools/api/public-tool-api";
+import { publicToolQueryKeys } from "@/features/public-tools/api/public-tool-query-keys";
 import {
   exceedsPlanPageLimit,
   shouldHoldPdfForPageLimit,
-} from "../lib/plan-page-limit";
+} from "@/features/public-tools/lib/plan-page-limit";
 import {
   isExpirationResponse,
   isMissingResourceResponse,
   mapPublicToolError,
   mapUploadWorkflowErrorKey,
   type PublicToolErrorKey,
-} from "../lib/public-tool-errors";
-import { resolveToolUxState } from "../lib/resolve-tool-ux-state";
-import { toolExecutionQueryRefetchInterval } from "../lib/tool-execution-polling";
-import { maxFilesForTool } from "../lib/tool-limits";
-import { toolAutoStartsWhenReady } from "../lib/tool-requires-configuration";
+} from "@/features/public-tools/lib/public-tool-errors";
+import { resolveToolUxState } from "@/features/public-tools/lib/resolve-tool-ux-state";
+import { toolExecutionQueryRefetchInterval } from "@/features/public-tools/lib/tool-execution-polling";
+import { maxFilesForTool } from "@/features/public-tools/lib/tool-limits";
+import { toolAutoStartsWhenReady } from "@/features/public-tools/lib/tool-requires-configuration";
 import {
   additionalFileIdsFromOptions,
   buildToolConversionOptions,
   DEFAULT_TOOL_WORKSPACE_STATE,
-} from "../lib/tool-workspace";
+} from "@/features/public-tools/lib/tool-workspace";
 import {
   isToolConversionType,
   validateToolProcess,
-} from "../lib/validate-tool-process";
+} from "@/features/public-tools/lib/validate-tool-process";
 import {
   appendWorkspaceFiles,
   clearWorkspaceFiles,
@@ -65,8 +64,9 @@ import {
   resolveToolFileContentType,
   supportsFileReorder,
   type WorkspaceFile,
-} from "../lib/workspace-files";
-import { isFileWorkspaceUx } from "../types/tool-ux-state";
+} from "@/features/public-tools/lib/workspace-files";
+import { isFileWorkspaceUx } from "@/features/public-tools/types/tool-ux-state";
+import { authClient } from "@/lib/auth/auth-client";
 
 export function usePublicToolWorkspace(
   tool: ToolDefinition,
@@ -465,7 +465,9 @@ export function usePublicToolWorkspace(
 
     void (async () => {
       try {
-        const { countPdfPages } = await import("../lib/pdfjs-client");
+        const { countPdfPages } = await import(
+          "@/features/public-tools/lib/pdfjs-client"
+        );
         const pageCount = await countPdfPages(current.file);
         const still = filesRef.current.find((entry) => entry.id === id);
 

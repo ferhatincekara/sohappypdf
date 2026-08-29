@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { apiKeyListView } from "./api-key-list-view";
+import { apiKeyListView } from "@/features/api-keys/lib/api-key-list-view";
 
 describe("api key list view", () => {
   test("renders empty, loading, and error states", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { safeConversionFailureKey } from "./conversion-failure";
+import { safeConversionFailureKey } from "@/features/conversions/lib/conversion-failure";
 
 describe("conversion failure keys", () => {
   test("maps known backend failure codes", () => {

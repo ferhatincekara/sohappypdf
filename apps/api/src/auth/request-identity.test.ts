@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { generateApiKeySecret } from "@repo/api-keys";
-import { isAppError } from "@repo/core";
-import type { Logger } from "@repo/logger";
+import { generateApiKeySecret } from "@sohappypdf/api-keys";
+import { isAppError } from "@sohappypdf/core";
+import type { Logger } from "@sohappypdf/logger";
 import { createApp } from "../app.js";
 import {
   createDefaultIdentityResolver,

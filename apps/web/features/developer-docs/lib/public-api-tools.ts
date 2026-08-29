@@ -2,15 +2,15 @@ import {
   isPremiumTool,
   listRegisteredTools,
   type ToolCategory,
-} from "@repo/tools/catalog";
-import { conversionCreateBodyExample } from "./example-snippets";
+} from "@sohappypdf/tools/catalog";
+import { conversionCreateBodyExample } from "@/features/developer-docs/lib/example-snippets";
 import {
   buildConversionExampleBody,
   type ExtraFilesKind,
   getPublicApiToolGuide,
   type ToolGuideNoteId,
   type ToolOptionField,
-} from "./public-api-tool-guide";
+} from "@/features/developer-docs/lib/public-api-tool-guide";
 
 export type PublicApiTool = {
   id: string;

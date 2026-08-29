@@ -1,5 +1,5 @@
 {
-  "name": "@repo/queue",
+  "name": "@sohappypdf/queue",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,13 +15,13 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@repo/config": "workspace:*",
-    "@repo/core": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
     "bullmq": "^6.2.0",
     "ioredis": "^5.8.2"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

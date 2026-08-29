@@ -1,7 +1,7 @@
 import { type ChildProcess, spawn } from "node:child_process";
 import process from "node:process";
 import type { Readable } from "node:stream";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { CONVERSION_NATIVE_BINARIES } from "../engine-config.js";
 import { conversionTimeoutError, nativeToolFailureError } from "../errors.js";
 import {

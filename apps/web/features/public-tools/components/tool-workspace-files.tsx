@@ -1,9 +1,9 @@
 "use client";
 
-import type { ToolSelectedWorkspaceProps } from "../types/tool-selected-workspace";
-import { ToolDropzone } from "./tool-dropzone";
-import { ToolFileCard } from "./tool-file-card";
-import { ToolFileList } from "./tool-file-list";
+import { ToolDropzone } from "@/features/public-tools/components/tool-dropzone";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolFileList } from "@/features/public-tools/components/tool-file-list";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function ToolWorkspaceFiles({
   props,

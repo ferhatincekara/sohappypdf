@@ -5,10 +5,10 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingScene } from "@/features/marketing/components/marketing-scene";
+import { fadeUp, viewportOnce } from "@/features/marketing/lib/motion-tokens";
 import { Link } from "@/lib/i18n/navigation";
-import { fadeUp, viewportOnce } from "../lib/motion-tokens";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingScene } from "./marketing-scene";
 
 const SPOTS = [
   {

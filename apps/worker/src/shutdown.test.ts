@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createLogger } from "@repo/logger";
+import { createLogger } from "@sohappypdf/logger";
 import { createWorkerShutdown } from "./shutdown.js";
 
 describe("worker shutdown", () => {

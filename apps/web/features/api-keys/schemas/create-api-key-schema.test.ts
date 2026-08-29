@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createApiKeyFormSchema } from "./create-api-key-schema";
+import { createApiKeyFormSchema } from "@/features/api-keys/schemas/create-api-key-schema";
 
 const schema = createApiKeyFormSchema((key) => key);
 

@@ -1,5 +1,5 @@
 import { writeFile } from "node:fs/promises";
-import { buildZipArchive, type ZipArchiveEntry } from "@repo/utils/zip";
+import { buildZipArchive, type ZipArchiveEntry } from "@sohappypdf/utils/zip";
 
 export type { ZipArchiveEntry };
 

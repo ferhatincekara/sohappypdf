@@ -3,11 +3,11 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { loginPath } from "@/features/auth/paths";
+import { ToolUpgradeCard } from "@/features/public-tools/components/tool-upgrade-card";
+import { isPlanUpgradeToolError } from "@/features/public-tools/lib/public-tool-errors";
+import type { ToolSelectedUxState } from "@/features/public-tools/types/tool-ux-state";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { isPlanUpgradeToolError } from "../lib/public-tool-errors";
-import type { ToolSelectedUxState } from "../types/tool-ux-state";
-import { ToolUpgradeCard } from "./tool-upgrade-card";
 
 export function ToolSelectedActions({
   toolRoute,

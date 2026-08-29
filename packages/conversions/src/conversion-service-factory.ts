@@ -1,5 +1,5 @@
-import { getDb } from "@repo/db";
-import { getFileService } from "@repo/files";
+import { getDb } from "@sohappypdf/db";
+import { getFileService } from "@sohappypdf/files";
 import { createConversionRepository } from "./conversion-repository.js";
 import {
   type ConversionService,

@@ -1,4 +1,4 @@
-import { getRegisteredTool, isRegisteredToolId } from "@repo/tools";
+import { getRegisteredTool, isRegisteredToolId } from "@sohappypdf/tools";
 import { usesAiCredits } from "./ai-credit-cost.js";
 
 export function resolveApiCreditCost(toolId: string): number {

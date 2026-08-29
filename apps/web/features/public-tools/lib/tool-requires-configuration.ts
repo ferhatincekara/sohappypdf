@@ -1,4 +1,4 @@
-import { resolveToolWorkspaceKind } from "./tool-workspace-kind";
+import { resolveToolWorkspaceKind } from "@/features/public-tools/lib/tool-workspace-kind";
 
 const DEFAULT_WORKSPACE_OPTION_TOOL_IDS = [
   "reorder-pages",

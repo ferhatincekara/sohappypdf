@@ -4,9 +4,9 @@ import type {
   CatalogOfferPrice,
   CheckoutProductKey,
   PublicBillingStatus,
-} from "../types/billing";
+} from "@/features/billing/types/billing";
 
-export { formatUsdAmount } from "@repo/billing/plans";
+export { formatUsdAmount } from "@sohappypdf/billing/plans";
 
 export const BILLING_CENTER_SECTIONS = ["web", "api"] as const;
 

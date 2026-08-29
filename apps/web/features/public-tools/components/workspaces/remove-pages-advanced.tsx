@@ -3,8 +3,11 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { parseSplitRangesInput } from "../../lib/tool-workspace";
-import { pagesToRangeInput, rangesToPages } from "../../pdf-workspace";
+import { parseSplitRangesInput } from "@/features/public-tools/lib/tool-workspace";
+import {
+  pagesToRangeInput,
+  rangesToPages,
+} from "@/features/public-tools/pdf-workspace";
 
 export function RemovePagesAdvanced({
   selectedPages,

@@ -1,8 +1,8 @@
 import type {
   PublicToolErrorKey,
   ToolUserError,
-} from "../lib/public-tool-errors";
-import type { WorkspaceFile } from "../lib/workspace-files";
+} from "@/features/public-tools/lib/public-tool-errors";
+import type { WorkspaceFile } from "@/features/public-tools/lib/workspace-files";
 
 export const TOOL_UX_STATUSES = [
   "empty",

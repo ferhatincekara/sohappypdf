@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   buildPublicToolFaqJsonLd,
   buildPublicToolWebPageJsonLd,
-} from "./public-tool-json-ld";
+} from "@/features/public-tools/lib/public-tool-json-ld";
 
 describe("public tool structured data", () => {
   test("describes the page and FAQ without reviews", () => {

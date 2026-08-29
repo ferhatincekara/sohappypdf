@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { assertBrowserDownloadUrl } from "./start-browser-download";
+import { assertBrowserDownloadUrl } from "@/features/files/lib/start-browser-download";
 
 describe("assertBrowserDownloadUrl", () => {
   test("accepts http and https download URLs", () => {

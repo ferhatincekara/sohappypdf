@@ -1,10 +1,10 @@
-import type { PlanId } from "@repo/billing";
-import { loadAnonymousConfig, loadRateLimitConfig } from "@repo/config";
+import type { PlanId } from "@sohappypdf/billing";
+import { loadAnonymousConfig, loadRateLimitConfig } from "@sohappypdf/config";
 import {
   createRateLimitPolicies,
   createRateLimitService,
   type RateLimitSubject,
-} from "@repo/rate-limit";
+} from "@sohappypdf/rate-limit";
 import type { CheckRateLimit } from "./middleware/rate-limit.js";
 
 export type ResolveRateLimitPlan = (userId: string) => Promise<PlanId>;

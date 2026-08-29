@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import { assertObjectByteLimit } from "./object-byte-limit.js";
 
 describe("assertObjectByteLimit", () => {

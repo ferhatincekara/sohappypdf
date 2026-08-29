@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { getPublicApiV1BaseUrl } from "@/config/public-env";
-import { getMarketingApiExample } from "./marketing-api-example";
+import { getMarketingApiExample } from "@/features/marketing/lib/marketing-api-example";
 
 describe("marketing API example", () => {
   test("uses the configured public API contract and a placeholder key", () => {

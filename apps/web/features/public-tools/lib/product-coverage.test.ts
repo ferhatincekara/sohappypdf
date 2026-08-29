@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { listRegisteredTools } from "@repo/tools/catalog";
-import en from "../../../messages/en.json";
-import tr from "../../../messages/tr.json";
-import { PUBLIC_TOOL_ERROR_KEYS } from "./public-tool-errors";
-import { listPublicToolRouteParams } from "./public-tool-routes";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
+import { PUBLIC_TOOL_ERROR_KEYS } from "@/features/public-tools/lib/public-tool-errors";
+import { listPublicToolRouteParams } from "@/features/public-tools/lib/public-tool-routes";
+import en from "@/messages/en.json";
+import tr from "@/messages/tr.json";
 
 describe("public product coverage", () => {
   test("localizes every public tool error key in English and Turkish", () => {

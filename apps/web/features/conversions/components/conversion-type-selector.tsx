@@ -7,8 +7,8 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
+import type { ConversionType } from "@/features/conversions/types/conversion";
 import { cn } from "@/lib/utils";
-import type { ConversionType } from "../types/conversion";
 
 export function ConversionTypeSelector({
   types,

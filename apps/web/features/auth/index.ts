@@ -1,17 +1,17 @@
-export { authActions } from "./api/auth-actions";
-export { ForgotPasswordForm } from "./components/forgot-password-form";
-export { LoginForm } from "./components/login-form";
-export { LogoutButton } from "./components/logout-button";
-export { RegisterForm } from "./components/register-form";
-export { ResetPasswordForm } from "./components/reset-password-form";
-export { AUTH_PATHS, loginPath, signupPath } from "./paths";
+export { authActions } from "@/features/auth/api/auth-actions";
+export { ForgotPasswordForm } from "@/features/auth/components/forgot-password-form";
+export { LoginForm } from "@/features/auth/components/login-form";
+export { LogoutButton } from "@/features/auth/components/logout-button";
+export { RegisterForm } from "@/features/auth/components/register-form";
+export { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
+export { AUTH_PATHS, loginPath, signupPath } from "@/features/auth/paths";
 export {
   resolveGuestOnlyRedirect,
   resolvePostAuthPath,
   resolveProtectedRouteRedirect,
   safeRedirectPath,
-} from "./safe-redirect";
-export { getWebSession } from "./session/get-web-session";
-export { redirectIfAuthenticated } from "./session/redirect-if-authenticated";
-export { requireWebSession } from "./session/require-web-session";
-export { hasWebSession } from "./session/session-state";
+} from "@/features/auth/safe-redirect";
+export { getWebSession } from "@/features/auth/session/get-web-session";
+export { redirectIfAuthenticated } from "@/features/auth/session/redirect-if-authenticated";
+export { requireWebSession } from "@/features/auth/session/require-web-session";
+export { hasWebSession } from "@/features/auth/session/session-state";

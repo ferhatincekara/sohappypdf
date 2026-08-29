@@ -1,5 +1,5 @@
 import { getPublicWebEnv } from "@/config/public-env";
-import { resolveUploadContentType } from "./supported-upload-types";
+import { resolveUploadContentType } from "@/features/files/lib/supported-upload-types";
 
 const MAX_FILENAME_LENGTH = 255;
 

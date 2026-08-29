@@ -1,13 +1,13 @@
-import { resolveWebMaxFilesPerOperation } from "@repo/billing/plans";
-import type { AnonymousConfig } from "@repo/config";
-import { isConversionType, normalizeFileFormat } from "@repo/conversions";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { resolveWebMaxFilesPerOperation } from "@sohappypdf/billing/plans";
+import type { AnonymousConfig } from "@sohappypdf/config";
+import { isConversionType, normalizeFileFormat } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   getRegisteredTool,
   isAnonymousToolAllowed,
   isRegisteredToolId,
   toolCombinesSourceFiles,
-} from "@repo/tools";
+} from "@sohappypdf/tools";
 import { z } from "zod";
 
 const FILE_ID_PATTERN =

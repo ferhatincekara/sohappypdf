@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FilesWorkspace } from "./files-workspace";
+import { FilesWorkspace } from "@/features/files/components/files-workspace";
 
 export async function FilesPageContent() {
   const t = await getTranslations("files");

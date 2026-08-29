@@ -1,5 +1,5 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { type Database, files } from "@repo/db";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import { type Database, files } from "@sohappypdf/db";
 import {
   and,
   desc,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { createAuth } from "@repo/auth";
-import type { Logger } from "@repo/logger";
+import { createAuth } from "@sohappypdf/auth";
+import type { Logger } from "@sohappypdf/logger";
 import { memoryAdapter } from "better-auth/adapters/memory";
 import { createApp } from "../app.js";
 

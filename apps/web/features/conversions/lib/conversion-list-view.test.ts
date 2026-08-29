@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { conversionListView } from "./conversion-list-view";
+import { conversionListView } from "@/features/conversions/lib/conversion-list-view";
 
 describe("conversion list view", () => {
   test("renders empty, loading, and error states", () => {

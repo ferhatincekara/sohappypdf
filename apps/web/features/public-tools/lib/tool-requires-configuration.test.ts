@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   toolAutoStartsWhenReady,
   toolRequiresConfiguration,
-} from "./tool-requires-configuration";
+} from "@/features/public-tools/lib/tool-requires-configuration";
 
 describe("toolRequiresConfiguration", () => {
   test("treats dedicated option workspaces as configuring", () => {

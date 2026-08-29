@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { dedicatedHowToForTool } from "./dedicated-tool-how-to";
+import { dedicatedHowToForTool } from "@/features/public-tools/lib/dedicated-tool-how-to";
 
 describe("dedicatedHowToForTool", () => {
   test("returns dedicated how-to copy for focused tools", () => {

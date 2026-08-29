@@ -1,4 +1,4 @@
-import type { PublicConversion } from "../types/conversion";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
 
 export const CONVERSION_RETENTION_MS = 2 * 60 * 60 * 1000;
 

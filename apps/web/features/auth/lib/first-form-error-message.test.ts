@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { firstFormErrorMessage } from "./first-form-error-message";
+import { firstFormErrorMessage } from "@/features/auth/lib/first-form-error-message";
 
 describe("firstFormErrorMessage", () => {
   test("returns the first field message", () => {

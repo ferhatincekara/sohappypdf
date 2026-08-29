@@ -4,6 +4,7 @@ import { ArrowUpRightIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import type { BlogPostCardModel } from "@/features/blog/lib/blog-card";
 import { MarketingContainer } from "@/features/marketing/components/marketing-container";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import {
@@ -12,7 +13,6 @@ import {
   viewportOnce,
 } from "@/features/marketing/lib/motion-tokens";
 import { Link } from "@/lib/i18n/navigation";
-import type { BlogPostCardModel } from "../lib/blog-card";
 
 export function LatestPostsSection({
   posts,

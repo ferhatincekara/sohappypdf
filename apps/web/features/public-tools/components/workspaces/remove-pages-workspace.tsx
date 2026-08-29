@@ -1,19 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { parseSelectedPagesInput } from "../../lib/tool-workspace";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolSidebarCard } from "@/features/public-tools/components/tool-sidebar-card";
+import { ToolStage } from "@/features/public-tools/components/tool-stage";
+import { RemovePagesAdvanced } from "@/features/public-tools/components/workspaces/remove-pages-advanced";
+import { RemoveResultSummary } from "@/features/public-tools/components/workspaces/remove-result-summary";
+import { parseSelectedPagesInput } from "@/features/public-tools/lib/tool-workspace";
 import {
   PdfPageWorkspace,
   pagesToRangeInput,
   usePdfDocument,
-} from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolSidebarCard } from "../tool-sidebar-card";
-import { ToolStage } from "../tool-stage";
-import { RemovePagesAdvanced } from "./remove-pages-advanced";
-import { RemoveResultSummary } from "./remove-result-summary";
+} from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function RemovePagesWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

@@ -1,18 +1,18 @@
-import { getAnonymousSessionService } from "@repo/auth";
-import { getBillingService } from "@repo/billing";
+import { getAnonymousSessionService } from "@sohappypdf/auth";
+import { getBillingService } from "@sohappypdf/billing";
 import {
   type EnvSource,
   loadFileConfig,
   type WorkerConfig,
-} from "@repo/config";
+} from "@sohappypdf/config";
 import {
   createEngineRegistry,
   getSafeConversionTempDir,
   type NativeBinaryProbe,
-} from "@repo/conversion-engines";
-import { getConversionService } from "@repo/conversions";
-import { getFileService } from "@repo/files";
-import { createLogger, type Logger } from "@repo/logger";
+} from "@sohappypdf/conversion-engines";
+import { getConversionService } from "@sohappypdf/conversions";
+import { getFileService } from "@sohappypdf/files";
+import { createLogger, type Logger } from "@sohappypdf/logger";
 import {
   CONVERSION_JOB_ATTEMPTS,
   CONVERSION_JOB_BACKOFF_DELAY_MS,
@@ -25,8 +25,8 @@ import {
   FILE_CLEANUP_INTERVAL_MS,
   FILE_CLEANUP_QUEUE_NAME,
   scheduleFileCleanup,
-} from "@repo/queue";
-import { getStorage } from "@repo/storage";
+} from "@sohappypdf/queue";
+import { getStorage } from "@sohappypdf/storage";
 import {
   startWorkerHealthServer,
   type WorkerHealthServer,

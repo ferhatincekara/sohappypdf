@@ -39,6 +39,8 @@ features/conversions/
 Keep feature-specific UI inside the feature.
 
 Shared shadcn/ui primitives currently live in `apps/web/components/ui`.
+
+Import application modules with the `@/` alias. Keep CSS side-effect imports relative.
 Do not create `packages/ui` unless there is a clear cross-app reuse need.
 
 ## Server State

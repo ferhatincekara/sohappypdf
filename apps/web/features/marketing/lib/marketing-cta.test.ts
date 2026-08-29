@@ -8,8 +8,8 @@ import {
   resolveProHref,
   resolveSignInHref,
   resolveStartHref,
-} from "./marketing-cta";
-import { MARKETING_PATHS } from "./marketing-paths";
+} from "@/features/marketing/lib/marketing-cta";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 describe("marketing CTAs", () => {
   test("sends guests to tools on the Free plan, not signup", () => {

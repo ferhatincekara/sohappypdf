@@ -6,7 +6,7 @@ import {
   mapUnknownUploadError,
   StorageUploadError,
   toFileClientError,
-} from "./file-errors";
+} from "@/features/files/api/file-errors";
 
 describe("file error mapping", () => {
   test("maps known API codes without exposing internals", () => {

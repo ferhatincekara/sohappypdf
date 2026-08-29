@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   MARKETING_SUPPORT_EMAIL,
   MARKETING_SUPPORT_MAILTO,
-} from "./marketing-contact";
+} from "@/features/marketing/lib/marketing-contact";
 
 describe("marketing contact", () => {
   test("exposes a sohappypdf.com support mailbox", () => {

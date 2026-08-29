@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { useLogout } from "../hooks/use-logout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
 export function LogoutButton() {
   const t = useTranslations("app");

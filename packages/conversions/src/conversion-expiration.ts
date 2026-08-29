@@ -1,4 +1,4 @@
-import { DEFAULT_FILE_RETENTION_MS } from "@repo/files";
+import { DEFAULT_FILE_RETENTION_MS } from "@sohappypdf/files";
 
 export const CONVERSION_RETENTION_MS = DEFAULT_FILE_RETENTION_MS;
 

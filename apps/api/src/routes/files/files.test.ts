@@ -1,15 +1,18 @@
 import { describe, expect, test } from "bun:test";
-import { createTestBillingService, DEFAULT_PLAN_LIMITS } from "@repo/billing";
-import { APP_ERROR_CODES } from "@repo/core";
+import {
+  createTestBillingService,
+  DEFAULT_PLAN_LIMITS,
+} from "@sohappypdf/billing";
+import { APP_ERROR_CODES } from "@sohappypdf/core";
 import {
   createFileService,
   type FileRecord,
   type FileRepository,
   type FileService,
   sumActiveStorageBytesForOwner,
-} from "@repo/files";
-import type { Logger } from "@repo/logger";
-import type { Storage } from "@repo/storage";
+} from "@sohappypdf/files";
+import type { Logger } from "@sohappypdf/logger";
+import type { Storage } from "@sohappypdf/storage";
 import { createApp } from "../../app.js";
 import type { RequestIdentity } from "../../auth/request-identity.js";
 
@@ -600,9 +603,9 @@ describe("file API", () => {
     expect(await response.json()).toMatchObject({
       file: { id: createdBody.file.id, status: "deleted" },
     });
-    expect(
-      (await app.request(`/v1/files/${createdBody.file.id}`)).status,
-    ).toBe(404);
+    expect((await app.request(`/v1/files/${createdBody.file.id}`)).status).toBe(
+      404,
+    );
   });
 
   test("rejects uploads that exceed the current plan file size", async () => {

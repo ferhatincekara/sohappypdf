@@ -3,10 +3,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { billingApi } from "../api/billing-api";
-import { mapUnknownBillingError } from "../api/billing-errors";
-import { billingQueryKeys } from "../api/billing-query-keys";
-import type { BillingInterval, CheckoutProductKey } from "../types/billing";
+import { billingApi } from "@/features/billing/api/billing-api";
+import { mapUnknownBillingError } from "@/features/billing/api/billing-errors";
+import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
+import type {
+  BillingInterval,
+  CheckoutProductKey,
+} from "@/features/billing/types/billing";
 
 export type BillingCheckoutInput = {
   product?: CheckoutProductKey;

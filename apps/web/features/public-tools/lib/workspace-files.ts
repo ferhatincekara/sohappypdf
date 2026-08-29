@@ -1,7 +1,7 @@
 import {
   type ToolDefinition,
   toolCombinesSourceFiles,
-} from "@repo/tools/catalog";
+} from "@sohappypdf/tools/catalog";
 import {
   formatFromPublicFile,
   resolveUploadContentType,
@@ -11,7 +11,7 @@ import {
   INITIAL_UPLOAD_PROGRESS,
   type UploadProgress,
 } from "@/features/files/types/upload-state";
-import type { PublicToolErrorKey } from "./public-tool-errors";
+import type { PublicToolErrorKey } from "@/features/public-tools/lib/public-tool-errors";
 
 export const WORKSPACE_FILE_STATUSES = [
   "pending",

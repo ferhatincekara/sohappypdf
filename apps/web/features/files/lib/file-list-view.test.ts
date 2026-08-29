@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { fileListView } from "./file-list-view";
+import { fileListView } from "@/features/files/lib/file-list-view";
 
 describe("file list view", () => {
   test("prefers loading and error before empty", () => {

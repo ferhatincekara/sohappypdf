@@ -1,6 +1,9 @@
 import { readdir, readFile, rename } from "node:fs/promises";
 import { basename } from "node:path";
-import { type ConversionType, isConversionSupported } from "@repo/conversions";
+import {
+  type ConversionType,
+  isConversionSupported,
+} from "@sohappypdf/conversions";
 import type { ConversionEngine, ConversionEngineResult } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";

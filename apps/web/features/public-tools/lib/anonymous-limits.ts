@@ -1,4 +1,4 @@
-import { ANONYMOUS_WEB_LIMITS } from "@repo/billing/plans";
+import { ANONYMOUS_WEB_LIMITS } from "@sohappypdf/billing/plans";
 
 export const PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES =
   ANONYMOUS_WEB_LIMITS.maxFileSizeBytes;

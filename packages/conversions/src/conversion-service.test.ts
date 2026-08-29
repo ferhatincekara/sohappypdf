@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
-import { FILE_EXPIRED_MESSAGE, type FileRecord } from "@repo/files";
+import { isAppError } from "@sohappypdf/core";
+import { FILE_EXPIRED_MESSAGE, type FileRecord } from "@sohappypdf/files";
 import { isConversionRecordExpired } from "./conversion-expiration.js";
 import type { ConversionRepository } from "./conversion-repository.js";
 import { createConversionService } from "./conversion-service.js";

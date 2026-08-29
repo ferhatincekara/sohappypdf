@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { apiKeyListView } from "../lib/api-key-list-view";
-import type { PublicApiKey } from "../types/api-key";
-import { ApiKeyListItem } from "./api-key-list-item";
+import { ApiKeyListItem } from "@/features/api-keys/components/api-key-list-item";
+import { apiKeyListView } from "@/features/api-keys/lib/api-key-list-view";
+import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 export function ApiKeyList({
   apiKeys,

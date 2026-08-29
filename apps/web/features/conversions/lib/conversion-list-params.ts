@@ -2,7 +2,7 @@ import { APP_PATHS } from "@/features/app-shell";
 import {
   CONVERSION_STATUSES,
   type ConversionStatus,
-} from "../types/conversion";
+} from "@/features/conversions/types/conversion";
 
 export const CONVERSION_HISTORY_FILTERS = [
   "all",

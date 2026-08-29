@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { authActions } from "../api/auth-actions";
-import { firstFormErrorMessage } from "../lib/first-form-error-message";
+import { authActions } from "@/features/auth/api/auth-actions";
+import { firstFormErrorMessage } from "@/features/auth/lib/first-form-error-message";
 import {
   createUpdateProfileSchema,
   type UpdateProfileValues,
-} from "../schemas/update-profile-schema";
+} from "@/features/auth/schemas/update-profile-schema";
 
 export function useUpdateProfile(initial: UpdateProfileValues) {
   const tSettings = useTranslations("settings.profile");

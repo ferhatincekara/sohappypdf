@@ -1,4 +1,4 @@
-import type { RateLimitConfig } from "@repo/config";
+import type { RateLimitConfig } from "@sohappypdf/config";
 import type { RateLimitKind } from "./rate-limit-identity.js";
 
 export const RATE_LIMIT_WINDOW = "1 m" as const;

@@ -5,9 +5,12 @@ import {
   DEFAULT_PLAN_LIMITS,
   fallbackCatalogPrices,
   PLAN_IDS,
-} from "@repo/billing/plans";
-import { getPublicApiPacks } from "./public-api-packs";
-import { countPremiumCatalogTools, getPublicPlans } from "./public-plans";
+} from "@sohappypdf/billing/plans";
+import { getPublicApiPacks } from "@/features/marketing/lib/public-api-packs";
+import {
+  countPremiumCatalogTools,
+  getPublicPlans,
+} from "@/features/marketing/lib/public-plans";
 
 describe("public plans", () => {
   test("renders the centralized Free and Pro catalog", () => {

@@ -2,9 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { PillTabs } from "@/components/ui/pill-tabs";
+import { APP_NAVIGATION } from "@/features/app-shell/config/navigation";
+import { isNavItemActive } from "@/features/app-shell/lib/is-nav-item-active";
 import { usePathname } from "@/lib/i18n/navigation";
-import { APP_NAVIGATION } from "../config/navigation";
-import { isNavItemActive } from "../lib/is-nav-item-active";
 
 export function AccountSubnav() {
   const t = useTranslations("appShell");

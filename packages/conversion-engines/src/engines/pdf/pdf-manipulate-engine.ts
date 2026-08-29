@@ -1,6 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { CompressionLevel } from "@repo/conversions";
-import { type ConversionType, isConversionSupported } from "@repo/conversions";
+import type { CompressionLevel } from "@sohappypdf/conversions";
+import {
+  type ConversionType,
+  isConversionSupported,
+} from "@sohappypdf/conversions";
 import { PDFDocument } from "pdf-lib";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";

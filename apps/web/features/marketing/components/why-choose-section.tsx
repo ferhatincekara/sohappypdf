@@ -3,9 +3,13 @@
 import { CheckIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import {
+  fadeUp,
+  stagger,
+  viewportOnce,
+} from "@/features/marketing/lib/motion-tokens";
 import { cn } from "@/lib/utils";
-import { fadeUp, stagger, viewportOnce } from "../lib/motion-tokens";
-import { MarketingContainer } from "./marketing-container";
 
 const CARDS = ["speed", "privacy", "anywhere"] as const;
 

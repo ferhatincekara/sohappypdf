@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { isBlogSlug } from "./blog-frontmatter";
-import { getBlogPost, listBlogPosts, listBlogSlugs } from "./load-blog-posts";
+import { isBlogSlug } from "@/features/blog/lib/blog-frontmatter";
+import {
+  getBlogPost,
+  listBlogPosts,
+  listBlogSlugs,
+} from "@/features/blog/lib/load-blog-posts";
 
 const EXPECTED_SLUGS = [
   "sign-pdf-in-the-browser",

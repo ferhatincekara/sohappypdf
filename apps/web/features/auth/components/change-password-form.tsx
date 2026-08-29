@@ -8,8 +8,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { useChangePassword } from "../hooks/use-change-password";
-import { PasswordInput } from "./password-input";
+import { PasswordInput } from "@/features/auth/components/password-input";
+import { useChangePassword } from "@/features/auth/hooks/use-change-password";
 
 export function ChangePasswordForm() {
   const t = useTranslations("settings.password");

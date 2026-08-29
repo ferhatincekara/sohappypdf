@@ -1,9 +1,9 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   getRetryAfterSeconds,
   type RateLimitDecision,
   type RateLimitSubject,
-} from "@repo/rate-limit";
+} from "@sohappypdf/rate-limit";
 import type { Context, MiddlewareHandler } from "hono";
 import type { AppEnv } from "../app-env.js";
 import { getClientIp } from "../client-ip.js";

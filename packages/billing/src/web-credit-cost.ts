@@ -1,4 +1,4 @@
-import { getRegisteredTool, isRegisteredToolId } from "@repo/tools";
+import { getRegisteredTool, isRegisteredToolId } from "@sohappypdf/tools";
 
 export function resolveWebCreditCost(toolId: string): number {
   if (!isRegisteredToolId(toolId)) {

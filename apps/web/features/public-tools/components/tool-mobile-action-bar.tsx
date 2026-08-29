@@ -5,11 +5,14 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { loginPath } from "@/features/auth/paths";
 import { resolveProHref } from "@/features/marketing/lib/marketing-cta";
+import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "@/features/public-tools/lib/anonymous-limits";
+import { isPlanUpgradeToolError } from "@/features/public-tools/lib/public-tool-errors";
+import {
+  isFileWorkspaceUx,
+  type ToolUxState,
+} from "@/features/public-tools/types/tool-ux-state";
 import { authClient } from "@/lib/auth/auth-client";
 import { Link } from "@/lib/i18n/navigation";
-import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
-import { isPlanUpgradeToolError } from "../lib/public-tool-errors";
-import { isFileWorkspaceUx, type ToolUxState } from "../types/tool-ux-state";
 
 const MOBILE_BAR_CLASS =
   "fixed inset-x-3 bottom-3 z-30 rounded-lg border border-border bg-background/95 p-3 shadow-lift backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden";

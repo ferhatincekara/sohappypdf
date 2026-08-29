@@ -4,13 +4,13 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useApiKeys } from "../hooks/use-api-keys";
-import { useRevokeApiKey } from "../hooks/use-revoke-api-key";
-import type { PublicApiKey } from "../types/api-key";
-import { ApiKeyCreateDialog } from "./api-key-create-dialog";
-import { ApiKeyList } from "./api-key-list";
-import { ApiKeyRevokeDialog } from "./api-key-revoke-dialog";
-import { ApiKeyUsage } from "./api-key-usage";
+import { ApiKeyCreateDialog } from "@/features/api-keys/components/api-key-create-dialog";
+import { ApiKeyList } from "@/features/api-keys/components/api-key-list";
+import { ApiKeyRevokeDialog } from "@/features/api-keys/components/api-key-revoke-dialog";
+import { ApiKeyUsage } from "@/features/api-keys/components/api-key-usage";
+import { useApiKeys } from "@/features/api-keys/hooks/use-api-keys";
+import { useRevokeApiKey } from "@/features/api-keys/hooks/use-revoke-api-key";
+import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 export function ApiKeysWorkspace({
   apiV1BaseUrl,

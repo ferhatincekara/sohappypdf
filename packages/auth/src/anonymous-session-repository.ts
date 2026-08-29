@@ -1,5 +1,5 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { anonymousSessions, type Database } from "@repo/db";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import { anonymousSessions, type Database } from "@sohappypdf/db";
 import { and, eq, lte } from "drizzle-orm";
 import type {
   AnonymousSessionRecord,

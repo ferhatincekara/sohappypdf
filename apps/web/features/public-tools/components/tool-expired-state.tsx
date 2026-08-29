@@ -3,7 +3,7 @@
 import { ClockIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "../lib/anonymous-limits";
+import { PUBLIC_ANONYMOUS_RETENTION_HOURS } from "@/features/public-tools/lib/anonymous-limits";
 
 export function ToolExpiredState({
   title,

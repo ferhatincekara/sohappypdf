@@ -4,7 +4,7 @@ import {
   type BillingCatalogPrices,
   DEFAULT_API_CREDIT_PACKS,
   fallbackCatalogPrices,
-} from "@repo/billing/plans";
+} from "@sohappypdf/billing/plans";
 
 export const PUBLIC_API_PACK_IDS = ["starter", "growth", "scale"] as const;
 

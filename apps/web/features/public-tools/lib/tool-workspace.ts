@@ -1,5 +1,5 @@
 import { editorRectToPdf } from "@/features/pdf-document-editor";
-import type { ToolEditOperation } from "./edit-pdf-operations";
+import type { ToolEditOperation } from "@/features/public-tools/lib/edit-pdf-operations";
 
 export const COMPRESSION_LEVELS = ["low", "medium", "high"] as const;
 export type CompressionLevel = (typeof COMPRESSION_LEVELS)[number];

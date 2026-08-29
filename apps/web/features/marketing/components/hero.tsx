@@ -7,11 +7,11 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { StarMark } from "@/features/marketing/components/star-mark";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { fadeUp, stagger } from "@/features/marketing/lib/motion-tokens";
 import { Link } from "@/lib/i18n/navigation";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { fadeUp, stagger } from "../lib/motion-tokens";
-import { MarketingContainer } from "./marketing-container";
-import { StarMark } from "./star-mark";
 
 const HERO_IMAGE = "/images/marketing/hero-team.jpg";
 

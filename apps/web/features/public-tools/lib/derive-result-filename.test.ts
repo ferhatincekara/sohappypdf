@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { deriveResultFilename } from "./derive-result-filename";
+import { deriveResultFilename } from "@/features/public-tools/lib/derive-result-filename";
 
 describe("deriveResultFilename", () => {
   test("replaces the source extension with the result format", () => {

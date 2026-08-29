@@ -1,6 +1,6 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
-import type { ConversionType } from "@repo/conversions";
-import { isConversionSupported } from "@repo/conversions";
+import type { ConversionType } from "@sohappypdf/conversions";
+import { isConversionSupported } from "@sohappypdf/conversions";
 import { PDFDocument, rgb } from "pdf-lib";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";

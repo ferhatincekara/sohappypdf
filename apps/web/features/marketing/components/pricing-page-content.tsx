@@ -1,15 +1,15 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { DeveloperCreditsTable } from "@/features/marketing/components/developer-credits-table";
+import { DeveloperPricingCalculator } from "@/features/marketing/components/developer-pricing-calculator";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
+import { PricingCards } from "@/features/marketing/components/pricing-cards";
+import { listDeveloperCalculatorTools } from "@/features/marketing/lib/developer-calculator";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import type { PublicApiPackPresentation } from "@/features/marketing/lib/public-api-packs";
+import type { PublicPlanPresentation } from "@/features/marketing/lib/public-plans";
 import { Link } from "@/lib/i18n/navigation";
-import { listDeveloperCalculatorTools } from "../lib/developer-calculator";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import type { PublicApiPackPresentation } from "../lib/public-api-packs";
-import type { PublicPlanPresentation } from "../lib/public-plans";
-import { DeveloperCreditsTable } from "./developer-credits-table";
-import { DeveloperPricingCalculator } from "./developer-pricing-calculator";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingPageHeader } from "./marketing-page-header";
-import { PricingCards } from "./pricing-cards";
 
 export async function PricingPageContent({
   plans,

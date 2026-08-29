@@ -1,12 +1,12 @@
 import type { AxiosInstance } from "axios";
-import { apiClient } from "@/lib/api/client";
+import { toApiKeyClientError } from "@/features/api-keys/api/api-key-errors";
 import type {
   ApiKeyListResponse,
   CreateApiKeyInput,
   CreateApiKeyResponse,
   PublicApiKey,
-} from "../types/api-key";
-import { toApiKeyClientError } from "./api-key-errors";
+} from "@/features/api-keys/types/api-key";
+import { apiClient } from "@/lib/api/client";
 
 export class ApiKeyApiRequestError extends Error {
   readonly clientError: ReturnType<typeof toApiKeyClientError>;
@@ -28,8 +28,7 @@ export function createApiKeyApi(client: AxiosInstance = apiClient): ApiKeyApi {
   return {
     async list() {
       try {
-        const response =
-          await client.get<ApiKeyListResponse>("/v1/api-keys");
+        const response = await client.get<ApiKeyListResponse>("/v1/api-keys");
         return response.data;
       } catch (error) {
         throw new ApiKeyApiRequestError(error);

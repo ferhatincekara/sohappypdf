@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 
 export const DEFAULT_PRESIGN_EXPIRES_IN_SECONDS = 15 * 60;
 export const MAX_PRESIGN_EXPIRES_IN_SECONDS = 60 * 60;

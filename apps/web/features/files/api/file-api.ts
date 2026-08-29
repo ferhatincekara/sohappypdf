@@ -1,5 +1,5 @@
 import type { AxiosInstance } from "axios";
-import { apiClient } from "@/lib/api/client";
+import { toFileClientError } from "@/features/files/api/file-errors";
 import type {
   CreateUploadInput,
   CreateUploadResponse,
@@ -7,8 +7,8 @@ import type {
   FileListQuery,
   FileListResponse,
   PublicFile,
-} from "../types/file";
-import { toFileClientError } from "./file-errors";
+} from "@/features/files/types/file";
+import { apiClient } from "@/lib/api/client";
 
 export class FileApiRequestError extends Error {
   readonly clientError: ReturnType<typeof toFileClientError>;

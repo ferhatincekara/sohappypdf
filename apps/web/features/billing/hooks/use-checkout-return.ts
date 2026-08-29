@@ -3,11 +3,11 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { APP_PATHS } from "@/features/app-shell";
-import { useRouter } from "@/lib/i18n/navigation";
 import {
   CHECKOUT_ACTIVATION_WAIT_MS,
   type CheckoutReturnPhase,
-} from "../lib/checkout-activation";
+} from "@/features/billing/lib/checkout-activation";
+import { useRouter } from "@/lib/i18n/navigation";
 
 export function useCheckoutReturn(): {
   phase: CheckoutReturnPhase;

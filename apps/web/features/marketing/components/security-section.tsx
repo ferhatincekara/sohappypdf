@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { MARKETING_SECURITY_IDS } from "../lib/security-ids";
+import { MARKETING_SECURITY_IDS } from "@/features/marketing/lib/security-ids";
 
 export async function SecuritySection() {
   const t = await getTranslations("marketing.security");

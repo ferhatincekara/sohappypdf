@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { account, session, user, verification } from "@repo/db";
+import { account, session, user, verification } from "@sohappypdf/db";
 import { createAuthAdapterSchema } from "./auth-adapter.js";
 
 describe("createAuthAdapterSchema", () => {

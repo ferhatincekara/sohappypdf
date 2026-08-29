@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { FileRecord } from "./file-types.js";
 
 export const DEFAULT_FILE_RETENTION_MS = 2 * 60 * 60 * 1000;

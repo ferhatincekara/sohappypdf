@@ -1,8 +1,8 @@
+import { MarketingToolStatusBadges } from "@/features/marketing/components/marketing-tool-status-badges";
+import { getMarketingToolIcon } from "@/features/marketing/lib/marketing-tool-icon";
+import type { MarketingToolNavItem } from "@/features/marketing/lib/marketing-tools";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { getMarketingToolIcon } from "../lib/marketing-tool-icon";
-import type { MarketingToolNavItem } from "../lib/marketing-tools";
-import { MarketingToolStatusBadges } from "./marketing-tool-status-badges";
 
 export function MarketingToolCard({
   tool,

@@ -1,7 +1,7 @@
 import {
   type ConversionRecord,
   isConversionRecordExpired,
-} from "@repo/conversions";
+} from "@sohappypdf/conversions";
 
 export type PublicConversionError = {
   code: string;

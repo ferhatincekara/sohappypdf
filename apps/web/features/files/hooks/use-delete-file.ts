@@ -1,9 +1,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteFile } from "../api/file-api";
-import { mapUnknownUploadError } from "../api/file-errors";
-import { filesQueryKeys } from "../api/file-query-keys";
+import { deleteFile } from "@/features/files/api/file-api";
+import { mapUnknownUploadError } from "@/features/files/api/file-errors";
+import { filesQueryKeys } from "@/features/files/api/file-query-keys";
 
 export function useDeleteFile() {
   const queryClient = useQueryClient();

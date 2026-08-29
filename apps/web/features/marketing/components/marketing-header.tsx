@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import type { AppShellUser } from "@/features/app-shell";
-import { resolveMarketingCtas } from "../lib/marketing-cta";
-import { getMarketingToolMenuGroups } from "../lib/marketing-tools";
-import { MarketingHeaderBar } from "./marketing-header-bar";
+import { MarketingHeaderBar } from "@/features/marketing/components/marketing-header-bar";
+import { resolveMarketingCtas } from "@/features/marketing/lib/marketing-cta";
+import { getMarketingToolMenuGroups } from "@/features/marketing/lib/marketing-tools";
 
 export async function MarketingHeader({ user }: { user: AppShellUser | null }) {
   const t = await getTranslations("marketing.nav");

@@ -17,7 +17,7 @@ import {
   serializeOrganizeOrder,
   serializeOrganizeRotations,
   setOrganizeSelection,
-} from "./organize-pages";
+} from "@/features/public-tools/lib/organize-pages";
 
 describe("organize pages", () => {
   test("creates identity slots and serializes order", () => {

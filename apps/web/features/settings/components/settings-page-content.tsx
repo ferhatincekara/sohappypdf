@@ -8,8 +8,8 @@ import {
 import { ChangePasswordForm } from "@/features/auth/components/change-password-form";
 import { UpdateProfileForm } from "@/features/auth/components/update-profile-form";
 import { LocaleSwitcher } from "@/features/marketing/components/locale-switcher";
-import { SettingsCard } from "./settings-card";
-import { SettingsSignOut } from "./settings-sign-out";
+import { SettingsCard } from "@/features/settings/components/settings-card";
+import { SettingsSignOut } from "@/features/settings/components/settings-sign-out";
 
 export async function SettingsPageContent({ user }: { user: AppShellUser }) {
   const t = await getTranslations("settings");

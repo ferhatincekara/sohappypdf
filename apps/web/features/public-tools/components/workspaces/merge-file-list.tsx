@@ -5,14 +5,17 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
-import { cn } from "@/lib/utils";
+import { ToolFileErrorLine } from "@/features/public-tools/components/tool-file-error-line";
+import { ToolFileUploadProgress } from "@/features/public-tools/components/tool-file-upload-progress";
 import {
   fileExtensionLabel,
   type WorkspaceFile,
-} from "../../lib/workspace-files";
-import { PdfPageThumbnail, usePdfDocument } from "../../pdf-workspace";
-import { ToolFileErrorLine } from "../tool-file-error-line";
-import { ToolFileUploadProgress } from "../tool-file-upload-progress";
+} from "@/features/public-tools/lib/workspace-files";
+import {
+  PdfPageThumbnail,
+  usePdfDocument,
+} from "@/features/public-tools/pdf-workspace";
+import { cn } from "@/lib/utils";
 
 export function MergeFileList({
   files,

@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/queue");
+assertServerOnly("@sohappypdf/queue");
 
 export { closeQueues } from "./close-queues.js";
 export type {

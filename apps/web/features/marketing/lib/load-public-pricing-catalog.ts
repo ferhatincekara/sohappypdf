@@ -1,7 +1,7 @@
 import {
   type BillingCatalogPrices,
   fallbackCatalogPrices,
-} from "@repo/billing/plans";
+} from "@sohappypdf/billing/plans";
 import { getServerApiV1BaseUrl } from "@/config/public-env";
 
 const CATALOG_REVALIDATE_SECONDS = 15 * 60;

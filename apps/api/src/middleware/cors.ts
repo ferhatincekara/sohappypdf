@@ -2,7 +2,7 @@ import {
   isLocalDevelopmentOrigin,
   type loadApiConfig,
   loadAppConfig,
-} from "@repo/config";
+} from "@sohappypdf/config";
 import { cors } from "hono/cors";
 
 export function corsMiddleware(config: ReturnType<typeof loadApiConfig>) {

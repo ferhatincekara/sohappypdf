@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { tmpdir } from "node:os";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import { isPermanentConversionError } from "../errors.js";
 import { getSafeConversionTempDir } from "../workspace/temp-workspace.js";
 import {

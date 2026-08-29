@@ -1,20 +1,20 @@
-import { type ApiKeyService, getApiKeyService } from "@repo/api-keys";
-import { type AnonymousSessionService, getAuth } from "@repo/auth";
-import { type BillingService, getBillingService } from "@repo/billing";
-import type { AnonymousConfig, ApiConfig } from "@repo/config";
+import { type ApiKeyService, getApiKeyService } from "@sohappypdf/api-keys";
+import { type AnonymousSessionService, getAuth } from "@sohappypdf/auth";
+import { type BillingService, getBillingService } from "@sohappypdf/billing";
+import type { AnonymousConfig, ApiConfig } from "@sohappypdf/config";
 import {
   loadAnonymousConfig,
   loadApiConfig,
   loadAppConfig,
   loadFileConfig,
-} from "@repo/config";
+} from "@sohappypdf/config";
 import {
   type ConversionService,
   getConversionService,
-} from "@repo/conversions";
-import { type FileService, getFileService } from "@repo/files";
-import { createLogger, type Logger } from "@repo/logger";
-import { type ConversionJobData, enqueueConversion } from "@repo/queue";
+} from "@sohappypdf/conversions";
+import { type FileService, getFileService } from "@sohappypdf/files";
+import { createLogger, type Logger } from "@sohappypdf/logger";
+import { type ConversionJobData, enqueueConversion } from "@sohappypdf/queue";
 import { Hono } from "hono";
 import type { AppEnv } from "./app-env.js";
 import {

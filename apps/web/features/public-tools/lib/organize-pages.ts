@@ -1,4 +1,7 @@
-import type { PdfPage, PdfPageRotation } from "../pdf-workspace/types/pdf-page";
+import type {
+  PdfPage,
+  PdfPageRotation,
+} from "@/features/public-tools/pdf-workspace/types/pdf-page";
 
 export const ORGANIZE_PAGE_ROTATIONS = [0, 90, 180, 270] as const;
 export type OrganizePageRotation = PdfPageRotation;

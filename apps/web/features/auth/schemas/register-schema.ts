@@ -3,7 +3,7 @@ import {
   type AuthValidationTranslator,
   createEmailSchema,
   createPasswordSchema,
-} from "./password";
+} from "@/features/auth/schemas/password";
 
 export const AUTH_NAME_MAX_LENGTH = 80;
 

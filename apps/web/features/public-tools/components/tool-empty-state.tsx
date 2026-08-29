@@ -1,6 +1,6 @@
 "use client";
 
-import { ToolDropzone } from "./tool-dropzone";
+import { ToolDropzone } from "@/features/public-tools/components/tool-dropzone";
 
 export function ToolEmptyState({
   accept,

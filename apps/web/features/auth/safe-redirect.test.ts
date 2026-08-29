@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { AUTH_PATHS } from "./paths";
+import { AUTH_PATHS } from "@/features/auth/paths";
 import {
   resolveGuestOnlyRedirect,
   resolvePostAuthPath,
   resolveProtectedRouteRedirect,
   safeRedirectPath,
-} from "./safe-redirect";
+} from "@/features/auth/safe-redirect";
 
 describe("safeRedirectPath", () => {
   test("allows internal application paths", () => {

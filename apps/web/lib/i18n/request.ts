@@ -1,7 +1,7 @@
 import { cookies, headers } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
-import { resolveAppLocale } from "./resolve-locale";
-import { LOCALE_COOKIE_NAME } from "./routing";
+import { resolveAppLocale } from "@/lib/i18n/resolve-locale";
+import { LOCALE_COOKIE_NAME } from "@/lib/i18n/routing";
 
 export default getRequestConfig(async () => {
   const locale = resolveAppLocale({

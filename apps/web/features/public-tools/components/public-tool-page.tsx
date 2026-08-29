@@ -1,4 +1,4 @@
-import type { ToolDefinition } from "@repo/tools/catalog";
+import type { ToolDefinition } from "@sohappypdf/tools/catalog";
 import { ArrowLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { getPublicWebEnv } from "@/config/public-env";
@@ -6,20 +6,23 @@ import type { WebToolBilling } from "@/features/billing/lib/web-tool-billing";
 import { MarketingContainer } from "@/features/marketing/components/marketing-container";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { getMarketingToolIcon } from "@/features/marketing/lib/marketing-tool-icon";
-import { Link } from "@/lib/i18n/navigation";
+import { PublicToolJsonLd } from "@/features/public-tools/components/public-tool-json-ld";
+import { PublicToolWorkspace } from "@/features/public-tools/components/public-tool-workspace";
+import { RecentExecutions } from "@/features/public-tools/components/recent-executions";
+import { ToolHeader } from "@/features/public-tools/components/tool-header";
 import {
   PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES,
   PUBLIC_ANONYMOUS_RETENTION_HOURS,
-} from "../lib/anonymous-limits";
-import { dedicatedHowToForTool } from "../lib/dedicated-tool-how-to";
-import { formatAcceptedFormats, formatLabel } from "../lib/format-labels";
-import type { PublicToolFaqItem } from "../lib/public-tool-json-ld";
-import { publicToolCanonicalUrl } from "../lib/public-tool-metadata";
-import { maxFilesForTool } from "../lib/tool-limits";
-import { PublicToolJsonLd } from "./public-tool-json-ld";
-import { PublicToolWorkspace } from "./public-tool-workspace";
-import { RecentExecutions } from "./recent-executions";
-import { ToolHeader } from "./tool-header";
+} from "@/features/public-tools/lib/anonymous-limits";
+import { dedicatedHowToForTool } from "@/features/public-tools/lib/dedicated-tool-how-to";
+import {
+  formatAcceptedFormats,
+  formatLabel,
+} from "@/features/public-tools/lib/format-labels";
+import type { PublicToolFaqItem } from "@/features/public-tools/lib/public-tool-json-ld";
+import { publicToolCanonicalUrl } from "@/features/public-tools/lib/public-tool-metadata";
+import { maxFilesForTool } from "@/features/public-tools/lib/tool-limits";
+import { Link } from "@/lib/i18n/navigation";
 
 export type RelatedPublicTool = {
   id: string;

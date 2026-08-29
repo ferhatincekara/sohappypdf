@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { apiKeysQueryKeys } from "./api-key-query-keys";
+import { apiKeysQueryKeys } from "@/features/api-keys/api/api-key-query-keys";
 
 describe("api key query keys", () => {
   test("keeps list keys under a shared prefix for invalidation", () => {

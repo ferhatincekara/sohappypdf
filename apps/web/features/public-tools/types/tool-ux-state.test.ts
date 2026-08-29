@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { resolveToolWorkspaceErrorKey } from "./tool-ux-state";
+import { resolveToolWorkspaceErrorKey } from "@/features/public-tools/types/tool-ux-state";
 
 describe("tool workspace error key", () => {
   test("reads the blocking error from selected and failed workspace states", () => {

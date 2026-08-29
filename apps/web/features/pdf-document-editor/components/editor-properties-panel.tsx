@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { EditorObject } from "../types/editor-object";
+import type { EditorObject } from "@/features/pdf-document-editor/types/editor-object";
 
 export function EditorPropertiesPanel({
   object,

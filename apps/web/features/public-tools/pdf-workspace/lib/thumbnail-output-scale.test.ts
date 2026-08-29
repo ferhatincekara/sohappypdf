@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { thumbnailOutputScale } from "./thumbnail-output-scale";
+import { thumbnailOutputScale } from "@/features/public-tools/pdf-workspace/lib/thumbnail-output-scale";
 
 describe("thumbnail output scale", () => {
   test("caps device pixel ratio so large page grids stay light", () => {

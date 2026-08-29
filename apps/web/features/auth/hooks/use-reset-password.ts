@@ -4,14 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "@/lib/i18n/navigation";
-import { authActions } from "../api/auth-actions";
-import { firstFormErrorMessage } from "../lib/first-form-error-message";
-import { AUTH_PATHS } from "../paths";
+import { authActions } from "@/features/auth/api/auth-actions";
+import { firstFormErrorMessage } from "@/features/auth/lib/first-form-error-message";
+import { AUTH_PATHS } from "@/features/auth/paths";
 import {
   createResetPasswordSchema,
   type ResetPasswordValues,
-} from "../schemas/reset-password-schema";
+} from "@/features/auth/schemas/reset-password-schema";
+import { useRouter } from "@/lib/i18n/navigation";
 
 export function useResetPassword(token: string) {
   const t = useTranslations("auth.resetPassword");

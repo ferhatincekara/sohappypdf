@@ -10,7 +10,7 @@ S3 is object storage. Database records expire/clean via the file and conversion 
 
 | Concern | Status |
 |---|---|
-| Tool catalog | `@repo/tools` `TOOL_CATALOG` |
+| Tool catalog | `@sohappypdf/tools` `TOOL_CATALOG` |
 | Public routes | `/{toolId}` via `listRegisteredTools()`; planned tools are **not** routed |
 | Upload | Presigned S3; anonymous + authenticated APIs |
 | Process | `POST` conversion (anon `/v1/anonymous` or authenticated `/v1/conversions`) |
@@ -26,7 +26,7 @@ S3 is object storage. Database records expire/clean via the file and conversion 
 | Mobile | sticky action bar exists; editor still desktop-leaning |
 | Accessibility | focus rings and labels present; editors need a dedicated pass |
 
-Anonymous UI size/count defaults are read from `@repo/billing/plans` (`ANONYMOUS_WEB_LIMITS`) so public tools do not hardcode plan numbers. Server anonymous config in `@repo/config` stays the enforcement source and is aligned with Free file size (20 MiB), 5 files, and 2 h retention.
+Anonymous UI size/count defaults are read from `@sohappypdf/billing/plans` (`ANONYMOUS_WEB_LIMITS`) so public tools do not hardcode plan numbers. Server anonymous config in `@sohappypdf/config` stays the enforcement source and is aligned with Free file size (20 MiB), 5 files, and 2 h retention.
 
 Authenticated web upload size is enforced by billing `assertCanUploadFile` using `PlanLimits.maxFileSizeBytes`. The process-wide `MAX_UPLOAD_FILE_SIZE` / `NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE` (default 100 MiB) is a hard ceiling, not a Free-plan allowance.
 

@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { HOW_IT_WORKS_STEP_IDS } from "../lib/how-it-works-ids";
+import { HOW_IT_WORKS_STEP_IDS } from "@/features/marketing/lib/how-it-works-ids";
 
 export async function HowItWorks() {
   const t = await getTranslations("marketing.howItWorks");

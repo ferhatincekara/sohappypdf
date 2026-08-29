@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { filesQueryKeys } from "./file-query-keys";
+import { filesQueryKeys } from "@/features/files/api/file-query-keys";
 
 describe("files query keys", () => {
   test("keeps list keys under a shared prefix for invalidation", () => {

@@ -1,17 +1,17 @@
 import { describe, expect, test } from "bun:test";
-import { FILE_ERROR_KEYS } from "../api/file-errors";
-import type { PublicFile } from "../types/file";
-import {
-  createInitialUploadState,
-  type FileUploadState,
-  type PreparedUpload,
-} from "../types/upload-state";
+import { FILE_ERROR_KEYS } from "@/features/files/api/file-errors";
 import {
   isPresignedUploadExpired,
   reduceUploadState,
   resolveRetryAction,
   toPreparedUpload,
-} from "./upload-state";
+} from "@/features/files/lib/upload-state";
+import type { PublicFile } from "@/features/files/types/file";
+import {
+  createInitialUploadState,
+  type FileUploadState,
+  type PreparedUpload,
+} from "@/features/files/types/upload-state";
 
 function createFile(): File {
   return new File([new Uint8Array(8)], "report.pdf", {

@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { AUTH_PATHS } from "@/features/auth/paths";
 import { Link } from "@/lib/i18n/navigation";
-import { AUTH_PATHS } from "../paths";
 
 export function AuthInvalidTokenNotice({
   message,

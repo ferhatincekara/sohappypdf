@@ -3,9 +3,9 @@
 import { Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState } from "react";
+import { createDropInputGate } from "@/features/files/lib/drop-input-gate";
+import { getFileInputAccept } from "@/features/files/lib/supported-upload-types";
 import { cn } from "@/lib/utils";
-import { createDropInputGate } from "../lib/drop-input-gate";
-import { getFileInputAccept } from "../lib/supported-upload-types";
 
 export function FileUploadDropzone({
   disabled,

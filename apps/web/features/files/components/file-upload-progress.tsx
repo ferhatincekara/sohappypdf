@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { formatUploadProgress } from "../lib/format-file-size";
-import type { UploadProgress } from "../types/upload-state";
+import { formatUploadProgress } from "@/features/files/lib/format-file-size";
+import type { UploadProgress } from "@/features/files/types/upload-state";
 
 export function FileUploadProgress({
   progress,

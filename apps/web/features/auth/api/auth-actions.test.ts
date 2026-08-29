@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import type { AuthBrowserClient, AuthClientResult } from "./auth-actions";
-import { createAuthActions } from "./auth-actions";
-import { AUTH_ERROR_KEYS } from "./auth-errors";
+import type {
+  AuthBrowserClient,
+  AuthClientResult,
+} from "@/features/auth/api/auth-actions";
+import { createAuthActions } from "@/features/auth/api/auth-actions";
+import { AUTH_ERROR_KEYS } from "@/features/auth/api/auth-errors";
 
 function success(): AuthClientResult {
   return { data: { ok: true }, error: null };

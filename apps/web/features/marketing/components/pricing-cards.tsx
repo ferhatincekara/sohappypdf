@@ -1,12 +1,12 @@
-import { formatUsdAmount } from "@repo/billing/plans";
+import { formatUsdAmount } from "@sohappypdf/billing/plans";
 import { CheckIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import type { PublicPlanPresentation } from "@/features/marketing/lib/public-plans";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
-import type { PublicPlanPresentation } from "../lib/public-plans";
 
 export async function PricingCards({
   plans,

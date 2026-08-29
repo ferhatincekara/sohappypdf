@@ -3,7 +3,7 @@ import { CONVERSION_POLL_INTERVAL_MS } from "@/features/conversions/lib/conversi
 import {
   toolExecutionQueryRefetchInterval,
   toolExecutionRefetchInterval,
-} from "./tool-execution-polling";
+} from "@/features/public-tools/lib/tool-execution-polling";
 
 describe("tool execution polling", () => {
   const now = new Date("2026-08-24T01:00:00.000Z");

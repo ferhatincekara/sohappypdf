@@ -4,9 +4,9 @@ import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { CodeBlock } from "@/features/developer-docs/components/code-block";
+import type { PublicApiTool } from "@/features/developer-docs/lib/public-api-tools";
 import { Link } from "@/lib/i18n/navigation";
-import type { PublicApiTool } from "../lib/public-api-tools";
-import { CodeBlock } from "./code-block";
 
 export function DeveloperToolReference({
   tools,

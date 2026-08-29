@@ -1,4 +1,4 @@
-import type { ConversionType } from "@repo/conversions";
+import type { ConversionType } from "@sohappypdf/conversions";
 import type { ConversionEngine, ConversionEngineQuery } from "./engine.js";
 import type { ConversionEngineConfig } from "./engine-config.js";
 import { createImagePdfEngine } from "./engines/image/image-pdf-engine.js";

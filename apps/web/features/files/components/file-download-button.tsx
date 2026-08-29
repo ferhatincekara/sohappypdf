@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { useFileDownload } from "../hooks/use-file-download";
+import { useFileDownload } from "@/features/files/hooks/use-file-download";
 
 export function FileDownloadButton({
   fileId,

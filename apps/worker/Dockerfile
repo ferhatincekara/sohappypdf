@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package.json bun.lock turbo.json ./
 COPY apps/worker ./apps/worker
 COPY packages ./packages
-RUN bunx turbo@2.10.11 prune @repo/worker --docker
+RUN bunx turbo@2.10.11 prune @sohappypdf/worker --docker
 
 FROM oven/bun:${BUN_VERSION}-debian AS installer
 WORKDIR /app

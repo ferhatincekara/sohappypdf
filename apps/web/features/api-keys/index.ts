@@ -1,1 +1,1 @@
-export { ApiKeysPageContent } from "./components/api-keys-page-content";
+export { ApiKeysPageContent } from "@/features/api-keys/components/api-keys-page-content";

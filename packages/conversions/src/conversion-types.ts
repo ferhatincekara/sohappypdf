@@ -1,4 +1,4 @@
-import type { ResourceOwnerKind } from "@repo/files";
+import type { ResourceOwnerKind } from "@sohappypdf/files";
 import type { FileFormat } from "./conversion-format.js";
 import type { ConversionOptions } from "./conversion-options.js";
 import type { ConversionStatus } from "./conversion-status.js";

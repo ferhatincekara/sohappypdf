@@ -1,17 +1,20 @@
 "use client";
 
 import { useEffect } from "react";
-import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
+import { EditorPageNav } from "@/features/pdf-document-editor/components/editor-page-nav";
+import { EditorPropertiesPanel } from "@/features/pdf-document-editor/components/editor-properties-panel";
+import { EditorToolbar } from "@/features/pdf-document-editor/components/editor-toolbar";
+import { EditorViewport } from "@/features/pdf-document-editor/components/editor-viewport";
 import type {
   DocumentEditorAction,
   DocumentEditorState,
-} from "../lib/document-editor-state";
-import { selectedEditorObject } from "../lib/document-editor-state";
-import type { EditorObject, EditorTool } from "../types/editor-object";
-import { EditorPageNav } from "./editor-page-nav";
-import { EditorPropertiesPanel } from "./editor-properties-panel";
-import { EditorToolbar } from "./editor-toolbar";
-import { EditorViewport } from "./editor-viewport";
+} from "@/features/pdf-document-editor/lib/document-editor-state";
+import { selectedEditorObject } from "@/features/pdf-document-editor/lib/document-editor-state";
+import type {
+  EditorObject,
+  EditorTool,
+} from "@/features/pdf-document-editor/types/editor-object";
+import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
 
 export type EditorPdfSource = {
   status: "idle" | "loading" | "ready" | "error";

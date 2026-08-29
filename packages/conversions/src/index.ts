@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/conversions");
+assertServerOnly("@sohappypdf/conversions");
 
 export type { ConversionCapability } from "./conversion-capability.js";
 export {

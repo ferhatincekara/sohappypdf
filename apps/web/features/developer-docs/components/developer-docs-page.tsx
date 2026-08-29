@@ -1,15 +1,15 @@
 import {
   DEFAULT_PLAN_LIMITS,
   INCLUDED_API_CREDITS_PER_MONTH,
-} from "@repo/billing/plans";
+} from "@sohappypdf/billing/plans";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { getPublicApiV1BaseUrl } from "@/config/public-env";
 import { APP_PATHS } from "@/features/app-shell/config/app-paths";
-import { MarketingContainer } from "@/features/marketing/components/marketing-container";
-import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
-import { Link } from "@/lib/i18n/navigation";
-import { DEVELOPER_TOC_IDS } from "../lib/developer-toc";
+import { CodeBlock } from "@/features/developer-docs/components/code-block";
+import { DeveloperDocsToc } from "@/features/developer-docs/components/developer-docs-toc";
+import { DeveloperToolReference } from "@/features/developer-docs/components/developer-tool-reference";
+import { DEVELOPER_TOC_IDS } from "@/features/developer-docs/lib/developer-toc";
 import {
   authorizationExample,
   cancelExample,
@@ -20,19 +20,19 @@ import {
   pollExample,
   putUploadExample,
   uploadExample,
-} from "../lib/example-snippets";
+} from "@/features/developer-docs/lib/example-snippets";
 import {
   CONVERSION_POLL_STATUSES,
   CONVERSION_TERMINAL_STATUSES,
   PUBLIC_API_ERROR_CODES,
-} from "../lib/public-api-errors";
+} from "@/features/developer-docs/lib/public-api-errors";
 import {
   listPublicApiToolCategories,
   listPublicApiTools,
-} from "../lib/public-api-tools";
-import { CodeBlock } from "./code-block";
-import { DeveloperDocsToc } from "./developer-docs-toc";
-import { DeveloperToolReference } from "./developer-tool-reference";
+} from "@/features/developer-docs/lib/public-api-tools";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { Link } from "@/lib/i18n/navigation";
 
 export async function DeveloperDocsPage() {
   const apiV1BaseUrl = getPublicApiV1BaseUrl();

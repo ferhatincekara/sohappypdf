@@ -2,7 +2,7 @@ import {
   type CompactAge,
   compactAgeFrom,
   compactRemainingFrom,
-} from "./format-compact-age";
+} from "@/features/conversions/lib/format-compact-age";
 
 export function activityAgeFrom(
   createdAt: string,

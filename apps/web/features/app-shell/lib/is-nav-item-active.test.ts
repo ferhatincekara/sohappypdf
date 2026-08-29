@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { APP_PATHS } from "../config/app-paths";
-import { isNavItemActive } from "./is-nav-item-active";
+import { APP_PATHS } from "@/features/app-shell/config/app-paths";
+import { isNavItemActive } from "@/features/app-shell/lib/is-nav-item-active";
 
 describe("isNavItemActive", () => {
   test("activates settings only on the settings route", () => {

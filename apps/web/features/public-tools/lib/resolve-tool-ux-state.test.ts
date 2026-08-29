@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
 import { INITIAL_UPLOAD_PROGRESS } from "@/features/files/types/upload-state";
-import { isToolUxStatus } from "../types/tool-ux-state";
-import { resolveToolUxState } from "./resolve-tool-ux-state";
-import type { WorkspaceFile } from "./workspace-files";
+import { resolveToolUxState } from "@/features/public-tools/lib/resolve-tool-ux-state";
+import type { WorkspaceFile } from "@/features/public-tools/lib/workspace-files";
+import { isToolUxStatus } from "@/features/public-tools/types/tool-ux-state";
 
 function createFile(overrides: Partial<WorkspaceFile> = {}): WorkspaceFile {
   return {

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
+import { cookieHeaderFromStore } from "@/features/auth/session/session-request-headers";
 import { serverAuthClient } from "@/lib/auth/server-auth-client";
-import { cookieHeaderFromStore } from "./session-request-headers";
 
 export type WebSession = NonNullable<typeof serverAuthClient.$Infer.Session>;
 

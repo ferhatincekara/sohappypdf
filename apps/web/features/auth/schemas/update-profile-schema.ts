@@ -1,6 +1,9 @@
 import { z } from "zod";
-import { type AuthValidationTranslator, createEmailSchema } from "./password";
-import { AUTH_NAME_MAX_LENGTH } from "./register-schema";
+import {
+  type AuthValidationTranslator,
+  createEmailSchema,
+} from "@/features/auth/schemas/password";
+import { AUTH_NAME_MAX_LENGTH } from "@/features/auth/schemas/register-schema";
 
 export function createUpdateProfileSchema(t: AuthValidationTranslator) {
   return z.object({

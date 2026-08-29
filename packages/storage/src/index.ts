@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/storage");
+assertServerOnly("@sohappypdf/storage");
 
 export type { StorageConfig } from "./config.js";
 export { getStorageConfig } from "./config.js";

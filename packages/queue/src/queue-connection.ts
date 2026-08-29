@@ -1,5 +1,5 @@
-import { loadQueueConfig, type QueueConfig } from "@repo/config";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { loadQueueConfig, type QueueConfig } from "@sohappypdf/config";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { Redis } from "ioredis";
 
 const UPSTASH_REDIS_PORT = 6379;

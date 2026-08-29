@@ -8,19 +8,19 @@ import { isConversionExpired } from "@/features/conversions/lib/can-download-con
 import { conversionListRefetchInterval } from "@/features/conversions/lib/conversion-polling";
 import { mapUnknownUploadError } from "@/features/files/api/file-errors";
 import { startBrowserDownload } from "@/features/files/lib/start-browser-download";
-import { authClient } from "@/lib/auth/auth-client";
-import { createPublicToolApis } from "../api/public-tool-api";
-import { publicToolQueryKeys } from "../api/public-tool-query-keys";
-import { mapRecentExecution } from "../lib/map-recent-execution";
+import { createPublicToolApis } from "@/features/public-tools/api/public-tool-api";
+import { publicToolQueryKeys } from "@/features/public-tools/api/public-tool-query-keys";
+import { mapRecentExecution } from "@/features/public-tools/lib/map-recent-execution";
 import {
   isExpirationResponse,
   isMissingResourceResponse,
-} from "../lib/public-tool-errors";
+} from "@/features/public-tools/lib/public-tool-errors";
 import {
   RECENT_EXECUTIONS_LIMIT,
   RECENT_EXECUTIONS_STALE_TIME_MS,
-} from "../lib/recent-executions";
-import type { RecentExecution } from "../types/recent-execution";
+} from "@/features/public-tools/lib/recent-executions";
+import type { RecentExecution } from "@/features/public-tools/types/recent-execution";
+import { authClient } from "@/lib/auth/auth-client";
 
 export function useRecentExecutions(options?: { authenticated?: boolean }) {
   const tErrors = useTranslations("files.errors");

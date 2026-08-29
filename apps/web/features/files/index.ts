@@ -1,1 +1,1 @@
-export { FilesPageContent } from "./components/files-page-content";
+export { FilesPageContent } from "@/features/files/components/files-page-content";

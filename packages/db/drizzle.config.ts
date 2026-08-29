@@ -1,6 +1,6 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadDatabaseConfig, loadEnvFile } from "@repo/config";
+import { loadDatabaseConfig, loadEnvFile } from "@sohappypdf/config";
 import { defineConfig } from "drizzle-kit";
 
 const packageDir = dirname(fileURLToPath(import.meta.url));

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { conversionFormatLabel } from "./format-label";
+import { conversionFormatLabel } from "@/features/conversions/lib/format-label";
 
 describe("conversionFormatLabel", () => {
   test("translates known formats and uppercases unknown ones", () => {

@@ -11,7 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { PublicApiKey } from "../types/api-key";
+import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 export function ApiKeyRevokeDialog({
   apiKey,

@@ -1,5 +1,5 @@
-import { loadApiConfig, loadAuthConfig } from "@repo/config";
-import { getDb } from "@repo/db";
+import { loadApiConfig, loadAuthConfig } from "@sohappypdf/config";
+import { getDb } from "@sohappypdf/db";
 import { type Auth, createAuth } from "./auth.js";
 import { createAuthDrizzleAdapter } from "./auth-adapter.js";
 

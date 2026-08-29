@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { getMarketingToolShortcuts } from "@/features/marketing/lib/marketing-tool-shortcuts";
 import { Link } from "@/lib/i18n/navigation";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { getMarketingToolShortcuts } from "../lib/marketing-tool-shortcuts";
 
 export async function MarketingToolShortcuts() {
   const t = await getTranslations("marketing.nav");

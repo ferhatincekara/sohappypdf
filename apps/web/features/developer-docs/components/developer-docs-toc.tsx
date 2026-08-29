@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 import {
   DEVELOPER_TOC_IDS,
   DEVELOPER_TOC_OFFSET_PX,
   type DeveloperTocId,
   resolveActiveTocId,
-} from "../lib/developer-toc";
+} from "@/features/developer-docs/lib/developer-toc";
+import { cn } from "@/lib/utils";
 
 export function DeveloperDocsToc({
   ariaLabel,

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { AUTH_PATHS, loginPath, signupPath } from "./paths";
+import { AUTH_PATHS, loginPath, signupPath } from "@/features/auth/paths";
 
 describe("auth paths", () => {
   test("keeps register and adds signup for marketing CTAs", () => {

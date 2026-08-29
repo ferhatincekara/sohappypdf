@@ -2,13 +2,13 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
-import { conversionApi } from "../api/conversion-api";
-import { mapUnknownConversionError } from "../api/conversion-errors";
-import { conversionQueryKeys } from "../api/conversion-query-keys";
+import { conversionApi } from "@/features/conversions/api/conversion-api";
+import { mapUnknownConversionError } from "@/features/conversions/api/conversion-errors";
+import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 import type {
   CreateConversionInput,
   PublicConversion,
-} from "../types/conversion";
+} from "@/features/conversions/types/conversion";
 
 export function useCreateConversion() {
   const queryClient = useQueryClient();

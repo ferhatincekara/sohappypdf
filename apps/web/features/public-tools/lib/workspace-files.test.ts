@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { formatAcceptedFormats } from "./format-labels";
-import { mapConversionFailure } from "./public-tool-errors";
+import { formatAcceptedFormats } from "@/features/public-tools/lib/format-labels";
+import { mapConversionFailure } from "@/features/public-tools/lib/public-tool-errors";
 import {
   appendWorkspaceFiles,
   createWorkspaceFiles,
   moveWorkspaceFile,
   reorderWorkspaceFile,
-} from "./workspace-files";
+} from "@/features/public-tools/lib/workspace-files";
 
 describe("workspace files", () => {
   test("creates, appends, moves, and reorders selected files", () => {

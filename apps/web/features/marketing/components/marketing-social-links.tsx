@@ -1,7 +1,7 @@
 "use client";
 
-import type { MarketingSocialLink } from "../lib/marketing-social";
-import { MarketingSocialIcon } from "./marketing-social-icon";
+import { MarketingSocialIcon } from "@/features/marketing/components/marketing-social-icon";
+import type { MarketingSocialLink } from "@/features/marketing/lib/marketing-social";
 
 export function MarketingSocialLinks({
   links,

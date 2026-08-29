@@ -1,9 +1,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiKeyApi } from "../api/api-key-api";
-import { mapUnknownApiKeyError } from "../api/api-key-errors";
-import { apiKeysQueryKeys } from "../api/api-key-query-keys";
+import { apiKeyApi } from "@/features/api-keys/api/api-key-api";
+import { mapUnknownApiKeyError } from "@/features/api-keys/api/api-key-errors";
+import { apiKeysQueryKeys } from "@/features/api-keys/api/api-key-query-keys";
 
 export function useRevokeApiKey() {
   const queryClient = useQueryClient();

@@ -1,4 +1,4 @@
-import type { RateLimitRedisConfig } from "@repo/config";
+import type { RateLimitRedisConfig } from "@sohappypdf/config";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { combineAnonymousRateLimitDecisions } from "./anonymous-rate-limit.js";

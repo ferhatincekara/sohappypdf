@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import { createQueueConnectionOptions } from "./queue-connection.js";
 
 const config = {

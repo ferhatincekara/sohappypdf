@@ -1,10 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { billingApi } from "../api/billing-api";
-import { mapUnknownBillingError } from "../api/billing-errors";
-import { billingQueryKeys } from "../api/billing-query-keys";
-import { isCheckoutActivationPending } from "../lib/checkout-activation";
+import { billingApi } from "@/features/billing/api/billing-api";
+import { mapUnknownBillingError } from "@/features/billing/api/billing-errors";
+import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
+import { isCheckoutActivationPending } from "@/features/billing/lib/checkout-activation";
 
 export function useBillingStatus(options?: { pollWhileConfirming?: boolean }) {
   const query = useQuery({

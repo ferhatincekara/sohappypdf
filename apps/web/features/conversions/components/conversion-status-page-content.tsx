@@ -4,11 +4,11 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AccountPageHeader, APP_PATHS } from "@/features/app-shell";
+import { ConversionStatus } from "@/features/conversions/components/conversion-status";
+import { useConversion } from "@/features/conversions/hooks/use-conversion";
+import { isConversionId } from "@/features/conversions/schemas/create-conversion-schema";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { Link } from "@/lib/i18n/navigation";
-import { useConversion } from "../hooks/use-conversion";
-import { isConversionId } from "../schemas/create-conversion-schema";
-import { ConversionStatus } from "./conversion-status";
 
 export function ConversionStatusPageContent({
   conversionId,

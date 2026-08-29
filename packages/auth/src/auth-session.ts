@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { Auth } from "./auth.js";
 import type { SessionAuthIdentity } from "./auth-identity.js";
 import { createSessionAuthIdentity } from "./auth-identity.js";

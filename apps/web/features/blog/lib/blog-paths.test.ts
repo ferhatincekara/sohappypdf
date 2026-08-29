@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
+import { blogPostPath } from "@/features/blog/lib/blog-paths";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
-import { blogPostPath } from "./blog-paths";
 
 describe("blogPostPath", () => {
   test("nests posts under the marketing blog route", () => {

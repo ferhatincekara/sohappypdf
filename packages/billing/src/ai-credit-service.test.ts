@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { loadBillingConfig } from "@repo/config";
-import { APP_ERROR_CODES, isAppError } from "@repo/core";
+import { loadBillingConfig } from "@sohappypdf/config";
+import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import { createBillingService } from "./billing-service.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
 import { DEFAULT_PLAN_LIMITS } from "./plan-config.js";

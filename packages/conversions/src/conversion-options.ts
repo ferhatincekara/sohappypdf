@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { FileFormat } from "./conversion-format.js";
 import type { ConversionType } from "./conversion-type.js";
 

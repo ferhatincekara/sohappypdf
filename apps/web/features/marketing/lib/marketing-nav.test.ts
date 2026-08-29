@@ -7,8 +7,8 @@ import {
   MARKETING_MOBILE_MENU_LINKS,
   MARKETING_NAV_LINKS,
   STATUS_PAGE_RECOVERY_LINKS,
-} from "./marketing-nav";
-import { MARKETING_PATHS } from "./marketing-paths";
+} from "@/features/marketing/lib/marketing-nav";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 describe("marketing navigation", () => {
   test("keeps the header to tools plus pricing and developers", () => {

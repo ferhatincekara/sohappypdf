@@ -3,7 +3,7 @@ import {
   parseAppLocale,
   resolveAppLocale,
   resolveLocaleFromAcceptLanguage,
-} from "./resolve-locale";
+} from "@/lib/i18n/resolve-locale";
 
 describe("resolveLocaleFromAcceptLanguage", () => {
   test("defaults to English when the header is missing", () => {

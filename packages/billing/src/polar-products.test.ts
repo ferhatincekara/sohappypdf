@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { PolarConfig } from "@repo/config";
+import type { PolarConfig } from "@sohappypdf/config";
 import {
   apiProductKeyFromPolarProductId,
   isApiCheckoutProductKey,

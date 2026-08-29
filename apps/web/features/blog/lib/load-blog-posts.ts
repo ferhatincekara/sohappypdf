@@ -2,12 +2,12 @@ import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
-import type { AppLocale } from "@/lib/i18n/routing";
 import {
   type BlogPost,
   blogPostFrontmatterSchema,
   isBlogSlug,
-} from "./blog-frontmatter";
+} from "@/features/blog/lib/blog-frontmatter";
+import type { AppLocale } from "@/lib/i18n/routing";
 
 const POSTS_ROOT = join(dirname(fileURLToPath(import.meta.url)), "../posts");
 

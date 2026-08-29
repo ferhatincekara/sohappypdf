@@ -1,14 +1,14 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
-import { getMarketingToolShortcuts } from "../lib/marketing-tool-shortcuts";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
+import { MarketingToolCard } from "@/features/marketing/components/marketing-tool-card";
+import { getMarketingToolShortcuts } from "@/features/marketing/lib/marketing-tool-shortcuts";
 import {
   type MarketingToolNavGroup,
   toolCategoryPath,
-} from "../lib/marketing-tools";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingPageHeader } from "./marketing-page-header";
-import { MarketingToolCard } from "./marketing-tool-card";
+} from "@/features/marketing/lib/marketing-tools";
+import { Link } from "@/lib/i18n/navigation";
 
 export async function ToolDirectoryPageContent({
   groups,

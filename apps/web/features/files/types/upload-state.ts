@@ -1,5 +1,5 @@
-import type { FileErrorKey } from "../api/file-errors";
-import type { PresignedUpload, PublicFile } from "./file";
+import type { FileErrorKey } from "@/features/files/api/file-errors";
+import type { PresignedUpload, PublicFile } from "@/features/files/types/file";
 
 export const UPLOAD_STATUSES = [
   "idle",

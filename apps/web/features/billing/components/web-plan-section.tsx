@@ -2,24 +2,27 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { formatFileSize } from "@/features/files/lib/format-file-size";
-import { cn } from "@/lib/utils";
+import {
+  BillingPlanHero,
+  BillingSectionCard,
+  billingStatGridClassName,
+} from "@/features/billing/components/billing-plan-hero";
+import { BillingStat } from "@/features/billing/components/billing-stat";
+import { PolarPortalActions } from "@/features/billing/components/polar-portal-actions";
 import {
   canOpenWebPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
   resolveBillingPlanNotice,
   webPlanRenewalDate,
-} from "../lib/billing-view";
-import { formatBillingDisplayDate } from "../lib/format-billing-date";
-import type { BillingInterval, PublicBillingStatus } from "../types/billing";
-import {
-  BillingPlanHero,
-  BillingSectionCard,
-  billingStatGridClassName,
-} from "./billing-plan-hero";
-import { BillingStat } from "./billing-stat";
-import { PolarPortalActions } from "./polar-portal-actions";
+} from "@/features/billing/lib/billing-view";
+import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
+import type {
+  BillingInterval,
+  PublicBillingStatus,
+} from "@/features/billing/types/billing";
+import { formatFileSize } from "@/features/files/lib/format-file-size";
+import { cn } from "@/lib/utils";
 
 export function WebPlanSection({
   billing,

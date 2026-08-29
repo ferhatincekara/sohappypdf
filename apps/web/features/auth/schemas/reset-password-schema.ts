@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   type AuthValidationTranslator,
   createPasswordSchema,
-} from "./password";
+} from "@/features/auth/schemas/password";
 
 export function createResetPasswordSchema(t: AuthValidationTranslator) {
   return z

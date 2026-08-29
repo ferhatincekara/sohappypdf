@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { loadAuthConfig } from "@repo/config";
-import { isAppError } from "@repo/core";
+import { loadAuthConfig } from "@sohappypdf/config";
+import { isAppError } from "@sohappypdf/core";
 
 describe("loadAuthConfig", () => {
   test("loads a valid authentication configuration", () => {

@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { isMobileNavEscapeKey, resolveMobileNavOpen } from "./mobile-nav-state";
+import {
+  isMobileNavEscapeKey,
+  resolveMobileNavOpen,
+} from "@/features/marketing/lib/mobile-nav-state";
 
 describe("mobile navigation state", () => {
   test("closes on escape, navigation, and explicit close", () => {

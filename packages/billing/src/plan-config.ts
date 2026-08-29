@@ -2,7 +2,7 @@ import {
   type EnvSource,
   loadAiConfig,
   loadWebCreditConfig,
-} from "@repo/config";
+} from "@sohappypdf/config";
 import { DEFAULT_PLAN_LIMITS as catalog } from "./default-plan-limits.js";
 import type { PlanCatalog, PlanLimits } from "./plan-types.js";
 

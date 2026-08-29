@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { createWebAuthClient } from "./auth-client";
-import { createServerAuthClient } from "./server-auth-client";
+import { createWebAuthClient } from "@/lib/auth/auth-client";
+import { createServerAuthClient } from "@/lib/auth/server-auth-client";
 
 describe("auth client", () => {
   test("initializes the Better Auth browser client without localStorage tokens", () => {

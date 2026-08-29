@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createApiClient } from "./client";
+import { createApiClient } from "@/lib/api/client";
 
 describe("api client", () => {
   test("initializes a single Axios instance against the public API URL", () => {

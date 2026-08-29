@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
+import { getMarketingApiExample } from "@/features/marketing/lib/marketing-api-example";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { Link } from "@/lib/i18n/navigation";
-import { getMarketingApiExample } from "../lib/marketing-api-example";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
 
 export async function DeveloperSection() {
   const t = await getTranslations("marketing.developer");

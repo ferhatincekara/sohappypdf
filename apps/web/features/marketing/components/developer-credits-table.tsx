@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import {
   type DeveloperCalculatorTool,
   groupDeveloperCalculatorTools,
-} from "../lib/developer-calculator";
+} from "@/features/marketing/lib/developer-calculator";
 
 export async function DeveloperCreditsTable({
   tools,

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { apiLedgerMotion } from "./api-ledger-motion";
+import { apiLedgerMotion } from "@/features/billing/lib/api-ledger-motion";
 
 describe("apiLedgerMotion", () => {
   test("shows pack top-ups and grants as credits added", () => {

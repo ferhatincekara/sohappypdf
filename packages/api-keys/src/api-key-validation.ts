@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 
 const MAX_API_KEY_NAME_LENGTH = 80;
 const USER_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/;

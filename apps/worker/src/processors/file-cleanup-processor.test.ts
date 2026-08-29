@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import type { ConversionService } from "@repo/conversions";
-import { isAppError } from "@repo/core";
-import type { FileService } from "@repo/files";
-import { createLogger } from "@repo/logger";
+import type { ConversionService } from "@sohappypdf/conversions";
+import { isAppError } from "@sohappypdf/core";
+import type { FileService } from "@sohappypdf/files";
+import { createLogger } from "@sohappypdf/logger";
 import { createFileCleanupProcessor } from "./file-cleanup-processor.js";
 
 function createConversionsStub(

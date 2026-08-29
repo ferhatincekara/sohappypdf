@@ -1,5 +1,5 @@
 {
-  "name": "@repo/files",
+  "name": "@sohappypdf/files",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,15 +15,15 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@repo/config": "workspace:*",
-    "@repo/core": "workspace:*",
-    "@repo/db": "workspace:*",
-    "@repo/storage": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
+    "@sohappypdf/db": "workspace:*",
+    "@sohappypdf/storage": "workspace:*",
+    "@sohappypdf/utils": "workspace:*",
     "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

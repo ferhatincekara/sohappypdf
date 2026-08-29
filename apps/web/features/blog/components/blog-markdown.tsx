@@ -2,11 +2,11 @@ import type { Route } from "next";
 import type { Components } from "react-markdown";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Link } from "@/lib/i18n/navigation";
 import {
   blogUrlTransform,
   isInternalMarkdownHref,
-} from "../lib/blog-url-transform";
+} from "@/features/blog/lib/blog-url-transform";
+import { Link } from "@/lib/i18n/navigation";
 
 const markdownComponents: Components = {
   h2: ({ children }) => (

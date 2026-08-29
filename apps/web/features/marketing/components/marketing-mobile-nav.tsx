@@ -27,17 +27,17 @@ import {
   resolveAccountInitial,
 } from "@/features/app-shell/lib/account-display-name";
 import { useLogout } from "@/features/auth/hooks/use-logout";
-import { Link, usePathname } from "@/lib/i18n/navigation";
-import { cn } from "@/lib/utils";
 import {
   MARKETING_MOBILE_MENU_LINKS,
   type MarketingMobileMenuLinkId,
-} from "../lib/marketing-nav";
+} from "@/features/marketing/lib/marketing-nav";
 import {
   getMarketingToolShortcuts,
   type MarketingToolShortcutLabelId,
-} from "../lib/marketing-tool-shortcuts";
-import { easeOutExpo } from "../lib/motion-tokens";
+} from "@/features/marketing/lib/marketing-tool-shortcuts";
+import { easeOutExpo } from "@/features/marketing/lib/motion-tokens";
+import { Link, usePathname } from "@/lib/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 const PAGE_ICONS: Record<MarketingMobileMenuLinkId, LucideIcon> = {
   tools: LayoutGridIcon,

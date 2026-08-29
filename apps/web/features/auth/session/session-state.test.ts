@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { hasWebSession } from "./session-state";
+import { hasWebSession } from "@/features/auth/session/session-state";
 
 describe("session access", () => {
   test("treats a missing session as unauthenticated", () => {

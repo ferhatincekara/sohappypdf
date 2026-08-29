@@ -8,10 +8,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ConversionForm } from "@/features/conversions/components/conversion-form";
+import { conversionPath } from "@/features/conversions/paths";
 import type { PublicFile } from "@/features/files/types/file";
 import { useRouter } from "@/lib/i18n/navigation";
-import { conversionPath } from "../paths";
-import { ConversionForm } from "./conversion-form";
 
 export function ConversionCreateDialog({
   file,

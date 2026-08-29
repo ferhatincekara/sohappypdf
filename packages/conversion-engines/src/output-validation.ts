@@ -1,5 +1,5 @@
 import { open, stat } from "node:fs/promises";
-import type { FileFormat } from "@repo/conversions";
+import type { FileFormat } from "@sohappypdf/conversions";
 import { outputValidationError } from "./errors.js";
 
 const MAX_OUTPUT_BYTES = 150 * 1024 * 1024;

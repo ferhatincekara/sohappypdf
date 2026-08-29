@@ -1,29 +1,29 @@
 "use client";
 
-import { findRegisteredTool } from "@repo/tools/catalog";
+import { findRegisteredTool } from "@sohappypdf/tools/catalog";
 import { useFormatter, useTranslations } from "next-intl";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { APP_PATHS } from "@/features/app-shell";
-import { FileDownloadButton } from "@/features/files/components/file-download-button";
-import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
-import { Link } from "@/lib/i18n/navigation";
 import {
   activityRemainingFrom,
   activityRemainingLabel,
-} from "../lib/activity-time-copy";
+} from "@/features/conversions/lib/activity-time-copy";
 import {
   canDownloadConversion,
   isConversionExpired,
-} from "../lib/can-download-conversion";
-import { safeConversionFailureKey } from "../lib/conversion-failure";
-import { conversionFormatLabel } from "../lib/format-label";
+} from "@/features/conversions/lib/can-download-conversion";
+import { safeConversionFailureKey } from "@/features/conversions/lib/conversion-failure";
+import { conversionFormatLabel } from "@/features/conversions/lib/format-label";
 import type {
   ConversionStatus as ConversionStatusId,
   PublicConversion,
-} from "../types/conversion";
+} from "@/features/conversions/types/conversion";
+import { FileDownloadButton } from "@/features/files/components/file-download-button";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { Link } from "@/lib/i18n/navigation";
 
 const cardClassName = "rounded-7 bg-muted p-6 shadow-none md:p-7";
 

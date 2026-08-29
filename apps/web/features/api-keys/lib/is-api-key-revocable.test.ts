@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicApiKey } from "../types/api-key";
-import { isApiKeyRevocable } from "./is-api-key-revocable";
+import { isApiKeyRevocable } from "@/features/api-keys/lib/is-api-key-revocable";
+import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 function createApiKey(overrides: Partial<PublicApiKey> = {}): PublicApiKey {
   return {

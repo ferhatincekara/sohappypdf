@@ -1,6 +1,6 @@
 "use client";
 
-import type { ToolDefinition } from "@repo/tools/catalog";
+import type { ToolDefinition } from "@sohappypdf/tools/catalog";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,7 @@ import {
 import type {
   CompressionLevel,
   ToolWorkspaceState,
-} from "../lib/tool-workspace";
+} from "@/features/public-tools/lib/tool-workspace";
 
 export function toolHasWorkspaceOptions(toolId: string): boolean {
   switch (toolId) {

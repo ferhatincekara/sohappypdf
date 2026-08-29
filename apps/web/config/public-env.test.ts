@@ -4,7 +4,7 @@ import {
   getPublicWebEnv,
   getServerApiV1BaseUrl,
   toServerApiBaseUrl,
-} from "./public-env";
+} from "@/config/public-env";
 
 describe("getPublicWebEnv", () => {
   test("exposes only browser-safe public URLs", () => {
@@ -20,9 +20,7 @@ describe("getPublicWebEnv", () => {
   });
 
   test("derives the public v1 API base from the API origin", () => {
-    expect(getPublicApiV1BaseUrl()).toBe(
-      `${getPublicWebEnv().apiBaseUrl}/v1`,
-    );
+    expect(getPublicApiV1BaseUrl()).toBe(`${getPublicWebEnv().apiBaseUrl}/v1`);
     expect(getPublicApiV1BaseUrl()).not.toContain("YOUR_API_KEY");
   });
 

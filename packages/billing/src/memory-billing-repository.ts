@@ -1,4 +1,4 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { resolveApiLedgerKind } from "./api-ledger-kind.js";
 import type { BillingRepository } from "./billing-repository.js";
 import type {

@@ -1,6 +1,6 @@
 "use client";
 
-import { formatUsdAmount } from "@repo/billing/plans";
+import { formatUsdAmount } from "@sohappypdf/billing/plans";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,15 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Link } from "@/lib/i18n/navigation";
-import { cn } from "@/lib/utils";
 import {
   type DeveloperCalculatorTool,
   snapCreditIndex,
   tasksForCredits,
-} from "../lib/developer-calculator";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import type { PublicApiPackPresentation } from "../lib/public-api-packs";
+} from "@/features/marketing/lib/developer-calculator";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import type { PublicApiPackPresentation } from "@/features/marketing/lib/public-api-packs";
+import { Link } from "@/lib/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 type BillingCycle = "monthly" | "yearly";
 

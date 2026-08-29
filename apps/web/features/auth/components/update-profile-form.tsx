@@ -9,7 +9,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useUpdateProfile } from "../hooks/use-update-profile";
+import { useUpdateProfile } from "@/features/auth/hooks/use-update-profile";
 
 export function UpdateProfileForm({
   name,

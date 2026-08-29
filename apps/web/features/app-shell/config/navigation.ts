@@ -5,7 +5,7 @@ import {
   type LucideIcon,
   SettingsIcon,
 } from "lucide-react";
-import { APP_PATHS, type AppPath } from "./app-paths";
+import { APP_PATHS, type AppPath } from "@/features/app-shell/config/app-paths";
 
 export const APP_NAV_IDS = [
   "activity",

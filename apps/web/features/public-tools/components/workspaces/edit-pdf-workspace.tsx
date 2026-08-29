@@ -7,13 +7,13 @@ import {
   DocumentEditor,
   useDocumentEditor,
 } from "@/features/pdf-document-editor";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { editorObjectsToEditOperations } from "@/features/public-tools/lib/edit-pdf-operations";
+import { uploadTemporaryAsset } from "@/features/public-tools/lib/upload-temporary-asset";
+import { usePdfDocument } from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 import { authClient } from "@/lib/auth/auth-client";
-import { editorObjectsToEditOperations } from "../../lib/edit-pdf-operations";
-import { uploadTemporaryAsset } from "../../lib/upload-temporary-asset";
-import { usePdfDocument } from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
 
 export function EditPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

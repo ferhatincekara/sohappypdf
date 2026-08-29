@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/rate-limit");
+assertServerOnly("@sohappypdf/rate-limit");
 
 export { combineAnonymousRateLimitDecisions } from "./anonymous-rate-limit.js";
 export type { RateLimitService } from "./create-rate-limit-service.js";

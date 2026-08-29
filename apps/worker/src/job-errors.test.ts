@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import {
   isRetryableConversionError,
   PermanentConversionError,

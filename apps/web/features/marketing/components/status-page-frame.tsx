@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { BrandLogo } from "@/components/brand-logo";
-import { STATUS_PAGE_RECOVERY_LINKS } from "../lib/marketing-nav";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { StatusPageChrome } from "./status-page-chrome";
+import { StatusPageChrome } from "@/features/marketing/components/status-page-chrome";
+import { STATUS_PAGE_RECOVERY_LINKS } from "@/features/marketing/lib/marketing-nav";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 export function StatusPageFrame({ children }: { children: ReactNode }) {
   const tNav = useTranslations("marketing.nav");

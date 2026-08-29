@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { API_KEY_LAST_USED_UPDATE_INTERVAL_MS } from "./api-key-last-used.js";
 import type { ApiKeyRepository } from "./api-key-repository.js";
 import {

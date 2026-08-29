@@ -1,5 +1,5 @@
-import type { ApiCreditLedgerEntry } from "../types/billing";
-import type { ApiLedgerMotion } from "./api-ledger-motion";
+import type { ApiLedgerMotion } from "@/features/billing/lib/api-ledger-motion";
+import type { ApiCreditLedgerEntry } from "@/features/billing/types/billing";
 
 export type ApiCreditHistoryKind =
   | "reset"

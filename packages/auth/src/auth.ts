@@ -1,4 +1,4 @@
-import type { AuthConfig } from "@repo/config";
+import type { AuthConfig } from "@sohappypdf/config";
 import { type BetterAuthOptions, betterAuth } from "better-auth";
 import {
   type SendAuthEmail,

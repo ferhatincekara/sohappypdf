@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { formatUsdAmount } from "../lib/billing-view";
+import { formatUsdAmount } from "@/features/billing/lib/billing-view";
 
 export function ApiPackSwitchDialog({
   open,

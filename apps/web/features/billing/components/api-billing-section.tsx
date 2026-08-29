@@ -3,14 +3,21 @@
 import {
   DEFAULT_API_CREDIT_PACKS,
   INCLUDED_API_CREDITS_PER_MONTH,
-} from "@repo/billing/plans";
+} from "@sohappypdf/billing/plans";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { APP_PATHS } from "@/features/app-shell";
-import { DEVELOPER_PATHS } from "@/features/developer-docs";
-import { Link } from "@/lib/i18n/navigation";
-import { cn } from "@/lib/utils";
+import { ApiPackSwitchDialog } from "@/features/billing/components/api-pack-switch-dialog";
+import { BillingCreditHistoryList } from "@/features/billing/components/billing-credit-history-list";
+import { BillingOfferCard } from "@/features/billing/components/billing-offer-card";
+import {
+  BillingPlanHero,
+  BillingSectionCard,
+  billingStatGridClassName,
+} from "@/features/billing/components/billing-plan-hero";
+import { BillingStat } from "@/features/billing/components/billing-stat";
+import { PolarPortalActions } from "@/features/billing/components/polar-portal-actions";
 import {
   apiPackCheckoutAction,
   apiPackRenewalDate,
@@ -20,23 +27,16 @@ import {
   catalogPriceForCycle,
   formatUsdAmount,
   resolveBillingPlanNotice,
-} from "../lib/billing-view";
-import { formatBillingDisplayDate } from "../lib/format-billing-date";
+} from "@/features/billing/lib/billing-view";
+import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
 import type {
   BillingInterval,
   CheckoutProductKey,
   PublicBillingStatus,
-} from "../types/billing";
-import { ApiPackSwitchDialog } from "./api-pack-switch-dialog";
-import { BillingCreditHistoryList } from "./billing-credit-history-list";
-import { BillingOfferCard } from "./billing-offer-card";
-import {
-  BillingPlanHero,
-  BillingSectionCard,
-  billingStatGridClassName,
-} from "./billing-plan-hero";
-import { BillingStat } from "./billing-stat";
-import { PolarPortalActions } from "./polar-portal-actions";
+} from "@/features/billing/types/billing";
+import { DEVELOPER_PATHS } from "@/features/developer-docs";
+import { Link } from "@/lib/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 export function ApiBillingSection({
   billing,

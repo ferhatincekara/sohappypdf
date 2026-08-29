@@ -1,5 +1,5 @@
-import type { ConversionFailureCode } from "@repo/conversions";
-import { APP_ERROR_CODES, isAppError } from "@repo/core";
+import type { ConversionFailureCode } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 
 export class PermanentConversionError extends Error {
   override readonly name = "PermanentConversionError";

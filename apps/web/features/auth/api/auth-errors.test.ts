@@ -3,7 +3,7 @@ import {
   AUTH_ERROR_KEYS,
   mapAuthError,
   shouldTreatForgotPasswordAsSuccess,
-} from "./auth-errors";
+} from "@/features/auth/api/auth-errors";
 
 describe("mapAuthError", () => {
   test("maps invalid credentials without exposing internals", () => {

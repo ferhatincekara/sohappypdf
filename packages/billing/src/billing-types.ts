@@ -1,4 +1,4 @@
-import type { ApiProductKey } from "@repo/config";
+import type { ApiProductKey } from "@sohappypdf/config";
 import type { BillingCatalogPrices } from "./default-plan-limits.js";
 import type { BillingSubscriptionStatus, PlanId } from "./plan-types.js";
 import type { CheckoutProductKey } from "./polar-products.js";
@@ -77,7 +77,7 @@ export type ApiCreditLedgerEntry = {
   createdAt: string;
 };
 
-export type { ApiProductKey } from "@repo/config";
+export type { ApiProductKey } from "@sohappypdf/config";
 export type { CheckoutProductKey } from "./polar-products.js";
 
 export type ApiSubscriptionRecord = {

@@ -2,11 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useState } from "react";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolDropzone } from "../tool-dropzone";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { MergeFileList } from "./merge-file-list";
-import { MergeResultSummary } from "./merge-result-summary";
+import { ToolDropzone } from "@/features/public-tools/components/tool-dropzone";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { MergeFileList } from "@/features/public-tools/components/workspaces/merge-file-list";
+import { MergeResultSummary } from "@/features/public-tools/components/workspaces/merge-result-summary";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function MergePdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_PLAN_LIMITS } from "@repo/billing/plans";
-import { findRegisteredTool } from "@repo/tools/catalog";
-import { maxFilesForTool } from "./tool-limits";
+import { DEFAULT_PLAN_LIMITS } from "@sohappypdf/billing/plans";
+import { findRegisteredTool } from "@sohappypdf/tools/catalog";
+import { maxFilesForTool } from "@/features/public-tools/lib/tool-limits";
 
 describe("maxFilesForTool", () => {
   test("lets merge pick the tool file count on every web tier", () => {

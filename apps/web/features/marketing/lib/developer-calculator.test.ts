@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { listRegisteredTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
 import {
   groupDeveloperCalculatorTools,
   listDeveloperCalculatorTools,
   tasksForCredits,
-} from "./developer-calculator";
+} from "@/features/marketing/lib/developer-calculator";
 
 describe("developer calculator", () => {
   test("divides selected credits by the tool API cost", () => {

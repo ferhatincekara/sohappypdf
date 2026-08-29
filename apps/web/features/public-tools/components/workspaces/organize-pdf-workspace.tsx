@@ -2,6 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolSidebarCard } from "@/features/public-tools/components/tool-sidebar-card";
+import { ToolStage } from "@/features/public-tools/components/tool-stage";
+import { OrganizeAdvancedOrder } from "@/features/public-tools/components/workspaces/organize-advanced-order";
+import { OrganizePageOverlay } from "@/features/public-tools/components/workspaces/organize-page-overlay";
+import { OrganizePdfToolbar } from "@/features/public-tools/components/workspaces/organize-pdf-toolbar";
+import { OrganizeResultSummary } from "@/features/public-tools/components/workspaces/organize-result-summary";
 import {
   canDeleteOrganizeSlot,
   createOrganizeSlots,
@@ -19,28 +27,20 @@ import {
   serializeOrganizeOrder,
   serializeOrganizeRotations,
   setOrganizeSelection,
-} from "../../lib/organize-pages";
+} from "@/features/public-tools/lib/organize-pages";
 import {
   parseOrganizeOrderInput,
   parseOrganizeRotationsInput,
   type ToolWorkspaceState,
-} from "../../lib/tool-workspace";
+} from "@/features/public-tools/lib/tool-workspace";
 import {
   type PdfDocumentState,
   PdfPageGrid,
   PdfPageGridSkeleton,
   usePdfDocument,
   usePdfPageSelection,
-} from "../../pdf-workspace";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolFileCard } from "../tool-file-card";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolSidebarCard } from "../tool-sidebar-card";
-import { ToolStage } from "../tool-stage";
-import { OrganizeAdvancedOrder } from "./organize-advanced-order";
-import { OrganizePageOverlay } from "./organize-page-overlay";
-import { OrganizePdfToolbar } from "./organize-pdf-toolbar";
-import { OrganizeResultSummary } from "./organize-result-summary";
+} from "@/features/public-tools/pdf-workspace";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 
 export function OrganizePdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const t = useTranslations("publicTools");

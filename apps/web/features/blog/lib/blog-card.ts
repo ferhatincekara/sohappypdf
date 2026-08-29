@@ -1,6 +1,6 @@
-import type { BlogPostFrontmatter } from "./blog-frontmatter";
-import { blogPostPath } from "./blog-paths";
-import { formatBlogDate } from "./format-blog-date";
+import type { BlogPostFrontmatter } from "@/features/blog/lib/blog-frontmatter";
+import { blogPostPath } from "@/features/blog/lib/blog-paths";
+import { formatBlogDate } from "@/features/blog/lib/format-blog-date";
 
 export type BlogPostCardModel = {
   href: `/blog/${string}`;

@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import axios, { type AxiosInstance } from "axios";
-import type { PublicApiKey } from "../types/api-key";
-import { ApiKeyApiRequestError, createApiKeyApi } from "./api-key-api";
+import {
+  ApiKeyApiRequestError,
+  createApiKeyApi,
+} from "@/features/api-keys/api/api-key-api";
+import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 function createApiKey(overrides: Partial<PublicApiKey> = {}): PublicApiKey {
   return {

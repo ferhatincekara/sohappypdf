@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import type { Logger } from "@repo/logger";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import type { Logger } from "@sohappypdf/logger";
 import { createApp } from "./app.js";
 import type { RequestIdentity } from "./auth/request-identity.js";
 

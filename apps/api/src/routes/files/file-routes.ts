@@ -1,5 +1,5 @@
-import type { BillingService } from "@repo/billing";
-import type { FileService } from "@repo/files";
+import type { BillingService } from "@sohappypdf/billing";
+import type { FileService } from "@sohappypdf/files";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireAuthenticatedIdentity } from "../../auth/request-identity.js";

@@ -8,8 +8,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { useResetPassword } from "../hooks/use-reset-password";
-import { PasswordInput } from "./password-input";
+import { PasswordInput } from "@/features/auth/components/password-input";
+import { useResetPassword } from "@/features/auth/hooks/use-reset-password";
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const t = useTranslations("auth.resetPassword");

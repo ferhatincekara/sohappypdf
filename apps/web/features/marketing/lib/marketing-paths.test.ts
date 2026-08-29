@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { MARKETING_PATHS, PUBLIC_MARKETING_ROUTES } from "./marketing-paths";
+import {
+  MARKETING_PATHS,
+  PUBLIC_MARKETING_ROUTES,
+} from "@/features/marketing/lib/marketing-paths";
 
 describe("public marketing routes", () => {
   test("exposes only real public routes", () => {

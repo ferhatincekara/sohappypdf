@@ -1,4 +1,4 @@
-import type { Logger } from "@repo/logger";
+import type { Logger } from "@sohappypdf/logger";
 
 export type WorkerShutdownDependencies = {
   closeWorker(force?: boolean): Promise<void>;

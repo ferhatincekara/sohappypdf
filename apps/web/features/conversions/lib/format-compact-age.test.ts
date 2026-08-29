@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { compactAgeFrom, compactRemainingFrom } from "./format-compact-age";
+import {
+  compactAgeFrom,
+  compactRemainingFrom,
+} from "@/features/conversions/lib/format-compact-age";
 
 describe("compactAgeFrom", () => {
   const now = new Date("2026-08-24T12:00:00.000Z");

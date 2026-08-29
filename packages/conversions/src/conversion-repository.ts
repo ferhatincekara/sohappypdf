@@ -1,10 +1,10 @@
-import { APP_ERROR_CODES, AppError } from "@repo/core";
-import { type ConversionRow, conversions, type Database } from "@repo/db";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
+import { type ConversionRow, conversions, type Database } from "@sohappypdf/db";
 import {
   DEFAULT_RESOURCE_OWNER_KIND,
   type ResourceOwnerTransferInput,
   type ResourceOwnerTransferResult,
-} from "@repo/files";
+} from "@sohappypdf/files";
 import { and, desc, eq, gt, isNull, lt, lte, or, sql } from "drizzle-orm";
 import { normalizeFileFormat } from "./conversion-format.js";
 import { parseConversionOptions } from "./conversion-options.js";

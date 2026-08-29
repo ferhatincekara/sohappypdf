@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { getUserInitials } from "./user-initials";
+import { getUserInitials } from "@/features/app-shell/lib/user-initials";
 
 describe("getUserInitials", () => {
   test("uses the first letters of a two-part name", () => {

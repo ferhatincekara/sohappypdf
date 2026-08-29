@@ -12,14 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLogout } from "@/features/auth/hooks/use-logout";
-import { Link } from "@/lib/i18n/navigation";
-import { APP_NAVIGATION } from "../config/navigation";
+import { APP_NAVIGATION } from "@/features/app-shell/config/navigation";
 import {
   resolveAccountDisplayName,
   resolveAccountInitial,
-} from "../lib/account-display-name";
-import type { AppShellUser } from "../types";
+} from "@/features/app-shell/lib/account-display-name";
+import type { AppShellUser } from "@/features/app-shell/types";
+import { useLogout } from "@/features/auth/hooks/use-logout";
+import { Link } from "@/lib/i18n/navigation";
 
 export function UserMenu({
   user,

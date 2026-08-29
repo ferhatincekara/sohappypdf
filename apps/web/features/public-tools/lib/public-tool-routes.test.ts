@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { listRegisteredTools } from "@repo/tools/catalog";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { toolPageConflictsWithReservedPath } from "@/features/marketing/lib/marketing-tool-shortcuts";
-import { listPublicToolRouteParams } from "./public-tool-routes";
+import { listPublicToolRouteParams } from "@/features/public-tools/lib/public-tool-routes";
 
 const RESERVED_MARKETING_PATHS = [
   MARKETING_PATHS.home,

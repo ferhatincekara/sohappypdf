@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { publicToolQueryKeys } from "./public-tool-query-keys";
+import { publicToolQueryKeys } from "@/features/public-tools/api/public-tool-query-keys";
 
 describe("public tool query keys", () => {
   test("scopes execution polling keys under a shared prefix", () => {

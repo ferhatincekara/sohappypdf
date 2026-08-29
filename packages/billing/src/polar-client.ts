@@ -1,6 +1,6 @@
 import { Polar } from "@polar-sh/sdk";
-import type { PolarServer } from "@repo/config";
-import { APP_ERROR_CODES, AppError, isAppError } from "@repo/core";
+import type { PolarServer } from "@sohappypdf/config";
+import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import type { PolarClient } from "./billing-types.js";
 
 export type CreatePolarClientOptions = {

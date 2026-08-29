@@ -1,5 +1,5 @@
 {
-  "name": "@repo/logger",
+  "name": "@sohappypdf/logger",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,10 +15,10 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@repo/core": "workspace:*"
+    "@sohappypdf/core": "workspace:*"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "@types/node": "^22.18.0",
     "typescript": "5.9.2"
   }

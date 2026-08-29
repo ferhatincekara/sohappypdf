@@ -1,17 +1,17 @@
 import { getTranslations } from "next-intl/server";
 import { BrandLogo } from "@/components/brand-logo";
-import { Link } from "@/lib/i18n/navigation";
+import { LocaleSwitcher } from "@/features/marketing/components/locale-switcher";
+import { MarketingContainer } from "@/features/marketing/components/marketing-container";
+import { MarketingSocialLinks } from "@/features/marketing/components/marketing-social-links";
 import {
   MARKETING_FOOTER_COMPANY_LINKS,
   MARKETING_FOOTER_LEGAL_LINKS,
   MARKETING_FOOTER_PRODUCT_LINKS,
   MARKETING_FOOTER_TOOL_LINKS,
-} from "../lib/marketing-nav";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { MARKETING_SOCIAL_LINKS } from "../lib/marketing-social";
-import { LocaleSwitcher } from "./locale-switcher";
-import { MarketingContainer } from "./marketing-container";
-import { MarketingSocialLinks } from "./marketing-social-links";
+} from "@/features/marketing/lib/marketing-nav";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { MARKETING_SOCIAL_LINKS } from "@/features/marketing/lib/marketing-social";
+import { Link } from "@/lib/i18n/navigation";
 
 export async function MarketingFooter() {
   const t = await getTranslations("marketing.footer");

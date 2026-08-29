@@ -1,5 +1,5 @@
 {
-  "name": "@repo/api-keys",
+  "name": "@sohappypdf/api-keys",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -15,12 +15,12 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@repo/core": "workspace:*",
-    "@repo/db": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
+    "@sohappypdf/db": "workspace:*",
     "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

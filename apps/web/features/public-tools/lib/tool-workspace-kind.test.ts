@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   resolveToolWorkspaceKind,
   usesCanvasActionSidebar,
-} from "./tool-workspace-kind";
+} from "@/features/public-tools/lib/tool-workspace-kind";
 
 describe("resolveToolWorkspaceKind", () => {
   test("maps focused tools to specialized workspaces", () => {

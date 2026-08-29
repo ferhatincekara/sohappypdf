@@ -2,7 +2,7 @@ import {
   validateEvent,
   WebhookVerificationError,
 } from "@polar-sh/sdk/webhooks";
-import { APP_ERROR_CODES, AppError } from "@repo/core";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { PolarWebhookEvent, VerifyPolarWebhook } from "./billing-types.js";
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {

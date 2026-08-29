@@ -2,8 +2,8 @@ import { describe, expect, test } from "bun:test";
 import {
   createAnonymousSessionService,
   createMemoryAnonymousSessionRepository,
-} from "@repo/auth";
-import type { ResourceOwnerTransferInput } from "@repo/files";
+} from "@sohappypdf/auth";
+import type { ResourceOwnerTransferInput } from "@sohappypdf/files";
 import { claimAnonymousSession } from "./claim-anonymous-session.js";
 
 const now = new Date("2026-08-28T12:00:00.000Z");

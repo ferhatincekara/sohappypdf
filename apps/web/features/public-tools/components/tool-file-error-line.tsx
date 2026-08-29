@@ -6,7 +6,7 @@ import {
   canRetryWorkspaceFileError,
   type PublicToolErrorKey,
   publicToolErrorMessageValues,
-} from "../lib/public-tool-errors";
+} from "@/features/public-tools/lib/public-tool-errors";
 
 export function ToolFileErrorLine({
   errorKey,

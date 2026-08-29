@@ -8,20 +8,20 @@ import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { type AppShellUser, UserMenu } from "@/features/app-shell";
-import { Link, usePathname } from "@/lib/i18n/navigation";
-import { cn } from "@/lib/utils";
-import { MARKETING_NAV_LINKS } from "../lib/marketing-nav";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import { getMarketingToolIcon } from "../lib/marketing-tool-icon";
+import { MarketingMenuToggleIcon } from "@/features/marketing/components/marketing-menu-toggle-icon";
+import { MarketingMobileNav } from "@/features/marketing/components/marketing-mobile-nav";
+import { MarketingToolStatusBadges } from "@/features/marketing/components/marketing-tool-status-badges";
+import { MARKETING_NAV_LINKS } from "@/features/marketing/lib/marketing-nav";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import { getMarketingToolIcon } from "@/features/marketing/lib/marketing-tool-icon";
 import {
   type MarketingToolNavGroup,
   type MarketingToolNavItem,
   visibleMegaMenuTools,
-} from "../lib/marketing-tools";
-import { isMobileNavEscapeKey } from "../lib/mobile-nav-state";
-import { MarketingMenuToggleIcon } from "./marketing-menu-toggle-icon";
-import { MarketingMobileNav } from "./marketing-mobile-nav";
-import { MarketingToolStatusBadges } from "./marketing-tool-status-badges";
+} from "@/features/marketing/lib/marketing-tools";
+import { isMobileNavEscapeKey } from "@/features/marketing/lib/mobile-nav-state";
+import { Link, usePathname } from "@/lib/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 const MEGA_STORIES = [
   {

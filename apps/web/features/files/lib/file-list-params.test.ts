@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { fileListHref, parseFileListSearchParams } from "./file-list-params";
+import {
+  fileListHref,
+  parseFileListSearchParams,
+} from "@/features/files/lib/file-list-params";
 
 describe("file list params", () => {
   test("parses optional cursor values", () => {

@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   resolveAccountDisplayName,
   resolveAccountInitial,
-} from "./account-display-name";
+} from "@/features/app-shell/lib/account-display-name";
 
 describe("resolveAccountDisplayName", () => {
   test("prefers a real name over the email", () => {

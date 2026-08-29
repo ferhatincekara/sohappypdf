@@ -10,10 +10,10 @@ import {
   useRef,
   useState,
 } from "react";
+import type { PdfjsDocument } from "@/features/public-tools/lib/pdfjs-client";
+import { thumbnailOutputScale } from "@/features/public-tools/pdf-workspace/lib/thumbnail-output-scale";
+import type { PdfPageRotation } from "@/features/public-tools/pdf-workspace/types/pdf-page";
 import { cn } from "@/lib/utils";
-import type { PdfjsDocument } from "../../lib/pdfjs-client";
-import { thumbnailOutputScale } from "../lib/thumbnail-output-scale";
-import type { PdfPageRotation } from "../types/pdf-page";
 
 const THUMBNAIL_WIDTH = 160;
 

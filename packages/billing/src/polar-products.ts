@@ -1,5 +1,9 @@
-import type { ApiCreditConfig, ApiProductKey, PolarConfig } from "@repo/config";
-import { loadApiCreditConfig } from "@repo/config";
+import type {
+  ApiCreditConfig,
+  ApiProductKey,
+  PolarConfig,
+} from "@sohappypdf/config";
+import { loadApiCreditConfig } from "@sohappypdf/config";
 
 export const CHECKOUT_PRODUCT_KEYS = [
   "pro",

@@ -22,24 +22,24 @@ SoHappyPDF is a **tool-first** PDF platform.
 
 | Package | Role |
 |---------|------|
-| `@repo/core` | App errors, server-only guard |
-| `@repo/config` | Env / retention / limits config |
-| `@repo/logger` | Structured logging |
-| `@repo/utils` | Shared utilities (sparse) |
-| `@repo/db` | Drizzle schema + Neon client |
-| `@repo/auth` | Better Auth + anonymous sessions |
-| `@repo/storage` | S3 abstraction |
-| `@repo/queue` | BullMQ queues/workers |
-| `@repo/rate-limit` | Upstash rate limiting |
-| `@repo/files` | Temporary file domain |
-| `@repo/conversions` | Processing jobs / conversion domain |
-| `@repo/conversion-engines` | Native/engine runners |
-| `@repo/billing` | Polar + entitlements + credit ledger |
-| `@repo/api-keys` | API key lifecycle |
-| `@repo/tools` | Public tool catalog + credit pricing |
-| `@repo/typescript-config` | Shared TS configs |
+| `@sohappypdf/core` | App errors, server-only guard |
+| `@sohappypdf/config` | Env / retention / limits config |
+| `@sohappypdf/logger` | Structured logging |
+| `@sohappypdf/utils` | Shared utilities (sparse) |
+| `@sohappypdf/db` | Drizzle schema + Neon client |
+| `@sohappypdf/auth` | Better Auth + anonymous sessions |
+| `@sohappypdf/storage` | S3 abstraction |
+| `@sohappypdf/queue` | BullMQ queues/workers |
+| `@sohappypdf/rate-limit` | Upstash rate limiting |
+| `@sohappypdf/files` | Temporary file domain |
+| `@sohappypdf/conversions` | Processing jobs / conversion domain |
+| `@sohappypdf/conversion-engines` | Native/engine runners |
+| `@sohappypdf/billing` | Polar + entitlements + credit ledger |
+| `@sohappypdf/api-keys` | API key lifecycle |
+| `@sohappypdf/tools` | Public tool catalog + credit pricing |
+| `@sohappypdf/typescript-config` | Shared TS configs |
 
-Shared UI currently lives under `apps/web/components/ui` (shadcn). There is no `@repo/ui`, `@repo/validation`, or `@repo/api-client` package yet.
+Shared UI currently lives under `apps/web/components/ui` (shadcn). There is no `@sohappypdf/ui`, `@sohappypdf/validation`, or `@sohappypdf/api-client` package yet.
 
 ## Docs
 

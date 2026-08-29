@@ -2,11 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
-import { estimateProcessingPercent } from "../lib/estimate-processing-progress";
+import { estimateProcessingPercent } from "@/features/public-tools/lib/estimate-processing-progress";
 import type {
   ToolProcessingStatus,
   ToolProcessingUxState,
-} from "../types/tool-ux-state";
+} from "@/features/public-tools/types/tool-ux-state";
 
 export function ToolProcessingState({
   state,

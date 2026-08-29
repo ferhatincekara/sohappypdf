@@ -3,12 +3,12 @@
 import { CheckCircle2Icon, DownloadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/navigation";
-import { formatLabel } from "../lib/format-labels";
+import { formatLabel } from "@/features/public-tools/lib/format-labels";
 import type {
   ToolSuccessOutput,
   ToolSuccessUxState,
-} from "../types/tool-ux-state";
+} from "@/features/public-tools/types/tool-ux-state";
+import { Link } from "@/lib/i18n/navigation";
 
 export function ToolSuccessState({
   state,

@@ -1,7 +1,7 @@
 /**
  * Client-safe mirror of implemented conversion capabilities that the HTTP
  * create endpoint can enqueue with default options.
- * Do not import `@repo/conversions` in browser code.
+ * Do not import `@sohappypdf/conversions` in browser code.
  *
  * merge-pdf is implemented in the worker but omitted here: the API create
  * contract does not accept options, and merge requires additionalFileIds.
@@ -10,7 +10,7 @@ import type {
   ConversionSourceFormat,
   ConversionTargetFormat,
   ConversionType,
-} from "../types/conversion";
+} from "@/features/conversions/types/conversion";
 
 export type CreatableConversionCapability = {
   type: ConversionType;

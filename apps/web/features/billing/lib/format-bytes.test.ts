@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { formatBytes } from "./format-bytes";
+import { formatBytes } from "@/features/billing/lib/format-bytes";
 
 describe("formatBytes", () => {
   test("formats common plan sizes", () => {

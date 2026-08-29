@@ -1,4 +1,4 @@
-import type { Logger } from "@repo/logger";
+import type { Logger } from "@sohappypdf/logger";
 import type { MiddlewareHandler } from "hono";
 import type { AppEnv } from "../app-env.js";
 

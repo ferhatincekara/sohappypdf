@@ -1,14 +1,17 @@
-export { PdfPageGrid, PdfPageGridSkeleton } from "./components/pdf-page-grid";
-export { PdfPageSelectionToolbar } from "./components/pdf-page-selection-toolbar";
-export { PdfPageThumbnail } from "./components/pdf-page-thumbnail";
-export { PdfPageWorkspace } from "./components/pdf-page-workspace";
+export {
+  PdfPageGrid,
+  PdfPageGridSkeleton,
+} from "@/features/public-tools/pdf-workspace/components/pdf-page-grid";
+export { PdfPageSelectionToolbar } from "@/features/public-tools/pdf-workspace/components/pdf-page-selection-toolbar";
+export { PdfPageThumbnail } from "@/features/public-tools/pdf-workspace/components/pdf-page-thumbnail";
+export { PdfPageWorkspace } from "@/features/public-tools/pdf-workspace/components/pdf-page-workspace";
 export {
   type PdfDocumentState,
   type PdfDocumentStatus,
   type PdfPreviewErrorKey,
   usePdfDocument,
-} from "./hooks/use-pdf-document";
-export { usePdfPageSelection } from "./hooks/use-pdf-page-selection";
+} from "@/features/public-tools/pdf-workspace/hooks/use-pdf-document";
+export { usePdfPageSelection } from "@/features/public-tools/pdf-workspace/hooks/use-pdf-page-selection";
 export {
   allPages,
   applyPageActivation,
@@ -21,9 +24,9 @@ export {
   pagesToRanges,
   rangesToPages,
   togglePage,
-} from "./lib/page-selection";
+} from "@/features/public-tools/pdf-workspace/lib/page-selection";
 export {
   createPdfPages,
   type PdfPage,
   type PdfPageRotation,
-} from "./types/pdf-page";
+} from "@/features/public-tools/pdf-workspace/types/pdf-page";

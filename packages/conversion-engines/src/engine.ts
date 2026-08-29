@@ -2,8 +2,8 @@ import type {
   ConversionOptions,
   ConversionType,
   FileFormat,
-} from "@repo/conversions";
-import { mimeTypeForFileFormat } from "@repo/conversions";
+} from "@sohappypdf/conversions";
+import { mimeTypeForFileFormat } from "@sohappypdf/conversions";
 
 export type ConversionEngineInput = {
   type: ConversionType;

@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import axios, { type AxiosInstance } from "axios";
-import type { PublicFile } from "../types/file";
-import { createFileListApi, FileApiRequestError } from "./file-api";
+import {
+  createFileListApi,
+  FileApiRequestError,
+} from "@/features/files/api/file-api";
+import type { PublicFile } from "@/features/files/types/file";
 
 function createFile(overrides: Partial<PublicFile> = {}): PublicFile {
   return {

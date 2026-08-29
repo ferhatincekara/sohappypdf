@@ -8,7 +8,7 @@ import {
   listSupportedUploadMimeTypes,
   mimeTypeFromFilename,
   resolveUploadContentType,
-} from "./supported-upload-types";
+} from "@/features/files/lib/supported-upload-types";
 
 describe("supported upload types", () => {
   test("includes conversion source MIME types and not invented formats", () => {

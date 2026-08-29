@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/logger");
+assertServerOnly("@sohappypdf/logger");
 
 export type {
   CreateLoggerOptions,

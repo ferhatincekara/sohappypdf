@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { conversionPath } from "./paths";
+import { conversionPath } from "@/features/conversions/paths";
 
 describe("conversion paths", () => {
   test("builds activity detail paths under /account", () => {

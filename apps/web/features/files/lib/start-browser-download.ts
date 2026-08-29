@@ -1,4 +1,4 @@
-import { buildZipArchive } from "@repo/utils/zip";
+import { buildZipArchive } from "@sohappypdf/utils/zip";
 
 export type BrowserDownloadItem = {
   url: string;

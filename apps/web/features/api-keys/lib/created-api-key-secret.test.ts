@@ -1,10 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import type { CreateApiKeyResponse } from "../types/api-key";
 import {
   createdSecretPersistedInCache,
   takeCreatedApiKeySecret,
   toListCacheApiKey,
-} from "./created-api-key-secret";
+} from "@/features/api-keys/lib/created-api-key-secret";
+import type { CreateApiKeyResponse } from "@/features/api-keys/types/api-key";
 
 const created: CreateApiKeyResponse = {
   apiKey: {

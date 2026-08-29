@@ -1,5 +1,5 @@
+import type { ConversionSourceFormat } from "@/features/conversions/types/conversion";
 import type { PublicFile } from "@/features/files/types/file";
-import type { ConversionSourceFormat } from "../types/conversion";
 
 const MIME_TO_SOURCE_FORMAT: Record<string, ConversionSourceFormat> = {
   "application/pdf": "pdf",

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
   type PublicToolErrorKey,
   publicToolErrorMessageValues,
-} from "../lib/public-tool-errors";
+} from "@/features/public-tools/lib/public-tool-errors";
 
 export const TOOL_ERROR_TOAST_ID = "public-tool-error";
 

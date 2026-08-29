@@ -1,6 +1,6 @@
-import { assertServerOnly } from "@repo/core";
+import { assertServerOnly } from "@sohappypdf/core";
 
-assertServerOnly("@repo/conversion-engines");
+assertServerOnly("@sohappypdf/conversion-engines");
 
 export type {
   ConversionEngine,

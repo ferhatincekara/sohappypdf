@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { isFileConvertible } from "@/features/conversions/lib/is-file-convertible";
 import type { PublicFile } from "@/features/files/types/file";
-import { isFileConvertible } from "../lib/is-file-convertible";
 
 export function FileConvertButton({
   file,

@@ -1,5 +1,5 @@
 {
-  "name": "@repo/api",
+  "name": "@sohappypdf/api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,25 +11,25 @@
     "openapi:write": "bun run src/public-contract/write-openapi.ts"
   },
   "dependencies": {
-    "@repo/api-keys": "workspace:*",
-    "@repo/auth": "workspace:*",
-    "@repo/billing": "workspace:*",
-    "@repo/config": "workspace:*",
-    "@repo/conversions": "workspace:*",
-    "@repo/core": "workspace:*",
-    "@repo/db": "workspace:*",
-    "@repo/files": "workspace:*",
-    "@repo/logger": "workspace:*",
-    "@repo/queue": "workspace:*",
-    "@repo/rate-limit": "workspace:*",
-    "@repo/storage": "workspace:*",
-    "@repo/tools": "workspace:*",
+    "@sohappypdf/api-keys": "workspace:*",
+    "@sohappypdf/auth": "workspace:*",
+    "@sohappypdf/billing": "workspace:*",
+    "@sohappypdf/config": "workspace:*",
+    "@sohappypdf/conversions": "workspace:*",
+    "@sohappypdf/core": "workspace:*",
+    "@sohappypdf/db": "workspace:*",
+    "@sohappypdf/files": "workspace:*",
+    "@sohappypdf/logger": "workspace:*",
+    "@sohappypdf/queue": "workspace:*",
+    "@sohappypdf/rate-limit": "workspace:*",
+    "@sohappypdf/storage": "workspace:*",
+    "@sohappypdf/tools": "workspace:*",
     "drizzle-orm": "^0.45.2",
     "hono": "^4.13.3",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@sohappypdf/typescript-config": "workspace:*",
     "@types/node": "^22.18.0",
     "typescript": "5.9.2"
   }

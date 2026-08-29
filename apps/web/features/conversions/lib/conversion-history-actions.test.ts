@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import type { PublicConversion } from "../types/conversion";
-import { conversionHistoryActions } from "./conversion-history-actions";
+import { conversionHistoryActions } from "@/features/conversions/lib/conversion-history-actions";
+import type { PublicConversion } from "@/features/conversions/types/conversion";
 
 function createConversion(
   overrides: Partial<PublicConversion> = {},

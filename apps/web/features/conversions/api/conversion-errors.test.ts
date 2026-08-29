@@ -4,7 +4,7 @@ import {
   CONVERSION_ERROR_KEYS,
   mapConversionError,
   toConversionClientError,
-} from "./conversion-errors";
+} from "@/features/conversions/api/conversion-errors";
 
 describe("conversion error mapping", () => {
   test("maps an unsupported conversion without exposing internals", () => {

@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { listRegisteredTools } from "@repo/tools/catalog";
-import { getMarketingToolDirectoryItems } from "@/features/marketing/lib/marketing-tools";
+import { listRegisteredTools } from "@sohappypdf/tools/catalog";
 import {
   buildConversionExampleBody,
   listGuidedToolIds,
-} from "./public-api-tool-guide";
-import { listPublicApiTools } from "./public-api-tools";
+} from "@/features/developer-docs/lib/public-api-tool-guide";
+import { listPublicApiTools } from "@/features/developer-docs/lib/public-api-tools";
+import { getMarketingToolDirectoryItems } from "@/features/marketing/lib/marketing-tools";
 
 describe("public API tools", () => {
   test("lists executable registered tools with API credit costs", () => {

@@ -7,7 +7,7 @@ import {
   isAllPagesSelected,
   type PageActivationModifiers,
   type PageSelectionMode,
-} from "../lib/page-selection";
+} from "@/features/public-tools/pdf-workspace/lib/page-selection";
 
 export function usePdfPageSelection({
   pageCount,

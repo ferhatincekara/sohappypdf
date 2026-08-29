@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { ProductDemo } from "./product-demo";
+import { ProductDemo } from "@/features/marketing/components/product-demo";
 
 export async function ProductDemoSection() {
   const t = await getTranslations("marketing.demo");

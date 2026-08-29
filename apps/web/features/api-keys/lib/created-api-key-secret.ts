@@ -1,4 +1,7 @@
-import type { CreateApiKeyResponse, PublicApiKey } from "../types/api-key";
+import type {
+  CreateApiKeyResponse,
+  PublicApiKey,
+} from "@/features/api-keys/types/api-key";
 
 export type CreatedApiKeySecret = {
   name: string;

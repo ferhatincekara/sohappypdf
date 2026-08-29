@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { editorRectToPdf, pdfRectToEditor } from "./page-coordinates";
+import {
+  editorRectToPdf,
+  pdfRectToEditor,
+} from "@/features/pdf-document-editor/lib/page-coordinates";
 
 describe("page coordinates", () => {
   test("converts editor top-left boxes to PDF bottom-left boxes", () => {

@@ -12,9 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
+import type { MarketingToolNavGroup } from "@/features/marketing/lib/marketing-tools";
 import { Link } from "@/lib/i18n/navigation";
-import { MARKETING_PATHS } from "../lib/marketing-paths";
-import type { MarketingToolNavGroup } from "../lib/marketing-tools";
 
 export function MarketingToolsNav({
   groups,

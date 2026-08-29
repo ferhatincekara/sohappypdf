@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isAppError } from "@repo/core";
+import { isAppError } from "@sohappypdf/core";
 import {
   DEFAULT_ANONYMOUS_MAX_FILE_SIZE_BYTES,
   DEFAULT_ANONYMOUS_MAX_FILES_PER_OPERATION,

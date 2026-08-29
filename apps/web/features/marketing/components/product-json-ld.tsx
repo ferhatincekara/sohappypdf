@@ -1,5 +1,5 @@
 import { getPublicWebEnv } from "@/config/public-env";
-import { buildProductJsonLd } from "../lib/product-json-ld";
+import { buildProductJsonLd } from "@/features/marketing/lib/product-json-ld";
 
 export function ProductJsonLd({
   name,

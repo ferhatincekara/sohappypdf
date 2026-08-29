@@ -1,14 +1,17 @@
 import { describe, expect, test } from "bun:test";
-import { DEFAULT_PLAN_LIMITS } from "@repo/billing";
-import { DEFAULT_ANONYMOUS_CONFIG } from "@repo/config";
-import { isConversionImplemented, isConversionType } from "@repo/conversions";
-import { isAppError } from "@repo/core";
-import { FILE_EXPIRED_MESSAGE } from "@repo/files";
+import { DEFAULT_PLAN_LIMITS } from "@sohappypdf/billing";
+import { DEFAULT_ANONYMOUS_CONFIG } from "@sohappypdf/config";
+import {
+  isConversionImplemented,
+  isConversionType,
+} from "@sohappypdf/conversions";
+import { isAppError } from "@sohappypdf/core";
+import { FILE_EXPIRED_MESSAGE } from "@sohappypdf/files";
 import {
   isAnonymousToolAllowed,
   listCatalogTools,
   listRegisteredTools,
-} from "@repo/tools";
+} from "@sohappypdf/tools";
 import { createOpenApiDocument } from "./public-contract/openapi.js";
 import { resolveAnonymousConversionRequest } from "./routes/anonymous/anonymous-schemas.js";
 

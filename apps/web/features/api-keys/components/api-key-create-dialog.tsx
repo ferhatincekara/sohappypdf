@@ -10,9 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { CreatedApiKeySecret } from "../lib/created-api-key-secret";
-import { ApiKeyCreateForm } from "./api-key-create-form";
-import { ApiKeyCreatedSecret } from "./api-key-created-secret";
+import { ApiKeyCreateForm } from "@/features/api-keys/components/api-key-create-form";
+import { ApiKeyCreatedSecret } from "@/features/api-keys/components/api-key-created-secret";
+import type { CreatedApiKeySecret } from "@/features/api-keys/lib/created-api-key-secret";
 
 export function ApiKeyCreateDialog({
   open,

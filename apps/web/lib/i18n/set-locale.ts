@@ -2,8 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { parseAppLocale } from "./resolve-locale";
-import { LOCALE_COOKIE_MAX_AGE_SECONDS, LOCALE_COOKIE_NAME } from "./routing";
+import { parseAppLocale } from "@/lib/i18n/resolve-locale";
+import {
+  LOCALE_COOKIE_MAX_AGE_SECONDS,
+  LOCALE_COOKIE_NAME,
+} from "@/lib/i18n/routing";
 
 export async function setAppLocale(locale: string): Promise<void> {
   const nextLocale = parseAppLocale(locale);

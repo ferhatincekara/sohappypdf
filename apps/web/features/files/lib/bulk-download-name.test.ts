@@ -3,7 +3,7 @@ import {
   bulkDownloadArchiveName,
   bulkDownloadEntryName,
   stemFromFilename,
-} from "./bulk-download-name";
+} from "@/features/files/lib/bulk-download-name";
 
 describe("bulk download names", () => {
   test("strips the source extension and unsafe characters", () => {

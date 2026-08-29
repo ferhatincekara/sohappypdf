@@ -9,10 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
+import { ToolWorkspaceFiles } from "@/features/public-tools/components/tool-workspace-files";
+import type { ToolSelectedWorkspaceProps } from "@/features/public-tools/types/tool-selected-workspace";
 import { cn } from "@/lib/utils";
-import type { ToolSelectedWorkspaceProps } from "../../types/tool-selected-workspace";
-import { ToolSelectedActions } from "../tool-selected-actions";
-import { ToolWorkspaceFiles } from "../tool-workspace-files";
 
 const OCR_LANGUAGES = ["eng", "tur", "deu", "fra", "spa"] as const;
 const OCR_OUTPUTS = ["pdf", "txt"] as const;
