@@ -1,6 +1,6 @@
 export type SendAuthEmailInput = {
   user: {
-    email: string;
+    email?: string;
   };
   url: string;
   token: string;

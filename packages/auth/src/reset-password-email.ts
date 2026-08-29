@@ -78,11 +78,20 @@ export function createResetPasswordEmailSender(options: {
       return;
     }
 
+    const email = data.user.email;
+
+    if (email === undefined || email.length === 0) {
+      logger?.warn(
+        "Password reset email was not sent because the user has no email",
+      );
+      return;
+    }
+
     const message = buildResetPasswordEmail(data.url);
 
     try {
       await sendEmail({
-        to: data.user.email,
+        to: email,
         subject: message.subject,
         text: message.text,
         html: message.html,

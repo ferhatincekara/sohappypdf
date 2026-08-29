@@ -92,8 +92,28 @@ export function createFileSchemas(
     parseListQuery(value: unknown) {
       return parseWithSchema(listFilesQuerySchema, value);
     },
-    parseArchiveRequest(value: unknown) {
-      return parseWithSchema(archiveSchema, value);
+    parseArchiveRequest(value: unknown): {
+      files: Array<{ id: string; name?: string }>;
+      archiveName?: string;
+    } {
+      const parsed = parseWithSchema(archiveSchema, value);
+      const files: Array<{ id: string; name?: string }> = [];
+
+      for (const file of parsed.files) {
+        if (file.id === undefined) {
+          throw new AppError({
+            code: APP_ERROR_CODES.VALIDATION_ERROR,
+            message: "Invalid file id",
+          });
+        }
+
+        files.push({ id: file.id, name: file.name });
+      }
+
+      return {
+        archiveName: parsed.archiveName,
+        files,
+      };
     },
   };
 }
