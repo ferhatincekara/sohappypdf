@@ -12,7 +12,10 @@ const CONVERSION_ID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const FILE_ID_PATTERN = CONVERSION_ID_PATTERN;
 
-function parseWithSchema<T>(schema: z.ZodType<T>, value: unknown): T {
+function parseWithSchema<S extends z.ZodType>(
+  schema: S,
+  value: unknown,
+): z.output<S> {
   const result = schema.safeParse(value);
 
   if (!result.success) {

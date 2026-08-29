@@ -17,7 +17,10 @@ function hasControlCharacter(value: string): boolean {
   return false;
 }
 
-function parseWithSchema<T>(schema: z.ZodType<T>, value: unknown): T {
+function parseWithSchema<S extends z.ZodType>(
+  schema: S,
+  value: unknown,
+): z.output<S> {
   const result = schema.safeParse(value);
 
   if (!result.success) {
