@@ -4,5 +4,6 @@
   "installCommand": "bun install",
   "buildCommand": "bun run --filter=@sohappypdf/api bundle:vercel",
   "outputDirectory": null,
-  "regions": ["fra1"]
+  "regions": ["fra1"],
+  "ignoreCommand": "exit 1"
 }
