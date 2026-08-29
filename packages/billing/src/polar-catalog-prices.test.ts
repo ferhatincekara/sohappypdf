@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import type { PolarConfig } from "@sohappypdf/config";
 import { fallbackCatalogPrices } from "./default-plan-limits.js";
 import {
+  applyConfiguredProYearlyPrice,
   collectPolarPriceTargets,
   mergePolarCatalogPrices,
   usdFromPolarProduct,
@@ -44,6 +45,44 @@ describe("polar catalog prices", () => {
       }),
     ).toBe(12);
     expect(usdFromPolarProduct({ prices: [] })).toBeUndefined();
+    expect(
+      usdFromPolarProduct(
+        {
+          prices: [
+            {
+              amountType: "fixed",
+              priceAmount: 500,
+              recurringInterval: "month",
+            },
+            {
+              amountType: "fixed",
+              priceAmount: 4800,
+              recurringInterval: "year",
+            },
+          ],
+        },
+        "yearly",
+      ),
+    ).toBe(48);
+    expect(
+      usdFromPolarProduct(
+        {
+          prices: [
+            {
+              amountType: "fixed",
+              priceAmount: 500,
+              recurringInterval: "month",
+            },
+            {
+              amountType: "fixed",
+              priceAmount: 4800,
+              recurringInterval: "year",
+            },
+          ],
+        },
+        "monthly",
+      ),
+    ).toBe(5);
   });
 
   test("collects configured Polar product IDs without exposing missing packs", () => {
@@ -77,5 +116,20 @@ describe("polar catalog prices", () => {
 
     expect(merged.starter.monthlyUsd).toBe(12);
     expect(merged.starter.yearlyUsd).toBe(86);
+  });
+
+  test("fills Pro yearly when a yearly Polar product is configured", () => {
+    const prices = applyConfiguredProYearlyPrice(
+      fallbackCatalogPrices(),
+      polar,
+    );
+
+    expect(prices.pro.yearlyUsd).toBe(48);
+    expect(
+      applyConfiguredProYearlyPrice(fallbackCatalogPrices(), {
+        ...polar,
+        proYearlyProductId: undefined,
+      }).pro.yearlyUsd,
+    ).toBeNull();
   });
 });

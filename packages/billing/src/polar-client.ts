@@ -369,7 +369,12 @@ export function createPolarClient(
 
     async getProduct(id) {
       try {
-        return await polar.products.get({ id });
+        return await polarApiJson({
+          accessToken: options.accessToken,
+          server: options.server,
+          method: "GET",
+          path: `/v1/products/${encodeURIComponent(id)}`,
+        });
       } catch {
         return null;
       }

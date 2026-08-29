@@ -25,7 +25,34 @@ function jsonRecord(value: unknown): Record<string, unknown> | undefined {
   return value as Record<string, unknown>;
 }
 
-export function usdFromPolarProduct(product: unknown): number | undefined {
+function priceRecurringInterval(
+  price: Record<string, unknown>,
+): string | undefined {
+  const value = price.recurringInterval ?? price.recurring_interval;
+  return typeof value === "string" ? value.toLowerCase() : undefined;
+}
+
+function priceMatchesInterval(
+  price: Record<string, unknown>,
+  interval: OfferInterval,
+): boolean {
+  const recurring = priceRecurringInterval(price);
+
+  if (recurring === undefined) {
+    return true;
+  }
+
+  if (interval === "yearly") {
+    return recurring === "year" || recurring === "yearly";
+  }
+
+  return recurring === "month" || recurring === "monthly";
+}
+
+export function usdFromPolarProduct(
+  product: unknown,
+  interval: OfferInterval = "monthly",
+): number | undefined {
   const record = jsonRecord(product);
 
   if (record === undefined) {
@@ -35,6 +62,8 @@ export function usdFromPolarProduct(product: unknown): number | undefined {
   if (!Array.isArray(record.prices)) {
     return undefined;
   }
+
+  let fallbackUsd: number | undefined;
 
   for (const item of record.prices) {
     const price = jsonRecord(item);
@@ -59,10 +88,20 @@ export function usdFromPolarProduct(product: unknown): number | undefined {
       continue;
     }
 
-    return cents / 100;
+    const usd = cents / 100;
+
+    if (priceMatchesInterval(price, interval)) {
+      const recurring = priceRecurringInterval(price);
+
+      if (recurring !== undefined) {
+        return usd;
+      }
+
+      fallbackUsd ??= usd;
+    }
   }
 
-  return undefined;
+  return fallbackUsd;
 }
 
 export function collectPolarPriceTargets(
@@ -131,6 +170,27 @@ export function mergePolarCatalogPrices(
   return next;
 }
 
+export function applyConfiguredProYearlyPrice(
+  prices: BillingCatalogPrices,
+  polar: PolarConfig,
+): BillingCatalogPrices {
+  if (
+    polar.proYearlyProductId === undefined ||
+    polar.proYearlyProductId.length === 0 ||
+    prices.pro.yearlyUsd !== null
+  ) {
+    return prices;
+  }
+
+  return {
+    ...prices,
+    pro: {
+      ...prices.pro,
+      yearlyUsd: apiPackYearlyPriceUsd(prices.pro.monthlyUsd),
+    },
+  };
+}
+
 export function createCatalogPriceLoader(input: {
   polar: PolarConfig;
   getProduct?: (id: string) => Promise<unknown | null>;
@@ -149,7 +209,10 @@ export function createCatalogPriceLoader(input: {
       return cache.value;
     }
 
-    const fallback = fallbackCatalogPrices();
+    const fallback = applyConfiguredProYearlyPrice(
+      fallbackCatalogPrices(),
+      input.polar,
+    );
 
     if (input.getProduct === undefined) {
       cache = { expiresAt: now + CATALOG_CACHE_MS, value: fallback };
@@ -163,7 +226,7 @@ export function createCatalogPriceLoader(input: {
           return {
             offer: target.offer,
             interval: target.interval,
-            usd: usdFromPolarProduct(product),
+            usd: usdFromPolarProduct(product, target.interval),
           };
         } catch {
           return {
@@ -174,7 +237,10 @@ export function createCatalogPriceLoader(input: {
         }
       }),
     );
-    const value = mergePolarCatalogPrices(fallback, fetched);
+    const value = applyConfiguredProYearlyPrice(
+      mergePolarCatalogPrices(fallbackCatalogPrices(), fetched),
+      input.polar,
+    );
     cache = { expiresAt: now + CATALOG_CACHE_MS, value };
     return value;
   };
