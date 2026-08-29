@@ -98,13 +98,14 @@ export function assertCanUseFileCount(input: {
   maxFilesPerOperation: number | null;
   toolMaxInputCount?: number;
   combinesSourceFiles?: boolean;
+  supportsBatch?: boolean;
 }): void {
   const maxFiles = resolveWebMaxFilesPerOperation({
     isAuthenticated: true,
     toolMaxInputCount: input.toolMaxInputCount ?? 1,
     planMaxFilesPerOperation: input.maxFilesPerOperation,
     combinesSourceFiles: input.combinesSourceFiles === true,
-    supportsBatch: false,
+    supportsBatch: input.supportsBatch === true,
   });
 
   if (input.fileCount > maxFiles) {

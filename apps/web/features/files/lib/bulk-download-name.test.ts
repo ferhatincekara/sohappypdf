@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { bulkDownloadEntryName, stemFromFilename } from "./bulk-download-name";
+import {
+  bulkDownloadArchiveName,
+  bulkDownloadEntryName,
+  stemFromFilename,
+} from "./bulk-download-name";
 
 describe("bulk download names", () => {
   test("strips the source extension and unsafe characters", () => {
@@ -23,5 +27,11 @@ describe("bulk download names", () => {
         index: 1,
       }),
     ).toBe("report-2.jpg");
+  });
+
+  test("names a batch archive after the tool and file count", () => {
+    expect(bulkDownloadArchiveName({ toolId: "pdf-to-word", count: 3 })).toBe(
+      "pdf-to-word-3-files.zip",
+    );
   });
 });

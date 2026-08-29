@@ -24,12 +24,18 @@ export {
 export type { FileRepository } from "./file-repository.js";
 export { createFileRepository } from "./file-repository.js";
 export type {
+  ArchiveFileInput,
+  CreateOwnedArchiveInput,
   FileCleanupSummary,
   FileDownloadUrl,
   FileService,
   FileServiceOptions,
 } from "./file-service.js";
-export { createFileService } from "./file-service.js";
+export {
+  createFileService,
+  MAX_ARCHIVE_FILES,
+  MIN_ARCHIVE_FILES,
+} from "./file-service.js";
 export { getFileService } from "./file-service-factory.js";
 export type { FileStatus } from "./file-status.js";
 export {

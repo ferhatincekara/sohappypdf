@@ -27,7 +27,7 @@ describe("maxFilesForTool", () => {
     ).toBe(21);
   });
 
-  test("keeps single-file tools at one file unless Pro can batch", () => {
+  test("keeps batch tools at one file for Free and anonymous", () => {
     const compress = findRegisteredTool("compress-pdf");
 
     expect(compress).toBeDefined();
@@ -39,13 +39,32 @@ describe("maxFilesForTool", () => {
     expect(
       maxFilesForTool(compress, {
         anonymous: false,
+        plan: "free",
         maxFilesPerOperation: DEFAULT_PLAN_LIMITS.free.maxFilesPerOperation,
       }),
     ).toBe(1);
+    expect(maxFilesForTool(compress, { anonymous: false })).toBe(1);
+  });
+
+  test("opens batch tools to 20 files only for Pro", () => {
+    const compress = findRegisteredTool("compress-pdf");
+
+    expect(compress).toBeDefined();
+    if (compress === undefined) {
+      throw new Error("compress-pdf must be registered");
+    }
+
     expect(
       maxFilesForTool(compress, {
         anonymous: false,
         maxFilesPerOperation: DEFAULT_PLAN_LIMITS.pro.maxFilesPerOperation,
+      }),
+    ).toBe(20);
+    expect(
+      maxFilesForTool(compress, {
+        anonymous: false,
+        plan: "pro",
+        maxFilesPerOperation: 1,
       }),
     ).toBe(20);
   });

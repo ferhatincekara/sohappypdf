@@ -6,6 +6,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getPublicWebEnv } from "@/config/public-env";
 import { getWebSession } from "@/features/auth/session/get-web-session";
 import { hasWebSession } from "@/features/auth/session/session-state";
+import { getWebToolBilling } from "@/features/billing/lib/get-web-billing-status";
 import { getRelatedMarketingTools } from "@/features/marketing/lib/marketing-tools";
 import { PublicToolPageContent } from "@/features/public-tools";
 import { buildPublicToolMetadata } from "@/features/public-tools/lib/public-tool-metadata";
@@ -56,6 +57,7 @@ export default async function PublicToolPage({
 
   const session = await getWebSession();
   const isAuthenticated = hasWebSession(session);
+  const billing = isAuthenticated ? await getWebToolBilling() : null;
 
   return (
     <PublicToolPageContent
@@ -64,7 +66,9 @@ export default async function PublicToolPage({
       relatedTools={getRelatedMarketingTools(tool)}
       maxAuthenticatedFileSizeBytes={resolveWebMaxFileSizeBytes({
         isAuthenticated: true,
+        planMaxFileSizeBytes: billing?.maxFileSizeBytes,
       })}
+      billing={billing}
     />
   );
 }

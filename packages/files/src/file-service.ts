@@ -5,11 +5,13 @@ import {
   createFileOriginalKey,
   type Storage,
 } from "@repo/storage";
+import { buildZipArchive } from "@repo/utils/zip";
 import {
   DEFAULT_FILE_TTL_MS,
   getFileExpirationDate,
   isEligibleForCleanup,
   isFileExpired,
+  remainingFileTtlMs,
   throwIfOwnedFileExpired,
 } from "./file-expiration.js";
 import {
@@ -43,6 +45,32 @@ import {
 
 const DEFAULT_CLEANUP_LIMIT = 100;
 const MAX_CLEANUP_LIMIT = 100;
+export const MIN_ARCHIVE_FILES = 2;
+export const MAX_ARCHIVE_FILES = 20;
+const DEFAULT_ARCHIVE_NAME = "sohappypdf-export.zip";
+
+export type ArchiveFileInput = {
+  id: string;
+  name?: string;
+};
+
+export type CreateOwnedArchiveInput = {
+  ownerId: string;
+  files: readonly ArchiveFileInput[];
+  archiveName?: string;
+};
+
+function assertArchiveFilename(value: string | undefined): string {
+  const filename = assertOriginalFilename(value ?? DEFAULT_ARCHIVE_NAME);
+  return filename.toLowerCase().endsWith(".zip") ? filename : `${filename}.zip`;
+}
+
+function invalidArchiveFiles(): AppError {
+  return new AppError({
+    code: APP_ERROR_CODES.VALIDATION_ERROR,
+    message: "Invalid archive files",
+  });
+}
 
 export type FileServiceOptions = {
   repository: FileRepository;
@@ -73,6 +101,9 @@ export type FileService = {
   findFileById(id: string): Promise<FileRecord | undefined>;
   getOwnedFile(id: string, ownerId: string): Promise<FileRecord>;
   createOwnedDownloadUrl(id: string, ownerId: string): Promise<FileDownloadUrl>;
+  createOwnedArchiveDownloadUrl(
+    input: CreateOwnedArchiveInput,
+  ): Promise<FileDownloadUrl>;
   listOwnedFiles(query: FileListQuery): Promise<FileListResult>;
   markFileUploaded(id: string): Promise<FileRecord>;
   updateFileStatus(id: string, status: FileStatus): Promise<FileRecord>;
@@ -282,6 +313,51 @@ export function createFileService(options: FileServiceOptions): FileService {
     return deleted;
   }
 
+  async function registerStoredFile(
+    input: RegisterStoredFileInput,
+  ): Promise<FileRecord> {
+    const id = input.id === undefined ? randomUUID() : assertFileId(input.id);
+    const existing = await options.repository.findById(id);
+
+    if (existing !== undefined) {
+      return existing;
+    }
+
+    const originalFilename = assertOriginalFilename(input.originalFilename);
+    const mimeType = assertMimeType(input.mimeType);
+    const sizeBytes = assertFileSizeBytes(input.sizeBytes, maxFileSizeBytes);
+    const objectKey = assertValidObjectKey(input.objectKey);
+    const ownerId = assertFileOwnerId(input.ownerId);
+    const createdAt = now();
+    const exists = await options.storage.objectExists(objectKey);
+
+    if (!exists) {
+      throw new AppError({
+        code: APP_ERROR_CODES.CONFLICT,
+        message: "File object was not uploaded",
+      });
+    }
+
+    return options.repository.insert({
+      id,
+      ownerId,
+      ownerKind: input.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
+      originalFilename,
+      mimeType,
+      sizeBytes,
+      objectKey,
+      status: "uploaded",
+      createdAt,
+      updatedAt: createdAt,
+      expiresAt: getFileExpirationDate({
+        createdAt,
+        retentionMs: input.expiresInMs ?? fileTtlMs,
+      }),
+      deletedAt: null,
+      purgedAt: null,
+    });
+  }
+
   return {
     createUploadIntent,
     createFile: createUploadIntent,
@@ -296,48 +372,7 @@ export function createFileService(options: FileServiceOptions): FileService {
       return markFileUploaded(file.id);
     },
 
-    async registerStoredFile(input) {
-      const id = input.id === undefined ? randomUUID() : assertFileId(input.id);
-      const existing = await options.repository.findById(id);
-
-      if (existing !== undefined) {
-        return existing;
-      }
-
-      const originalFilename = assertOriginalFilename(input.originalFilename);
-      const mimeType = assertMimeType(input.mimeType);
-      const sizeBytes = assertFileSizeBytes(input.sizeBytes, maxFileSizeBytes);
-      const objectKey = assertValidObjectKey(input.objectKey);
-      const ownerId = assertFileOwnerId(input.ownerId);
-      const createdAt = now();
-      const exists = await options.storage.objectExists(objectKey);
-
-      if (!exists) {
-        throw new AppError({
-          code: APP_ERROR_CODES.CONFLICT,
-          message: "File object was not uploaded",
-        });
-      }
-
-      return options.repository.insert({
-        id,
-        ownerId,
-        ownerKind: input.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
-        originalFilename,
-        mimeType,
-        sizeBytes,
-        objectKey,
-        status: "uploaded",
-        createdAt,
-        updatedAt: createdAt,
-        expiresAt: getFileExpirationDate({
-          createdAt,
-          retentionMs: input.expiresInMs ?? fileTtlMs,
-        }),
-        deletedAt: null,
-        purgedAt: null,
-      });
-    },
+    registerStoredFile,
 
     async findFileById(id) {
       return options.repository.findById(assertFileId(id));
@@ -372,6 +407,94 @@ export function createFileService(options: FileServiceOptions): FileService {
 
       return {
         fileId: file.id,
+        expiresInSeconds: download.expiresInSeconds,
+        url: download.url,
+      };
+    },
+
+    async createOwnedArchiveDownloadUrl(input) {
+      const ownerId = assertFileOwnerId(input.ownerId);
+
+      if (
+        input.files.length < MIN_ARCHIVE_FILES ||
+        input.files.length > MAX_ARCHIVE_FILES
+      ) {
+        throw invalidArchiveFiles();
+      }
+
+      const seen = new Set<string>();
+      const sources: FileRecord[] = [];
+      const names: string[] = [];
+
+      for (const entry of input.files) {
+        const id = assertFileId(entry.id);
+
+        if (seen.has(id)) {
+          throw invalidArchiveFiles();
+        }
+
+        seen.add(id);
+
+        const file = requireOwnedAccessibleFile(
+          await options.repository.findById(id),
+          ownerId,
+          now(),
+        );
+
+        if (file.status === "pending" || file.status === "failed") {
+          throw new AppError({
+            code: APP_ERROR_CODES.CONFLICT,
+            message: "File object was not uploaded",
+          });
+        }
+
+        sources.push(file);
+        names.push(assertOriginalFilename(entry.name ?? file.originalFilename));
+      }
+
+      const objects = await Promise.all(
+        sources.map((file) => options.storage.getObject(file.objectKey)),
+      );
+      const zip = buildZipArchive(
+        objects.map((object, index) => ({
+          name: names[index] ?? "file.bin",
+          data: object.body,
+        })),
+      );
+      const archiveId = randomUUID();
+      const objectKey = createFileOriginalKey(archiveId);
+
+      await options.storage.uploadObject({
+        key: objectKey,
+        body: zip,
+        contentType: "application/zip",
+      });
+
+      const first = sources[0];
+
+      if (first === undefined) {
+        throw invalidArchiveFiles();
+      }
+
+      const archived = await registerStoredFile({
+        id: archiveId,
+        ownerId,
+        ownerKind: first.ownerKind ?? DEFAULT_RESOURCE_OWNER_KIND,
+        originalFilename: assertArchiveFilename(input.archiveName),
+        mimeType: "application/zip",
+        sizeBytes: zip.byteLength,
+        objectKey,
+        expiresInMs: Math.min(
+          ...sources.map((file) => remainingFileTtlMs(file, now())),
+        ),
+      });
+      const download = await options.storage.createPresignedDownloadUrl({
+        key: archived.objectKey,
+        filename: archived.originalFilename,
+      });
+
+      return {
+        fileId: archived.id,
         expiresInSeconds: download.expiresInSeconds,
         url: download.url,
       };

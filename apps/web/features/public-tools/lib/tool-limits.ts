@@ -30,12 +30,14 @@ export function maxFilesForTool(
   input: {
     anonymous: boolean;
     maxFilesPerOperation?: number | null;
+    plan?: "free" | "pro";
   },
 ): number {
   return resolveWebMaxFilesPerOperation({
     isAuthenticated: !input.anonymous,
     toolMaxInputCount: tool.maxInputCount,
-    planMaxFilesPerOperation: input.maxFilesPerOperation,
+    planMaxFilesPerOperation:
+      input.plan === "pro" ? null : input.maxFilesPerOperation,
     combinesSourceFiles: toolCombinesSourceFiles(tool.id),
     supportsBatch: toolSupportsBatchOperations(tool.id),
   });

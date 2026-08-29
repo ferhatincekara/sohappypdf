@@ -391,6 +391,50 @@ describe("file API", () => {
     expect(JSON.stringify(body).includes("objectKey")).toBe(false);
   });
 
+  test("creates a zip download for multiple owned files", async () => {
+    const { fileService, storage } = createTestFileService();
+    const app = createFileApp({ identity: sessionIdentity, fileService });
+    const uploaded: string[] = [];
+
+    for (const filename of ["one.pdf", "two.pdf"]) {
+      const created = await app.request("/api/v1/files/upload", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...uploadBody, filename }),
+      });
+      const createdBody = await created.json();
+      const file = await fileService.getOwnedFile(
+        createdBody.file.id,
+        "user_1",
+      );
+      await storage.uploadObject({
+        key: file.objectKey,
+        body: new Uint8Array(file.sizeBytes),
+        contentType: file.mimeType,
+      });
+      await app.request(`/api/v1/files/${createdBody.file.id}/complete`, {
+        method: "POST",
+      });
+      uploaded.push(createdBody.file.id);
+    }
+
+    const response = await app.request("/api/v1/files/archive", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        files: [
+          { id: uploaded[0], name: "one.docx" },
+          { id: uploaded[1], name: "two.docx" },
+        ],
+        archiveName: "pdf-to-word.zip",
+      }),
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.download.url).toContain("filename=pdf-to-word.zip");
+  });
+
   test("hides another user's download URL", async () => {
     const { fileService, storage } = createTestFileService();
     const ownerApp = createFileApp({ identity: sessionIdentity, fileService });

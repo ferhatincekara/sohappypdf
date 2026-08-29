@@ -9,6 +9,7 @@ import {
   assertToolAllowedOnPlan,
   findRegisteredTool,
   toolCombinesSourceFiles,
+  toolSupportsBatchOperations,
 } from "@repo/tools";
 import { resolveAiCreditCost, usesAiCredits } from "./ai-credit-cost.js";
 import { shouldRefundAiCredits } from "./ai-credit-refund.js";
@@ -856,6 +857,8 @@ export function createBillingService(
         toolMaxInputCount: tool?.maxInputCount,
         combinesSourceFiles:
           tool === undefined ? false : toolCombinesSourceFiles(tool.id),
+        supportsBatch:
+          tool !== undefined && toolSupportsBatchOperations(tool.id),
       });
     },
 

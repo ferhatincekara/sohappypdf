@@ -617,6 +617,35 @@ describe("file service", () => {
     expect(download.url).toContain("filename=report.pdf");
   });
 
+  test("creates a zip download for multiple owned files", async () => {
+    const storage = createMemoryStorage();
+    const service = createFileService({
+      repository: createMemoryRepository(),
+      storage,
+    });
+    const first = await service.createUploadIntent(createInput);
+    const second = await service.createUploadIntent({
+      ...createInput,
+      originalFilename: "notes.pdf",
+    });
+    await storeUploadedObject(storage, first.file);
+    await storeUploadedObject(storage, second.file);
+    await service.completeUpload(first.file.id, "user_1");
+    await service.completeUpload(second.file.id, "user_1");
+
+    const download = await service.createOwnedArchiveDownloadUrl({
+      ownerId: "user_1",
+      files: [
+        { id: first.file.id, name: "report.docx" },
+        { id: second.file.id, name: "notes.docx" },
+      ],
+      archiveName: "pdf-to-word.zip",
+    });
+
+    expect(download.url).toContain("filename=pdf-to-word.zip");
+    expect(storage.objects.size).toBe(3);
+  });
+
   test("does not create a download URL for an expired file", async () => {
     let currentTime = new Date("2026-08-23T18:00:00.000Z");
     const storage = createMemoryStorage();

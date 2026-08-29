@@ -2,8 +2,10 @@ import { isSupportedUploadMimeType } from "@repo/conversions";
 import { APP_ERROR_CODES, AppError } from "@repo/core";
 import {
   DEFAULT_FILE_LIST_LIMIT,
+  MAX_ARCHIVE_FILES,
   MAX_FILE_LIST_LIMIT,
   MAX_FILE_SIZE_BYTES,
+  MIN_ARCHIVE_FILES,
 } from "@repo/files";
 import { z } from "zod";
 
@@ -57,6 +59,29 @@ export function createFileSchemas(
     cursor: z.string().trim().min(1).max(512).optional(),
   });
 
+  const archiveSchema = z.object({
+    files: z
+      .array(
+        z.object({
+          id: fileIdSchema,
+          name: z
+            .string()
+            .trim()
+            .min(1, "Invalid original filename")
+            .max(255, "Invalid original filename")
+            .optional(),
+        }),
+      )
+      .min(MIN_ARCHIVE_FILES, "Invalid archive files")
+      .max(MAX_ARCHIVE_FILES, "Invalid archive files"),
+    archiveName: z
+      .string()
+      .trim()
+      .min(1, "Invalid original filename")
+      .max(255, "Invalid original filename")
+      .optional(),
+  });
+
   return {
     parseUploadIntent(value: unknown) {
       return parseWithSchema(uploadIntentSchema, value);
@@ -66,6 +91,9 @@ export function createFileSchemas(
     },
     parseListQuery(value: unknown) {
       return parseWithSchema(listFilesQuerySchema, value);
+    },
+    parseArchiveRequest(value: unknown) {
+      return parseWithSchema(archiveSchema, value);
     },
   };
 }

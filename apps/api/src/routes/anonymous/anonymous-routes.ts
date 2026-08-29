@@ -128,6 +128,30 @@ export function createAnonymousRoutes(options: AnonymousRoutesOptions) {
     return c.json({ file: toPublicFile(file) });
   });
 
+  anonymous.post("/files/archive", async (c) => {
+    const identity = requireAnonymousIdentity(c.get("identity"));
+    const body = schemas.parseArchiveRequest(await readJsonBody(c.req.raw));
+    const download = await options
+      .getFileService()
+      .createOwnedArchiveDownloadUrl({
+        ownerId: identity.sessionId,
+        files: body.files,
+        archiveName: body.archiveName,
+      });
+
+    c.get("logger").info("anonymous file archive download url created", {
+      fileId: download.fileId,
+      fileCount: body.files.length,
+    });
+
+    return c.json({
+      download: {
+        url: download.url,
+        expiresInSeconds: download.expiresInSeconds,
+      },
+    });
+  });
+
   anonymous.get("/files/:id", async (c) => {
     const identity = requireAnonymousIdentity(c.get("identity"));
     const file = await options

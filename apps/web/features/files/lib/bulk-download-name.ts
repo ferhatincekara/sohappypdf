@@ -21,3 +21,12 @@ export function bulkDownloadEntryName(input: {
   const suffix = input.index === 0 ? "" : `-${input.index + 1}`;
   return `${stem}${suffix}.${format}`;
 }
+
+export function bulkDownloadArchiveName(input: {
+  toolId: string;
+  count: number;
+}): string {
+  const tool = input.toolId.replace(/[^a-z0-9-]/gi, "").toLowerCase();
+  const prefix = tool.length === 0 ? "sohappypdf" : tool;
+  return `${prefix}-${input.count}-files.zip`;
+}

@@ -244,6 +244,7 @@
         "@repo/core": "workspace:*",
         "@repo/db": "workspace:*",
         "@repo/storage": "workspace:*",
+        "@repo/utils": "workspace:*",
         "drizzle-orm": "^0.45.2",
       },
       "devDependencies": {

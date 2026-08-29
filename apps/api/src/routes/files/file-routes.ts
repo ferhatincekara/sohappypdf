@@ -46,6 +46,31 @@ export function createFileRoutes(options: FileRoutesOptions) {
     return c.json(toUploadIntentResponse(result), 201);
   });
 
+  files.post("/archive", async (c) => {
+    const identity = requireAuthenticatedIdentity(c.get("identity"));
+    const body = schemas.parseArchiveRequest(await readJsonBody(c.req.raw));
+    const download = await options
+      .getFileService()
+      .createOwnedArchiveDownloadUrl({
+        ownerId: identity.userId,
+        files: body.files,
+        archiveName: body.archiveName,
+      });
+
+    c.get("logger").info("file archive download url created", {
+      fileId: download.fileId,
+      userId: identity.userId,
+      fileCount: body.files.length,
+    });
+
+    return c.json({
+      download: {
+        url: download.url,
+        expiresInSeconds: download.expiresInSeconds,
+      },
+    });
+  });
+
   files.get("/", async (c) => {
     const identity = requireAuthenticatedIdentity(c.get("identity"));
     const query = schemas.parseListQuery(c.req.query());

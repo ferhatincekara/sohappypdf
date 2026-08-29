@@ -135,3 +135,30 @@ export async function createDownloadUrl(
     throw new FileApiRequestError(error);
   }
 }
+
+export type CreateArchiveDownloadInput = {
+  files: readonly { id: string; name?: string }[];
+  archiveName?: string;
+};
+
+export async function createArchiveDownloadUrl(
+  input: CreateArchiveDownloadInput,
+  options?: { signal?: AbortSignal },
+): Promise<FileDownloadResponse> {
+  try {
+    const response = await apiClient.post<FileDownloadResponse>(
+      "/api/v1/files/archive",
+      {
+        files: input.files,
+        ...(input.archiveName === undefined
+          ? {}
+          : { archiveName: input.archiveName }),
+      },
+      { signal: options?.signal },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new FileApiRequestError(error);
+  }
+}

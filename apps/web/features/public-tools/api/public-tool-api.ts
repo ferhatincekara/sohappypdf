@@ -8,7 +8,9 @@ import type {
   PublicConversion,
 } from "@/features/conversions/types/conversion";
 import {
+  type CreateArchiveDownloadInput,
   completeUpload as completeAuthenticatedUpload,
+  createArchiveDownloadUrl as createAuthenticatedArchiveDownloadUrl,
   createDownloadUrl as createAuthenticatedDownloadUrl,
   createUpload as createAuthenticatedUpload,
   FileApiRequestError,
@@ -134,6 +136,26 @@ export async function createAnonymousDownloadUrl(
   }
 }
 
+export async function createAnonymousArchiveDownloadUrl(
+  input: CreateArchiveDownloadInput,
+): Promise<FileDownloadResponse> {
+  try {
+    const response = await apiClient.post<FileDownloadResponse>(
+      "/api/v1/anonymous/files/archive",
+      {
+        files: input.files,
+        ...(input.archiveName === undefined
+          ? {}
+          : { archiveName: input.archiveName }),
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new FileApiRequestError(error);
+  }
+}
+
 export type PublicToolConversionInput = {
   sourceFileId: string;
   type: ConversionType;
@@ -172,5 +194,8 @@ export function createPublicToolApis(authenticated: boolean) {
     createDownloadUrl: authenticated
       ? createAuthenticatedDownloadUrl
       : createAnonymousDownloadUrl,
+    createArchiveDownloadUrl: authenticated
+      ? createAuthenticatedArchiveDownloadUrl
+      : createAnonymousArchiveDownloadUrl,
   };
 }

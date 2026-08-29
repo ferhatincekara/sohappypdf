@@ -4,6 +4,7 @@ import type { ToolDefinition } from "@repo/tools/catalog";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { signupPath } from "@/features/auth/paths";
+import type { WebToolBilling } from "@/features/billing/lib/web-tool-billing";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 import { usePublicToolWorkspace } from "../hooks/use-public-tool-workspace";
 import { useToolErrorToast } from "../hooks/use-tool-error-toast";
@@ -45,12 +46,14 @@ export type PublicToolSelectedSlot = {
 export function PublicToolWorkspace({
   tool,
   isAuthenticated,
+  billing,
   guide,
   header,
   renderSelected,
 }: {
   tool: ToolDefinition;
   isAuthenticated: boolean;
+  billing?: WebToolBilling | null;
   guide?: ReactNode;
   header?: ReactNode;
   renderSelected?: (slot: PublicToolSelectedSlot) => ReactNode;
@@ -59,6 +62,7 @@ export function PublicToolWorkspace({
   const tTools = useTranslations("tools");
   const workspace = usePublicToolWorkspace(tool, {
     authenticated: isAuthenticated,
+    billing: billing ?? undefined,
   });
   const formatsLabel = formatAcceptedFormats(
     tool.inputFormats,
@@ -117,7 +121,7 @@ export function PublicToolWorkspace({
       tool={tool}
       state={ux}
       accept={accept}
-      multiple={workspace.maxFiles > 1}
+      multiple={workspace.allowsMultiple}
       canAddFiles={workspace.files.length < workspace.maxFiles}
       formatsLabel={formatsLabel}
       maxSizeLabel={maxSizeLabel}
@@ -166,7 +170,7 @@ export function PublicToolWorkspace({
             {ux.status === "empty" ? (
               <ToolEmptyState
                 accept={accept}
-                multiple={workspace.maxFiles > 1}
+                multiple={workspace.allowsMultiple}
                 formatsLabel={formatsLabel}
                 maxSizeLabel={maxSizeLabel}
                 maxPagesPerFile={pageLimit}

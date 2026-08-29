@@ -1,12 +1,8 @@
-import { resolveWebMaxFilesPerOperation } from "@repo/billing/plans";
-import {
-  type ToolDefinition,
-  toolCombinesSourceFiles,
-  toolSupportsBatchOperations,
-} from "@repo/tools/catalog";
+import type { ToolDefinition } from "@repo/tools/catalog";
 import { ArrowLeftIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { getPublicWebEnv } from "@/config/public-env";
+import type { WebToolBilling } from "@/features/billing/lib/web-tool-billing";
 import { MarketingContainer } from "@/features/marketing/components/marketing-container";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { getMarketingToolIcon } from "@/features/marketing/lib/marketing-tool-icon";
@@ -19,6 +15,7 @@ import { dedicatedHowToForTool } from "../lib/dedicated-tool-how-to";
 import { formatAcceptedFormats, formatLabel } from "../lib/format-labels";
 import type { PublicToolFaqItem } from "../lib/public-tool-json-ld";
 import { publicToolCanonicalUrl } from "../lib/public-tool-metadata";
+import { maxFilesForTool } from "../lib/tool-limits";
 import { PublicToolJsonLd } from "./public-tool-json-ld";
 import { PublicToolWorkspace } from "./public-tool-workspace";
 import { RecentExecutions } from "./recent-executions";
@@ -41,25 +38,26 @@ export async function PublicToolPageContent({
   isAuthenticated,
   relatedTools,
   maxAuthenticatedFileSizeBytes,
+  billing,
 }: {
   tool: ToolDefinition;
   isAuthenticated: boolean;
   relatedTools: readonly RelatedPublicTool[];
   maxAuthenticatedFileSizeBytes: number;
+  billing?: WebToolBilling | null;
 }) {
   const t = await getTranslations("publicTools");
   const tTools = await getTranslations("tools");
   const tNav = await getTranslations("marketing.nav");
   const name = tTools(`${tool.id}.name`);
   const description = tTools(`${tool.id}.description`);
-  const maxFiles = resolveWebMaxFilesPerOperation({
-    isAuthenticated,
-    toolMaxInputCount: tool.maxInputCount,
-    combinesSourceFiles: toolCombinesSourceFiles(tool.id),
-    supportsBatch: toolSupportsBatchOperations(tool.id),
+  const maxFiles = maxFilesForTool(tool, {
+    anonymous: !isAuthenticated,
+    plan: billing?.plan,
+    maxFilesPerOperation: billing?.maxFilesPerOperation,
   });
   const maxFileSizeBytes = isAuthenticated
-    ? maxAuthenticatedFileSizeBytes
+    ? (billing?.maxFileSizeBytes ?? maxAuthenticatedFileSizeBytes)
     : PUBLIC_ANONYMOUS_MAX_FILE_SIZE_BYTES;
   const sizeMb = Math.floor(maxFileSizeBytes / (1024 * 1024));
   const formats = formatAcceptedFormats(
@@ -172,6 +170,7 @@ export async function PublicToolPageContent({
           <PublicToolWorkspace
             tool={tool}
             isAuthenticated={isAuthenticated}
+            billing={billing}
             header={
               <ToolHeader
                 icon={tool.icon}

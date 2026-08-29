@@ -124,6 +124,17 @@ describe("entitlement assertions", () => {
     }).not.toThrow();
   });
 
+  test("allows Pro batch jobs to use more than one file", () => {
+    expect(() => {
+      assertCanUseFileCount({
+        fileCount: 8,
+        maxFilesPerOperation: null,
+        toolMaxInputCount: 1,
+        supportsBatch: true,
+      });
+    }).not.toThrow();
+  });
+
   test("rejects PDFs over the plan page cap", () => {
     try {
       assertCanUsePageCount({ pageCount: 51, maxPagesPerFile: 50 });

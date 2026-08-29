@@ -13,14 +13,15 @@ import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { billingApi } from "@/features/billing/api/billing-api";
 import { billingQueryKeys } from "@/features/billing/api/billing-query-keys";
+import type { WebToolBilling } from "@/features/billing/lib/web-tool-billing";
 import { conversionQueryKeys } from "@/features/conversions/api/conversion-query-keys";
 import { canDownloadConversion } from "@/features/conversions/lib/can-download-conversion";
 import type { PublicConversion } from "@/features/conversions/types/conversion";
-import { bulkDownloadEntryName } from "@/features/files/lib/bulk-download-name";
 import {
-  startBrowserDownload,
-  startBrowserDownloads,
-} from "@/features/files/lib/start-browser-download";
+  bulkDownloadArchiveName,
+  bulkDownloadEntryName,
+} from "@/features/files/lib/bulk-download-name";
+import { startBrowserDownload } from "@/features/files/lib/start-browser-download";
 import {
   createFileUploadWorkflow,
   type FileUploadWorkflow,
@@ -69,7 +70,10 @@ import { isFileWorkspaceUx } from "../types/tool-ux-state";
 
 export function usePublicToolWorkspace(
   tool: ToolDefinition,
-  options?: { authenticated?: boolean },
+  options?: {
+    authenticated?: boolean;
+    billing?: WebToolBilling;
+  },
 ) {
   const session = authClient.useSession();
   const queryClient = useQueryClient();
@@ -86,18 +90,24 @@ export function usePublicToolWorkspace(
     enabled: isAuthenticated,
     staleTime: 0,
   });
+  const billing = billingQuery.data?.billing;
   const maxFiles = maxFilesForTool(tool, {
     anonymous: !isAuthenticated,
+    plan: billing?.plan ?? options?.billing?.plan,
     maxFilesPerOperation:
-      billingQuery.data?.billing.limits.maxFilesPerOperation,
+      billing?.limits.maxFilesPerOperation ??
+      options?.billing?.maxFilesPerOperation,
   });
+  const allowsMultiple = maxFiles > 1;
   const maxFileSizeBytes = resolveWebMaxFileSizeBytes({
     isAuthenticated,
-    planMaxFileSizeBytes: billingQuery.data?.billing.limits.maxFileSizeBytes,
+    planMaxFileSizeBytes:
+      billing?.limits.maxFileSizeBytes ?? options?.billing?.maxFileSizeBytes,
   });
   const maxPagesPerFile = resolveWebMaxPagesPerFile({
     isAuthenticated,
-    planMaxPagesPerFile: billingQuery.data?.billing.limits.maxPagesPerFile,
+    planMaxPagesPerFile:
+      billing?.limits.maxPagesPerFile ?? options?.billing?.maxPagesPerFile,
   });
   const canUploadNow = tool.allowsAnonymous || isAuthenticated;
   const reorderable = supportsFileReorder(tool);
@@ -250,6 +260,17 @@ export function usePublicToolWorkspace(
       window.clearInterval(intervalId);
     };
   }, [hasActiveJob, isCreatingExecution]);
+
+  useEffect(() => {
+    if (files.length > maxFiles) {
+      setSelectionError("tooManyFiles");
+      return;
+    }
+
+    setSelectionError((current) =>
+      current === "tooManyFiles" ? null : current,
+    );
+  }, [files.length, maxFiles]);
 
   const ux = resolveToolUxState({
     toolId: tool.id,
@@ -808,32 +829,47 @@ export function usePublicToolWorkspace(
     setDownloadError(null);
 
     try {
-      const items: Array<{ url: string; filename: string }> = [];
+      if (fileIds.length === 1) {
+        const fileId = fileIds[0];
 
-      for (const [index, fileId] of fileIds.entries()) {
-        const result = await apis.createDownloadUrl(fileId);
-        const output = ux.outputs.find(
-          (entry) => entry.outputFileId === fileId,
-        );
-
-        items.push({
-          url: result.download.url,
-          filename: bulkDownloadEntryName({
-            sourceFilename: output?.sourceFilename ?? ux.sourceFilename,
-            targetFormat: output?.targetFormat ?? ux.targetFormat,
-            index,
-          }),
-        });
-      }
-
-      if (items.length === 1) {
-        const item = items[0];
-
-        if (item !== undefined) {
-          startBrowserDownload(item.url, item.filename);
+        if (fileId !== undefined) {
+          const result = await apis.createDownloadUrl(fileId);
+          const output = ux.outputs.find(
+            (entry) => entry.outputFileId === fileId,
+          );
+          startBrowserDownload(
+            result.download.url,
+            bulkDownloadEntryName({
+              sourceFilename: output?.sourceFilename ?? ux.sourceFilename,
+              targetFormat: output?.targetFormat ?? ux.targetFormat,
+              index: 0,
+            }),
+          );
         }
       } else {
-        await startBrowserDownloads(items);
+        const files = fileIds.map((fileId, index) => {
+          const output = ux.outputs.find(
+            (entry) => entry.outputFileId === fileId,
+          );
+
+          return {
+            id: fileId,
+            name: bulkDownloadEntryName({
+              sourceFilename: output?.sourceFilename ?? ux.sourceFilename,
+              targetFormat: output?.targetFormat ?? ux.targetFormat,
+              index,
+            }),
+          };
+        });
+        const archiveName = bulkDownloadArchiveName({
+          toolId: tool.id,
+          count: files.length,
+        });
+        const result = await apis.createArchiveDownloadUrl({
+          files,
+          archiveName,
+        });
+        startBrowserDownload(result.download.url, archiveName);
       }
     } catch (error) {
       if (isExpirationResponse(error) || isMissingResourceResponse(error)) {
@@ -877,6 +913,7 @@ export function usePublicToolWorkspace(
     autoProcess,
     reorderable,
     maxFiles,
+    allowsMultiple,
     maxFileSizeBytes,
     maxPagesPerFile,
     isDownloading,
