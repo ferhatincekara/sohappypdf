@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.git
+.turbo
+coverage
+**/*.test.ts
+**/*.test.tsx
+apps/web/.next
+apps/web/out

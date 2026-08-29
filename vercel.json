@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "bun install",
+  "buildCommand": "bun run --filter=@sohappypdf/api bundle:vercel",
+  "outputDirectory": null
+}

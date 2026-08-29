@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "turbo run dev --continue --filter=@sohappypdf/web --filter=@sohappypdf/api --filter=@sohappypdf/worker",
     "build": "turbo run build",
+    "vercel-build": "bun run --filter=@sohappypdf/api bundle:vercel",
     "lint": "biome check .",
     "format": "biome check --write .",
     "check-types": "turbo run check-types",

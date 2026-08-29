@@ -20,6 +20,10 @@ coverage
 
 # Vercel
 .vercel
+/api/index.js
+/api/[[...route]].js
+/apps/api/api
+/apps/api/public
 
 # Build Outputs
 .next/
