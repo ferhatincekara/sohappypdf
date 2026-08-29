@@ -12,12 +12,10 @@ export async function PricingCards({
   plans,
   startHref,
   proHref,
-  premiumToolCount,
 }: {
   plans: readonly PublicPlanPresentation[];
   startHref: string;
   proHref: string;
-  premiumToolCount: number;
 }) {
   const t = await getTranslations("marketing.pricing");
 
@@ -33,9 +31,7 @@ export async function PricingCards({
               t("limits.multiFile"),
               t("limits.noPageCap"),
               t("limits.retention", { hours: 2 }),
-              premiumToolCount > 0
-                ? t("limits.premiumTools", { count: premiumToolCount })
-                : t("limits.standardTools"),
+              t("limits.premiumTools"),
               t("limits.supportIncluded"),
             ]
           : [

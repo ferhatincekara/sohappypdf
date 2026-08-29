@@ -126,14 +126,14 @@ export function ConversionStatus({
 
         <div className="mt-6 flex flex-wrap gap-3 border-t border-black/10 pt-6">
           <Button
-            variant="outline"
+            variant="white"
             nativeButton={false}
             render={<Link href={APP_PATHS.activity} />}
           >
             {t("backToHistory")}
           </Button>
           <Button
-            variant="outline"
+            variant="white"
             nativeButton={false}
             render={<Link href={toolRoute} />}
           >

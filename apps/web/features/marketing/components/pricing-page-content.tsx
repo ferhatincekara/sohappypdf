@@ -14,14 +14,12 @@ import { Link } from "@/lib/i18n/navigation";
 export async function PricingPageContent({
   plans,
   apiPacks,
-  premiumToolCount,
   startHref,
   proHref,
   apiHref,
 }: {
   plans: readonly PublicPlanPresentation[];
   apiPacks: readonly PublicApiPackPresentation[];
-  premiumToolCount: number;
   startHref: string;
   proHref: string;
   apiHref: string;
@@ -50,12 +48,7 @@ export async function PricingPageContent({
               {t("web.description")}
             </p>
           </div>
-          <PricingCards
-            plans={plans}
-            startHref={startHref}
-            proHref={proHref}
-            premiumToolCount={premiumToolCount}
-          />
+          <PricingCards plans={plans} startHref={startHref} proHref={proHref} />
         </section>
 
         <section

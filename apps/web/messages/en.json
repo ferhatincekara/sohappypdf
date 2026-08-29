@@ -451,7 +451,7 @@
         "noSupport": "No support",
         "supportIncluded": "Email support",
         "retention": "Files expire after {hours} hours",
-        "premiumTools": "{count} premium tools",
+        "premiumTools": "OCR and Pro tools",
         "standardTools": "Standard PDF tools",
         "apiCredits": "{count} API credits per pack",
         "apiKeys": "{count} API keys",

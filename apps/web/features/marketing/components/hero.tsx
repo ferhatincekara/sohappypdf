@@ -106,7 +106,7 @@ export function Hero({
             </Button>
             {isAuthenticated ? null : (
               <Button
-                variant="ghost"
+                variant="outline"
                 size="lg"
                 nativeButton={false}
                 render={<Link href={MARKETING_PATHS.tools} />}

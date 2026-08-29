@@ -451,7 +451,7 @@
         "noSupport": "Destek yok",
         "supportIncluded": "E-posta desteği",
         "retention": "Dosyalar {hours} saat sonra süresi dolar",
-        "premiumTools": "{count} premium araç",
+        "premiumTools": "OCR ve Pro araçlar",
         "standardTools": "Standart PDF araçları",
         "apiCredits": "Paket başına {count} API kredisi",
         "apiKeys": "{count} API anahtarı",

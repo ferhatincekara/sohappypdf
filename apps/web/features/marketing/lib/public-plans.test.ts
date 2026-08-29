@@ -7,10 +7,7 @@ import {
   PLAN_IDS,
 } from "@sohappypdf/billing/plans";
 import { getPublicApiPacks } from "@/features/marketing/lib/public-api-packs";
-import {
-  countPremiumCatalogTools,
-  getPublicPlans,
-} from "@/features/marketing/lib/public-plans";
+import { getPublicPlans } from "@/features/marketing/lib/public-plans";
 
 describe("public plans", () => {
   test("renders the centralized Free and Pro catalog", () => {
@@ -61,10 +58,6 @@ describe("public plans", () => {
     expect(serialized).not.toContain("polar");
     expect(serialized).not.toContain("customer");
     expect(serialized).not.toContain("subscriptionId");
-  });
-
-  test("counts premium tools from the catalog, not UI copy", () => {
-    expect(countPremiumCatalogTools()).toBeGreaterThanOrEqual(10);
   });
 });
 

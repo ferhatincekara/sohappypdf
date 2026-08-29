@@ -8,10 +8,7 @@ import { resolveMarketingCtas } from "@/features/marketing/lib/marketing-cta";
 import { buildMarketingPageMetadata } from "@/features/marketing/lib/marketing-page-metadata";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { getPublicApiPacks } from "@/features/marketing/lib/public-api-packs";
-import {
-  countPremiumCatalogTools,
-  getPublicPlans,
-} from "@/features/marketing/lib/public-plans";
+import { getPublicPlans } from "@/features/marketing/lib/public-plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("marketing.metadata");
@@ -35,7 +32,6 @@ export default async function PricingRoute() {
     <PricingPageContent
       plans={getPublicPlans(catalog)}
       apiPacks={getPublicApiPacks(catalog)}
-      premiumToolCount={countPremiumCatalogTools()}
       startHref={startHref}
       proHref={proHref}
       apiHref={apiHref}

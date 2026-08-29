@@ -10,12 +10,10 @@ export async function PricingSection({
   plans,
   startHref,
   proHref,
-  premiumToolCount,
 }: {
   plans: readonly PublicPlanPresentation[];
   startHref: string;
   proHref: string;
-  premiumToolCount: number;
 }) {
   const t = await getTranslations("marketing.pricing");
 
@@ -30,12 +28,7 @@ export async function PricingSection({
             {t("description")}
           </p>
         </div>
-        <PricingCards
-          plans={plans}
-          startHref={startHref}
-          proHref={proHref}
-          premiumToolCount={premiumToolCount}
-        />
+        <PricingCards plans={plans} startHref={startHref} proHref={proHref} />
         <div className="flex flex-col items-center gap-4">
           <p className="text-sm text-muted-foreground">{t("note")}</p>
           <Button

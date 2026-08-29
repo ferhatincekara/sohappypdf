@@ -5,7 +5,6 @@ import {
   PLAN_IDS,
   WEB_PLAN_MONTHLY_PRICE_USD,
 } from "@sohappypdf/billing/plans";
-import { isPremiumTool, listCatalogTools } from "@sohappypdf/tools/catalog";
 import { formatFileSize } from "@/features/files/lib/format-file-size";
 
 export type PublicPlanId = (typeof PLAN_IDS)[number];
@@ -67,10 +66,4 @@ export function getPublicPlans(
       id === "pro" ? prices.pro.monthlyUsd : WEB_PLAN_MONTHLY_PRICE_USD.free,
     ),
   );
-}
-
-export function countPremiumCatalogTools(): number {
-  return listCatalogTools().filter(
-    (tool) => isPremiumTool(tool) && tool.availability !== "planned",
-  ).length;
 }
