@@ -35,7 +35,10 @@ import {
 import { loadWorkerRuntimeConfig } from "./load-runtime-config.js";
 import { createConversionProcessor } from "./processors/conversion-processor.js";
 import { createFileCleanupProcessor } from "./processors/file-cleanup-processor.js";
-import { startPendingConversionPoller } from "./processors/pending-conversion-poller.js";
+import {
+  PENDING_CONVERSION_MIN_AGE_MS,
+  startPendingConversionPoller,
+} from "./processors/pending-conversion-poller.js";
 import { createWorkerShutdown } from "./shutdown.js";
 import {
   createWorkerEnvironmentChecks,
@@ -177,7 +180,7 @@ export async function startConversionWorkerRuntime(
         billing: getBillingService(),
       });
 
-    try {
+    if (environment.queueAvailable) {
       worker = createQueueWorker({
         processJob,
         concurrency: runtimeConfig.worker.concurrency,
@@ -230,8 +233,6 @@ export async function startConversionWorkerRuntime(
           },
         },
       });
-    } catch {
-      logger.warn("queue worker unavailable; using database fallback");
     }
 
     if (options.enablePendingPoller !== false) {
@@ -240,6 +241,9 @@ export async function startConversionWorkerRuntime(
         files: getFileService(),
         processJob,
         logger,
+        minAgeMs: environment.queueAvailable
+          ? PENDING_CONVERSION_MIN_AGE_MS
+          : 0,
         isShuttingDown: () => shutdownController.isShuttingDown(),
       }).stop;
     }
@@ -254,7 +258,7 @@ export async function startConversionWorkerRuntime(
         batchSize: fileConfig.cleanupBatchSize,
       });
 
-      try {
+      if (environment.queueAvailable) {
         cleanupWorker = createFileCleanupWorker({
           processJob: processCleanup,
           hooks: {
@@ -282,13 +286,28 @@ export async function startConversionWorkerRuntime(
           intervalMs: FILE_CLEANUP_INTERVAL_MS,
           batchSize: fileConfig.cleanupBatchSize,
         });
-      } catch {
-        const timer = setInterval(() => {
+      } else {
+        let cleanupInFlight = false;
+        const runCleanup = (): void => {
+          if (cleanupInFlight || shutdownController.isShuttingDown()) {
+            return;
+          }
+
+          cleanupInFlight = true;
           void processCleanup({
             id: "db:file-cleanup",
             attemptsMade: 0,
-          });
-        }, FILE_CLEANUP_INTERVAL_MS);
+          })
+            .catch(() => {
+              logger.warn("file cleanup fallback failed");
+            })
+            .finally(() => {
+              cleanupInFlight = false;
+            });
+        };
+
+        runCleanup();
+        const timer = setInterval(runCleanup, FILE_CLEANUP_INTERVAL_MS);
         stopFileCleanupFallback = () => {
           clearInterval(timer);
         };

@@ -17,6 +17,7 @@ import {
   isConversionType,
   parseConversionOptions,
 } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import {
   DEFAULT_RESOURCE_OWNER_KIND,
   type FileService,
@@ -25,6 +26,7 @@ import {
 import type { Logger } from "@sohappypdf/logger";
 import type { ConversionWorkerJob } from "@sohappypdf/queue";
 import { createFileOutputKey, type Storage } from "@sohappypdf/storage";
+import { isDatabaseFallbackJob } from "./pending-conversion-poller.js";
 
 export type ConversionProcessorDependencies = {
   conversions: ConversionService;
@@ -136,14 +138,28 @@ export function createConversionProcessor(
       );
     }
 
-    let current = conversion;
-
-    if (current.status === "pending") {
-      current = await dependencies.conversions.markQueued(current.id);
+    if (isDatabaseFallbackJob(job.id) && conversion.status === "processing") {
+      jobLogger.info("conversion already processing");
+      return;
     }
 
-    if (current.status === "queued") {
-      current = await dependencies.conversions.markProcessing(current.id);
+    let current = conversion;
+
+    try {
+      if (current.status === "pending") {
+        current = await dependencies.conversions.markQueued(current.id);
+      }
+
+      if (current.status === "queued") {
+        current = await dependencies.conversions.markProcessing(current.id);
+      }
+    } catch (error) {
+      if (isLostConversionClaim(error)) {
+        jobLogger.info("conversion already claimed");
+        return;
+      }
+
+      throw error;
     }
 
     const existingOutput = await dependencies.files.findFileById(current.id);
@@ -373,6 +389,10 @@ export function createConversionProcessor(
         jobLogger.error("conversion failed", {
           durationMs: Date.now() - startedAt,
         });
+
+        if (isDatabaseFallbackJob(job.id)) {
+          await markFallbackJobFailed(dependencies.conversions, current.id);
+        }
       }
 
       throw error;
@@ -380,4 +400,28 @@ export function createConversionProcessor(
       await workspace.cleanup();
     }
   };
+}
+
+function isLostConversionClaim(error: unknown): boolean {
+  return isAppError(error) && error.code === APP_ERROR_CODES.NOT_FOUND;
+}
+
+async function markFallbackJobFailed(
+  conversions: ConversionService,
+  conversionId: string,
+): Promise<void> {
+  try {
+    const latest = await conversions.getConversion(conversionId);
+
+    if (latest.status !== "queued" && latest.status !== "processing") {
+      return;
+    }
+
+    await conversions.markFailed(conversionId, {
+      errorCode: "processing_failed",
+      errorMessage: "Conversion could not be processed",
+    });
+  } catch {
+    return;
+  }
 }

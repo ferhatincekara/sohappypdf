@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test";
 import type { ConversionRecord } from "@sohappypdf/conversions";
-import type { FileRecord } from "@sohappypdf/files";
 import type { Logger } from "@sohappypdf/logger";
 import { startPendingConversionPoller } from "./pending-conversion-poller.js";
 
@@ -40,31 +39,25 @@ function createPendingConversion(): ConversionRecord {
   };
 }
 
-function createSourceFile(conversion: ConversionRecord): FileRecord {
-  return {
-    id: conversion.sourceFileId,
-    ownerId: conversion.ownerId,
-    ownerKind: "user",
-    objectKey: "users/user_1/source.pdf",
-    originalFilename: "source.pdf",
-    contentType: "application/pdf",
-    size: 128,
-    status: "uploaded",
-    createdAt: conversion.createdAt,
-    updatedAt: conversion.updatedAt,
-    expiresAt: conversion.expiresAt ?? conversion.createdAt,
-    deletedAt: null,
-  };
+async function waitForPoll(): Promise<void> {
+  await new Promise((resolve) => {
+    setTimeout(resolve, 20);
+  });
 }
 
 describe("startPendingConversionPoller", () => {
-  test("processes pending conversions from the database when Redis is down", async () => {
+  test("claims a pending conversion before processing it", async () => {
     const conversion = createPendingConversion();
+    const claimed: string[] = [];
     const processed: string[] = [];
     const poller = startPendingConversionPoller({
       conversions: {
         async listPendingForProcessing() {
           return [conversion];
+        },
+        async claimPendingForProcessing(id) {
+          claimed.push(id);
+          return { ...conversion, status: "queued" };
         },
         async markFailed() {
           throw new Error("should process instead");
@@ -72,7 +65,11 @@ describe("startPendingConversionPoller", () => {
       } as never,
       files: {
         async findFileById() {
-          return createSourceFile(conversion);
+          return {
+            id: conversion.sourceFileId,
+            objectKey: "users/user_1/source.pdf",
+            deletedAt: null,
+          };
         },
       } as never,
       async processJob(job) {
@@ -82,11 +79,122 @@ describe("startPendingConversionPoller", () => {
       intervalMs: 60_000,
     });
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 20);
-    });
+    await waitForPoll();
     poller.stop();
 
+    expect(claimed).toEqual([conversion.id]);
     expect(processed).toEqual([conversion.id]);
+  });
+
+  test("skips a conversion another worker already claimed", async () => {
+    const conversion = createPendingConversion();
+    const processed: string[] = [];
+    const poller = startPendingConversionPoller({
+      conversions: {
+        async listPendingForProcessing() {
+          return [conversion];
+        },
+        async claimPendingForProcessing() {
+          return undefined;
+        },
+      } as never,
+      files: {
+        async findFileById() {
+          throw new Error("should not load the file");
+        },
+      } as never,
+      async processJob(job) {
+        processed.push(job.data.conversionId);
+      },
+      logger: silentLogger,
+      intervalMs: 60_000,
+    });
+
+    await waitForPoll();
+    poller.stop();
+
+    expect(processed).toEqual([]);
+  });
+
+  test("marks the claimed conversion failed after a processing error", async () => {
+    const conversion = createPendingConversion();
+    const failed: string[] = [];
+    const poller = startPendingConversionPoller({
+      conversions: {
+        async listPendingForProcessing() {
+          return [conversion];
+        },
+        async claimPendingForProcessing() {
+          return { ...conversion, status: "queued" };
+        },
+        async getConversion() {
+          return { ...conversion, status: "queued" };
+        },
+        async markFailed(id) {
+          failed.push(id);
+          return { ...conversion, status: "failed" };
+        },
+      } as never,
+      files: {
+        async findFileById() {
+          return {
+            id: conversion.sourceFileId,
+            objectKey: "users/user_1/source.pdf",
+            deletedAt: null,
+          };
+        },
+      } as never,
+      async processJob() {
+        throw new Error("engine failed");
+      },
+      logger: silentLogger,
+      intervalMs: 60_000,
+    });
+
+    await waitForPoll();
+    poller.stop();
+
+    expect(failed).toEqual([conversion.id]);
+  });
+
+  test("does not fail a conversion another worker is already processing", async () => {
+    const conversion = createPendingConversion();
+    const failed: string[] = [];
+    const poller = startPendingConversionPoller({
+      conversions: {
+        async listPendingForProcessing() {
+          return [conversion];
+        },
+        async claimPendingForProcessing() {
+          return { ...conversion, status: "queued" };
+        },
+        async getConversion() {
+          return { ...conversion, status: "processing" };
+        },
+        async markFailed(id) {
+          failed.push(id);
+          return { ...conversion, status: "failed" };
+        },
+      } as never,
+      files: {
+        async findFileById() {
+          return {
+            id: conversion.sourceFileId,
+            objectKey: "users/user_1/source.pdf",
+            deletedAt: null,
+          };
+        },
+      } as never,
+      async processJob() {
+        throw new Error("lost the claim");
+      },
+      logger: silentLogger,
+      intervalMs: 60_000,
+    });
+
+    await waitForPoll();
+    poller.stop();
+
+    expect(failed).toEqual([]);
   });
 });

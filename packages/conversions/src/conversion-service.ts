@@ -90,7 +90,11 @@ export type ConversionService = {
   ): Promise<ConversionRecord>;
   cancelConversion(id: string): Promise<ConversionRecord>;
   cancelOwnedConversion(id: string, ownerId: string): Promise<ConversionRecord>;
-  listPendingForProcessing(limit?: number): Promise<ConversionRecord[]>;
+  listPendingForProcessing(
+    limit?: number,
+    minAgeMs?: number,
+  ): Promise<ConversionRecord[]>;
+  claimPendingForProcessing(id: string): Promise<ConversionRecord | undefined>;
   cleanupExpiredConversions(limit?: number): Promise<{
     scanned: number;
     deleted: number;
@@ -504,11 +508,18 @@ export function createConversionService(
       });
     },
 
-    async listPendingForProcessing(limit = 10) {
+    async listPendingForProcessing(limit = 10, minAgeMs = 0) {
       if (!Number.isInteger(limit) || limit < 1 || limit > 50) {
         throw new AppError({
           code: APP_ERROR_CODES.VALIDATION_ERROR,
           message: "Invalid pending conversion limit",
+        });
+      }
+
+      if (!Number.isInteger(minAgeMs) || minAgeMs < 0) {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Invalid pending conversion age",
         });
       }
 
@@ -517,6 +528,25 @@ export function createConversionService(
         now: current,
         activeAfter: conversionActiveAfter(current),
         limit,
+        staleBefore:
+          minAgeMs === 0 ? undefined : new Date(current.getTime() - minAgeMs),
+      });
+    },
+
+    async claimPendingForProcessing(id) {
+      const conversion = await options.repository.findById(
+        assertConversionId(id),
+      );
+
+      if (conversion === undefined || conversion.status !== "pending") {
+        return undefined;
+      }
+
+      return options.repository.updateStatus({
+        id: conversion.id,
+        from: "pending",
+        to: "queued",
+        now: now(),
       });
     },
 

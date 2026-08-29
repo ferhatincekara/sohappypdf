@@ -63,6 +63,7 @@ export type ConversionRepository = {
     now: Date;
     activeAfter: Date;
     limit: number;
+    staleBefore?: Date;
   }): Promise<ConversionRecord[]>;
   transferOwner(
     input: ResourceOwnerTransferInput,
@@ -314,11 +315,16 @@ export function createConversionRepository(db: Database): ConversionRepository {
           gt(conversions.createdAt, input.activeAfter),
         ),
       );
+      const conditions = [eq(conversions.status, "pending"), activeExpiry];
+
+      if (input.staleBefore !== undefined) {
+        conditions.push(lte(conversions.createdAt, input.staleBefore));
+      }
 
       const rows = await db
         .select()
         .from(conversions)
-        .where(and(eq(conversions.status, "pending"), activeExpiry))
+        .where(and(...conditions))
         .orderBy(asc(conversions.createdAt), asc(conversions.id))
         .limit(input.limit);
 

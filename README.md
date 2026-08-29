@@ -184,6 +184,8 @@ Consumes BullMQ conversion jobs, runs native engines, writes results to S3, and 
 
 Long-running conversion work must not run in the HTTP request. `POST /v1/conversions` returns **201** and enqueues a job. Clients poll `GET /v1/conversions/{id}`.
 
+If Redis / Upstash is unreachable, the API keeps the conversion `pending`. The worker still starts, does not open BullMQ (so it does not burn a dead quota), and processes stale pending rows from Postgres.
+
 ## Packages
 
 | Package | Role |

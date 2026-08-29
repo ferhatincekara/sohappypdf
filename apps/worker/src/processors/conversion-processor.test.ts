@@ -10,6 +10,7 @@ import type {
   ConversionRecord,
   ConversionService,
 } from "@sohappypdf/conversions";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { FileRecord, FileService } from "@sohappypdf/files";
 import { createLogger } from "@sohappypdf/logger";
 import type { ConversionJobData } from "@sohappypdf/queue";
@@ -17,6 +18,7 @@ import type { Storage } from "@sohappypdf/storage";
 import { PDFDocument } from "pdf-lib";
 import { PermanentConversionError } from "../job-errors.js";
 import { createConversionProcessor } from "./conversion-processor.js";
+import { DATABASE_FALLBACK_JOB_PREFIX } from "./pending-conversion-poller.js";
 
 const conversionId = "550e8400-e29b-41d4-a716-446655440300";
 const sourceFileId = "550e8400-e29b-41d4-a716-446655440301";
@@ -337,5 +339,137 @@ describe("conversion processor", () => {
     );
 
     expect(receivedOptions).toEqual([protectOptions]);
+  });
+
+  test("does not convert a database fallback job that is already processing", async () => {
+    const converted: string[] = [];
+    const processor = createConversionProcessor({
+      conversions: {
+        async getConversion() {
+          return createConversion({ status: "processing" });
+        },
+        async markProcessing() {
+          throw new Error("should not claim");
+        },
+      } as unknown as ConversionService,
+      files: {} as FileService,
+      storage: {} as Storage,
+      engines: {
+        resolve() {
+          return {
+            name: "image-pdf",
+            types: ["png-to-pdf"],
+            canHandle() {
+              return true;
+            },
+            supports() {
+              return true;
+            },
+            async convert() {
+              converted.push("ran");
+              throw new Error("should not convert");
+            },
+          } satisfies ConversionEngine;
+        },
+      },
+      config: DEFAULT_WORKER_CONFIG,
+      logger: createLogger({ level: "error" }),
+    });
+
+    await processor({
+      ...createJob(),
+      id: `${DATABASE_FALLBACK_JOB_PREFIX}${conversionId}`,
+    });
+    expect(converted).toEqual([]);
+  });
+
+  test("stops when another worker already claimed the conversion", async () => {
+    const converted: string[] = [];
+    const processor = createConversionProcessor({
+      conversions: {
+        async getConversion() {
+          return createConversion({ status: "queued" });
+        },
+        async markProcessing() {
+          throw new AppError({
+            code: APP_ERROR_CODES.NOT_FOUND,
+            message: "Conversion not found",
+          });
+        },
+      } as unknown as ConversionService,
+      files: {} as FileService,
+      storage: {} as Storage,
+      engines: {
+        resolve() {
+          return {
+            name: "image-pdf",
+            types: ["png-to-pdf"],
+            canHandle() {
+              return true;
+            },
+            supports() {
+              return true;
+            },
+            async convert() {
+              converted.push("ran");
+              throw new Error("should not convert");
+            },
+          } satisfies ConversionEngine;
+        },
+      },
+      config: DEFAULT_WORKER_CONFIG,
+      logger: createLogger({ level: "error" }),
+    });
+
+    await processor(createJob());
+    expect(converted).toEqual([]);
+  });
+
+  test("marks a database fallback job failed after a transient error", async () => {
+    const failed: string[] = [];
+    const processor = createConversionProcessor({
+      conversions: {
+        async getConversion() {
+          return createConversion({ status: "queued" });
+        },
+        async markProcessing() {
+          return createConversion({ status: "processing" });
+        },
+        async markFailed(id) {
+          failed.push(id);
+          return createConversion({ status: "failed" });
+        },
+      } as unknown as ConversionService,
+      files: {
+        async findFileById() {
+          return undefined;
+        },
+      } as unknown as FileService,
+      storage: {
+        async objectExists() {
+          return false;
+        },
+      } as unknown as Storage,
+      engines: {
+        resolve() {
+          throw new Error("engine crashed");
+        },
+      },
+      config: DEFAULT_WORKER_CONFIG,
+      logger: createLogger({ level: "error" }),
+    });
+
+    try {
+      await processor({
+        ...createJob(),
+        id: `${DATABASE_FALLBACK_JOB_PREFIX}${conversionId}`,
+      });
+      throw new Error("expected transient failure");
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect((error as Error).message).toBe("engine crashed");
+    }
+
+    expect(failed).toEqual([conversionId]);
   });
 });

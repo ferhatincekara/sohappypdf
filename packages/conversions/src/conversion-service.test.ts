@@ -159,11 +159,23 @@ function createMemoryRepository(
     },
     async listPendingForProcessing(input) {
       return [...records.values()]
-        .filter(
-          (conversion) =>
-            conversion.status === "pending" &&
-            !isConversionRecordExpired(conversion, input.now),
-        )
+        .filter((conversion) => {
+          if (
+            conversion.status !== "pending" ||
+            isConversionRecordExpired(conversion, input.now)
+          ) {
+            return false;
+          }
+
+          if (
+            input.staleBefore !== undefined &&
+            conversion.createdAt.getTime() > input.staleBefore.getTime()
+          ) {
+            return false;
+          }
+
+          return true;
+        })
         .sort((left, right) => {
           const created = left.createdAt.getTime() - right.createdAt.getTime();
           return created === 0 ? left.id.localeCompare(right.id) : created;
@@ -381,6 +393,17 @@ describe("conversion service", () => {
     expect(listed).toHaveLength(1);
     expect(listed[0]?.targetFormat).toBe("jpg");
     expect(listed[0]?.status).toBe("pending");
+
+    const claimed = await service.claimPendingForProcessing(
+      listed[0]?.id ?? "",
+    );
+    const claimedAgain = await service.claimPendingForProcessing(
+      listed[0]?.id ?? "",
+    );
+
+    expect(claimed?.status).toBe("queued");
+    expect(claimedAgain).toBeUndefined();
+    expect(await service.listPendingForProcessing()).toEqual([]);
   });
 
   test("rejects invalid status transitions", async () => {

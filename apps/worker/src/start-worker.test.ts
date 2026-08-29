@@ -44,7 +44,8 @@ describe("startConversionWorkerRuntime", () => {
     expect(await runtime.shutdown("SIGTERM")).toBe(0);
   });
 
-  test("starts when the queue is unavailable and uses the database fallback", async () => {
+  test("starts when the queue is unavailable and does not open BullMQ", async () => {
+    let created = false;
     const runtime = await startConversionWorkerRuntime({
       env: validEnv,
       listenHealth: false,
@@ -64,10 +65,12 @@ describe("startConversionWorkerRuntime", () => {
         return async () => undefined;
       },
       createQueueWorker() {
-        throw new Error("queue worker should be optional");
+        created = true;
+        throw new Error("queue worker should not start");
       },
     });
 
+    expect(created).toBe(false);
     expect(await runtime.shutdown("SIGTERM")).toBe(0);
   });
 });
