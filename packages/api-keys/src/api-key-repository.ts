@@ -11,10 +11,9 @@ export type ApiKeyRepository = {
     userId: string,
   ): Promise<StoredApiKeyRecord | undefined>;
   listByUserId(userId: string): Promise<StoredApiKeyRecord[]>;
-  revoke(input: {
+  delete(input: {
     id: string;
     userId: string;
-    now: Date;
   }): Promise<StoredApiKeyRecord | undefined>;
   touchLastUsedAt(input: {
     id: string;
@@ -105,20 +104,10 @@ export function createApiKeyRepository(db: Database): ApiKeyRepository {
       return rows.map((row) => toStoredRecord(row));
     },
 
-    async revoke(input) {
+    async delete(input) {
       const [row] = await db
-        .update(apiKeys)
-        .set({
-          revokedAt: input.now,
-          updatedAt: input.now,
-        })
-        .where(
-          and(
-            eq(apiKeys.id, input.id),
-            eq(apiKeys.userId, input.userId),
-            isNull(apiKeys.revokedAt),
-          ),
-        )
+        .delete(apiKeys)
+        .where(and(eq(apiKeys.id, input.id), eq(apiKeys.userId, input.userId)))
         .returning();
 
       if (row === undefined) {

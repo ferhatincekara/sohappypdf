@@ -303,7 +303,7 @@
         },
         "keys": {
           "title": "API keys",
-          "description": "Create and revoke keys in your account. The raw key is shown only once."
+          "description": "Create and delete keys in your account. The raw key is shown only once."
         },
         "limits": {
           "title": "Predictable limits",
@@ -364,7 +364,7 @@
         },
         "apiKeys": {
           "title": "API key protection",
-          "description": "Keys are secrets. Revoke a leaked key in the dashboard and create a replacement."
+          "description": "Keys are secrets. Delete a leaked key in the dashboard and create a replacement."
         }
       }
     },
@@ -640,7 +640,7 @@
         },
         "api": {
           "title": "API keys are secrets",
-          "body": "Programmatic access uses a Bearer API key. Do not put keys in URLs, browser JavaScript, or source control. If a key leaks, revoke it in the account area and create a replacement."
+          "body": "Programmatic access uses a Bearer API key. Do not put keys in URLs, browser JavaScript, or source control. If a key leaks, delete it in the account area and create a replacement."
         },
         "report": {
           "title": "Report a security issue",
@@ -700,7 +700,7 @@
         },
         "accounts": {
           "title": "Accounts",
-          "body": "You are responsible for the email and password on your account and for any API keys you create. Keep keys secret. Revoke a leaked key. We may suspend an account that abuses the service or these terms."
+          "body": "You are responsible for the email and password on your account and for any API keys you create. Keep keys secret. Delete a leaked key. We may suspend an account that abuses the service or these terms."
         },
         "acceptableUse": {
           "title": "Acceptable use",
@@ -804,7 +804,7 @@
       "ruleHeader": "Send the key only in the Authorization header.",
       "ruleSecret": "Treat the key as a secret. Do not commit it.",
       "ruleBrowser": "Do not ship keys in frontend JavaScript.",
-      "ruleRevoke": "Revoke a leaked key in the dashboard and create a replacement."
+      "ruleRevoke": "Delete a leaked key in the dashboard and create a replacement."
     },
     "files": {
       "title": "Files",
@@ -943,7 +943,7 @@
       },
       "apiKeys": {
         "title": "API",
-        "description": "Create and revoke keys for programmatic access."
+        "description": "Create and delete keys for programmatic access."
       },
       "settings": {
         "title": "Settings",
@@ -1304,12 +1304,12 @@
     "description": "Create keys to call the SoHappyPDF API. The raw key is shown only once.",
     "actions": {
       "create": "Create API key",
-      "revoke": "Revoke",
-      "revokeNamed": "Revoke {name}"
+      "delete": "Delete",
+      "deleteNamed": "Delete {name}"
     },
     "list": {
       "title": "Your API keys",
-      "description": "Active keys can authenticate API requests. Revoked keys stop working immediately.",
+      "description": "Active keys can authenticate API requests. Deleting a key stops it immediately.",
       "loading": "Loading API keys…",
       "empty": "No API keys yet.",
       "emptyHint": "Create an API key to start using SoHappyPDF programmatically.",
@@ -1345,19 +1345,19 @@
       "done": "Done",
       "close": "Close created API key"
     },
-    "revoke": {
-      "title": "Revoke API key",
+    "delete": {
+      "title": "Delete API key",
       "description": "{name} will stop working immediately. This cannot be undone.",
-      "confirm": "Revoke key",
-      "revoking": "Revoking…",
+      "confirm": "Delete key",
+      "deleting": "Deleting…",
       "cancel": "Cancel",
-      "success": "The API key was revoked."
+      "success": "The API key was deleted."
     },
     "usage": {
       "title": "Using an API key",
       "description": "Send the key in the Authorization header. Do not put it in query parameters or browser code.",
       "baseUrlLabel": "API base URL:",
-      "rotateHint": "Treat the key as a secret. Revoke it immediately if it leaks.",
+      "rotateHint": "Treat the key as a secret. Delete it immediately if it leaks.",
       "docsLink": "Open API documentation",
       "statusTitle": "API usage",
       "statusDescription": "API credits are separate from web tool credits. Limits follow your web plan.",

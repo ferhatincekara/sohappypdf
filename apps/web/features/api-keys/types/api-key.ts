@@ -30,6 +30,6 @@ export type CreateApiKeyResponse = {
   secret: string;
 };
 
-export type RevokeApiKeyResponse = {
+export type DeleteApiKeyResponse = {
   apiKey: PublicApiKey;
 };

@@ -42,24 +42,15 @@ function createMemoryRepository(
         )
         .map((record) => ({ ...record }));
     },
-    async revoke(input) {
+    async delete(input) {
       const record = records.get(input.id);
 
-      if (
-        record === undefined ||
-        record.userId !== input.userId ||
-        record.revokedAt !== null
-      ) {
+      if (record === undefined || record.userId !== input.userId) {
         return undefined;
       }
 
-      const updated = {
-        ...record,
-        revokedAt: input.now,
-        updatedAt: input.now,
-      };
-      records.set(input.id, updated);
-      return { ...updated };
+      records.delete(input.id);
+      return { ...record };
     },
     async touchLastUsedAt(input) {
       const record = records.get(input.id);
@@ -132,7 +123,7 @@ describe("createApiKeyService", () => {
     });
   });
 
-  test("rejects unknown, revoked, and expired keys the same way", async () => {
+  test("rejects unknown, deleted, and expired keys the same way", async () => {
     let currentTime = new Date("2026-01-01T00:00:00.000Z");
     const service = createService({
       now: () => currentTime,
@@ -148,7 +139,7 @@ describe("createApiKeyService", () => {
       service.authenticate(`${created.secret}x`),
     ).resolves.toBeNull();
 
-    await service.revoke({
+    await service.delete({
       id: created.apiKey.id,
       userId: "user_1",
     });
@@ -177,28 +168,55 @@ describe("createApiKeyService", () => {
     expect(JSON.stringify(listed).includes("keyHash")).toBe(false);
   });
 
-  test("revokes a key idempotently and keeps it unusable", async () => {
-    const service = createService();
+  test("deletes a key and hides leftover revoked rows from the list", async () => {
+    const repository = createMemoryRepository();
+    const service = createService({ repository });
+    const leftover = await service.create({
+      userId: "user_1",
+      name: "Legacy",
+    });
+    const leftoverRecord = repository.records.get(leftover.apiKey.id);
+
+    if (leftoverRecord === undefined) {
+      throw new Error("expected leftover API key");
+    }
+
+    leftoverRecord.revokedAt = leftover.apiKey.createdAt;
+    leftoverRecord.updatedAt = leftover.apiKey.createdAt;
+
     const created = await service.create({
       userId: "user_1",
       name: "CI",
     });
 
-    const revoked = await service.revoke({
-      id: created.apiKey.id,
-      userId: "user_1",
-    });
-    const revokedAgain = await service.revoke({
+    expect(await service.listByUserId("user_1")).toEqual([created.apiKey]);
+    await expect(service.authenticate(leftover.secret)).resolves.toBeNull();
+
+    const deleted = await service.delete({
       id: created.apiKey.id,
       userId: "user_1",
     });
 
-    expect(revoked.revokedAt).not.toBeNull();
-    expect(revokedAgain.revokedAt).toEqual(revoked.revokedAt);
+    expect(deleted.id).toBe(created.apiKey.id);
+    expect(repository.records.has(created.apiKey.id)).toBe(false);
+    expect(await service.listByUserId("user_1")).toEqual([]);
     await expect(service.authenticate(created.secret)).resolves.toBeNull();
+
+    try {
+      await service.delete({
+        id: created.apiKey.id,
+        userId: "user_1",
+      });
+      throw new Error("expected delete to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("NOT_FOUND");
+      }
+    }
   });
 
-  test("does not reveal another user's key on revoke", async () => {
+  test("does not reveal another user's key on delete", async () => {
     const service = createService();
     const created = await service.create({
       userId: "user_1",
@@ -206,11 +224,11 @@ describe("createApiKeyService", () => {
     });
 
     try {
-      await service.revoke({
+      await service.delete({
         id: created.apiKey.id,
         userId: "user_2",
       });
-      throw new Error("expected revoke to fail");
+      throw new Error("expected delete to fail");
     } catch (error) {
       expect(isAppError(error)).toBe(true);
       if (isAppError(error)) {

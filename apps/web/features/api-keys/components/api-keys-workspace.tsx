@@ -5,11 +5,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ApiKeyCreateDialog } from "@/features/api-keys/components/api-key-create-dialog";
+import { ApiKeyDeleteDialog } from "@/features/api-keys/components/api-key-delete-dialog";
 import { ApiKeyList } from "@/features/api-keys/components/api-key-list";
-import { ApiKeyRevokeDialog } from "@/features/api-keys/components/api-key-revoke-dialog";
 import { ApiKeyUsage } from "@/features/api-keys/components/api-key-usage";
 import { useApiKeys } from "@/features/api-keys/hooks/use-api-keys";
-import { useRevokeApiKey } from "@/features/api-keys/hooks/use-revoke-api-key";
+import { useDeleteApiKey } from "@/features/api-keys/hooks/use-delete-api-key";
 import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 export function ApiKeysWorkspace({
@@ -21,17 +21,17 @@ export function ApiKeysWorkspace({
 }) {
   const t = useTranslations("apiKeys");
   const tErrors = useTranslations("apiKeys.errors");
-  const tRevoke = useTranslations("apiKeys.revoke");
+  const tDelete = useTranslations("apiKeys.delete");
   const { apiKeys, isLoading, isError, errorKey, refetch } = useApiKeys();
   const {
-    revokeApiKey,
+    deleteApiKey,
     isPending,
-    errorKey: revokeErrorKey,
+    errorKey: deleteErrorKey,
     reset,
-  } = useRevokeApiKey();
+  } = useDeleteApiKey();
   const [createOpen, setCreateOpen] = useState(false);
-  const [keyToRevoke, setKeyToRevoke] = useState<PublicApiKey | null>(null);
-  const [revokeSucceeded, setRevokeSucceeded] = useState(false);
+  const [keyToDelete, setKeyToDelete] = useState<PublicApiKey | null>(null);
+  const [deleteSucceeded, setDeleteSucceeded] = useState(false);
 
   return (
     <div className="flex flex-col gap-8">
@@ -50,10 +50,10 @@ export function ApiKeysWorkspace({
           </Button>
         </div>
         <div aria-live="polite" className="sr-only">
-          {revokeSucceeded ? tRevoke("success") : ""}
+          {deleteSucceeded ? tDelete("success") : ""}
         </div>
-        {revokeSucceeded ? (
-          <p className="mt-4 text-sm font-medium">{tRevoke("success")}</p>
+        {deleteSucceeded ? (
+          <p className="mt-4 text-sm font-medium">{tDelete("success")}</p>
         ) : null}
         <div className="mt-6">
           <ApiKeyList
@@ -63,10 +63,10 @@ export function ApiKeysWorkspace({
             errorMessage={
               errorKey === null ? tErrors("unexpected") : tErrors(errorKey)
             }
-            onRevoke={(apiKey) => {
+            onDelete={(apiKey) => {
               reset();
-              setRevokeSucceeded(false);
-              setKeyToRevoke(apiKey);
+              setDeleteSucceeded(false);
+              setKeyToDelete(apiKey);
             }}
             onRetry={() => {
               void refetch();
@@ -76,24 +76,24 @@ export function ApiKeysWorkspace({
       </Card>
       <ApiKeyUsage apiV1BaseUrl={apiV1BaseUrl} docsHref={docsHref} />
       <ApiKeyCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
-      <ApiKeyRevokeDialog
-        apiKey={keyToRevoke}
+      <ApiKeyDeleteDialog
+        apiKey={keyToDelete}
         isPending={isPending}
-        errorMessage={revokeErrorKey === null ? null : tErrors(revokeErrorKey)}
+        errorMessage={deleteErrorKey === null ? null : tErrors(deleteErrorKey)}
         onOpenChange={(open) => {
           if (!open) {
-            setKeyToRevoke(null);
+            setKeyToDelete(null);
             reset();
           }
         }}
         onConfirm={() => {
-          if (keyToRevoke === null) {
+          if (keyToDelete === null) {
             return;
           }
 
-          void revokeApiKey(keyToRevoke.id).then(() => {
-            setKeyToRevoke(null);
-            setRevokeSucceeded(true);
+          void deleteApiKey(keyToDelete.id).then(() => {
+            setKeyToDelete(null);
+            setDeleteSucceeded(true);
           });
         }}
       />

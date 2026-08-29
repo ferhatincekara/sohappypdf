@@ -29,6 +29,6 @@ export type {
   AuthenticatedApiKey,
   CreateApiKeyInput,
   CreatedApiKey,
-  RevokeApiKeyInput,
+  DeleteApiKeyInput,
   StoredApiKeyRecord,
 } from "./api-key-types.js";

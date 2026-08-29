@@ -72,7 +72,7 @@ describe("api key api", () => {
     expect(created.apiKey).not.toHaveProperty("secret");
   });
 
-  test("revokes through the API and maps failures without leaking internals", async () => {
+  test("deletes through the API and maps failures without leaking internals", async () => {
     const api = createApiKeyApi(
       createClient({
         delete: (async () => {
@@ -96,7 +96,7 @@ describe("api key api", () => {
     );
 
     try {
-      await api.revoke("11111111-1111-4111-8111-111111111111");
+      await api.delete("11111111-1111-4111-8111-111111111111");
       throw new Error("expected failure");
     } catch (error) {
       expect(error).toBeInstanceOf(ApiKeyApiRequestError);

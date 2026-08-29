@@ -21,7 +21,7 @@ export class ApiKeyApiRequestError extends Error {
 export type ApiKeyApi = {
   list: () => Promise<ApiKeyListResponse>;
   create: (input: CreateApiKeyInput) => Promise<CreateApiKeyResponse>;
-  revoke: (id: string) => Promise<PublicApiKey>;
+  delete: (id: string) => Promise<PublicApiKey>;
 };
 
 export function createApiKeyApi(client: AxiosInstance = apiClient): ApiKeyApi {
@@ -47,7 +47,7 @@ export function createApiKeyApi(client: AxiosInstance = apiClient): ApiKeyApi {
       }
     },
 
-    async revoke(id) {
+    async delete(id) {
       try {
         const response = await client.delete<{ apiKey: PublicApiKey }>(
           `/v1/api-keys/${id}`,

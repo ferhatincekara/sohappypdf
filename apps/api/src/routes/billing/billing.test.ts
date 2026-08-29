@@ -169,7 +169,7 @@ function createMemoryApiKeyRepository(
     async listByUserId(userId) {
       return [...records.values()].filter((record) => record.userId === userId);
     },
-    async revoke() {
+    async delete() {
       return undefined;
     },
     async touchLastUsedAt() {},

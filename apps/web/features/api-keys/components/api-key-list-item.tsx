@@ -4,7 +4,7 @@ import { KeyRoundIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { isApiKeyRevocable } from "@/features/api-keys/lib/is-api-key-revocable";
+import { isApiKeyDeletable } from "@/features/api-keys/lib/is-api-key-deletable";
 import { maskApiKeyPrefix } from "@/features/api-keys/lib/mask-api-key-prefix";
 import {
   PUBLIC_API_KEY_STATUSES,
@@ -15,10 +15,10 @@ import { cn } from "@/lib/utils";
 
 export function ApiKeyListItem({
   apiKey,
-  onRevoke,
+  onDelete,
 }: {
   apiKey: PublicApiKey;
-  onRevoke: (apiKey: PublicApiKey) => void;
+  onDelete: (apiKey: PublicApiKey) => void;
 }) {
   const t = useTranslations("apiKeys.list");
   const tActions = useTranslations("apiKeys.actions");
@@ -85,16 +85,16 @@ export function ApiKeyListItem({
           </div>
         </div>
       </div>
-      {isApiKeyRevocable(apiKey) ? (
+      {isApiKeyDeletable(apiKey) ? (
         <Button
           type="button"
           size="xs"
           variant="destructive"
           className="shrink-0 self-start sm:self-center"
-          aria-label={tActions("revokeNamed", { name: apiKey.name })}
-          onClick={() => onRevoke(apiKey)}
+          aria-label={tActions("deleteNamed", { name: apiKey.name })}
+          onClick={() => onDelete(apiKey)}
         >
-          {tActions("revoke")}
+          {tActions("delete")}
         </Button>
       ) : null}
     </li>

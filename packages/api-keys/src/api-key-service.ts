@@ -14,7 +14,7 @@ import type {
   AuthenticatedApiKey,
   CreateApiKeyInput,
   CreatedApiKey,
-  RevokeApiKeyInput,
+  DeleteApiKeyInput,
   StoredApiKeyRecord,
 } from "./api-key-types.js";
 import {
@@ -33,7 +33,7 @@ export type ApiKeyServiceOptions = {
 export type ApiKeyService = {
   create(input: CreateApiKeyInput): Promise<CreatedApiKey>;
   listByUserId(userId: string): Promise<ApiKeyPublicRecord[]>;
-  revoke(input: RevokeApiKeyInput): Promise<ApiKeyPublicRecord>;
+  delete(input: DeleteApiKeyInput): Promise<ApiKeyPublicRecord>;
   authenticate(rawKey: string): Promise<AuthenticatedApiKey | null>;
 };
 
@@ -105,36 +105,36 @@ export function createApiKeyService(
         assertApiKeyUserId(userId),
       );
 
-      return records.map((record) => toApiKeyPublicRecord(record));
+      return records
+        .filter((record) => record.revokedAt === null)
+        .map((record) => toApiKeyPublicRecord(record));
     },
 
-    async revoke(input) {
+    async delete(input) {
       const id = assertApiKeyId(input.id);
       const userId = assertApiKeyUserId(input.userId);
       const existing = await options.repository.findByIdForUser(id, userId);
 
-      if (existing === undefined) {
+      if (existing === undefined || existing.revokedAt !== null) {
         throw new AppError({
           code: APP_ERROR_CODES.NOT_FOUND,
           message: "API key not found",
         });
       }
 
-      if (existing.revokedAt !== null) {
-        return toApiKeyPublicRecord(existing);
-      }
-
-      const revoked = await options.repository.revoke({
+      const deleted = await options.repository.delete({
         id,
         userId,
-        now: now(),
       });
 
-      if (revoked === undefined) {
-        return toApiKeyPublicRecord(existing);
+      if (deleted === undefined) {
+        throw new AppError({
+          code: APP_ERROR_CODES.NOT_FOUND,
+          message: "API key not found",
+        });
       }
 
-      return toApiKeyPublicRecord(revoked);
+      return toApiKeyPublicRecord(deleted);
     },
 
     async authenticate(rawKey) {

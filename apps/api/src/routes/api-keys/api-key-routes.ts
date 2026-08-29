@@ -60,12 +60,12 @@ export function createApiKeyRoutes(options: ApiKeyRoutesOptions) {
 
   apiKeys.delete("/:id", async (c) => {
     const identity = requireSessionIdentity(c.get("identity"));
-    const apiKey = await options.getApiKeyService().revoke({
+    const apiKey = await options.getApiKeyService().delete({
       id: parseApiKeyId(c.req.param("id")),
       userId: identity.userId,
     });
 
-    c.get("logger").info("api key revoked", {
+    c.get("logger").info("api key deleted", {
       apiKeyId: apiKey.id,
       userId: identity.userId,
     });

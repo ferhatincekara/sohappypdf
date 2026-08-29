@@ -12,14 +12,14 @@ export function ApiKeyList({
   isLoading,
   isError,
   errorMessage,
-  onRevoke,
+  onDelete,
   onRetry,
 }: {
   apiKeys: PublicApiKey[];
   isLoading: boolean;
   isError: boolean;
   errorMessage: string;
-  onRevoke: (apiKey: PublicApiKey) => void;
+  onDelete: (apiKey: PublicApiKey) => void;
   onRetry: () => void;
 }) {
   const t = useTranslations("apiKeys.list");
@@ -63,7 +63,7 @@ export function ApiKeyList({
   return (
     <ul className="flex flex-col gap-3">
       {apiKeys.map((apiKey) => (
-        <ApiKeyListItem key={apiKey.id} apiKey={apiKey} onRevoke={onRevoke} />
+        <ApiKeyListItem key={apiKey.id} apiKey={apiKey} onDelete={onDelete} />
       ))}
     </ul>
   );

@@ -25,7 +25,7 @@ export type CreateApiKeyInput = {
   expiresAt?: Date;
 };
 
-export type RevokeApiKeyInput = {
+export type DeleteApiKeyInput = {
   id: string;
   userId: string;
 };

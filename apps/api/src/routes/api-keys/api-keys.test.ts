@@ -62,24 +62,15 @@ function createMemoryRepository(
         )
         .map((record) => ({ ...record }));
     },
-    async revoke(input) {
+    async delete(input) {
       const record = records.get(input.id);
 
-      if (
-        record === undefined ||
-        record.userId !== input.userId ||
-        record.revokedAt !== null
-      ) {
+      if (record === undefined || record.userId !== input.userId) {
         return undefined;
       }
 
-      const updated = {
-        ...record,
-        revokedAt: input.now,
-        updatedAt: input.now,
-      };
-      records.set(input.id, updated);
-      return { ...updated };
+      records.delete(input.id);
+      return { ...record };
     },
     async touchLastUsedAt() {},
   };
@@ -193,7 +184,7 @@ describe("API key management API", () => {
     );
   });
 
-  test("lists only the authenticated user's keys and includes revoked ones", async () => {
+  test("lists only the authenticated user's remaining keys after delete", async () => {
     const apiKeyService = createApiKeyService({
       repository: createMemoryRepository(),
     });
@@ -224,12 +215,10 @@ describe("API key management API", () => {
     const listed = await ownerApp.request("/v1/api-keys");
     const listedBody = await listed.json();
 
-    expect(listedBody.apiKeys).toHaveLength(1);
-    expect(listedBody.apiKeys[0].name).toBe("CI");
-    expect(listedBody.apiKeys[0].status).toBe("revoked");
+    expect(listedBody.apiKeys).toHaveLength(0);
   });
 
-  test("revokes an owned key and hides another user's key", async () => {
+  test("deletes an owned key and hides another user's key", async () => {
     const apiKeyService = createApiKeyService({
       repository: createMemoryRepository(),
     });
@@ -252,16 +241,21 @@ describe("API key management API", () => {
       `/v1/api-keys/${createdBody.apiKey.id}`,
       { method: "DELETE" },
     );
-    const revoked = await ownerApp.request(
+    const deleted = await ownerApp.request(
       `/v1/api-keys/${createdBody.apiKey.id}`,
       { method: "DELETE" },
     );
-    const revokedBody = await revoked.json();
+    const deletedBody = await deleted.json();
+    const deletedAgain = await ownerApp.request(
+      `/v1/api-keys/${createdBody.apiKey.id}`,
+      { method: "DELETE" },
+    );
 
     expect(foreign.status).toBe(404);
-    expect(revoked.status).toBe(200);
-    expect(revokedBody.apiKey.status).toBe("revoked");
-    expect(revokedBody.apiKey).not.toHaveProperty("secret");
+    expect(deleted.status).toBe(200);
+    expect(deletedBody.apiKey.id).toBe(createdBody.apiKey.id);
+    expect(deletedBody.apiKey).not.toHaveProperty("secret");
+    expect(deletedAgain.status).toBe(404);
   });
 
   test("rejects extra API keys after the current plan limit", async () => {

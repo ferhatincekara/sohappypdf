@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
-export function ApiKeyRevokeDialog({
+export function ApiKeyDeleteDialog({
   apiKey,
   isPending,
   errorMessage,
@@ -26,7 +26,7 @@ export function ApiKeyRevokeDialog({
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
 }) {
-  const t = useTranslations("apiKeys.revoke");
+  const t = useTranslations("apiKeys.delete");
 
   return (
     <AlertDialog
@@ -60,7 +60,7 @@ export function ApiKeyRevokeDialog({
               onConfirm();
             }}
           >
-            {isPending ? t("revoking") : t("confirm")}
+            {isPending ? t("deleting") : t("confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -303,7 +303,7 @@
         },
         "keys": {
           "title": "API anahtarları",
-          "description": "Panelden anahtar oluşturun ve iptal edin. Ham anahtar yalnızca bir kez gösterilir."
+          "description": "Panelden anahtar oluşturun ve silin. Ham anahtar yalnızca bir kez gösterilir."
         },
         "limits": {
           "title": "Öngörülebilir limitler",
@@ -364,7 +364,7 @@
         },
         "apiKeys": {
           "title": "API anahtarı koruması",
-          "description": "Anahtarlar gizlidir. Sızan bir anahtarı panelden iptal edin ve yenisini oluşturun."
+          "description": "Anahtarlar gizlidir. Sızan bir anahtarı panelden silin ve yenisini oluşturun."
         }
       }
     },
@@ -640,7 +640,7 @@
         },
         "api": {
           "title": "API anahtarları gizlidir",
-          "body": "Programatik erişim Bearer API anahtarı kullanır. Anahtarları URL’lere, tarayıcı JavaScript’ine veya kaynak koduna koymayın. Bir anahtar sızarsa hesap alanından iptal edin ve yenisini oluşturun."
+          "body": "Programatik erişim Bearer API anahtarı kullanır. Anahtarları URL’lere, tarayıcı JavaScript’ine veya kaynak koduna koymayın. Bir anahtar sızarsa hesap alanından silin ve yenisini oluşturun."
         },
         "report": {
           "title": "Güvenlik sorunu bildirin",
@@ -700,7 +700,7 @@
         },
         "accounts": {
           "title": "Hesaplar",
-          "body": "Hesabınızdaki e-posta, paroladan ve oluşturduğunuz API anahtarlarından siz sorumlusunuz. Anahtarları gizli tutun. Sızan bir anahtarı iptal edin. Hizmeti veya bu şartları kötüye kullanan hesabı askıya alabiliriz."
+          "body": "Hesabınızdaki e-posta, paroladan ve oluşturduğunuz API anahtarlarından siz sorumlusunuz. Anahtarları gizli tutun. Sızan bir anahtarı silin. Hizmeti veya bu şartları kötüye kullanan hesabı askıya alabiliriz."
         },
         "acceptableUse": {
           "title": "Kabul edilebilir kullanım",
@@ -804,7 +804,7 @@
       "ruleHeader": "Anahtarı yalnızca Authorization başlığında gönderin.",
       "ruleSecret": "Anahtarı gizli tutun. Kaynak kontrole koymayın.",
       "ruleBrowser": "Anahtarları frontend JavaScript’e gömmeyin.",
-      "ruleRevoke": "Sızan bir anahtarı panelden iptal edin ve yenisini oluşturun."
+      "ruleRevoke": "Sızan bir anahtarı panelden silin ve yenisini oluşturun."
     },
     "files": {
       "title": "Dosyalar",
@@ -943,7 +943,7 @@
       },
       "apiKeys": {
         "title": "API",
-        "description": "Programatik erişim için anahtar oluşturun ve iptal edin."
+        "description": "Programatik erişim için anahtar oluşturun ve silin."
       },
       "settings": {
         "title": "Ayarlar",
@@ -1304,12 +1304,12 @@
     "description": "SoHappyPDF API’sini çağırmak için anahtar oluşturun. Ham anahtar yalnızca bir kez gösterilir.",
     "actions": {
       "create": "API anahtarı oluştur",
-      "revoke": "İptal et",
-      "revokeNamed": "{name} anahtarını iptal et"
+      "delete": "Sil",
+      "deleteNamed": "{name} anahtarını sil"
     },
     "list": {
       "title": "API anahtarlarınız",
-      "description": "Aktif anahtarlar API isteklerini doğrular. İptal edilen anahtarlar hemen çalışmayı durdurur.",
+      "description": "Aktif anahtarlar API isteklerini doğrular. Anahtarı silmek onu hemen durdurur.",
       "loading": "API anahtarları yükleniyor…",
       "empty": "Henüz API anahtarı yok.",
       "emptyHint": "SoHappyPDF’i programatik kullanmaya başlamak için bir API anahtarı oluşturun.",
@@ -1345,19 +1345,19 @@
       "done": "Tamam",
       "close": "Oluşturulan API anahtarını kapat"
     },
-    "revoke": {
-      "title": "API anahtarını iptal et",
+    "delete": {
+      "title": "API anahtarını sil",
       "description": "{name} hemen çalışmayı durduracak. Bu işlem geri alınamaz.",
-      "confirm": "Anahtarı iptal et",
-      "revoking": "İptal ediliyor…",
+      "confirm": "Anahtarı sil",
+      "deleting": "Siliniyor…",
       "cancel": "Vazgeç",
-      "success": "API anahtarı iptal edildi."
+      "success": "API anahtarı silindi."
     },
     "usage": {
       "title": "API anahtarı kullanımı",
       "description": "Anahtarı Authorization başlığında gönderin. Sorgu parametrelerine veya tarayıcı koduna koymayın.",
       "baseUrlLabel": "API taban URL’si:",
-      "rotateHint": "Anahtarı gizli tutun. Sızarsa hemen iptal edin.",
+      "rotateHint": "Anahtarı gizli tutun. Sızarsa hemen silin.",
       "docsLink": "API belgelendirmesini aç",
       "statusTitle": "API kullanımı",
       "statusDescription": "API kredileri web araç kredilerinden ayrıdır. Limitler web planınızı izler.",

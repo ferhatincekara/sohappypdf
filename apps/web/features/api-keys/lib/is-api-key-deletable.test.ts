@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isApiKeyRevocable } from "@/features/api-keys/lib/is-api-key-revocable";
+import { isApiKeyDeletable } from "@/features/api-keys/lib/is-api-key-deletable";
 import type { PublicApiKey } from "@/features/api-keys/types/api-key";
 
 function createApiKey(overrides: Partial<PublicApiKey> = {}): PublicApiKey {
@@ -16,11 +16,11 @@ function createApiKey(overrides: Partial<PublicApiKey> = {}): PublicApiKey {
   };
 }
 
-describe("isApiKeyRevocable", () => {
+describe("isApiKeyDeletable", () => {
   test("allows active keys and hides already revoked ones", () => {
-    expect(isApiKeyRevocable(createApiKey())).toBe(true);
+    expect(isApiKeyDeletable(createApiKey())).toBe(true);
     expect(
-      isApiKeyRevocable(
+      isApiKeyDeletable(
         createApiKey({
           status: "revoked",
           revokedAt: "2026-08-24T00:01:00.000Z",
