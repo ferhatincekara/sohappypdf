@@ -13,7 +13,7 @@ import {
 
 describe("developer examples", () => {
   test("use placeholders instead of secrets", () => {
-    const apiV1BaseUrl = "http://localhost:3001/api/v1";
+    const apiV1BaseUrl = "http://localhost:3001/v1";
     const examples = [
       authorizationExample(),
       uploadExample(apiV1BaseUrl),

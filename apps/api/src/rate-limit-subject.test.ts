@@ -52,25 +52,25 @@ describe("toRateLimitSubject", () => {
 describe("isHealthPath", () => {
   test("exempts infrastructure health routes", () => {
     expect(isHealthPath("/health")).toBe(true);
-    expect(isHealthPath("/api/v1/health")).toBe(true);
-    expect(isHealthPath("/api/v1/files")).toBe(false);
+    expect(isHealthPath("/v1/health")).toBe(true);
+    expect(isHealthPath("/v1/files")).toBe(false);
   });
 });
 
 describe("isRateLimitExemptPath", () => {
   test("exempts Polar webhook delivery", () => {
-    expect(isRateLimitExemptPath("/api/v1/billing/webhooks")).toBe(true);
-    expect(isRateLimitExemptPath("/api/v1/billing")).toBe(false);
+    expect(isRateLimitExemptPath("/v1/billing/webhooks")).toBe(true);
+    expect(isRateLimitExemptPath("/v1/billing")).toBe(false);
   });
 
   test("exempts the public OpenAPI document", () => {
-    expect(isRateLimitExemptPath("/api/v1/openapi.json")).toBe(true);
+    expect(isRateLimitExemptPath("/v1/openapi.json")).toBe(true);
   });
 });
 
 describe("isAnonymousApiPath", () => {
   test("identifies anonymous tool API routes", () => {
-    expect(isAnonymousApiPath("/api/v1/anonymous/files/upload")).toBe(true);
-    expect(isAnonymousApiPath("/api/v1/files/upload")).toBe(false);
+    expect(isAnonymousApiPath("/v1/anonymous/files/upload")).toBe(true);
+    expect(isAnonymousApiPath("/v1/files/upload")).toBe(false);
   });
 });

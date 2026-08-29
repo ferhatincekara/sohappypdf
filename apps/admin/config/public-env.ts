@@ -21,5 +21,5 @@ export function getPublicAdminEnv(): PublicAdminEnv {
 }
 
 export function getAdminApiV1BaseUrl(): string {
-  return `${getPublicAdminEnv().apiBaseUrl}/api/v1`;
+  return `${getPublicAdminEnv().apiBaseUrl}/v1`;
 }

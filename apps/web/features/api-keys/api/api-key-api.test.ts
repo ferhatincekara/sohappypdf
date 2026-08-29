@@ -34,7 +34,7 @@ describe("api key api", () => {
     const api = createApiKeyApi(
       createClient({
         get: (async (url) => {
-          expect(url).toBe("/api/v1/api-keys");
+          expect(url).toBe("/v1/api-keys");
           return { data: { apiKeys: [createApiKey()] } };
         }) as AxiosInstance["get"],
       }),
@@ -51,7 +51,7 @@ describe("api key api", () => {
     const api = createApiKeyApi(
       createClient({
         post: (async (url, body) => {
-          expect(url).toBe("/api/v1/api-keys");
+          expect(url).toBe("/v1/api-keys");
           expect(body).toEqual({ name: "Production" });
           return {
             data: {

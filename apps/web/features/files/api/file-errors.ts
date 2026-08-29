@@ -227,5 +227,5 @@ function isPresignedUrlRequest(url: string | undefined): boolean {
     return false;
   }
 
-  return !url.includes("/api/v1/");
+  return !url.includes("/v1/");
 }

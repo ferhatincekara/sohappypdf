@@ -276,7 +276,7 @@ describe("file API", () => {
       fileService,
     });
 
-    const response = await app.request("/api/v1/files/upload", {
+    const response = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -289,7 +289,7 @@ describe("file API", () => {
     const { fileService } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
 
-    const unsupported = await app.request("/api/v1/files/upload", {
+    const unsupported = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -297,7 +297,7 @@ describe("file API", () => {
         contentType: "application/zip",
       }),
     });
-    const oversized = await app.request("/api/v1/files/upload", {
+    const oversized = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -317,7 +317,7 @@ describe("file API", () => {
     const { fileService } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
 
-    const response = await app.request("/api/v1/files/upload", {
+    const response = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -336,7 +336,7 @@ describe("file API", () => {
   test("allows API-key identities to manage their owner's files", async () => {
     const { fileService, storage } = createTestFileService();
     const app = createFileApp({ identity: apiKeyIdentity, fileService });
-    const created = await app.request("/api/v1/files/upload", {
+    const created = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -350,7 +350,7 @@ describe("file API", () => {
     });
 
     const completed = await app.request(
-      `/api/v1/files/${createdBody.file.id}/complete`,
+      `/v1/files/${createdBody.file.id}/complete`,
       { method: "POST" },
     );
 
@@ -363,7 +363,7 @@ describe("file API", () => {
   test("creates a presigned download URL for an uploaded owned file", async () => {
     const { fileService, storage } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
-    const created = await app.request("/api/v1/files/upload", {
+    const created = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -375,12 +375,12 @@ describe("file API", () => {
       body: new Uint8Array(file.sizeBytes),
       contentType: file.mimeType,
     });
-    await app.request(`/api/v1/files/${createdBody.file.id}/complete`, {
+    await app.request(`/v1/files/${createdBody.file.id}/complete`, {
       method: "POST",
     });
 
     const response = await app.request(
-      `/api/v1/files/${createdBody.file.id}/download`,
+      `/v1/files/${createdBody.file.id}/download`,
       { method: "POST" },
     );
     const body = await response.json();
@@ -397,7 +397,7 @@ describe("file API", () => {
     const uploaded: string[] = [];
 
     for (const filename of ["one.pdf", "two.pdf"]) {
-      const created = await app.request("/api/v1/files/upload", {
+      const created = await app.request("/v1/files/upload", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ ...uploadBody, filename }),
@@ -412,13 +412,13 @@ describe("file API", () => {
         body: new Uint8Array(file.sizeBytes),
         contentType: file.mimeType,
       });
-      await app.request(`/api/v1/files/${createdBody.file.id}/complete`, {
+      await app.request(`/v1/files/${createdBody.file.id}/complete`, {
         method: "POST",
       });
       uploaded.push(createdBody.file.id);
     }
 
-    const response = await app.request("/api/v1/files/archive", {
+    const response = await app.request("/v1/files/archive", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -438,7 +438,7 @@ describe("file API", () => {
   test("hides another user's download URL", async () => {
     const { fileService, storage } = createTestFileService();
     const ownerApp = createFileApp({ identity: sessionIdentity, fileService });
-    const created = await ownerApp.request("/api/v1/files/upload", {
+    const created = await ownerApp.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -450,7 +450,7 @@ describe("file API", () => {
       body: new Uint8Array(file.sizeBytes),
       contentType: file.mimeType,
     });
-    await ownerApp.request(`/api/v1/files/${createdBody.file.id}/complete`, {
+    await ownerApp.request(`/v1/files/${createdBody.file.id}/complete`, {
       method: "POST",
     });
     const otherApp = createFileApp({
@@ -463,7 +463,7 @@ describe("file API", () => {
     });
 
     const response = await otherApp.request(
-      `/api/v1/files/${createdBody.file.id}/download`,
+      `/v1/files/${createdBody.file.id}/download`,
       { method: "POST" },
     );
 
@@ -473,7 +473,7 @@ describe("file API", () => {
   test("does not complete an upload when the object is missing", async () => {
     const { fileService } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
-    const created = await app.request("/api/v1/files/upload", {
+    const created = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -481,7 +481,7 @@ describe("file API", () => {
     const createdBody = await created.json();
 
     const response = await app.request(
-      `/api/v1/files/${createdBody.file.id}/complete`,
+      `/v1/files/${createdBody.file.id}/complete`,
       { method: "POST" },
     );
 
@@ -491,7 +491,7 @@ describe("file API", () => {
   test("hides another user's file on get and delete", async () => {
     const { fileService } = createTestFileService();
     const ownerApp = createFileApp({ identity: sessionIdentity, fileService });
-    const created = await ownerApp.request("/api/v1/files/upload", {
+    const created = await ownerApp.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -507,10 +507,10 @@ describe("file API", () => {
     });
 
     const getResponse = await otherApp.request(
-      `/api/v1/files/${createdBody.file.id}`,
+      `/v1/files/${createdBody.file.id}`,
     );
     const deleteResponse = await otherApp.request(
-      `/api/v1/files/${createdBody.file.id}`,
+      `/v1/files/${createdBody.file.id}`,
       { method: "DELETE" },
     );
 
@@ -522,7 +522,7 @@ describe("file API", () => {
     let currentTime = new Date("2026-08-23T18:00:00.000Z");
     const { fileService } = createTestFileService(() => currentTime);
     const app = createFileApp({ identity: sessionIdentity, fileService });
-    const created = await app.request("/api/v1/files/upload", {
+    const created = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -530,13 +530,13 @@ describe("file API", () => {
     const createdBody = await created.json();
     currentTime = new Date("2026-08-23T21:00:00.000Z");
 
-    const response = await app.request(`/api/v1/files/${createdBody.file.id}`);
+    const response = await app.request(`/v1/files/${createdBody.file.id}`);
     const complete = await app.request(
-      `/api/v1/files/${createdBody.file.id}/complete`,
+      `/v1/files/${createdBody.file.id}/complete`,
       { method: "POST" },
     );
     const download = await app.request(
-      `/api/v1/files/${createdBody.file.id}/download`,
+      `/v1/files/${createdBody.file.id}/download`,
       { method: "POST" },
     );
     const downloadBody = await download.json();
@@ -557,22 +557,22 @@ describe("file API", () => {
     const { fileService } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
 
-    await app.request("/api/v1/files/upload", {
+    await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ...uploadBody, filename: "one.pdf" }),
     });
-    await app.request("/api/v1/files/upload", {
+    await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ...uploadBody, filename: "two.pdf" }),
     });
 
-    const tooLarge = await app.request("/api/v1/files?limit=1000000");
-    const page = await app.request("/api/v1/files?limit=1");
+    const tooLarge = await app.request("/v1/files?limit=1000000");
+    const page = await app.request("/v1/files?limit=1");
     const pageBody = await page.json();
     const next = await app.request(
-      `/api/v1/files?limit=1&cursor=${pageBody.nextCursor}`,
+      `/v1/files?limit=1&cursor=${pageBody.nextCursor}`,
     );
 
     expect(tooLarge.status).toBe(400);
@@ -585,14 +585,14 @@ describe("file API", () => {
   test("deletes an owned file", async () => {
     const { fileService } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
-    const created = await app.request("/api/v1/files/upload", {
+    const created = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
     });
     const createdBody = await created.json();
 
-    const response = await app.request(`/api/v1/files/${createdBody.file.id}`, {
+    const response = await app.request(`/v1/files/${createdBody.file.id}`, {
       method: "DELETE",
     });
 
@@ -601,7 +601,7 @@ describe("file API", () => {
       file: { id: createdBody.file.id, status: "deleted" },
     });
     expect(
-      (await app.request(`/api/v1/files/${createdBody.file.id}`)).status,
+      (await app.request(`/v1/files/${createdBody.file.id}`)).status,
     ).toBe(404);
   });
 
@@ -609,7 +609,7 @@ describe("file API", () => {
     const { fileService } = createTestFileService();
     const app = createFileApp({ identity: sessionIdentity, fileService });
 
-    const response = await app.request("/api/v1/files/upload", {
+    const response = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -640,7 +640,7 @@ describe("file API", () => {
       }),
     });
 
-    const first = await app.request("/api/v1/files/upload", {
+    const first = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -648,7 +648,7 @@ describe("file API", () => {
         size: 800,
       }),
     });
-    const second = await app.request("/api/v1/files/upload", {
+    const second = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

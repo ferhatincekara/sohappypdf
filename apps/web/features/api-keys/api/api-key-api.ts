@@ -29,7 +29,7 @@ export function createApiKeyApi(client: AxiosInstance = apiClient): ApiKeyApi {
     async list() {
       try {
         const response =
-          await client.get<ApiKeyListResponse>("/api/v1/api-keys");
+          await client.get<ApiKeyListResponse>("/v1/api-keys");
         return response.data;
       } catch (error) {
         throw new ApiKeyApiRequestError(error);
@@ -39,7 +39,7 @@ export function createApiKeyApi(client: AxiosInstance = apiClient): ApiKeyApi {
     async create(input) {
       try {
         const response = await client.post<CreateApiKeyResponse>(
-          "/api/v1/api-keys",
+          "/v1/api-keys",
           { name: input.name },
         );
         return response.data;
@@ -51,7 +51,7 @@ export function createApiKeyApi(client: AxiosInstance = apiClient): ApiKeyApi {
     async revoke(id) {
       try {
         const response = await client.delete<{ apiKey: PublicApiKey }>(
-          `/api/v1/api-keys/${id}`,
+          `/v1/api-keys/${id}`,
         );
         return response.data.apiKey;
       } catch (error) {

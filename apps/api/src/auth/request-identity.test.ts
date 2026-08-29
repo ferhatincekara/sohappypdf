@@ -87,9 +87,9 @@ describe("request identity", () => {
         },
       }),
     });
-    app.get("/api/v1/__test/me", (c) => c.json(c.get("identity")));
+    app.get("/v1/__test/me", (c) => c.json(c.get("identity")));
 
-    const response = await app.request("/api/v1/__test/me", {
+    const response = await app.request("/v1/__test/me", {
       headers: {
         authorization: `Bearer ${generated.rawKey}`,
       },
@@ -112,9 +112,9 @@ describe("request identity", () => {
         authenticateApiKey: async () => null,
       }),
     });
-    app.get("/api/v1/__test/me", (c) => c.json(c.get("identity")));
+    app.get("/v1/__test/me", (c) => c.json(c.get("identity")));
 
-    const response = await app.request("/api/v1/__test/me", {
+    const response = await app.request("/v1/__test/me", {
       headers: {
         authorization: `Bearer ${generated.rawKey}`,
       },

@@ -35,7 +35,7 @@ export function createBillingApi(
     async getStatus() {
       try {
         const response =
-          await client.get<BillingStatusResponse>("/api/v1/billing");
+          await client.get<BillingStatusResponse>("/v1/billing");
         return response.data;
       } catch (error) {
         throw new BillingApiRequestError(error);
@@ -48,7 +48,7 @@ export function createBillingApi(
     ) {
       try {
         const response = await client.post<BillingCheckoutResponse>(
-          "/api/v1/billing/checkout",
+          "/v1/billing/checkout",
           { product, interval },
         );
         return response.data;
@@ -60,7 +60,7 @@ export function createBillingApi(
     async createPortal() {
       try {
         const response = await client.post<BillingPortalResponse>(
-          "/api/v1/billing/portal",
+          "/v1/billing/portal",
         );
         return response.data;
       } catch (error) {

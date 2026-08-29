@@ -266,7 +266,7 @@ function createBillingApp(options?: {
 describe("billing API", () => {
   test("rejects unauthenticated billing access", async () => {
     const app = createBillingApp({ identity: { kind: "anonymous" } });
-    const response = await app.request("/api/v1/billing");
+    const response = await app.request("/v1/billing");
 
     expect(response.status).toBe(401);
     expect((await response.json()).error.code).toBe(
@@ -302,7 +302,7 @@ describe("billing API", () => {
         },
       }),
     });
-    const response = await app.request("/api/v1/billing/catalog");
+    const response = await app.request("/v1/billing/catalog");
     const body = await response.json();
     const serialized = JSON.stringify(body);
 
@@ -315,7 +315,7 @@ describe("billing API", () => {
 
   test("returns the free billing status for a user without a subscription", async () => {
     const app = createBillingApp();
-    const response = await app.request("/api/v1/billing");
+    const response = await app.request("/v1/billing");
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -333,7 +333,7 @@ describe("billing API", () => {
 
   test("creates a Polar checkout session", async () => {
     const app = createBillingApp();
-    const response = await app.request("/api/v1/billing/checkout", {
+    const response = await app.request("/v1/billing/checkout", {
       method: "POST",
     });
     const body = await response.json();
@@ -356,7 +356,7 @@ describe("billing API", () => {
       }),
     });
 
-    const response = await app.request("/api/v1/billing/checkout", {
+    const response = await app.request("/v1/billing/checkout", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ product: "api-starter" }),
@@ -383,7 +383,7 @@ describe("billing API", () => {
       }),
     });
 
-    const response = await app.request("/api/v1/billing/checkout", {
+    const response = await app.request("/v1/billing/checkout", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ product: "api-starter", interval: "yearly" }),
@@ -418,7 +418,7 @@ describe("billing API", () => {
       }),
     });
 
-    const webhook = await app.request("/api/v1/billing/webhooks", {
+    const webhook = await app.request("/v1/billing/webhooks", {
       method: "POST",
       headers: {
         "webhook-id": "evt_test",
@@ -427,7 +427,7 @@ describe("billing API", () => {
       },
       body: "{}",
     });
-    const status = await app.request("/api/v1/billing");
+    const status = await app.request("/v1/billing");
     const body = await status.json();
 
     expect(webhook.status).toBe(202);
@@ -451,7 +451,7 @@ describe("billing API", () => {
         },
       }),
     });
-    const response = await app.request("/api/v1/billing");
+    const response = await app.request("/v1/billing");
     const body = await response.json();
 
     expect(response.status).toBe(200);

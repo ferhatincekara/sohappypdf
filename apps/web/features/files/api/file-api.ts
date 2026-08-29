@@ -26,7 +26,7 @@ export async function createUpload(
 ): Promise<CreateUploadResponse> {
   try {
     const response = await apiClient.post<CreateUploadResponse>(
-      "/api/v1/files/upload",
+      "/v1/files/upload",
       {
         filename: input.filename,
         contentType: input.contentType,
@@ -47,7 +47,7 @@ export async function completeUpload(
 ): Promise<PublicFile> {
   try {
     const response = await apiClient.post<{ file: PublicFile }>(
-      `/api/v1/files/${fileId}/complete`,
+      `/v1/files/${fileId}/complete`,
       undefined,
       { signal: options?.signal },
     );
@@ -75,7 +75,7 @@ export function createFileListApi(
   return {
     async list(query = {}, options) {
       try {
-        const response = await client.get<FileListResponse>("/api/v1/files", {
+        const response = await client.get<FileListResponse>("/v1/files", {
           params: {
             ...(query.cursor === undefined ? {} : { cursor: query.cursor }),
             ...(query.limit === undefined ? {} : { limit: query.limit }),
@@ -91,7 +91,7 @@ export function createFileListApi(
     async delete(fileId, options) {
       try {
         const response = await client.delete<{ file: PublicFile }>(
-          `/api/v1/files/${fileId}`,
+          `/v1/files/${fileId}`,
           { signal: options?.signal },
         );
 
@@ -125,7 +125,7 @@ export async function createDownloadUrl(
 ): Promise<FileDownloadResponse> {
   try {
     const response = await apiClient.post<FileDownloadResponse>(
-      `/api/v1/files/${fileId}/download`,
+      `/v1/files/${fileId}/download`,
       undefined,
       { signal: options?.signal },
     );
@@ -147,7 +147,7 @@ export async function createArchiveDownloadUrl(
 ): Promise<FileDownloadResponse> {
   try {
     const response = await apiClient.post<FileDownloadResponse>(
-      "/api/v1/files/archive",
+      "/v1/files/archive",
       {
         files: input.files,
         ...(input.archiveName === undefined

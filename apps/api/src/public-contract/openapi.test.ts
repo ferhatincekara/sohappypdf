@@ -25,8 +25,15 @@ describe("public OpenAPI contract", () => {
     expect(document.paths[PUBLIC_V1_PATHS.fileComplete]).toBeDefined();
     expect(document.paths[PUBLIC_V1_PATHS.fileDownload]).toBeDefined();
     expect(document.paths[PUBLIC_V1_PATHS.conversions]).toBeDefined();
-    expect(document.paths["/api/v1/api-keys"]).toBeUndefined();
-    expect(document.paths["/api/v1/billing"]).toBeUndefined();
+    expect(document.servers.map((server) => server.url)).toEqual([
+      "http://localhost:3001",
+      "https://api.sohappypdf.com",
+    ]);
+    expect(
+      Object.keys(document.paths).every((path) => path.startsWith("/v1/")),
+    ).toBe(true);
+    expect(document.paths["/v1/api-keys"]).toBeUndefined();
+    expect(document.paths["/v1/billing"]).toBeUndefined();
     expect(
       Object.keys(document.paths).some((path) => path.includes("/admin")),
     ).toBe(false);

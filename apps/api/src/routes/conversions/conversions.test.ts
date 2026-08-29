@@ -442,7 +442,7 @@ const apiKeyIdentity: RequestIdentity = {
 describe("conversion API", () => {
   test("requires authentication for conversion routes", async () => {
     const { app } = createConversionApp({ identity: { kind: "anonymous" } });
-    const response = await app.request("/api/v1/conversions", {
+    const response = await app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -461,7 +461,7 @@ describe("conversion API", () => {
     });
     const file = await createReadyFile(context, { ownerId: "user_1" });
 
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -506,7 +506,7 @@ describe("conversion API", () => {
       contentType: "image/png",
     });
 
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -531,7 +531,7 @@ describe("conversion API", () => {
     });
     const file = await createReadyFile(services, { ownerId: "user_1" });
 
-    const response = await otherApp.request("/api/v1/conversions", {
+    const response = await otherApp.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -544,7 +544,7 @@ describe("conversion API", () => {
     expect(await response.json()).toMatchObject({
       error: { code: APP_ERROR_CODES.NOT_FOUND, message: "File not found" },
     });
-    expect((await ownerApp.request("/api/v1/conversions")).status).toBe(200);
+    expect((await ownerApp.request("/v1/conversions")).status).toBe(200);
   });
 
   test("rejects expired and deleted source files", async () => {
@@ -563,7 +563,7 @@ describe("conversion API", () => {
     });
     await context.fileService.deleteOwnedFile(deleted.id, "user_1");
 
-    const deletedResponse = await context.app.request("/api/v1/conversions", {
+    const deletedResponse = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -574,7 +574,7 @@ describe("conversion API", () => {
 
     currentTime = new Date("2026-08-23T21:00:00.000Z");
 
-    const expiredResponse = await context.app.request("/api/v1/conversions", {
+    const expiredResponse = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -604,7 +604,7 @@ describe("conversion API", () => {
       sizeBytes: 2048,
     });
 
-    const response = await app.request("/api/v1/conversions", {
+    const response = await app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -625,7 +625,7 @@ describe("conversion API", () => {
   test("rejects invalid identifiers, formats, and malformed bodies", async () => {
     const { app } = createConversionApp({ identity: sessionIdentity });
 
-    const invalidId = await app.request("/api/v1/conversions", {
+    const invalidId = await app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -633,7 +633,7 @@ describe("conversion API", () => {
         targetFormat: "jpg",
       }),
     });
-    const unsupported = await app.request("/api/v1/conversions", {
+    const unsupported = await app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -641,7 +641,7 @@ describe("conversion API", () => {
         targetFormat: "exe",
       }),
     });
-    const malformed = await app.request("/api/v1/conversions", {
+    const malformed = await app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: "{",
@@ -664,13 +664,13 @@ describe("conversion API", () => {
       targetFormat: "jpg",
     });
 
-    const first = await context.app.request("/api/v1/conversions", {
+    const first = await context.app.request("/v1/conversions", {
       method: "POST",
       headers,
       body,
     });
     const firstBody = await first.json();
-    const second = await context.app.request("/api/v1/conversions", {
+    const second = await context.app.request("/v1/conversions", {
       method: "POST",
       headers,
       body,
@@ -687,7 +687,7 @@ describe("conversion API", () => {
     const context = createConversionApp({ identity: sessionIdentity });
     const file = await createReadyFile(context, { ownerId: "user_1" });
 
-    await context.app.request("/api/v1/conversions", {
+    await context.app.request("/v1/conversions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -698,7 +698,7 @@ describe("conversion API", () => {
         targetFormat: "jpg",
       }),
     });
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -718,7 +718,7 @@ describe("conversion API", () => {
     const file = await createReadyFile(context, { ownerId: "user_1" });
     context.failEnqueue = true;
 
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -736,7 +736,7 @@ describe("conversion API", () => {
     });
 
     context.failEnqueue = false;
-    const replay = await context.app.request("/api/v1/conversions", {
+    const replay = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -761,7 +761,7 @@ describe("conversion API", () => {
     });
     const ownerFile = await createReadyFile(services, { ownerId: "user_1" });
     const otherFile = await createReadyFile(services, { ownerId: "user_2" });
-    const created = await ownerApp.request("/api/v1/conversions", {
+    const created = await ownerApp.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -770,7 +770,7 @@ describe("conversion API", () => {
       }),
     });
     const createdBody = await created.json();
-    await otherApp.request("/api/v1/conversions", {
+    await otherApp.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -780,12 +780,12 @@ describe("conversion API", () => {
     });
 
     const getOwn = await ownerApp.request(
-      `/api/v1/conversions/${createdBody.conversion.id}`,
+      `/v1/conversions/${createdBody.conversion.id}`,
     );
     const getOther = await otherApp.request(
-      `/api/v1/conversions/${createdBody.conversion.id}`,
+      `/v1/conversions/${createdBody.conversion.id}`,
     );
-    const listed = await ownerApp.request("/api/v1/conversions");
+    const listed = await ownerApp.request("/v1/conversions");
     const listedBody = await listed.json();
 
     expect(getOwn.status).toBe(200);
@@ -807,24 +807,24 @@ describe("conversion API", () => {
       filename: "two.pdf",
     });
 
-    await context.app.request("/api/v1/conversions", {
+    await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ sourceFileId: first.id, targetFormat: "jpg" }),
     });
-    await context.app.request("/api/v1/conversions", {
+    await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ sourceFileId: second.id, targetFormat: "png" }),
     });
 
     const tooLarge = await context.app.request(
-      "/api/v1/conversions?limit=1000000",
+      "/v1/conversions?limit=1000000",
     );
-    const page = await context.app.request("/api/v1/conversions?limit=1");
+    const page = await context.app.request("/v1/conversions?limit=1");
     const pageBody = await page.json();
     const next = await context.app.request(
-      `/api/v1/conversions?limit=1&cursor=${pageBody.nextCursor}`,
+      `/v1/conversions?limit=1&cursor=${pageBody.nextCursor}`,
     );
 
     expect(tooLarge.status).toBe(400);
@@ -837,7 +837,7 @@ describe("conversion API", () => {
   test("cancels a queued conversion owned by the caller", async () => {
     const context = createConversionApp({ identity: sessionIdentity });
     const file = await createReadyFile(context, { ownerId: "user_1" });
-    const created = await context.app.request("/api/v1/conversions", {
+    const created = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -848,7 +848,7 @@ describe("conversion API", () => {
     const createdBody = await created.json();
 
     const response = await context.app.request(
-      `/api/v1/conversions/${createdBody.conversion.id}/cancel`,
+      `/v1/conversions/${createdBody.conversion.id}/cancel`,
       { method: "POST" },
     );
 
@@ -877,7 +877,7 @@ describe("conversion API", () => {
     });
     const file = await createReadyFile(context, { ownerId: "user_1" });
 
-    const first = await context.app.request("/api/v1/conversions", {
+    const first = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -885,7 +885,7 @@ describe("conversion API", () => {
         targetFormat: "jpg",
       }),
     });
-    const second = await context.app.request("/api/v1/conversions", {
+    const second = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -915,7 +915,7 @@ describe("conversion API", () => {
     });
     const file = await createReadyFile(context, { ownerId: "user_1" });
 
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -948,7 +948,7 @@ describe("conversion API", () => {
     });
     const file = await createReadyFile(context, { ownerId: "user_1" });
 
-    const first = await context.app.request("/api/v1/conversions", {
+    const first = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -956,7 +956,7 @@ describe("conversion API", () => {
         targetFormat: "jpg",
       }),
     });
-    const second = await context.app.request("/api/v1/conversions", {
+    const second = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -985,7 +985,7 @@ describe("conversion API", () => {
       contentType: "image/png",
     });
 
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -1006,7 +1006,7 @@ describe("conversion API", () => {
     });
     const file = await createReadyFile(context, { ownerId: "user_1" });
 
-    const response = await context.app.request("/api/v1/conversions", {
+    const response = await context.app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

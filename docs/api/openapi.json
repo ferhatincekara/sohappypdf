@@ -8,7 +8,11 @@
   "servers": [
     {
       "url": "http://localhost:3001",
-      "description": "Local development. Replace the origin with your deployed API host. Do not invent a production domain."
+      "description": "Local development API host."
+    },
+    {
+      "url": "https://api.sohappypdf.com",
+      "description": "Production API host. The public API is not served at the marketing origin under /api."
     }
   ],
   "tags": [
@@ -111,7 +115,8 @@
           "webp",
           "txt",
           "md",
-          "json"
+          "json",
+          "zip"
         ]
       },
       "ConversionType": {
@@ -412,7 +417,7 @@
     }
   ],
   "paths": {
-    "/api/v1/health": {
+    "/v1/health": {
       "get": {
         "tags": ["Health"],
         "summary": "API liveness",
@@ -439,7 +444,7 @@
         }
       }
     },
-    "/api/v1/openapi.json": {
+    "/v1/openapi.json": {
       "get": {
         "tags": ["Health"],
         "summary": "OpenAPI document",
@@ -458,7 +463,7 @@
         }
       }
     },
-    "/api/v1/files/upload": {
+    "/v1/files/upload": {
       "post": {
         "tags": ["Files"],
         "summary": "Create a presigned upload",
@@ -622,7 +627,7 @@
         }
       }
     },
-    "/api/v1/files": {
+    "/v1/files": {
       "get": {
         "tags": ["Files"],
         "summary": "List files",
@@ -754,7 +759,7 @@
         }
       }
     },
-    "/api/v1/files/{id}": {
+    "/v1/files/{id}": {
       "get": {
         "tags": ["Files"],
         "summary": "Get a file",
@@ -1074,7 +1079,7 @@
         }
       }
     },
-    "/api/v1/files/{id}/complete": {
+    "/v1/files/{id}/complete": {
       "post": {
         "tags": ["Files"],
         "summary": "Complete a presigned upload",
@@ -1235,7 +1240,7 @@
         }
       }
     },
-    "/api/v1/files/{id}/download": {
+    "/v1/files/{id}/download": {
       "post": {
         "tags": ["Files"],
         "summary": "Create a temporary download URL",
@@ -1391,11 +1396,11 @@
         }
       }
     },
-    "/api/v1/conversions": {
+    "/v1/conversions": {
       "post": {
         "tags": ["Conversions"],
         "summary": "Create a conversion",
-        "description": "Creates a conversion record and enqueues worker processing. Returns HTTP 201 immediately. Poll GET /api/v1/conversions/{id} until the status is completed, failed, or cancelled. Send Idempotency-Key to avoid duplicate jobs.",
+        "description": "Creates a conversion record and enqueues worker processing. Returns HTTP 201 immediately. Poll GET /v1/conversions/{id} until the status is completed, failed, or cancelled. Send Idempotency-Key to avoid duplicate jobs.",
         "parameters": [
           {
             "name": "Idempotency-Key",
@@ -1758,7 +1763,7 @@
         }
       }
     },
-    "/api/v1/conversions/{id}": {
+    "/v1/conversions/{id}": {
       "get": {
         "tags": ["Conversions"],
         "summary": "Get a conversion",
@@ -1898,7 +1903,7 @@
         }
       }
     },
-    "/api/v1/conversions/{id}/cancel": {
+    "/v1/conversions/{id}/cancel": {
       "post": {
         "tags": ["Conversions"],
         "summary": "Cancel a conversion",

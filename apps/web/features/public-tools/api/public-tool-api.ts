@@ -29,7 +29,7 @@ export async function createAnonymousUpload(
 ): Promise<CreateUploadResponse> {
   try {
     const response = await apiClient.post<CreateUploadResponse>(
-      "/api/v1/anonymous/files/upload",
+      "/v1/anonymous/files/upload",
       {
         filename: input.filename,
         contentType: input.contentType,
@@ -50,7 +50,7 @@ export async function completeAnonymousUpload(
 ): Promise<PublicFile> {
   try {
     const response = await apiClient.post<{ file: PublicFile }>(
-      `/api/v1/anonymous/files/${fileId}/complete`,
+      `/v1/anonymous/files/${fileId}/complete`,
       undefined,
       { signal: options?.signal },
     );
@@ -69,7 +69,7 @@ export async function createAnonymousConversion(input: {
 }): Promise<PublicConversion> {
   try {
     const response = await apiClient.post<{ conversion: PublicConversion }>(
-      "/api/v1/anonymous/conversions",
+      "/v1/anonymous/conversions",
       {
         sourceFileId: input.sourceFileId,
         type: input.type,
@@ -91,7 +91,7 @@ export async function getAnonymousConversion(
 ): Promise<PublicConversion> {
   try {
     const response = await apiClient.get<{ conversion: PublicConversion }>(
-      `/api/v1/anonymous/conversions/${id}`,
+      `/v1/anonymous/conversions/${id}`,
     );
 
     return response.data.conversion;
@@ -105,7 +105,7 @@ export async function listAnonymousConversions(
 ): Promise<ConversionListResponse> {
   try {
     const response = await apiClient.get<ConversionListResponse>(
-      "/api/v1/anonymous/conversions",
+      "/v1/anonymous/conversions",
       {
         params:
           query.limit === undefined
@@ -127,7 +127,7 @@ export async function createAnonymousDownloadUrl(
 ): Promise<FileDownloadResponse> {
   try {
     const response = await apiClient.post<FileDownloadResponse>(
-      `/api/v1/anonymous/files/${fileId}/download`,
+      `/v1/anonymous/files/${fileId}/download`,
     );
 
     return response.data;
@@ -141,7 +141,7 @@ export async function createAnonymousArchiveDownloadUrl(
 ): Promise<FileDownloadResponse> {
   try {
     const response = await apiClient.post<FileDownloadResponse>(
-      "/api/v1/anonymous/files/archive",
+      "/v1/anonymous/files/archive",
       {
         files: input.files,
         ...(input.archiveName === undefined

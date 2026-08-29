@@ -57,7 +57,7 @@ describe("conversion api", () => {
     expect(conversion.status).toBe("queued");
     expect(received).toEqual([
       {
-        url: "/api/v1/conversions",
+        url: "/v1/conversions",
         body: {
           sourceFileId: "11111111-1111-4111-8111-111111111111",
           targetFormat: "jpg",
@@ -72,7 +72,7 @@ describe("conversion api", () => {
       createClient({
         get: (async (url) => {
           expect(url).toBe(
-            "/api/v1/conversions/22222222-2222-4222-8222-222222222222",
+            "/v1/conversions/22222222-2222-4222-8222-222222222222",
           );
           return { data: { conversion: createConversion() } };
         }) as AxiosInstance["get"],
@@ -104,7 +104,7 @@ describe("conversion api", () => {
     expect(result.conversions).toHaveLength(1);
     expect(received).toEqual([
       {
-        url: "/api/v1/conversions",
+        url: "/v1/conversions",
         params: { cursor: "next-1", status: "completed" },
       },
     ]);

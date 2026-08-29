@@ -9,7 +9,10 @@ import {
 } from "@repo/conversions";
 import { APP_ERROR_CODES, APP_ERROR_STATUS } from "@repo/core";
 import { FILE_STATUSES } from "@repo/files";
-import { PUBLIC_V1_PATHS } from "./public-v1-paths.js";
+import {
+  PUBLIC_API_PRODUCTION_ORIGIN,
+  PUBLIC_V1_PATHS,
+} from "./public-v1-paths.js";
 
 export const DOCUMENTED_PRESIGN_EXPIRES_IN_SECONDS = 15 * 60;
 
@@ -159,8 +162,12 @@ export function createOpenApiDocument(): OpenApiDocument {
     servers: [
       {
         url: localServerUrl(),
+        description: "Local development API host.",
+      },
+      {
+        url: PUBLIC_API_PRODUCTION_ORIGIN,
         description:
-          "Local development. Replace the origin with your deployed API host. Do not invent a production domain.",
+          "Production API host. The public API is not served at the marketing origin under /api.",
       },
     ],
     tags: [
@@ -589,7 +596,7 @@ export function createOpenApiDocument(): OpenApiDocument {
           tags: ["Conversions"],
           summary: "Create a conversion",
           description:
-            "Creates a conversion record and enqueues worker processing. Returns HTTP 201 immediately. Poll GET /api/v1/conversions/{id} until the status is completed, failed, or cancelled. Send Idempotency-Key to avoid duplicate jobs.",
+            "Creates a conversion record and enqueues worker processing. Returns HTTP 201 immediately. Poll GET /v1/conversions/{id} until the status is completed, failed, or cancelled. Send Idempotency-Key to avoid duplicate jobs.",
           parameters: [
             {
               name: "Idempotency-Key",

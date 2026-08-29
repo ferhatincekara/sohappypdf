@@ -194,17 +194,17 @@ describe("end-to-end product coverage", () => {
     });
 
     const surfaces = [
-      "/api/v1/admin/me",
-      "/api/v1/admin/overview",
-      "/api/v1/admin/users",
-      "/api/v1/admin/users/user_2",
-      "/api/v1/admin/anonymous-sessions",
-      "/api/v1/admin/executions",
-      "/api/v1/admin/queues",
-      "/api/v1/admin/billing",
-      "/api/v1/admin/tools",
-      "/api/v1/admin/health",
-      "/api/v1/admin/audit",
+      "/v1/admin/me",
+      "/v1/admin/overview",
+      "/v1/admin/users",
+      "/v1/admin/users/user_2",
+      "/v1/admin/anonymous-sessions",
+      "/v1/admin/executions",
+      "/v1/admin/queues",
+      "/v1/admin/billing",
+      "/v1/admin/tools",
+      "/v1/admin/health",
+      "/v1/admin/audit",
     ];
 
     for (const path of surfaces) {
@@ -217,7 +217,7 @@ describe("end-to-end product coverage", () => {
       expect(body).not.toContain("polar_at_");
     }
 
-    const adjustment = await app.request("/api/v1/admin/billing/adjustments", {
+    const adjustment = await app.request("/v1/admin/billing/adjustments", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -229,7 +229,7 @@ describe("end-to-end product coverage", () => {
     });
     expect(adjustment.status).toBe(200);
 
-    const audit = await app.request("/api/v1/admin/audit");
+    const audit = await app.request("/v1/admin/audit");
     const auditBody = await audit.json();
     expect(audit.status).toBe(200);
     expect(auditBody.events[0]).toMatchObject({
@@ -256,7 +256,7 @@ describe("end-to-end product coverage", () => {
       }),
     });
 
-    const response = await app.request("/api/v1/admin/audit");
+    const response = await app.request("/v1/admin/audit");
     expect(response.status).toBe(403);
   });
 });

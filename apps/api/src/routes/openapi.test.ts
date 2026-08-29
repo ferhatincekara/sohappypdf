@@ -21,7 +21,7 @@ describe("OpenAPI route", () => {
       logger: silentLogger,
       resolveIdentity: async () => ({ kind: "anonymous" }),
     });
-    const response = await app.request("/api/v1/openapi.json");
+    const response = await app.request("/v1/openapi.json");
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual(createOpenApiDocument());

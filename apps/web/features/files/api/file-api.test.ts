@@ -50,7 +50,7 @@ describe("file list api", () => {
     expect(result.nextCursor).toBe("next-1");
     expect(received).toEqual([
       {
-        url: "/api/v1/files",
+        url: "/v1/files",
         params: { cursor: "page-2", limit: 20 },
       },
     ]);
@@ -71,7 +71,7 @@ describe("file list api", () => {
 
     expect(file.status).toBe("deleted");
     expect(received).toEqual([
-      "/api/v1/files/11111111-1111-4111-8111-111111111111",
+      "/v1/files/11111111-1111-4111-8111-111111111111",
     ]);
   });
 

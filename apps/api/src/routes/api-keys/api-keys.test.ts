@@ -126,8 +126,8 @@ describe("API key management API", () => {
     const anonymous = createApiKeyApp({ identity: { kind: "anonymous" } });
     const withApiKey = createApiKeyApp({ identity: apiKeyIdentity });
 
-    const unauthenticated = await anonymous.request("/api/v1/api-keys");
-    const programmatic = await withApiKey.request("/api/v1/api-keys", {
+    const unauthenticated = await anonymous.request("/v1/api-keys");
+    const programmatic = await withApiKey.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "CI" }),
@@ -146,7 +146,7 @@ describe("API key management API", () => {
       apiKeyService,
     });
 
-    const createdResponse = await app.request("/api/v1/api-keys", {
+    const createdResponse = await app.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "  Production  " }),
@@ -162,7 +162,7 @@ describe("API key management API", () => {
     expect(createdBody.apiKey).not.toHaveProperty("userId");
     expect(createdBody.apiKey).not.toHaveProperty("secret");
 
-    const listedResponse = await app.request("/api/v1/api-keys");
+    const listedResponse = await app.request("/v1/api-keys");
     const listedBody = await listedResponse.json();
 
     expect(listedResponse.status).toBe(200);
@@ -175,12 +175,12 @@ describe("API key management API", () => {
   test("rejects empty and oversized names", async () => {
     const app = createApiKeyApp({ identity: sessionIdentity });
 
-    const empty = await app.request("/api/v1/api-keys", {
+    const empty = await app.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "   " }),
     });
-    const oversized = await app.request("/api/v1/api-keys", {
+    const oversized = await app.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "a".repeat(81) }),
@@ -206,22 +206,22 @@ describe("API key management API", () => {
       apiKeyService,
     });
 
-    const created = await ownerApp.request("/api/v1/api-keys", {
+    const created = await ownerApp.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "CI" }),
     });
     const createdBody = await created.json();
-    await ownerApp.request(`/api/v1/api-keys/${createdBody.apiKey.id}`, {
+    await ownerApp.request(`/v1/api-keys/${createdBody.apiKey.id}`, {
       method: "DELETE",
     });
-    await otherApp.request("/api/v1/api-keys", {
+    await otherApp.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "Other" }),
     });
 
-    const listed = await ownerApp.request("/api/v1/api-keys");
+    const listed = await ownerApp.request("/v1/api-keys");
     const listedBody = await listed.json();
 
     expect(listedBody.apiKeys).toHaveLength(1);
@@ -242,18 +242,18 @@ describe("API key management API", () => {
       apiKeyService,
     });
 
-    const created = await ownerApp.request("/api/v1/api-keys", {
+    const created = await ownerApp.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "CI" }),
     });
     const createdBody = await created.json();
     const foreign = await otherApp.request(
-      `/api/v1/api-keys/${createdBody.apiKey.id}`,
+      `/v1/api-keys/${createdBody.apiKey.id}`,
       { method: "DELETE" },
     );
     const revoked = await ownerApp.request(
-      `/api/v1/api-keys/${createdBody.apiKey.id}`,
+      `/v1/api-keys/${createdBody.apiKey.id}`,
       { method: "DELETE" },
     );
     const revokedBody = await revoked.json();
@@ -282,12 +282,12 @@ describe("API key management API", () => {
       }),
     });
 
-    const first = await app.request("/api/v1/api-keys", {
+    const first = await app.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "First" }),
     });
-    const second = await app.request("/api/v1/api-keys", {
+    const second = await app.request("/v1/api-keys", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: "Second" }),

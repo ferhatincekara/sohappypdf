@@ -12,7 +12,7 @@ auth_header="Authorization: Bearer ${API_KEY}"
 size="$(wc -c < "${SOURCE_FILE}" | tr -d ' ')"
 
 intent="$(
-  curl -sS -X POST "${API_BASE}/api/v1/files/upload" \
+  curl -sS -X POST "${API_BASE}/v1/files/upload" \
     -H "${auth_header}" \
     -H "Content-Type: application/json" \
     -d "{\"filename\":\"report.pdf\",\"contentType\":\"application/pdf\",\"size\":${size}}"
@@ -26,11 +26,11 @@ curl -sS -X PUT "${upload_url}" \
   -H "Content-Type: ${content_type}" \
   --data-binary "@${SOURCE_FILE}"
 
-curl -sS -X POST "${API_BASE}/api/v1/files/${file_id}/complete" \
+curl -sS -X POST "${API_BASE}/v1/files/${file_id}/complete" \
   -H "${auth_header}"
 
 created="$(
-  curl -sS -X POST "${API_BASE}/api/v1/conversions" \
+  curl -sS -X POST "${API_BASE}/v1/conversions" \
     -H "${auth_header}" \
     -H "Content-Type: application/json" \
     -H "Idempotency-Key: example-pdf-to-png-1" \
@@ -40,7 +40,7 @@ created="$(
 conversion_id="$(printf '%s' "${created}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["conversion"]["id"])')"
 
 while true; do
-  status_json="$(curl -sS "${API_BASE}/api/v1/conversions/${conversion_id}" -H "${auth_header}")"
+  status_json="$(curl -sS "${API_BASE}/v1/conversions/${conversion_id}" -H "${auth_header}")"
   status="$(printf '%s' "${status_json}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["conversion"]["status"])')"
 
   if [ "${status}" = "completed" ]; then
@@ -57,12 +57,12 @@ while true; do
 done
 
 download="$(
-  curl -sS -X POST "${API_BASE}/api/v1/files/${output_file_id}/download" \
+  curl -sS -X POST "${API_BASE}/v1/files/${output_file_id}/download" \
     -H "${auth_header}"
 )"
 
 download_url="$(printf '%s' "${download}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["download"]["url"])')"
 curl -sS -L "${download_url}" -o result.png
 
-curl -sS -X DELETE "${API_BASE}/api/v1/files/${file_id}" \
+curl -sS -X DELETE "${API_BASE}/v1/files/${file_id}" \
   -H "${auth_header}"

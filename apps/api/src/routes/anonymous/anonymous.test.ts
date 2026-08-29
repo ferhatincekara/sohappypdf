@@ -436,7 +436,7 @@ async function uploadAnonymousFile(
   app: ReturnType<typeof createApp>,
   cookie?: string,
 ) {
-  const response = await app.request("/api/v1/anonymous/files/upload", {
+  const response = await app.request("/v1/anonymous/files/upload", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -465,7 +465,7 @@ async function completeAnonymousFile(
     contentType: file.mimeType,
   });
 
-  return app.request(`/api/v1/anonymous/files/${fileId}/complete`, {
+  return app.request(`/v1/anonymous/files/${fileId}/complete`, {
     method: "POST",
     headers: { cookie },
   });
@@ -498,7 +498,7 @@ describe("anonymous tool API", () => {
     );
     expect(completed.status).toBe(200);
 
-    const created = await app.request("/api/v1/anonymous/conversions", {
+    const created = await app.request("/v1/anonymous/conversions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -517,13 +517,13 @@ describe("anonymous tool API", () => {
     expect(jobs).toHaveLength(1);
 
     const status = await app.request(
-      `/api/v1/anonymous/conversions/${createdBody.conversion.id}`,
+      `/v1/anonymous/conversions/${createdBody.conversion.id}`,
       { headers: { cookie: uploaded.cookie } },
     );
     expect(status.status).toBe(200);
 
     const download = await app.request(
-      `/api/v1/anonymous/files/${uploaded.body.file.id}/download`,
+      `/v1/anonymous/files/${uploaded.body.file.id}/download`,
       {
         method: "POST",
         headers: { cookie: uploaded.cookie },
@@ -564,14 +564,14 @@ describe("anonymous tool API", () => {
 
     const second = await uploadAnonymousFile(app);
     const foreign = await app.request(
-      `/api/v1/anonymous/conversions/${created.id}`,
+      `/v1/anonymous/conversions/${created.id}`,
       { headers: { cookie: second.cookie } },
     );
     expect(foreign.status).toBe(404);
 
     current = new Date("2026-08-24T02:00:00.000Z");
     const expired = await app.request(
-      `/api/v1/anonymous/conversions/${created.id}`,
+      `/v1/anonymous/conversions/${created.id}`,
       { headers: { cookie: first.cookie } },
     );
     expect(expired.status).toBe(200);
@@ -611,7 +611,7 @@ describe("anonymous tool API", () => {
     current = new Date("2026-08-24T01:02:00.000Z");
 
     const download = await app.request(
-      `/api/v1/anonymous/files/${shortLived.file.id}/download`,
+      `/v1/anonymous/files/${shortLived.file.id}/download`,
       {
         method: "POST",
         headers: { cookie: uploaded.cookie },
@@ -640,7 +640,7 @@ describe("anonymous tool API", () => {
       uploaded.cookie,
       ownerId ?? "",
     );
-    const created = await app.request("/api/v1/anonymous/conversions", {
+    const created = await app.request("/v1/anonymous/conversions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -652,12 +652,12 @@ describe("anonymous tool API", () => {
       }),
     });
     const createdBody = await created.json();
-    const listed = await app.request("/api/v1/anonymous/conversions?limit=8", {
+    const listed = await app.request("/v1/anonymous/conversions?limit=8", {
       headers: { cookie: uploaded.cookie },
     });
     const listedBody = await listed.json();
     const otherSession = await uploadAnonymousFile(app);
-    const foreign = await app.request("/api/v1/anonymous/conversions?limit=8", {
+    const foreign = await app.request("/v1/anonymous/conversions?limit=8", {
       headers: { cookie: otherSession.cookie },
     });
     const foreignBody = await foreign.json();
@@ -702,7 +702,7 @@ describe("anonymous tool API", () => {
     });
 
     current = new Date("2026-08-24T02:00:00.000Z");
-    const listed = await app.request("/api/v1/anonymous/conversions?limit=8", {
+    const listed = await app.request("/v1/anonymous/conversions?limit=8", {
       headers: { cookie: uploaded.cookie },
     });
     const listedBody = await listed.json();
@@ -735,7 +735,7 @@ describe("anonymous tool API", () => {
       ownerId ?? "",
     );
 
-    const limited = await app.request("/api/v1/anonymous/conversions", {
+    const limited = await app.request("/v1/anonymous/conversions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -764,14 +764,14 @@ describe("anonymous tool API", () => {
       },
     });
 
-    const forbidden = await app.request("/api/v1/anonymous/files/upload", {
+    const forbidden = await app.request("/v1/anonymous/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
     });
     expect(forbidden.status).toBe(403);
 
-    const uploaded = await app.request("/api/v1/files/upload", {
+    const uploaded = await app.request("/v1/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(uploadBody),
@@ -786,9 +786,9 @@ describe("anonymous tool API", () => {
       body: new Uint8Array(file.sizeBytes),
       contentType: file.mimeType,
     });
-    await app.request(`/api/v1/files/${file.id}/complete`, { method: "POST" });
+    await app.request(`/v1/files/${file.id}/complete`, { method: "POST" });
 
-    const created = await app.request("/api/v1/conversions", {
+    const created = await app.request("/v1/conversions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -815,7 +815,7 @@ describe("anonymous tool API", () => {
       ownerId ?? "",
     );
     const conversion = await created.app.request(
-      "/api/v1/anonymous/conversions",
+      "/v1/anonymous/conversions",
       {
         method: "POST",
         headers: {
@@ -847,7 +847,7 @@ describe("anonymous tool API", () => {
         return { jobId: input.conversionId, conversionId: input.conversionId };
       },
     });
-    const listed = await loggedIn.request("/api/v1/conversions?limit=8", {
+    const listed = await loggedIn.request("/v1/conversions?limit=8", {
       headers: { cookie: uploaded.cookie },
     });
     const listedBody = await listed.json();
@@ -865,7 +865,7 @@ describe("anonymous tool API", () => {
 
   test("rejects oversized anonymous uploads as FILE_TOO_LARGE", async () => {
     const { app } = createAnonymousApp();
-    const response = await app.request("/api/v1/anonymous/files/upload", {
+    const response = await app.request("/v1/anonymous/files/upload", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

@@ -41,6 +41,7 @@ import {
 import { requestIdMiddleware } from "./middleware/request-id.js";
 import { requestIdentityMiddleware } from "./middleware/request-identity.js";
 import { requestLogMiddleware } from "./middleware/request-log.js";
+import { PUBLIC_API_PREFIX } from "./public-contract/public-v1-paths.js";
 import { createAuthRoutes, type HandleAuthRequest } from "./routes/auth.js";
 import { healthRoutes } from "./routes/health.js";
 import { createV1Routes } from "./routes/v1.js";
@@ -94,7 +95,7 @@ export function createApp(options: CreateAppOptions = {}) {
   app.use("*", corsMiddleware(config));
   app.use("*", requestIdentityMiddleware(resolveIdentity));
   app.use(
-    "/api/v1/*",
+    `${PUBLIC_API_PREFIX}/*`,
     anonymousSessionMiddleware({
       service: options.anonymousSessionService,
       cookieSecure: options.anonymousSessionCookieSecure ?? false,
@@ -102,7 +103,7 @@ export function createApp(options: CreateAppOptions = {}) {
     }),
   );
   app.use(
-    "/api/v1/*",
+    `${PUBLIC_API_PREFIX}/*`,
     claimAnonymousSessionMiddleware({
       service: options.anonymousSessionService,
       getFileService: () => options.fileService ?? getFileService(),
@@ -113,15 +114,18 @@ export function createApp(options: CreateAppOptions = {}) {
   );
 
   if (options.checkRateLimit !== undefined) {
-    // Applied to /api/v1/* so routes can share identity-based limiters.
-    // /health and /api/v1/health are exempt inside the middleware.
-    app.use("/api/v1/*", rateLimitMiddleware(options.checkRateLimit));
+    // Applied to /v1/* so routes can share identity-based limiters.
+    // /health and /v1/health are exempt inside the middleware.
+    app.use(
+      `${PUBLIC_API_PREFIX}/*`,
+      rateLimitMiddleware(options.checkRateLimit),
+    );
   }
 
   app.route("/", healthRoutes);
   app.route("/api/auth", createAuthRoutes(handleAuth));
   app.route(
-    "/api/v1",
+    PUBLIC_API_PREFIX,
     createV1Routes({
       getFileService: () => options.fileService ?? getFileService(),
       getConversionService: () =>

@@ -2,13 +2,13 @@
 
 Public developer contract for SoHappyPDF **v1**.
 
-The HTTP API is versioned as `/api/v1`. That prefix is stable. Breaking changes require a new version.
+The HTTP API is versioned as `/v1` on a dedicated host (`https://api.sohappypdf.com` in production, `http://localhost:3001` locally). It is not served at the marketing origin under `/api`. That prefix is stable. Breaking changes require a new version.
 
 ## Read these first
 
 1. [v1 reference](./v1.md) — authentication, files, conversions, errors, rate limits, and plans
 2. [End-to-end workflow](./examples/workflow.sh) — upload, convert, poll, download
-3. [OpenAPI](./openapi.json) — machine-readable contract, also served at `GET /api/v1/openapi.json`
+3. [OpenAPI](./openapi.json) — machine-readable contract, also served at `GET /v1/openapi.json`
 
 ## Canonical workflow
 

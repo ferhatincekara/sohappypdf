@@ -64,13 +64,13 @@ describe("conversion error mapping", () => {
         new axios.AxiosError(
           "Request failed with status code 403",
           "ERR_BAD_REQUEST",
-          { url: "/api/v1/conversions", method: "post" },
+          { url: "/v1/conversions", method: "post" },
           undefined,
           {
             status: 403,
             statusText: "Forbidden",
             headers: {},
-            config: { url: "/api/v1/conversions" },
+            config: { url: "/v1/conversions" },
             data: {
               error: {
                 code: "PLAN_LIMIT_REACHED",
@@ -97,13 +97,13 @@ describe("conversion error mapping", () => {
         new axios.AxiosError(
           "Request failed with status code 403",
           "ERR_BAD_REQUEST",
-          { url: "/api/v1/conversions", method: "post" },
+          { url: "/v1/conversions", method: "post" },
           undefined,
           {
             status: 403,
             statusText: "Forbidden",
             headers: {},
-            config: { url: "/api/v1/conversions" },
+            config: { url: "/v1/conversions" },
             data: {
               error: {
                 code: "PLAN_LIMIT_REACHED",
@@ -122,13 +122,13 @@ describe("conversion error mapping", () => {
         new axios.AxiosError(
           "Request failed with status code 500",
           "ERR_BAD_RESPONSE",
-          { url: "/api/v1/conversions", method: "post" },
+          { url: "/v1/conversions", method: "post" },
           undefined,
           {
             status: 500,
             statusText: "Internal Server Error",
             headers: {},
-            config: { url: "/api/v1/conversions" },
+            config: { url: "/v1/conversions" },
             data: {
               error: {
                 code: "CONFIGURATION_ERROR",

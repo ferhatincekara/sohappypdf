@@ -33,7 +33,7 @@ export function createConversionApi(
     async create(input) {
       try {
         const response = await client.post<CreateConversionResponse>(
-          "/api/v1/conversions",
+          "/v1/conversions",
           {
             sourceFileId: input.sourceFileId,
             targetFormat: input.targetFormat,
@@ -61,7 +61,7 @@ export function createConversionApi(
     async get(id) {
       try {
         const response = await client.get<GetConversionResponse>(
-          `/api/v1/conversions/${id}`,
+          `/v1/conversions/${id}`,
         );
         return response.data.conversion;
       } catch (error) {
@@ -72,7 +72,7 @@ export function createConversionApi(
     async list(query = {}) {
       try {
         const response = await client.get<ConversionListResponse>(
-          "/api/v1/conversions",
+          "/v1/conversions",
           {
             params: {
               ...(query.cursor === undefined ? {} : { cursor: query.cursor }),

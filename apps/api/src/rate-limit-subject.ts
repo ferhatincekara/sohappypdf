@@ -1,6 +1,10 @@
 import type { RateLimitSubject } from "@repo/rate-limit";
 import { fingerprintClientIp } from "./auth/ip-fingerprint.js";
 import type { RequestIdentity } from "./auth/request-identity.js";
+import {
+  PUBLIC_API_PREFIX,
+  PUBLIC_V1_PATHS,
+} from "./public-contract/public-v1-paths.js";
 
 export function toRateLimitSubject(
   identity: RequestIdentity,
@@ -33,17 +37,20 @@ export function toRateLimitSubject(
  * probes remain reliable even when anonymous traffic is being throttled.
  */
 export function isHealthPath(path: string): boolean {
-  return path === "/health" || path === "/api/v1/health";
+  return path === "/health" || path === PUBLIC_V1_PATHS.health;
 }
 
 export function isRateLimitExemptPath(path: string): boolean {
   return (
     isHealthPath(path) ||
-    path === "/api/v1/billing/webhooks" ||
-    path === "/api/v1/openapi.json"
+    path === `${PUBLIC_API_PREFIX}/billing/webhooks` ||
+    path === PUBLIC_V1_PATHS.openapi
   );
 }
 
 export function isAnonymousApiPath(path: string): boolean {
-  return path === "/api/v1/anonymous" || path.startsWith("/api/v1/anonymous/");
+  return (
+    path === `${PUBLIC_API_PREFIX}/anonymous` ||
+    path.startsWith(`${PUBLIC_API_PREFIX}/anonymous/`)
+  );
 }

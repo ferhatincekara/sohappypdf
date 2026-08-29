@@ -46,7 +46,7 @@ export function getPublicWebEnv(): PublicWebEnv {
 }
 
 export function getPublicApiV1BaseUrl(): string {
-  return `${getPublicWebEnv().apiBaseUrl}/api/v1`;
+  return `${getPublicWebEnv().apiBaseUrl}/v1`;
 }
 
 /**
@@ -75,5 +75,5 @@ export function getServerApiBaseUrl(): string {
 }
 
 export function getServerApiV1BaseUrl(): string {
-  return `${getServerApiBaseUrl()}/api/v1`;
+  return `${getServerApiBaseUrl()}/v1`;
 }

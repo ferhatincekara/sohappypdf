@@ -35,7 +35,7 @@ function createLimitedApp(
     checkRateLimit,
   });
 
-  app.get("/api/v1/__test/limited", (c) => c.json({ ok: true }));
+  app.get("/v1/__test/limited", (c) => c.json({ ok: true }));
   return app;
 }
 
@@ -47,7 +47,7 @@ describe("rateLimitMiddleware", () => {
       return denied;
     });
 
-    const response = await app.request("/api/v1/health");
+    const response = await app.request("/v1/health");
 
     expect(response.status).toBe(200);
     expect(checked).toBe(false);
@@ -55,7 +55,7 @@ describe("rateLimitMiddleware", () => {
 
   test("returns 429 with Retry-After when the limiter rejects the request", async () => {
     const app = createLimitedApp(async () => denied);
-    const response = await app.request("/api/v1/__test/limited", {
+    const response = await app.request("/v1/__test/limited", {
       headers: {
         "x-real-ip": "203.0.113.10",
       },
@@ -85,7 +85,7 @@ describe("rateLimitMiddleware", () => {
       resetAtMs: 0,
     }));
 
-    const response = await app.request("/api/v1/__test/limited", {
+    const response = await app.request("/v1/__test/limited", {
       headers: {
         "x-real-ip": "203.0.113.10",
       },
@@ -118,9 +118,9 @@ describe("rateLimitMiddleware", () => {
         };
       },
     });
-    app.get("/api/v1/__test/limited", (c) => c.json({ ok: true }));
+    app.get("/v1/__test/limited", (c) => c.json({ ok: true }));
 
-    const response = await app.request("/api/v1/__test/limited");
+    const response = await app.request("/v1/__test/limited");
 
     expect(response.status).toBe(200);
     expect(subject).toEqual({ kind: "user", userId: "user_1" });

@@ -98,7 +98,7 @@ function createAdminTestApp(
 describe("admin routes", () => {
   test("requires a signed-in allowlisted operator", async () => {
     const anonymous = await createAdminTestApp({ kind: "anonymous" }).request(
-      "/api/v1/admin/me",
+      "/v1/admin/me",
     );
     expect(anonymous.status).toBe(401);
 
@@ -106,14 +106,14 @@ describe("admin routes", () => {
       kind: "api-key",
       userId: "admin_1",
       apiKeyId: "key_1",
-    }).request("/api/v1/admin/me");
+    }).request("/v1/admin/me");
     expect(apiKey.status).toBe(403);
 
     const otherUser = await createAdminTestApp({
       kind: "session",
       userId: "user_9",
       sessionId: "session_9",
-    }).request("/api/v1/admin/me");
+    }).request("/v1/admin/me");
     expect(otherUser.status).toBe(403);
   });
 
@@ -124,11 +124,11 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const me = await app.request("/api/v1/admin/me");
+    const me = await app.request("/v1/admin/me");
     expect(me.status).toBe(200);
     expect(await me.json()).toEqual(adminActor);
 
-    const overview = await app.request("/api/v1/admin/overview");
+    const overview = await app.request("/v1/admin/overview");
     expect(overview.status).toBe(200);
     const body = await overview.json();
     expect(body.users).toBe(4);
@@ -145,13 +145,13 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const users = await app.request("/api/v1/admin/users");
+    const users = await app.request("/v1/admin/users");
     expect(users.status).toBe(200);
     const usersBody = await users.json();
     expect(usersBody.users[0]?.email).toBe("member@example.com");
     expect(JSON.stringify(usersBody)).not.toContain("password");
 
-    const sessions = await app.request("/api/v1/admin/anonymous-sessions");
+    const sessions = await app.request("/v1/admin/anonymous-sessions");
     expect(sessions.status).toBe(200);
     const sessionsBody = await sessions.json();
     expect(sessionsBody.sessions).toHaveLength(1);
@@ -166,7 +166,7 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const response = await app.request("/api/v1/admin/executions");
+    const response = await app.request("/v1/admin/executions");
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(Array.isArray(body.executions)).toBe(true);
@@ -196,7 +196,7 @@ describe("admin routes", () => {
       }),
     });
 
-    const response = await app.request("/api/v1/admin/queues");
+    const response = await app.request("/v1/admin/queues");
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.conversion).toEqual({
@@ -215,7 +215,7 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const response = await app.request("/api/v1/admin/billing");
+    const response = await app.request("/v1/admin/billing");
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.plans.free.monthlyWebCredits).toBeDefined();
@@ -231,7 +231,7 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const response = await app.request("/api/v1/admin/billing/adjustments", {
+    const response = await app.request("/v1/admin/billing/adjustments", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -245,7 +245,7 @@ describe("admin routes", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
 
-    const audit = await app.request("/api/v1/admin/audit");
+    const audit = await app.request("/v1/admin/audit");
     expect(audit.status).toBe(200);
     const auditBody = await audit.json();
     expect(auditBody.events).toHaveLength(1);
@@ -269,7 +269,7 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const response = await app.request("/api/v1/admin/billing/adjustments", {
+    const response = await app.request("/v1/admin/billing/adjustments", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -282,7 +282,7 @@ describe("admin routes", () => {
 
     expect(response.status).toBe(400);
 
-    const audit = await app.request("/api/v1/admin/audit");
+    const audit = await app.request("/v1/admin/audit");
     expect(audit.status).toBe(200);
     expect((await audit.json()).events).toEqual([]);
   });
@@ -294,7 +294,7 @@ describe("admin routes", () => {
       sessionId: "session_1",
     });
 
-    const response = await app.request("/api/v1/admin/tools");
+    const response = await app.request("/v1/admin/tools");
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(Array.isArray(body.tools)).toBe(true);
@@ -330,7 +330,7 @@ describe("admin routes", () => {
       }),
     });
 
-    const response = await app.request("/api/v1/admin/health");
+    const response = await app.request("/v1/admin/health");
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.api).toBe("ok");

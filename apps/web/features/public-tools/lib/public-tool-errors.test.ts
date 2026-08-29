@@ -22,13 +22,13 @@ function createAxiosError(
   return new axios.AxiosError(
     `Request failed with status code ${status}`,
     "ERR_BAD_REQUEST",
-    { url: "/api/v1/files/x/download", method: "post" },
+    { url: "/v1/files/x/download", method: "post" },
     undefined,
     {
       status,
       statusText: status === 410 ? "Gone" : "Not Found",
       headers: {},
-      config: { url: "/api/v1/files/x/download" },
+      config: { url: "/v1/files/x/download" },
       data: {
         error: {
           code,

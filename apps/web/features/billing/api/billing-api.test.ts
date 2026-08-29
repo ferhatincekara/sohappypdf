@@ -17,7 +17,7 @@ describe("billing api", () => {
     const api = createBillingApi(
       createClient({
         get: (async (url) => {
-          expect(url).toBe("/api/v1/billing");
+          expect(url).toBe("/v1/billing");
           return {
             data: {
               billing: {
@@ -84,7 +84,7 @@ describe("billing api", () => {
     const api = createBillingApi(
       createClient({
         post: (async (url, body) => {
-          expect(url).toBe("/api/v1/billing/checkout");
+          expect(url).toBe("/v1/billing/checkout");
           expect(body).toEqual({
             product: "api-starter",
             interval: "yearly",

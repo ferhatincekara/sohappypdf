@@ -21,7 +21,7 @@ describe("getPublicWebEnv", () => {
 
   test("derives the public v1 API base from the API origin", () => {
     expect(getPublicApiV1BaseUrl()).toBe(
-      `${getPublicWebEnv().apiBaseUrl}/api/v1`,
+      `${getPublicWebEnv().apiBaseUrl}/v1`,
     );
     expect(getPublicApiV1BaseUrl()).not.toContain("YOUR_API_KEY");
   });
@@ -37,7 +37,7 @@ describe("getPublicWebEnv", () => {
       "https://api.sohappypdf.com",
     );
     expect(getServerApiV1BaseUrl()).toBe(
-      `${toServerApiBaseUrl(getPublicWebEnv().apiBaseUrl)}/api/v1`,
+      `${toServerApiBaseUrl(getPublicWebEnv().apiBaseUrl)}/v1`,
     );
   });
 });

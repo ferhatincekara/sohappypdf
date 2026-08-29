@@ -34,7 +34,7 @@ describe("createApp", () => {
 
   test("exposes the same health check on the v1 API", async () => {
     const app = createTestApp();
-    const response = await app.request("/api/v1/health");
+    const response = await app.request("/v1/health");
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ status: "ok" });
@@ -170,7 +170,7 @@ describe("createApp", () => {
       logger: silentLogger,
       resolveIdentity: async () => ({ kind: "anonymous" }),
     });
-    const response = await app.request("/api/v1/conversions", {
+    const response = await app.request("/v1/conversions", {
       method: "OPTIONS",
       headers: {
         Origin: "http://localhost:3000",
