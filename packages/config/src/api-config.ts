@@ -1,5 +1,6 @@
 import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
+import { expandHttpsSiteOrigins } from "./site-origins.js";
 
 export type ApiConfig = {
   corsOrigins: readonly string[];
@@ -50,8 +51,37 @@ function parseCorsOrigins(value: string | undefined): readonly string[] {
   return origins;
 }
 
+function parseOptionalOrigin(value: string | undefined): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  try {
+    const parsed = new URL(value);
+
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return undefined;
+    }
+
+    return parsed.origin;
+  } catch {
+    return undefined;
+  }
+}
+
 export function loadApiConfig(source: EnvSource = process.env): ApiConfig {
+  const configured = parseCorsOrigins(
+    getOptionalEnv("API_CORS_ORIGINS", source),
+  );
+  const appOrigin = parseOptionalOrigin(
+    getOptionalEnv("APP_URL", source) ??
+      getOptionalEnv("NEXT_PUBLIC_APP_URL", source),
+  );
+
   return {
-    corsOrigins: parseCorsOrigins(getOptionalEnv("API_CORS_ORIGINS", source)),
+    corsOrigins: expandHttpsSiteOrigins([
+      ...configured,
+      ...(appOrigin === undefined ? [] : [appOrigin]),
+    ]),
   };
 }

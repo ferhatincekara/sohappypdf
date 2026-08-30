@@ -1,4 +1,5 @@
 import {
+  isAllowedHttpsSiteOrigin,
   isLocalDevelopmentOrigin,
   type loadApiConfig,
   loadAppConfig,
@@ -19,7 +20,7 @@ export function corsMiddleware(config: ReturnType<typeof loadApiConfig>) {
             : undefined;
       }
 
-      if (allowedOrigins.has(origin)) {
+      if (isAllowedHttpsSiteOrigin(origin, allowedOrigins)) {
         return origin;
       }
 

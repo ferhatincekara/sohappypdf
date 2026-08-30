@@ -1,4 +1,4 @@
-import type { AuthConfig } from "@sohappypdf/config";
+import { type AuthConfig, httpsApexWwwOrigins } from "@sohappypdf/config";
 import { type BetterAuthOptions, betterAuth } from "better-auth";
 import {
   type SendAuthEmail,
@@ -20,25 +20,11 @@ function uniqueOrigins(origins: readonly string[]): string[] {
   return [...new Set(origins.filter((origin) => origin.length > 0))];
 }
 
-function httpsSiteOrigins(hostname: string): string[] {
-  if (hostname === "localhost" || hostname.endsWith(".localhost")) {
-    return [];
-  }
-
-  const apex = hostname.replace(/^www\./, "");
-
-  if (!apex.includes(".")) {
-    return [];
-  }
-
-  return [`https://${apex}`, `https://www.${apex}`];
-}
-
 function resolveBrowserOrigins(config: AuthConfig): string[] {
   const origins: string[] = [];
 
   if (config.appUrl !== undefined) {
-    origins.push(...httpsSiteOrigins(new URL(config.appUrl).hostname));
+    origins.push(...httpsApexWwwOrigins(config.appUrl));
   }
 
   // Cookie-bearing Better Auth POSTs (login, Google) check Origin against
@@ -46,7 +32,7 @@ function resolveBrowserOrigins(config: AuthConfig): string[] {
   // the public site must be trusted even when API_CORS_ORIGINS is missing.
   // www and apex are different origins; both must be listed.
   if (config.cookieDomain !== undefined && config.useSecureCookies) {
-    origins.push(...httpsSiteOrigins(config.cookieDomain));
+    origins.push(...httpsApexWwwOrigins(`https://${config.cookieDomain}`));
   }
 
   return origins;

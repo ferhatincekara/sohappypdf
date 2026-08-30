@@ -164,6 +164,23 @@ describe("createApp", () => {
     );
   });
 
+  test("allows the www pair of a configured site origin", async () => {
+    const app = createApp({
+      config: { corsOrigins: ["https://sohappypdf.com"] },
+      logger: silentLogger,
+      resolveIdentity: async () => ({ kind: "anonymous" }),
+    });
+    const response = await app.request("/health", {
+      headers: {
+        Origin: "https://www.sohappypdf.com",
+      },
+    });
+
+    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(
+      "https://www.sohappypdf.com",
+    );
+  });
+
   test("allows the conversion Idempotency-Key header in CORS preflight", async () => {
     const app = createApp({
       config: { corsOrigins: ["http://localhost:3000"] },

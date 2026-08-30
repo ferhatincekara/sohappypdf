@@ -13,7 +13,21 @@ describe("loadApiConfig", () => {
         API_CORS_ORIGINS: "https://sohappypdf.com, http://localhost:3000/",
       }),
     ).toEqual({
-      corsOrigins: ["https://sohappypdf.com", "http://localhost:3000"],
+      corsOrigins: [
+        "https://sohappypdf.com",
+        "https://www.sohappypdf.com",
+        "http://localhost:3000",
+      ],
+    });
+  });
+
+  test("includes the public app origin and its www pair", () => {
+    expect(
+      loadApiConfig({
+        APP_URL: "https://sohappypdf.com/",
+      }),
+    ).toEqual({
+      corsOrigins: ["https://sohappypdf.com", "https://www.sohappypdf.com"],
     });
   });
 

@@ -296,4 +296,5 @@ Run `bun test` inside a workspace, or pass a file / folder path from the repo ro
 - Never log API keys, access tokens, credentials, or signed URLs.
 - Do not commit `.env`, keys, or Polar secrets.
 - Temporary files expire after about two hours. Presigned upload and download URLs expire after 15 minutes.
-- CORS must be an explicit origin list (`API_CORS_ORIGINS`).
+- CORS must be an explicit origin list (`API_CORS_ORIGINS`). Apex and `www` are treated as a pair.
+- The S3 bucket CORS list must include every browser origin that uploads files, including `https://www.sohappypdf.com`.

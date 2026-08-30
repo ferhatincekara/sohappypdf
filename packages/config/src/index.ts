@@ -88,6 +88,11 @@ export {
   RETENTION_KINDS,
   resolveRetentionMs,
 } from "./retention-policy.js";
+export {
+  expandHttpsSiteOrigins,
+  httpsApexWwwOrigins,
+  isAllowedHttpsSiteOrigin,
+} from "./site-origins.js";
 export type { StorageConfig } from "./storage-config.js";
 export { loadStorageConfig } from "./storage-config.js";
 export type { WebCreditConfig } from "./web-credit-config.js";
