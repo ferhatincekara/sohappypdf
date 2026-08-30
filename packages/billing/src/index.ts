@@ -67,7 +67,6 @@ export {
   createPolarClient,
   readPolarValidationSummary,
 } from "./polar-client.js";
-export { resolvePolarCheckoutLocale } from "./polar-locale.js";
 export type { BillingInterval } from "./polar-products.js";
 export {
   BILLING_INTERVALS,

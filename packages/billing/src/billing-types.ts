@@ -166,7 +166,6 @@ export type PolarClient = {
     customerEmail: string;
     successUrl: string;
     returnUrl?: string;
-    locale?: string;
   }) => Promise<PolarCheckout>;
   updateSubscription: (input: {
     subscriptionId: string;

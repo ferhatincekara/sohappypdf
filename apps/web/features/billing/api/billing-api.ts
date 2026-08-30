@@ -24,7 +24,6 @@ export type BillingApi = {
   createCheckout: (
     product?: CheckoutProductKey,
     interval?: BillingInterval,
-    locale?: string,
   ) => Promise<BillingCheckoutResponse>;
   createPortal: () => Promise<BillingPortalResponse>;
 };
@@ -45,16 +44,11 @@ export function createBillingApi(
     async createCheckout(
       product: CheckoutProductKey = "pro",
       interval: BillingInterval = "monthly",
-      locale?: string,
     ) {
       try {
         const response = await client.post<BillingCheckoutResponse>(
           "/v1/billing/checkout",
-          {
-            product,
-            interval,
-            ...(locale === undefined ? {} : { locale }),
-          },
+          { product, interval },
         );
         return response.data;
       } catch (error) {

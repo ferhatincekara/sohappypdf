@@ -148,21 +148,6 @@ describe("createBillingService", () => {
     });
   });
 
-  test("sends the site locale to Polar checkout", async () => {
-    let locale: string | undefined;
-    const billing = createService({
-      polarClient: createPolarClientMock({
-        async createCheckout(input) {
-          locale = input.locale;
-          return { url: "https://polar.example/checkout/cs_tr" };
-        },
-      }),
-    });
-
-    await billing.createCheckout("user_1", "pro", "monthly", "tr");
-    expect(locale).toBe("tr");
-  });
-
   test("reuses an existing Polar customer instead of creating a duplicate", async () => {
     let created = 0;
     const billing = createService({
