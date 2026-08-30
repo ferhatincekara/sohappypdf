@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { type AppShellUser, UserMenu } from "@/features/app-shell";
+import { HomeBrandLink } from "@/features/marketing/components/home-brand-link";
 import { MarketingMenuToggleIcon } from "@/features/marketing/components/marketing-menu-toggle-icon";
 import { MarketingMobileNav } from "@/features/marketing/components/marketing-mobile-nav";
 import { MarketingToolStatusBadges } from "@/features/marketing/components/marketing-tool-status-badges";
@@ -140,12 +141,15 @@ export function MarketingHeaderBar({
         )}
       >
         <div className="mx-auto grid h-full min-w-0 max-w-site grid-cols-[1fr_auto_1fr] items-center gap-3 px-5 md:px-8">
-          <Link
-            href={MARKETING_PATHS.home}
+          <HomeBrandLink
             className="flex shrink-0 items-center justify-self-start"
+            onNavigate={() => {
+              setToolsOpen(false);
+              setMobileOpen(false);
+            }}
           >
             <BrandLogo title={t("brand")} />
-          </Link>
+          </HomeBrandLink>
 
           <LayoutGroup id="nav-hover">
             <nav

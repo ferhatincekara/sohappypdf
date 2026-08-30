@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { BrandLogo } from "@/components/brand-logo";
+import { HomeBrandLink } from "@/features/marketing/components/home-brand-link";
 import { LocaleSwitcher } from "@/features/marketing/components/locale-switcher";
 import { MarketingContainer } from "@/features/marketing/components/marketing-container";
 import { MarketingSocialLinks } from "@/features/marketing/components/marketing-social-links";
@@ -9,7 +10,6 @@ import {
   MARKETING_FOOTER_PRODUCT_LINKS,
   MARKETING_FOOTER_TOOL_LINKS,
 } from "@/features/marketing/lib/marketing-nav";
-import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { MARKETING_SOCIAL_LINKS } from "@/features/marketing/lib/marketing-social";
 import { Link } from "@/lib/i18n/navigation";
 
@@ -23,9 +23,9 @@ export async function MarketingFooter() {
         <MarketingContainer className="px-0">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1.8fr]">
             <div>
-              <Link href={MARKETING_PATHS.home} className="inline-flex">
+              <HomeBrandLink className="inline-flex">
                 <BrandLogo title={t("brand")} />
-              </Link>
+              </HomeBrandLink>
               <p className="mt-5 max-w-sm text-base text-foreground">
                 {t("blurb")}
               </p>
