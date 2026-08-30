@@ -70,6 +70,7 @@ export {
   loadFileConfig,
   MAX_FILE_CLEANUP_BATCH_SIZE,
 } from "./file-config.js";
+export { resolvePublicWebOrigins } from "./public-web-origins.js";
 export type { QueueConfig } from "./queue-config.js";
 export { loadQueueConfig } from "./queue-config.js";
 export type {

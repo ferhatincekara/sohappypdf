@@ -194,6 +194,7 @@ function createMemoryStorage(options?: {
       };
     },
     async ping() {},
+    async ensureBrowserUploadCors() {},
     async createPresignedUploadUrl(input) {
       return {
         key: input.key,

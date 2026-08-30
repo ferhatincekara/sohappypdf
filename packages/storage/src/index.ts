@@ -2,6 +2,10 @@ import { assertServerOnly } from "@sohappypdf/core";
 
 assertServerOnly("@sohappypdf/storage");
 
+export {
+  BROWSER_UPLOAD_CORS_RULE_ID,
+  mergeBrowserUploadCorsRules,
+} from "./bucket-cors.js";
 export type { StorageConfig } from "./config.js";
 export { getStorageConfig } from "./config.js";
 export {

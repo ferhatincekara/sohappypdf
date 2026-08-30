@@ -1,13 +1,17 @@
 import { createReadStream } from "node:fs";
 import { open, stat, unlink } from "node:fs/promises";
 import {
+  type CORSRule,
   DeleteObjectCommand,
+  GetBucketCorsCommand,
   GetObjectCommand,
   HeadObjectCommand,
+  PutBucketCorsCommand,
   PutObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
+import { mergeBrowserUploadCorsRules } from "./bucket-cors.js";
 import { createS3Client } from "./client.js";
 import { getStorageConfig, type StorageConfig } from "./config.js";
 import { toAttachmentContentDisposition } from "./content-disposition.js";
@@ -97,6 +101,7 @@ export type Storage = {
   deleteObject(key: string): Promise<void>;
   objectExists(key: string): Promise<boolean>;
   ping(): Promise<void>;
+  ensureBrowserUploadCors(origins: readonly string[]): Promise<void>;
 };
 
 function assertSafeContentType(contentType: string): void {
@@ -114,6 +119,33 @@ function assertSafeContentType(contentType: string): void {
 
 function resolveExpiresInSeconds(expiresInSeconds: number | undefined): number {
   return resolvePresignExpiresInSeconds(expiresInSeconds);
+}
+
+function isMissingBucketCors(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) {
+    return false;
+  }
+
+  if (
+    "name" in error &&
+    (error.name === "NoSuchCORSConfiguration" || error.name === "NotFound")
+  ) {
+    return true;
+  }
+
+  if ("$metadata" in error) {
+    const metadata = error.$metadata;
+
+    if (
+      typeof metadata === "object" &&
+      metadata !== null &&
+      "httpStatusCode" in metadata
+    ) {
+      return metadata.httpStatusCode === 404;
+    }
+  }
+
+  return false;
 }
 
 function isS3NotFound(error: unknown): boolean {
@@ -454,6 +486,42 @@ export function createStorage(config: StorageConfig): Storage {
           new DeleteObjectCommand({
             Bucket: bucket,
             Key: key,
+          }),
+        );
+      } catch (error) {
+        throw toStorageError(error);
+      }
+    },
+
+    async ensureBrowserUploadCors(origins) {
+      let existing: CORSRule[] | undefined;
+
+      try {
+        const response = await client.send(
+          new GetBucketCorsCommand({
+            Bucket: bucket,
+          }),
+        );
+        existing = response.CORSRules;
+      } catch (error) {
+        if (!isMissingBucketCors(error)) {
+          throw toStorageError(error);
+        }
+      }
+
+      const rules = mergeBrowserUploadCorsRules(existing, origins);
+
+      if (rules.length === 0) {
+        return;
+      }
+
+      try {
+        await client.send(
+          new PutBucketCorsCommand({
+            Bucket: bucket,
+            CORSConfiguration: {
+              CORSRules: rules,
+            },
           }),
         );
       } catch (error) {

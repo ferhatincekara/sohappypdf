@@ -168,6 +168,7 @@ function createMemoryStorage(): Storage & {
       return { key: input.key, sizeBytes: 0 };
     },
     async ping() {},
+    async ensureBrowserUploadCors() {},
     async createPresignedUploadUrl(input) {
       return {
         key: input.key,
