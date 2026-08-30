@@ -12,8 +12,8 @@ import {
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 describe("marketing CTAs", () => {
-  test("sends guests to tools on the Free plan, not signup", () => {
-    expect(resolveStartHref(false)).toBe(MARKETING_PATHS.tools);
+  test("sends guests to signup on Try for free, and signed-in users to tools", () => {
+    expect(resolveStartHref(false)).toBe(AUTH_PATHS.signup);
     expect(resolveStartHref(true)).toBe(MARKETING_PATHS.tools);
     expect(resolveSignInHref(false)).toBe(AUTH_PATHS.login);
     expect(resolveSignInHref(true)).toBe(APP_PATHS.settings);

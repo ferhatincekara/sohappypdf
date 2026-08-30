@@ -23,7 +23,7 @@ describe("resolveGoogleCallbackUrls", () => {
       next: "https://evil.example",
     });
 
-    expect(urls.callbackURL).toBe(`${appUrl}${AUTH_PATHS.app}`);
+    expect(urls.callbackURL).toBe(`${appUrl}${AUTH_PATHS.afterAuth}`);
     expect(urls.errorCallbackURL).toBe(`${appUrl}${AUTH_PATHS.login}`);
   });
 });

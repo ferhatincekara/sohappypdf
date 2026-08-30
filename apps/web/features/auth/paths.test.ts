@@ -7,6 +7,7 @@ describe("auth paths", () => {
     expect(AUTH_PATHS.signup).toBe("/signup");
     expect(AUTH_PATHS.login).toBe("/login");
     expect(AUTH_PATHS.app).toBe("/account/settings");
+    expect(AUTH_PATHS.afterAuth).toBe("/tools");
   });
 
   test("builds signup URLs without inventing a destination", () => {
@@ -18,6 +19,9 @@ describe("auth paths", () => {
   });
 
   test("builds login URLs with a next destination", () => {
+    expect(loginPath()).toBe(
+      `${AUTH_PATHS.login}?next=${encodeURIComponent(AUTH_PATHS.afterAuth)}`,
+    );
     expect(loginPath("/account/billing")).toBe(
       `${AUTH_PATHS.login}?next=${encodeURIComponent("/account/billing")}`,
     );

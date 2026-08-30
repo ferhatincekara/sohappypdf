@@ -5,11 +5,12 @@ export const AUTH_PATHS = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   app: "/account/settings",
+  afterAuth: "/tools",
   home: "/",
 } as const;
 
 export function loginPath(next?: string | null): string {
-  const destination = next ?? AUTH_PATHS.app;
+  const destination = next ?? AUTH_PATHS.afterAuth;
 
   return `${AUTH_PATHS.login}?next=${encodeURIComponent(destination)}`;
 }

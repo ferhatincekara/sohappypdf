@@ -40,7 +40,9 @@ describe("auth redirects", () => {
 
   test("uses a safe post-auth destination", () => {
     expect(resolvePostAuthPath("/account")).toBe("/account");
-    expect(resolvePostAuthPath("https://evil.example")).toBe(AUTH_PATHS.app);
-    expect(resolvePostAuthPath(null)).toBe(AUTH_PATHS.app);
+    expect(resolvePostAuthPath("https://evil.example")).toBe(
+      AUTH_PATHS.afterAuth,
+    );
+    expect(resolvePostAuthPath(null)).toBe(AUTH_PATHS.afterAuth);
   });
 });

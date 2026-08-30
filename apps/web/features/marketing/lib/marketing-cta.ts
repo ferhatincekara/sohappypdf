@@ -2,10 +2,8 @@ import { APP_PATHS } from "@/features/app-shell/config/app-paths";
 import { AUTH_PATHS, signupPath } from "@/features/auth/paths";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
-export function resolveStartHref(
-  _isAuthenticated: boolean,
-): typeof MARKETING_PATHS.tools {
-  return MARKETING_PATHS.tools;
+export function resolveStartHref(isAuthenticated: boolean): string {
+  return isAuthenticated ? MARKETING_PATHS.tools : AUTH_PATHS.signup;
 }
 
 export const BILLING_API_HREF = `${APP_PATHS.billing}?section=api`;

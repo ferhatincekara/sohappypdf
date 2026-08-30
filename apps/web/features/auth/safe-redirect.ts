@@ -47,7 +47,7 @@ export function safeRedirectPath(
 }
 
 export function resolvePostAuthPath(next?: string | null): string {
-  return safeRedirectPath(next) ?? AUTH_PATHS.app;
+  return safeRedirectPath(next) ?? AUTH_PATHS.afterAuth;
 }
 
 export function resolveGuestOnlyRedirect(
