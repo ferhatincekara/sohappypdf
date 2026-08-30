@@ -3,6 +3,10 @@ import type { PolarServer } from "@sohappypdf/config";
 import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import type { PolarClient } from "./billing-types.js";
 import { polarApiJson } from "./polar-http.js";
+import {
+  resolvePolarCheckoutLocale,
+  withPolarCheckoutLocale,
+} from "./polar-locale.js";
 
 export type CreatePolarClientOptions = {
   accessToken: string;
@@ -347,6 +351,7 @@ export function createPolarClient(
 
     async createCheckout(input) {
       const returnUrl = resolvePolarReturnUrl(input.returnUrl);
+      const locale = resolvePolarCheckoutLocale(input.locale);
 
       try {
         const checkout = await polarApiJson({
@@ -360,11 +365,15 @@ export function createPolarClient(
             customer_email: input.customerEmail,
             success_url: input.successUrl,
             ...(returnUrl === undefined ? {} : { return_url: returnUrl }),
+            ...(locale === undefined ? {} : { locale }),
           },
         });
 
+        const url = requireUrl(readPolarCheckoutUrl(checkout), "checkout");
+
         return {
-          url: requireUrl(readPolarCheckoutUrl(checkout), "checkout"),
+          url:
+            locale === undefined ? url : withPolarCheckoutLocale(url, locale),
         };
       } catch (error) {
         throw mapPolarRequestError(error, "checkout");

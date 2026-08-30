@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { billingApi } from "@/features/billing/api/billing-api";
 import { mapUnknownBillingError } from "@/features/billing/api/billing-errors";
@@ -17,6 +17,7 @@ export type BillingCheckoutInput = {
 };
 
 export function useBillingActions() {
+  const locale = useLocale();
   const tErrors = useTranslations("billing.errors");
   const queryClient = useQueryClient();
   const checkout = useMutation({
@@ -24,7 +25,7 @@ export function useBillingActions() {
       product = "pro",
       interval = "monthly",
     }: BillingCheckoutInput = {}) =>
-      billingApi.createCheckout(product, interval),
+      billingApi.createCheckout(product, interval, locale),
     onSuccess(result) {
       if (result.checkout.url === null) {
         void queryClient.invalidateQueries({
