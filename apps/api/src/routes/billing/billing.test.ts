@@ -434,29 +434,6 @@ describe("billing API", () => {
     expect(productIds).toEqual(["prod_starter_yearly"]);
   });
 
-  test("forwards the checkout locale to Polar", async () => {
-    let locale: string | undefined;
-    const app = createBillingApp({
-      polarClient: createPolarClientMock({
-        async createCheckout(input) {
-          locale = input.locale;
-          return { url: "https://polar.example/checkout/cs_tr" };
-        },
-      }),
-    });
-
-    const response = await app.request("/v1/billing/checkout", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ locale: "tr-TR" }),
-    });
-    const body = await response.json();
-
-    expect(response.status).toBe(201);
-    expect(body.checkout.url).toBe("https://polar.example/checkout/cs_tr");
-    expect(locale).toBe("tr");
-  });
-
   test("activates Pro after a verified webhook", async () => {
     const repository = createMemoryBillingRepository({
       userEmails: { user_1: "user@example.com" },

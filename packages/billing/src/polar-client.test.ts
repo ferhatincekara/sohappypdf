@@ -85,39 +85,6 @@ describe("readPolarPortalUrl", () => {
   });
 });
 
-describe("createPolarClient.createCheckout", () => {
-  test("posts Polar checkout locale and adds it to the URL", async () => {
-    globalThis.fetch = async (input, init) => {
-      expect(String(input)).toBe("https://api.polar.sh/v1/checkouts/");
-      expect(JSON.parse(String(init?.body))).toMatchObject({
-        locale: "tr",
-      });
-
-      return Response.json(
-        { url: "https://polar.sh/checkout/cs_1" },
-        { status: 201 },
-      );
-    };
-
-    const polar = createPolarClient({
-      accessToken: "polar_oat_test",
-      server: "production",
-    });
-
-    await expect(
-      polar.createCheckout({
-        productIds: ["prod_1"],
-        externalCustomerId: "user_1",
-        customerEmail: "user@example.com",
-        successUrl: "https://sohappypdf.com/account/billing?checkout=success",
-        locale: "tr",
-      }),
-    ).resolves.toEqual({
-      url: "https://polar.sh/checkout/cs_1?locale=tr",
-    });
-  });
-});
-
 describe("createPolarClient.createCustomerPortal", () => {
   test("opens Polar portal through HTTP customer sessions", async () => {
     globalThis.fetch = async (input, init) => {

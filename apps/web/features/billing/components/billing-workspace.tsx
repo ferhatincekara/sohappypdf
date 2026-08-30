@@ -26,7 +26,6 @@ import {
   resolveCheckoutBanner,
 } from "@/features/billing/lib/checkout-activation";
 import type { BillingInterval } from "@/features/billing/types/billing";
-import { LocaleSwitcher } from "@/features/marketing/components/locale-switcher";
 
 function BillingWorkspaceInner() {
   const t = useTranslations("billing");
@@ -128,12 +127,9 @@ function BillingWorkspaceInner() {
             label: t(`sections.${item}`),
           }))}
         />
-        <div className="flex flex-wrap items-center gap-3">
-          <LocaleSwitcher className="w-fit" />
-          {showCycle ? (
-            <BillingCycleToggle value={cycle} onChange={setCycle} />
-          ) : null}
-        </div>
+        {showCycle ? (
+          <BillingCycleToggle value={cycle} onChange={setCycle} />
+        ) : null}
       </div>
       {section === "web" ? (
         <WebPlanSection
