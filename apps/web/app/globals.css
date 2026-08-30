@@ -148,7 +148,6 @@ select:focus-visible,
 .btn-label-slide {
   display: inline-grid;
   overflow: hidden;
-  overflow: clip;
   justify-items: center;
   align-items: center;
   line-height: 1.25;
