@@ -118,6 +118,21 @@ describe("billing api", () => {
     }
   });
 
+  test("posts an empty portal body", async () => {
+    const api = createBillingApi(
+      createClient({
+        post: (async (url, body) => {
+          expect(url).toBe("/v1/billing/portal");
+          expect(body).toEqual({});
+          return { data: { portal: { url: "https://polar.example/p" } } };
+        }) as AxiosInstance["post"],
+      }),
+    );
+
+    const result = await api.createPortal();
+    expect(result.portal.url).toBe("https://polar.example/p");
+  });
+
   test("wraps portal failures", async () => {
     const api = createBillingApi(
       createClient({

@@ -58,8 +58,10 @@ export function createBillingApi(
 
     async createPortal() {
       try {
-        const response =
-          await client.post<BillingPortalResponse>("/v1/billing/portal");
+        const response = await client.post<BillingPortalResponse>(
+          "/v1/billing/portal",
+          {},
+        );
         return response.data;
       } catch (error) {
         throw new BillingApiRequestError(error);

@@ -331,6 +331,43 @@ describe("billing API", () => {
     expect(JSON.stringify(body).includes("polar_at_test")).toBe(false);
   });
 
+  test("opens Polar portal with POST, not GET", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await repository.upsertCustomer({
+      userId: "user_1",
+      polarCustomerId: "cus_polar_1",
+      createdAt: now,
+      updatedAt: now,
+    });
+    await repository.upsertSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_polar_1",
+      polarProductId: "prod_pro",
+      plan: "pro",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: new Date("2026-08-01T00:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-09-01T00:00:00.000Z"),
+      endedAt: null,
+      updatedAt: now,
+    });
+
+    const app = createBillingApp({ repository });
+    const getResponse = await app.request("/v1/billing/portal");
+    const postResponse = await app.request("/v1/billing/portal", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{}",
+    });
+    const body = await postResponse.json();
+
+    expect(getResponse.status).toBe(404);
+    expect(postResponse.status).toBe(200);
+    expect(body.portal.url).toBe("https://polar.example/portal/ps_1");
+  });
+
   test("creates a Polar checkout session", async () => {
     const app = createBillingApp();
     const response = await app.request("/v1/billing/checkout", {
