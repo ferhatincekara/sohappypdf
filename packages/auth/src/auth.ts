@@ -26,6 +26,7 @@ export function createAuth(options: CreateAuthOptions) {
   const sendResetPassword =
     options.sendResetPassword ?? sendAuthEmailUnimplemented;
   const cookieDomain = options.config.cookieDomain;
+  const google = options.config.google;
 
   return betterAuth({
     database: options.database,
@@ -38,6 +39,26 @@ export function createAuth(options: CreateAuthOptions) {
     telemetry: {
       enabled: false,
     },
+    ...(google === undefined
+      ? {}
+      : {
+          socialProviders: {
+            google: {
+              clientId: google.clientId,
+              clientSecret: google.clientSecret,
+            },
+          },
+          account: {
+            accountLinking: {
+              enabled: true,
+              trustedProviders: ["google"],
+              // Email/password signup does not verify email. Google emails are
+              // verified, so same-email sign-in should attach Google to the
+              // existing credential account instead of failing the link.
+              requireLocalEmailVerified: false,
+            },
+          },
+        }),
     emailAndPassword: {
       enabled: true,
       minPasswordLength: 8,

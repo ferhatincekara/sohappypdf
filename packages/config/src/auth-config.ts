@@ -5,12 +5,18 @@ import { type EnvSource, getOptionalEnv, getRequiredEnv } from "./env.js";
 
 const MIN_AUTH_SECRET_LENGTH = 32;
 
+export type GoogleAuthConfig = {
+  clientId: string;
+  clientSecret: string;
+};
+
 export type AuthConfig = {
   secret: string;
   baseUrl: string;
   runtimeEnv: RuntimeEnv;
   useSecureCookies: boolean;
   cookieDomain?: string;
+  google?: GoogleAuthConfig;
 };
 
 function parseAuthSecret(value: string): string {
@@ -56,6 +62,26 @@ function parseAuthBaseUrl(value: string, runtimeEnv: RuntimeEnv): string {
   return `${parsed.origin}${pathname}`;
 }
 
+function parseGoogleAuthConfig(
+  source: EnvSource,
+): GoogleAuthConfig | undefined {
+  const clientId = getOptionalEnv("GOOGLE_CLIENT_ID", source);
+  const clientSecret = getOptionalEnv("GOOGLE_CLIENT_SECRET", source);
+
+  if (clientId === undefined && clientSecret === undefined) {
+    return undefined;
+  }
+
+  if (clientId === undefined || clientSecret === undefined) {
+    throw new AppError({
+      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+      message: "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must both be set",
+    });
+  }
+
+  return { clientId, clientSecret };
+}
+
 export function loadAuthConfig(source: EnvSource = process.env): AuthConfig {
   const { runtimeEnv } = loadAppConfig(source);
   const baseUrl = parseAuthBaseUrl(
@@ -86,5 +112,6 @@ export function loadAuthConfig(source: EnvSource = process.env): AuthConfig {
     useSecureCookies:
       runtimeEnv === "production" || new URL(baseUrl).protocol === "https:",
     cookieDomain,
+    google: parseGoogleAuthConfig(source),
   };
 }

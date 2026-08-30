@@ -1005,6 +1005,11 @@
       "invalidToken": "Este enlace de restablecimiento no es válido o ha caducado. Solicita uno nuevo.",
       "loginLink": "Volver a iniciar sesión"
     },
+    "social": {
+      "google": "Continuar con Google",
+      "googleSubmitting": "Continuando con Google…",
+      "or": "o"
+    },
     "fields": {
       "showPassword": "Mostrar contraseña",
       "hidePassword": "Ocultar contraseña"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "Este enlace de restablecimiento no es válido o ha caducado.",
       "currentPasswordIncorrect": "La contraseña actual es incorrecta.",
       "networkFailure": "No se pudo completar la solicitud. Inténtalo de nuevo.",
+      "googleFailed": "No se pudo completar el inicio de sesión con Google. Inténtalo de nuevo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo."
     },
     "shell": {

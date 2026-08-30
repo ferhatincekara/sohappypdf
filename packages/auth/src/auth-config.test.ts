@@ -15,6 +15,38 @@ describe("loadAuthConfig", () => {
     expect(config.runtimeEnv).toBe("development");
     expect(config.useSecureCookies).toBe(false);
     expect(config.cookieDomain).toBeUndefined();
+    expect(config.google).toBeUndefined();
+  });
+
+  test("loads Google credentials as a complete pair", () => {
+    const config = loadAuthConfig({
+      BETTER_AUTH_SECRET: "a".repeat(32),
+      BETTER_AUTH_URL: "http://localhost:3000",
+      NODE_ENV: "development",
+      GOOGLE_CLIENT_ID: "google-client-id",
+      GOOGLE_CLIENT_SECRET: "google-client-secret",
+    });
+
+    expect(config.google).toEqual({
+      clientId: "google-client-id",
+      clientSecret: "google-client-secret",
+    });
+  });
+
+  test("rejects a partial Google credential pair", () => {
+    try {
+      loadAuthConfig({
+        BETTER_AUTH_SECRET: "a".repeat(32),
+        BETTER_AUTH_URL: "http://localhost:3000",
+        GOOGLE_CLIENT_ID: "google-client-id",
+      });
+      throw new Error("expected configuration to fail");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe("CONFIGURATION_ERROR");
+      }
+    }
   });
 
   test("shares session cookies across the API and site hosts", () => {

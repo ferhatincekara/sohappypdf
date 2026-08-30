@@ -16,9 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
   await redirectIfAuthenticated(next);
   const t = await getTranslations("auth.login");
 
@@ -28,7 +28,7 @@ export default async function LoginPage({
       description={t("description")}
       variant="login"
     >
-      <LoginForm next={next} />
+      <LoginForm next={next} oauthError={error} />
     </AuthPageShell>
   );
 }

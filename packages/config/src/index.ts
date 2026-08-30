@@ -35,7 +35,7 @@ export {
 } from "./api-credit-config.js";
 export type { AppConfig, LogLevel, RuntimeEnv } from "./app-config.js";
 export { LOG_LEVELS, loadAppConfig, RUNTIME_ENVS } from "./app-config.js";
-export type { AuthConfig } from "./auth-config.js";
+export type { AuthConfig, GoogleAuthConfig } from "./auth-config.js";
 export { loadAuthConfig } from "./auth-config.js";
 export { resolveAuthCookieDomain } from "./auth-cookie-domain.js";
 export type {

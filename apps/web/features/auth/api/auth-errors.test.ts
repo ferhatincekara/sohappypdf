@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   AUTH_ERROR_KEYS,
   mapAuthError,
+  mapOAuthCallbackError,
   shouldTreatForgotPasswordAsSuccess,
 } from "@/features/auth/api/auth-errors";
 
@@ -45,6 +46,26 @@ describe("mapAuthError", () => {
   test("falls back to a generic error", () => {
     expect(mapAuthError({ code: "SOME_INTERNAL_CODE", message: "stack" })).toBe(
       AUTH_ERROR_KEYS.unexpected,
+    );
+  });
+});
+
+describe("mapOAuthCallbackError", () => {
+  test("ignores a cancelled Google sign-in", () => {
+    expect(mapOAuthCallbackError("access_denied")).toBeUndefined();
+    expect(mapOAuthCallbackError("user_cancelled")).toBeUndefined();
+    expect(mapOAuthCallbackError("")).toBeUndefined();
+  });
+
+  test("maps a failed Google link to an existing account", () => {
+    expect(mapOAuthCallbackError("account_not_linked")).toBe(
+      AUTH_ERROR_KEYS.existingAccount,
+    );
+  });
+
+  test("maps other Google callback failures", () => {
+    expect(mapOAuthCallbackError("invalid_code")).toBe(
+      AUTH_ERROR_KEYS.googleFailed,
     );
   });
 });

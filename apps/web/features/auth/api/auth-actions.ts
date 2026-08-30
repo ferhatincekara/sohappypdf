@@ -6,6 +6,7 @@ import {
   mapAuthError,
   shouldTreatForgotPasswordAsSuccess,
 } from "@/features/auth/api/auth-errors";
+import { resolveGoogleCallbackUrls } from "@/features/auth/lib/google-callback-urls";
 import { AUTH_PATHS } from "@/features/auth/paths";
 import { authClient } from "@/lib/auth/auth-client";
 
@@ -23,6 +24,11 @@ export type AuthBrowserClient = {
     email: (input: {
       email: string;
       password: string;
+    }) => Promise<AuthClientResult>;
+    social: (input: {
+      provider: "google";
+      callbackURL: string;
+      errorCallbackURL: string;
     }) => Promise<AuthClientResult>;
   };
   signUp: {
@@ -71,6 +77,24 @@ export function createAuthActions(client: AuthBrowserClient) {
         await client.signIn.email({
           email: input.email,
           password: input.password,
+        }),
+      );
+    },
+
+    async signInWithGoogle(input: {
+      next?: string | null;
+      errorPath?: string;
+    }): Promise<AuthActionResult> {
+      const urls = resolveGoogleCallbackUrls({
+        next: input.next,
+        errorPath: input.errorPath,
+      });
+
+      return toActionResult(
+        await client.signIn.social({
+          provider: "google",
+          callbackURL: urls.callbackURL,
+          errorCallbackURL: urls.errorCallbackURL,
         }),
       );
     },

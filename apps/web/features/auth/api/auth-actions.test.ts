@@ -5,6 +5,7 @@ import type {
 } from "@/features/auth/api/auth-actions";
 import { createAuthActions } from "@/features/auth/api/auth-actions";
 import { AUTH_ERROR_KEYS } from "@/features/auth/api/auth-errors";
+import { AUTH_PATHS } from "@/features/auth/paths";
 
 function success(): AuthClientResult {
   return { data: { ok: true }, error: null };
@@ -17,6 +18,7 @@ function failure(code: string): AuthClientResult {
 function createMockClient(
   overrides: Partial<{
     signIn: AuthBrowserClient["signIn"]["email"];
+    signInSocial: AuthBrowserClient["signIn"]["social"];
     signUp: AuthBrowserClient["signUp"]["email"];
     signOut: AuthBrowserClient["signOut"];
     requestPasswordReset: AuthBrowserClient["requestPasswordReset"];
@@ -29,6 +31,7 @@ function createMockClient(
   return {
     signIn: {
       email: overrides.signIn ?? (async () => success()),
+      social: overrides.signInSocial ?? (async () => success()),
     },
     signUp: {
       email: overrides.signUp ?? (async () => success()),
@@ -52,6 +55,33 @@ describe("auth actions", () => {
     });
 
     expect(result).toEqual({ ok: true });
+  });
+
+  test("starts Google sign-in with a trusted web callback URL", async () => {
+    let received:
+      | {
+          provider: "google";
+          callbackURL: string;
+          errorCallbackURL: string;
+        }
+      | undefined;
+    const actions = createAuthActions(
+      createMockClient({
+        signInSocial: async (input) => {
+          received = input;
+          return success();
+        },
+      }),
+    );
+
+    const result = await actions.signInWithGoogle({
+      next: "/account/billing",
+    });
+
+    expect(result).toEqual({ ok: true });
+    expect(received?.provider).toBe("google");
+    expect(received?.callbackURL).toContain("/account/billing");
+    expect(received?.errorCallbackURL).toContain(AUTH_PATHS.login);
   });
 
   test("maps failed authentication", async () => {

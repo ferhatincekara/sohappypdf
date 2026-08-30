@@ -1005,6 +1005,11 @@
       "invalidToken": "Este link de redefinição é inválido ou expirou. Solicite um novo.",
       "loginLink": "Voltar para entrar"
     },
+    "social": {
+      "google": "Continuar com o Google",
+      "googleSubmitting": "Continuando com o Google…",
+      "or": "ou"
+    },
     "fields": {
       "showPassword": "Mostrar senha",
       "hidePassword": "Ocultar senha"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "Este link de redefinição é inválido ou expirou.",
       "currentPasswordIncorrect": "A senha atual está incorreta.",
       "networkFailure": "A solicitação não pôde ser concluída. Tente de novo.",
+      "googleFailed": "Não foi possível concluir o acesso com o Google. Tente de novo.",
       "unexpected": "Algo deu errado. Tente de novo."
     },
     "shell": {

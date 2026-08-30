@@ -1005,6 +1005,11 @@
       "invalidToken": "This reset link is invalid or has expired. Request a new one.",
       "loginLink": "Back to sign in"
     },
+    "social": {
+      "google": "Continue with Google",
+      "googleSubmitting": "Continuing with Google…",
+      "or": "or"
+    },
     "fields": {
       "showPassword": "Show password",
       "hidePassword": "Hide password"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "This reset link is invalid or has expired.",
       "currentPasswordIncorrect": "The current password is incorrect.",
       "networkFailure": "The request could not be completed. Try again.",
+      "googleFailed": "Google sign-in could not be completed. Try again.",
       "unexpected": "Something went wrong. Try again."
     },
     "shell": {

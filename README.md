@@ -90,6 +90,7 @@ On macOS with Homebrew, a typical set is `libreoffice`, `poppler`, `ghostscript`
 
 - **Resend** — password-reset email. Tools work without it.
 - **Polar.sh** — checkout and webhooks. Local webhooks cannot reach `localhost`; billing status reconciles on page load.
+- **Google OAuth** — `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Same-email Google sign-in links to an existing password account. Redirect URI is `{BETTER_AUTH_URL}/api/auth/callback/google`.
 
 ## Local setup
 

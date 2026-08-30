@@ -1005,6 +1005,11 @@
       "invalidToken": "Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.",
       "loginLink": "Retour à la connexion"
     },
+    "social": {
+      "google": "Continuer avec Google",
+      "googleSubmitting": "Redirection vers Google…",
+      "or": "ou"
+    },
     "fields": {
       "showPassword": "Afficher le mot de passe",
       "hidePassword": "Masquer le mot de passe"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "Ce lien de réinitialisation est invalide ou a expiré.",
       "currentPasswordIncorrect": "Le mot de passe actuel est incorrect.",
       "networkFailure": "La requête n'a pas pu aboutir. Réessayez.",
+      "googleFailed": "La connexion Google n'a pas pu aboutir. Réessayez.",
       "unexpected": "Une erreur s'est produite. Réessayez."
     },
     "shell": {

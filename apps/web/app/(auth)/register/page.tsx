@@ -19,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RegisterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; error?: string }>;
 }) {
-  const { next } = await searchParams;
+  const { next, error } = await searchParams;
   await redirectIfAuthenticated(next);
   const t = await getTranslations("auth.register");
 
@@ -31,7 +31,7 @@ export default async function RegisterPage({
       description={t("description")}
       variant="register"
     >
-      <RegisterForm next={next} />
+      <RegisterForm next={next} oauthError={error} />
     </AuthPageShell>
   );
 }

@@ -1005,6 +1005,11 @@
       "invalidToken": "このリセットリンクは無効か、期限切れです。新しいリンクをリクエストしてください。",
       "loginLink": "ログインに戻る"
     },
+    "social": {
+      "google": "Googleで続行",
+      "googleSubmitting": "Googleに移動しています…",
+      "or": "または"
+    },
     "fields": {
       "showPassword": "パスワードを表示",
       "hidePassword": "パスワードを隠す"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "このリセットリンクは無効か、期限切れです。",
       "currentPasswordIncorrect": "現在のパスワードが正しくありません。",
       "networkFailure": "リクエストを完了できませんでした。もう一度お試しください。",
+      "googleFailed": "Googleでのログインを完了できませんでした。もう一度お試しください。",
       "unexpected": "問題が発生しました。もう一度お試しください。"
     },
     "shell": {

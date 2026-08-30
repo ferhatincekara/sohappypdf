@@ -1005,6 +1005,11 @@
       "invalidToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bir bağlantı isteyin.",
       "loginLink": "Girişe dön"
     },
+    "social": {
+      "google": "Google ile devam et",
+      "googleSubmitting": "Google’a yönlendiriliyor…",
+      "or": "veya"
+    },
     "fields": {
       "showPassword": "Şifreyi göster",
       "hidePassword": "Şifreyi gizle"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "Bu sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
       "currentPasswordIncorrect": "Mevcut şifre yanlış.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
+      "googleFailed": "Google ile giriş tamamlanamadı. Tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     },
     "shell": {

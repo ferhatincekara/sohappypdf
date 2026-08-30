@@ -1005,6 +1005,11 @@
       "invalidToken": "Dieser Reset-Link ist ungültig oder abgelaufen. Fordern Sie einen neuen an.",
       "loginLink": "Zurück zur Anmeldung"
     },
+    "social": {
+      "google": "Mit Google fortfahren",
+      "googleSubmitting": "Weiterleitung zu Google…",
+      "or": "oder"
+    },
     "fields": {
       "showPassword": "Passwort anzeigen",
       "hidePassword": "Passwort verbergen"
@@ -1025,6 +1030,7 @@
       "expiredResetToken": "Dieser Reset-Link ist ungültig oder abgelaufen.",
       "currentPasswordIncorrect": "Das aktuelle Passwort ist falsch.",
       "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "googleFailed": "Die Google-Anmeldung konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
       "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
     },
     "shell": {

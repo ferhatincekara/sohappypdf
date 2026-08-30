@@ -40,6 +40,7 @@ describe("createAuth", () => {
     );
     expect(auth.options.emailAndPassword?.password).toBeUndefined();
     expect(auth.options.socialProviders).toBeUndefined();
+    expect(auth.options.account?.accountLinking).toBeUndefined();
     expect(auth.options.plugins ?? []).toEqual([]);
     expect(auth.options.session?.cookieCache?.enabled).toBe(false);
     expect(auth.options.advanced?.useSecureCookies).toBe(false);
@@ -100,6 +101,38 @@ describe("createAuth", () => {
       "none",
     );
     expect(auth.options.advanced?.defaultCookieAttributes?.secure).toBe(true);
+  });
+
+  test("enables Google sign-in and links matching emails to existing accounts", () => {
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "http://localhost:3000",
+        runtimeEnv: "test",
+        useSecureCookies: false,
+        google: {
+          clientId: "google-client-id",
+          clientSecret: "google-client-secret",
+        },
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+    });
+
+    expect(auth.options.socialProviders?.google?.clientId).toBe(
+      "google-client-id",
+    );
+    expect(auth.options.account?.accountLinking?.enabled).toBe(true);
+    expect(auth.options.account?.accountLinking?.trustedProviders).toEqual([
+      "google",
+    ]);
+    expect(
+      auth.options.account?.accountLinking?.requireLocalEmailVerified,
+    ).toBe(false);
   });
 
   test("creates a user with a hashed credential and a server session", async () => {

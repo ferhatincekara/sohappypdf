@@ -6,6 +6,7 @@ export const AUTH_ERROR_KEYS = {
   expiredResetToken: "expiredResetToken",
   currentPasswordIncorrect: "currentPasswordIncorrect",
   networkFailure: "networkFailure",
+  googleFailed: "googleFailed",
   unexpected: "unexpected",
 } as const;
 
@@ -24,6 +25,7 @@ const ERROR_CODE_MAP: Record<string, AuthErrorKey> = {
   CREDENTIAL_ACCOUNT_NOT_FOUND: AUTH_ERROR_KEYS.invalidCredentials,
   USER_ALREADY_EXISTS: AUTH_ERROR_KEYS.existingAccount,
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: AUTH_ERROR_KEYS.existingAccount,
+  ACCOUNT_NOT_LINKED: AUTH_ERROR_KEYS.existingAccount,
   INVALID_EMAIL: AUTH_ERROR_KEYS.invalidEmail,
   CHANGE_EMAIL_DISABLED: AUTH_ERROR_KEYS.unexpected,
   INVALID_PASSWORD: AUTH_ERROR_KEYS.weakPassword,
@@ -80,4 +82,29 @@ export function shouldTreatForgotPasswordAsSuccess(
   error: AuthClientError | null,
 ): boolean {
   return error === null || error.code === "USER_NOT_FOUND";
+}
+
+const CANCELLED_OAUTH_ERRORS = new Set(["access_denied", "user_cancelled"]);
+
+export function mapOAuthCallbackError(
+  error?: string | null,
+): AuthErrorKey | undefined {
+  if (error === undefined || error === null || error.trim() === "") {
+    return undefined;
+  }
+
+  const normalized = error.trim().toLowerCase();
+
+  if (CANCELLED_OAUTH_ERRORS.has(normalized)) {
+    return undefined;
+  }
+
+  if (
+    normalized === "account_not_linked" ||
+    normalized === "unable_to_link_account"
+  ) {
+    return AUTH_ERROR_KEYS.existingAccount;
+  }
+
+  return AUTH_ERROR_KEYS.googleFailed;
 }
