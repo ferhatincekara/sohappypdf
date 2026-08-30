@@ -5,14 +5,12 @@ import {
 } from "@/features/marketing/lib/marketing-social";
 
 describe("marketing social links", () => {
-  test("exposes Instagram, X, and LinkedIn on the sohappypdf handle", () => {
+  test("exposes Instagram on the sohappypdf handle", () => {
     expect(MARKETING_SOCIAL_LINKS.map((item) => item.id)).toEqual([
       ...MARKETING_SOCIAL_LINK_IDS,
     ]);
     expect(MARKETING_SOCIAL_LINKS.map((item) => item.href)).toEqual([
       "https://www.instagram.com/sohappypdf",
-      "https://x.com/sohappypdf",
-      "https://www.linkedin.com/company/sohappypdf",
     ]);
   });
 
