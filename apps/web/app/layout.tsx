@@ -12,6 +12,7 @@ import { AppProviders } from "@/components/providers/app-providers";
 import { getPublicWebEnv } from "@/config/public-env";
 import { openGraphLocale } from "@/features/public-tools/lib/public-tool-metadata";
 import {
+  BRAND_ICON_192_PATH,
   OPENGRAPH_IMAGE_ALT,
   OPENGRAPH_IMAGE_PATH,
   SITE_NAME,
@@ -47,6 +48,13 @@ export async function generateMetadata(): Promise<Metadata> {
       template: TITLE_TEMPLATE,
     },
     description: t("description"),
+    icons: {
+      icon: [
+        { url: "/icon.png", type: "image/png", sizes: "192x192" },
+        { url: BRAND_ICON_192_PATH, type: "image/png", sizes: "192x192" },
+      ],
+      apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
+    },
     openGraph: {
       siteName: SITE_NAME,
       type: "website",
