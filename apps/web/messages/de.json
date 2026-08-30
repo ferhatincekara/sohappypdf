@@ -1,0 +1,2800 @@
+{
+  "metadata": {
+    "title": "Online-PDF-Tools zum Zusammenführen, Konvertieren und Komprimieren - SoHappyPDF",
+    "description": "Kostenlose Online-PDF-Tools zum Zusammenführen, Teilen, Komprimieren, Konvertieren, OCR und Schützen von Dateien. Für die Grundnutzung brauchen Sie kein Konto. Dateien laufen nach zwei Stunden ab."
+  },
+  "marketing": {
+    "nav": {
+      "brand": "SoHappyPDF",
+      "product": "Produkt",
+      "pricing": "Preise",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "about": "Über uns",
+      "contact": "Kontakt",
+      "developers": "Entwickler",
+      "signIn": "Anmelden",
+      "account": "Konto",
+      "getStarted": "Kostenlos testen",
+      "comingSoon": "Bald",
+      "pro": "Pro",
+      "stories": {
+        "pdf-to-word": "Einen Vertrag in Word umwandeln und weiterarbeiten",
+        "compress-pdf": "Ein großes PDF verkleinern und lesbar halten"
+      },
+      "open": "Menü öffnen",
+      "close": "Menü schließen",
+      "menu": "Seite",
+      "skip": "Zum Inhalt springen",
+      "tools": "Tools",
+      "allTools": "Alle Tools",
+      "shortcuts": {
+        "label": "Beliebte Tools",
+        "merge": "Zusammenführen",
+        "split": "Teilen",
+        "compress": "Komprimieren",
+        "convert": "Konvertieren",
+        "ocr": "OCR",
+        "protect": "Schützen"
+      },
+      "categories": {
+        "organize": "PDF organisieren",
+        "optimize": "PDF optimieren",
+        "convert": "PDF konvertieren",
+        "edit": "PDF bearbeiten",
+        "security": "PDF-Sicherheit",
+        "document": "Office und Bilder",
+        "intelligence": "PDF-Intelligenz"
+      }
+    },
+    "hero": {
+      "eyebrow": "{count} PDF-Tools, ein guter Ort",
+      "title": "PDFs konvertieren, zusammenführen <smile>und verwalten.</smile>",
+      "description": "Öffnen Sie ein Tool, legen Sie eine Datei ab und laden Sie das Ergebnis herunter. Für die Grundnutzung brauchen Sie kein Konto. Dateien bleiben auf Ihre Sitzung beschränkt und laufen nach etwa zwei Stunden ab.",
+      "primaryCta": "Kostenlos starten",
+      "secondaryCta": "Tools durchsuchen",
+      "accountCta": "Tools öffnen",
+      "imageAlt": "Ein Team arbeitet gemeinsam an Dokumenten",
+      "chipLabel": "Dateilebensdauer",
+      "chipValue": "Etwa 2 Stunden",
+      "highlights": {
+        "speed": {
+          "title": "In der Cloud verarbeiten",
+          "text": "Hochladen, das Tool ausführen und herunterladen, wenn der Auftrag fertig ist. Keine Desktop-App zum Installieren."
+        },
+        "quality": {
+          "title": "Layout behalten",
+          "text": "Komprimieren und konvertieren, ohne die Dokumentstruktur zu verlieren, die Sie brauchen."
+        },
+        "privacy": {
+          "title": "Dateien privat halten",
+          "text": "Dateien gehören zu Ihrer Sitzung oder Ihrem Konto. Downloads nutzen kurzlebigen signierten Zugriff."
+        }
+      },
+      "convertCard": {
+        "title": "Eine Datei konvertieren",
+        "drop": "PDF hierher ziehen",
+        "orSelect": "oder vom Computer auswählen",
+        "fileName": "Contract.pdf",
+        "fileMeta": "2,4 MB · 12 Seiten",
+        "conversion": "PDF → Word",
+        "free": "Free",
+        "cta": "Konvertieren"
+      }
+    },
+    "overview": {
+      "eyebrow": "Der Überblick",
+      "title": "Alles, was Sie brauchen, auf einen Blick.",
+      "description": "Konvertieren, zusammenführen, komprimieren und schützen. Angemeldete Konten können letzte Aufträge nachsehen, damit klar ist, was mit jeder Datei passiert ist.",
+      "toolsCta": "Tools durchsuchen",
+      "weekLabel": "Beispielwoche",
+      "weekValue": "48 Dateien",
+      "chartValue": "78%",
+      "activity": {
+        "convert": {
+          "name": "Contract_v4.pdf",
+          "action": "Nach Word konvertiert",
+          "time": "Fertig"
+        },
+        "compress": {
+          "name": "Invoice_March.pdf",
+          "action": "Komprimiert · 8,4 MB → 1,1 MB",
+          "time": "Fertig"
+        },
+        "merge": {
+          "name": "Deck.pdf",
+          "action": "Zusammengeführt · 12 Seiten",
+          "time": "Fertig"
+        }
+      }
+    },
+    "spotlights": {
+      "title": "Die PDF-Arbeit erledigen. Den Rest des Tages behalten.",
+      "description": "Der Ablauf ist bei jedem Auftrag gleich: Tool öffnen, Datei hochladen und herunterladen, wenn die Verarbeitung fertig ist. Für die Grundnutzung brauchen Sie kein Konto.",
+      "convert": {
+        "eyebrow": "Jedes Format konvertieren",
+        "title": "Word, Excel, JPG — PDF in jede Richtung.",
+        "text": "Bearbeitbare Dokumente erzeugen, Tabellen extrahieren und Seiten in Bilder umwandeln. Tool öffnen, hochladen, herunterladen.",
+        "cta": "PDF → Word testen",
+        "overlay": {
+          "title": "Bereit — Contract.docx",
+          "meta": "12 Seiten · bearbeitbar",
+          "cta": "Herunterladen"
+        }
+      },
+      "compress": {
+        "eyebrow": "Smarte Komprimierung",
+        "title": "Kleinere Dateien, weiterhin lesbar.",
+        "text": "E-Mail-Limits und langsame Uploads sind real. Komprimieren Sie ein PDF und behalten Sie den Text klar genug zum Teilen.",
+        "cta": "Komprimieren testen",
+        "overlay": {
+          "title": "Komprimierung",
+          "before": "Vorher",
+          "beforeSize": "8,4 MB",
+          "after": "Nachher",
+          "afterSize": "1,1 MB"
+        }
+      },
+      "protect": {
+        "eyebrow": "Schützen und sperren",
+        "title": "Den Vertrag ohne Drucker abschließen.",
+        "text": "Schützen Sie sensible PDFs mit einem Passwort. Der Zugriff bleibt auf Ihre Sitzung oder Ihr Konto beschränkt, mit kurzlebigen Download-Links.",
+        "cta": "Schützen testen",
+        "overlay": {
+          "title": "Geschützt",
+          "name": "E. Kaya",
+          "meta": "Passwort gesetzt"
+        }
+      }
+    },
+    "whyChoose": {
+      "title": "Warum SoHappyPDF?",
+      "description": "PDF-Tools wirken oft kühl und überladen. Wir haben dieses rund, etwas gelb und darauf ausgerichtet gelassen, die Aufgabe fertigzumachen.",
+      "try": "Ausprobieren",
+      "speed": {
+        "title": "Keine Software zum Installieren",
+        "text": "Öffnen Sie ein Tool im Browser, laden Sie eine Datei hoch und laden Sie das Ergebnis herunter.",
+        "stat": "Cloud-Aufträge"
+      },
+      "privacy": {
+        "title": "Dateien bleiben Ihre",
+        "text": "Dateien bleiben auf Ihrer Sitzung oder Ihrem Konto und laufen nach etwa zwei Stunden ab.",
+        "stat": "Kurzlebige Dateien"
+      },
+      "anywhere": {
+        "title": "Jede Datei, ein Ort",
+        "text": "PDF, Word, Excel und Bilder an einem Ort. Öffnen Sie ein Tool — keine Desktop-App.",
+        "stat": "{count} Tools"
+      },
+      "visual": {
+        "word": "PDF → Word",
+        "wordFile": "Contract.pdf",
+        "excel": "PDF → Excel",
+        "excelFile": "Invoice.pdf",
+        "fileMark": "PDF",
+        "fileMeta": "~2 Stunden",
+        "wordOut": "Word",
+        "wordOutMeta": "DOCX",
+        "excelOut": "Excel",
+        "excelOutMeta": "XLSX"
+      }
+    },
+    "testimonials": {
+      "title": "Was andere sagen",
+      "description": "Kleine Teams und beschäftigte Freelancer, die PDF-Arbeit hinter sich bringen wollten.",
+      "quotes": {
+        "elif": {
+          "name": "Elif Kaya",
+          "role": "Operations, GreenLeaf",
+          "text": "Verträge in Word umwandeln ist ein kurzes Warten, keine Schnitzeljagd.",
+          "tag": "Ruhiger Ablauf",
+          "initials": "EK"
+        },
+        "mert": {
+          "name": "Mert Aydın",
+          "role": "Freiberuflicher Designer",
+          "text": "Die Komprimierung sieht weiterhin sauber aus. Kundendateien bleiben leicht und lesbar.",
+          "tag": "Schnell und zuverlässig",
+          "initials": "MA"
+        },
+        "selin": {
+          "name": "Selin Arslan",
+          "role": "HR-Leitung",
+          "text": "Bewerbungsunterlagen sind im Browser fertig. Der Ordner wächst nicht weiter.",
+          "tag": "Guter Service",
+          "initials": "SA"
+        },
+        "can": {
+          "name": "Can Demir",
+          "role": "Finanzanalyst",
+          "text": "Der Tabellenexport nach Excel hat beim ersten Versuch geklappt. Ich kopiere Rechnungen nicht mehr von Hand.",
+          "tag": "Einfach und klar",
+          "initials": "CD"
+        }
+      }
+    },
+    "ctaBanner": {
+      "title": "{count} Tools, fokussierte Seiten, ein Produkt.",
+      "description": "Verlaufen Sie sich nicht auf der Startseite. Tools, Preise und Ihr Konto haben jeweils einen Platz — dann zurück an die Arbeit.",
+      "toolsCta": "Alle Tools",
+      "startCta": "Pläne ansehen"
+    },
+    "faq": {
+      "title": "Fragen, die wir oft hören",
+      "description": "Kurze Antworten zu Dateien, Limits und dazu, wie das Produkt wirklich funktioniert.",
+      "items": {
+        "files": {
+          "q": "Wohin gehen meine Dateien?",
+          "a": "Dateien werden zur Verarbeitung hochgeladen und auf Ihre anonyme Sitzung oder Ihr Konto beschränkt. Downloads nutzen kurzlebige signierte URLs. Temporäre Dateien laufen nach etwa zwei Stunden ab."
+        },
+        "anonymous": {
+          "q": "Brauche ich ein Konto?",
+          "a": "Nein. Free deckt dieselben Tageslimits mit oder ohne Anmeldung ab. Ein Konto ist optional für Verlauf, Abrechnung und API-Keys."
+        },
+        "formats": {
+          "q": "Welche Formate kann ich konvertieren?",
+          "a": "Der Katalog umfasst PDF, Word, Excel, PowerPoint, JPG, PNG und OCR-Tools. Jede Tool-Dropzone zeigt die Formate, die das Tool akzeptiert."
+        },
+        "limits": {
+          "q": "Welche Dateilimits gelten?",
+          "a": "Free sind 5 Vorgänge pro Tag, 25 MB pro Datei, eine Datei gleichzeitig und 50 Seiten pro Datei — mit oder ohne Konto. OCR ist nur bei Pro. Pro kostet 5 $ pro Monat für unbegrenzte Vorgänge und ein Dateilimit von 1 GB. Dateien laufen nach etwa zwei Stunden ab. Developer-API-Credits werden getrennt abgerechnet."
+        },
+        "account": {
+          "q": "Was ändert sich durch die Anmeldung?",
+          "a": "Sie erhalten letzte Aktivität, Abrechnung und API-Keys. Die täglichen Free-Limits bleiben gleich. Die Tool-Seiten bleiben gleich: Datei hochladen, dann das Ergebnis herunterladen."
+        },
+        "credits": {
+          "q": "Wie funktionieren Credits?",
+          "a": "Web-Vorgänge bei Free sind täglich begrenzt. Pro kostet 5 $ pro Monat für unbegrenzte Web-Nutzung. API-Credits werden getrennt über Developer-Pakete abgerechnet und messen die programmatische Nutzung."
+        },
+        "api": {
+          "q": "Gibt es eine Entwickler-API?",
+          "a": "Ja. Die öffentliche v1-API nutzt denselben Ablauf aus Hochladen, Verarbeiten und Herunterladen mit einem API-Key. API-Credit-Pakete sind von den Web-Plänen getrennt."
+        },
+        "privacy": {
+          "q": "Sind meine Dateien privat?",
+          "a": "Ja. Dateien sind auf Ihre Sitzung oder Ihr Konto beschränkt, nicht auf eine gemeinsame Bibliothek. Downloads nutzen kurzlebige signierte URLs statt öffentlicher Links."
+        },
+        "pro": {
+          "q": "Was ist in Pro enthalten?",
+          "a": "Pro kostet 5 $ pro Monat. Es schaltet OCR, Bearbeitung, E-Signatur und KI-Tools frei, entfernt die tägliche Vorgangsgrenze und hebt das Dateigrößenlimit auf 1 GB."
+        },
+        "payment": {
+          "q": "Wie funktionieren Zahlung und Kündigung?",
+          "a": "Der Checkout läuft über Polar, nachdem Sie sich angemeldet haben. Zahlungsmethoden, Rechnungen und Kündigung werden im Polar-Kundenportal verwaltet. Jährliche API-Pakete sind 20 % günstiger, wenn dieses Produkt konfiguriert ist."
+        }
+      }
+    },
+    "demo": {
+      "title": "Vom Upload zum Download",
+      "description": "Jedes Tool besitzt seinen Ablauf: Datei auswählen, verarbeiten, dann das temporäre Ergebnis herunterladen.",
+      "panelTitle": "Tool-Ablauf",
+      "fileLabel": "Datei",
+      "fileName": "report.pdf",
+      "conversionLabel": "Tool",
+      "conversion": "PDF zu PNG",
+      "resultLabel": "Ergebnis",
+      "result": "report.png",
+      "status": "Abgeschlossen",
+      "upload": "Hochladen",
+      "choose": "Tool wählen",
+      "convert": "Verarbeiten",
+      "download": "Herunterladen"
+    },
+    "features": {
+      "title": "Was Sie heute tun können",
+      "description": "SoHappyPDF verarbeitet unterstützte Dateien in der Cloud und hält temporäre Ergebnisse etwa zwei Stunden bereit.",
+      "items": {
+        "conversion": {
+          "title": "PDF-Tools",
+          "description": "Zusammenführen, teilen, komprimieren, konvertieren, schützen und mehr auf fokussierten Tool-Seiten."
+        },
+        "workflow": {
+          "title": "Einfacher Tool-Ablauf",
+          "description": "Auf der Tool-Seite hochladen, verarbeiten und herunterladen, wenn das Ergebnis bereit ist."
+        },
+        "history": {
+          "title": "Letzte Aktivität",
+          "description": "Angemeldete Konten können letzte Ausführungen nachsehen. Dateien bleiben temporär."
+        },
+        "api": {
+          "title": "Developer-API",
+          "description": "Denselben Datei- und Verarbeitungsablauf mit einem API-Key aufrufen."
+        },
+        "keys": {
+          "title": "API-Keys",
+          "description": "Keys in Ihrem Konto erstellen und löschen. Der Roh-Key wird nur einmal angezeigt."
+        },
+        "limits": {
+          "title": "Vorhersehbare Limits",
+          "description": "Free- und Pro-Pläne veröffentlichen tägliche Vorgänge, Dateigröße und API-Limits."
+        },
+        "security": {
+          "title": "Private Dateien",
+          "description": "Dateien gehören zu Ihrer anonymen Sitzung oder Ihrem Konto. Downloads nutzen kurzlebigen signierten Zugriff."
+        },
+        "cloud": {
+          "title": "Cloud-Verarbeitung",
+          "description": "Aufträge laufen in der Cloud, Sie installieren also keine Konvertierungssoftware lokal."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "So funktioniert es",
+      "step": "Schritt {number}",
+      "upload": {
+        "title": "Hochladen",
+        "description": "Öffnen Sie ein Tool und senden Sie eine unterstützte Datei."
+      },
+      "convert": {
+        "title": "Verarbeiten",
+        "description": "Wählen Sie bei Bedarf Optionen. Die Verarbeitung läuft im Hintergrund weiter."
+      },
+      "download": {
+        "title": "Herunterladen",
+        "description": "Laden Sie das Ergebnis herunter, wenn die Verarbeitung fertig ist. Temporäre Dateien laufen nach etwa zwei Stunden ab."
+      }
+    },
+    "developer": {
+      "title": "Eine API für dasselbe Produkt",
+      "description": "Erstellen Sie einen API-Key, authentifizieren Sie sich mit einem Bearer-Token und laden Sie dann über die öffentliche v1-API hoch, konvertieren und herunter.",
+      "authHint": "Nutzen Sie Authorization: Bearer YOUR_API_KEY. Legen Sie Keys nicht in URLs oder Browser-Code.",
+      "exampleLabel": "Eine Konvertierung prüfen",
+      "cta": "API-Dokumentation lesen"
+    },
+    "security": {
+      "title": "Sicherheitseigenschaften, die wir tatsächlich bieten",
+      "description": "Das sind Produktkontrollen, keine Compliance-Zertifizierungen Dritter.",
+      "items": {
+        "authentication": {
+          "title": "Sichere Anmeldung",
+          "description": "Das Dashboard nutzt E-Mail- und Passwort-Anmeldung, bevor Kontodaten angezeigt werden."
+        },
+        "privateFiles": {
+          "title": "Private Dateien",
+          "description": "Hochgeladene und konvertierte Dateien sind auf das angemeldete Konto oder den API-Key-Inhaber beschränkt."
+        },
+        "authorization": {
+          "title": "Autorisierung auf dem Server",
+          "description": "Aktionen zu Dateien, Konvertierungen und API-Keys werden auf dem Server autorisiert."
+        },
+        "signedAccess": {
+          "title": "Signierter Ergebniszugriff",
+          "description": "Downloads werden als kurzlebige signierte URLs ausgegeben, nicht als öffentliche Objekt-Links."
+        },
+        "apiKeys": {
+          "title": "Schutz von API-Keys",
+          "description": "Keys sind Geheimnisse. Löschen Sie einen durchgesickerten Key im Dashboard und erstellen Sie einen Ersatz."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Free, Pro und Developer",
+      "description": "Web-Pläne decken Browser-Tools ab. Developer-Credit-Pakete werden getrennt für die öffentliche API abgerechnet.",
+      "viewPage": "Preise ansehen",
+      "note": "Pro kostet 5 $ pro Monat. Upgrades und API-Credit-Pakete nutzen Polar-Checkout nach der Anmeldung.",
+      "interval": "/Monat",
+      "intervalYear": "/Jahr",
+      "web": {
+        "title": "Web-Pläne",
+        "description": "Nutzen Sie PDF-Tools im Browser. Tägliche Vorgänge, Dateigröße und Seitenlimits folgen Ihrem Web-Plan."
+      },
+      "free": {
+        "name": "Free",
+        "badge": "Enthalten",
+        "summary": "Fünf Vorgänge pro Tag, eine Datei gleichzeitig, mit einer Größengrenze von 25 MB. Dieselben Limits mit oder ohne Konto. OCR ist nicht enthalten.",
+        "cta": "Kostenlos starten"
+      },
+      "pro": {
+        "name": "Pro",
+        "badge": "Unbegrenzt",
+        "summary": "Unbegrenzte Browser-Vorgänge, 1-GB-Dateien, OCR und Premium-Tools.",
+        "cta": "Pro starten"
+      },
+      "api": {
+        "title": "API-Credit-Pakete",
+        "description": "API-Credits sind von der Web-Nutzung getrennt. Kaufen Sie ein Paket in Ihrem Konto, wenn Sie programmatischen Zugriff brauchen.",
+        "note": "API-Anfrageraten und Key-Limits folgen Ihrem Web-Plan. API-Credits werden nur durch API-Nutzung verbraucht.",
+        "cta": "Developer-Dokumentation",
+        "packs": {
+          "starter": {
+            "name": "Starter",
+            "summary": "Genug Credits, um die öffentliche API auszuprobieren."
+          },
+          "growth": {
+            "name": "Growth",
+            "summary": "Mehr API-Credits für regelmäßige Integrationen."
+          },
+          "scale": {
+            "name": "Scale",
+            "summary": "Höhere API-Credit-Kapazität für stärkeren Betrieb."
+          }
+        }
+      },
+      "developer": {
+        "title": "Developer",
+        "description": "API-Credits werden getrennt abgerechnet. Wählen Sie ein monatliches oder jährliches Paket und sehen Sie, wie viele Aufgaben diese Credits abdecken.",
+        "docsCta": "Developer-Dokumentation",
+        "cycleTitle": "Abrechnungszyklus wählen",
+        "monthly": "Monatlich",
+        "yearly": "Jährlich",
+        "yearlyDiscount": "-20%",
+        "cycleNote": {
+          "monthly": "Credits erneuern sich jeden Monat. Ungenutzte Credits laufen am Ende des Zeitraums ab.",
+          "yearly": "Zahlen Sie jährlich und sparen Sie 20 % beim Polar-Checkout. Credits erneuern sich weiterhin monatlich."
+        },
+        "creditsTitle": "Anzahl der Credits pro Monat wählen",
+        "needMore": "Mehr nötig? <contact>Kontaktieren Sie uns</contact>",
+        "calculatorTitle": "Rechner",
+        "calculatorDescription": "Wie viele Dateien, Seiten oder Aufgaben kann ich pro Monat mit <credits></credits> Credits verarbeiten?",
+        "calculatorResult": "Sie können <count></count> Aufgaben mit dem Tool <tool></tool> verarbeiten.",
+        "cta": "Abonnieren",
+        "creditsTableTitle": "Credits und Dateien",
+        "creditsTableDescription": "Die API-Credit-Kosten hängen vom Tool ab. Höhere Credit-Pakete decken mehr Aufgaben ab. Ungenutzte monatliche Credits laufen am Ende des Zeitraums ab.",
+        "creditsTableTool": "Tool",
+        "creditsTableCredits": "Credits",
+        "creditsPerTask": "{count, plural, one {# Credit pro Aufgabe} other {# Credits pro Aufgabe}}"
+      },
+      "limits": {
+        "webCredits": "{count} Web-Tool-Credits pro Monat",
+        "operations": "{count} Verarbeitungsvorgänge pro Monat",
+        "dailyOperations": "{count} Vorgänge pro Tag",
+        "unlimitedOperations": "Unbegrenzte Vorgänge",
+        "noAccountRequired": "Tools ohne Konto nutzen",
+        "fileSize": "Bis zu {size} pro Datei",
+        "filesPerOperation": "Bis zu {count} Dateien pro Vorgang",
+        "multiFile": "Mehrere Dateien pro Vorgang",
+        "hourlyOperations": "Bis zu {count} Vorgänge pro Stunde",
+        "pagesPerFile": "Bis zu {count} Seiten pro Datei",
+        "noPageCap": "Kein Seitenlimit pro Datei",
+        "noOcr": "OCR nicht enthalten",
+        "noSupport": "Kein Support",
+        "supportIncluded": "E-Mail-Support",
+        "retention": "Dateien laufen nach {hours} Stunden ab",
+        "premiumTools": "OCR und Pro-Tools",
+        "standardTools": "Standard-PDF-Tools",
+        "apiCredits": "{count} API-Credits pro Paket",
+        "apiKeys": "{count} API-Keys",
+        "apiRate": "{count} API-Anfragen pro Minute",
+        "apiAccess": "Zugriff auf die öffentliche API"
+      }
+    },
+    "footer": {
+      "brand": "SoHappyPDF",
+      "menu": "Fußzeile",
+      "product": "Produkt",
+      "company": "Unternehmen",
+      "tools": "Tools",
+      "pricing": "Preise",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "about": "Über uns",
+      "contact": "Kontakt",
+      "api": "API",
+      "legal": "Rechtliches",
+      "security": "Sicherheit",
+      "privacy": "Datenschutz",
+      "terms": "AGB",
+      "cookies": "Cookies",
+      "blurb": "Gebaut, damit PDF-Arbeit leichter, schneller und etwas fröhlicher wird. Dateien bleiben auf Sie beschränkt und laufen dann ab.",
+      "copyright": "© {year} SoHappyPDF. Alle Rechte vorbehalten.",
+      "language": "Sprache",
+      "languages": {
+        "en": "English",
+        "tr": "Türkçe",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "ja": "日本語",
+        "pt-BR": "Português (Brasil)"
+      },
+      "social": "Social",
+      "instagram": "SoHappyPDF auf Instagram",
+      "x": "SoHappyPDF auf X",
+      "linkedin": "SoHappyPDF auf LinkedIn"
+    },
+    "toolsDirectory": {
+      "title": "PDF-Tools",
+      "description": "Jedes öffentliche Tool ist ein fokussierter Ablauf. Wählen Sie eine Kategorie, öffnen Sie ein Tool, laden Sie eine Datei hoch und laden Sie das Ergebnis herunter.",
+      "openTool": "Tool öffnen",
+      "comingSoon": "Demnächst",
+      "pro": "Pro",
+      "jump": "Beliebte Tools",
+      "categories": {
+        "organize": "PDF-Seiten zusammenführen, teilen und neu anordnen.",
+        "convert": "PDFs in andere Formate und wieder zurück umwandeln.",
+        "edit": "Wasserzeichen, Seitenzahlen und leichte Bearbeitungen hinzufügen.",
+        "optimize": "PDFs komprimieren, reparieren und zum Teilen vorbereiten.",
+        "security": "PDFs schützen, entsperren und den Zugriff steuern.",
+        "document": "Office-Dateien und Bilder in PDF konvertieren.",
+        "intelligence": "OCR, Zusammenfassen und Übersetzen von Dokumentinhalt."
+      }
+    },
+    "metadata": {
+      "homeTitle": "Online-PDF-Tools zum Zusammenführen, Konvertieren und Komprimieren",
+      "homeDescription": "Kostenlose Online-PDF-Tools zum Zusammenführen, Teilen, Komprimieren, Konvertieren, OCR und Schützen von Dateien. Öffnen Sie ein Tool, legen Sie eine Datei ab und laden Sie das Ergebnis herunter. Für die Grundnutzung brauchen Sie kein Konto. Dateien laufen nach zwei Stunden ab.",
+      "pricingTitle": "Preise",
+      "pricingDescription": "Vergleichen Sie Free- und Pro-Limits für Web-PDF-Tools sowie Developer-API-Credit-Pakete.",
+      "faqTitle": "FAQ",
+      "faqDescription": "Antworten zu Dateiablauf, Datenschutz, Tageslimits, Pro-Plänen und der öffentlichen API.",
+      "blogTitle": "Blog",
+      "blogDescription": "Kurze Anleitungen zum Konvertieren, Komprimieren, Zusammenführen und Unterschreiben von PDFs.",
+      "toolsTitle": "Alle Online-PDF-Tools",
+      "toolsDescription": "Durchsuchen Sie kostenlose Online-PDF-Tools zum Zusammenführen, Konvertieren, Komprimieren, Bearbeiten, Schützen und für OCR. Öffnen Sie ein Tool, laden Sie eine Datei hoch und laden Sie das Ergebnis herunter.",
+      "categoryTitles": {
+        "organize": "PDFs zusammenführen, teilen und organisieren",
+        "convert": "PDF-Konverter",
+        "edit": "PDF-Dateien online bearbeiten",
+        "optimize": "PDFs komprimieren und optimieren",
+        "security": "PDFs schützen und entsperren",
+        "document": "Office und Bilder in PDF konvertieren",
+        "intelligence": "OCR- und KI-PDF-Tools"
+      },
+      "developersTitle": "Öffentliche API",
+      "developersDescription": "Datei hochladen, ein PDF-Tool ausführen, den Auftrag abfragen und das Ergebnis mit einem API-Key herunterladen.",
+      "aboutTitle": "Über uns",
+      "aboutDescription": "SoHappyPDF ist ein tool-first PDF-Produkt. Dateien bleiben absichtlich temporär — etwa zwei Stunden, keine Dokumentenbibliothek.",
+      "contactTitle": "Kontakt",
+      "contactDescription": "Schreiben Sie an hello@sohappypdf.com zu Produkt, Abrechnung und API. Keine Dateien anhängen."
+    },
+    "contact": {
+      "title": "Schreiben Sie uns.",
+      "description": "E-Mail ist der Weg. Bei Limits, Dateien und Plänen ist die FAQ schneller.",
+      "emailLabel": "Support",
+      "emailHint": "Schreiben Sie in jeder Sprache. Wir lesen E-Mails an Werktagen. Senden Sie hier keine Dateien — laden Sie sie auf einer Tool-Seite hoch.",
+      "emailCta": "E-Mail senden",
+      "topics": {
+        "title": "Worüber Sie schreiben können",
+        "description": "Eine kurze Betreffzeile hilft.",
+        "items": {
+          "product": {
+            "title": "Das Produkt",
+            "text": "Ein Tool, das fehlgeschlagen ist, ein fehlendes Format oder Feedback zum Ablauf."
+          },
+          "billing": {
+            "title": "Abrechnung",
+            "text": "Rechnungen, Zahlungsmethoden und Kündigung finden Sie nach der Anmeldung im Polar-Kundenportal. Schreiben Sie uns, wenn der Checkout hängt."
+          },
+          "api": {
+            "title": "Die API",
+            "text": "Keys, Credit-Pakete und die öffentlichen v1-Docs. Dieselben Tools wie auf der Website."
+          }
+        }
+      },
+      "faq": {
+        "title": "Schauen Sie zuerst in die FAQ.",
+        "description": "Dateien, Datenschutz, Tageslimits, Pro und API-Credits sind dort bereits beantwortet.",
+        "cta": "FAQ lesen"
+      }
+    },
+    "about": {
+      "title": "Ein PDF-Produkt, das Sie besuchen und wieder verlassen.",
+      "description": "SoHappyPDF hat PDF-Tools zum Zusammenführen, Konvertieren, Komprimieren, Schützen und für OCR — plus eine öffentliche API, die dieselben Aufträge ausführt. Wir halten Dateien absichtlich temporär. Für die Grundnutzung brauchen Sie kein Konto.",
+      "story": {
+        "title": "Wer wir sind",
+        "lead": "Wir bauen PDF-Tools für Menschen, die schon eine Aufgabe zu erledigen haben. Das ist keine Dokumentenbibliothek, kein Ort zum Parken von Dateien und kein Dashboard, in dem Sie leben sollen.",
+        "body": "Jedes Tool ist eine eigene Seite: öffnen, Datei hochladen, Ergebnis herunterladen. Angemeldete Konten erhalten letzte Aktivität, Abrechnung und API-Keys. Anonym erlaubte Tools funktionieren ohne Konto. Temporäre Dateien laufen nach etwa zwei Stunden ab — das ist das Produkt, kein fehlendes Feature."
+      },
+      "beliefs": {
+        "title": "Wie wir arbeiten",
+        "description": "Das sind die Regeln, nach denen wir das Produkt gestalten.",
+        "items": {
+          "pages": {
+            "title": "Die Tool-Seite besitzt den Auftrag",
+            "text": "Es gibt kein alltägliches Dokumentenarchiv. Schließen Sie die Datei auf der Seite ab, die Sie geöffnet haben, und gehen Sie weiter."
+          },
+          "anonymous": {
+            "title": "Ein Konto ist optional",
+            "text": "Die täglichen Free-Limits sind mit oder ohne Anmeldung gleich. Ein Konto schaltet Verlauf, Abrechnung und API-Keys frei."
+          },
+          "files": {
+            "title": "Dateien sind temporär",
+            "text": "Uploads und Ergebnisse bleiben auf Ihre Sitzung oder Ihr Konto beschränkt und laufen nach etwa zwei Stunden ab."
+          },
+          "api": {
+            "title": "Die API ist dasselbe Produkt",
+            "text": "Die öffentliche v1-API führt dieselben Tools aus. Ein Satz Tools, zwei Oberflächen: die Website und ein Bearer-Token."
+          }
+        }
+      },
+      "questions": {
+        "title": "Fragen über uns",
+        "description": "Limits, Credits und Zahlung stehen in der FAQ. Diese Antworten betreffen das Produkt selbst.",
+        "items": {
+          "what": {
+            "q": "Was ist SoHappyPDF?",
+            "a": "PDF-Tools und eine öffentliche API. Sie verarbeiten eine Datei und laden das Ergebnis herunter. Wir führen keine dauerhafte Bibliothek Ihrer Dokumente."
+          },
+          "who": {
+            "q": "Wer steckt dahinter?",
+            "a": "SoHappyPDF ist ein unabhängiges Produkt, das wir bauen und betreiben. Wir verarbeiten Dateien in der Cloud, beschränken sie auf Ihre Sitzung oder Ihr Konto und lassen sie nach kurzer Zeit ablaufen. Wir beanspruchen keine Compliance-Zertifizierungen."
+          },
+          "why": {
+            "q": "Warum laufen Dateien ab?",
+            "a": "Alltägliche PDF-Arbeit soll kein Speicher werden. Eine kurze Lebensdauer hält das Produkt einfach und verhindert, dass Dateien nach dem Auftrag liegen bleiben."
+          },
+          "start": {
+            "q": "Wie fange ich an?",
+            "a": "Öffnen Sie ein Tool, legen Sie eine Datei ab und laden Sie herunter, wenn die Verarbeitung fertig ist. Wenn Sie Verlauf oder die API brauchen, erstellen Sie ein Konto."
+          }
+        }
+      }
+    }
+  },
+  "legal": {
+    "eyebrow": "Rechtliches",
+    "updated": "Zuletzt aktualisiert {date}",
+    "contactHint": "Fragen zu diesen Seiten gehen an",
+    "security": {
+      "nav": "Sicherheit",
+      "metaTitle": "Sicherheit",
+      "title": "Sicherheit, die wir tatsächlich bieten",
+      "description": "Das sind Produktkontrollen, keine Compliance-Zertifizierungen Dritter. Wenn ein Siegel hier nicht steht, beanspruchen wir es nicht.",
+      "sections": {
+        "honest": {
+          "title": "Was diese Seite nicht ist",
+          "body": "SoHappyPDF veröffentlicht keine Audit-Berichte oder Compliance-Zertifizierungen Dritter. Diese Seite beschreibt, wie das Produkt Dateien, Konten und API-Keys heute behandelt."
+        },
+        "files": {
+          "title": "Dateien bleiben beschränkt und temporär",
+          "body": "Uploads und Ergebnisse sind an Ihre anonyme Sitzung oder Ihr angemeldetes Konto gebunden, nicht an eine gemeinsame Bibliothek. Downloads nutzen kurzlebige signierte URLs statt öffentlicher Objekt-Links. Temporäre Dateien laufen nach etwa zwei Stunden ab. Vorab signierte Upload- und Download-URLs laufen nach 15 Minuten ab."
+        },
+        "accounts": {
+          "title": "Konten werden auf dem Server autorisiert",
+          "body": "Der Kontobereich nutzt E-Mail- und Passwort-Anmeldung. Aktionen zu Dateien, Konvertierungen, Abrechnung und API-Keys werden auf dem Server autorisiert. Prüfungen im Client sind keine Berechtigung."
+        },
+        "api": {
+          "title": "API-Keys sind Geheimnisse",
+          "body": "Programmatischer Zugriff nutzt einen Bearer-API-Key. Legen Sie Keys nicht in URLs, Browser-JavaScript oder die Versionskontrolle. Wenn ein Key durchsickert, löschen Sie ihn im Kontobereich und erstellen Sie einen Ersatz."
+        },
+        "report": {
+          "title": "Ein Sicherheitsproblem melden",
+          "body": "Wenn Sie eine Schwachstelle in SoHappyPDF finden, schreiben Sie uns mit genug Details zur Reproduktion. Hängen Sie keine Kundendateien an. Wir werden Sie nicht bitten, API-Keys oder Passwörter zu senden."
+        }
+      }
+    },
+    "privacy": {
+      "nav": "Datenschutz",
+      "metaTitle": "Datenschutz",
+      "title": "Datenschutzerklärung",
+      "description": "Wie SoHappyPDF Dateien, Konten, Zahlungen und Cookies behandelt. Wir halten das am tatsächlichen Produkt ausgerichtet.",
+      "sections": {
+        "overview": {
+          "title": "Was wir erheben",
+          "body": "SoHappyPDF verarbeitet PDFs und verwandte Dateien, damit Sie sie konvertieren, zusammenführen, komprimieren und anderweitig umwandeln können. Wir speichern außerdem die Kontodaten, die zum Anmelden, Abrechnen eines Plans und Ausgeben von API-Keys nötig sind. Wir verkaufen Ihre Dateien oder Kontodaten nicht."
+        },
+        "files": {
+          "title": "Dateien, die Sie hochladen",
+          "body": "Quelldateien und Ergebnisse liegen in privatem Objektspeicher, damit das Tool laufen kann. Sie sind auf Ihre Sitzung oder Ihr Konto beschränkt. Temporäre Dateien laufen nach etwa zwei Stunden ab und werden dann gelöscht. Das Produkt ist kein Dokumentenarchiv — laden Sie Ergebnisse herunter, die Sie behalten wollen."
+        },
+        "accounts": {
+          "title": "Kontodaten",
+          "body": "Wenn Sie ein Konto erstellen, speichern wir Ihre E-Mail, den Namen falls Sie einen angeben, ein gehashtes Passwort, Sitzungsdaten, letzte Aktivität und API-Key-Metadaten. Den Roh-API-Key speichern wir nicht, nachdem er einmal angezeigt wurde."
+        },
+        "payments": {
+          "title": "Zahlungen",
+          "body": "Checkout, Rechnungen und Karten werden von Polar verarbeitet. SoHappyPDF speichert den Abo- und Credit-Paket-Status, der nötig ist, um Free-, Pro- und API-Berechtigungen durchzusetzen. Kartennummern werden in SoHappyPDF nicht gespeichert."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "body": "Wir nutzen eine kleine Menge First-Party-Cookies, um die Sprache zu merken, eine anonyme Tool-Sitzung zu halten und Sie angemeldet zu halten. Wir setzen keine Werbe-Pixel oder Analyse-Skripte auf Marketing- oder App-Seiten. Details stehen auf der Cookie-Seite."
+        },
+        "retention": {
+          "title": "Wie lange Daten bleiben",
+          "body": "Tool-Dateien bleiben etwa zwei Stunden. Konto-, Abrechnungs- und API-Key-Datensätze bleiben, bis Sie das Konto schließen oder wir sie für den Zahlungsanbieter oder das Gesetz behalten müssen. Sie können uns per E-Mail um die Löschung eines Kontos bitten."
+        },
+        "processors": {
+          "title": "Wer sonst Daten sieht",
+          "body": "Dateien laufen durch unsere Anwendung, den Worker und privaten Objektspeicher. Polar verarbeitet Zahlungen. Hosting- und E-Mail-Anbieter sehen die technischen Daten, die zum Betrieb dieser Dienste nötig sind. Wir teilen Dateien nicht mit anderen Kunden."
+        },
+        "contact": {
+          "title": "Fragen zum Datenschutz",
+          "body": "Schreiben Sie an hello@sohappypdf.com. Senden Sie keine Dateien an diese Adresse — laden Sie sie auf einer Tool-Seite hoch, wenn sie verarbeitet werden sollen."
+        }
+      }
+    },
+    "terms": {
+      "nav": "AGB",
+      "metaTitle": "AGB",
+      "title": "Nutzungsbedingungen",
+      "description": "Die Regeln für die Nutzung der öffentlichen Tools, Konten und der API von SoHappyPDF. Bewahren Sie eine lokale Kopie jeder Datei auf, die Sie nach der Verarbeitung noch brauchen.",
+      "sections": {
+        "service": {
+          "title": "Der Dienst",
+          "body": "SoHappyPDF bietet Web-PDF-Tools und eine öffentliche API. Sie dürfen anonym erlaubte Tools ohne Konto nutzen, vorbehaltlich der täglichen Free-Limits. Die Anmeldung schaltet Verlauf, Abrechnung und API-Keys frei. Wir können Funktionen, Limits und Preise ändern; aktuelle Limits stehen unter Preise."
+        },
+        "accounts": {
+          "title": "Konten",
+          "body": "Sie sind für E-Mail und Passwort Ihres Kontos und für alle API-Keys verantwortlich, die Sie erstellen. Halten Sie Keys geheim. Löschen Sie einen durchgesickerten Key. Wir können ein Konto sperren, das den Dienst oder diese Bedingungen missbraucht."
+        },
+        "acceptableUse": {
+          "title": "Zulässige Nutzung",
+          "body": "Laden Sie keine Schadsoftware hoch, versuchen Sie nicht, das Produkt zu knacken, scrapen Sie es nicht auf eine Weise, die anderen schadet, und nutzen Sie es nicht für rechtswidrige Inhalte. Sie müssen das Recht haben, die hochgeladenen Dateien zu verarbeiten. Wir können Aufträge ablehnen oder löschen, die missbräuchlich wirken."
+        },
+        "files": {
+          "title": "Dateien laufen ab",
+          "body": "Uploads und Ergebnisse sind temporäre Verarbeitungsobjekte, keine Bibliothek. Sie laufen nach etwa zwei Stunden ab. Wenn ein Download-Link nicht mehr funktioniert, verarbeiten Sie die Datei erneut. Wir sind kein Backup-Dienst."
+        },
+        "billing": {
+          "title": "Pläne und Polar",
+          "body": "Free und Pro sind Web-Pläne. API-Credit-Pakete werden getrennt abgerechnet. Checkout und Kündigung laufen über Polar, nachdem Sie sich angemeldet haben. Im Polar-Portal aktualisieren Sie Karten, laden Rechnungen herunter und kündigen. Ungenutzte API-Credits werden am Ende des Paketzeitraums zurückgesetzt."
+        },
+        "api": {
+          "title": "API",
+          "body": "Die öffentliche v1-API nutzt dieselben Tools wie die Website. Ratenlimits und Key-Limits folgen Ihrem Web-Plan. API-Credits messen nur die programmatische Nutzung. Legen Sie API-Keys nicht in Client-Code."
+        },
+        "changes": {
+          "title": "Änderungen",
+          "body": "Wir können diese Bedingungen aktualisieren. Das Datum oben auf dieser Seite ist die aktuelle Version. Die weitere Nutzung nach einer Aktualisierung bedeutet, dass Sie die neuen Bedingungen akzeptieren. Wenn nicht, beenden Sie die Nutzung und kündigen Sie über Polar."
+        },
+        "contact": {
+          "title": "Kontakt",
+          "body": "Bei Fragen zu Produkt, Abrechnung oder API schreiben Sie an hello@sohappypdf.com. Hängen Sie keine Dateien an dieses Postfach."
+        }
+      }
+    },
+    "cookies": {
+      "nav": "Cookies",
+      "metaTitle": "Cookies",
+      "title": "Cookies",
+      "description": "SoHappyPDF nutzt eine kleine Zahl First-Party-Cookies, um die Website zu betreiben. Wir setzen keine Werbe- oder Analyse-Cookies.",
+      "sections": {
+        "overview": {
+          "title": "Wofür wir Cookies nutzen",
+          "body": "Cookies sind kleine Textdateien, die Ihr Browser speichert. Wir nutzen sie nur, um Ihre Sprache zu merken, anonyme Tool-Nutzung auf Ihren Browser zu beschränken und eine angemeldete Sitzung zu halten. Es gibt kein Cookie-Banner, weil wir keine optionalen Tracking-Cookies einsetzen."
+        },
+        "language": {
+          "title": "Sprache",
+          "body": "Wenn Sie eine Sprache wählen, wird ein httpOnly-Cookie namens NEXT_LOCALE für bis zu einem Jahr gesetzt, damit die Website in dieser Sprache bleibt. Sie können das jederzeit über die Sprachsteuerung in der Fußzeile ändern."
+        },
+        "session": {
+          "title": "Sitzungen",
+          "body": "Anonyme Tool-Nutzung kann ein First-Party-Cookie namens spdf_anon setzen, damit Dateien an Ihren Browser gebunden bleiben statt an einen gemeinsamen Pool. Die Anmeldung setzt Konto-Sitzungs-Cookies, damit der Kontobereich laden kann. Diese Cookies sind httpOnly. Beim Abmelden wird die Kontositzung gelöscht."
+        },
+        "payments": {
+          "title": "Zahlungen",
+          "body": "Der Checkout findet bei Polar statt. Polar kann eigene Cookies auf seiner Domain setzen, während Sie zahlen oder ein Abo verwalten. Diese Cookies gehören Polar, nicht zu Marketing- oder Analyse-Cookies von SoHappyPDF."
+        },
+        "control": {
+          "title": "Cookies steuern",
+          "body": "Sie können Cookies in Ihrem Browser löschen. Wenn Sie alle Cookies blockieren, bleiben Spracheinstellung und Anmeldung nicht erhalten. Die oben genannten notwendigen Cookies sind für diese Funktionen erforderlich."
+        }
+      }
+    }
+  },
+  "blog": {
+    "title": "Neueste Beiträge",
+    "pageTitle": "Blog",
+    "description": "Weniger Klicks, sauberere Dokumente. Kurze Notizen.",
+    "readAll": "Alle lesen",
+    "back": "Alle Beiträge",
+    "openTool": "Zugehöriges Tool öffnen"
+  },
+  "developerDocs": {
+    "eyebrow": "Öffentliche v1-API",
+    "title": "Auf denselben Tools aufbauen",
+    "description": "Jedes Browser-Tool ist ein Konvertierungstyp. Erstellen Sie einen API-Key, laden Sie mit einem voraussignierten PUT hoch und senden Sie dann POST /conversions mit diesem type. Fragen Sie ab, bis der Auftrag fertig ist, und laden Sie die Ausgabedatei herunter.",
+    "createKey": "API-Key erstellen",
+    "viewPricing": "Developer-Preise",
+    "baseUrl": "Base URL",
+    "openapi": "OpenAPI",
+    "codeLabel": "Beispiel",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "toc": {
+      "label": "Auf dieser Seite",
+      "quickstart": "Schnellstart",
+      "auth": "Authentifizierung",
+      "files": "Dateien",
+      "conversions": "Konvertierungen",
+      "tools": "Tools",
+      "errors": "Fehler",
+      "limits": "Limits"
+    },
+    "quickstart": {
+      "title": "Schnellstart",
+      "step1": "Erstellen Sie einen Key unter Konto → API. Er wird nur einmal angezeigt.",
+      "step2": "Senden Sie Authorization: Bearer YOUR_API_KEY bei jeder Anfrage. Legen Sie den Key nie in eine URL oder in Browser-Code.",
+      "step3": "POST /files/upload, PUT die Bytes an upload.url, dann POST /files/'{id}'/complete.",
+      "step4": "POST /conversions mit sourceFileId, targetFormat und type. Nutzen Sie die Tool-ID als type.",
+      "step5": "Fragen Sie GET /conversions/'{id}' alle zwei Sekunden ab, bis completed, dann POST /files/'{outputFileId}'/download.",
+      "uploadLabel": "1. Upload anlegen",
+      "putLabel": "2. Datei-Bytes per PUT senden",
+      "completeLabel": "3. Upload abschließen",
+      "convertLabel": "4. Konvertierung anlegen"
+    },
+    "auth": {
+      "title": "Authentifizierung",
+      "description": "Programmatischer Zugriff nutzt API-Keys. Dashboard-Cookies sind für die Web-App, nicht für Integrationen.",
+      "ruleHeader": "Senden Sie den Key nur im Authorization-Header.",
+      "ruleSecret": "Behandeln Sie den Key als Geheimnis. Committen Sie ihn nicht.",
+      "ruleBrowser": "Liefern Sie Keys nicht in Frontend-JavaScript aus.",
+      "ruleRevoke": "Löschen Sie einen durchgesickerten Key im Dashboard und erstellen Sie einen Ersatz."
+    },
+    "files": {
+      "title": "Dateien",
+      "description": "Uploads sind voraussigniert. Die API hält die Datei-Bytes nie. Schließen Sie den Upload ab, bevor Sie eine Konvertierung anlegen.",
+      "expiry": "Temporäre Dateien laufen nach etwa zwei Stunden ab. Vorab signierte Upload- und Download-URLs laufen nach 15 Minuten ab."
+    },
+    "conversions": {
+      "title": "Konvertierungen",
+      "description": "POST /conversions gibt 201 zurück und reiht einen Worker-Auftrag ein. Das Feld type ist die Tool-ID. Optionen gehören in options. Weitere Eingabedateien gehören in additionalFileIds, nicht in die Datei-Bytes.",
+      "pollHint": "Fragen Sie ab, solange status {pending} ist. Halten Sie bei {done} an. Wenn completed, ist conversion.outputFileId gesetzt.",
+      "idempotency": "Senden Sie Idempotency-Key (1–128 Zeichen) beim Anlegen. Eine Wiederholung mit demselben Inhaber und Key gibt den ursprünglichen Auftrag zurück und verbraucht keinen weiteren Credit."
+    },
+    "tools": {
+      "title": "Tools",
+      "description": "Nutzen Sie die Tool-ID als conversion type. Das JSON unten ist der Body von POST /conversions. Credits kommen aus dem Katalog. Geplante Tools fehlen, bis sie ausgeliefert sind.",
+      "search": "Tools suchen",
+      "allCategories": "Alle",
+      "resultCount": "{count, plural, one {# Tool} other {# Tools}}",
+      "tryInBrowser": "Im Browser testen",
+      "pro": "Pro",
+      "type": "type",
+      "input": "Eingabe",
+      "output": "Ausgabe",
+      "credits": "Credits",
+      "apiCredits": "{count} API-Credits",
+      "aiCredits": "{count} KI-Credits",
+      "files": "Dateien",
+      "filesValue": "{count, plural, one {# Datei} other {# Dateien}}",
+      "extraFiles": "Zusätzliche Dateien",
+      "extra": {
+        "none": "Nur Quelldatei",
+        "required": "additionalFileIds erforderlich",
+        "optional": "additionalFileIds optional"
+      },
+      "options": "options",
+      "required": "erforderlich",
+      "optional": "optional",
+      "exampleLabel": "POST /conversions Body"
+    },
+    "errors": {
+      "title": "Fehler",
+      "description": "Jeder Fehler nutzt diese Hülle. Fehlende Dateien und Konvertierungen geben beide NOT_FOUND zurück. Eine abgelaufene eigene Datei gibt FILE_EXPIRED statt 404 zurück.",
+      "code": "Code",
+      "status": "HTTP",
+      "retry": "429 enthält Retry-After, RateLimit-Limit, RateLimit-Remaining und RateLimit-Reset. Warten, dann erneut versuchen. Keine engen Schleifen."
+    },
+    "limits": {
+      "title": "Limits und Credits",
+      "description": "API-Credits sind von Web-Tool-Credits getrennt. Ratenlimits folgen dem Web-Plan. Das Erreichen eines Kontingents gibt 403 PLAN_LIMIT_REACHED zurück.",
+      "free": "Free: {ops} Konvertierungen/Tag, 25-MB-Dateien, {rpm} API-Anfragen/Minute.",
+      "pro": "Pro: unbegrenzte Konvertierungen, 1-GB-Dateien, {rpm} API-Anfragen/Minute.",
+      "credits": "Jede Konvertierung verbraucht die API-Credit-Kosten des Tools. Konten enthalten jeden Monat {count} API-Credits; kaufen Sie Developer-Pakete in der Abrechnung für mehr.",
+      "webhooks": "Webhooks sind nicht verfügbar. Clients müssen pollen."
+    },
+    "notes": {
+      "pagesOneIndexed": "Seitenzahlen sind 1-basiert.",
+      "extraFilesTopLevel": "Übergeben Sie zusätzliche Uploads als additionalFileIds an der Konvertierung, nachdem jede Datei abgeschlossen wurde.",
+      "explicitType": "Senden Sie type ausdrücklich. Die API leitet dieses Tool nicht allein aus den Formaten ab.",
+      "rangesInclusive": "Bereichsstart und -ende sind inklusive.",
+      "ocrLanguage": "language ist ein OCR-Sprachcode wie eng oder tur.",
+      "protectSecret": "Protokollieren Sie keine Passwörter. Rotieren Sie sie, wenn eine Anfrage mitgeschnitten wird.",
+      "signVisualOnly": "Das ist ein visueller Stempel, keine kryptografische digitale Signatur.",
+      "compareSecondFile": "Laden Sie beide PDFs hoch und übergeben Sie die zweite ID in additionalFileIds."
+    }
+  },
+  "app": {
+    "title": "Anwendung",
+    "authenticated": "Angemeldet",
+    "signedInAs": "Angemeldet als {email}",
+    "logout": "Abmelden",
+    "loggingOut": "Wird abgemeldet…"
+  },
+  "appShell": {
+    "brand": "SoHappyPDF",
+    "navigation": "Konto",
+    "openNavigation": "Navigation öffnen",
+    "closeNavigation": "Navigation schließen",
+    "breadcrumb": "Brotkrumen",
+    "userMenu": "Kontomenü",
+    "accountNav": "Kontoseiten",
+    "logout": "Abmelden",
+    "loggingOut": "Wird abgemeldet…",
+    "nav": {
+      "overview": "Übersicht",
+      "usage": "Nutzung",
+      "plan": "Plan",
+      "activity": "Verlauf",
+      "billing": "Abrechnung",
+      "apiKeys": "API",
+      "settings": "Einstellungen"
+    },
+    "pages": {
+      "overview": {
+        "title": "Übersicht",
+        "description": "Prüfen Sie Plan und Credits und springen Sie zurück zu den PDF-Tools.",
+        "planTitle": "Ihr Plan",
+        "creditsSummary": "{used} von {limit} Web-Credits genutzt ({remaining} übrig).",
+        "manageBilling": "Abrechnung verwalten",
+        "upgrade": "Upgrade",
+        "toolsTitle": "PDF-Tools",
+        "toolsDescription": "Verarbeiten Sie Dateien direkt auf jeder Tool-Seite. Temporäre Ergebnisse laufen nach etwa zwei Stunden ab.",
+        "chooseTool": "Ein Tool wählen",
+        "viewActivity": "Verlauf ansehen",
+        "viewUsage": "Nutzung ansehen",
+        "recentTitle": "Letzte Aktivität",
+        "operations": "Monatliche Verarbeitung",
+        "fileSize": "Max. Dateigröße",
+        "apiStatus": "API-Credits",
+        "apiCreditsSummary": "{remaining} von {limit} übrig"
+      },
+      "plan": {
+        "title": "Plan",
+        "description": "Ihr Web-Plan legt Credits, Dateigröße und monatliche Verarbeitung fest. Die Abrechnung läuft getrennt.",
+        "current": "Aktueller Plan",
+        "noSubscription": "Kein bezahltes Web-Abo",
+        "upgrade": "Auf Pro upgraden",
+        "manageBilling": "Abrechnung verwalten",
+        "fileSize": "Bis zu {size} pro Datei",
+        "operations": "{used} von {limit} Vorgängen in diesem Monat",
+        "billingHint": "Zahlungsmethoden und Rechnungen finden Sie unter Abrechnung."
+      },
+      "usage": {
+        "title": "Nutzung",
+        "description": "Web-Credits sind der primäre Zähler für authentifizierte Tool-Nutzung.",
+        "webCreditsTitle": "Web-Credits",
+        "billingHint": "Mehr Kapazität nötig?",
+        "openBilling": "Abrechnung öffnen"
+      },
+      "activity": {
+        "title": "Verlauf",
+        "description": "Ausführungsverlauf für Ihr Konto. Temporäre Dateien laufen nach etwa zwei Stunden ab und können danach nicht mehr heruntergeladen werden."
+      },
+      "billing": {
+        "title": "Abrechnung",
+        "description": "Verwalten Sie Ihren Plan und Ihre Zahlungsdaten."
+      },
+      "apiKeys": {
+        "title": "API",
+        "description": "Keys für programmatischen Zugriff erstellen und löschen."
+      },
+      "settings": {
+        "title": "Einstellungen",
+        "description": "Kontoeinstellungen verwalten."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "description": "Melden Sie sich bei SoHappyPDF an für höhere Limits, letzte Aktivität, Abrechnung und API-Keys.",
+      "email": "E-Mail",
+      "emailPlaceholder": "you@company.com",
+      "password": "Passwort",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Anmelden",
+      "submitting": "Wird angemeldet…",
+      "switchHint": "Noch kein Konto?",
+      "registerLink": "Konto erstellen",
+      "forgotLink": "Passwort vergessen?"
+    },
+    "register": {
+      "title": "Konto erstellen",
+      "description": "Erstellen Sie ein kostenloses SoHappyPDF-Konto für höhere Limits, Verlauf, Abrechnung und API-Zugriff.",
+      "name": "Name",
+      "namePlaceholder": "Ada Lovelace",
+      "email": "E-Mail",
+      "emailPlaceholder": "you@company.com",
+      "password": "Passwort",
+      "passwordPlaceholder": "Mindestens 8 Zeichen",
+      "confirmPassword": "Passwort bestätigen",
+      "submit": "Konto erstellen",
+      "submitting": "Konto wird erstellt…",
+      "switchHint": "Schon ein Konto?",
+      "loginLink": "Anmelden"
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "description": "Geben Sie Ihre E-Mail ein. Wir senden Anweisungen zum Zurücksetzen, wenn ein Konto existiert.",
+      "email": "E-Mail",
+      "emailPlaceholder": "you@company.com",
+      "submit": "Anweisungen senden",
+      "submitting": "Wird gesendet…",
+      "success": "Wenn für diese E-Mail ein Konto existiert, wurden Anweisungen zum Zurücksetzen des Passworts gesendet.",
+      "loginLink": "Zurück zur Anmeldung"
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Wählen Sie ein neues Passwort für Ihr Konto.",
+      "password": "Neues Passwort",
+      "passwordPlaceholder": "Mindestens 8 Zeichen",
+      "confirmPassword": "Neues Passwort bestätigen",
+      "submit": "Passwort aktualisieren",
+      "submitting": "Passwort wird aktualisiert…",
+      "updated": "Ihr Passwort wurde aktualisiert. Melden Sie sich an, um fortzufahren.",
+      "invalidToken": "Dieser Reset-Link ist ungültig oder abgelaufen. Fordern Sie einen neuen an.",
+      "loginLink": "Zurück zur Anmeldung"
+    },
+    "fields": {
+      "showPassword": "Passwort anzeigen",
+      "hidePassword": "Passwort verbergen"
+    },
+    "validation": {
+      "required": "Dieses Feld ist erforderlich.",
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "passwordMin": "Das Passwort muss mindestens 8 Zeichen haben.",
+      "passwordMax": "Das Passwort darf höchstens 128 Zeichen haben.",
+      "nameMax": "Der Name darf höchstens 80 Zeichen haben.",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein."
+    },
+    "errors": {
+      "invalidCredentials": "Ungültige E-Mail oder ungültiges Passwort.",
+      "existingAccount": "Ein Konto mit dieser E-Mail existiert bereits.",
+      "invalidEmail": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "weakPassword": "Wählen Sie ein stärkeres Passwort.",
+      "expiredResetToken": "Dieser Reset-Link ist ungültig oder abgelaufen.",
+      "currentPasswordIncorrect": "Das aktuelle Passwort ist falsch.",
+      "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
+    },
+    "shell": {
+      "brand": "SoHappyPDF",
+      "home": "Startseite",
+      "login": {
+        "eyebrow": "Willkommen zurück",
+        "title": "Genau dort weitermachen, wo Sie aufgehört haben.",
+        "text": "Letzte Aufträge, Abrechnung und API-Keys warten in Ihrem Konto."
+      },
+      "register": {
+        "eyebrow": "Kostenlos starten",
+        "title": "Konto eröffnen, mit einem Lächeln fertig werden.",
+        "text": "Grundlegende Tools funktionieren ohne Anmeldung. Ein Konto bringt Credits, Verlauf und API-Zugriff."
+      },
+      "reset": {
+        "eyebrow": "Zugriff zurücksetzen",
+        "title": "Wieder in Ihr Konto kommen.",
+        "text": "Wir senden Anweisungen per E-Mail, wenn diese Adresse ein Konto hat."
+      },
+      "perks": {
+        "private": "Dateien bleiben auf Sie beschränkt",
+        "password": "Anmeldung mit E-Mail und Passwort",
+        "start": "Ohne bezahlten Plan starten"
+      }
+    }
+  },
+  "errors": {
+    "notFound": "Diese Seite wurde nicht gefunden.",
+    "notFoundCode": "404",
+    "notFoundTitle": "Diese Seite ist verschwunden.",
+    "notFoundDescription": "Sie wurde vielleicht zusammengeführt, geteilt oder hat nie existiert. Sie können von der Startseite weitergehen.",
+    "notFoundHome": "Zur Startseite",
+    "notFoundTools": "Tools durchsuchen",
+    "generic": "Etwas ist schiefgegangen.",
+    "genericCode": "Fehler",
+    "genericTitle": "Etwas ist schiefgegangen.",
+    "genericDescription": "Die Seite hat einen unerwarteten Fehler getroffen. Versuchen Sie es erneut oder gehen Sie zur Startseite.",
+    "genericRetry": "Erneut versuchen",
+    "genericHome": "Zur Startseite",
+    "loading": "Wird geladen"
+  },
+  "files": {
+    "title": "Dateien",
+    "description": "Laden Sie eine unterstützte Datei hoch. Die Konvertierung steht bereit, nachdem die Datei gespeichert ist.",
+    "actions": {
+      "download": "Herunterladen",
+      "downloading": "Download wird vorbereitet…",
+      "delete": "Löschen",
+      "deleteNamed": "{filename} löschen"
+    },
+    "formats": {
+      "pdf": "PDF",
+      "doc": "DOC",
+      "docx": "DOCX",
+      "xls": "XLS",
+      "xlsx": "XLSX",
+      "ppt": "PPT",
+      "pptx": "PPTX",
+      "jpg": "JPG",
+      "png": "PNG"
+    },
+    "delete": {
+      "title": "Datei löschen",
+      "description": "Dadurch wird {filename} dauerhaft aus Ihrem Konto entfernt.",
+      "confirm": "Datei löschen",
+      "deleting": "Wird gelöscht…",
+      "cancel": "Abbrechen",
+      "success": "Die Datei wurde gelöscht."
+    },
+    "upload": {
+      "title": "Hochladen",
+      "description": "Wählen Sie jeweils eine Datei. Die Datei wird direkt in den Speicher gesendet.",
+      "dropzoneTitle": "Datei wählen",
+      "dropzoneHint": "Klicken zum Durchsuchen oder per Drag-and-Drop. PDF, Word, Excel, PowerPoint, JPG und PNG werden unterstützt.",
+      "preparing": "Upload wird vorbereitet…",
+      "uploading": "Wird hochgeladen",
+      "finalizing": "Upload wird abgeschlossen…",
+      "complete": "Upload abgeschlossen",
+      "cancelled": "Upload abgebrochen",
+      "percent": "{value}%",
+      "cancel": "Abbrechen",
+      "retry": "Erneut versuchen",
+      "chooseAnother": "Andere Datei wählen"
+    },
+    "list": {
+      "title": "Hochgeladene Dateien",
+      "description": "Dateien, die bereits für Ihr Konto gespeichert sind.",
+      "loading": "Dateien werden geladen…",
+      "empty": "Noch keine Dateien.",
+      "emptyHint": "Laden Sie Ihre erste Datei hoch, um zu starten.",
+      "uploadCta": "Datei hochladen",
+      "retry": "Erneut versuchen",
+      "unknownType": "Datei",
+      "created": "Hinzugefügt {date}",
+      "expires": "Läuft ab {date}",
+      "firstPage": "Neueste",
+      "nextPage": "Ältere Dateien",
+      "status": {
+        "pending": "Ausstehend",
+        "uploaded": "Hochgeladen",
+        "processing": "Wird verarbeitet",
+        "completed": "Abgeschlossen",
+        "failed": "Fehlgeschlagen",
+        "deleted": "Gelöscht"
+      }
+    },
+    "status": {
+      "idle": "Bereit, eine Datei hochzuladen.",
+      "selecting": "Dateiauswahl geöffnet.",
+      "preparing": "Upload wird vorbereitet.",
+      "uploading": "Datei wird hochgeladen.",
+      "finalizing": "Upload wird abgeschlossen.",
+      "completed": "Upload abgeschlossen.",
+      "failed": "Upload fehlgeschlagen.",
+      "cancelled": "Upload abgebrochen."
+    },
+    "errors": {
+      "missingFile": "Wählen Sie eine Datei zum Hochladen.",
+      "multipleFiles": "Laden Sie jeweils eine Datei hoch.",
+      "invalidFilename": "Dieser Dateiname kann nicht verwendet werden.",
+      "unsupportedType": "Dieser Dateityp wird nicht unterstützt.",
+      "emptyFile": "Die ausgewählte Datei ist leer.",
+      "fileTooLarge": "Die Datei ist größer als {maxSize}.",
+      "storageLimitReached": "Dieser Upload würde Ihr Speicherlimit überschreiten.",
+      "expiredUpload": "Die Upload-Sitzung ist abgelaufen. Versuchen Sie es erneut.",
+      "objectNotUploaded": "Die Datei konnte nicht bestätigt werden. Versuchen Sie es erneut.",
+      "fileNotFound": "Diese Datei ist nicht mehr verfügbar.",
+      "unauthorized": "Melden Sie sich erneut an, um Dateien zu verwalten.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "cancelled": "Upload abgebrochen.",
+      "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
+    }
+  },
+  "conversions": {
+    "actions": {
+      "convert": "Konvertieren"
+    },
+    "history": {
+      "title": "Verlauf",
+      "description": "Aufträge, die Sie angemeldet ausgeführt haben. Temporäre Dateien laufen nach etwa zwei Stunden ab und können danach nicht mehr heruntergeladen werden.",
+      "loading": "Aktivität wird geladen…",
+      "empty": "Noch keine letzte Aktivität.",
+      "emptyHint": "Öffnen Sie ein PDF-Tool, verarbeiten Sie eine Datei, und das Ergebnis erscheint hier.",
+      "emptyFiltered": "Keine Aktivität passt zu diesem Filter.",
+      "emptyFilteredHint": "Versuchen Sie einen anderen Status oder zeigen Sie die gesamte Aktivität.",
+      "browseTools": "Tools durchsuchen",
+      "openFiles": "Tools durchsuchen",
+      "retry": "Erneut versuchen",
+      "view": "Ansehen",
+      "unnamedSource": "Quelldatei",
+      "summary": "{source} → {target}",
+      "created": "Gestartet {date}",
+      "completed": "Fertig {date}",
+      "expiredHint": "Dieses Ergebnis ist abgelaufen und nicht mehr herunterladbar.",
+      "firstPage": "Neueste",
+      "nextPage": "Ältere Aktivität",
+      "age": {
+        "justNow": "Gerade eben",
+        "minutes": "vor {count} Min.",
+        "hours": "vor {count} Std."
+      },
+      "expiresIn": {
+        "minutes": "Läuft in {count} Min. ab",
+        "hours": "Läuft in {count} Std. ab"
+      },
+      "filters": {
+        "label": "Aktivität filtern",
+        "all": "Alle",
+        "queued": "In der Warteschlange",
+        "processing": "Wird verarbeitet",
+        "completed": "Bereit",
+        "failed": "Fehlgeschlagen"
+      }
+    },
+    "form": {
+      "title": "Konvertierung anlegen",
+      "description": "Wählen Sie ein Ausgabeformat. Die Konvertierung läuft im Hintergrund.",
+      "close": "Konvertierungsformular schließen",
+      "sourceFile": "Datei: {filename}",
+      "targetFormat": "Ausgabeformat",
+      "conversionType": "Konvertierungstyp",
+      "conversionTypeHint": "Dieses Ausgabeformat kann auf mehr als eine Weise erzeugt werden.",
+      "submit": "Konvertierung anlegen",
+      "submitting": "Konvertierung wird angelegt…",
+      "formats": {
+        "pdf": "PDF",
+        "doc": "DOC",
+        "docx": "DOCX",
+        "xls": "XLS",
+        "xlsx": "XLSX",
+        "ppt": "PPT",
+        "pptx": "PPTX",
+        "jpg": "JPG",
+        "png": "PNG",
+        "txt": "TXT"
+      },
+      "types": {
+        "pdf-to-word": "PDF zu Word",
+        "pdf-to-excel": "PDF zu Excel",
+        "pdf-to-powerpoint": "PDF zu PowerPoint",
+        "word-to-pdf": "Word zu PDF",
+        "excel-to-pdf": "Excel zu PDF",
+        "powerpoint-to-pdf": "PowerPoint zu PDF",
+        "pdf-to-jpg": "PDF zu JPG",
+        "pdf-to-png": "PDF zu PNG",
+        "pdf-to-txt": "PDF zu Text",
+        "jpg-to-pdf": "JPG zu PDF",
+        "png-to-pdf": "PNG zu PDF",
+        "merge-pdf": "PDF zusammenführen",
+        "split-pdf": "PDF teilen",
+        "extract-pages": "Seiten extrahieren",
+        "compress-pdf": "PDF komprimieren",
+        "rotate-pdf": "PDF drehen",
+        "protect-pdf": "PDF schützen",
+        "unlock-pdf": "PDF entsperren",
+        "ocr-pdf": "OCR für PDF",
+        "ocr-image": "OCR für Bild"
+      }
+    },
+    "validation": {
+      "invalidFile": "Diese Datei kann nicht konvertiert werden.",
+      "targetRequired": "Wählen Sie ein Ausgabeformat.",
+      "typeRequired": "Wählen Sie einen Konvertierungstyp.",
+      "unsupportedConversion": "Diese Konvertierung wird nicht unterstützt.",
+      "invalidTargetFormat": "Dieses Ausgabeformat wird nicht unterstützt."
+    },
+    "errors": {
+      "invalidFile": "Diese Datei kann nicht konvertiert werden.",
+      "targetRequired": "Wählen Sie ein Ausgabeformat.",
+      "typeRequired": "Wählen Sie einen Konvertierungstyp.",
+      "unsupportedConversion": "Diese Konvertierung wird nicht unterstützt.",
+      "invalidTargetFormat": "Dieses Ausgabeformat wird nicht unterstützt.",
+      "notFound": "Diese Konvertierung wurde nicht gefunden.",
+      "sourceUnavailable": "Diese Datei ist noch nicht bereit zur Konvertierung.",
+      "conflict": "Diese Konvertierungsanfrage konnte nicht abgeschlossen werden.",
+      "unauthorized": "Melden Sie sich erneut an, um eine Konvertierung anzulegen.",
+      "rateLimited": "Zu viele Anfragen. Bitte versuchen Sie es in Kürze erneut.",
+      "planLimitReached": "Sie haben Ihr monatliches Limit erreicht.",
+      "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
+    },
+    "status": {
+      "title": "Aktivitätsdetails",
+      "description": "Status dieser Tool-Ausführung. Abgelaufene Ergebnisse können nicht heruntergeladen werden.",
+      "loading": "Aktivität wird geladen…",
+      "pending": "Wird vorbereitet",
+      "queued": "In der Warteschlange",
+      "processing": "Wird verarbeitet",
+      "completed": "Bereit",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Abgebrochen",
+      "expired": "Abgelaufen",
+      "complete": "Bereit zum Herunterladen",
+      "inProgressHint": "Die Verarbeitung läuft im Hintergrund weiter. Diese Seite aktualisiert sich automatisch.",
+      "expiredHint": "Temporäre Dateien dieser Ausführung sind abgelaufen und nicht mehr zum Download verfügbar.",
+      "summary": "{type} → {target}",
+      "started": "Gestartet",
+      "output": "Ausgabe",
+      "expires": "Läuft ab",
+      "openTool": "Tool öffnen",
+      "backToHistory": "Zurück zur letzten Aktivität",
+      "browseTools": "Tools durchsuchen",
+      "backToFiles": "Tools durchsuchen"
+    },
+    "failure": {
+      "unsupported_conversion": "Diese Konvertierung wird nicht unterstützt.",
+      "invalid_source_format": "Das Quelldateiformat kann nicht konvertiert werden.",
+      "invalid_target_format": "Das Ausgabeformat ist für diese Datei ungültig.",
+      "invalid_options": "Die Konvertierungseinstellungen sind ungültig.",
+      "source_file_unavailable": "Die Quelldatei ist nicht mehr verfügbar.",
+      "output_file_unavailable": "Die konvertierte Datei ist nicht verfügbar.",
+      "processing_failed": "Die Konvertierung konnte nicht abgeschlossen werden.",
+      "cancelled": "Die Konvertierung wurde abgebrochen."
+    }
+  },
+  "apiKeys": {
+    "title": "API",
+    "description": "Erstellen Sie Keys, um die SoHappyPDF-API aufzurufen. Der Roh-Key wird nur einmal angezeigt.",
+    "actions": {
+      "create": "API-Key erstellen",
+      "delete": "Löschen",
+      "deleteNamed": "{name} löschen"
+    },
+    "list": {
+      "title": "Ihre API-Keys",
+      "description": "Aktive Keys können API-Anfragen authentifizieren. Das Löschen eines Keys beendet ihn unmittelbar.",
+      "loading": "API-Keys werden geladen…",
+      "empty": "Noch keine API-Keys.",
+      "emptyHint": "Erstellen Sie einen API-Key, um SoHappyPDF programmatisch zu nutzen.",
+      "createCta": "API-Key erstellen",
+      "retry": "Erneut versuchen",
+      "created": "Erstellt {date}",
+      "lastUsed": "Zuletzt genutzt {date}",
+      "neverUsed": "Noch nie genutzt",
+      "expires": "Läuft ab {date}",
+      "status": {
+        "active": "Aktiv",
+        "revoked": "Widerrufen",
+        "expired": "Abgelaufen"
+      }
+    },
+    "create": {
+      "title": "API-Key erstellen",
+      "description": "Geben Sie dem Key einen Namen, den Sie später wiedererkennen.",
+      "close": "API-Key-Erstellung schließen",
+      "name": "Key-Name",
+      "namePlaceholder": "Production",
+      "submit": "API-Key erstellen",
+      "submitting": "Key wird erstellt…"
+    },
+    "created": {
+      "title": "API-Key erstellt",
+      "warning": "Dieser Key wird nur einmal angezeigt.",
+      "store": "Kopieren Sie ihn jetzt und speichern Sie ihn sicher. Sie können ihn später nicht wiederherstellen.",
+      "label": "Roh-Key für {name}",
+      "copy": "Kopieren",
+      "copied": "API-Key kopiert",
+      "copyFailed": "Der Key konnte nicht kopiert werden. Markieren Sie ihn und kopieren Sie ihn manuell.",
+      "done": "Fertig",
+      "close": "Erstellten API-Key schließen"
+    },
+    "delete": {
+      "title": "API-Key löschen",
+      "description": "{name} funktioniert unmittelbar nicht mehr. Das lässt sich nicht rückgängig machen.",
+      "confirm": "Key löschen",
+      "deleting": "Wird gelöscht…",
+      "cancel": "Abbrechen",
+      "success": "Der API-Key wurde gelöscht."
+    },
+    "usage": {
+      "title": "Einen API-Key nutzen",
+      "description": "Senden Sie den Key im Authorization-Header. Legen Sie ihn nicht in Query-Parameter oder Browser-Code.",
+      "baseUrlLabel": "API-Base-URL:",
+      "rotateHint": "Behandeln Sie den Key als Geheimnis. Löschen Sie ihn umgehend, wenn er durchsickert.",
+      "docsLink": "API-Dokumentation öffnen",
+      "statusTitle": "API-Nutzung",
+      "statusDescription": "API-Credits sind von Web-Tool-Credits getrennt. Limits folgen Ihrem Web-Plan.",
+      "loading": "API-Nutzung wird geladen…",
+      "credits": "API-Credits",
+      "rate": "API-Anfragen",
+      "rateValue": "{count} pro Minute",
+      "keys": "API-Keys",
+      "usageWithoutTool": "API-Credits",
+      "ledger": {
+        "grant": "+{amount} hinzugefügt",
+        "consume": "{amount} genutzt",
+        "refund": "{amount} zurückgegeben",
+        "adjustment": "{amount} angepasst"
+      }
+    },
+    "validation": {
+      "nameRequired": "Geben Sie einen Key-Namen ein.",
+      "nameTooLong": "Nutzen Sie höchstens 80 Zeichen.",
+      "nameInvalid": "Dieser Key-Name kann nicht verwendet werden."
+    },
+    "errors": {
+      "invalidName": "Dieser Key-Name kann nicht verwendet werden.",
+      "unauthorized": "Melden Sie sich erneut an, um API-Keys zu verwalten.",
+      "forbidden": "API-Keys können andere API-Keys nicht verwalten.",
+      "notFound": "Dieser API-Key wurde nicht gefunden.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "apiKeyLimitReached": "Sie haben das API-Key-Limit Ihres Plans erreicht.",
+      "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "description": "Aktualisieren Sie Name, E-Mail, Passwort und Sprache.",
+    "profile": {
+      "title": "Profil",
+      "description": "So erscheint Ihr Konto im Menü. Die E-Mail dient zur Anmeldung.",
+      "name": "Name",
+      "email": "E-Mail",
+      "submit": "Profil speichern",
+      "submitting": "Wird gespeichert…",
+      "updated": "Profil aktualisiert."
+    },
+    "password": {
+      "title": "Passwort",
+      "description": "Wählen Sie ein neues Passwort. Andere Sitzungen werden abgemeldet.",
+      "current": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "confirm": "Neues Passwort bestätigen",
+      "submit": "Passwort aktualisieren",
+      "submitting": "Wird aktualisiert…",
+      "updated": "Passwort aktualisiert."
+    },
+    "language": {
+      "title": "Sprache",
+      "description": "Wählen Sie die Sprache für Website, Tools und Kontoseiten."
+    },
+    "session": {
+      "title": "Sitzung",
+      "description": "Melden Sie sich in diesem Browser ab. Sie können sich mit derselben E-Mail wieder anmelden.",
+      "logout": "Abmelden"
+    }
+  },
+  "billing": {
+    "title": "Abrechnung",
+    "description": "Web-Tools und die Developer-API werden getrennt abgerechnet. Polar übernimmt Checkout, Rechnungen und Karten.",
+    "usage": "Nutzung",
+    "upgrade": "Upgrade",
+    "upgradeToPro": "Web Pro · {price}/Monat",
+    "upgrading": "Weiterleitung zu Polar…",
+    "perMonth": "/Monat",
+    "perYear": "/Jahr",
+    "proPrice": "Pro kostet {price}/Monat",
+    "manage": "Polar öffnen",
+    "openingPortal": "Polar wird geöffnet…",
+    "portalHeading": "Zahlung und Rechnungen",
+    "portalHint": "Aktualisieren Sie Ihre Karte, laden Sie Rechnungen herunter oder kündigen Sie ein Abo in Polar.",
+    "providerHint": "Checkout, Rechnungen und Karten werden in Polar verwaltet.",
+    "webPlanHint": "Das ist der Web-Plan für PDF-Tools. API-Pakete sind getrennt.",
+    "openApiPack": "API: {pack}",
+    "checkoutIntervalHint": "Wählen Sie monatlich oder jährlich auf der Polar-Checkout-Seite.",
+    "checkoutYearlyHint": "Jährlich kostet {price} beim Polar-Checkout.",
+    "cycle": {
+      "label": "Abrechnungsintervall",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "yearlyDiscount": "-{percent}%"
+    },
+    "activating": "Ihr Polar-Kauf wird bestätigt…",
+    "activated": "Ihr Polar-Kauf ist aktiv.",
+    "unconfirmed": "Polar hat diesen Kauf noch nicht bestätigt. Aktualisieren Sie, um erneut zu prüfen.",
+    "refreshStatus": "Aktualisieren",
+    "includedOperations": "{count} Vorgänge sind jeden Tag enthalten.",
+    "cancelsOn": "Kündigung geplant. Pro bleibt bis {date}.",
+    "renewsOn": "Verlängert sich am {date}.",
+    "creditsResetOn": "Monatliche Tool-Credits werden am {date} zurückgesetzt.",
+    "remainingLabel": "Übrig",
+    "remaining": "{count} übrig",
+    "usedOfLimit": "{used} von {limit} genutzt",
+    "unlimited": "Unbegrenzt",
+    "operationsResetDaily": "Tägliche Vorgänge werden um 00:00 UTC zurückgesetzt.",
+    "backToSettings": "Zurück zu den Einstellungen",
+    "period": "{start} – {end}",
+    "sections": {
+      "web": "Web-Plan",
+      "api": "API"
+    },
+    "api": {
+      "title": "API",
+      "includedTitle": "Enthaltene Credits",
+      "includedHint": "{count} API-Credits jeden Monat enthalten.",
+      "credits": "API-Credits",
+      "plans": "API-Pakete",
+      "packCredits": "{count} Credits / Monat",
+      "packPrice": "{price}/Monat",
+      "packYearlyPrice": "{price}/Jahr",
+      "subscribe": "Abonnieren",
+      "switch": "Wechseln",
+      "switchTo": "Zu {pack} wechseln?",
+      "switchConfirmBody": "Polar aktualisiert Ihr aktuelles API-Abo auf {pack} und belastet die hinterlegte Karte. Der Listenpreis ist {price}/Monat; die Differenz wird für diesen Zeitraum anteilig berechnet.",
+      "switchConfirm": "Wechsel bestätigen",
+      "switchCancel": "Abbrechen",
+      "switchClose": "Wechselbestätigung schließen",
+      "current": "Aktuelles Paket",
+      "webPlanHint": "Das ist das API-Paket. Der Web-Plan ist getrennt.",
+      "openWebPlan": "Web: {plan}",
+      "recentUsage": "Letzte API-Nutzung",
+      "recentUsageHint": "Diese Liste gilt nur für den aktuellen Zeitraum. Am Monatsende beginnt sie von vorn. Ungenutzte Credits werden nicht in den nächsten Monat übertragen.",
+      "noUsage": "Keine API-Credit-Aktivität in diesem Zeitraum.",
+      "usageWithoutTool": "API-Credits",
+      "resetLabel": "Zurücksetzung",
+      "creditsResetOn": "Ungenutzte API-Credits werden am {date} zurückgesetzt.",
+      "showMore": "Mehr anzeigen",
+      "showLess": "Weniger anzeigen",
+      "history": {
+        "reset": "Monatliche Zurücksetzung",
+        "pack": "API-Paket",
+        "grant": "API-Credits",
+        "consume": "API-Credits",
+        "refund": "API-Credits"
+      },
+      "ledger": {
+        "grant": "+{amount} hinzugefügt",
+        "consume": "{amount} genutzt",
+        "refund": "{amount} zurückgegeben",
+        "adjustment": "{amount} angepasst"
+      },
+      "documentation": "API-Dokumentation",
+      "manageKeys": "API-Keys"
+    },
+    "apiProducts": {
+      "starter": "API Starter",
+      "growth": "API Growth",
+      "scale": "API Scale"
+    },
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "subscriptionStatus": {
+      "incomplete": "Unvollständig",
+      "incomplete_expired": "Abgelaufen",
+      "trialing": "Testphase",
+      "active": "Abo aktiv",
+      "past_due": "Überfällig",
+      "canceled": "Abo gekündigt",
+      "unpaid": "Unbezahlt",
+      "revoked": "Widerrufen",
+      "paused": "Pausiert"
+    },
+    "usageItems": {
+      "webCredits": "Web-Tool-Credits",
+      "operations": "Vorgänge heute",
+      "fileSize": "Max. Dateigröße",
+      "conversions": "Konvertierungen in diesem Monat",
+      "storage": "Speicher",
+      "apiKeys": "API-Keys"
+    },
+    "errors": {
+      "unauthorized": "Melden Sie sich erneut an, um die Abrechnung zu verwalten.",
+      "conflict": "Ihr Plan enthält dieses Abo bereits.",
+      "configuration": "Die Abrechnung ist noch nicht konfiguriert.",
+      "notFound": "Polar konnte das Abrechnungsportal für dieses Konto nicht öffnen. Versuchen Sie es erneut.",
+      "portalUnavailable": "Polar konnte das Abrechnungsportal nicht öffnen. Versuchen Sie es erneut.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
+    }
+  },
+  "publicTools": {
+    "metaTitle": "{tool} - SoHappyPDF",
+    "description": "Laden Sie eine Datei hoch, verarbeiten Sie sie in der Cloud und laden Sie das Ergebnis herunter. Für die Grundverarbeitung ist kein Konto nötig.",
+    "descriptionAuthenticated": "Dieses Tool braucht ein angemeldetes Konto, bevor die Verarbeitung starten kann.",
+    "selectFile": "Datei wählen",
+    "selectFiles": "Dateien wählen",
+    "process": "Verarbeiten",
+    "merge": "PDF zusammenführen",
+    "split": "PDF teilen",
+    "processing": "Wird verarbeitet…",
+    "download": "Herunterladen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "loading": "Wird geladen…",
+    "proRequired": {
+      "title": "Dieses Tool ist in Pro enthalten",
+      "description": "OCR, Bearbeitung, E-Signatur und KI-Tools sind im Pro-Plan verfügbar.",
+      "cta": "Auf Pro upgraden"
+    },
+    "status": "Status: {status}",
+    "keepWorkspace": "Erstellen Sie ein kostenloses Konto für Nutzungsverlauf, Abrechnung und API-Keys.",
+    "createAccount": "Kostenloses Konto erstellen",
+    "limits": "Bis zu {files} Dateien, je {sizeMb} MB. Dateien werden {hours} Stunden aufbewahrt.",
+    "overview": {
+      "accepts": "Akzeptierte Dateien",
+      "outputs": "Ausgabe",
+      "limits": "Limits",
+      "howTitle": "So nutzen Sie es",
+      "detailsTitle": "Formate und Limits",
+      "step": "Schritt {number}",
+      "steps": {
+        "upload": {
+          "title": "Hochladen",
+          "description": "Fügen Sie unterstützte Dateien hinzu ({detail})."
+        },
+        "process": {
+          "title": "Verarbeiten",
+          "description": "Wir verarbeiten Ihre Datei zu {detail}."
+        },
+        "download": {
+          "title": "Herunterladen",
+          "description": "Holen Sie sich Ihr {detail}-Ergebnis ohne Konto, wenn das Tool das erlaubt."
+        }
+      }
+    },
+    "upload": {
+      "title": "Datei hierher ziehen",
+      "titleMultiple": "Dateien hierher ziehen",
+      "browse": "Dateien durchsuchen",
+      "browseMultiple": "Dateien durchsuchen",
+      "addMore": "Weitere Datei hinzufügen",
+      "addMoreMultiple": "Weitere Dateien hinzufügen",
+      "addMoreBrowse": "Dateien durchsuchen",
+      "hint": "Unterstützt {formats}. Max. {size} pro Datei.",
+      "hintWithPageLimit": "Unterstützt {formats}. Max. {size} pro Datei. Der Free-Plan erlaubt {pages} Seiten pro Datei.",
+      "conjunction": "und"
+    },
+    "autoStart": {
+      "hint": "Die Verarbeitung startet automatisch, nachdem die Datei hochgeladen wurde.",
+      "starting": "Wird gestartet…"
+    },
+    "actions": {
+      "download": "Herunterladen",
+      "retry": "Erneut versuchen",
+      "startAgain": "Neu starten"
+    },
+    "states": {
+      "empty": {
+        "privacy": "Dateien sind temporär und werden etwa {hours} Stunden aufbewahrt."
+      },
+      "configuring": {
+        "status": "Datei konfigurieren"
+      },
+      "processing": {
+        "status": "Verarbeitungsstatus",
+        "starting": "Startet",
+        "startingHint": "Ihre Datei wird vorbereitet.",
+        "queued": "Wartet",
+        "queuedHint": "Ihre Datei ist als Nächstes an der Reihe.",
+        "processing": "Ihr PDF wird verarbeitet...",
+        "processingHint": "Wir arbeiten an Ihrer Datei. Das kann einen Moment dauern."
+      }
+    },
+    "expiration": {
+      "title": "Diese Datei ist abgelaufen",
+      "description": "Diese Datei ist abgelaufen. Bitte verarbeiten Sie sie erneut. Temporäre Dateien werden etwa {hours} Stunden aufbewahrt."
+    },
+    "workspace": {
+      "fileList": "Ausgewählte Dateien",
+      "options": "Tool-Optionen",
+      "replaceFile": "Ersetzen",
+      "remove": "Entfernen",
+      "removeFile": "{name} entfernen",
+      "retry": "Upload erneut versuchen",
+      "fileReady": "Bereit",
+      "filePending": "Wartet auf Upload",
+      "filePendingSignIn": "Melden Sie sich an, um diese Datei hochzuladen",
+      "pageCount": "{count, plural, one {# Seite} other {# Seiten}}"
+    },
+    "pages": {
+      "pageLabel": "Seite {number}",
+      "pageLabelSelected": "Seite {number}, ausgewählt",
+      "pageLabelRotated": "Seite {number}, um {degrees} Grad gedreht",
+      "pageLabelSelectedRotated": "Seite {number}, ausgewählt, um {degrees} Grad gedreht",
+      "reorderHandle": "Ziehen, um Seite {number} neu anzuordnen",
+      "selectAll": "Alle auswählen",
+      "clear": "Auswahl aufheben",
+      "selectedCount": "{count, plural, one {# Seite ausgewählt} other {# Seiten ausgewählt}}",
+      "allSelected": "{count, plural, one {Alle # Seite ausgewählt} other {Alle # Seiten ausgewählt}}",
+      "loading": "PDF-Seiten werden geladen",
+      "pagePreviewFailed": "Vorschau nicht verfügbar",
+      "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
+      "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+      "gridLabel": "PDF-Seiten",
+      "keyboardHelp": "Mit den Pfeiltasten zwischen Seiten wechseln. Alt gedrückt halten und mit den Pfeiltasten Seiten neu anordnen. Über dem Seitengitter gibt es außerdem eine Dateiauswahl."
+    },
+    "workspaces": {
+      "split": {
+        "title": "Wählen Sie die gewünschten Seiten",
+        "hint": "Wählen Sie die Seiten aus, die enthalten sein sollen. Sie bleiben in der Reihenfolge in einem neuen PDF.",
+        "modeTitle": "So funktioniert dieses Teilen",
+        "modeExtract": "Ausgewählte Seiten extrahieren",
+        "modeExtractHint": "Ein PDF mit den von Ihnen ausgewählten Seiten erzeugen.",
+        "output": "{count, plural, one {# ausgewählte Seite → 1 PDF} other {# ausgewählte Seiten → 1 PDF}}",
+        "allSelectedOutput": "Alle {count} Seiten → 1 PDF",
+        "advanced": "Erweitert",
+        "advancedTitle": "Seitenbereiche manuell eingeben",
+        "advancedHint": "Nutzen Sie das, wenn Sie die Seitenzahlen schon kennen. Die visuelle Auswahl bleibt synchron.",
+        "advancedExample": "Beispiel: 1-3, 5, 8-10",
+        "advancedError": "Prüfen Sie die Seitenzahlen. Nutzen Sie Kommas und Bindestriche, etwa 1-3, 5.",
+        "selectPrompt": "Wählen Sie mindestens eine Seite aus, um fortzufahren.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden. Sie können Seitenzahlen trotzdem unter Erweitert eingeben.",
+        "processing": "Ihr PDF wird geteilt...",
+        "processingHint": "Die ausgewählten Seiten werden extrahiert. Das kann einen Moment dauern.",
+        "successTitle": "Ihr PDF ist bereit",
+        "successDescription": "Laden Sie das neue PDF mit den ausgewählten Seiten herunter.",
+        "download": "PDF herunterladen",
+        "splitAnother": "Weiteres PDF teilen",
+        "processingFailed": "Wir konnten dieses PDF nicht teilen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Teilen Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, wählen Sie die gewünschten Seiten und teilen Sie. Sie erhalten ein neues PDF mit diesen Seiten. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie teilen möchten."
+          },
+          "select": {
+            "title": "Seiten auswählen",
+            "description": "Tippen Sie die Seiten an, die enthalten sein sollen, oder wählen Sie alle."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF mit den gewählten Seiten."
+          }
+        }
+      },
+      "extract": {
+        "title": "Seiten zum Extrahieren wählen",
+        "hint": "Wählen Sie die Seiten, die Sie herausnehmen möchten. Mindestens eine Seite muss bleiben.",
+        "selectPrompt": "Wählen Sie mindestens eine Seite zum Extrahieren.",
+        "keepOnePage": "Behalten Sie mindestens eine Seite im PDF.",
+        "willRemoveBadge": "Extrahieren",
+        "resultTitle": "Was Sie erhalten",
+        "output": "{count, plural, one {# Seite wird extrahiert.} other {# Seiten werden extrahiert.}}",
+        "remaining": "{count, plural, one {Das PDF hat dann # Seite.} other {Das PDF hat dann # Seiten.}}",
+        "advanced": "Erweitert",
+        "advancedTitle": "Seiten zum Extrahieren eingeben",
+        "advancedHint": "Nutzen Sie Seitenzahlen oder Bereiche, zum Beispiel 2, 5-7.",
+        "advancedPlaceholder": "z. B. 2, 5-7",
+        "advancedExample": "Beispiel: 2, 5-7",
+        "advancedError": "Prüfen Sie die Seitenzahlen. Nutzen Sie Kommas und Bereiche wie 2, 5-7.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden. Sie können Seitenzahlen trotzdem unter Erweitert eingeben.",
+        "processing": "Seiten werden extrahiert...",
+        "processingHint": "Es wird ein neues PDF ohne die ausgewählten Seiten erzeugt.",
+        "successTitle": "Ihr PDF ist bereit",
+        "successDescription": "Laden Sie das PDF herunter, aus dem diese Seiten entfernt wurden.",
+        "download": "PDF herunterladen",
+        "extractAnother": "Seiten aus einem anderen PDF extrahieren",
+        "processingFailed": "Wir konnten diese Seiten nicht extrahieren. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Extrahieren Sie Seiten aus einem anderen PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, wählen Sie die Seiten zum Herausnehmen und extrahieren Sie. Mindestens eine Seite muss bleiben. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, aus dem Sie Seiten extrahieren möchten."
+          },
+          "select": {
+            "title": "Seiten auswählen",
+            "description": "Wählen Sie die Seiten, die herausgenommen werden sollen."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF ohne diese Seiten."
+          }
+        }
+      },
+      "merge": {
+        "title": "Dateien zum Zusammenführen anordnen",
+        "hint": "Fügen Sie mindestens zwei PDFs hinzu und ziehen Sie sie in die gewünschte Reihenfolge.",
+        "selectPrompt": "Fügen Sie mindestens zwei PDFs hinzu, um fortzufahren.",
+        "resultTitle": "Was Sie erhalten",
+        "resultLabel": "Ein zusammengeführtes PDF",
+        "equation": "{files} = 1 PDF",
+        "output": "{count, plural, one {# PDF → 1 zusammengeführtes PDF} other {# PDFs → 1 zusammengeführtes PDF}}",
+        "outputWithPages": "{files, plural, one {# PDF} other {# PDFs}} · {pages, plural, one {# Seite} other {# Seiten}} → 1 PDF",
+        "processing": "Ihre PDFs werden zusammengeführt...",
+        "processingHint": "Die Dateien werden in der gewählten Reihenfolge kombiniert. Das kann einen Moment dauern.",
+        "successTitle": "Ihr zusammengeführtes PDF ist bereit",
+        "successDescription": "Laden Sie das kombinierte PDF herunter.",
+        "download": "PDF herunterladen",
+        "mergeAnother": "Weitere PDFs zusammenführen",
+        "processingFailed": "Wir konnten diese PDFs nicht zusammenführen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Eine dieser Dateien konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Führen Sie weitere PDFs zusammen, um fortzufahren.",
+        "faqHow": "Laden Sie zwei oder mehr PDFs hoch, ordnen Sie die Reihenfolge und führen Sie zusammen. Sie erhalten ein kombiniertes PDF. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Fügen Sie die PDFs hinzu, die Sie kombinieren möchten."
+          },
+          "arrange": {
+            "title": "Anordnen",
+            "description": "Ziehen Sie Dateien in die Reihenfolge, in der sie erscheinen sollen."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF, in dem jede Datei enthalten ist."
+          }
+        }
+      },
+      "compress": {
+        "title": "Wählen Sie, wie stark komprimiert wird",
+        "hint": "Maximal ergibt eine kleinere Datei. Weniger Komprimierung behält mehr Qualität. Wir raten die neue Dateigröße nicht.",
+        "output": "Mit {level} komprimieren.",
+        "processing": "Ihr PDF wird komprimiert...",
+        "processingHint": "Die Dateigröße wird reduziert. Das kann einen Moment dauern.",
+        "successTitle": "Ihr komprimiertes PDF ist bereit",
+        "successDescription": "Laden Sie das kleinere PDF herunter.",
+        "download": "PDF herunterladen",
+        "compressAnother": "Weiteres PDF komprimieren",
+        "processingFailed": "Wir konnten dieses PDF nicht komprimieren. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Komprimieren Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, wählen Sie Maximal, Empfohlen oder Weniger Komprimierung und komprimieren Sie. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie verkleinern möchten."
+          },
+          "select": {
+            "title": "Komprimierung wählen",
+            "description": "Wählen Sie Maximal, Empfohlen oder Weniger Komprimierung."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich das komprimierte PDF."
+          }
+        },
+        "medium": {
+          "title": "Empfohlen",
+          "hint": "Ausgewogen für die meisten Dateien.",
+          "outcome": "Ausgewogen"
+        },
+        "high": {
+          "title": "Maximal",
+          "hint": "Kleinste Datei. Die Qualität kann sinken.",
+          "outcome": "Kleinere Datei"
+        },
+        "low": {
+          "title": "Weniger Komprimierung",
+          "hint": "Behält mehr visuelle Qualität.",
+          "outcome": "Bessere Qualität"
+        }
+      },
+      "convert": {
+        "title": "Eine Datei konvertieren",
+        "drop": "{format} hierher ziehen",
+        "orSelect": "oder vom Computer auswählen",
+        "free": "Free",
+        "cta": "Konvertieren",
+        "hint": "Wir konvertieren diese Datei in das Format, das dieses Tool erzeugt.",
+        "excelHint": "Text und Tabellen werden in eine Tabelle extrahiert. Gescannte PDFs brauchen PDF zu Excel OCR.",
+        "wordOcrHint": "Zuerst wird Text erkannt, dann nach Word konvertiert. Bei Scans dauert das länger.",
+        "pdfaHint": "Erzeugt eine archivierbare PDF/A-Datei. Das Layout bleibt gleich.",
+        "imageHint": "Dieses Bild wird zu einer PDF-Seite in Originalgröße.",
+        "textHint": "Lesbarer Text wird aus dem PDF extrahiert.",
+        "resultTitle": "Was Sie erhalten",
+        "equation": "{source} → {target}",
+        "resultHint": "Eine {target}-Datei aus Ihrem {source}.",
+        "processing": "Ihre Datei wird konvertiert...",
+        "processingHint": "Die neue Datei wird erzeugt. Das kann einen Moment dauern.",
+        "successTitle": "Ihre Datei ist bereit",
+        "successDescription": "Laden Sie die konvertierte Datei herunter.",
+        "download": "Herunterladen",
+        "convertAnother": "Weitere Datei konvertieren",
+        "processingFailed": "Wir konnten diese Datei nicht konvertieren. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie eine andere Datei.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Konvertieren Sie eine weitere Datei, um fortzufahren.",
+        "faqHow": "Laden Sie eine Datei hoch. Die Konvertierung startet automatisch, dann laden Sie das Ergebnis herunter. Für gewöhnliche Free-Tools ist kein Konto nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie die Datei hinein, die Sie konvertieren möchten."
+          },
+          "convert": {
+            "title": "Konvertieren",
+            "description": "Die Konvertierung startet, sobald die Datei hochgeladen ist."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich die konvertierte Datei."
+          }
+        }
+      },
+      "imageToPdf": {
+        "title": "Dieses Bild wird zu einem PDF",
+        "hint": "Ein Bild wird zu einer PDF-Seite in Originalgröße. Seitengröße, Ränder und die Reihenfolge mehrerer Bilder sind bei diesem Tool nicht verfügbar.",
+        "output": "1 Bild → 1 PDF-Seite",
+        "faqHow": "Laden Sie ein JPG oder PNG hoch. Die Konvertierung startet automatisch und erzeugt eine PDF-Seite in der Originalgröße des Bildes. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie ein Bild hinein."
+          },
+          "convert": {
+            "title": "Konvertieren",
+            "description": "Wir platzieren es auf einer passenden PDF-Seite, sobald es hochgeladen ist."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein einseitiges PDF."
+          }
+        }
+      },
+      "password": {
+        "unlockTitle": "Dieses PDF entsperren",
+        "unlockHint": "Geben Sie das aktuelle Passwort ein, um die Datei zu öffnen.",
+        "protectTitle": "Dieses PDF schützen",
+        "protectHint": "Legen Sie ein Passwort fest, das zum Öffnen des Ergebnisses nötig ist.",
+        "required": "Geben Sie ein Passwort ein, um fortzufahren."
+      },
+      "protect": {
+        "title": "Dieses PDF schützen",
+        "hint": "Legen Sie ein Passwort fest. Jeder, der das Ergebnis öffnet, braucht es.",
+        "password": "Passwort",
+        "confirm": "Passwort bestätigen",
+        "required": "Geben Sie ein Passwort ein, um fortzufahren.",
+        "confirmRequired": "Bestätigen Sie das Passwort, um fortzufahren.",
+        "mismatch": "Die Passwörter stimmen nicht überein.",
+        "tooLong": "Nutzen Sie ein Passwort mit höchstens 128 Zeichen.",
+        "output": "Das heruntergeladene PDF braucht dieses Passwort zum Öffnen.",
+        "processing": "Ihr PDF wird geschützt...",
+        "processingHint": "Der Datei wird ein Passwort hinzugefügt.",
+        "successTitle": "Ihr geschütztes PDF ist bereit",
+        "successDescription": "Laden Sie das passwortgeschützte PDF herunter.",
+        "download": "PDF herunterladen",
+        "protectAnother": "Weiteres PDF schützen",
+        "processingFailed": "Wir konnten dieses PDF nicht schützen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Schützen Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, legen Sie ein Passwort fest, bestätigen Sie es und schützen Sie. Für dieses Tool ist eine Anmeldung nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie schützen möchten."
+          },
+          "password": {
+            "title": "Passwort festlegen",
+            "description": "Geben Sie das Passwort zweimal ein, damit es bestätigt werden kann."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF, das zum Öffnen das Passwort braucht."
+          }
+        }
+      },
+      "unlock": {
+        "title": "Dieses PDF entsperren",
+        "hint": "Geben Sie das aktuelle Passwort ein. Wir erzeugen eine entsperrte Kopie, die Sie ohne Passwort öffnen können.",
+        "password": "Passwort",
+        "required": "Geben Sie das Passwort ein, um fortzufahren.",
+        "output": "Sie erhalten eine Kopie, die ohne Passwort öffnet.",
+        "wrongPassword": "Dieses Passwort hat nicht funktioniert. Prüfen Sie es und versuchen Sie es erneut.",
+        "processing": "Ihr PDF wird entsperrt...",
+        "processingHint": "Das Passwort wird aus einer Kopie der Datei entfernt.",
+        "successTitle": "Ihr entsperrtes PDF ist bereit",
+        "successDescription": "Laden Sie die entsperrte Kopie herunter.",
+        "download": "PDF herunterladen",
+        "unlockAnother": "Weiteres PDF entsperren",
+        "processingFailed": "Wir konnten dieses PDF nicht entsperren. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Entsperren Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein passwortgeschütztes PDF hoch, geben Sie das Passwort ein und entsperren Sie. Für dieses Tool ist eine Anmeldung nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das gesperrte PDF hinein."
+          },
+          "password": {
+            "title": "Passwort eingeben",
+            "description": "Geben Sie das Passwort ein, das derzeit zum Öffnen nötig ist."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich eine entsperrte Kopie."
+          }
+        }
+      },
+      "repair": {
+        "title": "Dieses PDF reparieren",
+        "hint": "Wir versuchen, eine beschädigte Datei zu öffnen und neu aufzubauen. Eine Reparatur ist nicht garantiert.",
+        "output": "Analysieren, dann reparieren, dann das Ergebnis herunterladen.",
+        "processing": "Ihr PDF wird analysiert...",
+        "processingHint": "Ihr PDF wird repariert. Das kann einen Moment dauern.",
+        "successTitle": "Ihr repariertes PDF ist bereit",
+        "successDescription": "Laden Sie die reparierte Datei herunter.",
+        "download": "PDF herunterladen",
+        "repairAnother": "Weiteres PDF reparieren",
+        "processingFailed": "Wir konnten dieses PDF nicht reparieren. Bitte versuchen Sie eine andere Datei.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Reparieren Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch. Die Reparatur startet automatisch. Wir versuchen, Schäden zu beheben, dann können Sie das Ergebnis herunterladen. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das sich nicht korrekt öffnet."
+          },
+          "repair": {
+            "title": "Reparieren",
+            "description": "Wir analysieren die Datei und versuchen, sie neu aufzubauen."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich das reparierte PDF, wenn die Reparatur gelingt."
+          }
+        },
+        "steps": {
+          "analyze": {
+            "title": "Analysieren",
+            "description": "Prüfen, ob die Datei neu aufgebaut werden kann."
+          },
+          "repair": {
+            "title": "Reparieren",
+            "description": "Ein neues PDF aus dem erzeugen, was sich retten lässt."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Die reparierte Datei speichern."
+          }
+        }
+      },
+      "rotate": {
+        "title": "Seiten zum Drehen wählen",
+        "hint": "Wählen Sie Seiten und drehen Sie nach links oder rechts. Die Vorschau zeigt die Änderung, bevor Sie sie anwenden.",
+        "rotateLeft": "Nach links drehen",
+        "rotateRight": "Nach rechts drehen",
+        "selectPrompt": "Wählen Sie mindestens eine Seite zum Drehen.",
+        "output": "{count, plural, one {# Seite} other {# Seiten}} werden um {degrees}° gedreht.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
+        "processing": "Ihr PDF wird gedreht...",
+        "processingHint": "Die Drehung wird auf die ausgewählten Seiten angewendet.",
+        "successTitle": "Ihr PDF ist bereit",
+        "successDescription": "Laden Sie das gedrehte PDF herunter.",
+        "download": "PDF herunterladen",
+        "rotateAnother": "Weiteres PDF drehen",
+        "processingFailed": "Wir konnten dieses PDF nicht drehen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Drehen Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, wählen Sie die Seiten zum Drehen, wählen Sie links oder rechts und drehen Sie. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie drehen möchten."
+          },
+          "select": {
+            "title": "Seiten drehen",
+            "description": "Wählen Sie Seiten und entscheiden Sie sich für links oder rechts."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich das gedrehte PDF."
+          }
+        }
+      },
+      "organize": {
+        "title": "Seiten anordnen",
+        "hint": "Ziehen Sie Seiten in die Reihenfolge. Wählen Sie Seiten zum Drehen, Duplizieren oder Entfernen.",
+        "rotateLeft": "Nach links drehen",
+        "rotateRight": "Nach rechts drehen",
+        "duplicate": "Duplizieren",
+        "delete": "Entfernen",
+        "reset": "Seiten zurücksetzen",
+        "rotatePage": "Seite {number} drehen",
+        "deletePage": "Seite {number} entfernen",
+        "output": "{from} Seiten → {to, plural, one {# Seite} other {# Seiten}}",
+        "outputSame": "{count, plural, one {# Seite → 1 PDF} other {# Seiten → 1 PDF}}",
+        "outputCount": "{count, plural, one {# Seite → 1 PDF} other {# Seiten → 1 PDF}}",
+        "keepOnePage": "Behalten Sie mindestens eine Seite im Dokument.",
+        "selectPrompt": "Warten Sie, bis die Seiten geladen sind, und sortieren Sie dann Ihr PDF.",
+        "advanced": "Erweitert",
+        "advancedTitle": "Seitenreihenfolge manuell eingeben",
+        "advancedHint": "Nutzen Sie die ursprünglichen Seitenzahlen. Wiederholen Sie eine Zahl zum Duplizieren. Die visuelle Drehung wird gelöscht.",
+        "advancedPlaceholder": "z. B. 3, 1, 1, 2",
+        "advancedExample": "Beispiel: 3, 1, 1, 2",
+        "advancedError": "Prüfen Sie die Seitenzahlen. Nutzen Sie Kommas und nur Seiten, die in diesem PDF existieren.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten zu sortieren.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden. Versuchen Sie eine andere Datei oder geben Sie unter Erweitert eine Seitenreihenfolge ein, wenn die Datei trotzdem hochgeladen wurde.",
+        "processing": "Ihr PDF wird sortiert...",
+        "processingHint": "Seitenreihenfolge, Drehungen und Bearbeitungen werden angewendet. Das kann einen Moment dauern.",
+        "successTitle": "Ihr PDF ist bereit",
+        "successDescription": "Laden Sie das sortierte PDF herunter.",
+        "download": "PDF herunterladen",
+        "organizeAnother": "Weiteres PDF sortieren",
+        "processingFailed": "Wir konnten dieses PDF nicht sortieren. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Sortieren Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, ordnen oder bearbeiten Sie die Seiten und sortieren Sie. Sie erhalten ein neues PDF. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie sortieren möchten."
+          },
+          "arrange": {
+            "title": "Seiten anordnen",
+            "description": "Neu anordnen, drehen, duplizieren oder Seiten entfernen."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF mit Ihren Seitenänderungen."
+          }
+        }
+      },
+      "remove": {
+        "title": "Seiten zum Löschen wählen",
+        "hint": "Wählen Sie die Seiten, die Sie entfernen möchten. Mindestens eine Seite muss bleiben.",
+        "selectPrompt": "Wählen Sie mindestens eine Seite zum Löschen.",
+        "keepOnePage": "Behalten Sie mindestens eine Seite im PDF.",
+        "willRemoveBadge": "Entfernen",
+        "resultTitle": "Was passiert",
+        "output": "{count, plural, one {# Seite wird entfernt.} other {# Seiten werden entfernt.}}",
+        "remaining": "{count, plural, one {Das PDF hat dann # Seite.} other {Das PDF hat dann # Seiten.}}",
+        "advanced": "Erweitert",
+        "advancedTitle": "Seiten zum Löschen eingeben",
+        "advancedHint": "Nutzen Sie Seitenzahlen oder Bereiche, zum Beispiel 2, 5-7.",
+        "advancedPlaceholder": "z. B. 2, 5-7",
+        "advancedExample": "Beispiel: 2, 5-7",
+        "advancedError": "Prüfen Sie die Seitenzahlen. Nutzen Sie Kommas und Bereiche wie 2, 5-7.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
+        "processing": "Seiten werden entfernt...",
+        "processingHint": "Es wird ein neues PDF ohne die ausgewählten Seiten erzeugt.",
+        "successTitle": "Ihr PDF ist bereit",
+        "successDescription": "Laden Sie das PDF herunter, aus dem diese Seiten entfernt wurden.",
+        "download": "PDF herunterladen",
+        "removeAnother": "Seiten aus einem anderen PDF löschen",
+        "processingFailed": "Wir konnten diese Seiten nicht entfernen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Löschen Sie Seiten aus einem anderen PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, wählen Sie die Seiten zum Löschen und entfernen Sie sie. Mindestens eine Seite muss bleiben. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie bearbeiten möchten."
+          },
+          "select": {
+            "title": "Seiten auswählen",
+            "description": "Wählen Sie die Seiten, die entfernt werden sollen."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF ohne diese Seiten."
+          }
+        }
+      },
+      "ocr": {
+        "title": "Text erkennen",
+        "hint": "Wählen Sie die Dokumentsprache und ob Sie ein durchsuchbares PDF oder extrahierten Text brauchen.",
+        "language": "Dokumentsprache",
+        "output": {
+          "pdf": "Sie erhalten ein durchsuchbares PDF.",
+          "txt": "Sie erhalten eine Textdatei mit dem erkannten Text."
+        },
+        "modes": {
+          "pdf": {
+            "title": "Durchsuchbares PDF",
+            "hint": "Die Originalseiten behalten und eine Textebene hinzufügen, die Sie suchen und kopieren können."
+          },
+          "txt": {
+            "title": "Extrahierter Text",
+            "hint": "Den erkannten Text als separate Datei herunterladen."
+          }
+        },
+        "processing": "Text wird erkannt...",
+        "processingHint": "Bei gescannten oder bildlastigen PDFs kann das länger dauern.",
+        "successTitle": "Ihr Ergebnis ist bereit",
+        "successDescription": "Laden Sie das durchsuchbare PDF oder den extrahierten Text herunter.",
+        "download": "Ergebnis herunterladen",
+        "ocrAnother": "Weiteres PDF erkennen",
+        "processingFailed": "Wir konnten in diesem PDF keinen Text erkennen. Bitte versuchen Sie eine andere Datei.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Erkennen Sie Text in einem anderen PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, wählen Sie die Sprache und erzeugen Sie ein durchsuchbares PDF oder extrahieren Sie den Text. Für dieses Tool ist eine Anmeldung nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie ein gescanntes oder bildbasiertes PDF hinein."
+          },
+          "recognize": {
+            "title": "Erkennen",
+            "description": "Wählen Sie die Sprache und ob Sie ein durchsuchbares PDF oder Text möchten."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich das durchsuchbare PDF oder den extrahierten Text."
+          }
+        }
+      },
+      "crop": {
+        "title": "Wählen Sie den Bereich, der bleiben soll",
+        "hint": "Ziehen Sie den Rahmen oder seine Kanten. Derselbe Zuschnitt gilt für jede Seite. Ein Zuschnitt pro Seite ist nicht verfügbar.",
+        "move": "Zuschnittbereich verschieben",
+        "edges": {
+          "top": "Obere Kante anpassen",
+          "right": "Rechte Kante anpassen",
+          "bottom": "Untere Kante anpassen",
+          "left": "Linke Kante anpassen"
+        },
+        "previewHint": "Laden Sie ein PDF hoch, um den Zuschnittbereich in der Vorschau zu sehen.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+        "output": "Jede Seite behält den Bereich innerhalb des Rahmens.",
+        "processing": "Ihr PDF wird zugeschnitten...",
+        "processingHint": "Derselbe Zuschnitt wird auf jede Seite angewendet.",
+        "successTitle": "Ihr zugeschnittenes PDF ist bereit",
+        "successDescription": "Laden Sie das zugeschnittene PDF herunter.",
+        "download": "PDF herunterladen",
+        "cropAnother": "Weiteres PDF zuschneiden",
+        "processingFailed": "Wir konnten dieses PDF nicht zuschneiden. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Schneiden Sie ein weiteres PDF zu, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, ziehen Sie den Zuschnittrahmen und schneiden Sie zu. Derselbe Bereich bleibt auf jeder Seite. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie zuschneiden möchten."
+          },
+          "crop": {
+            "title": "Zuschnitt festlegen",
+            "description": "Verschieben oder ändern Sie den Rahmen auf der ersten Seite. Er gilt für alle Seiten."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF ohne die überflüssigen Ränder."
+          }
+        }
+      },
+      "watermark": {
+        "title": "Ein Wasserzeichen hinzufügen",
+        "hint": "Die Markierung liegt diagonal auf jeder Seite. Bild-Wasserzeichen, Position und Größe sind nicht verfügbar.",
+        "text": "Wasserzeichentext",
+        "required": "Geben Sie Wasserzeichentext ein, um fortzufahren.",
+        "tooLong": "Nutzen Sie höchstens 200 Zeichen.",
+        "more": "Deckkraft",
+        "opacity": "Stärke · {percent}%",
+        "opacityHint": "Niedriger ist leichter. Dieselbe Markierung gilt für jede Seite.",
+        "previewEmpty": "WASSERZEICHEN",
+        "previewCaption": "Vorschau der ersten Seite",
+        "previewHint": "Laden Sie ein PDF hoch, um das Wasserzeichen in der Vorschau zu sehen.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um Seiten in der Vorschau zu sehen.",
+        "output": "Jede Seite enthält dieses diagonale Wasserzeichen.",
+        "processing": "Ihr Wasserzeichen wird hinzugefügt...",
+        "processingHint": "Die Markierung wird auf jede Seite angewendet.",
+        "successTitle": "Ihr PDF mit Wasserzeichen ist bereit",
+        "successDescription": "Laden Sie das PDF mit dem angewendeten Wasserzeichen herunter.",
+        "download": "PDF herunterladen",
+        "watermarkAnother": "Weiteres PDF mit Wasserzeichen versehen",
+        "processingFailed": "Wir konnten diesem PDF kein Wasserzeichen hinzufügen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Versehen Sie ein weiteres PDF mit einem Wasserzeichen, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, geben Sie den Wasserzeichentext ein, passen Sie optional die Deckkraft an und wenden Sie an. Dieselbe diagonale Markierung wird auf jede Seite gesetzt. Ein Konto ist nicht nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das die Markierung tragen soll."
+          },
+          "mark": {
+            "title": "Wasserzeichen festlegen",
+            "description": "Geben Sie den Text ein und passen Sie bei Bedarf an, wie stark er wirkt."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF mit dem Wasserzeichen auf jeder Seite."
+          }
+        }
+      },
+      "sign": {
+        "title": "Dieses PDF unterschreiben",
+        "hint": "Erstellen Sie eine Unterschrift und platzieren Sie sie auf der Seite. Das unterschriebene PDF enthält die Markierung.",
+        "methods": {
+          "draw": "Zeichnen",
+          "type": "Tippen",
+          "upload": "Bild hochladen"
+        },
+        "clear": "Löschen",
+        "useSignature": "Diese Unterschrift verwenden",
+        "typedLabel": "Namen eingeben",
+        "typedPlaceholder": "Ihr Name",
+        "uploadLabel": "PNG oder JPG hochladen",
+        "uploading": "Ihre Unterschrift wird gespeichert…",
+        "uploadFailed": "Wir konnten die Unterschrift nicht speichern. Bitte versuchen Sie es erneut.",
+        "selectPrompt": "Erstellen Sie eine Unterschrift und platzieren Sie sie auf der Seite.",
+        "output": "Die Unterschrift wird in das heruntergeladene PDF geschrieben.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um zu unterschreiben.",
+        "processing": "Ihr PDF wird unterschrieben...",
+        "processingHint": "Die Unterschrift wird in die Datei geschrieben.",
+        "successTitle": "Ihr unterschriebenes PDF ist bereit",
+        "successDescription": "Laden Sie das PDF mit der angewendeten Unterschrift herunter.",
+        "download": "PDF herunterladen",
+        "signAnother": "Weiteres PDF unterschreiben",
+        "processingFailed": "Wir konnten dieses PDF nicht unterschreiben. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Unterschreiben Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, erstellen Sie eine Unterschrift durch Zeichnen, Tippen oder Hochladen eines Bildes, platzieren Sie sie auf der Seite und unterschreiben Sie. Für dieses Tool ist eine Anmeldung nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das eine Unterschrift braucht."
+          },
+          "sign": {
+            "title": "Unterschrift platzieren",
+            "description": "Zeichnen, tippen oder eine Markierung hochladen und auf der Seite verschieben."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF, das die Unterschrift enthält."
+          }
+        }
+      },
+      "fill": {
+        "title": "Dieses PDF ausfüllen",
+        "hint": "Wir haben die vorhandenen Formularfelder in diesem PDF gefunden. Füllen Sie sie aus und speichern Sie eine ausgefüllte Kopie.",
+        "detecting": "Formularfelder werden gesucht",
+        "empty": "Dieses PDF hat keine ausfüllbaren Formularfelder, die wir bearbeiten können. Wir setzen keine neuen Felder auf die Seite.",
+        "fieldCount": "{count, plural, one {# Feld} other {# Felder}}",
+        "choose": "Eine Option wählen",
+        "page": "Seite {page}",
+        "flatten": "Antworten in der Datei sperren",
+        "flattenHint": "Macht die ausgefüllten Antworten zum Teil der Seite, damit sie später nicht mehr geändert werden können.",
+        "skippedRadio": "Optionsfelder in diesem PDF können noch nicht ausgefüllt werden.",
+        "skippedSignature": "Unterschriftsfelder können hier nicht ausgefüllt werden. Nutzen Sie PDF unterschreiben, um eine Unterschrift hinzuzufügen.",
+        "selectPrompt": "Dieses PDF braucht ausfüllbare Formularfelder, bevor Sie fortfahren können.",
+        "output": "Ihre Antworten werden in das heruntergeladene PDF geschrieben.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um das Formular auszufüllen.",
+        "processing": "Ihr PDF wird ausgefüllt...",
+        "processingHint": "Ihre Antworten werden ins Formular geschrieben.",
+        "successTitle": "Ihr ausgefülltes PDF ist bereit",
+        "successDescription": "Laden Sie das PDF mit Ihren Antworten herunter.",
+        "download": "PDF herunterladen",
+        "fillAnother": "Weiteres PDF ausfüllen",
+        "processingFailed": "Wir konnten dieses PDF nicht ausfüllen. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Füllen Sie ein weiteres PDF aus, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, das bereits Formularfelder enthält, füllen Sie sie aus und laden Sie herunter. Für dieses Tool ist eine Anmeldung nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie ein PDF hinein, das bereits Formularfelder hat."
+          },
+          "fill": {
+            "title": "Felder ausfüllen",
+            "description": "Beantworten Sie die erkannten Felder. Wir füllen nur Felder aus, die bereits in der Datei existieren."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein ausgefülltes PDF mit Ihren Antworten."
+          }
+        }
+      },
+      "edit": {
+        "title": "Markierungen auf dieses PDF setzen",
+        "hint": "Fügen Sie Text, Hervorhebungen, Formen oder ein Bild über dem PDF hinzu. Vorhandener PDF-Text kann nicht bearbeitet werden.",
+        "addImage": "Ein Bild hinzufügen",
+        "uploadingImage": "Ihr Bild wird gespeichert…",
+        "imageFailed": "Wir konnten das Bild nicht speichern. Bitte versuchen Sie es erneut.",
+        "selectPrompt": "Fügen Sie Text, eine Hervorhebung oder ein Bild hinzu, bevor Sie fortfahren.",
+        "output": "{count, plural, one {# Markierung wird zum PDF hinzugefügt.} other {# Markierungen werden zum PDF hinzugefügt.}}",
+        "limitation": "Das setzt neue Markierungen auf die Seiten. Der ursprüngliche Text im PDF wird nicht geändert.",
+        "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
+        "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um zu bearbeiten.",
+        "processing": "Ihre Markierungen werden hinzugefügt...",
+        "processingHint": "Text, Formen und Bilder werden ins PDF geschrieben.",
+        "successTitle": "Ihr bearbeitetes PDF ist bereit",
+        "successDescription": "Laden Sie das PDF mit Ihren Markierungen herunter.",
+        "download": "PDF herunterladen",
+        "editAnother": "Weiteres PDF bearbeiten",
+        "processingFailed": "Wir konnten dieses PDF nicht bearbeiten. Bitte versuchen Sie es erneut.",
+        "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
+        "expiredTitle": "Diese Datei ist abgelaufen",
+        "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Bearbeiten Sie ein weiteres PDF, um fortzufahren.",
+        "faqHow": "Laden Sie ein PDF hoch, fügen Sie Text, Hervorhebungen oder ein Bild auf der Seite hinzu und speichern Sie. Vorhandener PDF-Text kann nicht geändert werden. Für dieses Tool ist eine Anmeldung nötig.",
+        "how": {
+          "upload": {
+            "title": "Hochladen",
+            "description": "Ziehen Sie das PDF hinein, das Sie markieren möchten."
+          },
+          "edit": {
+            "title": "Markierungen hinzufügen",
+            "description": "Platzieren Sie Text, Hervorhebungen, Formen oder ein Bild auf den Seiten."
+          },
+          "download": {
+            "title": "Herunterladen",
+            "description": "Holen Sie sich ein PDF, in dem diese Markierungen in die Datei geschrieben sind."
+          }
+        }
+      },
+      "editor": {
+        "toolbar": "Dokumentwerkzeuge",
+        "tools": {
+          "select": "Auswählen",
+          "text": "Text hinzufügen",
+          "image": "Bild hinzufügen",
+          "shape": "Hervorhebung hinzufügen",
+          "signature": "Unterschrift hinzufügen"
+        },
+        "undo": "Rückgängig",
+        "redo": "Wiederholen",
+        "delete": "Auswahl löschen",
+        "zoomIn": "Vergrößern",
+        "zoomOut": "Verkleinern",
+        "previousPage": "Vorherige Seite",
+        "nextPage": "Nächste Seite",
+        "pageOf": "Seite {current} von {total}",
+        "properties": "Eigenschaften",
+        "propertiesEmpty": "Wählen Sie ein Objekt, um Position und Größe zu bearbeiten.",
+        "text": "Text",
+        "fontSize": "Textgröße",
+        "style": "Stil",
+        "styles": {
+          "highlight": "Hervorhebung",
+          "fill": "Fläche"
+        },
+        "x": "X",
+        "y": "Y",
+        "width": "Breite",
+        "height": "Höhe",
+        "rotation": "Drehung",
+        "objects": {
+          "text": "Text",
+          "image": "Bild",
+          "rectangle": "Hervorhebung",
+          "signature": "Unterschrift"
+        }
+      },
+      "generic": {
+        "title": "Diese Datei verarbeiten"
+      }
+    },
+    "phases": {
+      "uploading": "Wird hochgeladen",
+      "checkingPages": "Seiten werden geprüft",
+      "uploadingHint": "Ihre Datei wird an den sicheren Speicher gesendet.",
+      "preparing": "Wird vorbereitet",
+      "preparingHint": "Der Vorgang wird gestartet.",
+      "processing": "Wird verarbeitet",
+      "processingHint": "Wir arbeiten an Ihrer Datei. Das kann einen Moment dauern.",
+      "ready": "Bereit",
+      "readyHint": "Ihr Ergebnis ist bereit zum Herunterladen."
+    },
+    "result": {
+      "title": "Ihr PDF ist bereit",
+      "titleBatch": "Ihre Dateien sind bereit",
+      "description": "{source} wurde nach {format} konvertiert.",
+      "descriptionBatch": "{count} Dateien wurden verarbeitet. Laden Sie sie als ein ZIP herunter.",
+      "unnamedSource": "Ihre Datei",
+      "download": "Herunterladen",
+      "downloadAll": "ZIP herunterladen ({count})",
+      "downloadNamed": "{name} herunterladen",
+      "downloading": "Download wird vorbereitet…",
+      "fileList": "Bereite Dateien",
+      "processAnother": "Weitere Datei verarbeiten",
+      "signupPrompt": "Möchten Sie Verlauf, Abrechnung und Kontonutzung verfolgen?",
+      "signupCta": "Kostenloses Konto erstellen"
+    },
+    "related": {
+      "title": "Verwandte Tools"
+    },
+    "recent": {
+      "title": "Zuletzt",
+      "notice": "Temporäre Dateien werden etwa {hours} Stunden aufbewahrt und laufen dann ab.",
+      "empty": "Noch keine letzten Dateien.",
+      "emptyHint": "Verarbeiten Sie eine Datei auf dieser Seite, und das Ergebnis erscheint hier etwa {hours} Stunden.",
+      "error": "Letzte Dateien konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "unnamedFile": "Unbenannte Datei",
+      "originalFile": "Von {filename}",
+      "download": "Herunterladen",
+      "downloading": "Download wird vorbereitet…",
+      "openTool": "Tool öffnen",
+      "startAgain": "Neu starten",
+      "status": {
+        "processing": "Wird verarbeitet",
+        "ready": "Bereit",
+        "failed": "Fehlgeschlagen",
+        "expired": "Abgelaufen"
+      },
+      "age": {
+        "justNow": "Gerade eben",
+        "minutes": "vor {count} Min.",
+        "hours": "vor {count} Std."
+      },
+      "expiresIn": {
+        "minutes": "Läuft in {count} Min. ab",
+        "hours": "Läuft in {count} Std. ab"
+      }
+    },
+    "privacy": {
+      "title": "Dateien und Aufbewahrung",
+      "body": "Hochgeladene Dateien werden genutzt, um dieses Tool auszuführen. Temporäre Dateien werden etwa {hours} Stunden aufbewahrt und können danach entfernt werden. Downloads nutzen kurzlebige signierte Links. Wir beanspruchen keine Compliance-Zertifizierungen."
+    },
+    "faq": {
+      "title": "Fragen",
+      "what": {
+        "question": "Was macht {tool}?"
+      },
+      "how": {
+        "question": "Wie nutze ich dieses Tool?",
+        "answer": "Laden Sie eine unterstützte Datei hoch. Wenn das Tool keine Extra-Optionen braucht, startet die Verarbeitung automatisch. Laden Sie das Ergebnis herunter, wenn es bereit ist. Ein Konto ist nicht nötig, außer das Tool sagt das."
+      },
+      "formats": {
+        "question": "Welche Formate werden unterstützt?",
+        "answer": "Dieses Tool akzeptiert {formats} und liefert {outputs}."
+      },
+      "account": {
+        "question": "Brauche ich ein Konto?",
+        "anonymous": "Nein. Sie können dieses Tool ohne Konto ausführen. Melden Sie sich an, wenn Sie Verlauf, Abrechnung und API-Keys möchten. Die täglichen Free-Limits bleiben gleich.",
+        "required": "Ja. Melden Sie sich vor der Verarbeitung an. Dieses Tool ist ohne Konto nicht verfügbar."
+      },
+      "limits": {
+        "question": "Welche Limits gelten gerade?",
+        "answer": "Bis zu {files} Dateien, je {sizeMb} MB. Dateien werden etwa {hours} Stunden aufbewahrt."
+      },
+      "privacy": {
+        "question": "Wie lange werden Dateien aufbewahrt?",
+        "answer": "Dateien werden etwa {hours} Stunden für Verarbeitung und Download aufbewahrt und können danach entfernt werden."
+      }
+    },
+    "options": {
+      "compressionLevel": "Komprimierungsstufe",
+      "compressionLow": "Niedrig (beste Qualität)",
+      "compressionMedium": "Mittel (ausgewogen)",
+      "compressionHigh": "Hoch (kleinste Datei)",
+      "rotation": "Drehung",
+      "splitRanges": "Seitenbereiche",
+      "splitRangesPlaceholder": "1-3, 5, 8-10",
+      "pageOrder": "Seitenreihenfolge",
+      "pageOrderPlaceholder": "z. B. 3, 1, 2",
+      "pagesToRemove": "Zu entfernende Seiten",
+      "pagesToRemovePlaceholder": "z. B. 2, 4",
+      "cropTop": "Oberer Rand (pt)",
+      "cropRight": "Rechter Rand (pt)",
+      "cropBottom": "Unterer Rand (pt)",
+      "cropLeft": "Linker Rand (pt)",
+      "watermarkText": "Wasserzeichentext",
+      "pageNumberStart": "Nummerierung beginnen bei",
+      "password": "Passwort",
+      "targetLanguage": "Zielsprache",
+      "outputFormat": "Ausgabeformat",
+      "languages": {
+        "eng": "Englisch",
+        "tur": "Türkisch",
+        "deu": "Deutsch",
+        "fra": "Französisch",
+        "spa": "Spanisch"
+      }
+    },
+    "errors": {
+      "title": "Wir konnten diese Datei nicht verarbeiten",
+      "noFile": "Wählen Sie eine Datei zum Verarbeiten.",
+      "tooFewFiles": "Wählen Sie mindestens zwei Dateien.",
+      "tooManyFiles": "Zu viele Dateien für dieses Tool.",
+      "tooManyPages": "Diese Datei hat mehr als {max} Seiten. Der Free-Plan erlaubt {max} Seiten pro Datei.",
+      "tooManyPagesShort": "Über dem Limit von {max} Seiten.",
+      "tooManyPagesHint": "Upgraden Sie auf Pro, um längere PDFs zu verarbeiten, oder starten Sie mit einer kürzeren Datei neu.",
+      "upgradeTitle": "Mit Pro weitermachen",
+      "tooLarge": "Diese Datei ist größer als das aktuelle Limit.",
+      "emptyFile": "Diese Datei ist leer. Wählen Sie ein gültiges PDF und versuchen Sie es erneut.",
+      "unsupported": "Dieser Dateityp wird für dieses Tool nicht unterstützt.",
+      "invalidPdf": "Diese Datei sieht nicht wie ein gültiges PDF aus. Versuchen Sie eine andere Datei.",
+      "corruptedFile": "Dieses PDF wirkt beschädigt. Versuchen Sie eine Reparatur oder nutzen Sie eine andere Datei.",
+      "invalidOptions": "Prüfen Sie die Tool-Einstellungen und versuchen Sie es erneut.",
+      "creditsExhausted": "Sie haben alle Credits für diesen Monat genutzt. Upgraden Sie auf Pro oder warten Sie auf den nächsten Abrechnungszeitraum.",
+      "limitReached": "Sie haben das aktuelle Nutzungslimit erreicht. Versuchen Sie es später erneut oder upgraden Sie Ihren Plan.",
+      "upgradeRequired": "Dieses Tool braucht Pro. Upgraden Sie, um fortzufahren.",
+      "upgradeCta": "Auf Pro upgraden",
+      "signInRequired": "Melden Sie sich an, um dieses Tool zu nutzen.",
+      "signInCta": "Anmelden, um fortzufahren",
+      "unauthorized": "Sie haben keinen Zugriff auf diese Datei.",
+      "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst oder nutzen Sie PDF entsperren mit dem richtigen Passwort.",
+      "processingFailed": "Die Verarbeitung ist fehlgeschlagen. Versuchen Sie es mit einer anderen Datei erneut.",
+      "aiUnavailable": "KI-Verarbeitung ist gerade nicht verfügbar. Versuchen Sie es später erneut.",
+      "duplicateExecution": "Diese Datei wird bereits verarbeitet. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "uploadInterrupted": "Der Upload wurde unterbrochen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "filesExpired": "Diese Datei ist abgelaufen. Bitte verarbeiten Sie sie erneut.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "networkFailure": "Upload fehlgeschlagen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut.",
+      "retryHint": "Sie können diesen Vorgang erneut versuchen.",
+      "startAgainHint": "Starten Sie mit einer neuen Datei neu."
+    }
+  },
+  "tools": {
+    "merge-pdf": {
+      "name": "PDF zusammenführen",
+      "metaTitle": "PDF-Dateien online zusammenführen",
+      "description": "Mehrere PDF-Dateien zu einem Dokument kombinieren. Dateien hochladen, Reihenfolge festlegen und ein einzelnes PDF herunterladen. Für die Grundnutzung brauchen Sie kein Konto."
+    },
+    "split-pdf": {
+      "name": "PDF teilen",
+      "metaTitle": "PDF-Dateien online teilen",
+      "description": "Ein PDF in eine neue Datei mit nur den benötigten Seiten teilen. Seiten visuell auswählen und das Ergebnis herunterladen."
+    },
+    "extract-pages": {
+      "name": "PDF-Seiten extrahieren",
+      "metaTitle": "Seiten aus PDF extrahieren",
+      "description": "Ausgewählte Seiten aus einem PDF nehmen und den Rest als neue Datei speichern. Seiten visuell wählen, dann herunterladen."
+    },
+    "organize-pdf": {
+      "name": "PDF sortieren",
+      "metaTitle": "PDF-Seiten online sortieren",
+      "description": "PDF-Seiten neu anordnen, drehen und verwalten, dann die aktualisierte Datei herunterladen."
+    },
+    "remove-pages": {
+      "name": "PDF-Seiten entfernen",
+      "metaTitle": "Seiten aus PDF entfernen",
+      "description": "Unerwünschte Seiten aus einem PDF löschen und den Rest in einer neuen Datei behalten."
+    },
+    "reorder-pages": {
+      "name": "PDF-Seiten neu anordnen",
+      "metaTitle": "PDF-Seiten online neu anordnen",
+      "description": "Die Seitenreihenfolge eines PDFs ändern und die neu angeordnete Datei herunterladen."
+    },
+    "rotate-pdf": {
+      "name": "PDF drehen",
+      "metaTitle": "PDF-Seiten online drehen",
+      "description": "Eine oder mehrere Seiten in einem PDF drehen und die korrigierte Datei herunterladen."
+    },
+    "crop-pdf": {
+      "name": "PDF zuschneiden",
+      "metaTitle": "PDF-Seiten online zuschneiden",
+      "description": "Seitenränder und überflüssigen Platz aus einem PDF zuschneiden und das Ergebnis herunterladen."
+    },
+    "compress-pdf": {
+      "name": "PDF komprimieren",
+      "metaTitle": "PDF online komprimieren",
+      "description": "Die PDF-Dateigröße reduzieren und das Dokument lesbar halten. Eine Komprimierungsstufe wählen und ein kleineres PDF herunterladen."
+    },
+    "repair-pdf": {
+      "name": "PDF reparieren",
+      "metaTitle": "PDF-Dateien online reparieren",
+      "description": "Versuchen, ein beschädigtes oder unlesbares PDF zu reparieren, und eine reparierte Kopie herunterladen."
+    },
+    "pdf-to-pdfa": {
+      "name": "PDF zu PDF/A",
+      "metaTitle": "PDF in PDF/A konvertieren",
+      "description": "Ein PDF in eine archivierbare PDF/A-Datei für die längere Aufbewahrung konvertieren."
+    },
+    "pdf-to-word": {
+      "name": "PDF zu Word",
+      "metaTitle": "PDF-zu-Word-Konverter",
+      "description": "Ein PDF in ein bearbeitbares Word-Dokument konvertieren. Ein PDF hochladen und eine DOC- oder DOCX-Datei herunterladen."
+    },
+    "pdf-to-word-ocr": {
+      "name": "PDF zu Word OCR",
+      "metaTitle": "PDF zu Word mit OCR",
+      "description": "Ein gescanntes PDF mit OCR nach Word konvertieren, damit der Text bearbeitet werden kann."
+    },
+    "pdf-to-powerpoint": {
+      "name": "PDF zu PowerPoint",
+      "metaTitle": "PDF-zu-PowerPoint-Konverter",
+      "description": "Ein PDF in eine PowerPoint-Präsentation konvertieren, die Sie bearbeiten und vorführen können."
+    },
+    "pdf-to-excel": {
+      "name": "PDF zu Excel",
+      "metaTitle": "PDF-zu-Excel-Konverter",
+      "description": "Tabellen in einem PDF in eine Excel-Tabelle konvertieren, die Sie sortieren und bearbeiten können."
+    },
+    "pdf-to-excel-ocr": {
+      "name": "PDF zu Excel OCR",
+      "metaTitle": "PDF zu Excel mit OCR",
+      "description": "Gescannte PDF-Tabellen mit OCR nach Excel konvertieren."
+    },
+    "pdf-to-jpg": {
+      "name": "PDF zu JPG",
+      "metaTitle": "PDF-zu-JPG-Konverter",
+      "description": "PDF-Seiten in JPG-Bilder konvertieren, die Sie speichern oder teilen können."
+    },
+    "pdf-to-png": {
+      "name": "PDF zu PNG",
+      "metaTitle": "PDF-zu-PNG-Konverter",
+      "description": "PDF-Seiten in PNG-Bilder mit transparentem oder sauberem Hintergrund konvertieren."
+    },
+    "pdf-to-txt": {
+      "name": "PDF zu Text",
+      "metaTitle": "PDF-zu-Text-Konverter",
+      "description": "Klartext aus einem PDF extrahieren und als Textdatei herunterladen."
+    },
+    "word-to-pdf": {
+      "name": "Word zu PDF",
+      "metaTitle": "Word-zu-PDF-Konverter",
+      "description": "Ein Word-Dokument in ein PDF konvertieren, das Sie teilen oder drucken können."
+    },
+    "powerpoint-to-pdf": {
+      "name": "PowerPoint zu PDF",
+      "metaTitle": "PowerPoint-zu-PDF-Konverter",
+      "description": "Eine PowerPoint-Präsentation in ein PDF konvertieren."
+    },
+    "excel-to-pdf": {
+      "name": "Excel zu PDF",
+      "metaTitle": "Excel-zu-PDF-Konverter",
+      "description": "Eine Excel-Tabelle in ein PDF konvertieren."
+    },
+    "image-to-pdf": {
+      "name": "Bild zu PDF",
+      "metaTitle": "Bild-zu-PDF-Konverter",
+      "description": "JPG, PNG oder andere Bilder zu einem einzelnen PDF kombinieren."
+    },
+    "jpg-to-pdf": {
+      "name": "JPG zu PDF",
+      "metaTitle": "JPG-zu-PDF-Konverter",
+      "description": "Ein JPG-Bild in eine PDF-Datei konvertieren."
+    },
+    "png-to-pdf": {
+      "name": "PNG zu PDF",
+      "metaTitle": "PNG-zu-PDF-Konverter",
+      "description": "Ein PNG-Bild in eine PDF-Datei konvertieren."
+    },
+    "office-to-pdf": {
+      "name": "Office zu PDF",
+      "metaTitle": "Office-zu-PDF-Konverter",
+      "description": "Word-, Excel- oder PowerPoint-Dateien in PDF konvertieren."
+    },
+    "edit-pdf": {
+      "name": "PDF bearbeiten",
+      "metaTitle": "PDF online bearbeiten",
+      "description": "Text, Hervorhebungen, Formen und Bilder über einem PDF hinzufügen. Vorhandener Text bleibt unverändert."
+    },
+    "watermark-pdf": {
+      "name": "Wasserzeichen auf PDF",
+      "metaTitle": "Wasserzeichen auf PDF setzen",
+      "description": "Ein Text- oder Bildwasserzeichen über jede Seite eines PDFs setzen."
+    },
+    "page-numbers-pdf": {
+      "name": "Seitenzahlen auf PDF",
+      "metaTitle": "Seitenzahlen auf PDF setzen",
+      "description": "Seitenzahlen auf ein PDF setzen und die nummerierte Datei herunterladen."
+    },
+    "protect-pdf": {
+      "name": "PDF schützen",
+      "metaTitle": "PDF mit Passwort schützen",
+      "description": "Ein Passwort hinzufügen, damit andere es zum Öffnen oder Nutzen des PDFs brauchen."
+    },
+    "unlock-pdf": {
+      "name": "PDF entsperren",
+      "metaTitle": "PDF-Passwort entfernen",
+      "description": "Den Passwortschutz von einem PDF entfernen, das Ihnen gehört, und eine entsperrte Kopie herunterladen."
+    },
+    "sign-pdf": {
+      "name": "PDF unterschreiben",
+      "metaTitle": "PDF online unterschreiben",
+      "description": "Ein visuelles Unterschriftsbild oder einen Textstempel hinzufügen. Das ist keine kryptografische digitale Signatur."
+    },
+    "redact-pdf": {
+      "name": "PDF schwärzen",
+      "metaTitle": "PDF online schwärzen",
+      "description": "Sensible Texte oder Bereiche in einem PDF dauerhaft schwärzen, bevor Sie es teilen."
+    },
+    "compare-pdf": {
+      "name": "PDF vergleichen",
+      "metaTitle": "PDF-Dateien vergleichen",
+      "description": "Zwei PDF-Versionen vergleichen und sehen, was sich geändert hat."
+    },
+    "pdf-forms": {
+      "name": "PDF-Formulare ausfüllen",
+      "metaTitle": "PDF-Formulare online ausfüllen",
+      "description": "Vorhandene Felder in einem interaktiven PDF-Formular ausfüllen und die ausgefüllte Datei herunterladen."
+    },
+    "web-to-pdf": {
+      "name": "Webseite zu PDF",
+      "metaTitle": "Webseite in PDF konvertieren",
+      "description": "Eine Webseite als PDF erfassen, das Sie speichern oder teilen können."
+    },
+    "scan-to-pdf": {
+      "name": "Scan zu PDF",
+      "metaTitle": "Scan online in PDF umwandeln",
+      "description": "Gescannte Bilder in ein einzelnes PDF umwandeln."
+    },
+    "pdf-extract": {
+      "name": "PDF-Inhalt extrahieren",
+      "metaTitle": "Inhalt aus PDF extrahieren",
+      "description": "Strukturierten Inhalt aus einem PDF extrahieren, um ihn in anderen Dateien weiterzunutzen."
+    },
+    "pdf-to-markdown": {
+      "name": "PDF zu Markdown",
+      "metaTitle": "PDF-zu-Markdown-Konverter",
+      "description": "PDF-Inhalt in Markdown konvertieren, das Sie in einem Texteditor bearbeiten können."
+    },
+    "ocr-pdf": {
+      "name": "OCR für PDF",
+      "metaTitle": "OCR für PDF online",
+      "description": "Ein gescanntes PDF mit OCR durchsuchbar machen oder den erkannten Text extrahieren."
+    },
+    "ai-summarizer": {
+      "name": "PDF zusammenfassen",
+      "metaTitle": "PDF mit KI zusammenfassen",
+      "description": "Ein PDF mit KI zusammenfassen, damit Sie die wichtigsten Punkte lesen können, ohne jede Seite zu öffnen."
+    },
+    "translate-pdf": {
+      "name": "PDF übersetzen",
+      "metaTitle": "PDF online übersetzen",
+      "description": "PDF-Inhalt in eine andere Sprache übersetzen und das Ergebnis herunterladen."
+    }
+  }
+}

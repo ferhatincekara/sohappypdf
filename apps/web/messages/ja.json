@@ -1,0 +1,2800 @@
+{
+  "metadata": {
+    "title": "結合・変換・圧縮ができるオンラインPDFツール - SoHappyPDF",
+    "description": "結合、分割、圧縮、変換、OCR、保護まで使える無料のオンラインPDFツール。基本的な利用にアカウントは不要です。ファイルは2時間後に期限切れになります。"
+  },
+  "marketing": {
+    "nav": {
+      "brand": "SoHappyPDF",
+      "product": "プロダクト",
+      "pricing": "料金",
+      "faq": "よくある質問",
+      "blog": "ブログ",
+      "about": "私たちについて",
+      "contact": "お問い合わせ",
+      "developers": "開発者",
+      "signIn": "ログイン",
+      "account": "アカウント",
+      "getStarted": "無料で試す",
+      "comingSoon": "近日公開",
+      "pro": "Pro",
+      "stories": {
+        "pdf-to-word": "契約書をWordにして作業を続ける",
+        "compress-pdf": "大きなPDFを小さくしても読みやすく保つ"
+      },
+      "open": "メニューを開く",
+      "close": "メニューを閉じる",
+      "menu": "サイト",
+      "skip": "本文へスキップ",
+      "tools": "ツール",
+      "allTools": "すべてのツール",
+      "shortcuts": {
+        "label": "よく使うツール",
+        "merge": "結合",
+        "split": "分割",
+        "compress": "圧縮",
+        "convert": "変換",
+        "ocr": "OCR",
+        "protect": "保護"
+      },
+      "categories": {
+        "organize": "PDFを整理",
+        "optimize": "PDFを最適化",
+        "convert": "PDFを変換",
+        "edit": "PDFを編集",
+        "security": "PDFのセキュリティ",
+        "document": "Officeと画像",
+        "intelligence": "PDFインテリジェンス"
+      }
+    },
+    "hero": {
+      "eyebrow": "{count}のPDFツール、ひとつの使いやすい場所",
+      "title": "変換、結合、<smile>そしてPDFの管理。</smile>",
+      "description": "ツールを開き、ファイルをドロップして、結果をダウンロードします。基本的な利用にアカウントは不要です。ファイルはセッション内に限定され、約2時間後に期限切れになります。",
+      "primaryCta": "無料ではじめる",
+      "secondaryCta": "ツールを見る",
+      "accountCta": "ツールを開く",
+      "imageAlt": "書類を一緒に扱うチーム",
+      "chipLabel": "ファイルの保存期間",
+      "chipValue": "約2時間",
+      "highlights": {
+        "speed": {
+          "title": "クラウドで処理",
+          "text": "アップロードし、ツールを実行し、完了したらダウンロードします。デスクトップアプリのインストールは不要です。"
+        },
+        "quality": {
+          "title": "レイアウトを保つ",
+          "text": "必要な文書構造を捨てずに、圧縮や変換ができます。"
+        },
+        "privacy": {
+          "title": "ファイルは非公開",
+          "text": "ファイルはあなたのセッションまたはアカウントに属します。ダウンロードは有効期限の短い署名付きアクセスを使います。"
+        }
+      },
+      "convertCard": {
+        "title": "ファイルを変換",
+        "drop": "ここにPDFをドロップ",
+        "orSelect": "またはパソコンから選択",
+        "fileName": "Contract.pdf",
+        "fileMeta": "2.4 MB · 12ページ",
+        "conversion": "PDF → Word",
+        "free": "Free",
+        "cta": "変換"
+      }
+    },
+    "overview": {
+      "eyebrow": "全体像",
+      "title": "必要なものが、ひと目でわかります。",
+      "description": "変換、結合、圧縮、保護。ログインしたアカウントでは最近の処理を確認でき、各ファイルの結果がわかります。",
+      "toolsCta": "ツールを見る",
+      "weekLabel": "1週間の例",
+      "weekValue": "48ファイル",
+      "chartValue": "78%",
+      "activity": {
+        "convert": {
+          "name": "Contract_v4.pdf",
+          "action": "Wordに変換済み",
+          "time": "完了"
+        },
+        "compress": {
+          "name": "Invoice_March.pdf",
+          "action": "圧縮 · 8.4 MB → 1.1 MB",
+          "time": "完了"
+        },
+        "merge": {
+          "name": "Deck.pdf",
+          "action": "結合 · 12ページ",
+          "time": "完了"
+        }
+      }
+    },
+    "spotlights": {
+      "title": "PDFの作業を終えて、残りの一日を大切に。",
+      "description": "どの処理も流れは同じです。ツールを開き、ファイルをアップロードし、処理が終わったらダウンロードします。基本的な利用にアカウントは不要です。",
+      "convert": {
+        "eyebrow": "さまざまな形式に変換",
+        "title": "Word、Excel、JPG — PDFを双方向に。",
+        "text": "編集できる文書を作り、表を取り出し、ページを画像にします。ツールを開き、アップロードして、ダウンロードするだけです。",
+        "cta": "PDF → Wordを試す",
+        "overlay": {
+          "title": "準備完了 — Contract.docx",
+          "meta": "12ページ · 編集可能",
+          "cta": "ダウンロード"
+        }
+      },
+      "compress": {
+        "eyebrow": "スマートな圧縮",
+        "title": "ファイルは小さく、読みやすさはそのまま。",
+        "text": "メールの容量制限や遅いアップロードはよくあることです。PDFを圧縮しても、共有できる読みやすさを保てます。",
+        "cta": "圧縮を試す",
+        "overlay": {
+          "title": "圧縮",
+          "before": "圧縮前",
+          "beforeSize": "8.4 MB",
+          "after": "圧縮後",
+          "afterSize": "1.1 MB"
+        }
+      },
+      "protect": {
+        "eyebrow": "保護とロック",
+        "title": "印刷せずに契約を仕上げる。",
+        "text": "機密のPDFにパスワードを設定できます。アクセスはセッションまたはアカウントに限定され、ダウンロードリンクの有効期限は短くなっています。",
+        "cta": "保護を試す",
+        "overlay": {
+          "title": "保護済み",
+          "name": "E. Kaya",
+          "meta": "パスワードを設定済み"
+        }
+      }
+    },
+    "whyChoose": {
+      "title": "なぜSoHappyPDF？",
+      "description": "PDFツールは冷たくて混雑しがちです。私たちは丸みがあり、少し黄色く、作業を終わらせることに集中したプロダクトにしました。",
+      "try": "試してみる",
+      "speed": {
+        "title": "ソフトのインストール不要",
+        "text": "ブラウザでツールを開き、ファイルをアップロードして、結果をダウンロードします。",
+        "stat": "クラウド処理"
+      },
+      "privacy": {
+        "title": "ファイルはあなたのもの",
+        "text": "ファイルはセッションまたはアカウントに残り、約2時間後に期限切れになります。",
+        "stat": "短い保存期間"
+      },
+      "anywhere": {
+        "title": "すべてのファイルを、ひとつの場所で",
+        "text": "PDF、Word、Excel、画像を一箇所で。ツールを開くだけで、デスクトップアプリは不要です。",
+        "stat": "{count}のツール"
+      },
+      "visual": {
+        "word": "PDF → Word",
+        "wordFile": "Contract.pdf",
+        "excel": "PDF → Excel",
+        "excelFile": "Invoice.pdf",
+        "fileMark": "PDF",
+        "fileMeta": "約2時間",
+        "wordOut": "Word",
+        "wordOutMeta": "DOCX",
+        "excelOut": "Excel",
+        "excelOutMeta": "XLSX"
+      }
+    },
+    "testimonials": {
+      "title": "利用者の声",
+      "description": "PDF作業をさっと終わらせたい小規模チームと忙しいフリーランスの方々です。",
+      "quotes": {
+        "elif": {
+          "name": "Elif Kaya",
+          "role": "オペレーション、GreenLeaf",
+          "text": "契約書をWordにする待ち時間が短く、探し回る必要がなくなりました。",
+          "tag": "スムーズな作業",
+          "initials": "EK"
+        },
+        "mert": {
+          "name": "Mert Aydın",
+          "role": "フリーランスデザイナー",
+          "text": "圧縮しても見た目がきれいです。クライアントのファイルは軽く、読みやすいままです。",
+          "tag": "速くて信頼できる",
+          "initials": "MA"
+        },
+        "selin": {
+          "name": "Selin Arslan",
+          "role": "人事責任者",
+          "text": "応募者の書類はブラウザで終わります。フォルダが増え続けません。",
+          "tag": "とても助かる",
+          "initials": "SA"
+        },
+        "can": {
+          "name": "Can Demir",
+          "role": "財務アナリスト",
+          "text": "表のExcel書き出しは最初からうまくいきました。請求書を手でコピーするのをやめました。",
+          "tag": "シンプルでわかりやすい",
+          "initials": "CD"
+        }
+      }
+    },
+    "ctaBanner": {
+      "title": "{count}のツール、焦点の定まったページ、ひとつのプロダクト。",
+      "description": "ランディングページで迷わないでください。ツール、料金、アカウントにはそれぞれ場所があります。あとは作業に戻れます。",
+      "toolsCta": "すべてのツール",
+      "startCta": "プランを見る"
+    },
+    "faq": {
+      "title": "よくいただく質問",
+      "description": "ファイル、上限、プロダクトの実際の動きについての短い回答です。",
+      "items": {
+        "files": {
+          "q": "ファイルはどこに行きますか？",
+          "a": "ファイルは処理のためにアップロードされ、匿名セッションまたはアカウントに紐づきます。ダウンロードには有効期限の短い署名付きURLを使います。一時ファイルは約2時間後に期限切れになります。"
+        },
+        "anonymous": {
+          "q": "アカウントは必要ですか？",
+          "a": "いいえ。Freeの1日あたりの上限は、ログインの有無にかかわらず同じです。アカウントは履歴、お支払い、APIキーのために任意です。"
+        },
+        "formats": {
+          "q": "どの形式を変換できますか？",
+          "a": "カタログにはPDF、Word、Excel、PowerPoint、JPG、PNG、OCRツールがあります。各ツールのドロップゾーンに、そのツールが受け付ける形式が表示されます。"
+        },
+        "limits": {
+          "q": "ファイルの上限は何ですか？",
+          "a": "Freeは1日5回の操作、ファイルあたり25 MB、一度に1ファイル、ファイルあたり50ページです。アカウントの有無は問いません。OCRはPro限定です。Proは月額$5で、操作回数は無制限、ファイル上限は1 GBです。ファイルは約2時間後に期限切れになります。開発者向けAPIクレジットは別請求です。"
+        },
+        "account": {
+          "q": "ログインすると何が変わりますか？",
+          "a": "最近のアクティビティ、お支払い、APIキーが使えます。Freeの1日あたりの上限は同じです。ツールページも同じです。ファイルをアップロードし、結果をダウンロードします。"
+        },
+        "credits": {
+          "q": "クレジットはどう機能しますか？",
+          "a": "FreeのWeb操作には1日の上限があります。Proは月額$5でWeb利用が無制限です。APIクレジットはDeveloperパックで別請求され、プログラムからの利用を計量します。"
+        },
+        "api": {
+          "q": "開発者向けAPIはありますか？",
+          "a": "あります。公開v1 APIは、APIキーで同じアップロード、処理、ダウンロードの流れを使います。APIクレジットパックはWebプランとは別です。"
+        },
+        "privacy": {
+          "q": "ファイルは非公開ですか？",
+          "a": "はい。ファイルは共有ライブラリではなく、セッションまたはアカウントに限定されます。ダウンロードには公開リンクではなく、有効期限の短い署名付きURLを使います。"
+        },
+        "pro": {
+          "q": "Proには何が含まれますか？",
+          "a": "Proは月額$5です。OCR、編集、サイン、AIツールが使え、1日の操作上限がなくなり、ファイルサイズ上限が1 GBになります。"
+        },
+        "payment": {
+          "q": "支払いと解約はどうなりますか？",
+          "a": "ログイン後、決済はPolarで行います。支払い方法、請求書、解約はPolarのカスタマーポータルで扱います。年額のAPIパックは、その商品が設定されている場合20%オフです。"
+        }
+      }
+    },
+    "demo": {
+      "title": "アップロードからダウンロードまで",
+      "description": "各ツールがワークフローを持ちます。ファイルを選び、処理し、一時的な結果をダウンロードします。",
+      "panelTitle": "ツールの流れ",
+      "fileLabel": "ファイル",
+      "fileName": "report.pdf",
+      "conversionLabel": "ツール",
+      "conversion": "PDF to PNG",
+      "resultLabel": "結果",
+      "result": "report.png",
+      "status": "完了",
+      "upload": "アップロード",
+      "choose": "ツールを選ぶ",
+      "convert": "処理",
+      "download": "ダウンロード"
+    },
+    "features": {
+      "title": "今できること",
+      "description": "SoHappyPDFは対応ファイルをクラウドで処理し、一時的な結果を約2時間利用できるようにします。",
+      "items": {
+        "conversion": {
+          "title": "PDFツール",
+          "description": "結合、分割、圧縮、変換、保護などを、焦点の定まったツールページから行えます。"
+        },
+        "workflow": {
+          "title": "シンプルなツールの流れ",
+          "description": "ツールページでアップロードし、処理し、結果の準備ができたらダウンロードします。"
+        },
+        "history": {
+          "title": "最近のアクティビティ",
+          "description": "ログインしたアカウントでは最近の実行を確認できます。ファイルは一時的なままです。"
+        },
+        "api": {
+          "title": "開発者向けAPI",
+          "description": "APIキーで、同じファイルと処理のワークフローを呼び出せます。"
+        },
+        "keys": {
+          "title": "APIキー",
+          "description": "アカウントでキーの作成と削除ができます。生のキーは一度だけ表示されます。"
+        },
+        "limits": {
+          "title": "わかりやすい上限",
+          "description": "FreeとProプランでは、1日の操作回数、ファイルサイズ、API上限を公開しています。"
+        },
+        "security": {
+          "title": "非公開のファイル",
+          "description": "ファイルは匿名セッションまたはアカウントに属します。ダウンロードは有効期限の短い署名付きアクセスを使います。"
+        },
+        "cloud": {
+          "title": "クラウド処理",
+          "description": "処理はクラウドで実行されるため、変換ソフトを手元にインストールする必要はありません。"
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "使い方",
+      "step": "ステップ {number}",
+      "upload": {
+        "title": "アップロード",
+        "description": "ツールを開き、対応ファイルを送ります。"
+      },
+      "convert": {
+        "title": "処理",
+        "description": "必要ならオプションを選びます。処理はバックグラウンドで続きます。"
+      },
+      "download": {
+        "title": "ダウンロード",
+        "description": "処理が完了したら結果をダウンロードします。一時ファイルは約2時間後に期限切れになります。"
+      }
+    },
+    "developer": {
+      "title": "同じプロダクトのためのAPI",
+      "description": "APIキーを作成し、Bearerトークンで認証してから、公開v1 APIでアップロード、変換、ダウンロードします。",
+      "authHint": "Authorization: Bearer YOUR_API_KEY を使ってください。キーをURLやブラウザのコードに置かないでください。",
+      "exampleLabel": "変換を確認",
+      "cta": "APIドキュメントを読む"
+    },
+    "security": {
+      "title": "実際に提供しているセキュリティ",
+      "description": "これらはプロダクト上の制御であり、第三者のコンプライアンス認証ではありません。",
+      "items": {
+        "authentication": {
+          "title": "安全な認証",
+          "description": "ダッシュボードでは、アカウントデータを表示する前にメールとパスワードで認証します。"
+        },
+        "privateFiles": {
+          "title": "非公開のファイル",
+          "description": "アップロードと変換後のファイルは、ログイン中のアカウントまたはAPIキーの所有者に限定されます。"
+        },
+        "authorization": {
+          "title": "サーバー側の認可",
+          "description": "ファイル、変換、APIキーの操作はサーバー側で認可されます。"
+        },
+        "signedAccess": {
+          "title": "署名付きの結果アクセス",
+          "description": "ダウンロードは公開オブジェクトリンクではなく、有効期限の短い署名付きURLとして発行されます。"
+        },
+        "apiKeys": {
+          "title": "APIキーの保護",
+          "description": "キーは秘密情報です。漏えいしたキーはダッシュボードで削除し、代わりのキーを作成してください。"
+        }
+      }
+    },
+    "pricing": {
+      "title": "Free、Pro、Developer",
+      "description": "Webプランはブラウザのツール向けです。Developerクレジットパックは公開API用に別請求されます。",
+      "viewPage": "料金を見る",
+      "note": "Proは月額$5です。アップグレードとAPIクレジットパックは、ログイン後にPolarの決済を使います。",
+      "interval": "/月",
+      "intervalYear": "/年",
+      "web": {
+        "title": "Webプラン",
+        "description": "ブラウザでPDFツールを使います。1日の操作回数、ファイルサイズ、ページ上限はWebプランに従います。"
+      },
+      "free": {
+        "name": "Free",
+        "badge": "含まれます",
+        "summary": "1日5回の操作、一度に1ファイル、サイズ上限は25 MBです。アカウントの有無にかかわらず同じ上限です。OCRは含まれません。",
+        "cta": "無料ではじめる"
+      },
+      "pro": {
+        "name": "Pro",
+        "badge": "無制限",
+        "summary": "ブラウザ操作は無制限、1 GBのファイル、OCR、プレミアムツールが使えます。",
+        "cta": "Proをはじめる"
+      },
+      "api": {
+        "title": "APIクレジットパック",
+        "description": "APIクレジットはWeb利用とは別です。プログラムから使う必要があれば、アカウントからパックを購入できます。",
+        "note": "APIのリクエストレートとキー上限はWebプランに従います。APIクレジットはAPI利用でのみ消費されます。",
+        "cta": "開発者向けドキュメント",
+        "packs": {
+          "starter": {
+            "name": "Starter",
+            "summary": "公開APIを試すのに十分なクレジットです。"
+          },
+          "growth": {
+            "name": "Growth",
+            "summary": "通常の連携向けに、より多くのAPIクレジットです。"
+          },
+          "scale": {
+            "name": "Scale",
+            "summary": "負荷の高い処理向けに、より大きなAPIクレジット容量です。"
+          }
+        }
+      },
+      "developer": {
+        "title": "Developer",
+        "description": "APIクレジットは別請求です。月額または年額のパックを選び、そのクレジットで何件のタスクを処理できるかを確認できます。",
+        "docsCta": "開発者向けドキュメント",
+        "cycleTitle": "請求サイクルを選ぶ",
+        "monthly": "月額",
+        "yearly": "年額",
+        "yearlyDiscount": "-20%",
+        "cycleNote": {
+          "monthly": "クレジットは毎月更新されます。未使用のクレジットは期間終了時に失効します。",
+          "yearly": "年額で支払い、Polarの決済で20%お得になります。クレジットは毎月更新されます。"
+        },
+        "creditsTitle": "1か月あたりのクレジット数を選ぶ",
+        "needMore": "もっと必要ですか？ <contact>お問い合わせ</contact>",
+        "calculatorTitle": "計算機",
+        "calculatorDescription": "<credits></credits> クレジットで、1か月に何件のファイル、ページ、タスクを処理できますか？",
+        "calculatorResult": "ツール <tool></tool> では、<count></count> 件のタスクを処理できます。",
+        "cta": "申し込む",
+        "creditsTableTitle": "クレジットとファイル",
+        "creditsTableDescription": "APIクレジットの消費はツールによって異なります。クレジットが多いパックほど、より多くのタスクをカバーします。未使用の月次クレジットは期間終了時に失効します。",
+        "creditsTableTool": "ツール",
+        "creditsTableCredits": "クレジット",
+        "creditsPerTask": "{count, plural, one {1タスクあたり # クレジット} other {1タスクあたり # クレジット}}"
+      },
+      "limits": {
+        "webCredits": "Webツールクレジット {count} / 月",
+        "operations": "処理操作 {count} / 月",
+        "dailyOperations": "操作 {count} / 日",
+        "unlimitedOperations": "操作回数無制限",
+        "noAccountRequired": "アカウントなしでツールを利用",
+        "fileSize": "ファイルあたり最大 {size}",
+        "filesPerOperation": "1回の操作あたり最大 {count} ファイル",
+        "multiFile": "1回の操作で複数ファイル",
+        "hourlyOperations": "1時間あたり最大 {count} 回の操作",
+        "pagesPerFile": "ファイルあたり最大 {count} ページ",
+        "noPageCap": "ファイルあたりのページ上限なし",
+        "noOcr": "OCRは含まれません",
+        "noSupport": "サポートなし",
+        "supportIncluded": "メールサポート",
+        "retention": "ファイルは {hours} 時間後に期限切れ",
+        "premiumTools": "OCRとProツール",
+        "standardTools": "標準PDFツール",
+        "apiCredits": "パックあたり APIクレジット {count}",
+        "apiKeys": "APIキー {count}",
+        "apiRate": "APIリクエスト {count} / 分",
+        "apiAccess": "公開APIへのアクセス"
+      }
+    },
+    "footer": {
+      "brand": "SoHappyPDF",
+      "menu": "フッター",
+      "product": "プロダクト",
+      "company": "会社情報",
+      "tools": "ツール",
+      "pricing": "料金",
+      "faq": "よくある質問",
+      "blog": "ブログ",
+      "about": "私たちについて",
+      "contact": "お問い合わせ",
+      "api": "API",
+      "legal": "法務",
+      "security": "セキュリティ",
+      "privacy": "プライバシーポリシー",
+      "terms": "利用規約",
+      "cookies": "Cookie",
+      "blurb": "PDFの作業を軽く、速く、少し明るくするために作りました。ファイルはあなたに限定され、その後期限切れになります。",
+      "copyright": "© {year} SoHappyPDF. All rights reserved.",
+      "language": "言語",
+      "languages": {
+        "en": "English",
+        "tr": "Türkçe",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "ja": "日本語",
+        "pt-BR": "Português (Brasil)"
+      },
+      "social": "ソーシャル",
+      "instagram": "InstagramのSoHappyPDF",
+      "x": "XのSoHappyPDF",
+      "linkedin": "LinkedInのSoHappyPDF"
+    },
+    "toolsDirectory": {
+      "title": "PDFツール",
+      "description": "公開ツールはそれぞれ焦点の定まったワークフローです。カテゴリを選び、ツールを開き、ファイルをアップロードして、結果をダウンロードします。",
+      "openTool": "ツールを開く",
+      "comingSoon": "近日公開",
+      "pro": "Pro",
+      "jump": "よく使うツール",
+      "categories": {
+        "organize": "PDFのページを結合、分割、並べ替えます。",
+        "convert": "PDFをほかの形式へ、またその逆へ変換します。",
+        "edit": "透かし、ページ番号、軽い編集を追加します。",
+        "optimize": "圧縮、修復、共有の準備をします。",
+        "security": "PDFを保護、ロック解除し、アクセスを管理します。",
+        "document": "Officeファイルと画像をPDFに変換します。",
+        "intelligence": "OCR、要約、文書内容の翻訳を行います。"
+      }
+    },
+    "metadata": {
+      "homeTitle": "結合・変換・圧縮ができるオンラインPDFツール",
+      "homeDescription": "結合、分割、圧縮、変換、OCR、保護まで使える無料のオンラインPDFツール。ツールを開き、ファイルをドロップして、結果をダウンロードします。基本的な利用にアカウントは不要です。ファイルは2時間後に期限切れになります。",
+      "pricingTitle": "料金",
+      "pricingDescription": "Web PDFツールのFreeとProの上限、およびDeveloper APIクレジットパックを比較できます。",
+      "faqTitle": "よくある質問",
+      "faqDescription": "ファイルの期限、プライバシー、1日の上限、Proプラン、公開APIについての回答です。",
+      "blogTitle": "ブログ",
+      "blogDescription": "PDFの変換、圧縮、結合、署名についての短いガイドです。",
+      "toolsTitle": "すべてのオンラインPDFツール",
+      "toolsDescription": "結合、変換、圧縮、編集、保護、OCRができる無料のオンラインPDFツールを探せます。ツールを開き、ファイルをアップロードして、結果をダウンロードします。",
+      "categoryTitles": {
+        "organize": "PDFの結合、分割、整理",
+        "convert": "PDF変換ツール",
+        "edit": "PDFをオンラインで編集",
+        "optimize": "PDFの圧縮と最適化",
+        "security": "PDFの保護とロック解除",
+        "document": "Officeと画像をPDFに変換",
+        "intelligence": "OCRとAIのPDFツール"
+      },
+      "developersTitle": "公開API",
+      "developersDescription": "APIキーでファイルをアップロードし、PDFツールを実行し、ジョブを確認して、結果をダウンロードします。",
+      "aboutTitle": "私たちについて",
+      "aboutDescription": "SoHappyPDFはツール中心のPDFプロダクトです。ファイルは意図的に一時的です。約2時間で、文書ライブラリではありません。",
+      "contactTitle": "お問い合わせ",
+      "contactDescription": "プロダクト、お支払い、APIに関するご質問は hello@sohappypdf.com へ。ファイルは添付しないでください。"
+    },
+    "contact": {
+      "title": "ご連絡ください。",
+      "description": "窓口はメールです。上限、ファイル、プランについては、よくある質問の方が早い場合があります。",
+      "emailLabel": "サポート",
+      "emailHint": "どの言語でもお書きください。平日にメールを確認しています。ここにファイルを送らないでください。ツールページからアップロードしてください。",
+      "emailCta": "メールを送る",
+      "topics": {
+        "title": "ご連絡の内容",
+        "description": "短い件名があると助かります。",
+        "items": {
+          "product": {
+            "title": "プロダクト",
+            "text": "うまく動かなかったツール、足りない形式、ワークフローへのご意見などです。"
+          },
+          "billing": {
+            "title": "お支払い",
+            "text": "請求書、支払い方法、解約は、ログイン後のPolarカスタマーポータルにあります。決済が進まない場合はメールください。"
+          },
+          "api": {
+            "title": "API",
+            "text": "キー、クレジットパック、公開v1ドキュメントです。Webサイトと同じツールです。"
+          }
+        }
+      },
+      "faq": {
+        "title": "まずよくある質問をご確認ください。",
+        "description": "ファイル、プライバシー、1日の上限、Pro、APIクレジットは、すでにそこに回答があります。",
+        "cta": "よくある質問を読む"
+      }
+    },
+    "about": {
+      "title": "訪れて、使い終えたら離れられるPDFプロダクト。",
+      "description": "SoHappyPDFには結合、変換、圧縮、保護、OCRのPDFツールと、同じ処理を実行する公開APIがあります。ファイルは意図的に一時的です。基本的な利用にアカウントは不要です。",
+      "story": {
+        "title": "私たちについて",
+        "lead": "すでに終わらせたい仕事がある人のためのPDFツールを作っています。これは文書ライブラリではなく、ファイルを置いておく場所でも、長居するためのダッシュボードでもありません。",
+        "body": "各ツールは独立したページです。開いて、ファイルをアップロードし、結果をダウンロードします。ログインしたアカウントでは最近のアクティビティ、お支払い、APIキーが使えます。匿名利用が許可されたツールはアカウントなしで使えます。一時ファイルは約2時間後に期限切れになります。それがプロダクトであり、欠けた機能ではありません。"
+      },
+      "beliefs": {
+        "title": "私たちの考え方",
+        "description": "プロダクトを設計するときに使うルールです。",
+        "items": {
+          "pages": {
+            "title": "作業はツールページが担当する",
+            "text": "日常的な文書アーカイブはありません。開いたページでファイルを仕上げて、次に進みます。"
+          },
+          "anonymous": {
+            "title": "アカウントは任意",
+            "text": "Freeの1日あたりの上限は、ログインの有無にかかわらず同じです。アカウントで履歴、お支払い、APIキーが使えます。"
+          },
+          "files": {
+            "title": "ファイルは一時的",
+            "text": "アップロードと結果はセッションまたはアカウントに限定され、約2時間後に期限切れになります。"
+          },
+          "api": {
+            "title": "APIは同じプロダクト",
+            "text": "公開v1 APIは同じツールを実行します。ツールは一式、表面は2つです。WebサイトとBearerトークンです。"
+          }
+        }
+      },
+      "questions": {
+        "title": "私たちについての質問",
+        "description": "上限、クレジット、支払いはよくある質問にあります。ここでの回答はプロダクトそのものについてです。",
+        "items": {
+          "what": {
+            "q": "SoHappyPDFとは何ですか？",
+            "a": "PDFツールと公開APIです。ファイルを処理し、出力をダウンロードします。文書の永続ライブラリは持ちません。"
+          },
+          "who": {
+            "q": "運営しているのは誰ですか？",
+            "a": "SoHappyPDFは、私たちが開発・運営する独立したプロダクトです。ファイルはクラウドで処理し、セッションまたはアカウントに限定し、短いタイマーで期限切れにします。コンプライアンス認証は主張しません。"
+          },
+          "why": {
+            "q": "なぜファイルは期限切れになりますか？",
+            "a": "日常のPDF作業が保管になってはいけません。短い保存期間はプロダクトをシンプルに保ち、作業後にファイルが残り続けるのを防ぎます。"
+          },
+          "start": {
+            "q": "どう始めますか？",
+            "a": "ツールを開き、ファイルをドロップし、処理が完了したらダウンロードします。履歴やAPIが必要なら、アカウントを作成してください。"
+          }
+        }
+      }
+    }
+  },
+  "legal": {
+    "eyebrow": "法務",
+    "updated": "最終更新 {date}",
+    "contactHint": "これらのページに関するご質問は",
+    "security": {
+      "nav": "セキュリティ",
+      "metaTitle": "セキュリティ",
+      "title": "実際に提供しているセキュリティ",
+      "description": "これらはプロダクト上の制御であり、第三者のコンプライアンス認証ではありません。ここにないバッジは主張しません。",
+      "sections": {
+        "honest": {
+          "title": "このページが扱わないこと",
+          "body": "SoHappyPDFは第三者の監査報告書やコンプライアンス認証を公開していません。このページは、現在プロダクトがファイル、アカウント、APIキーをどう扱うかを説明しています。"
+        },
+        "files": {
+          "title": "ファイルは範囲を限定し、一時的です",
+          "body": "アップロードと結果は共有ライブラリではなく、匿名セッションまたはログイン中のアカウントに紐づきます。ダウンロードには公開オブジェクトリンクではなく、有効期限の短い署名付きURLを使います。一時ファイルは約2時間後に期限切れになります。事前署名付きのアップロードURLとダウンロードURLは15分後に期限切れになります。"
+        },
+        "accounts": {
+          "title": "アカウントはサーバー側で認可されます",
+          "body": "アカウント領域ではメールとパスワードで認証します。ファイル、変換、お支払い、APIキーの操作はサーバー側で認可されます。クライアント側のチェックは権限の付与ではありません。"
+        },
+        "api": {
+          "title": "APIキーは秘密情報です",
+          "body": "プログラムからのアクセスにはBearer APIキーを使います。キーをURL、ブラウザのJavaScript、ソース管理に置かないでください。キーが漏れた場合は、アカウント領域で削除し、代わりのキーを作成してください。"
+        },
+        "report": {
+          "title": "セキュリティ上の問題を報告する",
+          "body": "SoHappyPDFに脆弱性を見つけた場合は、再現できる十分な詳細を添えてメールしてください。顧客のファイルは添付しないでください。APIキーやパスワードの送付は求めません。"
+        }
+      }
+    },
+    "privacy": {
+      "nav": "プライバシーポリシー",
+      "metaTitle": "プライバシーポリシー",
+      "title": "プライバシーポリシー",
+      "description": "SoHappyPDFがファイル、アカウント、支払い、Cookieをどう扱うか。プロダクトの実際の動きに合わせて書いています。",
+      "sections": {
+        "overview": {
+          "title": "収集する情報",
+          "body": "SoHappyPDFは、変換、結合、圧縮などの処理ができるよう、PDFと関連ファイルを処理します。ログイン、プランの請求、APIキー発行に必要なアカウントデータも保存します。ファイルやアカウントデータは販売しません。"
+        },
+        "files": {
+          "title": "アップロードしたファイル",
+          "body": "元ファイルと結果は、ツールを実行するためにプライベートなオブジェクトストレージに保存されます。セッションまたはアカウントに限定されます。一時ファイルは約2時間後に期限切れになり、その後削除されます。このプロダクトは文書アーカイブではありません。残しておきたい結果はダウンロードしてください。"
+        },
+        "accounts": {
+          "title": "アカウントデータ",
+          "body": "アカウントを作成すると、メール、提供された場合の名前、ハッシュ化したパスワード、セッションデータ、最近のアクティビティ、APIキーのメタデータを保存します。生のAPIキーは一度表示したあと保存しません。"
+        },
+        "payments": {
+          "title": "支払い",
+          "body": "決済、請求書、カードはPolarが扱います。SoHappyPDFは、Free、Pro、APIの利用権を適用するために必要なサブスクリプションとクレジットパックの状態を保存します。カード番号はSoHappyPDFに保存しません。"
+        },
+        "cookies": {
+          "title": "Cookie",
+          "body": "言語の記憶、匿名のツールセッション、ログイン維持のために、少数のファーストパーティCookieを使います。マーケティングページやアプリページで広告ピクセルや分析スクリプトは実行しません。詳細はCookieのページにあります。"
+        },
+        "retention": {
+          "title": "データの保存期間",
+          "body": "ツールのファイルは約2時間保管します。アカウント、お支払い、APIキーの記録は、アカウントを閉じるか、決済事業者や法令のために保管が必要な場合まで残ります。アカウント削除はメールで依頼できます。"
+        },
+        "processors": {
+          "title": "ほかにデータを見る者",
+          "body": "ファイルは当社のアプリケーション、ワーカー、プライベートなオブジェクトストレージを通ります。Polarが支払いを処理します。ホスティングとメール配信の事業者は、それらのサービス運営に必要な技術データを見ます。ファイルをほかのお客様と共有することはありません。"
+        },
+        "contact": {
+          "title": "プライバシーに関する質問",
+          "body": "hello@sohappypdf.com へメールしてください。そのアドレスにファイルを送らないでください。処理が必要ならツールページからアップロードしてください。"
+        }
+      }
+    },
+    "terms": {
+      "nav": "利用規約",
+      "metaTitle": "利用規約",
+      "title": "利用規約",
+      "description": "SoHappyPDFの公開ツール、アカウント、APIを使うためのルールです。処理後も必要なファイルは、手元にコピーを保管してください。",
+      "sections": {
+        "service": {
+          "title": "サービス",
+          "body": "SoHappyPDFはWeb PDFツールと公開APIを提供します。匿名利用が許可されたツールは、Freeの1日上限の範囲でアカウントなしでも使えます。ログインすると履歴、お支払い、APIキーが使えます。機能、上限、価格は変更することがあります。現行の上限は料金ページに掲載しています。"
+        },
+        "accounts": {
+          "title": "アカウント",
+          "body": "アカウントのメールとパスワード、作成したAPIキーはご自身の責任です。キーは秘密にしてください。漏れたキーは削除してください。サービスや本規約を濫用するアカウントは停止することがあります。"
+        },
+        "acceptableUse": {
+          "title": "利用上の禁止事項",
+          "body": "マルウェアのアップロード、プロダクトを壊そうとする行為、ほかの利用者に害を及ぼすスクレイピング、違法な内容への利用はしないでください。アップロードするファイルを処理する権利が必要です。濫用と判断したジョブは拒否または削除することがあります。"
+        },
+        "files": {
+          "title": "ファイルは期限切れになります",
+          "body": "アップロードと結果は、ライブラリではなく一時的な処理用アセットです。約2時間後に期限切れになります。ダウンロードリンクが使えなくなった場合は、ファイルを再度処理してください。バックアップサービスではありません。"
+        },
+        "billing": {
+          "title": "プランとPolar",
+          "body": "FreeとProはWebプランです。APIクレジットパックは別請求です。決済と解約は、ログイン後にPolarで行います。カードの更新、請求書のダウンロード、解約はPolarのポータルで行います。未使用のAPIクレジットはパック期間の終了時にリセットされます。"
+        },
+        "api": {
+          "title": "API",
+          "body": "公開v1 APIはWebサイトと同じツールを使います。レート制限とキー上限はWebプランに従います。APIクレジットはプログラムからの利用だけを計量します。APIキーをクライアント側のコードに置かないでください。"
+        },
+        "changes": {
+          "title": "変更",
+          "body": "本規約は更新することがあります。このページ上部の日付が現行版です。更新後も利用を続ける場合は、新しい規約に同意したものとみなします。同意しない場合は利用をやめ、Polarから解約してください。"
+        },
+        "contact": {
+          "title": "お問い合わせ",
+          "body": "プロダクト、お支払い、APIに関するご質問は hello@sohappypdf.com へ。そのメールボックスにファイルを添付しないでください。"
+        }
+      }
+    },
+    "cookies": {
+      "nav": "Cookie",
+      "metaTitle": "Cookie",
+      "title": "Cookie",
+      "description": "SoHappyPDFはサイト運営のために少数のファーストパーティCookieを使います。広告や分析のCookieは設定しません。",
+      "sections": {
+        "overview": {
+          "title": "Cookieの用途",
+          "body": "Cookieはブラウザが保存する小さなテキストファイルです。言語の記憶、匿名のツール利用をブラウザに限定すること、ログインセッションの維持にだけ使います。任意のトラッキングCookieは使わないため、Cookieバナーはありません。"
+        },
+        "language": {
+          "title": "言語",
+          "body": "フッターの言語切り替えで言語を選ぶと、NEXT_LOCALE という httpOnly Cookie が最大1年間設定され、サイトがその言語のまま表示されます。フッターの言語コントロールからいつでも変更できます。"
+        },
+        "session": {
+          "title": "セッション",
+          "body": "匿名でのツール利用では、ファイルを共有プールではなくブラウザに紐づけるため、spdf_anon というファーストパーティCookieを設定することがあります。ログインすると、アカウント領域を読み込むためのアカウントセッションCookieが設定されます。これらのCookieは httpOnly です。ログアウトするとアカウントセッションは消去されます。"
+        },
+        "payments": {
+          "title": "支払い",
+          "body": "決済はPolarで行われます。支払い中やサブスクリプション管理中に、Polarがそのドメインで独自のCookieを設定することがあります。それらはPolarのCookieであり、SoHappyPDFのマーケティングや分析のCookieではありません。"
+        },
+        "control": {
+          "title": "Cookieの管理方法",
+          "body": "ブラウザでCookieを削除できます。すべてのCookieをブロックすると、言語設定とログインは保持されません。上記の必要なCookieは、それらの機能のために必要です。"
+        }
+      }
+    }
+  },
+  "blog": {
+    "title": "最新の投稿",
+    "pageTitle": "ブログ",
+    "description": "クリックは少なく、文書はきれいに。短いメモです。",
+    "readAll": "すべて読む",
+    "back": "すべての投稿",
+    "openTool": "関連ツールを開く"
+  },
+  "developerDocs": {
+    "eyebrow": "公開v1 API",
+    "title": "同じツールの上に構築する",
+    "description": "ブラウザの各ツールは変換タイプです。APIキーを作成し、事前署名付きPUTでアップロードしてから、そのタイプで POST /conversions します。ジョブが完了するまで確認し、出力ファイルをダウンロードします。",
+    "createKey": "APIキーを作成",
+    "viewPricing": "Developerの料金",
+    "baseUrl": "ベースURL",
+    "openapi": "OpenAPI",
+    "codeLabel": "例",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "toc": {
+      "label": "このページの内容",
+      "quickstart": "クイックスタート",
+      "auth": "認証",
+      "files": "ファイル",
+      "conversions": "変換",
+      "tools": "ツール",
+      "errors": "エラー",
+      "limits": "上限"
+    },
+    "quickstart": {
+      "title": "クイックスタート",
+      "step1": "アカウント → API でキーを作成します。表示は一度だけです。",
+      "step2": "すべてのリクエストに Authorization: Bearer YOUR_API_KEY を付けます。キーをURLやブラウザのコードに置かないでください。",
+      "step3": "POST /files/upload のあと、バイトを upload.url に PUT し、POST /files/'{id}'/complete します。",
+      "step4": "sourceFileId、targetFormat、type を指定して POST /conversions します。type にはツールIDを使います。",
+      "step5": "completed になるまで2秒ごとに GET /conversions/'{id}' を確認し、その後 POST /files/'{outputFileId}'/download します。",
+      "uploadLabel": "1. アップロードを作成",
+      "putLabel": "2. ファイルのバイトをPUT",
+      "completeLabel": "3. アップロードを完了",
+      "convertLabel": "4. 変換を作成"
+    },
+    "auth": {
+      "title": "認証",
+      "description": "プログラムからのアクセスにはAPIキーを使います。ダッシュボードのCookieはWebアプリ用であり、連携用ではありません。",
+      "ruleHeader": "キーは Authorization ヘッダーにだけ送ってください。",
+      "ruleSecret": "キーは秘密情報として扱ってください。コミットしないでください。",
+      "ruleBrowser": "フロントエンドのJavaScriptにキーを含めないでください。",
+      "ruleRevoke": "漏れたキーはダッシュボードで削除し、代わりのキーを作成してください。"
+    },
+    "files": {
+      "title": "ファイル",
+      "description": "アップロードは事前署名付きです。APIはファイルのバイトを保持しません。変換を作成する前にアップロードを完了してください。",
+      "expiry": "一時ファイルは約2時間後に期限切れになります。事前署名付きのアップロードURLとダウンロードURLは15分後に期限切れになります。"
+    },
+    "conversions": {
+      "title": "変換",
+      "description": "POST /conversions は 201 を返し、ワーカーのジョブをキューに入れます。type フィールドはツールIDです。オプションは options に入れます。追加の入力ファイルはファイルのバイト内ではなく additionalFileIds に入れます。",
+      "pollHint": "status が {pending} のあいだ確認を続けます。{done} で止めてください。完了すると conversion.outputFileId が設定されます。",
+      "idempotency": "作成時に Idempotency-Key（1〜128文字）を送ってください。同じ所有者と同じキーでの再送は元のジョブを返し、クレジットを再度消費しません。"
+    },
+    "tools": {
+      "title": "ツール",
+      "description": "変換タイプにはツールIDを使います。以下のJSONは POST /conversions の本文です。クレジットはカタログから決まります。予定中のツールは公開まで省略します。",
+      "search": "ツールを検索",
+      "allCategories": "すべて",
+      "resultCount": "{count, plural, one {# 件のツール} other {# 件のツール}}",
+      "tryInBrowser": "ブラウザで試す",
+      "pro": "Pro",
+      "type": "type",
+      "input": "入力",
+      "output": "出力",
+      "credits": "クレジット",
+      "apiCredits": "APIクレジット {count}",
+      "aiCredits": "AIクレジット {count}",
+      "files": "ファイル",
+      "filesValue": "{count, plural, one {# ファイル} other {# ファイル}}",
+      "extraFiles": "追加ファイル",
+      "extra": {
+        "none": "元ファイルのみ",
+        "required": "additionalFileIds が必須",
+        "optional": "additionalFileIds は任意"
+      },
+      "options": "options",
+      "required": "必須",
+      "optional": "任意",
+      "exampleLabel": "POST /conversions の本文"
+    },
+    "errors": {
+      "title": "エラー",
+      "description": "すべてのエラーはこのエンベロープを使います。存在しないファイルと変換はどちらも NOT_FOUND を返します。期限切れの所有ファイルは 404 ではなく FILE_EXPIRED を返します。",
+      "code": "コード",
+      "status": "HTTP",
+      "retry": "429 には Retry-After、RateLimit-Limit、RateLimit-Remaining、RateLimit-Reset が含まれます。待ってから再試行してください。短い間隔で繰り返さないでください。"
+    },
+    "limits": {
+      "title": "上限とクレジット",
+      "description": "APIクレジットはWebツールクレジットとは別です。レート制限はWebプランに従います。上限に達すると 403 PLAN_LIMIT_REACHED を返します。",
+      "free": "Free: 変換 {ops} 回/日、25 MBのファイル、APIリクエスト {rpm} 回/分。",
+      "pro": "Pro: 変換回数無制限、1 GBのファイル、APIリクエスト {rpm} 回/分。",
+      "credits": "各変換はツールのAPIクレジット費用を消費します。アカウントには毎月 APIクレジット {count} が含まれます。追加はお支払いからDeveloperパックを購入してください。",
+      "webhooks": "Webhookはありません。クライアントはポーリングする必要があります。"
+    },
+    "notes": {
+      "pagesOneIndexed": "ページ番号は1始まりです。",
+      "extraFilesTopLevel": "追加のアップロードは、各ファイルの完了後に変換の additionalFileIds として渡してください。",
+      "explicitType": "type は明示的に送ってください。APIはこのツールを形式だけから推測しません。",
+      "rangesInclusive": "範囲の開始と終了は両端を含みます。",
+      "ocrLanguage": "language は eng や tur のようなOCR言語コードです。",
+      "protectSecret": "パスワードをログに残さないでください。リクエストが捕捉された場合はローテーションしてください。",
+      "signVisualOnly": "これは見た目のスタンプであり、暗号による電子署名ではありません。",
+      "compareSecondFile": "両方のPDFをアップロードし、2つ目のIDを additionalFileIds に渡してください。"
+    }
+  },
+  "app": {
+    "title": "アプリケーション",
+    "authenticated": "認証済み",
+    "signedInAs": "{email} でログイン中",
+    "logout": "ログアウト",
+    "loggingOut": "ログアウトしています…"
+  },
+  "appShell": {
+    "brand": "SoHappyPDF",
+    "navigation": "アカウント",
+    "openNavigation": "ナビゲーションを開く",
+    "closeNavigation": "ナビゲーションを閉じる",
+    "breadcrumb": "パンくず",
+    "userMenu": "アカウントメニュー",
+    "accountNav": "アカウントページ",
+    "logout": "ログアウト",
+    "loggingOut": "ログアウトしています…",
+    "nav": {
+      "overview": "概要",
+      "usage": "利用状況",
+      "plan": "プラン",
+      "activity": "履歴",
+      "billing": "お支払い",
+      "apiKeys": "API",
+      "settings": "設定"
+    },
+    "pages": {
+      "overview": {
+        "title": "概要",
+        "description": "プランとクレジットを確認してから、PDFツールに戻ります。",
+        "planTitle": "ご利用中のプラン",
+        "creditsSummary": "Webクレジット {limit} のうち {used} を使用（残り {remaining}）。",
+        "manageBilling": "お支払いを管理",
+        "upgrade": "アップグレード",
+        "toolsTitle": "PDFツール",
+        "toolsDescription": "各ツールページで直接ファイルを処理します。一時的な結果は約2時間後に期限切れになります。",
+        "chooseTool": "ツールを選ぶ",
+        "viewActivity": "履歴を見る",
+        "viewUsage": "利用状況を見る",
+        "recentTitle": "最近のアクティビティ",
+        "operations": "月間の処理",
+        "fileSize": "最大ファイルサイズ",
+        "apiStatus": "APIクレジット",
+        "apiCreditsSummary": "{limit} のうち残り {remaining}"
+      },
+      "plan": {
+        "title": "プラン",
+        "description": "Webプランがクレジット、ファイルサイズ、月間の処理を決めます。お支払いは別に管理します。",
+        "current": "現在のプラン",
+        "noSubscription": "有料のWebサブスクリプションはありません",
+        "upgrade": "Proにアップグレード",
+        "manageBilling": "お支払いを管理",
+        "fileSize": "ファイルあたり最大 {size}",
+        "operations": "今月の操作 {limit} のうち {used}",
+        "billingHint": "支払い方法と請求書はお支払いにあります。"
+      },
+      "usage": {
+        "title": "利用状況",
+        "description": "Webクレジットは、ログイン後のツール利用の主な計量です。",
+        "webCreditsTitle": "Webクレジット",
+        "billingHint": "容量がさらに必要ですか？",
+        "openBilling": "お支払いを開く"
+      },
+      "activity": {
+        "title": "履歴",
+        "description": "アカウントの実行履歴です。一時ファイルは約2時間後に期限切れになり、期限後はダウンロードできません。"
+      },
+      "billing": {
+        "title": "お支払い",
+        "description": "プランと支払い情報を管理します。"
+      },
+      "apiKeys": {
+        "title": "API",
+        "description": "プログラムからのアクセス用にキーを作成・削除します。"
+      },
+      "settings": {
+        "title": "設定",
+        "description": "アカウントの設定を管理します。"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "ログイン",
+      "description": "上限の引き上げ、最近のアクティビティ、お支払い、APIキーのためにSoHappyPDFにログインします。",
+      "email": "メールアドレス",
+      "emailPlaceholder": "you@company.com",
+      "password": "パスワード",
+      "passwordPlaceholder": "••••••••",
+      "submit": "ログイン",
+      "submitting": "ログインしています…",
+      "switchHint": "アカウントをお持ちでないですか？",
+      "registerLink": "アカウントを作成",
+      "forgotLink": "パスワードをお忘れですか？"
+    },
+    "register": {
+      "title": "アカウントを作成",
+      "description": "上限の引き上げ、履歴、お支払い、API利用のために、無料のSoHappyPDFアカウントを作成します。",
+      "name": "名前",
+      "namePlaceholder": "Ada Lovelace",
+      "email": "メールアドレス",
+      "emailPlaceholder": "you@company.com",
+      "password": "パスワード",
+      "passwordPlaceholder": "8文字以上",
+      "confirmPassword": "パスワードの確認",
+      "submit": "アカウントを作成",
+      "submitting": "アカウントを作成しています…",
+      "switchHint": "すでにアカウントをお持ちですか？",
+      "loginLink": "ログイン"
+    },
+    "forgotPassword": {
+      "title": "パスワードをお忘れの場合",
+      "description": "メールアドレスを入力してください。アカウントがある場合は、リセット手順をお送りします。",
+      "email": "メールアドレス",
+      "emailPlaceholder": "you@company.com",
+      "submit": "リセット手順を送る",
+      "submitting": "送信しています…",
+      "success": "そのメールアドレスのアカウントがある場合、パスワードリセット手順を送信しました。",
+      "loginLink": "ログインに戻る"
+    },
+    "resetPassword": {
+      "title": "パスワードをリセット",
+      "description": "アカウントの新しいパスワードを選んでください。",
+      "password": "新しいパスワード",
+      "passwordPlaceholder": "8文字以上",
+      "confirmPassword": "新しいパスワードの確認",
+      "submit": "パスワードを更新",
+      "submitting": "パスワードを更新しています…",
+      "updated": "パスワードを更新しました。続けてログインしてください。",
+      "invalidToken": "このリセットリンクは無効か、期限切れです。新しいリンクをリクエストしてください。",
+      "loginLink": "ログインに戻る"
+    },
+    "fields": {
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを隠す"
+    },
+    "validation": {
+      "required": "この項目は必須です。",
+      "invalidEmail": "有効なメールアドレスを入力してください。",
+      "passwordMin": "パスワードは8文字以上にしてください。",
+      "passwordMax": "パスワードは128文字以下にしてください。",
+      "nameMax": "名前は80文字以下にしてください。",
+      "passwordMismatch": "パスワードが一致しません。"
+    },
+    "errors": {
+      "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+      "existingAccount": "このメールアドレスのアカウントはすでに存在します。",
+      "invalidEmail": "有効なメールアドレスを入力してください。",
+      "weakPassword": "より強いパスワードを選んでください。",
+      "expiredResetToken": "このリセットリンクは無効か、期限切れです。",
+      "currentPasswordIncorrect": "現在のパスワードが正しくありません。",
+      "networkFailure": "リクエストを完了できませんでした。もう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    },
+    "shell": {
+      "brand": "SoHappyPDF",
+      "home": "ホーム",
+      "login": {
+        "eyebrow": "おかえりなさい",
+        "title": "中断したところから続けられます。",
+        "text": "最近の処理、お支払い、APIキーはアカウントで待っています。"
+      },
+      "register": {
+        "eyebrow": "無料ではじめる",
+        "title": "アカウントを開いて、笑顔で仕上げる。",
+        "text": "基本ツールはログインなしで使えます。アカウントを作るとクレジット、履歴、API利用が加わります。"
+      },
+      "reset": {
+        "eyebrow": "アクセスをリセット",
+        "title": "アカウントに戻る。",
+        "text": "そのアドレスにアカウントがある場合、リセット手順をメールします。"
+      },
+      "perks": {
+        "private": "ファイルはあなたに限定されます",
+        "password": "メールとパスワードでログイン",
+        "start": "有料プランなしではじめられる"
+      }
+    }
+  },
+  "errors": {
+    "notFound": "このページは見つかりませんでした。",
+    "notFoundCode": "404",
+    "notFoundTitle": "このページは見つかりません。",
+    "notFoundDescription": "結合や分割されたか、もともと存在しなかったのかもしれません。ホームから続けられます。",
+    "notFoundHome": "ホームに戻る",
+    "notFoundTools": "ツールを見る",
+    "generic": "問題が発生しました。",
+    "genericCode": "エラー",
+    "genericTitle": "問題が発生しました。",
+    "genericDescription": "ページで予期しないエラーが起きました。もう一度試すか、ホームに戻ってください。",
+    "genericRetry": "もう一度試す",
+    "genericHome": "ホームに戻る",
+    "loading": "読み込み中"
+  },
+  "files": {
+    "title": "ファイル",
+    "description": "対応ファイルをアップロードします。保存後に変換が使えるようになります。",
+    "actions": {
+      "download": "ダウンロード",
+      "downloading": "ダウンロードを準備しています…",
+      "delete": "削除",
+      "deleteNamed": "{filename} を削除"
+    },
+    "formats": {
+      "pdf": "PDF",
+      "doc": "DOC",
+      "docx": "DOCX",
+      "xls": "XLS",
+      "xlsx": "XLSX",
+      "ppt": "PPT",
+      "pptx": "PPTX",
+      "jpg": "JPG",
+      "png": "PNG"
+    },
+    "delete": {
+      "title": "ファイルを削除",
+      "description": "これにより {filename} がアカウントから完全に削除されます。",
+      "confirm": "ファイルを削除",
+      "deleting": "削除しています…",
+      "cancel": "キャンセル",
+      "success": "ファイルを削除しました。"
+    },
+    "upload": {
+      "title": "アップロード",
+      "description": "一度に1ファイルを選んでください。ファイルはストレージへ直接送られます。",
+      "dropzoneTitle": "ファイルを選ぶ",
+      "dropzoneHint": "クリックして参照するか、ドラッグ＆ドロップします。PDF、Word、Excel、PowerPoint、JPG、PNGに対応しています。",
+      "preparing": "アップロードを準備しています…",
+      "uploading": "アップロード中",
+      "finalizing": "アップロードを完了しています…",
+      "complete": "アップロード完了",
+      "cancelled": "アップロードをキャンセルしました",
+      "percent": "{value}%",
+      "cancel": "キャンセル",
+      "retry": "再試行",
+      "chooseAnother": "別のファイルを選ぶ"
+    },
+    "list": {
+      "title": "アップロード済みファイル",
+      "description": "アカウントにすでに保存されているファイルです。",
+      "loading": "ファイルを読み込んでいます…",
+      "empty": "まだファイルはありません。",
+      "emptyHint": "最初のファイルをアップロードしてはじめましょう。",
+      "uploadCta": "ファイルをアップロード",
+      "retry": "もう一度試す",
+      "unknownType": "ファイル",
+      "created": "追加日 {date}",
+      "expires": "期限 {date}",
+      "firstPage": "新しい順",
+      "nextPage": "以前のファイル",
+      "status": {
+        "pending": "待機中",
+        "uploaded": "アップロード済み",
+        "processing": "処理中",
+        "completed": "完了",
+        "failed": "失敗",
+        "deleted": "削除済み"
+      }
+    },
+    "status": {
+      "idle": "ファイルをアップロードできます。",
+      "selecting": "ファイル選択を開きました。",
+      "preparing": "アップロードを準備しています。",
+      "uploading": "ファイルをアップロードしています。",
+      "finalizing": "アップロードを完了しています。",
+      "completed": "アップロードが完了しました。",
+      "failed": "アップロードに失敗しました。",
+      "cancelled": "アップロードをキャンセルしました。"
+    },
+    "errors": {
+      "missingFile": "アップロードするファイルを選んでください。",
+      "multipleFiles": "一度に1ファイルずつアップロードしてください。",
+      "invalidFilename": "そのファイル名は使えません。",
+      "unsupportedType": "そのファイル形式には対応していません。",
+      "emptyFile": "選択したファイルは空です。",
+      "fileTooLarge": "ファイルが {maxSize} を超えています。",
+      "storageLimitReached": "このアップロードはストレージ上限を超えます。",
+      "expiredUpload": "アップロードセッションの期限が切れました。もう一度お試しください。",
+      "objectNotUploaded": "ファイルを確認できませんでした。もう一度お試しください。",
+      "fileNotFound": "そのファイルはもう利用できません。",
+      "unauthorized": "ファイルを管理するには、もう一度ログインしてください。",
+      "rateLimited": "リクエストが多すぎます。少し待ってからもう一度お試しください。",
+      "networkFailure": "リクエストを完了できませんでした。もう一度お試しください。",
+      "cancelled": "アップロードをキャンセルしました。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    }
+  },
+  "conversions": {
+    "actions": {
+      "convert": "変換"
+    },
+    "history": {
+      "title": "履歴",
+      "description": "ログイン中に実行したジョブです。一時ファイルは約2時間後に期限切れになり、期限後はダウンロードできません。",
+      "loading": "アクティビティを読み込んでいます…",
+      "empty": "最近のアクティビティはまだありません。",
+      "emptyHint": "PDFツールを開き、ファイルを処理すると、結果がここに表示されます。",
+      "emptyFiltered": "このフィルターに一致するアクティビティはありません。",
+      "emptyFilteredHint": "別のステータスを試すか、すべてのアクティビティを表示してください。",
+      "browseTools": "ツールを見る",
+      "openFiles": "ツールを見る",
+      "retry": "もう一度試す",
+      "view": "表示",
+      "unnamedSource": "元ファイル",
+      "summary": "{source} → {target}",
+      "created": "開始 {date}",
+      "completed": "完了 {date}",
+      "expiredHint": "この結果は期限切れのため、ダウンロードできません。",
+      "firstPage": "新しい順",
+      "nextPage": "以前のアクティビティ",
+      "age": {
+        "justNow": "たった今",
+        "minutes": "{count}分前",
+        "hours": "{count}時間前"
+      },
+      "expiresIn": {
+        "minutes": "残り{count}分で期限切れ",
+        "hours": "残り{count}時間で期限切れ"
+      },
+      "filters": {
+        "label": "アクティビティを絞り込む",
+        "all": "すべて",
+        "queued": "待機中",
+        "processing": "処理中",
+        "completed": "準備完了",
+        "failed": "失敗"
+      }
+    },
+    "form": {
+      "title": "変換を作成",
+      "description": "出力形式を選びます。変換はバックグラウンドで実行されます。",
+      "close": "変換フォームを閉じる",
+      "sourceFile": "ファイル: {filename}",
+      "targetFormat": "出力形式",
+      "conversionType": "変換タイプ",
+      "conversionTypeHint": "この出力形式は、複数の方法で作成できます。",
+      "submit": "変換を作成",
+      "submitting": "変換を作成しています…",
+      "formats": {
+        "pdf": "PDF",
+        "doc": "DOC",
+        "docx": "DOCX",
+        "xls": "XLS",
+        "xlsx": "XLSX",
+        "ppt": "PPT",
+        "pptx": "PPTX",
+        "jpg": "JPG",
+        "png": "PNG",
+        "txt": "TXT"
+      },
+      "types": {
+        "pdf-to-word": "PDFをWordに",
+        "pdf-to-excel": "PDFをExcelに",
+        "pdf-to-powerpoint": "PDFをPowerPointに",
+        "word-to-pdf": "WordをPDFに",
+        "excel-to-pdf": "ExcelをPDFに",
+        "powerpoint-to-pdf": "PowerPointをPDFに",
+        "pdf-to-jpg": "PDFをJPGに",
+        "pdf-to-png": "PDFをPNGに",
+        "pdf-to-txt": "PDFをテキストに",
+        "jpg-to-pdf": "JPGをPDFに",
+        "png-to-pdf": "PNGをPDFに",
+        "merge-pdf": "PDFを結合",
+        "split-pdf": "PDFを分割",
+        "extract-pages": "ページを抽出",
+        "compress-pdf": "PDFを圧縮",
+        "rotate-pdf": "PDFを回転",
+        "protect-pdf": "PDFを保護",
+        "unlock-pdf": "PDFのロックを解除",
+        "ocr-pdf": "PDFをOCR",
+        "ocr-image": "画像をOCR"
+      }
+    },
+    "validation": {
+      "invalidFile": "このファイルは変換できません。",
+      "targetRequired": "出力形式を選んでください。",
+      "typeRequired": "変換タイプを選んでください。",
+      "unsupportedConversion": "その変換には対応していません。",
+      "invalidTargetFormat": "その出力形式には対応していません。"
+    },
+    "errors": {
+      "invalidFile": "このファイルは変換できません。",
+      "targetRequired": "出力形式を選んでください。",
+      "typeRequired": "変換タイプを選んでください。",
+      "unsupportedConversion": "その変換には対応していません。",
+      "invalidTargetFormat": "その出力形式には対応していません。",
+      "notFound": "この変換は見つかりませんでした。",
+      "sourceUnavailable": "このファイルはまだ変換できる状態ではありません。",
+      "conflict": "この変換リクエストを完了できませんでした。",
+      "unauthorized": "変換を作成するには、もう一度ログインしてください。",
+      "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+      "planLimitReached": "月間の上限に達しました。",
+      "networkFailure": "リクエストを完了できませんでした。もう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    },
+    "status": {
+      "title": "アクティビティの詳細",
+      "description": "このツール実行のステータスです。期限切れの結果はダウンロードできません。",
+      "loading": "アクティビティを読み込んでいます…",
+      "pending": "準備中",
+      "queued": "待機中",
+      "processing": "処理中",
+      "completed": "準備完了",
+      "failed": "失敗",
+      "cancelled": "キャンセル済み",
+      "expired": "期限切れ",
+      "complete": "ダウンロードできます",
+      "inProgressHint": "処理はバックグラウンドで続きます。このページは自動で更新されます。",
+      "expiredHint": "この実行の一時ファイルは期限切れのため、ダウンロードできません。",
+      "summary": "{type} → {target}",
+      "started": "開始",
+      "output": "出力",
+      "expires": "期限",
+      "openTool": "ツールを開く",
+      "backToHistory": "最近のアクティビティに戻る",
+      "browseTools": "ツールを見る",
+      "backToFiles": "ツールを見る"
+    },
+    "failure": {
+      "unsupported_conversion": "その変換には対応していません。",
+      "invalid_source_format": "元ファイルの形式は変換できません。",
+      "invalid_target_format": "このファイルに対して出力形式が正しくありません。",
+      "invalid_options": "変換設定が正しくありません。",
+      "source_file_unavailable": "元ファイルはもう利用できません。",
+      "output_file_unavailable": "変換後のファイルは利用できません。",
+      "processing_failed": "変換を完了できませんでした。",
+      "cancelled": "変換はキャンセルされました。"
+    }
+  },
+  "apiKeys": {
+    "title": "API",
+    "description": "SoHappyPDF APIを呼び出すキーを作成します。生のキーは一度だけ表示されます。",
+    "actions": {
+      "create": "APIキーを作成",
+      "delete": "削除",
+      "deleteNamed": "{name} を削除"
+    },
+    "list": {
+      "title": "あなたのAPIキー",
+      "description": "有効なキーでAPIリクエストを認証できます。キーを削除するとすぐに停止します。",
+      "loading": "APIキーを読み込んでいます…",
+      "empty": "まだAPIキーはありません。",
+      "emptyHint": "APIキーを作成して、SoHappyPDFをプログラムから使い始めましょう。",
+      "createCta": "APIキーを作成",
+      "retry": "もう一度試す",
+      "created": "作成日 {date}",
+      "lastUsed": "最終使用 {date}",
+      "neverUsed": "未使用",
+      "expires": "期限 {date}",
+      "status": {
+        "active": "有効",
+        "revoked": "取り消済み",
+        "expired": "期限切れ"
+      }
+    },
+    "create": {
+      "title": "APIキーを作成",
+      "description": "あとで見分けられる名前を付けてください。",
+      "close": "APIキー作成を閉じる",
+      "name": "キー名",
+      "namePlaceholder": "Production",
+      "submit": "APIキーを作成",
+      "submitting": "キーを作成しています…"
+    },
+    "created": {
+      "title": "APIキーを作成しました",
+      "warning": "このキーは一度だけ表示されます。",
+      "store": "今すぐコピーし、安全に保管してください。あとから復元できません。",
+      "label": "{name} の生のキー",
+      "copy": "コピー",
+      "copied": "APIキーをコピーしました",
+      "copyFailed": "キーをコピーできませんでした。選択して手動でコピーしてください。",
+      "done": "完了",
+      "close": "作成したAPIキーを閉じる"
+    },
+    "delete": {
+      "title": "APIキーを削除",
+      "description": "{name} はすぐに使えなくなります。この操作は取り消せません。",
+      "confirm": "キーを削除",
+      "deleting": "削除しています…",
+      "cancel": "キャンセル",
+      "success": "APIキーを削除しました。"
+    },
+    "usage": {
+      "title": "APIキーの使い方",
+      "description": "キーは Authorization ヘッダーで送ってください。クエリパラメータやブラウザのコードに置かないでください。",
+      "baseUrlLabel": "APIベースURL:",
+      "rotateHint": "キーは秘密情報として扱ってください。漏れた場合はすぐに削除してください。",
+      "docsLink": "APIドキュメントを開く",
+      "statusTitle": "APIの利用状況",
+      "statusDescription": "APIクレジットはWebツールクレジットとは別です。上限はWebプランに従います。",
+      "loading": "APIの利用状況を読み込んでいます…",
+      "credits": "APIクレジット",
+      "rate": "APIリクエスト",
+      "rateValue": "{count} / 分",
+      "keys": "APIキー",
+      "usageWithoutTool": "APIクレジット",
+      "ledger": {
+        "grant": "+{amount} 追加",
+        "consume": "{amount} 使用",
+        "refund": "{amount} 返還",
+        "adjustment": "{amount} 調整"
+      }
+    },
+    "validation": {
+      "nameRequired": "キー名を入力してください。",
+      "nameTooLong": "80文字以下にしてください。",
+      "nameInvalid": "そのキー名は使えません。"
+    },
+    "errors": {
+      "invalidName": "そのキー名は使えません。",
+      "unauthorized": "APIキーを管理するには、もう一度ログインしてください。",
+      "forbidden": "APIキーでほかのAPIキーを管理することはできません。",
+      "notFound": "そのAPIキーは見つかりませんでした。",
+      "rateLimited": "リクエストが多すぎます。少し待ってからもう一度お試しください。",
+      "apiKeyLimitReached": "プランのAPIキー上限に達しました。",
+      "networkFailure": "リクエストを完了できませんでした。もう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "description": "名前、メールアドレス、パスワード、言語を更新します。",
+    "profile": {
+      "title": "プロフィール",
+      "description": "メニューでのアカウントの表示です。メールアドレスはログインに使います。",
+      "name": "名前",
+      "email": "メールアドレス",
+      "submit": "プロフィールを保存",
+      "submitting": "保存しています…",
+      "updated": "プロフィールを更新しました。"
+    },
+    "password": {
+      "title": "パスワード",
+      "description": "新しいパスワードを選んでください。ほかのセッションはログアウトされます。",
+      "current": "現在のパスワード",
+      "newPassword": "新しいパスワード",
+      "confirm": "新しいパスワードの確認",
+      "submit": "パスワードを更新",
+      "submitting": "更新しています…",
+      "updated": "パスワードを更新しました。"
+    },
+    "language": {
+      "title": "言語",
+      "description": "サイト、ツール、アカウントページの言語を選びます。"
+    },
+    "session": {
+      "title": "セッション",
+      "description": "このブラウザからログアウトします。同じメールアドレスで再度ログインできます。",
+      "logout": "ログアウト"
+    }
+  },
+  "billing": {
+    "title": "お支払い",
+    "description": "Webツールと開発者向けAPIは別請求です。決済、請求書、カードはPolarが扱います。",
+    "usage": "利用状況",
+    "upgrade": "アップグレード",
+    "upgradeToPro": "Web Pro · {price}/月",
+    "upgrading": "Polarへ移動しています…",
+    "perMonth": "/月",
+    "perYear": "/年",
+    "proPrice": "Proは {price}/月",
+    "manage": "Polarを開く",
+    "openingPortal": "Polarを開いています…",
+    "portalHeading": "支払いと請求書",
+    "portalHint": "カードの更新、請求書のダウンロード、サブスクリプションの解約はPolarで行います。",
+    "providerHint": "決済、請求書、カードはPolarで管理します。",
+    "webPlanHint": "これはPDFツールのWebプランです。APIパックは別です。",
+    "openApiPack": "API: {pack}",
+    "checkoutIntervalHint": "Polarの決済ページで月額または年額を選べます。",
+    "checkoutYearlyHint": "年額はPolarの決済で {price} です。",
+    "cycle": {
+      "label": "請求間隔",
+      "monthly": "月額",
+      "yearly": "年額",
+      "yearlyDiscount": "-{percent}%"
+    },
+    "activating": "Polarでの購入を確認しています…",
+    "activated": "Polarでの購入が有効になりました。",
+    "unconfirmed": "Polarはこの購入をまだ確認していません。更新してもう一度確認してください。",
+    "refreshStatus": "更新",
+    "includedOperations": "毎日 {count} 回の操作が含まれます。",
+    "cancelsOn": "解約が予定されています。Proは {date} まで続きます。",
+    "renewsOn": "{date} に更新されます。",
+    "creditsResetOn": "月次のツールクレジットは {date} にリセットされます。",
+    "remainingLabel": "残り",
+    "remaining": "残り {count}",
+    "usedOfLimit": "{limit} のうち {used} を使用",
+    "unlimited": "無制限",
+    "operationsResetDaily": "1日の操作回数は 00:00 UTC にリセットされます。",
+    "backToSettings": "設定に戻る",
+    "period": "{start} – {end}",
+    "sections": {
+      "web": "Webプラン",
+      "api": "API"
+    },
+    "api": {
+      "title": "API",
+      "includedTitle": "含まれるクレジット",
+      "includedHint": "毎月 APIクレジット {count} が含まれます。",
+      "credits": "APIクレジット",
+      "plans": "APIパック",
+      "packCredits": "{count} クレジット / 月",
+      "packPrice": "{price}/月",
+      "packYearlyPrice": "{price}/年",
+      "subscribe": "申し込む",
+      "switch": "切り替える",
+      "switchTo": "{pack} に切り替えますか？",
+      "switchConfirmBody": "Polarは現在のAPIサブスクリプションを {pack} に更新し、登録済みのカードに請求します。表示価格は {price}/月です。差額はこの期間で日割りされます。",
+      "switchConfirm": "切り替えを確定",
+      "switchCancel": "キャンセル",
+      "switchClose": "切り替え確認を閉じる",
+      "current": "現在のパック",
+      "webPlanHint": "これはAPIパックです。Webプランは別です。",
+      "openWebPlan": "Web: {plan}",
+      "recentUsage": "最近のAPI利用",
+      "recentUsageHint": "この一覧は今の期間だけです。月が終わると最初からになります。未使用のクレジットは翌月に繰り越しません。",
+      "noUsage": "この期間のAPIクレジットの動きはありません。",
+      "usageWithoutTool": "APIクレジット",
+      "resetLabel": "リセット",
+      "creditsResetOn": "未使用のAPIクレジットは {date} にリセットされます。",
+      "showMore": "もっと見る",
+      "showLess": "少なく表示",
+      "history": {
+        "reset": "月次リセット",
+        "pack": "APIパック",
+        "grant": "APIクレジット",
+        "consume": "APIクレジット",
+        "refund": "APIクレジット"
+      },
+      "ledger": {
+        "grant": "+{amount} 追加",
+        "consume": "{amount} 使用",
+        "refund": "{amount} 返還",
+        "adjustment": "{amount} 調整"
+      },
+      "documentation": "APIドキュメント",
+      "manageKeys": "APIキー"
+    },
+    "apiProducts": {
+      "starter": "API Starter",
+      "growth": "API Growth",
+      "scale": "API Scale"
+    },
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "subscriptionStatus": {
+      "incomplete": "未完了",
+      "incomplete_expired": "期限切れ",
+      "trialing": "トライアル中",
+      "active": "サブスクリプション有効",
+      "past_due": "支払い遅延",
+      "canceled": "サブスクリプション解約済み",
+      "unpaid": "未払い",
+      "revoked": "取り消し済み",
+      "paused": "一時停止"
+    },
+    "usageItems": {
+      "webCredits": "Webツールクレジット",
+      "operations": "本日の操作",
+      "fileSize": "最大ファイルサイズ",
+      "conversions": "今月の変換",
+      "storage": "ストレージ",
+      "apiKeys": "APIキー"
+    },
+    "errors": {
+      "unauthorized": "お支払いを管理するには、もう一度ログインしてください。",
+      "conflict": "ご利用中のプランには、すでにこのサブスクリプションが含まれています。",
+      "configuration": "お支払いはまだ設定されていません。",
+      "notFound": "Polarはこのアカウントの請求ポータルを開けませんでした。もう一度お試しください。",
+      "portalUnavailable": "Polarは請求ポータルを開けませんでした。もう一度お試しください。",
+      "rateLimited": "リクエストが多すぎます。少し待ってからもう一度お試しください。",
+      "networkFailure": "リクエストを完了できませんでした。もう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    }
+  },
+  "publicTools": {
+    "metaTitle": "{tool} - SoHappyPDF",
+    "description": "ファイルをアップロードし、クラウドで処理して、結果をダウンロードします。基本的な処理にアカウントは不要です。",
+    "descriptionAuthenticated": "このツールは、処理を始める前にログインしたアカウントが必要です。",
+    "selectFile": "ファイルを選ぶ",
+    "selectFiles": "ファイルを選ぶ",
+    "process": "処理",
+    "merge": "PDFを結合",
+    "split": "PDFを分割",
+    "processing": "処理中…",
+    "download": "ダウンロード",
+    "moveUp": "上へ移動",
+    "moveDown": "下へ移動",
+    "loading": "読み込み中…",
+    "proRequired": {
+      "title": "このツールはProに含まれます",
+      "description": "OCR、編集、サイン、AIツールはProプランで利用できます。",
+      "cta": "Proにアップグレード"
+    },
+    "status": "ステータス: {status}",
+    "keepWorkspace": "利用履歴、お支払い、APIキーのために無料アカウントを作成します。",
+    "createAccount": "無料アカウントを作成",
+    "limits": "最大 {files} ファイル、各 {sizeMb} MB。ファイルは {hours} 時間保管されます。",
+    "overview": {
+      "accepts": "受け付けるファイル",
+      "outputs": "出力",
+      "limits": "上限",
+      "howTitle": "使い方",
+      "detailsTitle": "形式と上限",
+      "step": "ステップ {number}",
+      "steps": {
+        "upload": {
+          "title": "アップロード",
+          "description": "対応ファイルを追加します（{detail}）。"
+        },
+        "process": {
+          "title": "処理",
+          "description": "ファイルを {detail} に処理します。"
+        },
+        "download": {
+          "title": "ダウンロード",
+          "description": "ツールが許可する場合、アカウントを作らずに {detail} の結果を受け取れます。"
+        }
+      }
+    },
+    "upload": {
+      "title": "ここにファイルをドロップ",
+      "titleMultiple": "ここにファイルをドロップ",
+      "browse": "ファイルを参照",
+      "browseMultiple": "ファイルを参照",
+      "addMore": "別のファイルを追加",
+      "addMoreMultiple": "さらにファイルを追加",
+      "addMoreBrowse": "ファイルを参照",
+      "hint": "{formats} に対応。ファイルあたり最大 {size}。",
+      "hintWithPageLimit": "{formats} に対応。ファイルあたり最大 {size}。Freeプランはファイルあたり {pages} ページまでです。",
+      "conjunction": "と"
+    },
+    "autoStart": {
+      "hint": "ファイルのアップロード後、処理は自動で始まります。",
+      "starting": "開始しています…"
+    },
+    "actions": {
+      "download": "ダウンロード",
+      "retry": "再試行",
+      "startAgain": "最初からやり直す"
+    },
+    "states": {
+      "empty": {
+        "privacy": "ファイルは一時的で、約 {hours} 時間保管されます。"
+      },
+      "configuring": {
+        "status": "ファイルを設定"
+      },
+      "processing": {
+        "status": "処理ステータス",
+        "starting": "開始中",
+        "startingHint": "ファイルを準備しています。",
+        "queued": "待機中",
+        "queuedHint": "あなたのファイルは次の番です。",
+        "processing": "PDFを処理しています...",
+        "processingHint": "ファイルを処理しています。しばらくかかる場合があります。"
+      }
+    },
+    "expiration": {
+      "title": "このファイルは期限切れです",
+      "description": "このファイルは期限切れです。もう一度処理してください。一時ファイルは約 {hours} 時間保管されます。"
+    },
+    "workspace": {
+      "fileList": "選択したファイル",
+      "options": "ツールのオプション",
+      "replaceFile": "置き換え",
+      "remove": "削除",
+      "removeFile": "{name} を削除",
+      "retry": "アップロードを再試行",
+      "fileReady": "準備完了",
+      "filePending": "アップロード待ち",
+      "filePendingSignIn": "このファイルをアップロードするにはログインしてください",
+      "pageCount": "{count, plural, one {# ページ} other {# ページ}}"
+    },
+    "pages": {
+      "pageLabel": "ページ {number}",
+      "pageLabelSelected": "ページ {number}、選択中",
+      "pageLabelRotated": "ページ {number}、{degrees}度回転",
+      "pageLabelSelectedRotated": "ページ {number}、選択中、{degrees}度回転",
+      "reorderHandle": "ドラッグしてページ {number} を並べ替え",
+      "selectAll": "すべて選択",
+      "clear": "選択を解除",
+      "selectedCount": "{count, plural, one {# ページを選択中} other {# ページを選択中}}",
+      "allSelected": "{count, plural, one {全 # ページを選択中} other {全 # ページを選択中}}",
+      "loading": "PDFページを読み込み中",
+      "pagePreviewFailed": "プレビューを表示できません",
+      "previewFailed": "このPDFはプレビューできませんでした。",
+      "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+      "gridLabel": "PDFページ",
+      "keyboardHelp": "矢印キーでページ間を移動します。Altを押しながら矢印キーでページを並べ替えます。ページグリッドの上にもファイル選択があります。"
+    },
+    "workspaces": {
+      "split": {
+        "title": "残したいページを選ぶ",
+        "hint": "含めるページを選びます。新しいPDF 1件に、選んだ順で残ります。",
+        "modeTitle": "この分割の動き",
+        "modeExtract": "選択したページを抽出",
+        "modeExtractHint": "選んだページを含むPDFを1件作成します。",
+        "output": "{count, plural, one {選択した # ページ → PDF 1件} other {選択した # ページ → PDF 1件}}",
+        "allSelectedOutput": "全 {count} ページ → PDF 1件",
+        "advanced": "詳細",
+        "advancedTitle": "ページ範囲を手入力",
+        "advancedHint": "ページ番号がわかっている場合に使います。画面上の選択も同期します。",
+        "advancedExample": "例: 1-3, 5, 8-10",
+        "advancedError": "ページ番号を確認してください。カンマとハイフンを使い、1-3, 5 のように入力します。",
+        "selectPrompt": "続けるには、少なくとも1ページを選んでください。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+        "previewFailed": "このPDFはプレビューできませんでした。詳細でページ番号を入力することはできます。",
+        "processing": "PDFを分割しています...",
+        "processingHint": "選んだページを抽出しています。しばらくかかる場合があります。",
+        "successTitle": "PDFの準備ができました",
+        "successDescription": "選んだページだけの新しいPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "splitAnother": "別のPDFを分割",
+        "processingFailed": "このPDFを分割できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを分割してください。",
+        "faqHow": "PDFをアップロードし、残したいページを選んで分割します。それらのページを含む新しいPDFが1件できます。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "分割したいPDFをドロップします。"
+          },
+          "select": {
+            "title": "ページを選ぶ",
+            "description": "含めるページをタップするか、すべて選択します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "選んだページだけのPDFを1件受け取れます。"
+          }
+        }
+      },
+      "extract": {
+        "title": "抽出するページを選ぶ",
+        "hint": "取り出したいページを選びます。少なくとも1ページは残す必要があります。",
+        "selectPrompt": "抽出するには、少なくとも1ページを選んでください。",
+        "keepOnePage": "PDFには少なくとも1ページを残してください。",
+        "willRemoveBadge": "抽出",
+        "resultTitle": "得られる結果",
+        "output": "{count, plural, one {# ページを抽出します。} other {# ページを抽出します。}}",
+        "remaining": "{count, plural, one {PDFは # ページになります。} other {PDFは # ページになります。}}",
+        "advanced": "詳細",
+        "advancedTitle": "抽出するページを入力",
+        "advancedHint": "ページ番号または範囲を使います。例: 2, 5-7。",
+        "advancedPlaceholder": "例: 2, 5-7",
+        "advancedExample": "例: 2, 5-7",
+        "advancedError": "ページ番号を確認してください。カンマと範囲を使い、2, 5-7 のように入力します。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+        "previewFailed": "このPDFはプレビューできませんでした。詳細でページ番号を入力することはできます。",
+        "processing": "ページを抽出しています...",
+        "processingHint": "選んだページを除いた新しいPDFを作成しています。",
+        "successTitle": "PDFの準備ができました",
+        "successDescription": "それらのページを除いたPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "extractAnother": "別のPDFからページを抽出",
+        "processingFailed": "それらのページを抽出できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFからページを抽出してください。",
+        "faqHow": "PDFをアップロードし、取り出すページを選んで抽出します。少なくとも1ページは残す必要があります。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "ページを抽出したいPDFをドロップします。"
+          },
+          "select": {
+            "title": "ページを選ぶ",
+            "description": "取り出したいページを選びます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "それらのページを除いたPDFを受け取れます。"
+          }
+        }
+      },
+      "merge": {
+        "title": "結合するファイルを並べる",
+        "hint": "PDFを2件以上追加し、希望の順にドラッグします。",
+        "selectPrompt": "続けるには、PDFを2件以上追加してください。",
+        "resultTitle": "得られる結果",
+        "resultLabel": "結合したPDF 1件",
+        "equation": "{files} = PDF 1件",
+        "output": "{count, plural, one {# 件のPDF → 結合したPDF 1件} other {# 件のPDF → 結合したPDF 1件}}",
+        "outputWithPages": "{files, plural, one {# 件のPDF} other {# 件のPDF}} · {pages, plural, one {# ページ} other {# ページ}} → PDF 1件",
+        "processing": "PDFを結合しています...",
+        "processingHint": "選んだ順でファイルをまとめています。しばらくかかる場合があります。",
+        "successTitle": "結合したPDFの準備ができました",
+        "successDescription": "まとめたPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "mergeAnother": "さらにPDFを結合",
+        "processingFailed": "これらのPDFを結合できませんでした。もう一度お試しください。",
+        "invalidFile": "いずれかのファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、さらにPDFを結合してください。",
+        "faqHow": "PDFを2件以上アップロードし、順序を整えて結合します。1件にまとまったPDFができます。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "まとめたいPDFを追加します。"
+          },
+          "arrange": {
+            "title": "並べ替え",
+            "description": "表示したい順にファイルをドラッグします。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "すべてのファイルを含むPDFを1件受け取れます。"
+          }
+        }
+      },
+      "compress": {
+        "title": "圧縮の強さを選ぶ",
+        "hint": "最大はより小さいファイルになります。弱めの圧縮は品質を保ちやすくなります。新しいファイルサイズは予測しません。",
+        "output": "{level} で圧縮します。",
+        "processing": "PDFを圧縮しています...",
+        "processingHint": "ファイルサイズを小さくしています。しばらくかかる場合があります。",
+        "successTitle": "圧縮したPDFの準備ができました",
+        "successDescription": "小さくなったPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "compressAnother": "別のPDFを圧縮",
+        "processingFailed": "このPDFを圧縮できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを圧縮してください。",
+        "faqHow": "PDFをアップロードし、最大、おすすめ、弱めのいずれかを選んで圧縮します。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "小さくしたいPDFをドロップします。"
+          },
+          "select": {
+            "title": "圧縮を選ぶ",
+            "description": "最大、おすすめ、弱めのいずれかを選びます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "圧縮したPDFを受け取れます。"
+          }
+        },
+        "medium": {
+          "title": "おすすめ",
+          "hint": "多くのファイルにバランスが良い設定です。",
+          "outcome": "バランス"
+        },
+        "high": {
+          "title": "最大",
+          "hint": "いちばん小さいファイル。品質が下がることがあります。",
+          "outcome": "より小さいファイル"
+        },
+        "low": {
+          "title": "弱めの圧縮",
+          "hint": "見た目の品質をより保ちます。",
+          "outcome": "より良い品質"
+        }
+      },
+      "convert": {
+        "title": "ファイルを変換",
+        "drop": "ここに {format} をドロップ",
+        "orSelect": "またはパソコンから選択",
+        "free": "Free",
+        "cta": "変換",
+        "hint": "このツールが作る形式にファイルを変換します。",
+        "excelHint": "テキストと表を表計算に取り出します。スキャンしたPDFには「PDFをExcelに変換（OCR）」が必要です。",
+        "wordOcrHint": "先に文字を認識してからWordに変換します。スキャンでは時間が長くなることがあります。",
+        "pdfaHint": "長期保存向けのPDF/Aファイルを作成します。レイアウトはそのままです。",
+        "imageHint": "この画像は元のサイズのまま、PDFの1ページになります。",
+        "textHint": "PDFから読めるテキストを取り出します。",
+        "resultTitle": "得られる結果",
+        "equation": "{source} → {target}",
+        "resultHint": "{source} から {target} ファイル1件。",
+        "processing": "ファイルを変換しています...",
+        "processingHint": "新しいファイルを作成しています。しばらくかかる場合があります。",
+        "successTitle": "ファイルの準備ができました",
+        "successDescription": "変換したファイルをダウンロードします。",
+        "download": "ダウンロード",
+        "convertAnother": "別のファイルを変換",
+        "processingFailed": "このファイルを変換できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のファイルをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のファイルを変換してください。",
+        "faqHow": "ファイルをアップロードします。変換は自動で始まり、その後結果をダウンロードします。通常の無料ツールにアカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "変換したいファイルをドロップします。"
+          },
+          "convert": {
+            "title": "変換",
+            "description": "ファイルのアップロード後、変換が始まります。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "変換したファイルを受け取れます。"
+          }
+        }
+      },
+      "imageToPdf": {
+        "title": "この画像はPDFになります",
+        "hint": "画像1枚が、元のサイズのままPDFの1ページになります。ページサイズ、余白、複数画像の順序はこのツールでは使えません。",
+        "output": "画像1枚 → PDF 1ページ",
+        "faqHow": "JPGまたはPNGをアップロードします。変換は自動で始まり、画像の元のサイズでPDFページを作成します。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "画像を1枚ドロップします。"
+          },
+          "convert": {
+            "title": "変換",
+            "description": "アップロード後、同じ大きさのPDFページに配置します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "1ページのPDFを受け取れます。"
+          }
+        }
+      },
+      "password": {
+        "unlockTitle": "このPDFのロックを解除",
+        "unlockHint": "ファイルを開くための現在のパスワードを入力します。",
+        "protectTitle": "このPDFを保護",
+        "protectHint": "結果を開くときに必要なパスワードを設定します。",
+        "required": "続けるにはパスワードを入力してください。"
+      },
+      "protect": {
+        "title": "このPDFを保護",
+        "hint": "パスワードを設定します。結果を開く人にはそれが必要です。",
+        "password": "パスワード",
+        "confirm": "パスワードの確認",
+        "required": "続けるにはパスワードを入力してください。",
+        "confirmRequired": "続けるにはパスワードを確認してください。",
+        "mismatch": "パスワードが一致しません。",
+        "tooLong": "パスワードは128文字以下にしてください。",
+        "output": "ダウンロードしたPDFを開くには、このパスワードが必要です。",
+        "processing": "PDFを保護しています...",
+        "processingHint": "ファイルにパスワードを追加しています。",
+        "successTitle": "保護したPDFの準備ができました",
+        "successDescription": "パスワードで保護したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "protectAnother": "別のPDFを保護",
+        "processingFailed": "このPDFを保護できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを保護してください。",
+        "faqHow": "PDFをアップロードし、パスワードを設定して確認してから保護します。このツールにはログインが必要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "保護したいPDFをドロップします。"
+          },
+          "password": {
+            "title": "パスワードを設定",
+            "description": "確認のため、パスワードを2回入力します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "開くのにパスワードが必要なPDFを受け取れます。"
+          }
+        }
+      },
+      "unlock": {
+        "title": "このPDFのロックを解除",
+        "hint": "現在のパスワードを入力します。パスワードなしで開ける解除済みのコピーを作成します。",
+        "password": "パスワード",
+        "required": "続けるにはパスワードを入力してください。",
+        "output": "パスワードなしで開くコピーを受け取れます。",
+        "wrongPassword": "そのパスワードでは開けませんでした。確認してもう一度お試しください。",
+        "processing": "PDFのロックを解除しています...",
+        "processingHint": "ファイルのコピーからパスワードを外しています。",
+        "successTitle": "ロック解除したPDFの準備ができました",
+        "successDescription": "解除済みのコピーをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "unlockAnother": "別のPDFのロックを解除",
+        "processingFailed": "このPDFのロックを解除できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFのロックを解除してください。",
+        "faqHow": "パスワードで保護されたPDFをアップロードし、パスワードを入力してロックを解除します。このツールにはログインが必要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "ロックされたPDFをドロップします。"
+          },
+          "password": {
+            "title": "パスワードを入力",
+            "description": "現在、開くために必要なパスワードを入力します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "ロック解除したコピーを受け取れます。"
+          }
+        }
+      },
+      "repair": {
+        "title": "このPDFを修復",
+        "hint": "壊れたファイルを開いて再構築を試みます。修復は保証されません。",
+        "output": "解析し、修復し、結果をダウンロードします。",
+        "processing": "PDFを解析しています...",
+        "processingHint": "PDFを修復しています。しばらくかかる場合があります。",
+        "successTitle": "修復したPDFの準備ができました",
+        "successDescription": "修復したファイルをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "repairAnother": "別のPDFを修復",
+        "processingFailed": "このPDFを修復できませんでした。別のファイルをお試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを修復してください。",
+        "faqHow": "PDFをアップロードします。修復は自動で始まります。損傷の修正を試みたあと、結果をダウンロードできます。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "正しく開けないPDFをドロップします。"
+          },
+          "repair": {
+            "title": "修復",
+            "description": "ファイルを解析し、再構築を試みます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "修復に成功した場合、修復したPDFを受け取れます。"
+          }
+        },
+        "steps": {
+          "analyze": {
+            "title": "解析",
+            "description": "ファイルを再構築できるかを確認します。"
+          },
+          "repair": {
+            "title": "修復",
+            "description": "復元できる内容から新しいPDFを作成します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "修復したファイルを保存します。"
+          }
+        }
+      },
+      "rotate": {
+        "title": "回転するページを選ぶ",
+        "hint": "ページを選び、左または右に回転します。適用前にプレビューで変化を確認できます。",
+        "rotateLeft": "左に回転",
+        "rotateRight": "右に回転",
+        "selectPrompt": "回転するには、少なくとも1ページを選んでください。",
+        "output": "{count, plural, one {# ページ} other {# ページ}}を {degrees}° 回転します。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+        "previewFailed": "このPDFはプレビューできませんでした。",
+        "processing": "PDFを回転しています...",
+        "processingHint": "選んだページに回転を適用しています。",
+        "successTitle": "PDFの準備ができました",
+        "successDescription": "回転したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "rotateAnother": "別のPDFを回転",
+        "processingFailed": "このPDFを回転できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを回転してください。",
+        "faqHow": "PDFをアップロードし、回転するページを選び、左または右を選んで回転します。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "回転したいPDFをドロップします。"
+          },
+          "select": {
+            "title": "ページを回転",
+            "description": "ページを選び、左または右を選びます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "回転したPDFを受け取れます。"
+          }
+        }
+      },
+      "organize": {
+        "title": "ページを並べる",
+        "hint": "ページをドラッグして順序を変えます。回転、複製、削除するページを選べます。",
+        "rotateLeft": "左に回転",
+        "rotateRight": "右に回転",
+        "duplicate": "複製",
+        "delete": "削除",
+        "reset": "ページをリセット",
+        "rotatePage": "ページ {number} を回転",
+        "deletePage": "ページ {number} を削除",
+        "output": "{from} ページ → {to, plural, one {# ページ} other {# ページ}}",
+        "outputSame": "{count, plural, one {# ページ → PDF 1件} other {# ページ → PDF 1件}}",
+        "outputCount": "{count, plural, one {# ページ → PDF 1件} other {# ページ → PDF 1件}}",
+        "keepOnePage": "文書には少なくとも1ページを残してください。",
+        "selectPrompt": "ページの読み込みを待ってから、PDFを整理してください。",
+        "advanced": "詳細",
+        "advancedTitle": "ページ順を手入力",
+        "advancedHint": "元のページ番号を使います。番号を繰り返すと複製されます。画面上の回転はクリアされます。",
+        "advancedPlaceholder": "例: 3, 1, 1, 2",
+        "advancedExample": "例: 3, 1, 1, 2",
+        "advancedError": "ページ番号を確認してください。カンマを使い、このPDFに存在するページだけを指定します。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページを整理するには、先にロックを解除してください。",
+        "previewFailed": "このPDFはプレビューできませんでした。別のファイルを試すか、アップロード済みなら詳細でページ順を入力できます。",
+        "processing": "PDFを整理しています...",
+        "processingHint": "ページ順、回転、編集を適用しています。しばらくかかる場合があります。",
+        "successTitle": "PDFの準備ができました",
+        "successDescription": "整理したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "organizeAnother": "別のPDFを整理",
+        "processingFailed": "このPDFを整理できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを整理してください。",
+        "faqHow": "PDFをアップロードし、ページを並べ替えたり編集したりしてから整理します。新しいPDFが1件できます。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "整理したいPDFをドロップします。"
+          },
+          "arrange": {
+            "title": "ページを並べる",
+            "description": "並べ替え、回転、複製、削除ができます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "ページの変更を適用したPDFを1件受け取れます。"
+          }
+        }
+      },
+      "remove": {
+        "title": "削除するページを選ぶ",
+        "hint": "取り除きたいページを選びます。少なくとも1ページは残す必要があります。",
+        "selectPrompt": "削除するには、少なくとも1ページを選んでください。",
+        "keepOnePage": "PDFには少なくとも1ページを残してください。",
+        "willRemoveBadge": "削除",
+        "resultTitle": "このあと起きること",
+        "output": "{count, plural, one {# ページを削除します。} other {# ページを削除します。}}",
+        "remaining": "{count, plural, one {PDFは # ページになります。} other {PDFは # ページになります。}}",
+        "advanced": "詳細",
+        "advancedTitle": "削除するページを入力",
+        "advancedHint": "ページ番号または範囲を使います。例: 2, 5-7。",
+        "advancedPlaceholder": "例: 2, 5-7",
+        "advancedExample": "例: 2, 5-7",
+        "advancedError": "ページ番号を確認してください。カンマと範囲を使い、2, 5-7 のように入力します。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+        "previewFailed": "このPDFはプレビューできませんでした。",
+        "processing": "ページを削除しています...",
+        "processingHint": "選んだページを除いた新しいPDFを作成しています。",
+        "successTitle": "PDFの準備ができました",
+        "successDescription": "それらのページを除いたPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "removeAnother": "別のPDFからページを削除",
+        "processingFailed": "それらのページを削除できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFからページを削除してください。",
+        "faqHow": "PDFをアップロードし、削除するページを選んで取り除きます。少なくとも1ページは残す必要があります。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "編集したいPDFをドロップします。"
+          },
+          "select": {
+            "title": "ページを選ぶ",
+            "description": "取り除きたいページを選びます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "それらのページを除いたPDFを受け取れます。"
+          }
+        }
+      },
+      "ocr": {
+        "title": "文字を認識",
+        "hint": "文書の言語と、検索可能なPDFか抽出テキストのどちらが必要かを選びます。",
+        "language": "文書の言語",
+        "output": {
+          "pdf": "検索可能なPDFを受け取れます。",
+          "txt": "認識したテキストのテキストファイルを受け取れます。"
+        },
+        "modes": {
+          "pdf": {
+            "title": "検索可能なPDF",
+            "hint": "元のページを保ち、検索やコピーができるテキスト層を追加します。"
+          },
+          "txt": {
+            "title": "抽出したテキスト",
+            "hint": "認識したテキストを別ファイルとしてダウンロードします。"
+          }
+        },
+        "processing": "文字を認識しています...",
+        "processingHint": "スキャンや画像の多いPDFでは、より時間がかかることがあります。",
+        "successTitle": "結果の準備ができました",
+        "successDescription": "検索可能なPDFまたは抽出したテキストをダウンロードします。",
+        "download": "結果をダウンロード",
+        "ocrAnother": "別のPDFを認識",
+        "processingFailed": "このPDFの文字を認識できませんでした。別のファイルをお試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFで文字を認識してください。",
+        "faqHow": "PDFをアップロードし、言語を選んでから、検索可能なPDFを作成するかテキストを抽出します。このツールにはログインが必要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "スキャンまたは画像ベースのPDFをドロップします。"
+          },
+          "recognize": {
+            "title": "認識",
+            "description": "言語と、検索可能なPDFかテキストのどちらが必要かを選びます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "検索可能なPDFまたは抽出したテキストを受け取れます。"
+          }
+        }
+      },
+      "crop": {
+        "title": "残す範囲を選ぶ",
+        "hint": "枠または端をドラッグします。同じ切り抜きがすべてのページに適用されます。ページごとの切り抜きは使えません。",
+        "move": "切り抜き範囲を移動",
+        "edges": {
+          "top": "上端をリサイズ",
+          "right": "右端をリサイズ",
+          "bottom": "下端をリサイズ",
+          "left": "左端をリサイズ"
+        },
+        "previewHint": "切り抜き範囲をプレビューするには、PDFをアップロードしてください。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+        "output": "すべてのページで、枠の内側が残ります。",
+        "processing": "PDFを切り抜いています...",
+        "processingHint": "同じ切り抜きをすべてのページに適用しています。",
+        "successTitle": "切り抜いたPDFの準備ができました",
+        "successDescription": "切り抜いたPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "cropAnother": "別のPDFを切り抜き",
+        "processingFailed": "このPDFを切り抜けませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを切り抜いてください。",
+        "faqHow": "PDFをアップロードし、切り抜き枠をドラッグしてから切り抜きます。すべてのページで同じ範囲が残ります。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "切り抜きたいPDFをドロップします。"
+          },
+          "crop": {
+            "title": "切り抜きを設定",
+            "description": "最初のページで枠を動かしたりリサイズしたりします。すべてのページに適用されます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "余分な余白を除いたPDFを受け取れます。"
+          }
+        }
+      },
+      "watermark": {
+        "title": "透かしを追加",
+        "hint": "マークはすべてのページに斜めに配置されます。画像の透かし、位置、サイズはこのツールでは使えません。",
+        "text": "透かしのテキスト",
+        "required": "続けるには透かしのテキストを入力してください。",
+        "tooLong": "200文字以下にしてください。",
+        "more": "不透明度",
+        "opacity": "強さ · {percent}%",
+        "opacityHint": "低いほど薄くなります。同じマークがすべてのページに適用されます。",
+        "previewEmpty": "透かし",
+        "previewCaption": "最初のページのプレビュー",
+        "previewHint": "透かしをプレビューするには、PDFをアップロードしてください。",
+        "passwordProtected": "このPDFはパスワードで保護されています。ページをプレビューするには、先にロックを解除してください。",
+        "output": "すべてのページに、この斜めの透かしが入ります。",
+        "processing": "透かしを追加しています...",
+        "processingHint": "すべてのページにマークを適用しています。",
+        "successTitle": "透かし入りPDFの準備ができました",
+        "successDescription": "透かしを適用したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "watermarkAnother": "別のPDFに透かしを追加",
+        "processingFailed": "このPDFに透かしを追加できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFに透かしを追加してください。",
+        "faqHow": "PDFをアップロードし、透かしのテキストを入力し、必要なら不透明度を調整してから適用します。同じ斜めのマークがすべてのページに追加されます。アカウントは不要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "マークを入れたいPDFをドロップします。"
+          },
+          "mark": {
+            "title": "透かしを設定",
+            "description": "テキストを入力し、必要なら見た目の強さを調整します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "すべてのページに透かしが入ったPDFを受け取れます。"
+          }
+        }
+      },
+      "sign": {
+        "title": "このPDFに署名",
+        "hint": "署名を作成し、ページに配置します。署名済みPDFにそのマークが入ります。",
+        "methods": {
+          "draw": "手書き",
+          "type": "入力",
+          "upload": "画像をアップロード"
+        },
+        "clear": "クリア",
+        "useSignature": "この署名を使う",
+        "typedLabel": "名前を入力",
+        "typedPlaceholder": "あなたの名前",
+        "uploadLabel": "PNGまたはJPGをアップロード",
+        "uploading": "署名を保存しています…",
+        "uploadFailed": "署名を保存できませんでした。もう一度お試しください。",
+        "selectPrompt": "署名を作成し、ページに配置してください。",
+        "output": "署名はダウンロードするPDFに書き込まれます。",
+        "previewFailed": "このPDFはプレビューできませんでした。",
+        "passwordProtected": "このPDFはパスワードで保護されています。署名するには、先にロックを解除してください。",
+        "processing": "PDFに署名しています...",
+        "processingHint": "ファイルに署名を書き込んでいます。",
+        "successTitle": "署名したPDFの準備ができました",
+        "successDescription": "署名を適用したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "signAnother": "別のPDFに署名",
+        "processingFailed": "このPDFに署名できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFに署名してください。",
+        "faqHow": "PDFをアップロードし、手書き、入力、または画像のアップロードで署名を作成してページに配置し、署名します。このツールにはログインが必要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "署名が必要なPDFをドロップします。"
+          },
+          "sign": {
+            "title": "署名を配置",
+            "description": "手書き、入力、またはアップロードでマークを作り、ページ上で動かします。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "署名が入ったPDFを受け取れます。"
+          }
+        }
+      },
+      "fill": {
+        "title": "このPDFに記入",
+        "hint": "このPDFにある既存のフォーム欄を見つけました。記入して、完成したコピーを保存します。",
+        "detecting": "フォーム欄を探しています",
+        "empty": "このPDFには編集できる記入欄がありません。新しい欄をページに置くことはしません。",
+        "fieldCount": "{count, plural, one {# 件のフィールド} other {# 件のフィールド}}",
+        "choose": "オプションを選ぶ",
+        "page": "ページ {page}",
+        "flatten": "回答をファイルに固定",
+        "flattenHint": "記入した回答をページの一部にし、あとから変更できないようにします。",
+        "skippedRadio": "このPDFのラジオボタンは、まだ記入できません。",
+        "skippedSignature": "署名欄はここでは記入できません。署名を追加するには「PDFに署名」を使ってください。",
+        "selectPrompt": "続けるには、記入できるフォーム欄があるPDFが必要です。",
+        "output": "回答はダウンロードするPDFに書き込まれます。",
+        "previewFailed": "このPDFはプレビューできませんでした。",
+        "passwordProtected": "このPDFはパスワードで保護されています。フォームに記入するには、先にロックを解除してください。",
+        "processing": "PDFに記入しています...",
+        "processingHint": "回答をフォームに書き込んでいます。",
+        "successTitle": "記入したPDFの準備ができました",
+        "successDescription": "回答を適用したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "fillAnother": "別のPDFに記入",
+        "processingFailed": "このPDFに記入できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFに記入してください。",
+        "faqHow": "すでにフォーム欄があるPDFをアップロードし、記入してからダウンロードします。このツールにはログインが必要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "すでにフォーム欄があるPDFをドロップします。"
+          },
+          "fill": {
+            "title": "欄に記入",
+            "description": "検出された欄に答えます。ファイルにすでに存在する欄だけを記入します。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "回答が入った完成PDFを受け取れます。"
+          }
+        }
+      },
+      "edit": {
+        "title": "このPDFにマークを追加",
+        "hint": "テキスト、ハイライト、図形、画像をPDFの上に追加します。既存のPDFテキストは編集できません。",
+        "addImage": "画像を追加",
+        "uploadingImage": "画像を保存しています…",
+        "imageFailed": "画像を保存できませんでした。もう一度お試しください。",
+        "selectPrompt": "続ける前に、テキスト、ハイライト、または画像を追加してください。",
+        "output": "{count, plural, one {# 件のマークをPDFに追加します。} other {# 件のマークをPDFに追加します。}}",
+        "limitation": "これはページの上に新しいマークを追加します。PDF内の元のテキストは変更しません。",
+        "previewFailed": "このPDFはプレビューできませんでした。",
+        "passwordProtected": "このPDFはパスワードで保護されています。編集するには、先にロックを解除してください。",
+        "processing": "マークを追加しています...",
+        "processingHint": "テキスト、図形、画像をPDFに書き込んでいます。",
+        "successTitle": "編集したPDFの準備ができました",
+        "successDescription": "マークを適用したPDFをダウンロードします。",
+        "download": "PDFをダウンロード",
+        "editAnother": "別のPDFを編集",
+        "processingFailed": "このPDFを編集できませんでした。もう一度お試しください。",
+        "invalidFile": "このファイルを開けませんでした。別のPDFをお試しください。",
+        "expiredTitle": "このファイルは期限切れです",
+        "expiredDescription": "ファイルは {hours} 時間後に自動削除されます。続けるには、別のPDFを編集してください。",
+        "faqHow": "PDFをアップロードし、ページにテキスト、ハイライト、または画像を追加して保存します。既存のPDFテキストは変更できません。このツールにはログインが必要です。",
+        "how": {
+          "upload": {
+            "title": "アップロード",
+            "description": "マークを付けたいPDFをドロップします。"
+          },
+          "edit": {
+            "title": "マークを追加",
+            "description": "テキスト、ハイライト、図形、または画像1枚をページに置きます。"
+          },
+          "download": {
+            "title": "ダウンロード",
+            "description": "それらのマークが書き込まれたPDFを受け取れます。"
+          }
+        }
+      },
+      "editor": {
+        "toolbar": "文書ツール",
+        "tools": {
+          "select": "選択",
+          "text": "テキストを追加",
+          "image": "画像を追加",
+          "shape": "ハイライトを追加",
+          "signature": "署名を追加"
+        },
+        "undo": "元に戻す",
+        "redo": "やり直す",
+        "delete": "選択を削除",
+        "zoomIn": "拡大",
+        "zoomOut": "縮小",
+        "previousPage": "前のページ",
+        "nextPage": "次のページ",
+        "pageOf": "{total} ページ中 {current} ページ",
+        "properties": "プロパティ",
+        "propertiesEmpty": "位置とサイズを編集するオブジェクトを選んでください。",
+        "text": "テキスト",
+        "fontSize": "文字サイズ",
+        "style": "スタイル",
+        "styles": {
+          "highlight": "ハイライト",
+          "fill": "塗りつぶし"
+        },
+        "x": "X",
+        "y": "Y",
+        "width": "幅",
+        "height": "高さ",
+        "rotation": "回転",
+        "objects": {
+          "text": "テキスト",
+          "image": "画像",
+          "rectangle": "ハイライト",
+          "signature": "署名"
+        }
+      },
+      "generic": {
+        "title": "このファイルを処理"
+      }
+    },
+    "phases": {
+      "uploading": "アップロード中",
+      "checkingPages": "ページを確認中",
+      "uploadingHint": "ファイルを安全なストレージに送っています。",
+      "preparing": "準備中",
+      "preparingHint": "処理を開始しています。",
+      "processing": "処理中",
+      "processingHint": "ファイルを処理しています。しばらくかかる場合があります。",
+      "ready": "準備完了",
+      "readyHint": "結果をダウンロードできます。"
+    },
+    "result": {
+      "title": "PDFの準備ができました",
+      "titleBatch": "ファイルの準備ができました",
+      "description": "{source} を {format} に変換しました。",
+      "descriptionBatch": "{count} 件のファイルを処理しました。1つのZIPとしてダウンロードします。",
+      "unnamedSource": "あなたのファイル",
+      "download": "ダウンロード",
+      "downloadAll": "ZIPをダウンロード（{count}）",
+      "downloadNamed": "{name} をダウンロード",
+      "downloading": "ダウンロードを準備しています…",
+      "fileList": "準備できたファイル",
+      "processAnother": "別のファイルを処理",
+      "signupPrompt": "履歴、お支払い、アカウントの利用状況を残したいですか？",
+      "signupCta": "無料アカウントを作成"
+    },
+    "related": {
+      "title": "関連ツール"
+    },
+    "recent": {
+      "title": "最近",
+      "notice": "一時ファイルは約 {hours} 時間保管され、その後期限切れになります。",
+      "empty": "最近のファイルはまだありません。",
+      "emptyHint": "このページでファイルを処理すると、結果が約 {hours} 時間ここに表示されます。",
+      "error": "最近のファイルを読み込めませんでした。",
+      "retry": "もう一度試す",
+      "unnamedFile": "無題のファイル",
+      "originalFile": "{filename} から",
+      "download": "ダウンロード",
+      "downloading": "ダウンロードを準備しています…",
+      "openTool": "ツールを開く",
+      "startAgain": "最初からやり直す",
+      "status": {
+        "processing": "処理中",
+        "ready": "準備完了",
+        "failed": "失敗",
+        "expired": "期限切れ"
+      },
+      "age": {
+        "justNow": "たった今",
+        "minutes": "{count}分前",
+        "hours": "{count}時間前"
+      },
+      "expiresIn": {
+        "minutes": "残り{count}分で期限切れ",
+        "hours": "残り{count}時間で期限切れ"
+      }
+    },
+    "privacy": {
+      "title": "ファイルと保存",
+      "body": "アップロードしたファイルはこのツールの実行に使います。一時ファイルは約 {hours} 時間保管され、その後削除の対象になります。ダウンロードには有効期限の短い署名付きリンクを使います。コンプライアンス認証は主張しません。"
+    },
+    "faq": {
+      "title": "質問",
+      "what": {
+        "question": "{tool} は何をしますか？"
+      },
+      "how": {
+        "question": "このツールの使い方は？",
+        "answer": "対応ファイルをアップロードします。追加オプションが不要なツールでは、処理は自動で始まります。準備ができたら結果をダウンロードします。ツールが必要と書いていない限り、アカウントは不要です。"
+      },
+      "formats": {
+        "question": "どの形式に対応していますか？",
+        "answer": "このツールは {formats} を受け付け、{outputs} を返します。"
+      },
+      "account": {
+        "question": "アカウントは必要ですか？",
+        "anonymous": "いいえ。アカウントを作らずにこのツールを実行できます。履歴、お支払い、APIキーが必要ならログインしてください。Freeの1日あたりの上限は同じです。",
+        "required": "はい。処理の前にログインしてください。このツールはアカウントなしでは使えません。"
+      },
+      "limits": {
+        "question": "現在の上限は何ですか？",
+        "answer": "最大 {files} ファイル、各 {sizeMb} MB。ファイルは約 {hours} 時間保管されます。"
+      },
+      "privacy": {
+        "question": "ファイルはどのくらい保管されますか？",
+        "answer": "処理とダウンロードのため、ファイルは約 {hours} 時間保管され、その後削除の対象になります。"
+      }
+    },
+    "options": {
+      "compressionLevel": "圧縮レベル",
+      "compressionLow": "低（最高品質）",
+      "compressionMedium": "中（バランス）",
+      "compressionHigh": "高（最小ファイル）",
+      "rotation": "回転",
+      "splitRanges": "ページ範囲",
+      "splitRangesPlaceholder": "1-3, 5, 8-10",
+      "pageOrder": "ページ順",
+      "pageOrderPlaceholder": "例: 3, 1, 2",
+      "pagesToRemove": "削除するページ",
+      "pagesToRemovePlaceholder": "例: 2, 4",
+      "cropTop": "上余白（pt）",
+      "cropRight": "右余白（pt）",
+      "cropBottom": "下余白（pt）",
+      "cropLeft": "左余白（pt）",
+      "watermarkText": "透かしのテキスト",
+      "pageNumberStart": "番号の開始",
+      "password": "パスワード",
+      "targetLanguage": "翻訳先の言語",
+      "outputFormat": "出力形式",
+      "languages": {
+        "eng": "英語",
+        "tur": "トルコ語",
+        "deu": "ドイツ語",
+        "fra": "フランス語",
+        "spa": "スペイン語"
+      }
+    },
+    "errors": {
+      "title": "このファイルを処理できませんでした",
+      "noFile": "処理するファイルを選んでください。",
+      "tooFewFiles": "少なくとも2ファイルを選んでください。",
+      "tooManyFiles": "このツールにはファイルが多すぎます。",
+      "tooManyPages": "このファイルは {max} ページを超えています。無料プランはファイルあたり {max} ページまでです。",
+      "tooManyPagesShort": "{max} ページの上限を超えています。",
+      "tooManyPagesHint": "長いPDFを処理するにはProにアップグレードするか、短いファイルでもう一度はじめてください。",
+      "upgradeTitle": "Proで続ける",
+      "tooLarge": "そのファイルは現在の上限より大きいです。",
+      "emptyFile": "そのファイルは空です。有効なPDFを選んでもう一度お試しください。",
+      "unsupported": "そのファイル形式はこのツールに対応していません。",
+      "invalidPdf": "このファイルは有効なPDFではないようです。別のファイルをお試しください。",
+      "corruptedFile": "このPDFは損傷しているようです。修復を試すか、別のファイルを使ってください。",
+      "invalidOptions": "ツールの設定を確認してもう一度お試しください。",
+      "creditsExhausted": "今月のクレジットを使い切りました。Proにアップグレードするか、次の請求期間まで待ってください。",
+      "limitReached": "現在の利用上限に達しました。あとで再試行するか、プランをアップグレードしてください。",
+      "upgradeRequired": "このツールにはProが必要です。続けるにはアップグレードしてください。",
+      "upgradeCta": "Proにアップグレード",
+      "signInRequired": "このツールを使うにはログインしてください。",
+      "signInCta": "続けてログイン",
+      "unauthorized": "このファイルへのアクセス権がありません。",
+      "passwordProtected": "このPDFはパスワードで保護されています。先にロックを解除するか、正しいパスワードで「PDFのロックを解除」を使ってください。",
+      "processingFailed": "処理に失敗しました。別のファイルでもう一度お試しください。",
+      "aiUnavailable": "AI処理は現在利用できません。あとでもう一度お試しください。",
+      "duplicateExecution": "このファイルはすでに処理中です。少し待ってもう一度お試しください。",
+      "uploadInterrupted": "アップロードが中断されました。接続を確認してもう一度お試しください。",
+      "filesExpired": "このファイルは期限切れです。もう一度処理してください。",
+      "rateLimited": "リクエストが多すぎます。少し待ってからもう一度お試しください。",
+      "networkFailure": "アップロードに失敗しました。接続を確認してもう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。",
+      "retryHint": "この操作をもう一度試せます。",
+      "startAgainHint": "新しいファイルでもう一度はじめてください。"
+    }
+  },
+  "tools": {
+    "merge-pdf": {
+      "name": "PDFを結合",
+      "metaTitle": "PDFファイルをオンラインで結合",
+      "description": "複数のPDFファイルを1つの文書にまとめます。ファイルをアップロードし、順序を決めて、1件のPDFをダウンロードします。基本的な利用にアカウントは不要です。"
+    },
+    "split-pdf": {
+      "name": "PDFを分割",
+      "metaTitle": "PDFファイルをオンラインで分割",
+      "description": "必要なページだけを含む新しいファイルにPDFを分割します。ページを画面で選び、結果をダウンロードします。"
+    },
+    "extract-pages": {
+      "name": "PDFのページを抽出",
+      "metaTitle": "PDFからページを抽出",
+      "description": "選んだページをPDFから取り出し、残りを新しいファイルとして保存します。ページを画面で選び、ダウンロードします。"
+    },
+    "organize-pdf": {
+      "name": "PDFを整理",
+      "metaTitle": "PDFのページをオンラインで整理",
+      "description": "PDFページの並べ替え、回転、管理を一箇所で行い、更新したファイルをダウンロードします。"
+    },
+    "remove-pages": {
+      "name": "PDFのページを削除",
+      "metaTitle": "PDFからページを削除",
+      "description": "不要なページをPDFから削除し、残りを新しいファイルに残します。"
+    },
+    "reorder-pages": {
+      "name": "PDFのページを並べ替え",
+      "metaTitle": "PDFのページをオンラインで並べ替え",
+      "description": "PDFのページ順を変更し、並べ替えたファイルをダウンロードします。"
+    },
+    "rotate-pdf": {
+      "name": "PDFを回転",
+      "metaTitle": "PDFのページをオンラインで回転",
+      "description": "PDFの1ページまたは複数ページを回転し、直したファイルをダウンロードします。"
+    },
+    "crop-pdf": {
+      "name": "PDFをトリミング",
+      "metaTitle": "PDFのページをオンラインでトリミング",
+      "description": "PDFの余白や余分なスペースを切り取り、結果をダウンロードします。"
+    },
+    "compress-pdf": {
+      "name": "PDFを圧縮",
+      "metaTitle": "PDFをオンラインで圧縮",
+      "description": "文書を読める状態のまま、PDFのファイルサイズを小さくします。圧縮レベルを選び、より小さいPDFをダウンロードします。"
+    },
+    "repair-pdf": {
+      "name": "PDFを修復",
+      "metaTitle": "PDFファイルをオンラインで修復",
+      "description": "損傷または読めないPDFの修正を試み、修復したコピーをダウンロードします。"
+    },
+    "pdf-to-pdfa": {
+      "name": "PDFをPDF/Aに変換",
+      "metaTitle": "PDFをPDF/Aへ変換",
+      "description": "より長期の保管向けに、PDFをアーカイブ用のPDF/Aファイルへ変換します。"
+    },
+    "pdf-to-word": {
+      "name": "PDFをWordに変換",
+      "metaTitle": "PDFからWordへの変換",
+      "description": "PDFを編集可能なWord文書に変換します。PDFをアップロードし、DOCまたはDOCXファイルをダウンロードします。"
+    },
+    "pdf-to-word-ocr": {
+      "name": "PDFをWordに変換（OCR）",
+      "metaTitle": "OCRでPDFをWordに変換",
+      "description": "スキャンしたPDFをOCRでWordに変換し、テキストを編集できるようにします。"
+    },
+    "pdf-to-powerpoint": {
+      "name": "PDFをPowerPointに変換",
+      "metaTitle": "PDFからPowerPointへの変換",
+      "description": "PDFを、編集や発表ができるPowerPointプレゼンテーションに変換します。"
+    },
+    "pdf-to-excel": {
+      "name": "PDFをExcelに変換",
+      "metaTitle": "PDFからExcelへの変換",
+      "description": "PDF内の表を、並べ替えや編集ができるExcel表計算に変換します。"
+    },
+    "pdf-to-excel-ocr": {
+      "name": "PDFをExcelに変換（OCR）",
+      "metaTitle": "OCRでPDFをExcelに変換",
+      "description": "スキャンしたPDFの表をOCRでExcelに変換します。"
+    },
+    "pdf-to-jpg": {
+      "name": "PDFをJPGに変換",
+      "metaTitle": "PDFからJPGへの変換",
+      "description": "PDFページを、保存や共有ができるJPG画像に変換します。"
+    },
+    "pdf-to-png": {
+      "name": "PDFをPNGに変換",
+      "metaTitle": "PDFからPNGへの変換",
+      "description": "PDFページを、透明またはきれいな背景のPNG画像に変換します。"
+    },
+    "pdf-to-txt": {
+      "name": "PDFをテキストに変換",
+      "metaTitle": "PDFからテキストへの変換",
+      "description": "PDFからプレーンテキストを取り出し、テキストファイルとしてダウンロードします。"
+    },
+    "word-to-pdf": {
+      "name": "WordをPDFに変換",
+      "metaTitle": "WordからPDFへの変換",
+      "description": "Word文書を、共有や印刷ができるPDFに変換します。"
+    },
+    "powerpoint-to-pdf": {
+      "name": "PowerPointをPDFに変換",
+      "metaTitle": "PowerPointからPDFへの変換",
+      "description": "PowerPointプレゼンテーションをPDFに変換します。"
+    },
+    "excel-to-pdf": {
+      "name": "ExcelをPDFに変換",
+      "metaTitle": "ExcelからPDFへの変換",
+      "description": "Excel表計算をPDFに変換します。"
+    },
+    "image-to-pdf": {
+      "name": "画像をPDFに変換",
+      "metaTitle": "画像からPDFへの変換",
+      "description": "JPG、PNG、その他の画像を1件のPDFにまとめます。"
+    },
+    "jpg-to-pdf": {
+      "name": "JPGをPDFに変換",
+      "metaTitle": "JPGからPDFへの変換",
+      "description": "JPG画像をPDFファイルに変換します。"
+    },
+    "png-to-pdf": {
+      "name": "PNGをPDFに変換",
+      "metaTitle": "PNGからPDFへの変換",
+      "description": "PNG画像をPDFファイルに変換します。"
+    },
+    "office-to-pdf": {
+      "name": "OfficeをPDFに変換",
+      "metaTitle": "OfficeからPDFへの変換",
+      "description": "Word、Excel、PowerPointファイルをPDFに変換します。"
+    },
+    "edit-pdf": {
+      "name": "PDFを編集",
+      "metaTitle": "PDFをオンラインで編集",
+      "description": "テキスト、ハイライト、図形、画像をPDFの上に追加します。既存のテキストはそのままです。"
+    },
+    "watermark-pdf": {
+      "name": "PDFに透かしを追加",
+      "metaTitle": "PDFへ透かしを入れる",
+      "description": "PDFのすべてのページに、テキストまたは画像の透かしを追加します。"
+    },
+    "page-numbers-pdf": {
+      "name": "PDFにページ番号を追加",
+      "metaTitle": "PDFへページ番号を入れる",
+      "description": "PDFにページ番号を追加し、番号付きファイルをダウンロードします。"
+    },
+    "protect-pdf": {
+      "name": "PDFを保護",
+      "metaTitle": "パスワードでPDFを保護",
+      "description": "パスワードを追加し、PDFを開くまたは使うときに必要にします。"
+    },
+    "unlock-pdf": {
+      "name": "PDFのロックを解除",
+      "metaTitle": "PDFのパスワードを解除",
+      "description": "所有するPDFのパスワード保護を外し、ロック解除したコピーをダウンロードします。"
+    },
+    "sign-pdf": {
+      "name": "PDFに署名",
+      "metaTitle": "PDFにオンラインで署名",
+      "description": "見た目の署名画像またはテキストスタンプを追加します。暗号による電子署名ではありません。"
+    },
+    "redact-pdf": {
+      "name": "PDFを墨消し",
+      "metaTitle": "PDFをオンラインで墨消し",
+      "description": "共有する前に、PDF内の機密テキストや範囲を完全に黒塗りします。"
+    },
+    "compare-pdf": {
+      "name": "PDFを比較",
+      "metaTitle": "PDFファイルを比較",
+      "description": "2つのPDFバージョンを比較し、何が変わったかを確認します。"
+    },
+    "pdf-forms": {
+      "name": "PDFフォームに記入",
+      "metaTitle": "PDFフォームをオンラインで記入",
+      "description": "対話型PDFフォームの既存の欄に記入し、完成したファイルをダウンロードします。"
+    },
+    "web-to-pdf": {
+      "name": "WebページをPDFに変換",
+      "metaTitle": "WebページからPDFへの変換",
+      "description": "Webページを、保存や共有ができるPDFとして取り込みます。"
+    },
+    "scan-to-pdf": {
+      "name": "スキャンをPDFに変換",
+      "metaTitle": "スキャンをオンラインでPDFに",
+      "description": "スキャンした画像を1件のPDFにします。"
+    },
+    "pdf-extract": {
+      "name": "PDFからコンテンツを抽出",
+      "metaTitle": "PDFの内容を取り出す",
+      "description": "ほかのファイルで再利用できるよう、PDFから構造化された内容を取り出します。"
+    },
+    "pdf-to-markdown": {
+      "name": "PDFをMarkdownに変換",
+      "metaTitle": "PDFからMarkdownへの変換",
+      "description": "PDFの内容を、テキストエディタで編集できるMarkdownに変換します。"
+    },
+    "ocr-pdf": {
+      "name": "PDFをOCR",
+      "metaTitle": "PDFをオンラインでOCR",
+      "description": "スキャンしたPDFをOCRで検索可能にするか、認識したテキストを取り出します。"
+    },
+    "ai-summarizer": {
+      "name": "PDFを要約",
+      "metaTitle": "AIでPDFを要約",
+      "description": "すべてのページを開かなくても要点を読めるよう、AIでPDFを要約します。"
+    },
+    "translate-pdf": {
+      "name": "PDFを翻訳",
+      "metaTitle": "PDFをオンラインで翻訳",
+      "description": "PDFの内容を別の言語に翻訳し、結果をダウンロードします。"
+    }
+  }
+}

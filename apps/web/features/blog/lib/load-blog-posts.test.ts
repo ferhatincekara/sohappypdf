@@ -18,6 +18,16 @@ describe("blog posts", () => {
     expect(listBlogSlugs("tr")).toEqual([...EXPECTED_SLUGS]);
   });
 
+  test("falls back to English posts for locales without blog copy", () => {
+    expect(listBlogSlugs("de")).toEqual([...EXPECTED_SLUGS]);
+    expect(getBlogPost("ja", "sign-pdf-in-the-browser")?.title).toBe(
+      getBlogPost("en", "sign-pdf-in-the-browser")?.title,
+    );
+    expect(getBlogPost("pt-BR", "check-before-pdf-to-word")?.role).toBe(
+      "Founder",
+    );
+  });
+
   test("keeps Turkish titles aligned with the marketing reference", () => {
     const posts = listBlogPosts("tr");
 

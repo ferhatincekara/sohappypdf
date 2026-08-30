@@ -481,7 +481,12 @@
       "language": "Dil",
       "languages": {
         "en": "English",
-        "tr": "Türkçe"
+        "tr": "Türkçe",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "ja": "日本語",
+        "pt-BR": "Português (Brasil)"
       },
       "social": "Sosyal",
       "instagram": "SoHappyPDF Instagram",
@@ -740,7 +745,7 @@
         },
         "language": {
           "title": "Dil",
-          "body": "İngilizce veya Türkçe seçmek, sitenin o dilde kalması için en fazla bir yıl süren, httpOnly NEXT_LOCALE çerezini yazar. Dili alt bilgideki dil kontrolünden istediğiniz zaman değiştirebilirsiniz."
+          "body": "Bir dil seçmek, sitenin o dilde kalması için en fazla bir yıl süren, httpOnly NEXT_LOCALE çerezini yazar. Dili alt bilgideki dil kontrolünden istediğiniz zaman değiştirebilirsiniz."
         },
         "session": {
           "title": "Oturumlar",

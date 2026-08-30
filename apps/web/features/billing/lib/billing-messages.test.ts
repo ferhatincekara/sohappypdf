@@ -1,6 +1,13 @@
 import { describe, expect, test } from "bun:test";
+import de from "@/messages/de.json";
 import en from "@/messages/en.json";
+import es from "@/messages/es.json";
+import fr from "@/messages/fr.json";
+import ja from "@/messages/ja.json";
+import ptBR from "@/messages/pt-BR.json";
 import tr from "@/messages/tr.json";
+
+const catalogs = { en, tr, de, es, fr, ja, "pt-BR": ptBR } as const;
 
 function flattenKeys(value: unknown, prefix = ""): string[] {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -13,11 +20,16 @@ function flattenKeys(value: unknown, prefix = ""): string[] {
 }
 
 describe("billing locales", () => {
-  test("keeps English and Turkish billing keys aligned", () => {
+  test("keeps billing keys aligned across locales", () => {
     const englishKeys = flattenKeys(en.billing).sort();
-    const turkishKeys = flattenKeys(tr.billing).sort();
 
-    expect(turkishKeys).toEqual(englishKeys);
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.billing).sort(), locale).toEqual(englishKeys);
+    }
     expect(englishKeys).toContain("sections.web");
     expect(englishKeys).toContain("sections.api");
     expect(englishKeys).not.toContain("sections.ai");

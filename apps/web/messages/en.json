@@ -481,7 +481,12 @@
       "language": "Language",
       "languages": {
         "en": "English",
-        "tr": "Türkçe"
+        "tr": "Türkçe",
+        "de": "Deutsch",
+        "es": "Español",
+        "fr": "Français",
+        "ja": "日本語",
+        "pt-BR": "Português (Brasil)"
       },
       "social": "Social",
       "instagram": "SoHappyPDF on Instagram",
@@ -740,7 +745,7 @@
         },
         "language": {
           "title": "Language",
-          "body": "Choosing English or Turkish sets an httpOnly cookie named NEXT_LOCALE for up to one year so the site stays in that language. You can change it any time from the language control in the footer."
+          "body": "Choosing a language sets an httpOnly cookie named NEXT_LOCALE for up to one year so the site stays in that language. You can change it any time from the language control in the footer."
         },
         "session": {
           "title": "Sessions",

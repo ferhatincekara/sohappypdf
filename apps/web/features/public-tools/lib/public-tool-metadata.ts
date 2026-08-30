@@ -5,6 +5,7 @@ import {
   OPENGRAPH_IMAGE_PATH,
   SITE_NAME,
 } from "@/features/seo/lib/site-brand";
+import { toOpenGraphLocale } from "@/lib/i18n/routing";
 
 export type PublicToolMetadataInput = {
   name: string;
@@ -23,11 +24,7 @@ export function publicToolCanonicalUrl(input: {
 }
 
 export function openGraphLocale(locale: string): string {
-  if (locale === "tr") {
-    return "tr_TR";
-  }
-
-  return "en_US";
+  return toOpenGraphLocale(locale);
 }
 
 export function buildPublicToolMetadata(

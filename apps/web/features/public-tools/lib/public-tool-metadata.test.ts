@@ -53,6 +53,9 @@ describe("public tool metadata", () => {
   test("maps locales without stuffing extra keywords", () => {
     expect(openGraphLocale("tr")).toBe("tr_TR");
     expect(openGraphLocale("en")).toBe("en_US");
+    expect(openGraphLocale("de")).toBe("de_DE");
+    expect(openGraphLocale("ja")).toBe("ja_JP");
+    expect(openGraphLocale("pt-BR")).toBe("pt_BR");
     expect(
       publicToolCanonicalUrl({
         appUrl: "https://sohappypdf.example/",

@@ -5,14 +5,13 @@ import {
   isBlogSlug,
 } from "@/features/blog/lib/blog-frontmatter";
 import { BLOG_POST_CONTENTS } from "@/features/blog/lib/blog-post-contents";
-import type { AppLocale } from "@/lib/i18n/routing";
 
-function asAppLocale(locale: string): AppLocale {
-  if (locale === "en" || locale === "tr") {
-    return locale;
+function blogContentLocale(locale: string): "en" | "tr" {
+  if (locale === "tr") {
+    return "tr";
   }
 
-  throw new Error(`Unsupported blog locale: ${locale}`);
+  return "en";
 }
 
 function parsePostRaw(raw: string, expectedSlug: string): BlogPost {
@@ -32,7 +31,7 @@ function parsePostRaw(raw: string, expectedSlug: string): BlogPost {
 }
 
 export function listBlogPosts(locale: string): readonly BlogPost[] {
-  const contents = BLOG_POST_CONTENTS[asAppLocale(locale)];
+  const contents = BLOG_POST_CONTENTS[blogContentLocale(locale)];
   const posts = Object.entries(contents).map(([slug, raw]) =>
     parsePostRaw(raw, slug),
   );
@@ -48,7 +47,7 @@ export function getBlogPost(
     return undefined;
   }
 
-  const contents = BLOG_POST_CONTENTS[asAppLocale(locale)];
+  const contents = BLOG_POST_CONTENTS[blogContentLocale(locale)];
 
   if (!Object.hasOwn(contents, slug)) {
     return undefined;

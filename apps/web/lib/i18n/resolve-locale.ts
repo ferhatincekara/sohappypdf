@@ -1,4 +1,3 @@
-import { hasLocale } from "next-intl";
 import { type AppLocale, routing } from "@/lib/i18n/routing";
 
 type LanguageCandidate = {
@@ -36,6 +35,33 @@ function parseAcceptLanguage(header: string): LanguageCandidate[] {
     });
 }
 
+function findCanonicalLocale(tag: string): AppLocale | undefined {
+  const normalized = tag.trim().toLowerCase();
+
+  if (normalized === "") {
+    return undefined;
+  }
+
+  const exact = routing.locales.find(
+    (locale) => locale.toLowerCase() === normalized,
+  );
+
+  if (exact !== undefined) {
+    return exact;
+  }
+
+  const language = normalized.split("-")[0];
+
+  if (language === undefined || language === "") {
+    return undefined;
+  }
+
+  return routing.locales.find((locale) => {
+    const localeLower = locale.toLowerCase();
+    return localeLower === language || localeLower.startsWith(`${language}-`);
+  });
+}
+
 export function parseAppLocale(
   value: string | null | undefined,
 ): AppLocale | undefined {
@@ -43,13 +69,7 @@ export function parseAppLocale(
     return undefined;
   }
 
-  const normalized = value.trim().toLowerCase();
-
-  if (hasLocale(routing.locales, normalized)) {
-    return normalized;
-  }
-
-  return undefined;
+  return findCanonicalLocale(value);
 }
 
 export function resolveAppLocale(input: {
@@ -73,14 +93,10 @@ export function resolveLocaleFromAcceptLanguage(
   }
 
   for (const candidate of parseAcceptLanguage(header)) {
-    if (hasLocale(routing.locales, candidate.tag)) {
-      return candidate.tag;
-    }
+    const matched = findCanonicalLocale(candidate.tag);
 
-    const language = candidate.tag.split("-")[0];
-
-    if (language !== undefined && hasLocale(routing.locales, language)) {
-      return language;
+    if (matched !== undefined) {
+      return matched;
     }
   }
 

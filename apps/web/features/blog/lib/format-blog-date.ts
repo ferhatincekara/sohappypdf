@@ -1,3 +1,5 @@
+import { toDateLocale } from "@/lib/i18n/routing";
+
 export function formatBlogDate(date: string, locale: string): string {
   const [year, month, day] = date.split("-").map(Number);
 
@@ -12,7 +14,7 @@ export function formatBlogDate(date: string, locale: string): string {
     throw new Error(`Invalid blog date: ${date}`);
   }
 
-  return new Intl.DateTimeFormat(locale === "tr" ? "tr-TR" : "en-GB", {
+  return new Intl.DateTimeFormat(toDateLocale(locale), {
     day: "numeric",
     month: "long",
     year: "numeric",

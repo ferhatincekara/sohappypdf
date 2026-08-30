@@ -20,12 +20,17 @@ describe("resolveLocaleFromAcceptLanguage", () => {
       "en",
     );
     expect(resolveLocaleFromAcceptLanguage("de-DE,de;q=0.9,tr;q=0.8")).toBe(
-      "tr",
+      "de",
     );
+    expect(resolveLocaleFromAcceptLanguage("pt-BR,pt;q=0.9,en;q=0.8")).toBe(
+      "pt-BR",
+    );
+    expect(resolveLocaleFromAcceptLanguage("pt-PT,pt;q=0.9")).toBe("pt-BR");
+    expect(resolveLocaleFromAcceptLanguage("ja,en;q=0.8")).toBe("ja");
   });
 
   test("falls back to English for unsupported languages", () => {
-    expect(resolveLocaleFromAcceptLanguage("de-DE,fr;q=0.8")).toBe("en");
+    expect(resolveLocaleFromAcceptLanguage("zh-CN,it;q=0.8")).toBe("en");
   });
 });
 
@@ -40,10 +45,11 @@ describe("resolveAppLocale", () => {
   });
 
   test("ignores an invalid locale cookie", () => {
-    expect(parseAppLocale("de")).toBeUndefined();
+    expect(parseAppLocale("zh")).toBeUndefined();
+    expect(parseAppLocale("pt-br")).toBe("pt-BR");
     expect(
       resolveAppLocale({
-        cookieLocale: "de",
+        cookieLocale: "zh",
         acceptLanguage: "tr-TR,tr;q=0.9",
       }),
     ).toBe("tr");

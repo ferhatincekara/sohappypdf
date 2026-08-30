@@ -1,7 +1,14 @@
 import { describe, expect, test } from "bun:test";
 import { listCatalogTools } from "@sohappypdf/tools/catalog";
+import de from "@/messages/de.json";
 import en from "@/messages/en.json";
+import es from "@/messages/es.json";
+import fr from "@/messages/fr.json";
+import ja from "@/messages/ja.json";
+import ptBR from "@/messages/pt-BR.json";
 import tr from "@/messages/tr.json";
+
+const catalogs = { en, tr, de, es, fr, ja, "pt-BR": ptBR } as const;
 
 function flattenKeys(value: unknown, prefix = ""): string[] {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -14,11 +21,31 @@ function flattenKeys(value: unknown, prefix = ""): string[] {
 }
 
 describe("marketing locales", () => {
-  test("keeps English and Turkish marketing keys aligned", () => {
-    const englishKeys = flattenKeys(en.marketing).sort();
-    const turkishKeys = flattenKeys(tr.marketing).sort();
+  test("keeps the full message catalog aligned across locales", () => {
+    const englishKeys = flattenKeys(en).sort();
 
-    expect(turkishKeys).toEqual(englishKeys);
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog).sort()).toEqual(englishKeys);
+    }
+  });
+
+  test("keeps marketing keys aligned across locales", () => {
+    const englishKeys = flattenKeys(en.marketing).sort();
+
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.marketing).sort(), locale).toEqual(
+        englishKeys,
+      );
+    }
+
     expect(englishKeys.some((key) => key.startsWith("hero."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("pricing."))).toBe(true);
     expect(englishKeys.some((key) => key.startsWith("nav."))).toBe(true);
@@ -30,36 +57,85 @@ describe("marketing locales", () => {
     );
   });
 
-  test("keeps English and Turkish developerDocs keys aligned", () => {
-    expect(flattenKeys(tr.developerDocs).sort()).toEqual(
-      flattenKeys(en.developerDocs).sort(),
-    );
+  test("keeps developerDocs keys aligned across locales", () => {
+    const englishKeys = flattenKeys(en.developerDocs).sort();
+
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.developerDocs).sort(), locale).toEqual(
+        englishKeys,
+      );
+    }
   });
 
-  test("keeps English and Turkish blog chrome keys aligned", () => {
-    expect(flattenKeys(tr.blog).sort()).toEqual(flattenKeys(en.blog).sort());
+  test("keeps blog chrome keys aligned across locales", () => {
+    const englishKeys = flattenKeys(en.blog).sort();
+
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.blog).sort(), locale).toEqual(englishKeys);
+    }
   });
 
-  test("keeps English and Turkish legal keys aligned", () => {
-    expect(flattenKeys(tr.legal).sort()).toEqual(flattenKeys(en.legal).sort());
+  test("keeps legal keys aligned across locales", () => {
+    const englishKeys = flattenKeys(en.legal).sort();
+
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.legal).sort(), locale).toEqual(englishKeys);
+    }
   });
 
-  test("keeps English and Turkish publicTools keys aligned", () => {
-    expect(flattenKeys(tr.publicTools).sort()).toEqual(
-      flattenKeys(en.publicTools).sort(),
-    );
+  test("keeps publicTools keys aligned across locales", () => {
+    const englishKeys = flattenKeys(en.publicTools).sort();
+
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.publicTools).sort(), locale).toEqual(
+        englishKeys,
+      );
+    }
   });
 
-  test("keeps English and Turkish tool catalog copy aligned", () => {
-    expect(flattenKeys(tr.tools).sort()).toEqual(flattenKeys(en.tools).sort());
+  test("keeps tool catalog copy aligned across locales", () => {
+    const englishKeys = flattenKeys(en.tools).sort();
+
+    for (const [locale, catalog] of Object.entries(catalogs)) {
+      if (locale === "en") {
+        continue;
+      }
+
+      expect(flattenKeys(catalog.tools).sort(), locale).toEqual(englishKeys);
+    }
   });
 
   test("does not claim certifications or instant processing", () => {
-    const copy = `${JSON.stringify(en.marketing)} ${JSON.stringify(tr.marketing)} ${JSON.stringify(en.publicTools)} ${JSON.stringify(tr.publicTools)} ${JSON.stringify(en.blog)} ${JSON.stringify(tr.blog)} ${JSON.stringify(en.legal)} ${JSON.stringify(tr.legal)}`;
+    const allCopy = Object.values(catalogs)
+      .flatMap((catalog) => [
+        catalog.marketing,
+        catalog.publicTools,
+        catalog.blog,
+        catalog.legal,
+      ])
+      .map((section) => JSON.stringify(section))
+      .join(" ");
+    const englishCopy = `${JSON.stringify(en.marketing)} ${JSON.stringify(en.publicTools)} ${JSON.stringify(en.blog)} ${JSON.stringify(en.legal)} ${JSON.stringify(tr.marketing)} ${JSON.stringify(tr.publicTools)} ${JSON.stringify(tr.blog)} ${JSON.stringify(tr.legal)}`;
 
-    expect(copy).not.toContain("SOC 2");
-    expect(copy).not.toContain("HIPAA");
-    expect(copy.toLowerCase()).not.toContain("instant");
+    expect(allCopy).not.toContain("SOC 2");
+    expect(allCopy).not.toContain("HIPAA");
+    expect(englishCopy.toLowerCase()).not.toContain("instant");
   });
 
   test("has unique English tool names", () => {
@@ -70,17 +146,23 @@ describe("marketing locales", () => {
     expect(new Set(names).size).toBe(names.length);
   });
 
-  test("has name and description copy for every catalog tool in both locales", () => {
+  test("has name and description copy for every catalog tool in every locale", () => {
     for (const tool of listCatalogTools()) {
-      const english = en.tools[tool.id as keyof typeof en.tools];
-      const turkish = tr.tools[tool.id as keyof typeof tr.tools];
+      for (const [locale, catalog] of Object.entries(catalogs)) {
+        const copy = catalog.tools[tool.id as keyof typeof catalog.tools];
 
-      expect(english.name.length).toBeGreaterThan(0);
-      expect(english.metaTitle.length).toBeGreaterThan(0);
-      expect(english.description.length).toBeGreaterThan(0);
-      expect(turkish.name.length).toBeGreaterThan(0);
-      expect(turkish.metaTitle.length).toBeGreaterThan(0);
-      expect(turkish.description.length).toBeGreaterThan(0);
+        expect(copy.name.length, `${locale}:${tool.id}.name`).toBeGreaterThan(
+          0,
+        );
+        expect(
+          copy.metaTitle.length,
+          `${locale}:${tool.id}.metaTitle`,
+        ).toBeGreaterThan(0);
+        expect(
+          copy.description.length,
+          `${locale}:${tool.id}.description`,
+        ).toBeGreaterThan(0);
+      }
     }
   });
 

@@ -10,6 +10,7 @@ import { MarketingContainer } from "@/features/marketing/components/marketing-co
 import { MarketingPageHeader } from "@/features/marketing/components/marketing-page-header";
 import { MARKETING_SUPPORT_EMAIL } from "@/features/marketing/lib/marketing-contact";
 import { Link } from "@/lib/i18n/navigation";
+import { toDateLocale } from "@/lib/i18n/routing";
 
 export async function LegalDocumentPage({ pageId }: { pageId: LegalPageId }) {
   const t = await getTranslations("legal");
@@ -88,7 +89,7 @@ function formatLegalDate(date: string, locale: string): string {
     throw new Error(`Invalid legal date: ${date}`);
   }
 
-  return new Intl.DateTimeFormat(locale === "tr" ? "tr-TR" : "en-GB", {
+  return new Intl.DateTimeFormat(toDateLocale(locale), {
     day: "numeric",
     month: "long",
     year: "numeric",

@@ -263,7 +263,7 @@ Local Polar webhooks cannot reach this machine. After a sandbox checkout, reload
 
 ## Internationalization
 
-`apps/web` uses **next-intl** with locales `en` and `tr`. Locale is cookie-based (`NEXT_LOCALE`). URLs have **no** locale prefix (`localePrefix: "never"`). Copy lives in `apps/web/messages/en.json` and `apps/web/messages/tr.json`.
+`apps/web` uses **next-intl** with locales `en`, `tr`, `de`, `es`, `fr`, `ja`, and `pt-BR`. Locale is cookie-based (`NEXT_LOCALE`). URLs have **no** locale prefix (`localePrefix: "never"`). Copy lives in `apps/web/messages/{locale}.json`. Blog posts are authored in `en` and `tr`; other locales fall back to English posts.
 
 ## Testing and checks
 
