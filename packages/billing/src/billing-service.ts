@@ -177,6 +177,7 @@ export type BillingService = {
     userId: string,
     product?: CheckoutProductKey,
     interval?: BillingInterval,
+    locale?: string,
   ): Promise<{ url: string | null }>;
   createCustomerPortal(userId: string): Promise<{ url: string }>;
   handleWebhook(input: {
@@ -1083,7 +1084,12 @@ export function createBillingService(
       });
     },
 
-    async createCheckout(userId, product = "pro", interval = "monthly") {
+    async createCheckout(
+      userId,
+      product = "pro",
+      interval = "monthly",
+      locale,
+    ) {
       const polar = options.polarClient;
       const productIds = polarCheckoutProductIds(
         product,
@@ -1162,6 +1168,7 @@ export function createBillingService(
         customerEmail,
         successUrl: checkoutSuccessUrl(options.config),
         ...(returnUrl === undefined ? {} : { returnUrl }),
+        ...(locale === undefined ? {} : { locale }),
       });
 
       return { url: checkout.url };

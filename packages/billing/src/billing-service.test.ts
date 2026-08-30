@@ -148,6 +148,35 @@ describe("createBillingService", () => {
     });
   });
 
+  test("sends the checkout locale to Polar", async () => {
+    let checkoutInput: {
+      productIds: readonly string[];
+      externalCustomerId: string;
+      customerEmail: string;
+      successUrl: string;
+      returnUrl?: string;
+      locale?: string;
+    } | null = null;
+    const billing = createService({
+      polarClient: createPolarClientMock({
+        async createCheckout(input) {
+          checkoutInput = input;
+          return { url: "https://polar.example/checkout/cs_tr" };
+        },
+      }),
+    });
+
+    const checkout = await billing.createCheckout(
+      "user_1",
+      "pro",
+      "monthly",
+      "tr",
+    );
+
+    expect(checkout.url).toBe("https://polar.example/checkout/cs_tr");
+    expect(checkoutInput?.locale).toBe("tr");
+  });
+
   test("reuses an existing Polar customer instead of creating a duplicate", async () => {
     let created = 0;
     const billing = createService({

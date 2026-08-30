@@ -5,6 +5,7 @@ import {
   type CheckoutProductKey,
   isBillingInterval,
   isCheckoutProductKey,
+  resolvePolarCheckoutLocale,
 } from "@sohappypdf/billing";
 import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import type { FileService } from "@sohappypdf/files";
@@ -92,10 +93,10 @@ export function createBillingRoutes(options: BillingRoutesOptions) {
 
   managed.post("/checkout", async (c) => {
     const identity = requireSessionIdentity(c.get("identity"));
-    const { product, interval } = await parseCheckoutRequest(c.req.raw);
+    const { product, interval, locale } = await parseCheckoutRequest(c.req.raw);
     const checkout = await options
       .getBillingService()
-      .createCheckout(identity.userId, product, interval);
+      .createCheckout(identity.userId, product, interval, locale);
 
     if (checkout.url === null) {
       c.get("logger").info("billing api pack updated", {
@@ -131,6 +132,7 @@ export function createBillingRoutes(options: BillingRoutesOptions) {
 async function parseCheckoutRequest(request: Request): Promise<{
   product: CheckoutProductKey;
   interval: BillingInterval;
+  locale?: string;
 }> {
   const text = await request.text();
 
@@ -158,6 +160,7 @@ async function parseCheckoutRequest(request: Request): Promise<{
 
   let product: CheckoutProductKey = "pro";
   let interval: BillingInterval = "monthly";
+  let locale: string | undefined;
 
   if ("product" in parsed && parsed.product !== undefined) {
     if (
@@ -187,5 +190,16 @@ async function parseCheckoutRequest(request: Request): Promise<{
     interval = parsed.interval;
   }
 
-  return { product, interval };
+  if ("locale" in parsed && parsed.locale !== undefined) {
+    if (typeof parsed.locale !== "string") {
+      throw new AppError({
+        code: APP_ERROR_CODES.VALIDATION_ERROR,
+        message: "Invalid checkout locale",
+      });
+    }
+
+    locale = resolvePolarCheckoutLocale(parsed.locale);
+  }
+
+  return { product, interval, locale };
 }

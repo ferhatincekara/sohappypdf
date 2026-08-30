@@ -91,13 +91,14 @@ describe("billing api", () => {
           expect(body).toEqual({
             product: "api-starter",
             interval: "yearly",
+            locale: "tr",
           });
           return { data: { checkout: { url: "https://polar.example/c" } } };
         }) as AxiosInstance["post"],
       }),
     );
 
-    const result = await api.createCheckout("api-starter", "yearly");
+    const result = await api.createCheckout("api-starter", "yearly", "tr");
     expect(result.checkout.url).toBe("https://polar.example/c");
   });
 
