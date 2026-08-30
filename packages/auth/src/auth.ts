@@ -20,18 +20,33 @@ function uniqueOrigins(origins: readonly string[]): string[] {
   return [...new Set(origins.filter((origin) => origin.length > 0))];
 }
 
+function httpsSiteOrigins(hostname: string): string[] {
+  if (hostname === "localhost" || hostname.endsWith(".localhost")) {
+    return [];
+  }
+
+  const apex = hostname.replace(/^www\./, "");
+
+  if (!apex.includes(".")) {
+    return [];
+  }
+
+  return [`https://${apex}`, `https://www.${apex}`];
+}
+
 function resolveBrowserOrigins(config: AuthConfig): string[] {
   const origins: string[] = [];
 
   if (config.appUrl !== undefined) {
-    origins.push(new URL(config.appUrl).origin);
+    origins.push(...httpsSiteOrigins(new URL(config.appUrl).hostname));
   }
 
   // Cookie-bearing Better Auth POSTs (login, Google) check Origin against
   // this list. Analytics and anonymous-session cookies count as cookies, so
   // the public site must be trusted even when API_CORS_ORIGINS is missing.
+  // www and apex are different origins; both must be listed.
   if (config.cookieDomain !== undefined && config.useSecureCookies) {
-    origins.push(`https://${config.cookieDomain}`);
+    origins.push(...httpsSiteOrigins(config.cookieDomain));
   }
 
   return origins;

@@ -104,6 +104,7 @@ describe("createAuth", () => {
     expect(auth.options.trustedOrigins).toEqual([
       "https://api.sohappypdf.com",
       "https://sohappypdf.com",
+      "https://www.sohappypdf.com",
     ]);
   });
 
@@ -128,6 +129,7 @@ describe("createAuth", () => {
     expect(auth.options.trustedOrigins).toEqual([
       "https://api.sohappypdf.com",
       "https://sohappypdf.com",
+      "https://www.sohappypdf.com",
     ]);
   });
 
