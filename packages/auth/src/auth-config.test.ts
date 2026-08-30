@@ -15,6 +15,7 @@ describe("loadAuthConfig", () => {
     expect(config.runtimeEnv).toBe("development");
     expect(config.useSecureCookies).toBe(false);
     expect(config.cookieDomain).toBeUndefined();
+    expect(config.appUrl).toBeUndefined();
     expect(config.google).toBeUndefined();
   });
 
@@ -58,6 +59,7 @@ describe("loadAuthConfig", () => {
     });
 
     expect(config.cookieDomain).toBe("sohappypdf.com");
+    expect(config.appUrl).toBe("https://sohappypdf.com");
   });
 
   test("requires HTTPS and secure cookies in production", () => {

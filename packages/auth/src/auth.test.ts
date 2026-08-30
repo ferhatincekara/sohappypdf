@@ -101,6 +101,34 @@ describe("createAuth", () => {
       "none",
     );
     expect(auth.options.advanced?.defaultCookieAttributes?.secure).toBe(true);
+    expect(auth.options.trustedOrigins).toEqual([
+      "https://api.sohappypdf.com",
+      "https://sohappypdf.com",
+    ]);
+  });
+
+  test("trusts the public site origin for cookie-bearing login posts", () => {
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "https://api.sohappypdf.com",
+        appUrl: "https://sohappypdf.com",
+        runtimeEnv: "production",
+        useSecureCookies: true,
+        cookieDomain: "sohappypdf.com",
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+    });
+
+    expect(auth.options.trustedOrigins).toEqual([
+      "https://api.sohappypdf.com",
+      "https://sohappypdf.com",
+    ]);
   });
 
   test("enables Google sign-in and links matching emails to existing accounts", () => {

@@ -13,6 +13,7 @@ export type GoogleAuthConfig = {
 export type AuthConfig = {
   secret: string;
   baseUrl: string;
+  appUrl?: string;
   runtimeEnv: RuntimeEnv;
   useSecureCookies: boolean;
   cookieDomain?: string;
@@ -62,6 +63,42 @@ function parseAuthBaseUrl(value: string, runtimeEnv: RuntimeEnv): string {
   return `${parsed.origin}${pathname}`;
 }
 
+function parseOptionalAppUrl(
+  value: string | undefined,
+  runtimeEnv: RuntimeEnv,
+): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  let parsed: URL;
+
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new AppError({
+      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+      message: "Invalid APP_URL",
+    });
+  }
+
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    throw new AppError({
+      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+      message: "Invalid APP_URL",
+    });
+  }
+
+  if (runtimeEnv === "production" && parsed.protocol !== "https:") {
+    throw new AppError({
+      code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+      message: "APP_URL must use HTTPS in production",
+    });
+  }
+
+  return parsed.origin;
+}
+
 function parseGoogleAuthConfig(
   source: EnvSource,
 ): GoogleAuthConfig | undefined {
@@ -90,11 +127,14 @@ export function loadAuthConfig(source: EnvSource = process.env): AuthConfig {
   );
 
   const explicitCookieDomain = getOptionalEnv("AUTH_COOKIE_DOMAIN", source);
+  const appUrl = parseOptionalAppUrl(
+    getOptionalEnv("APP_URL", source) ??
+      getOptionalEnv("NEXT_PUBLIC_APP_URL", source),
+    runtimeEnv,
+  );
   const cookieDomain = resolveAuthCookieDomain({
     authBaseUrl: baseUrl,
-    appUrl:
-      getOptionalEnv("APP_URL", source) ??
-      getOptionalEnv("NEXT_PUBLIC_APP_URL", source),
+    appUrl,
     cookieDomain: explicitCookieDomain,
   });
 
@@ -108,6 +148,7 @@ export function loadAuthConfig(source: EnvSource = process.env): AuthConfig {
   return {
     secret: parseAuthSecret(getRequiredEnv("BETTER_AUTH_SECRET", source)),
     baseUrl,
+    appUrl,
     runtimeEnv,
     useSecureCookies:
       runtimeEnv === "production" || new URL(baseUrl).protocol === "https:",

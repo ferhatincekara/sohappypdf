@@ -20,6 +20,23 @@ function uniqueOrigins(origins: readonly string[]): string[] {
   return [...new Set(origins.filter((origin) => origin.length > 0))];
 }
 
+function resolveBrowserOrigins(config: AuthConfig): string[] {
+  const origins: string[] = [];
+
+  if (config.appUrl !== undefined) {
+    origins.push(new URL(config.appUrl).origin);
+  }
+
+  // Cookie-bearing Better Auth POSTs (login, Google) check Origin against
+  // this list. Analytics and anonymous-session cookies count as cookies, so
+  // the public site must be trusted even when API_CORS_ORIGINS is missing.
+  if (config.cookieDomain !== undefined && config.useSecureCookies) {
+    origins.push(`https://${config.cookieDomain}`);
+  }
+
+  return origins;
+}
+
 export function createAuth(options: CreateAuthOptions) {
   const sendVerificationEmail =
     options.sendVerificationEmail ?? sendAuthEmailUnimplemented;
@@ -34,6 +51,7 @@ export function createAuth(options: CreateAuthOptions) {
     baseURL: options.config.baseUrl,
     trustedOrigins: uniqueOrigins([
       new URL(options.config.baseUrl).origin,
+      ...resolveBrowserOrigins(options.config),
       ...(options.trustedOrigins ?? []),
     ]),
     telemetry: {
