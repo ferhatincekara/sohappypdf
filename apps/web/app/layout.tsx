@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Onest } from "next/font/google";
+import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import {
   getLocale,
@@ -85,6 +86,18 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={onest.variable}>
       <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WZP8B9ND6D"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-WZP8B9ND6D');
+          `}
+        </Script>
         <NextIntlClientProvider locale={locale} messages={messages} now={now}>
           <AppProviders>{children}</AppProviders>
         </NextIntlClientProvider>
