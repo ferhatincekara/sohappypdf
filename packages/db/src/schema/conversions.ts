@@ -71,6 +71,11 @@ export const conversions = pgTable(
       table.createdAt,
       table.id,
     ),
+    index("conversions_created_at_id_idx").on(table.createdAt, table.id),
+    index("conversions_status_created_at_idx").on(
+      table.status,
+      table.createdAt,
+    ),
     uniqueIndex("conversions_owner_id_idempotency_key_uidx")
       .on(table.ownerId, table.idempotencyKey)
       .where(sql`${table.idempotencyKey} is not null`),

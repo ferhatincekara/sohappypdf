@@ -7,9 +7,13 @@ export { createDatabase, getDb } from "./client.js";
 export { pingDatabase } from "./ping.js";
 export type {
   AdminAuditEventRow,
+  AdminAuditResult,
   NewAdminAuditEventRow,
 } from "./schema/admin-audit-events.js";
-export { adminAuditEvents } from "./schema/admin-audit-events.js";
+export {
+  ADMIN_AUDIT_RESULTS,
+  adminAuditEvents,
+} from "./schema/admin-audit-events.js";
 export type {
   AnonymousSessionRow,
   NewAnonymousSessionRow,
@@ -24,6 +28,7 @@ export type {
   NewUserRow,
   NewVerificationRow,
   SessionRow,
+  UserRole,
   UserRow,
   VerificationRow,
 } from "./schema/auth.js";
@@ -32,6 +37,7 @@ export {
   accountRelations,
   session,
   sessionRelations,
+  USER_ROLES,
   user,
   userRelations,
   verification,

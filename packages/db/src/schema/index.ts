@@ -1,8 +1,12 @@
 export type {
   AdminAuditEventRow,
+  AdminAuditResult,
   NewAdminAuditEventRow,
 } from "./admin-audit-events.js";
-export { adminAuditEvents } from "./admin-audit-events.js";
+export {
+  ADMIN_AUDIT_RESULTS,
+  adminAuditEvents,
+} from "./admin-audit-events.js";
 export type {
   AnonymousSessionRow,
   NewAnonymousSessionRow,
@@ -17,6 +21,7 @@ export type {
   NewUserRow,
   NewVerificationRow,
   SessionRow,
+  UserRole,
   UserRow,
   VerificationRow,
 } from "./auth.js";
@@ -25,6 +30,7 @@ export {
   accountRelations,
   session,
   sessionRelations,
+  USER_ROLES,
   user,
   userRelations,
   verification,

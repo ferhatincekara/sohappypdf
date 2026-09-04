@@ -1,6 +1,7 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
+  check,
   index,
   pgTable,
   text,
@@ -8,18 +9,37 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-export const user = pgTable("user", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
-  image: text("image"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-});
+export const USER_ROLES = ["user", "admin"] as const;
+
+export type UserRole = (typeof USER_ROLES)[number];
+
+export const user = pgTable(
+  "user",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    email: text("email").notNull().unique(),
+    emailVerified: boolean("email_verified").default(false).notNull(),
+    image: text("image"),
+    role: text("role").notNull().default("user"),
+    suspendedAt: timestamp("suspended_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    suspendedReason: text("suspended_reason"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("user_created_at_idx").on(table.createdAt),
+    index("user_role_idx").on(table.role),
+    index("user_suspended_at_idx").on(table.suspendedAt),
+    check("user_role_known", sql`${table.role} in ('user', 'admin')`),
+  ],
+);
 
 export const session = pgTable(
   "session",
