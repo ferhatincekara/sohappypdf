@@ -22,9 +22,12 @@ import {
   closeQueues,
   createConversionWorker,
   createFileCleanupWorker,
+  createWorkerHeartbeatState,
   FILE_CLEANUP_INTERVAL_MS,
   FILE_CLEANUP_QUEUE_NAME,
   scheduleFileCleanup,
+  startWorkerHeartbeat,
+  type WorkerHeartbeat,
 } from "@sohappypdf/queue";
 import { getStorage } from "@sohappypdf/storage";
 import {
@@ -61,6 +64,7 @@ export type StartConversionWorkerRuntimeOptions = {
   enableFileCleanup?: boolean;
   enablePendingPoller?: boolean;
   listenHealth?: boolean;
+  writeHeartbeat?: (heartbeat: WorkerHeartbeat) => Promise<void>;
 };
 
 function createWorkerLogger(config: {
@@ -116,6 +120,7 @@ export async function startConversionWorkerRuntime(
     async closeWorker(force) {
       stopPendingPoller?.();
       stopFileCleanupFallback?.();
+      stopHeartbeat?.();
       await Promise.all([
         worker?.close(force) ?? Promise.resolve(),
         cleanupWorker?.close(force) ?? Promise.resolve(),
@@ -135,6 +140,8 @@ export async function startConversionWorkerRuntime(
   let cleanupWorker: ConversionWorker | undefined;
   let stopPendingPoller: (() => void) | undefined;
   let stopFileCleanupFallback: (() => void) | undefined;
+  let stopHeartbeat: (() => void) | undefined;
+  const heartbeat = createWorkerHeartbeatState();
 
   logger.info("worker starting");
 
@@ -165,7 +172,7 @@ export async function startConversionWorkerRuntime(
 
     const createQueueWorker =
       options.createQueueWorker ?? createConversionWorker;
-    const processJob =
+    const processConversion =
       options.createProcessor?.({
         config: runtimeConfig.worker,
         logger,
@@ -179,6 +186,10 @@ export async function startConversionWorkerRuntime(
         logger,
         billing: getBillingService(),
       });
+    const processJob: ConversionJobProcessor = async (job) => {
+      heartbeat.markJobStarted(job.id);
+      await processConversion(job);
+    };
 
     if (environment.queueAvailable) {
       worker = createQueueWorker({
@@ -192,12 +203,16 @@ export async function startConversionWorkerRuntime(
             });
           },
           onCompleted(job) {
+            heartbeat.markJobCompleted();
             logger.info("job completed", {
               jobId: job.id,
               conversionId: job.conversionId,
             });
           },
           onFailed(job) {
+            if (job.permanent) {
+              heartbeat.markJobFailed();
+            }
             logger.warn(job.permanent ? "job failed" : "job retrying", {
               jobId: job.id,
               conversionId: job.conversionId,
@@ -316,6 +331,14 @@ export async function startConversionWorkerRuntime(
     }
 
     status = "ready";
+
+    if (environment.queueAvailable) {
+      stopHeartbeat = startWorkerHeartbeat({
+        state: heartbeat,
+        write: options.writeHeartbeat,
+      });
+    }
+
     logger.info("worker started", {
       concurrency: runtimeConfig.worker.concurrency,
       timeoutMs: runtimeConfig.worker.conversionTimeoutMs,

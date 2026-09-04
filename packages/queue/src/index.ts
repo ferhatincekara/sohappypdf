@@ -23,6 +23,7 @@ export type {
 export {
   createConversionEnqueue,
   enqueueConversion,
+  getConversionQueue,
   getConversionQueueCounts,
 } from "./conversion-queue.js";
 export type {
@@ -40,6 +41,7 @@ export {
 } from "./file-cleanup-job.js";
 export {
   closeFileCleanupQueue,
+  getFileCleanupQueue,
   scheduleFileCleanup,
 } from "./file-cleanup-queue.js";
 export type {
@@ -48,6 +50,23 @@ export type {
   FileCleanupWorkerJob,
 } from "./file-cleanup-worker.js";
 export { createFileCleanupWorker } from "./file-cleanup-worker.js";
+export type {
+  AdminQueueCounts,
+  AdminQueueJobSummary,
+  AdminQueueName,
+  AdminQueueSummary,
+} from "./queue-admin.js";
+export {
+  ADMIN_QUEUE_NAMES,
+  getAdminQueueCounts,
+  getAdminQueueLabel,
+  inspectAdminQueueJob,
+  listAdminQueues,
+  pauseAdminQueue,
+  removeAdminQueueJob,
+  resumeAdminQueue,
+  retryAdminQueueJob,
+} from "./queue-admin.js";
 export type {
   QueueConnectionOptions,
   QueueConnectionRole,
@@ -77,3 +96,19 @@ export {
   FILE_CLEANUP_REPEAT,
   FILE_CLEANUP_SCHEDULER_ID,
 } from "./queue-settings.js";
+export type {
+  WorkerHeartbeat,
+  WorkerHeartbeatStatus,
+  WorkerHeartbeatView,
+} from "./worker-heartbeat.js";
+export {
+  createWorkerHeartbeatState,
+  listWorkerHeartbeats,
+  parseWorkerHeartbeat,
+  resolveWorkerHeartbeatStatus,
+  startWorkerHeartbeat,
+  WORKER_HEARTBEAT_INTERVAL_MS,
+  WORKER_HEARTBEAT_KEY_PREFIX,
+  WORKER_HEARTBEAT_TTL_SECONDS,
+  writeWorkerHeartbeat,
+} from "./worker-heartbeat.js";

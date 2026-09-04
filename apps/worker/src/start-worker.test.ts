@@ -38,6 +38,7 @@ describe("startConversionWorkerRuntime", () => {
           async close() {},
         };
       },
+      writeHeartbeat: async () => undefined,
     });
 
     expect(created).toBe(true);

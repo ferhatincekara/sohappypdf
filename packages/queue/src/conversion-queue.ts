@@ -30,7 +30,7 @@ export type ConversionJobWriter = {
 
 let conversionQueue: Queue<ConversionJobData> | undefined;
 
-function getConversionQueue(): Queue<ConversionJobData> {
+export function getConversionQueue(): Queue<ConversionJobData> {
   if (conversionQueue === undefined) {
     conversionQueue = new Queue<ConversionJobData>(CONVERSION_QUEUE_NAME, {
       connection: getQueueConnection("producer"),
