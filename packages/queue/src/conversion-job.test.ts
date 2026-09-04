@@ -6,6 +6,7 @@ import {
   createConversionJob,
   createConversionJobId,
   parseConversionJobData,
+  toQueueSafeJobOptions,
 } from "./conversion-job.js";
 import {
   CONVERSION_JOB_NAME,
@@ -73,6 +74,33 @@ describe("conversion job contract", () => {
 
   test("accepts a typed conversion payload", () => {
     expect(parseConversionJobData(validJob)).toEqual(validJob);
+  });
+
+  test("keeps only the conversion type in Redis job options", () => {
+    expect(
+      parseConversionJobData({
+        ...validJob,
+        conversionType: "edit-pdf",
+        targetFormat: "pdf",
+        options: toQueueSafeJobOptions({
+          type: "edit-pdf",
+          operations: [
+            {
+              kind: "text",
+              page: 1,
+              x: 10,
+              y: 20,
+              text: "2 Open Settings Sync merhaba",
+            },
+          ],
+        }),
+      }),
+    ).toEqual({
+      ...validJob,
+      conversionType: "edit-pdf",
+      targetFormat: "pdf",
+      options: { type: "edit-pdf" },
+    });
   });
 
   test("rejects invalid or sensitive payloads", () => {

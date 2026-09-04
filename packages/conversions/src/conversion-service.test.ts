@@ -160,10 +160,17 @@ function createMemoryRepository(
     async listPendingForProcessing(input) {
       return [...records.values()]
         .filter((conversion) => {
-          if (
-            conversion.status !== "pending" ||
-            isConversionRecordExpired(conversion, input.now)
-          ) {
+          if (isConversionRecordExpired(conversion, input.now)) {
+            return false;
+          }
+
+          const pending = conversion.status === "pending";
+          const stuckQueued =
+            conversion.status === "queued" &&
+            conversion.startedAt === null &&
+            input.staleBefore !== undefined;
+
+          if (!pending && !stuckQueued) {
             return false;
           }
 
@@ -404,6 +411,37 @@ describe("conversion service", () => {
     expect(claimed?.status).toBe("queued");
     expect(claimedAgain).toBeUndefined();
     expect(await service.listPendingForProcessing()).toEqual([]);
+  });
+
+  test("lists stuck queued conversions for the worker fallback", async () => {
+    let current = new Date("2026-08-23T18:39:00.000Z");
+    const service = createConversionService({
+      repository: createMemoryRepository(),
+      files: createFileLookup([sourceFile]),
+      now: () => current,
+    });
+    const queued = await service.createConversion({
+      ownerId: sourceFile.ownerId,
+      sourceFileId: sourceFile.id,
+      type: "edit-pdf",
+      sourceFormat: "pdf",
+      targetFormat: "pdf",
+      options: {
+        type: "edit-pdf",
+        operations: [{ kind: "text", page: 1, x: 10, y: 20, text: "Hello" }],
+      },
+    });
+    await service.markQueued(queued.id);
+    current = new Date("2026-08-23T18:40:00.000Z");
+
+    expect(await service.listPendingForProcessing()).toEqual([]);
+
+    const listed = await service.listPendingForProcessing(10, 15_000);
+
+    expect(listed).toHaveLength(1);
+    expect(listed[0]?.id).toBe(queued.id);
+    expect(listed[0]?.status).toBe("queued");
+    expect(listed[0]?.startedAt).toBeNull();
   });
 
   test("rejects invalid status transitions", async () => {

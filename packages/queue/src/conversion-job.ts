@@ -49,23 +49,27 @@ export function conversionIdFromJobData(value: unknown): string | undefined {
 }
 
 /**
- * Redis job payloads must not contain secrets. Workers load those
- * fields from the conversion record instead.
+ * Redis job payloads must stay small and must not contain secrets.
+ * Workers load the full option document from the conversion record.
  */
 export function toQueueSafeJobOptions(
   options: Record<string, unknown>,
 ): Record<string, unknown> {
-  const safe: Record<string, unknown> = {};
+  const type = options.type;
 
-  for (const [key, value] of Object.entries(options)) {
-    if (SENSITIVE_OPTION_KEYS.has(key.toLowerCase())) {
-      continue;
-    }
-
-    safe[key] = value;
+  if (typeof type !== "string" || type.length === 0) {
+    return {};
   }
 
-  return safe;
+  if (
+    type.length > MAX_FIELD_LENGTH ||
+    !FIELD_PATTERN.test(type) ||
+    SENSITIVE_OPTION_KEYS.has(type.toLowerCase())
+  ) {
+    return {};
+  }
+
+  return { type };
 }
 
 export type ConversionJobData = {

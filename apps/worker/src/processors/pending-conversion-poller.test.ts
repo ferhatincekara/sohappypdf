@@ -157,6 +157,47 @@ describe("startPendingConversionPoller", () => {
     expect(failed).toEqual([conversion.id]);
   });
 
+  test("processes a queued conversion that never started", async () => {
+    const conversion = {
+      ...createPendingConversion(),
+      status: "queued" as const,
+      queuedAt: new Date("2026-08-29T12:00:00.000Z"),
+    };
+    const claimed: string[] = [];
+    const processed: string[] = [];
+    const poller = startPendingConversionPoller({
+      conversions: {
+        async listPendingForProcessing() {
+          return [conversion];
+        },
+        async claimPendingForProcessing(id) {
+          claimed.push(id);
+          return undefined;
+        },
+      } as never,
+      files: {
+        async findFileById() {
+          return {
+            id: conversion.sourceFileId,
+            objectKey: "users/user_1/source.pdf",
+            deletedAt: null,
+          };
+        },
+      } as never,
+      async processJob(job) {
+        processed.push(job.data.conversionId);
+      },
+      logger: silentLogger,
+      intervalMs: 60_000,
+    });
+
+    await waitForPoll();
+    poller.stop();
+
+    expect(claimed).toEqual([]);
+    expect(processed).toEqual([conversion.id]);
+  });
+
   test("does not fail a conversion another worker is already processing", async () => {
     const conversion = createPendingConversion();
     const failed: string[] = [];

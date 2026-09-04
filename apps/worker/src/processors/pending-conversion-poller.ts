@@ -87,9 +87,10 @@ async function processPendingConversion(
     logger: Logger;
   },
 ): Promise<void> {
-  const claimed = await options.conversions.claimPendingForProcessing(
-    conversion.id,
-  );
+  const claimed =
+    conversion.status === "queued"
+      ? conversion
+      : await options.conversions.claimPendingForProcessing(conversion.id);
 
   if (claimed === undefined) {
     return;

@@ -315,7 +315,17 @@ export function createConversionRepository(db: Database): ConversionRepository {
           gt(conversions.createdAt, input.activeAfter),
         ),
       );
-      const conditions = [eq(conversions.status, "pending"), activeExpiry];
+      const statusCondition =
+        input.staleBefore === undefined
+          ? eq(conversions.status, "pending")
+          : or(
+              eq(conversions.status, "pending"),
+              and(
+                eq(conversions.status, "queued"),
+                isNull(conversions.startedAt),
+              ),
+            );
+      const conditions = [statusCondition, activeExpiry];
 
       if (input.staleBefore !== undefined) {
         conditions.push(lte(conversions.createdAt, input.staleBefore));
