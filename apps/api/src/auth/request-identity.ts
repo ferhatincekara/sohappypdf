@@ -2,7 +2,9 @@ import { getApiKeyService, isApiKeyFormat } from "@sohappypdf/api-keys";
 import {
   type Auth,
   type AuthIdentity,
+  assertUserNotSuspended,
   createApiKeyAuthIdentity,
+  findUserAccess,
   getAuth,
   getAuthSession,
   type SessionAuthIdentity,
@@ -60,6 +62,12 @@ export async function resolveRequestIdentity(
   const session = await getAuthSession(auth, headers);
 
   if (session !== null) {
+    const access = await findUserAccess(session.user.id);
+
+    if (access !== undefined) {
+      assertUserNotSuspended(access);
+    }
+
     return toSessionAuthIdentity(session);
   }
 

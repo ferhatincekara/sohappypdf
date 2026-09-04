@@ -25,6 +25,10 @@ function createMemoryRepository(
       );
       return record === undefined ? undefined : { ...record };
     },
+    async findById(id) {
+      const record = records.get(id);
+      return record === undefined ? undefined : { ...record };
+    },
     async findByIdForUser(id, userId) {
       const record = records.get(id);
 
@@ -51,6 +55,21 @@ function createMemoryRepository(
 
       records.delete(input.id);
       return { ...record };
+    },
+    async revoke(input) {
+      const record = records.get(input.id);
+
+      if (record === undefined || record.revokedAt !== null) {
+        return undefined;
+      }
+
+      const revoked = {
+        ...record,
+        revokedAt: input.now,
+        updatedAt: input.now,
+      };
+      records.set(input.id, revoked);
+      return { ...revoked };
     },
     async touchLastUsedAt(input) {
       const record = records.get(input.id);
@@ -214,6 +233,26 @@ describe("createApiKeyService", () => {
         expect(error.code).toBe("NOT_FOUND");
       }
     }
+  });
+
+  test("revokes a key without returning secret material", async () => {
+    const currentTime = new Date("2026-01-01T00:00:00.000Z");
+    const repository = createMemoryRepository();
+    const service = createService({
+      repository,
+      now: () => currentTime,
+    });
+    const created = await service.create({
+      userId: "user_1",
+      name: "CI",
+    });
+
+    const revoked = await service.revoke(created.apiKey.id);
+
+    expect(revoked.revokedAt).toEqual(currentTime);
+    expect(JSON.stringify(revoked).includes(created.secret)).toBe(false);
+    await expect(service.authenticate(created.secret)).resolves.toBeNull();
+    expect(await service.listByUserId("user_1")).toEqual([]);
   });
 
   test("does not reveal another user's key on delete", async () => {

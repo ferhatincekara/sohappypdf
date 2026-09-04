@@ -6,6 +6,7 @@ import type { StoredApiKeyRecord } from "./api-key-types.js";
 export type ApiKeyRepository = {
   insert(record: StoredApiKeyRecord): Promise<StoredApiKeyRecord>;
   findByPrefix(keyPrefix: string): Promise<StoredApiKeyRecord | undefined>;
+  findById(id: string): Promise<StoredApiKeyRecord | undefined>;
   findByIdForUser(
     id: string,
     userId: string,
@@ -14,6 +15,10 @@ export type ApiKeyRepository = {
   delete(input: {
     id: string;
     userId: string;
+  }): Promise<StoredApiKeyRecord | undefined>;
+  revoke(input: {
+    id: string;
+    now: Date;
   }): Promise<StoredApiKeyRecord | undefined>;
   touchLastUsedAt(input: {
     id: string;
@@ -80,6 +85,20 @@ export function createApiKeyRepository(db: Database): ApiKeyRepository {
       return toStoredRecord(row);
     },
 
+    async findById(id) {
+      const [row] = await db
+        .select()
+        .from(apiKeys)
+        .where(eq(apiKeys.id, id))
+        .limit(1);
+
+      if (row === undefined) {
+        return undefined;
+      }
+
+      return toStoredRecord(row);
+    },
+
     async findByIdForUser(id, userId) {
       const [row] = await db
         .select()
@@ -108,6 +127,23 @@ export function createApiKeyRepository(db: Database): ApiKeyRepository {
       const [row] = await db
         .delete(apiKeys)
         .where(and(eq(apiKeys.id, input.id), eq(apiKeys.userId, input.userId)))
+        .returning();
+
+      if (row === undefined) {
+        return undefined;
+      }
+
+      return toStoredRecord(row);
+    },
+
+    async revoke(input) {
+      const [row] = await db
+        .update(apiKeys)
+        .set({
+          revokedAt: input.now,
+          updatedAt: input.now,
+        })
+        .where(and(eq(apiKeys.id, input.id), isNull(apiKeys.revokedAt)))
         .returning();
 
       if (row === undefined) {

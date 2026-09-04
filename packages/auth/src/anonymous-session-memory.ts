@@ -29,6 +29,10 @@ export function createMemoryAnonymousSessionRepository(
       return record === undefined ? undefined : { ...record };
     },
 
+    async deleteById(id) {
+      return records.delete(id);
+    },
+
     async deleteExpired(input) {
       const expired = [...records.values()]
         .filter((session) => session.expiresAt.getTime() <= input.now.getTime())

@@ -34,6 +34,7 @@ export type ApiKeyService = {
   create(input: CreateApiKeyInput): Promise<CreatedApiKey>;
   listByUserId(userId: string): Promise<ApiKeyPublicRecord[]>;
   delete(input: DeleteApiKeyInput): Promise<ApiKeyPublicRecord>;
+  revoke(id: string): Promise<ApiKeyPublicRecord>;
   authenticate(rawKey: string): Promise<AuthenticatedApiKey | null>;
 };
 
@@ -135,6 +136,32 @@ export function createApiKeyService(
       }
 
       return toApiKeyPublicRecord(deleted);
+    },
+
+    async revoke(id) {
+      const keyId = assertApiKeyId(id);
+      const existing = await options.repository.findById(keyId);
+
+      if (existing === undefined || existing.revokedAt !== null) {
+        throw new AppError({
+          code: APP_ERROR_CODES.NOT_FOUND,
+          message: "API key not found",
+        });
+      }
+
+      const revoked = await options.repository.revoke({
+        id: keyId,
+        now: now(),
+      });
+
+      if (revoked === undefined) {
+        throw new AppError({
+          code: APP_ERROR_CODES.NOT_FOUND,
+          message: "API key not found",
+        });
+      }
+
+      return toApiKeyPublicRecord(revoked);
     },
 
     async authenticate(rawKey) {

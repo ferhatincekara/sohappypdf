@@ -2,6 +2,24 @@ import { assertServerOnly } from "@sohappypdf/core";
 
 assertServerOnly("@sohappypdf/auth");
 
+export type {
+  AdminAuditEvent,
+  WriteAdminAuditEventInput,
+} from "./admin-audit.js";
+export { writeAdminAuditEvent } from "./admin-audit.js";
+export type { AdminUserAccess, UserRole } from "./admin-authorization.js";
+export {
+  assertUserNotSuspended,
+  findUserAccess,
+  hasAdminRole,
+  isUserRole,
+  requireAdminAccess,
+  USER_ROLES,
+} from "./admin-authorization.js";
+export {
+  restoreUserAccount,
+  setUserSuspended,
+} from "./admin-user-account.js";
 export {
   ANONYMOUS_SESSION_COOKIE_NAME,
   createAnonymousSessionCookieClearOptions,

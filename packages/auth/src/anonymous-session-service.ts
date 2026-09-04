@@ -95,6 +95,20 @@ export function createAnonymousSessionService(
       };
     },
 
+    async findById(id) {
+      const record = await options.repository.findById(id);
+
+      if (record === undefined) {
+        return undefined;
+      }
+
+      return toPublicSession(record);
+    },
+
+    async deleteById(id) {
+      return options.repository.deleteById(id);
+    },
+
     async deleteExpired(input = {}) {
       const at = input.now ?? now();
       const limit = input.limit ?? 100;

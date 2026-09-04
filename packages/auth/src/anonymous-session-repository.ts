@@ -72,6 +72,15 @@ export function createAnonymousSessionRepository(
       return toAnonymousSessionRecord(row);
     },
 
+    async deleteById(id) {
+      const [row] = await db
+        .delete(anonymousSessions)
+        .where(eq(anonymousSessions.id, id))
+        .returning({ id: anonymousSessions.id });
+
+      return row !== undefined;
+    },
+
     async deleteExpired(input) {
       const expired = await db
         .select({ id: anonymousSessions.id })
