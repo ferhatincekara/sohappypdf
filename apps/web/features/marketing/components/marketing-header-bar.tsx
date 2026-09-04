@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRightIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -292,7 +292,7 @@ export function MarketingHeaderBar({
             >
               <div className="max-h-[calc(100vh-4rem)] overflow-y-auto bg-white md:max-h-[calc(100vh-5rem)]">
                 <div className="mx-auto grid max-w-site grid-cols-[minmax(0,1fr)_--spacing(60)] gap-10 px-5 py-8 md:px-8">
-                  <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
+                  <div className="grid grid-cols-3 gap-x-8 gap-y-8">
                     {sections.map((section) => (
                       <MegaMenuToolGroup
                         key={section.id}
@@ -350,14 +350,6 @@ export function MarketingHeaderBar({
                         </motion.div>
                       );
                     })}
-                    <Link
-                      href={MARKETING_PATHS.tools}
-                      onClick={() => setToolsOpen(false)}
-                      className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-foreground transition-opacity hover:opacity-60"
-                    >
-                      {t("allTools")}
-                      <ArrowRightIcon className="size-4" />
-                    </Link>
                   </div>
                 </div>
               </div>

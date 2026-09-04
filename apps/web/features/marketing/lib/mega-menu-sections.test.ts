@@ -9,13 +9,15 @@ describe("mega menu sections", () => {
     );
 
     expect(sections.map((section) => section.id)).toEqual([
-      "popular",
       "organize",
       "convertFrom",
       "convertTo",
       "edit",
       "security",
     ]);
+    expect(ids.filter((id) => id === "merge-pdf")).toHaveLength(1);
+    expect(ids).toContain("compress-pdf");
+    expect(ids).toContain("ocr-pdf");
     expect(ids).toContain("word-to-pdf");
     expect(ids).toContain("excel-to-pdf");
     expect(ids).toContain("redact-pdf");

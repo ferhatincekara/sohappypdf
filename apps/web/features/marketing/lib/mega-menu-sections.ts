@@ -5,7 +5,6 @@ import {
 } from "@/features/marketing/lib/marketing-tools";
 
 export const MEGA_MENU_SECTION_IDS = [
-  "popular",
   "organize",
   "convertFrom",
   "convertTo",
@@ -21,17 +20,10 @@ export type MegaMenuSection = {
 };
 
 const MEGA_MENU_TOOL_IDS: Record<MegaMenuSectionId, readonly string[]> = {
-  popular: [
-    "merge-pdf",
-    "split-pdf",
-    "compress-pdf",
-    "pdf-to-word",
-    "edit-pdf",
-    "ocr-pdf",
-  ],
   organize: [
     "merge-pdf",
     "split-pdf",
+    "compress-pdf",
     "organize-pdf",
     "extract-pages",
     "remove-pages",
@@ -43,6 +35,7 @@ const MEGA_MENU_TOOL_IDS: Record<MegaMenuSectionId, readonly string[]> = {
     "pdf-to-powerpoint",
     "pdf-to-jpg",
     "pdf-to-png",
+    "ocr-pdf",
   ],
   convertTo: [
     "word-to-pdf",
