@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { DetailGrid, DetailSection } from "@/components/admin/detail-section";
 import { PageHeader } from "@/components/admin/page-header";
 import { StatusBadge } from "@/components/admin/status-badge";
+import { resolveAvatarUrl } from "@/features/identity/gravatar-url";
+import { UserAvatar } from "@/features/identity/user-avatar";
 import {
   AdjustCreditsForm,
   RestoreUserButton,
@@ -32,6 +34,13 @@ export default async function UserDetailPage({
       <PageHeader
         title={detail.user.email}
         description={detail.user.name}
+        leading={
+          <UserAvatar
+            src={resolveAvatarUrl(detail.user.email, detail.user.image)}
+            label={detail.user.name || detail.user.email}
+            className="size-11"
+          />
+        }
         actions={
           <UserActionBar>
             {detail.user.suspendedAt === null ? (
@@ -45,7 +54,7 @@ export default async function UserDetailPage({
                 email={detail.user.email}
               />
             )}
-            <AdjustCreditsForm userId={detail.user.id} />
+            <AdjustCreditsForm userId={detail.user.id} webPlan={webPlan} />
           </UserActionBar>
         }
       />
@@ -111,16 +120,14 @@ export default async function UserDetailPage({
           <DetailGrid
             items={[
               {
-                label: "Web",
-                value: `${detail.credits.web.webCreditsRemaining} remaining / ${detail.credits.web.webCreditsGranted} granted`,
+                label: "Web tools",
+                value: detail.credits.web.unlimited
+                  ? "Unlimited on the web app"
+                  : `${detail.credits.web.webCreditsRemaining} left of ${detail.credits.web.webCreditsGranted} this period`,
               },
               {
-                label: "API",
-                value: `${detail.credits.api.apiCreditsRemaining} remaining / ${detail.credits.api.apiCreditsGranted} granted`,
-              },
-              {
-                label: "AI",
-                value: `${detail.credits.ai.aiCreditsRemaining} remaining / ${detail.credits.ai.aiCreditsGranted} granted`,
+                label: "API credits",
+                value: `${detail.credits.api.apiCreditsRemaining} left of ${detail.credits.api.apiCreditsGranted} this period`,
               },
             ]}
           />
@@ -170,8 +177,7 @@ export default async function UserDetailPage({
           <ul className="space-y-1 text-sm">
             {detail.recentLedger.map((entry) => (
               <li key={entry.id}>
-                {entry.type} {entry.source} {entry.amount} · {entry.reason} ·{" "}
-                {formatDateTime(entry.createdAt)}
+                {formatLedgerEntry(entry)} · {formatDateTime(entry.createdAt)}
               </li>
             ))}
           </ul>
@@ -179,4 +185,24 @@ export default async function UserDetailPage({
       </div>
     </>
   );
+}
+
+function formatLedgerEntry(entry: {
+  type: string;
+  source: string;
+  amount: number;
+  reason: string;
+}): string {
+  const pool = entry.source === "api" ? "API credits" : "Web tool credits";
+  const verb =
+    entry.type === "consume"
+      ? "used"
+      : entry.type === "refund"
+        ? "returned"
+        : entry.type === "adjustment"
+          ? "adjusted"
+          : "added";
+  const reason = entry.reason.replace(/^admin:[^:]+:\s*/, "");
+
+  return `${verb} ${entry.amount} ${pool}${reason.length > 0 ? ` · ${reason}` : ""}`;
 }

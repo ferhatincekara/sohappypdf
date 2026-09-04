@@ -12,6 +12,7 @@ export function ConfirmDialog({
   destructive = false,
   triggerLabel,
   triggerVariant = "outline",
+  confirmDisabled = false,
   onConfirm,
 }: {
   title: string;
@@ -21,6 +22,7 @@ export function ConfirmDialog({
   destructive?: boolean;
   triggerLabel: string;
   triggerVariant?: "outline" | "destructive" | "ghost";
+  confirmDisabled?: boolean;
   onConfirm: () => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
@@ -61,7 +63,7 @@ export function ConfirmDialog({
             </Button>
             <Button
               variant={destructive ? "destructive" : "default"}
-              disabled={pending}
+              disabled={pending || confirmDisabled}
               onClick={() => {
                 setPending(true);
                 setError(null);

@@ -34,6 +34,7 @@ export type AdminUserListRow = {
   id: string;
   email: string;
   name: string;
+  image: string | null;
   role: string;
   suspendedAt: Date | null;
   createdAt: Date;
@@ -122,6 +123,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
       id: user.id,
       email: user.email,
       name: user.name,
+      image: user.image,
       role: user.role,
       suspendedAt: user.suspendedAt,
       createdAt: user.createdAt,
@@ -284,6 +286,7 @@ export async function getAdminUserDetail(userId: string) {
       id: user.id,
       email: user.email,
       name: user.name,
+      image: user.image,
       role: user.role,
       emailVerified: user.emailVerified,
       suspendedAt: user.suspendedAt,
@@ -304,7 +307,8 @@ export async function getAdminUserDetail(userId: string) {
     entitlements,
     webSubscription,
     apiSubscription,
-    usagePeriod,
+    webBalance,
+    apiBalance,
     keys,
     recentExecutions,
     recentLedger,
@@ -336,20 +340,8 @@ export async function getAdminUserDetail(userId: string) {
       .orderBy(desc(apiSubscriptions.updatedAt))
       .limit(1)
       .then((rows) => rows[0] ?? null),
-    db
-      .select({
-        webCreditsGranted: usagePeriods.webCreditsGranted,
-        webCreditsUsed: usagePeriods.webCreditsUsed,
-        apiCreditsGranted: usagePeriods.apiCreditsGranted,
-        apiCreditsUsed: usagePeriods.apiCreditsUsed,
-        aiCreditsGranted: usagePeriods.aiCreditsGranted,
-        aiCreditsUsed: usagePeriods.aiCreditsUsed,
-      })
-      .from(usagePeriods)
-      .where(eq(usagePeriods.userId, userId))
-      .orderBy(desc(usagePeriods.periodStart))
-      .limit(1)
-      .then((rows) => rows[0] ?? null),
+    billing.getWebCreditBalance(userId),
+    billing.getApiCreditBalance(userId),
     db
       .select({
         id: apiKeys.id,
@@ -388,7 +380,12 @@ export async function getAdminUserDetail(userId: string) {
         createdAt: webCreditLedgerEntries.createdAt,
       })
       .from(webCreditLedgerEntries)
-      .where(eq(webCreditLedgerEntries.userId, userId))
+      .where(
+        and(
+          eq(webCreditLedgerEntries.userId, userId),
+          sql`${webCreditLedgerEntries.source} <> 'ai'`,
+        ),
+      )
       .orderBy(desc(webCreditLedgerEntries.createdAt))
       .limit(20),
     db
@@ -411,25 +408,15 @@ export async function getAdminUserDetail(userId: string) {
     apiSubscription,
     credits: {
       web: {
-        webCreditsGranted: usagePeriod?.webCreditsGranted ?? 0,
-        webCreditsUsed: usagePeriod?.webCreditsUsed ?? 0,
-        webCreditsRemaining:
-          (usagePeriod?.webCreditsGranted ?? 0) -
-          (usagePeriod?.webCreditsUsed ?? 0),
+        unlimited: entitlements.plan === "pro",
+        webCreditsGranted: webBalance.webCreditsGranted,
+        webCreditsUsed: webBalance.webCreditsUsed,
+        webCreditsRemaining: webBalance.webCreditsRemaining,
       },
       api: {
-        apiCreditsGranted: usagePeriod?.apiCreditsGranted ?? 0,
-        apiCreditsUsed: usagePeriod?.apiCreditsUsed ?? 0,
-        apiCreditsRemaining:
-          (usagePeriod?.apiCreditsGranted ?? 0) -
-          (usagePeriod?.apiCreditsUsed ?? 0),
-      },
-      ai: {
-        aiCreditsGranted: usagePeriod?.aiCreditsGranted ?? 0,
-        aiCreditsUsed: usagePeriod?.aiCreditsUsed ?? 0,
-        aiCreditsRemaining:
-          (usagePeriod?.aiCreditsGranted ?? 0) -
-          (usagePeriod?.aiCreditsUsed ?? 0),
+        apiCreditsGranted: apiBalance.apiCreditsGranted,
+        apiCreditsUsed: apiBalance.apiCreditsUsed,
+        apiCreditsRemaining: apiBalance.apiCreditsRemaining,
       },
     },
     apiKeys: keys,

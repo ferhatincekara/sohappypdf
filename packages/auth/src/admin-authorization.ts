@@ -15,6 +15,7 @@ export type AdminUserAccess = {
   userId: string;
   email: string;
   name: string;
+  image: string | null;
   role: UserRole;
   suspendedAt: Date | null;
   suspendedReason: string | null;
@@ -50,6 +51,7 @@ export async function findUserAccess(
       id: user.id,
       email: user.email,
       name: user.name,
+      image: user.image,
       role: user.role,
       suspendedAt: user.suspendedAt,
       suspendedReason: user.suspendedReason,
@@ -66,6 +68,7 @@ export async function findUserAccess(
     userId: row.id,
     email: row.email,
     name: row.name,
+    image: row.image,
     role: isUserRole(row.role) ? row.role : "user",
     suspendedAt: row.suspendedAt,
     suspendedReason: row.suspendedReason,

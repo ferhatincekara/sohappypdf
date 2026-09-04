@@ -4,7 +4,8 @@ import { PageHeader } from "@/components/admin/page-header";
 import { Pagination } from "@/components/admin/pagination";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Input } from "@/components/ui/input";
-import { formatDateTime, formatNumber, shortId } from "@/lib/format";
+import { UserCell } from "@/features/identity/user-cell";
+import { formatDateTime, formatNumber } from "@/lib/format";
 import { withQuery } from "@/lib/query-href";
 import { listAdminUsers } from "@/server/query/users";
 
@@ -70,8 +71,13 @@ export default async function UsersPage({
         </form>
         <DataTable
           columns={[
-            { id: "user", header: "User", cell: (row) => row.email },
-            { id: "id", header: "ID", cell: (row) => shortId(row.id) },
+            {
+              id: "user",
+              header: "User",
+              cell: (row) => (
+                <UserCell email={row.email} name={row.name} image={row.image} />
+              ),
+            },
             {
               id: "status",
               header: "Status",
@@ -81,19 +87,27 @@ export default async function UsersPage({
             },
             {
               id: "web",
-              header: "Web",
+              header: "Plan",
               cell: (row) => <StatusBadge value={row.webPlan} />,
             },
             {
               id: "dev",
-              header: "Developer",
-              cell: (row) => row.developerPlan,
+              header: "API pack",
+              cell: (row) =>
+                row.developerPlan === "none" ? "Included" : row.developerPlan,
             },
             {
-              id: "credits",
-              header: "Credits",
+              id: "web-tools",
+              header: "Web tools",
               cell: (row) =>
-                `${formatNumber(row.webCreditsRemaining)} web / ${formatNumber(row.apiCreditsRemaining)} API`,
+                row.webPlan === "pro"
+                  ? "Unlimited"
+                  : `${formatNumber(row.webCreditsRemaining)} left`,
+            },
+            {
+              id: "api-credits",
+              header: "API credits",
+              cell: (row) => formatNumber(row.apiCreditsRemaining),
             },
             {
               id: "created",

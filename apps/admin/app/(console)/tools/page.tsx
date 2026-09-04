@@ -35,9 +35,9 @@ export default function ToolsPage() {
           },
           {
             id: "cost",
-            header: "Credits",
+            header: "Cost",
             cell: (row) =>
-              `web ${row.webCreditCost} / api ${row.apiCreditCost}`,
+              `${row.webCreditCost} web · ${row.apiCreditCost} API`,
           },
         ]}
         rows={tools}

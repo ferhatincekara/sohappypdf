@@ -1297,7 +1297,7 @@ export function createBillingService(
       const period =
         input.source === "api"
           ? (await resolveApiUsageContext(input.userId)).period
-          : getUtcMonthPeriod(now());
+          : (await resolveUsageContext(input.userId)).period;
       await options.repository.applyManualCreditAdjustment({
         userId: input.userId,
         source: input.source,

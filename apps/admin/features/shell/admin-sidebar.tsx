@@ -24,12 +24,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { UserAvatar } from "@/features/identity/user-avatar";
 import {
   ADMIN_NAV,
   type AdminNavIcon,
   isActiveAdminPath,
 } from "@/features/navigation/admin-nav";
 import { AdminMark } from "@/features/shell/admin-mark";
+import { BrandLogo } from "@/features/shell/brand-logo";
 import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 
@@ -53,9 +55,11 @@ const NAV_ICONS: Record<AdminNavIcon, typeof LayoutDashboard> = {
 export function AdminSidebar({
   actorEmail,
   actorRole,
+  actorImageUrl,
 }: {
   actorEmail: string;
   actorRole: string;
+  actorImageUrl: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -86,11 +90,16 @@ export function AdminSidebar({
         )}
       >
         <div className="flex min-w-0 items-center gap-2.5">
-          <AdminMark className="size-7 text-xs" />
-          {collapsed ? null : (
+          {collapsed ? (
+            <AdminMark className="size-7" />
+          ) : (
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">SoHappyPDF</p>
-              <p className="text-[11px] text-sidebar-muted">Operations</p>
+              <BrandLogo
+                title="SoHappyPDF"
+                className="h-7 w-auto text-sidebar-foreground"
+                markClassName="fill-primary"
+              />
+              <p className="mt-1 text-[11px] text-sidebar-muted">Operations</p>
             </div>
           )}
         </div>
@@ -154,9 +163,11 @@ export function AdminSidebar({
             collapsed && "justify-center",
           )}
         >
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sidebar-active text-xs font-medium">
-            {actorEmail.slice(0, 1).toUpperCase()}
-          </span>
+          <UserAvatar
+            src={actorImageUrl}
+            label={actorEmail}
+            className="bg-sidebar-active text-sidebar-foreground"
+          />
           {collapsed ? null : (
             <div className="min-w-0 flex-1">
               <p className="truncate text-xs">{actorEmail}</p>
@@ -189,8 +200,11 @@ export function AdminSidebar({
     <>
       <div className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border bg-card/95 px-4 py-3 backdrop-blur lg:hidden">
         <div className="flex min-w-0 items-center gap-2">
-          <AdminMark className="size-7 text-xs" />
-          <p className="truncate font-semibold">Admin</p>
+          <BrandLogo
+            title="SoHappyPDF"
+            className="h-6 w-auto"
+            markClassName="fill-primary"
+          />
         </div>
         <Button
           variant="outline"

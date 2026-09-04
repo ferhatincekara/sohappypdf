@@ -6,6 +6,7 @@ import {
   apiSubscriptions,
   billingSubscriptions,
   getDb,
+  user,
   webhookEvents,
 } from "@sohappypdf/db";
 import { desc, eq, sql } from "drizzle-orm";
@@ -60,6 +61,9 @@ export async function getAdminBillingOverview() {
       .select({
         id: billingSubscriptions.id,
         userId: billingSubscriptions.userId,
+        email: user.email,
+        name: user.name,
+        image: user.image,
         plan: billingSubscriptions.plan,
         status: billingSubscriptions.status,
         polarSubscriptionId: billingSubscriptions.polarSubscriptionId,
@@ -67,12 +71,16 @@ export async function getAdminBillingOverview() {
         updatedAt: billingSubscriptions.updatedAt,
       })
       .from(billingSubscriptions)
+      .leftJoin(user, eq(user.id, billingSubscriptions.userId))
       .orderBy(desc(billingSubscriptions.updatedAt))
       .limit(15),
     db
       .select({
         id: apiSubscriptions.id,
         userId: apiSubscriptions.userId,
+        email: user.email,
+        name: user.name,
+        image: user.image,
         productKey: apiSubscriptions.productKey,
         status: apiSubscriptions.status,
         polarSubscriptionId: apiSubscriptions.polarSubscriptionId,
@@ -80,6 +88,7 @@ export async function getAdminBillingOverview() {
         updatedAt: apiSubscriptions.updatedAt,
       })
       .from(apiSubscriptions)
+      .leftJoin(user, eq(user.id, apiSubscriptions.userId))
       .orderBy(desc(apiSubscriptions.updatedAt))
       .limit(15),
   ]);

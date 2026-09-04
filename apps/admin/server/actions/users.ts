@@ -71,7 +71,7 @@ export async function restoreUserAction(input: {
 
 export async function adjustCreditsAction(input: {
   userId: string;
-  source: "web" | "api" | "ai";
+  source: "web" | "api";
   amount: number;
   reason: string;
 }): Promise<void> {

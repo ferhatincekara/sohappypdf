@@ -1,16 +1,20 @@
 import { listAdminQueues, listWorkerHeartbeats } from "@sohappypdf/queue";
+import { BarChart, RankedBars } from "@/components/admin/bar-chart";
+import { ChartCard } from "@/components/admin/chart-card";
 import { ErrorState } from "@/components/admin/error-state";
 import { MetricCard, MetricSection } from "@/components/admin/metric-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { formatBytes, formatDurationMs, formatNumber } from "@/lib/format";
 import { getDashboardMetrics } from "@/server/query/dashboard";
+import { getAdminUsageAnalytics } from "@/server/query/usage";
 
 export default async function DashboardPage() {
   try {
-    const [metrics, queues, workers] = await Promise.all([
+    const [metrics, queues, workers, usage] = await Promise.all([
       getDashboardMetrics(),
       listAdminQueues().catch(() => null),
       listWorkerHeartbeats().catch(() => null),
+      getAdminUsageAnalytics("7d"),
     ]);
 
     const queueBacklog =
@@ -30,8 +34,36 @@ export default async function DashboardPage() {
       <>
         <PageHeader
           title="Overview"
-          description="What is happening on SoHappyPDF right now. Metrics are counted from live database and queue state."
+          description="Live operations snapshot from the database, queues, and workers."
         />
+        <div className="grid gap-4 xl:grid-cols-3">
+          <div className="xl:col-span-2">
+            <ChartCard
+              title="Executions · 7 days"
+              description="Completed and failed jobs counted from conversion records."
+            >
+              <BarChart
+                items={usage.byDay.map((day) => ({
+                  key: day.day,
+                  label: day.day.slice(5),
+                  value: day.total,
+                }))}
+              />
+            </ChartCard>
+          </div>
+          <ChartCard
+            title="Top tools"
+            description="Most used tools in the last 7 days."
+          >
+            <RankedBars
+              items={usage.byTool.slice(0, 6).map((tool) => ({
+                key: tool.tool,
+                label: tool.tool,
+                value: tool.total,
+              }))}
+            />
+          </ChartCard>
+        </div>
         <MetricSection title="People">
           <MetricCard
             label="Users"

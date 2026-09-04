@@ -91,6 +91,7 @@ export async function listAdminExecutions(filters: AdminExecutionFilters) {
       or(
         eq(conversions.id, query),
         eq(conversions.ownerId, query),
+        ilike(user.email, `${query}%`),
         ilike(files.originalFilename, `${query}%`),
       ),
     );
@@ -101,6 +102,10 @@ export async function listAdminExecutions(filters: AdminExecutionFilters) {
     .select({ value: sql<number>`count(*)::int` })
     .from(conversions)
     .leftJoin(files, eq(files.id, conversions.sourceFileId))
+    .leftJoin(
+      user,
+      and(eq(conversions.ownerKind, "user"), eq(user.id, conversions.ownerId)),
+    )
     .where(where);
 
   const rows = await db
@@ -108,6 +113,7 @@ export async function listAdminExecutions(filters: AdminExecutionFilters) {
       id: conversions.id,
       conversionType: conversions.conversionType,
       ownerId: conversions.ownerId,
+      ownerEmail: user.email,
       ownerKind: conversions.ownerKind,
       status: conversions.status,
       createdAt: conversions.createdAt,
@@ -133,6 +139,10 @@ export async function listAdminExecutions(filters: AdminExecutionFilters) {
     })
     .from(conversions)
     .leftJoin(files, eq(files.id, conversions.sourceFileId))
+    .leftJoin(
+      user,
+      and(eq(conversions.ownerKind, "user"), eq(user.id, conversions.ownerId)),
+    )
     .where(where)
     .orderBy(desc(conversions.createdAt), desc(conversions.id))
     .limit(pageSize)

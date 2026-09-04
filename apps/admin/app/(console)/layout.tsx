@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { resolveAvatarUrl } from "@/features/identity/gravatar-url";
 import { AdminSearch } from "@/features/search/admin-search";
 import { AdminSidebar } from "@/features/shell/admin-sidebar";
 import { searchAdminAction } from "@/server/actions/search";
@@ -15,12 +16,16 @@ export default async function ConsoleLayout({
 
   return (
     <div className="flex min-h-dvh flex-col lg:flex-row">
-      <AdminSidebar actorEmail={actor.email} actorRole={actor.role} />
+      <AdminSidebar
+        actorEmail={actor.email}
+        actorRole={actor.role}
+        actorImageUrl={resolveAvatarUrl(actor.email, actor.image)}
+      />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-b border-border bg-background/90 px-4 py-3 backdrop-blur lg:sticky lg:top-0 lg:z-20">
+        <header className="border-b border-border bg-background/80 px-4 py-3 backdrop-blur lg:sticky lg:top-0 lg:z-20">
           <AdminSearch search={searchAdminAction} />
         </header>
-        <main className="flex-1 space-y-6 overflow-x-hidden px-4 py-5 sm:px-6">
+        <main className="flex-1 space-y-7 overflow-x-hidden px-4 py-6 sm:px-6">
           {children}
         </main>
       </div>

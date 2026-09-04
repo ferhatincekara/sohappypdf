@@ -1,3 +1,5 @@
+import { BarChart, RankedBars } from "@/components/admin/bar-chart";
+import { ChartCard } from "@/components/admin/chart-card";
 import { MetricCard } from "@/components/admin/metric-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { formatDurationMs, formatNumber } from "@/lib/format";
@@ -10,7 +12,6 @@ export default async function UsagePage({
 }) {
   const params = await searchParams;
   const usage = await getAdminUsageAnalytics(params.range);
-  const maxDay = Math.max(...usage.byDay.map((row) => row.total), 1);
 
   return (
     <>
@@ -71,41 +72,31 @@ export default async function UsagePage({
           value={formatNumber(usage.totals.authenticated)}
         />
       </section>
-      <section className="rounded-md border border-border bg-card p-3">
-        <h2 className="text-sm font-medium">Executions over time</h2>
-        <div className="mt-3 flex h-40 items-end gap-1">
-          {usage.byDay.map((day) => (
-            <div
-              key={day.day}
-              className="flex flex-1 flex-col items-center gap-1"
-            >
-              <div
-                className="w-full rounded-sm bg-foreground/80"
-                style={{
-                  height: `${Math.max((day.total / maxDay) * 100, 4)}%`,
-                }}
-                title={`${day.day}: ${day.total}`}
-              />
-              <span className="text-[10px] text-muted-foreground">
-                {day.day.slice(5)}
-              </span>
-            </div>
-          ))}
+      <div className="grid gap-4 xl:grid-cols-3">
+        <div className="xl:col-span-2">
+          <ChartCard
+            title="Executions over time"
+            description="Daily conversion volume for the selected range."
+          >
+            <BarChart
+              items={usage.byDay.map((day) => ({
+                key: day.day,
+                label: day.day.slice(5),
+                value: day.total,
+              }))}
+            />
+          </ChartCard>
         </div>
-      </section>
-      <section className="rounded-md border border-border bg-card p-3">
-        <h2 className="text-sm font-medium">Tool popularity</h2>
-        <ul className="mt-3 space-y-2 text-sm">
-          {usage.byTool.map((tool) => (
-            <li key={tool.tool} className="flex justify-between gap-3">
-              <a href={`/tools/${tool.tool}`}>{tool.tool}</a>
-              <span>
-                {formatNumber(tool.total)} · {formatNumber(tool.failed)} failed
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <ChartCard title="Tool popularity" description="Most used tools.">
+          <RankedBars
+            items={usage.byTool.map((tool) => ({
+              key: tool.tool,
+              label: tool.tool,
+              value: tool.total,
+            }))}
+          />
+        </ChartCard>
+      </div>
     </>
   );
 }

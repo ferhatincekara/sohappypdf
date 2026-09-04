@@ -85,7 +85,14 @@ export default async function ExecutionsPage({
         columns={[
           { id: "id", header: "Execution", cell: (row) => shortId(row.id) },
           { id: "tool", header: "Tool", cell: (row) => row.conversionType },
-          { id: "owner", header: "Owner", cell: (row) => shortId(row.ownerId) },
+          {
+            id: "owner",
+            header: "User",
+            cell: (row) =>
+              row.ownerKind === "user"
+                ? (row.ownerEmail ?? shortId(row.ownerId))
+                : `Anonymous ${shortId(row.ownerId)}`,
+          },
           { id: "channel", header: "Channel", cell: (row) => row.channel },
           {
             id: "status",

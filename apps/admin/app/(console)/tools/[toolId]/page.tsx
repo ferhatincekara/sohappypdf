@@ -31,7 +31,7 @@ export default async function ToolDetailPage({
               },
               { label: "Processor", value: detail.tool.processorId },
               {
-                label: "Web credits",
+                label: "Web tool cost",
                 value: String(detail.tool.webCreditCost),
               },
               {

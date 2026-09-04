@@ -8,7 +8,7 @@ export function DetailSection({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-md border border-border bg-card">
+    <section className="rounded-xl border border-border bg-card shadow-sm">
       <h2 className="border-b border-border px-3 py-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
         {title}
       </h2>

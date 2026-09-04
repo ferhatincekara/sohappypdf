@@ -29,11 +29,11 @@ export function MetricCard({
   unavailable?: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-border bg-card px-3.5 py-3">
+    <div className="rounded-xl border border-border bg-card px-4 py-3.5 shadow-sm">
       <p className="text-[11px] font-medium tracking-[0.08em] text-muted-foreground uppercase">
         {label}
       </p>
-      <p className="mt-1.5 text-2xl font-semibold tracking-tight">
+      <p className="mt-2 text-[1.65rem] font-semibold tracking-tight">
         {unavailable ? "Unavailable" : value}
       </p>
       {hint !== undefined ? (

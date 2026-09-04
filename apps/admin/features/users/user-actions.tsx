@@ -78,10 +78,19 @@ export function RestoreUserButton({
   );
 }
 
-export function AdjustCreditsForm({ userId }: { userId: string }) {
-  const [source, setSource] = useState<"web" | "api" | "ai">("web");
+export function AdjustCreditsForm({
+  userId,
+  webPlan,
+}: {
+  userId: string;
+  webPlan: "free" | "pro";
+}) {
+  const [source, setSource] = useState<"web" | "api">("api");
   const [amount, setAmount] = useState("10");
   const [reason, setReason] = useState("");
+  const parsedAmount = Number(amount);
+  const reasonReady = reason.trim().length >= 8;
+  const amountReady = Number.isInteger(parsedAmount) && parsedAmount > 0;
 
   return (
     <ConfirmDialog
@@ -89,45 +98,52 @@ export function AdjustCreditsForm({ userId }: { userId: string }) {
       triggerLabel="Add credits"
       confirmLabel="Add credits"
       pendingLabel="Adding…"
+      confirmDisabled={!reasonReady || !amountReady}
       description={
-        <div className="space-y-2">
-          <p>
-            This creates a ledger adjustment. It does not edit the current
-            balance in place.
+        <div className="space-y-3 text-foreground">
+          <p className="text-muted-foreground">
+            Adds credits to this billing period. API credits apply to developer
+            keys. Web tool credits only apply to Free users.
           </p>
           <select
-            className="h-8 w-full rounded-md border border-input bg-card px-2 text-sm"
+            className="admin-field"
             value={source}
-            onChange={(event) =>
-              setSource(event.target.value as "web" | "api" | "ai")
-            }
+            onChange={(event) => setSource(event.target.value as "web" | "api")}
           >
-            <option value="web">Web credits</option>
             <option value="api">API credits</option>
-            <option value="ai">AI credits</option>
+            <option value="web">Web tool credits</option>
           </select>
+          {source === "web" && webPlan === "pro" ? (
+            <p className="rounded-md border border-border bg-muted/60 px-3 py-2 text-xs">
+              Pro users do not spend web tool credits. This adjustment is
+              recorded but does not change their web access.
+            </p>
+          ) : null}
           <Input
             type="number"
             min={1}
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
+            aria-label="Credit amount"
           />
           <Input
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="Reason (required)"
+            placeholder="Reason, at least 8 characters"
+            aria-label="Adjustment reason"
           />
-          <p>
-            Add {amount || "0"} {source} credits. Reason:{" "}
-            {reason || "(missing)"}
-          </p>
+          {reason.length > 0 && !reasonReady ? (
+            <p className="text-xs text-destructive">
+              Reason must be at least 8 characters.
+            </p>
+          ) : null}
         </div>
       }
       onConfirm={async () => {
         await adjustCreditsAction({
           userId,
           source,
-          amount: Number(amount),
+          amount: parsedAmount,
           reason,
         });
       }}

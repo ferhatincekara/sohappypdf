@@ -31,7 +31,7 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="-mx-4 overflow-x-auto border-y border-border bg-card sm:mx-0 sm:rounded-lg sm:border">
+    <div className="-mx-4 overflow-x-auto border-y border-border bg-card sm:mx-0 sm:rounded-xl sm:border sm:shadow-sm">
       <table className="w-full min-w-160 border-collapse text-left text-sm">
         <thead className="sticky top-0 z-10 bg-card">
           <tr className="border-b border-border">

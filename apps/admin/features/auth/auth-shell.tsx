@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AdminMark } from "@/features/shell/admin-mark";
+import { BrandLogo } from "@/features/shell/brand-logo";
 
 export function AuthShell({
   eyebrow,
@@ -16,14 +16,11 @@ export function AuthShell({
     <main className="admin-surface relative flex min-h-dvh items-center justify-center px-4 py-10 sm:px-6">
       <div className="absolute inset-x-0 top-0 h-1 bg-primary" />
       <div className="relative w-full max-w-[420px]">
-        <div className="mb-6 flex items-center gap-3">
-          <AdminMark />
-          <div>
-            <p className="text-sm font-semibold tracking-tight">SoHappyPDF</p>
-            <p className="text-xs text-muted-foreground">
-              {eyebrow ?? "Operations console"}
-            </p>
-          </div>
+        <div className="mb-6">
+          <BrandLogo title="SoHappyPDF" className="h-8 w-auto" />
+          <p className="mt-2 text-xs text-muted-foreground">
+            {eyebrow ?? "Operations console"}
+          </p>
         </div>
         <section className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
           <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
