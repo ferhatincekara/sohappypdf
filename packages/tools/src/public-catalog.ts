@@ -221,7 +221,7 @@ export const TOOL_CATALOG = [
     inputKind: "pdf",
     outputKind: "pdf",
     inputFormats: ["pdf"],
-    outputFormats: ["pdf"],
+    outputFormats: ["pdf", "zip"],
     allowsAnonymous: true,
     requiresAuthentication: false,
     maxInputCount: 1,

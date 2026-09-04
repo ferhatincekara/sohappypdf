@@ -94,6 +94,24 @@ describe("pdf manipulate engine", () => {
         await readFile(removed.outputPath),
       );
       expect(removedPdf.getPageCount()).toBe(1);
+
+      const zipped = await engine.convert({
+        type: "split-pdf",
+        sourcePath: extractSource,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "zip",
+        options: {
+          type: "split-pdf",
+          ranges: [
+            { start: 1, end: 1 },
+            { start: 2, end: 2 },
+          ],
+        },
+        additionalSourcePaths: [],
+      });
+      expect(zipped.filename).toBe("output.zip");
+      expect(zipped.mimeType).toBe("application/zip");
     } finally {
       await workspace.cleanup();
     }

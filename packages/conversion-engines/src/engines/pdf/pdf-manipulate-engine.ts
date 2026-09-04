@@ -22,6 +22,7 @@ import {
   assertPathInside,
   joinJobPath,
 } from "../../workspace/temp-workspace.js";
+import { writeZipArchive } from "../../workspace/write-zip.js";
 import {
   cropPdfMargins,
   organizePdfPages,
@@ -79,6 +80,22 @@ export function createPdfManipulateEngine(
           outputPath,
         );
       } else if (input.options.type === "split-pdf") {
+        if (input.targetFormat === "zip") {
+          const zipPath = joinJobPath(input.outputDirectory, "output.zip");
+          await splitPdfToZip(input.sourcePath, input.options.ranges, zipPath);
+          await validateConversionOutput({
+            outputPath: zipPath,
+            expectedFormat: "zip",
+            maxBytes: config.maxOutputFileSizeBytes,
+          });
+
+          return {
+            outputPath: zipPath,
+            mimeType: outputMimeType("zip"),
+            filename: outputFilename("zip"),
+          };
+        }
+
         await splitPdf(input.sourcePath, input.options.ranges, outputPath);
       } else if (input.options.type === "extract-pages") {
         if (
@@ -216,6 +233,49 @@ async function splitPdf(
   }
 
   await writeFile(outputPath, await output.save());
+}
+
+async function splitPdfToZip(
+  sourcePath: string,
+  ranges: readonly { start: number; end: number }[] | undefined,
+  zipPath: string,
+): Promise<void> {
+  const source = await loadPdf(sourcePath);
+  const pageCount = source.getPageCount();
+  const selected = ranges ?? [{ start: 1, end: pageCount }];
+  const files: Array<{ name: string; data: Uint8Array }> = [];
+
+  for (const [index, range] of selected.entries()) {
+    const part = await PDFDocument.create();
+
+    for (
+      let pageNumber = range.start;
+      pageNumber <= range.end;
+      pageNumber += 1
+    ) {
+      if (pageNumber < 1 || pageNumber > pageCount) {
+        throw new PermanentConversionError(
+          "invalid_options",
+          "Invalid conversion options",
+        );
+      }
+
+      const [page] = await part.copyPages(source, [pageNumber - 1]);
+
+      if (page === undefined) {
+        throw invalidInputError();
+      }
+
+      part.addPage(page);
+    }
+
+    files.push({
+      name: `part-${String(index + 1).padStart(2, "0")}.pdf`,
+      data: await part.save(),
+    });
+  }
+
+  await writeZipArchive(zipPath, files);
 }
 
 async function compressPdf(input: {

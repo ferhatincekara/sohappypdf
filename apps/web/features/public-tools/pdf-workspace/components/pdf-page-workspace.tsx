@@ -26,6 +26,7 @@ export function PdfPageWorkspace({
   renderPageOverlay,
   mapPages,
   toolbarChildren,
+  showToolbar = true,
   children,
 }: {
   pdf: PdfDocumentState;
@@ -38,6 +39,7 @@ export function PdfPageWorkspace({
   renderPageOverlay?: (page: PdfPage) => ReactNode;
   mapPages?: (pages: PdfPage[]) => PdfPage[];
   toolbarChildren?: ReactNode;
+  showToolbar?: boolean;
   children?: ReactNode;
 }) {
   const t = useTranslations("publicTools.pages");
@@ -77,16 +79,18 @@ export function PdfPageWorkspace({
 
   return (
     <div className="flex flex-col gap-4">
-      <PdfPageSelectionToolbar
-        selectedCount={selection.selectedCount}
-        pageCount={pdf.pageCount}
-        isAllSelected={selection.isAllSelected}
-        disabled={disabled}
-        onSelectAll={selection.selectAll}
-        onClear={selection.clear}
-      >
-        {toolbarChildren}
-      </PdfPageSelectionToolbar>
+      {showToolbar ? (
+        <PdfPageSelectionToolbar
+          selectedCount={selection.selectedCount}
+          pageCount={pdf.pageCount}
+          isAllSelected={selection.isAllSelected}
+          disabled={disabled}
+          onSelectAll={selection.selectAll}
+          onClear={selection.clear}
+        >
+          {toolbarChildren}
+        </PdfPageSelectionToolbar>
+      ) : null}
       <PdfPageGrid
         document={pdf.document}
         pages={pages}

@@ -109,7 +109,7 @@ const CONVERSION_CAPABILITIES: Record<ConversionType, ConversionCapability> = {
   "split-pdf": {
     type: "split-pdf",
     sourceFormats: ["pdf"],
-    targetFormats: ["pdf"],
+    targetFormats: ["pdf", "zip"],
     implemented: true,
   },
   "extract-pages": {
