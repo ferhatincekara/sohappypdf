@@ -4,8 +4,14 @@ export type BarChartItem = {
   value: number;
 };
 
+function chartValue(value: number | string): number {
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 export function BarChart({ items }: { items: readonly BarChartItem[] }) {
-  const max = Math.max(...items.map((item) => item.value), 1);
+  const values = items.map((item) => chartValue(item.value));
+  const max = Math.max(...values, 1);
 
   if (items.length === 0) {
     return (
@@ -16,22 +22,24 @@ export function BarChart({ items }: { items: readonly BarChartItem[] }) {
   }
 
   return (
-    <div className="flex h-44 items-end gap-1.5 sm:gap-2">
-      {items.map((item) => {
-        const height =
-          item.value === 0 ? 4 : Math.max((item.value / max) * 100, 8);
+    <div className="flex h-48 gap-1.5 sm:gap-2">
+      {items.map((item, index) => {
+        const value = values[index] ?? 0;
+        const percent = value === 0 ? 0 : Math.max((value / max) * 100, 6);
 
         return (
           <div
             key={item.key}
-            className="flex min-w-0 flex-1 flex-col items-center gap-1.5"
+            className="flex min-w-0 flex-1 flex-col"
+            title={`${item.label}: ${value}`}
           >
-            <div
-              className="w-full rounded-t-md bg-primary"
-              style={{ height: `${height}%` }}
-              title={`${item.label}: ${item.value}`}
-            />
-            <span className="w-full truncate text-center text-[10px] text-muted-foreground">
+            <div className="flex min-h-0 flex-1 items-end">
+              <div
+                className="w-full rounded-t-md bg-foreground"
+                style={{ height: `${percent}%` }}
+              />
+            </div>
+            <span className="mt-1.5 truncate text-center text-[10px] text-muted-foreground">
               {item.label}
             </span>
           </div>
@@ -42,7 +50,8 @@ export function BarChart({ items }: { items: readonly BarChartItem[] }) {
 }
 
 export function RankedBars({ items }: { items: readonly BarChartItem[] }) {
-  const max = Math.max(...items.map((item) => item.value), 1);
+  const values = items.map((item) => chartValue(item.value));
+  const max = Math.max(...values, 1);
 
   if (items.length === 0) {
     return (
@@ -53,21 +62,29 @@ export function RankedBars({ items }: { items: readonly BarChartItem[] }) {
   }
 
   return (
-    <ul className="space-y-2.5">
-      {items.map((item) => (
-        <li key={item.key} className="space-y-1">
-          <div className="flex items-center justify-between gap-3 text-sm">
-            <span className="truncate font-medium">{item.label}</span>
-            <span className="shrink-0 text-muted-foreground">{item.value}</span>
-          </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full bg-primary"
-              style={{ width: `${Math.max((item.value / max) * 100, 3)}%` }}
-            />
-          </div>
-        </li>
-      ))}
+    <ul className="space-y-3">
+      {items.map((item, index) => {
+        const value = values[index] ?? 0;
+
+        return (
+          <li key={item.key} className="space-y-1.5">
+            <div className="flex items-center justify-between gap-3 text-sm">
+              <span className="truncate font-medium">{item.label}</span>
+              <span className="shrink-0 tabular-nums text-muted-foreground">
+                {value}
+              </span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-foreground"
+                style={{
+                  width: `${Math.max((value / max) * 100, value === 0 ? 0 : 4)}%`,
+                }}
+              />
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 }

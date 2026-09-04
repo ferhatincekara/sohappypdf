@@ -3,6 +3,7 @@ import { MetricCard } from "@/components/admin/metric-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { Pagination } from "@/components/admin/pagination";
 import { StatusBadge } from "@/components/admin/status-badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RevokeApiKeyButton } from "@/features/users/user-actions";
 import {
@@ -56,12 +57,7 @@ export default async function ApiPage({
           defaultValue={params.q}
           placeholder="User ID, email, or key ID"
         />
-        <button
-          type="submit"
-          className="admin-field bg-foreground text-background sm:w-auto"
-        >
-          Search
-        </button>
+        <Button type="submit">Search</Button>
       </form>
       <DataTable
         columns={[

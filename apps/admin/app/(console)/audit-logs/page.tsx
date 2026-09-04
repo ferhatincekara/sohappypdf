@@ -2,6 +2,7 @@ import { DataTable } from "@/components/admin/data-table";
 import { PageHeader } from "@/components/admin/page-header";
 import { Pagination } from "@/components/admin/pagination";
 import { StatusBadge } from "@/components/admin/status-badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDateTime, shortId } from "@/lib/format";
 import { withQuery } from "@/lib/query-href";
@@ -32,12 +33,7 @@ export default async function AuditLogsPage({
           defaultValue={params.actor}
           placeholder="Actor user ID"
         />
-        <button
-          type="submit"
-          className="h-8 rounded-md bg-foreground px-3 text-sm text-background"
-        >
-          Filter
-        </button>
+        <Button type="submit">Filter</Button>
       </form>
       <DataTable
         columns={[

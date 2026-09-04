@@ -72,7 +72,7 @@ export function LoginForm() {
       ) : null}
       <Button
         type="submit"
-        variant="primary"
+        variant="default"
         disabled={pending}
         className="h-11 w-full sm:h-10"
       >

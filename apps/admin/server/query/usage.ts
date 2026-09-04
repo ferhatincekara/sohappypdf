@@ -2,6 +2,7 @@ import { conversions, conversionUsageEvents, getDb } from "@sohappypdf/db";
 import { and, gte, sql } from "drizzle-orm";
 import {
   type AdminDateRangePreset,
+  fillDailySeries,
   resolveDateRange,
 } from "@/server/query/date-range";
 import { avgNumber, countInt } from "@/server/query/sql";
@@ -36,14 +37,14 @@ export async function getAdminUsageAnalytics(preset?: string) {
 
   const byDay = await db
     .select({
-      day: sql<string>`to_char(date_trunc('day', ${conversions.createdAt}), 'YYYY-MM-DD')`,
+      day: sql<string>`to_char((${conversions.createdAt} at time zone 'utc')::date, 'YYYY-MM-DD')`,
       total: sql<number>`count(*)::int`,
       failed: sql<number>`count(*) filter (where ${conversions.status} = 'failed')::int`,
     })
     .from(conversions)
     .where(gte(conversions.createdAt, range.start))
-    .groupBy(sql`date_trunc('day', ${conversions.createdAt})`)
-    .orderBy(sql`date_trunc('day', ${conversions.createdAt})`);
+    .groupBy(sql`(${conversions.createdAt} at time zone 'utc')::date`)
+    .orderBy(sql`(${conversions.createdAt} at time zone 'utc')::date`);
 
   const byTool = await db
     .select({
@@ -78,8 +79,21 @@ export async function getAdminUsageAnalytics(preset?: string) {
       failureRate: total === 0 ? null : (failed / total) * 100,
       averageDurationMs: avgNumber(totals?.averageDurationMs),
     },
-    byDay,
-    byTool,
+    byDay: fillDailySeries(
+      range.start,
+      range.end,
+      byDay.map((row) => ({
+        day: row.day,
+        total: countInt(row.total),
+        failed: countInt(row.failed),
+      })),
+      (day) => ({ day, total: 0, failed: 0 }),
+    ),
+    byTool: byTool.map((row) => ({
+      tool: row.tool,
+      total: countInt(row.total),
+      failed: countInt(row.failed),
+    })),
     presets: [
       "today",
       "7d",

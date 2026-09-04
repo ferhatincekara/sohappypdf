@@ -11,6 +11,7 @@ import {
   KeyRound,
   Layers,
   LayoutDashboard,
+  LogOut,
   Menu,
   ScrollText,
   Settings,
@@ -85,42 +86,43 @@ export function AdminSidebar({
     <>
       <div
         className={cn(
-          "flex items-center gap-2.5 px-3 py-4",
-          collapsed ? "justify-center" : "justify-between",
+          "flex h-14 items-center border-b border-border px-3",
+          collapsed ? "justify-center" : "justify-between gap-2",
         )}
       >
-        <div className="flex min-w-0 items-center gap-2.5">
-          {collapsed ? (
-            <AdminMark className="size-7" />
-          ) : (
-            <div className="min-w-0">
+        {collapsed ? (
+          <button
+            type="button"
+            onClick={() => setCollapsed(false)}
+            aria-label="Expand sidebar"
+          >
+            <AdminMark className="size-8" />
+          </button>
+        ) : (
+          <>
+            <Link href="/" className="min-w-0 no-underline">
               <BrandLogo
                 title="SoHappyPDF"
-                className="h-7 w-auto text-sidebar-foreground"
-                markClassName="fill-primary"
+                className="h-6 w-auto text-sidebar-foreground"
+                markClassName="fill-foreground"
               />
-              <p className="mt-1 text-[11px] text-sidebar-muted">Operations</p>
-            </div>
-          )}
-        </div>
-        <button
-          type="button"
-          className="hidden rounded-md p-1.5 text-sidebar-muted hover:bg-sidebar-active hover:text-sidebar-foreground lg:inline-flex"
-          onClick={() => setCollapsed((value) => !value)}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? (
-            <ChevronsRight className="size-4" />
-          ) : (
-            <ChevronsLeft className="size-4" />
-          )}
-        </button>
+            </Link>
+            <button
+              type="button"
+              className="hidden rounded-md p-1.5 text-sidebar-muted hover:bg-sidebar-active hover:text-sidebar-foreground lg:inline-flex"
+              onClick={() => setCollapsed(true)}
+              aria-label="Collapse sidebar"
+            >
+              <ChevronsLeft className="size-4" />
+            </button>
+          </>
+        )}
       </div>
-      <nav className="flex-1 space-y-5 overflow-y-auto px-2 pb-4">
+      <nav className="flex-1 space-y-4 overflow-y-auto px-2 py-3">
         {ADMIN_NAV.map((section) => (
           <div key={section.label}>
             {collapsed ? null : (
-              <p className="px-2 pb-1.5 text-[10px] font-medium tracking-[0.14em] text-sidebar-muted uppercase">
+              <p className="px-2 pb-1 text-[11px] font-medium text-sidebar-muted">
                 {section.label}
               </p>
             )}
@@ -134,10 +136,10 @@ export function AdminSidebar({
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-2.5 rounded-md px-2 py-2 text-sm no-underline transition-colors",
+                      "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition-colors",
                       collapsed && "justify-center px-0",
                       active
-                        ? "bg-sidebar-active text-sidebar-foreground"
+                        ? "bg-sidebar-active font-medium text-sidebar-foreground"
                         : "text-sidebar-muted hover:bg-sidebar-active hover:text-sidebar-foreground",
                     )}
                     title={item.label}
@@ -156,32 +158,26 @@ export function AdminSidebar({
           </div>
         ))}
       </nav>
-      <div className="border-t border-white/10 p-3">
+      <div className="border-t border-border p-2">
         <div
           className={cn(
-            "flex items-center gap-2",
+            "flex items-center gap-2 rounded-md px-1 py-1",
             collapsed && "justify-center",
           )}
         >
-          <UserAvatar
-            src={actorImageUrl}
-            label={actorEmail}
-            className="bg-sidebar-active text-sidebar-foreground"
-          />
+          <UserAvatar src={actorImageUrl} label={actorEmail} />
           {collapsed ? null : (
             <div className="min-w-0 flex-1">
-              <p className="truncate text-xs">{actorEmail}</p>
-              <p className="text-[11px] text-sidebar-muted uppercase">
-                {actorRole}
-              </p>
+              <p className="truncate text-xs font-medium">{actorEmail}</p>
+              <p className="text-[11px] text-sidebar-muted">{actorRole}</p>
             </div>
           )}
         </div>
         <button
           type="button"
           className={cn(
-            "mt-3 w-full rounded-md px-2 py-2 text-left text-xs text-sidebar-muted hover:bg-sidebar-active hover:text-sidebar-foreground",
-            collapsed && "text-center",
+            "mt-1 flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-sidebar-muted hover:bg-sidebar-active hover:text-sidebar-foreground",
+            collapsed && "justify-center",
           )}
           onClick={() => {
             void authClient.signOut().then(() => {
@@ -190,26 +186,32 @@ export function AdminSidebar({
             });
           }}
         >
-          {collapsed ? "Out" : "Sign out"}
+          <LogOut className="size-4" />
+          {collapsed ? <span className="sr-only">Sign out</span> : "Sign out"}
         </button>
+        {collapsed ? (
+          <button
+            type="button"
+            className="mt-1 hidden w-full items-center justify-center rounded-md py-1.5 text-sidebar-muted hover:bg-sidebar-active lg:flex"
+            onClick={() => setCollapsed(false)}
+            aria-label="Expand sidebar"
+          >
+            <ChevronsRight className="size-4" />
+          </button>
+        ) : null}
       </div>
     </>
   );
 
   return (
     <>
-      <div className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-border bg-card/95 px-4 py-3 backdrop-blur lg:hidden">
-        <div className="flex min-w-0 items-center gap-2">
-          <BrandLogo
-            title="SoHappyPDF"
-            className="h-6 w-auto"
-            markClassName="fill-primary"
-          />
-        </div>
+      <div className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border bg-background px-4 lg:hidden">
+        <Link href="/" className="no-underline">
+          <BrandLogo title="SoHappyPDF" className="h-6 w-auto" />
+        </Link>
         <Button
           variant="outline"
-          size="sm"
-          className="h-10 min-w-10"
+          size="icon"
           onClick={() => setMobileOpen((open) => !open)}
           aria-expanded={mobileOpen}
           aria-controls="admin-mobile-nav"
@@ -231,9 +233,9 @@ export function AdminSidebar({
       <aside
         id="admin-mobile-nav"
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-[min(18rem,88vw)] flex-col bg-sidebar text-sidebar-foreground lg:static lg:z-auto lg:flex",
+          "fixed inset-y-0 left-0 z-50 flex w-[min(16rem,88vw)] flex-col border-r border-border bg-sidebar text-sidebar-foreground lg:static lg:z-auto lg:flex",
           mobileOpen ? "flex" : "hidden lg:flex",
-          collapsed ? "lg:w-16" : "lg:w-60",
+          collapsed ? "lg:w-14" : "lg:w-60",
         )}
       >
         {navigation}

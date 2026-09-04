@@ -2,6 +2,7 @@ import { BarChart, RankedBars } from "@/components/admin/bar-chart";
 import { ChartCard } from "@/components/admin/chart-card";
 import { MetricCard } from "@/components/admin/metric-card";
 import { PageHeader } from "@/components/admin/page-header";
+import { Button } from "@/components/ui/button";
 import { formatDurationMs, formatNumber } from "@/lib/format";
 import { getAdminUsageAnalytics } from "@/server/query/usage";
 
@@ -21,19 +22,15 @@ export default async function UsagePage({
       />
       <form className="flex flex-wrap gap-2" method="get">
         {usage.presets.map((preset) => (
-          <button
+          <Button
             key={preset}
             type="submit"
             name="range"
             value={preset}
-            className={`h-10 min-w-16 rounded-md px-3 text-sm sm:h-8 ${
-              usage.range.preset === preset
-                ? "bg-foreground text-background"
-                : "border border-border bg-card"
-            }`}
+            variant={usage.range.preset === preset ? "default" : "outline"}
           >
             {preset}
-          </button>
+          </Button>
         ))}
       </form>
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">

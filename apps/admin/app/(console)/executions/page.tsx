@@ -4,6 +4,7 @@ import { DataTable } from "@/components/admin/data-table";
 import { PageHeader } from "@/components/admin/page-header";
 import { Pagination } from "@/components/admin/pagination";
 import { StatusBadge } from "@/components/admin/status-badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatDateTime, formatDurationMs, shortId } from "@/lib/format";
 import { withQuery } from "@/lib/query-href";
@@ -74,12 +75,7 @@ export default async function ExecutionsPage({
           <option value="anonymous_session">Anonymous session</option>
         </select>
         <Input name="from" type="date" defaultValue={params.from} />
-        <button
-          type="submit"
-          className="admin-field bg-foreground text-background"
-        >
-          Filter
-        </button>
+        <Button type="submit">Filter</Button>
       </form>
       <DataTable
         columns={[

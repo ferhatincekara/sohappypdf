@@ -10,7 +10,7 @@ export function ChartCard({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
+    <section className="rounded-xl border border-border bg-card p-4 shadow-xs">
       <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
       {description === undefined ? null : (
         <p className="mt-1 text-xs leading-5 text-muted-foreground">

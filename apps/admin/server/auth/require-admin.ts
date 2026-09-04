@@ -41,7 +41,9 @@ export async function requireAdmin(): Promise<AdminActor> {
   }
 }
 
-export async function requireAdminAction(): Promise<AdminActor> {
+export async function requireAdminAction(options?: {
+  rateLimit?: boolean;
+}): Promise<AdminActor> {
   const session = await getAdminSession();
 
   if (session === null) {
@@ -55,6 +57,10 @@ export async function requireAdminAction(): Promise<AdminActor> {
     userId: session.user.id,
     bootstrapUserIds: loadAdminConfig().bootstrapUserIds,
   });
-  await consumeAdminRateLimit(actor.userId);
+
+  if (options?.rateLimit !== false) {
+    await consumeAdminRateLimit(actor.userId);
+  }
+
   return actor;
 }

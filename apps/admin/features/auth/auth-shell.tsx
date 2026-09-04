@@ -13,26 +13,23 @@ export function AuthShell({
   children: ReactNode;
 }) {
   return (
-    <main className="admin-surface relative flex min-h-dvh items-center justify-center px-4 py-10 sm:px-6">
-      <div className="absolute inset-x-0 top-0 h-1 bg-primary" />
-      <div className="relative w-full max-w-[420px]">
+    <main className="flex min-h-dvh items-center justify-center bg-muted/40 px-4 py-10">
+      <div className="w-full max-w-sm">
         <div className="mb-6">
-          <BrandLogo title="SoHappyPDF" className="h-8 w-auto" />
+          <BrandLogo title="SoHappyPDF" className="h-7 w-auto" />
           <p className="mt-2 text-xs text-muted-foreground">
-            {eyebrow ?? "Operations console"}
+            {eyebrow ?? "Operations"}
           </p>
         </div>
-        <section className="rounded-xl border border-border bg-card p-5 shadow-sm sm:p-6">
-          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-            {title}
-          </h1>
+        <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {description}
           </p>
           <div className="mt-6">{children}</div>
         </section>
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Internal administrators only. This is not the customer product login.
+          Internal administrators only.
         </p>
       </div>
     </main>

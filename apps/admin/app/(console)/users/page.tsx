@@ -3,6 +3,7 @@ import { ErrorState } from "@/components/admin/error-state";
 import { PageHeader } from "@/components/admin/page-header";
 import { Pagination } from "@/components/admin/pagination";
 import { StatusBadge } from "@/components/admin/status-badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserCell } from "@/features/identity/user-cell";
 import { formatDateTime, formatNumber } from "@/lib/format";
@@ -62,12 +63,7 @@ export default async function UsersPage({
           </select>
           <Input name="from" type="date" defaultValue={params.from} />
           <Input name="to" type="date" defaultValue={params.to} />
-          <button
-            type="submit"
-            className="admin-field bg-foreground text-background"
-          >
-            Filter
-          </button>
+          <Button type="submit">Filter</Button>
         </form>
         <DataTable
           columns={[

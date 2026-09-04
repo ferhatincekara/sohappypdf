@@ -1,6 +1,7 @@
 import { anonymousSessions, conversions, getDb, user } from "@sohappypdf/db";
-import { findCatalogTool } from "@sohappypdf/tools";
-import { ilike, or, sql } from "drizzle-orm";
+import { listCatalogTools } from "@sohappypdf/tools";
+import { desc, ilike, or, sql } from "drizzle-orm";
+import { matchesCatalogTool } from "@/server/query/search-match";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -20,16 +21,23 @@ export async function searchAdmin(query: string): Promise<AdminSearchResult[]> {
   }
 
   const db = getDb();
+  const like = `%${trimmed}%`;
   const results: AdminSearchResult[] = [];
-  const tool = findCatalogTool(trimmed);
+  const needle = trimmed.toLowerCase();
 
-  if (tool !== undefined) {
-    results.push({
-      kind: "tool",
-      id: tool.id,
-      label: tool.id,
-      href: `/tools/${tool.id}`,
-    });
+  for (const tool of listCatalogTools()) {
+    if (matchesCatalogTool(tool, needle)) {
+      results.push({
+        kind: "tool",
+        id: tool.id,
+        label: tool.id,
+        href: `/tools/${tool.id}`,
+      });
+    }
+
+    if (results.length >= 5) {
+      break;
+    }
   }
 
   if (UUID_PATTERN.test(trimmed)) {
@@ -65,6 +73,25 @@ export async function searchAdmin(query: string): Promise<AdminSearchResult[]> {
         href: `/anonymous-sessions/${anonymous.id}`,
       });
     }
+  } else {
+    const executions = await db
+      .select({
+        id: conversions.id,
+        conversionType: conversions.conversionType,
+      })
+      .from(conversions)
+      .where(ilike(conversions.conversionType, like))
+      .orderBy(desc(conversions.createdAt))
+      .limit(5);
+
+    for (const execution of executions) {
+      results.push({
+        kind: "execution",
+        id: execution.id,
+        label: execution.conversionType,
+        href: `/executions/${execution.id}`,
+      });
+    }
   }
 
   const users = await db
@@ -73,9 +100,8 @@ export async function searchAdmin(query: string): Promise<AdminSearchResult[]> {
     .where(
       or(
         sql`${user.id} = ${trimmed}`,
-        sql`${user.email} = ${trimmed.toLowerCase()}`,
-        ilike(user.email, `${trimmed}%`),
-        ilike(user.name, `${trimmed}%`),
+        ilike(user.email, like),
+        ilike(user.name, like),
       ),
     )
     .limit(5);
