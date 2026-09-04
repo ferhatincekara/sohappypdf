@@ -18,14 +18,14 @@ export default async function UsagePage({
         title="Usage"
         description="Operational product metrics from conversion records. Charts use real counts only."
       />
-      <form className="flex gap-2" method="get">
+      <form className="flex flex-wrap gap-2" method="get">
         {usage.presets.map((preset) => (
           <button
             key={preset}
             type="submit"
             name="range"
             value={preset}
-            className={`h-8 rounded-md px-3 text-sm ${
+            className={`h-10 min-w-16 rounded-md px-3 text-sm sm:h-8 ${
               usage.range.preset === preset
                 ? "bg-foreground text-background"
                 : "border border-border bg-card"

@@ -50,7 +50,7 @@ export default async function ApiPage({
           value={formatNumber(overview.creditsConsumedToday)}
         />
       </section>
-      <form className="flex gap-2" method="get">
+      <form className="flex flex-col gap-2 sm:flex-row" method="get">
         <Input
           name="q"
           defaultValue={params.q}
@@ -58,7 +58,7 @@ export default async function ApiPage({
         />
         <button
           type="submit"
-          className="h-8 rounded-md bg-foreground px-3 text-sm text-background"
+          className="admin-field bg-foreground text-background sm:w-auto"
         >
           Search
         </button>

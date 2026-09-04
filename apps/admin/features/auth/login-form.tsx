@@ -15,7 +15,7 @@ export function LoginForm() {
 
   return (
     <form
-      className="flex flex-col gap-3"
+      className="flex flex-col gap-4"
       onSubmit={(event) => {
         event.preventDefault();
         setPending(true);
@@ -36,34 +36,46 @@ export function LoginForm() {
           });
       }}
     >
-      <label className="text-sm font-medium" htmlFor="email">
-        Email
-      </label>
-      <Input
-        id="email"
-        type="email"
-        autoComplete="email"
-        required
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-      />
-      <label className="text-sm font-medium" htmlFor="password">
-        Password
-      </label>
-      <Input
-        id="password"
-        type="password"
-        autoComplete="current-password"
-        required
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-      />
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium" htmlFor="email">
+          Email
+        </label>
+        <Input
+          id="email"
+          type="email"
+          autoComplete="email"
+          required
+          inputMode="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          className="h-11 sm:h-10"
+        />
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium" htmlFor="password">
+          Password
+        </label>
+        <Input
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          className="h-11 sm:h-10"
+        />
+      </div>
       {error !== null ? (
         <p className="text-sm text-destructive" role="alert">
           {error}
         </p>
       ) : null}
-      <Button type="submit" disabled={pending}>
+      <Button
+        type="submit"
+        variant="primary"
+        disabled={pending}
+        className="h-11 w-full sm:h-10"
+      >
         {pending ? "Signing in…" : "Sign in"}
       </Button>
     </form>

@@ -1,6 +1,6 @@
 import { listAdminQueues, listWorkerHeartbeats } from "@sohappypdf/queue";
 import { ErrorState } from "@/components/admin/error-state";
-import { MetricCard } from "@/components/admin/metric-card";
+import { MetricCard, MetricSection } from "@/components/admin/metric-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { formatBytes, formatDurationMs, formatNumber } from "@/lib/format";
 import { getDashboardMetrics } from "@/server/query/dashboard";
@@ -32,7 +32,7 @@ export default async function DashboardPage() {
           title="Overview"
           description="What is happening on SoHappyPDF right now. Metrics are counted from live database and queue state."
         />
-        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricSection title="People">
           <MetricCard
             label="Users"
             value={formatNumber(metrics.users.total)}
@@ -53,6 +53,8 @@ export default async function DashboardPage() {
             value={formatNumber(metrics.anonymous.activeSessions)}
             hint={`${formatNumber(metrics.anonymous.executionsToday)} executions today`}
           />
+        </MetricSection>
+        <MetricSection title="Processing">
           <MetricCard
             label="Executions today"
             value={formatNumber(metrics.processing.executionsToday)}
@@ -75,6 +77,8 @@ export default async function DashboardPage() {
                 : "Completed jobs today"
             }
           />
+        </MetricSection>
+        <MetricSection title="Workers and storage">
           <MetricCard
             label="Active workers"
             value={
@@ -103,9 +107,19 @@ export default async function DashboardPage() {
             hint={`${formatBytes(metrics.storage.usageBytes)} · ${formatNumber(metrics.storage.expiringSoon)} expiring soon`}
           />
           <MetricCard
+            label="Cleanup eligible files"
+            value={formatNumber(metrics.storage.eligibleForCleanup)}
+          />
+        </MetricSection>
+        <MetricSection title="Revenue and API">
+          <MetricCard
             label="Estimated MRR"
             value={`$${formatNumber(metrics.revenue.estimatedMrrUsd)}`}
             hint="Derived from catalog list prices × active subscriptions"
+          />
+          <MetricCard
+            label="Active API subscriptions"
+            value={formatNumber(metrics.revenue.activeApiSubscriptions)}
           />
           <MetricCard
             label="API executions today"
@@ -117,15 +131,7 @@ export default async function DashboardPage() {
             value={formatNumber(metrics.api.creditsConsumedToday)}
             hint="Ledger consume entries today"
           />
-          <MetricCard
-            label="Active API subscriptions"
-            value={formatNumber(metrics.revenue.activeApiSubscriptions)}
-          />
-          <MetricCard
-            label="Cleanup eligible files"
-            value={formatNumber(metrics.storage.eligibleForCleanup)}
-          />
-        </section>
+        </MetricSection>
       </>
     );
   } catch {

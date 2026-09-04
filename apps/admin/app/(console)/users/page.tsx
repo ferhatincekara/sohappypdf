@@ -30,7 +30,7 @@ export default async function UsersPage({
         <select
           name="plan"
           defaultValue={params.plan ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All web plans</option>
           <option value="free">Free</option>
@@ -39,7 +39,7 @@ export default async function UsersPage({
         <select
           name="developer"
           defaultValue={params.developer ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All developer plans</option>
           <option value="none">No developer subscription</option>
@@ -50,7 +50,7 @@ export default async function UsersPage({
         <select
           name="status"
           defaultValue={params.status ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All statuses</option>
           <option value="active">Active</option>
@@ -60,7 +60,7 @@ export default async function UsersPage({
         <Input name="to" type="date" defaultValue={params.to} />
         <button
           type="submit"
-          className="h-8 rounded-md bg-foreground px-3 text-sm text-background"
+          className="admin-field bg-foreground text-background"
         >
           Filter
         </button>

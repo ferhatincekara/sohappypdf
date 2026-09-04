@@ -33,7 +33,7 @@ export default async function ExecutionsPage({
         <select
           name="status"
           defaultValue={params.status ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All statuses</option>
           {CONVERSION_STATUSES.map((status) => (
@@ -45,7 +45,7 @@ export default async function ExecutionsPage({
         <select
           name="tool"
           defaultValue={params.tool ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All tools</option>
           {tools.map((tool) => (
@@ -57,7 +57,7 @@ export default async function ExecutionsPage({
         <select
           name="channel"
           defaultValue={params.channel ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All channels</option>
           <option value="web">Web</option>
@@ -67,7 +67,7 @@ export default async function ExecutionsPage({
         <select
           name="ownerKind"
           defaultValue={params.ownerKind ?? ""}
-          className="h-8 rounded-md border border-input bg-card px-2 text-sm"
+          className="admin-field"
         >
           <option value="">All owners</option>
           <option value="user">User</option>
@@ -76,7 +76,7 @@ export default async function ExecutionsPage({
         <Input name="from" type="date" defaultValue={params.from} />
         <button
           type="submit"
-          className="h-8 rounded-md bg-foreground px-3 text-sm text-background"
+          className="admin-field bg-foreground text-background"
         >
           Filter
         </button>

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={onest.variable}>
-      <body>
+      <body className="pb-[env(safe-area-inset-bottom)]">
         {children}
         <Toaster theme="system" />
       </body>
