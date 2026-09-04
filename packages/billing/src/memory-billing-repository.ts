@@ -533,6 +533,19 @@ export function createMemoryBillingRepository(options?: {
       return true;
     },
 
+    async sumManualCreditAdjustments(input) {
+      return ledger
+        .filter(
+          (entry) =>
+            entry.userId === input.userId &&
+            entry.source === input.source &&
+            entry.type === "adjustment" &&
+            entry.reason.startsWith("admin:") &&
+            entry.periodStart.getTime() === input.periodStart.getTime(),
+        )
+        .reduce((total, entry) => total + entry.amount, 0);
+    },
+
     async listApiCreditLedger(input) {
       return ledger
         .filter(

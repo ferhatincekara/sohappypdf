@@ -1469,6 +1469,7 @@
     "unconfirmed": "Polarはこの購入をまだ確認していません。更新してもう一度確認してください。",
     "refreshStatus": "更新",
     "includedOperations": "毎日 {count} 回の操作が含まれます。",
+    "includedWebCredits": "今月のWebツールクレジットは {count} です。",
     "cancelsOn": "解約が予定されています。Proは {date} まで続きます。",
     "renewsOn": "{date} に更新されます。",
     "creditsResetOn": "月次のツールクレジットは {date} にリセットされます。",

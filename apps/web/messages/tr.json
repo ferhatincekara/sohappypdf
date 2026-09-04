@@ -1469,6 +1469,7 @@
     "unconfirmed": "Polar bu satın almayı henüz doğrulamadı. Tekrar kontrol etmek için yenileyin.",
     "refreshStatus": "Yenile",
     "includedOperations": "Her gün {count} işlem dahil.",
+    "includedWebCredits": "Bu ay {count} web araç kredisi dahil.",
     "cancelsOn": "İptal planlandı. Pro {date} tarihine kadar devam eder.",
     "renewsOn": "Yenileme tarihi: {date}.",
     "creditsResetOn": "Aylık araç kredileri {date} tarihinde yenilenir.",

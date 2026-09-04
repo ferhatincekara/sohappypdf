@@ -1469,6 +1469,7 @@
     "unconfirmed": "Polar aún no ha confirmado esta compra. Actualiza para volver a comprobarlo.",
     "refreshStatus": "Actualizar",
     "includedOperations": "{count} operaciones incluidas cada día.",
+    "includedWebCredits": "{count} créditos de herramientas web este mes.",
     "cancelsOn": "Cancelación programada. Pro sigue hasta {date}.",
     "renewsOn": "Se renueva el {date}.",
     "creditsResetOn": "Los créditos mensuales de herramientas se reinician el {date}.",

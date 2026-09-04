@@ -131,25 +131,21 @@ export const INCLUDED_API_CREDITS_PER_MONTH = 100;
 export function includedApiCreditBalance(input: {
   apiCreditsGranted: number;
   apiCreditsUsed: number;
+  adjustmentTotal?: number;
 }): {
   apiCreditsGranted: number;
   apiCreditsUsed: number;
   apiCreditsRemaining: number;
 } {
   const included = INCLUDED_API_CREDITS_PER_MONTH;
-
-  if (input.apiCreditsGranted <= included) {
-    return {
-      apiCreditsGranted: input.apiCreditsGranted,
-      apiCreditsUsed: input.apiCreditsUsed,
-      apiCreditsRemaining: input.apiCreditsGranted - input.apiCreditsUsed,
-    };
-  }
+  const extra = Math.max(0, input.adjustmentTotal ?? 0);
+  const granted = included + extra;
+  const used = Math.min(input.apiCreditsUsed, granted);
 
   return {
-    apiCreditsGranted: included,
-    apiCreditsUsed: Math.min(input.apiCreditsUsed, included),
-    apiCreditsRemaining: Math.max(0, included - input.apiCreditsUsed),
+    apiCreditsGranted: granted,
+    apiCreditsUsed: used,
+    apiCreditsRemaining: Math.max(0, granted - input.apiCreditsUsed),
   };
 }
 

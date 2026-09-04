@@ -147,6 +147,11 @@ export type BillingRepository = {
     periodStart: Date;
     limit: number;
   }): Promise<readonly ApiCreditLedgerEntry[]>;
+  sumManualCreditAdjustments(input: {
+    userId: string;
+    source: "web" | "api" | "ai";
+    periodStart: Date;
+  }): Promise<number>;
   recordConversionUsage(input: {
     userId: string;
     conversionId: string;
@@ -1096,6 +1101,26 @@ export function createBillingRepository(db: Database): BillingRepository {
 
         return true;
       });
+    },
+
+    async sumManualCreditAdjustments(input) {
+      const [row] = await db
+        .select({
+          total: sql<number>`coalesce(sum(${webCreditLedgerEntries.amount}), 0)::int`,
+        })
+        .from(webCreditLedgerEntries)
+        .where(
+          and(
+            eq(webCreditLedgerEntries.userId, input.userId),
+            eq(webCreditLedgerEntries.source, input.source),
+            eq(webCreditLedgerEntries.type, "adjustment"),
+            sql`${webCreditLedgerEntries.reason} like 'admin:%'`,
+            eq(webCreditLedgerEntries.periodStart, input.periodStart),
+          ),
+        );
+
+      const parsed = Number(row?.total ?? 0);
+      return Number.isFinite(parsed) ? parsed : 0;
     },
 
     async listApiCreditLedger(input) {

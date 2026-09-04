@@ -45,6 +45,17 @@ describe("default plan limits", () => {
       apiCreditsUsed: 12,
       apiCreditsRemaining: 88,
     });
+    expect(
+      includedApiCreditBalance({
+        apiCreditsGranted: 110,
+        apiCreditsUsed: 0,
+        adjustmentTotal: 10,
+      }),
+    ).toEqual({
+      apiCreditsGranted: 110,
+      apiCreditsUsed: 0,
+      apiCreditsRemaining: 110,
+    });
   });
 
   test("publishes the Pro web list price as five US dollars per month", () => {

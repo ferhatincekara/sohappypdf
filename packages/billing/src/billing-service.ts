@@ -332,7 +332,16 @@ export function createBillingService(
         grantAmount: INCLUDED_API_CREDITS_PER_MONTH,
         now: current,
       });
-      return includedApiCreditBalance(balance);
+      const adjustmentTotal =
+        await options.repository.sumManualCreditAdjustments({
+          userId,
+          source: "api",
+          periodStart: period.start,
+        });
+      return includedApiCreditBalance({
+        ...balance,
+        adjustmentTotal,
+      });
     }
     const legacyCalendar = getUtcMonthPeriod(period.start);
     const shouldCarryLegacy =
@@ -780,7 +789,7 @@ export function createBillingService(
         canManage: await hasManagedPolarBilling(input.userId),
         usage: {
           webCreditsUsed: balance.webCreditsUsed,
-          webCreditsLimit: entitlements.limits.monthlyWebCredits,
+          webCreditsLimit: balance.webCreditsGranted,
           webCreditsRemaining: balance.webCreditsRemaining,
           aiCreditsUsed: aiBalance.aiCreditsUsed,
           aiCreditsLimit: entitlements.limits.monthlyAiCredits,

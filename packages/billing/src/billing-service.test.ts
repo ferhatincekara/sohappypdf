@@ -1061,6 +1061,16 @@ describe("createBillingService", () => {
 
     const balance = await billing.getWebCreditBalance("user_1");
     expect(balance.webCreditsGranted).toBe(before.webCreditsGranted + 25);
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+    expect(status.usage.webCreditsLimit).toBe(before.webCreditsGranted + 25);
+    expect(status.usage.webCreditsRemaining).toBe(
+      before.webCreditsRemaining + 25,
+    );
   });
 
   test("keeps a web credit adjustment after the monthly grant is applied", async () => {
@@ -1081,6 +1091,27 @@ describe("createBillingService", () => {
     expect(adjusted.webCreditsRemaining).toBe(
       baseline.webCreditsRemaining + 25,
     );
+  });
+
+  test("includes admin API credit top-ups in the public included balance", async () => {
+    const billing = createService();
+    const before = await billing.getApiCreditBalance("user_1");
+
+    await billing.adjustCredits({
+      userId: "user_1",
+      source: "api",
+      amount: 10,
+      reason: "support goodwill credit",
+      actorUserId: "admin_1",
+    });
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+    expect(status.api.creditsLimit).toBe(before.apiCreditsGranted + 10);
+    expect(status.api.creditsRemaining).toBe(before.apiCreditsRemaining + 10);
   });
 
   test("rejects credit adjustments without a reason", async () => {

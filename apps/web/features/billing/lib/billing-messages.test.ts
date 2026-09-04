@@ -51,6 +51,7 @@ describe("billing locales", () => {
     expect(englishKeys).toContain("usedOfLimit");
     expect(englishKeys).toContain("renewsOn");
     expect(englishKeys).toContain("includedOperations");
+    expect(englishKeys).toContain("includedWebCredits");
     expect(englishKeys).toContain("api.packCredits");
     expect(englishKeys).not.toContain("noSubscription");
     expect(englishKeys).not.toContain("ai.title");

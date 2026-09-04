@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  DEFAULT_API_CREDIT_PACKS,
-  INCLUDED_API_CREDITS_PER_MONTH,
-} from "@sohappypdf/billing/plans";
+import { DEFAULT_API_CREDIT_PACKS } from "@sohappypdf/billing/plans";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -121,7 +118,7 @@ export function ApiBillingSection({
                 end: formatBillingDisplayDate(billing.api.periodEnd, locale),
               })
             : tApi("includedHint", {
-                count: INCLUDED_API_CREDITS_PER_MONTH,
+                count: billing.api.creditsLimit,
               })
         }
         meta={tApi("creditsResetOn", {

@@ -45,6 +45,7 @@ export function WebPlanSection({
   const locale = useLocale();
   const isPro = billing.plan === "pro";
   const operationsLimit = billing.usage.conversionsLimit;
+  const webCreditsLimit = billing.usage.webCreditsLimit;
   const notice = resolveBillingPlanNotice({
     paid: isPro,
     cancelAtPeriodEnd: billing.cancelAtPeriodEnd,
@@ -105,8 +106,8 @@ export function WebPlanSection({
         title={t("usage")}
         description={
           billing.plan === "free"
-            ? t("includedOperations", {
-                count: operationsLimit ?? 0,
+            ? t("includedWebCredits", {
+                count: webCreditsLimit,
               })
             : t("period", {
                 start: formatBillingDisplayDate(
@@ -116,34 +117,44 @@ export function WebPlanSection({
                 end: formatBillingDisplayDate(billing.usage.periodEnd, locale),
               })
         }
-        meta={billing.plan === "free" ? t("operationsResetDaily") : undefined}
+        meta={
+          billing.plan === "free"
+            ? t("creditsResetOn", {
+                date: formatBillingDisplayDate(billing.usage.periodEnd, locale),
+              })
+            : undefined
+        }
       >
-        <dl
-          className={cn(
-            billingStatGridClassName,
-            operationsLimit === null ? null : "lg:grid-cols-3",
-          )}
-        >
-          <BillingStat
-            label={t("usageItems.operations")}
-            value={
-              operationsLimit === null
-                ? t("unlimited")
-                : t("usedOfLimit", {
+        <dl className={cn(billingStatGridClassName, "lg:grid-cols-2")}>
+          {billing.plan === "free" ? (
+            <>
+              <BillingStat
+                label={t("usageItems.webCredits")}
+                value={t("usedOfLimit", {
+                  used: billing.usage.webCreditsUsed,
+                  limit: webCreditsLimit,
+                })}
+              />
+              <BillingStat
+                label={t("remainingLabel")}
+                value={t("remaining", {
+                  count: billing.usage.webCreditsRemaining,
+                })}
+              />
+              {operationsLimit === null ? null : (
+                <BillingStat
+                  label={t("usageItems.operations")}
+                  value={t("usedOfLimit", {
                     used: billing.usage.conversionsUsed,
                     limit: operationsLimit,
-                  })
-            }
-          />
-          {operationsLimit === null ? null : (
+                  })}
+                />
+              )}
+            </>
+          ) : (
             <BillingStat
-              label={t("remainingLabel")}
-              value={t("remaining", {
-                count: Math.max(
-                  0,
-                  operationsLimit - billing.usage.conversionsUsed,
-                ),
-              })}
+              label={t("usageItems.operations")}
+              value={t("unlimited")}
             />
           )}
           <BillingStat
