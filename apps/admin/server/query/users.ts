@@ -14,7 +14,11 @@ import {
 import { and, desc, eq, gte, ilike, lte, or, sql } from "drizzle-orm";
 import { parseOptionalDate } from "@/server/query/date-range";
 import { paginated, parsePage, parsePageSize } from "@/server/query/pagination";
-import { ACTIVE_SUBSCRIPTION_SQL, countInt } from "@/server/query/sql";
+import {
+  ACTIVE_SUBSCRIPTION_SQL,
+  countInt,
+  QUALIFIED_USER_ID_SQL,
+} from "@/server/query/sql";
 
 export type AdminUserListFilters = {
   q?: string;
@@ -77,14 +81,14 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
   if (filters.plan === "pro") {
     conditions.push(sql`exists (
       select 1 from ${billingSubscriptions}
-      where ${billingSubscriptions.userId} = ${user.id}
+      where ${billingSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
         and ${billingSubscriptions.plan} = 'pro'
         and ${ACTIVE_SUBSCRIPTION_SQL}
     )`);
   } else if (filters.plan === "free") {
     conditions.push(sql`not exists (
       select 1 from ${billingSubscriptions}
-      where ${billingSubscriptions.userId} = ${user.id}
+      where ${billingSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
         and ${billingSubscriptions.plan} = 'pro'
         and ${ACTIVE_SUBSCRIPTION_SQL}
     )`);
@@ -93,14 +97,14 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
   if (filters.developer !== undefined && filters.developer !== "none") {
     conditions.push(sql`exists (
       select 1 from ${apiSubscriptions}
-      where ${apiSubscriptions.userId} = ${user.id}
+      where ${apiSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
         and ${apiSubscriptions.productKey} = ${filters.developer}
         and ${ACTIVE_SUBSCRIPTION_SQL}
     )`);
   } else if (filters.developer === "none") {
     conditions.push(sql`not exists (
       select 1 from ${apiSubscriptions}
-      where ${apiSubscriptions.userId} = ${user.id}
+      where ${apiSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
         and ${ACTIVE_SUBSCRIPTION_SQL}
     )`);
   }
@@ -125,27 +129,27 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
         select max(activity_at) from (
           select max(${session.updatedAt}) as activity_at
           from ${session}
-          where ${session.userId} = ${user.id}
+          where ${session.userId} = ${QUALIFIED_USER_ID_SQL}
           union all
           select max(${conversionUsageEvents.createdAt})
           from ${conversionUsageEvents}
-          where ${conversionUsageEvents.userId} = ${user.id}
+          where ${conversionUsageEvents.userId} = ${QUALIFIED_USER_ID_SQL}
           union all
           select max(${apiKeys.lastUsedAt})
           from ${apiKeys}
-          where ${apiKeys.userId} = ${user.id}
+          where ${apiKeys.userId} = ${QUALIFIED_USER_ID_SQL}
         ) activity
       )`,
       webPlan: sql<"free" | "pro">`case when exists (
         select 1 from ${billingSubscriptions}
-        where ${billingSubscriptions.userId} = ${user.id}
+        where ${billingSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
           and ${billingSubscriptions.plan} = 'pro'
           and ${ACTIVE_SUBSCRIPTION_SQL}
       ) then 'pro' else 'free' end`,
       developerPlan: sql<"none" | "starter" | "growth" | "scale">`coalesce((
         select ${apiSubscriptions.productKey}
         from ${apiSubscriptions}
-        where ${apiSubscriptions.userId} = ${user.id}
+        where ${apiSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
           and ${ACTIVE_SUBSCRIPTION_SQL}
         order by ${apiSubscriptions.updatedAt} desc
         limit 1
@@ -153,14 +157,14 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
       webCreditsRemaining: sql<number | null>`(
         select ${usagePeriods.webCreditsGranted} - ${usagePeriods.webCreditsUsed}
         from ${usagePeriods}
-        where ${usagePeriods.userId} = ${user.id}
+        where ${usagePeriods.userId} = ${QUALIFIED_USER_ID_SQL}
         order by ${usagePeriods.periodStart} desc
         limit 1
       )`,
       apiCreditsRemaining: sql<number | null>`(
         select ${usagePeriods.apiCreditsGranted} - ${usagePeriods.apiCreditsUsed}
         from ${usagePeriods}
-        where ${usagePeriods.userId} = ${user.id}
+        where ${usagePeriods.userId} = ${QUALIFIED_USER_ID_SQL}
         order by ${usagePeriods.periodStart} desc
         limit 1
       )`,

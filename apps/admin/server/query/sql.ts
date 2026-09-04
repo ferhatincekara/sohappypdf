@@ -1,5 +1,8 @@
 import { sql } from "drizzle-orm";
 
+/** Qualified so correlated subqueries do not bind `"id"` to an inner uuid PK. */
+export const QUALIFIED_USER_ID_SQL = sql`"user"."id"`;
+
 export function countInt(value: unknown): number {
   if (typeof value === "number") {
     return value;
