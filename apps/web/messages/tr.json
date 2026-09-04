@@ -2329,7 +2329,10 @@
             "description": "İmzayı içeren bir PDF alın."
           }
         },
-        "openEditor": "Editörü aç"
+        "openEditor": "Editörü aç",
+        "changeSignature": "İmzayı değiştir",
+        "addSignature": "İmza ekle",
+        "closePad": "Vazgeç"
       },
       "fill": {
         "title": "Bu PDF formunu doldur",
@@ -2374,39 +2377,39 @@
         }
       },
       "edit": {
-        "title": "Bu PDF’ye işaret ekle",
-        "hint": "PDF’in üzerine metin, vurgu, şekil veya bir görsel ekleyin. Mevcut PDF metni düzenlenemez.",
+        "title": "Bu PDF’i düzenle",
+        "hint": "Mevcut metne tıklayıp değiştirin. Yeni metin, vurgu veya görsel de ekleyebilirsiniz.",
         "addImage": "Görsel ekle",
         "uploadingImage": "Görseliniz kaydediliyor…",
         "imageFailed": "Görsel kaydedilemedi. Lütfen tekrar deneyin.",
-        "selectPrompt": "Devam etmeden önce metin, vurgu veya bir görsel ekleyin.",
-        "output": "{count, plural, one {PDF’e # işaret eklenecek.} other {PDF’e # işaret eklenecek.}}",
-        "limitation": "Bu, sayfaların üzerine yeni işaretler ekler. PDF’deki orijinal metni değiştirmez.",
+        "selectPrompt": "Düzenlemek için bir metin satırına tıklayın veya yeni bir işaret ekleyin.",
+        "output": "{count, plural, one {PDF’e # değişiklik yazılacak.} other {PDF’e # değişiklik yazılacak.}}",
+        "limitation": "Değiştirilen satırlar örtülüp yeniden yazılır. Gömülü yazı tipleri ve birebir düzen korunmayabilir. Metin katmanı olmayan taranmış sayfalar metin olarak düzenlenemez.",
         "previewFailed": "Bu PDF önizlenemedi.",
         "passwordProtected": "Bu PDF parola korumalı. Düzenlemek için önce kilidini açın.",
-        "processing": "İşaretleriniz ekleniyor...",
-        "processingHint": "Metin, şekil ve görseller PDF’e yazılıyor.",
+        "processing": "Düzenlemeleriniz kaydediliyor...",
+        "processingHint": "Metin değişiklikleri ve işaretler PDF’e yazılıyor.",
         "successTitle": "Düzenlenmiş PDF’niz hazır",
-        "successDescription": "İşaretlerinizin uygulandığı PDF’i indirin.",
+        "successDescription": "Düzenlemelerinizin uygulandığı PDF’i indirin.",
         "download": "PDF’i indir",
         "editAnother": "Başka bir PDF düzenle",
         "processingFailed": "Bu PDF düzenlenemedi. Lütfen tekrar deneyin.",
         "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
         "expiredTitle": "Bu dosyanın süresi doldu",
         "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF düzenleyin.",
-        "faqHow": "Bir PDF yükleyin, sayfaya metin, vurgu veya bir görsel ekleyin, ardından kaydedin. Mevcut PDF metni değiştirilemez. Bu araç için giriş gerekir.",
+        "faqHow": "Bir PDF yükleyin, mevcut metne tıklayıp düzenleyin, isterseniz işaret ekleyin, ardından kaydedin. Bu araç için giriş gerekir.",
         "how": {
           "upload": {
             "title": "Yükle",
-            "description": "İşaretlemek istediğiniz PDF’i bırakın."
+            "description": "Düzenlemek istediğiniz PDF’i bırakın."
           },
           "edit": {
-            "title": "İşaret ekle",
-            "description": "Sayfalara metin, vurgu, şekil veya bir görsel yerleştirin."
+            "title": "Düzenle",
+            "description": "Sayfadaki metne tıklayıp değiştirin veya yeni metin, vurgu ve görsel ekleyin."
           },
           "download": {
             "title": "İndir",
-            "description": "Bu işaretlerin dosyaya yazıldığı bir PDF alın."
+            "description": "Bu düzenlemelerin dosyaya yazıldığı bir PDF alın."
           }
         },
         "openEditor": "Editörü aç"
@@ -2663,7 +2666,7 @@
       "nextPage": "Sonraki sayfa",
       "pageOf": "Sayfa {current} / {total}",
       "properties": "Özellikler",
-      "propertiesEmpty": "Konum ve boyutu düzenlemek için bir nesne seçin.",
+      "propertiesEmpty": "Düzenlemek için sayfadaki metne tıklayın veya bir işaret seçin.",
       "text": "Metin",
       "fontSize": "Metin boyutu",
       "style": "Stil",
@@ -2818,7 +2821,7 @@
     "edit-pdf": {
       "name": "PDF düzenle",
       "metaTitle": "PDF düzenleme",
-      "description": "Bir PDF’in üzerine metin, vurgu, şekil ve görsel ekleyin. Mevcut metin olduğu gibi kalır."
+      "description": "PDF’deki mevcut metni düzenleyin; gerekirse vurgu, şekil veya görsel ekleyin."
     },
     "watermark-pdf": {
       "name": "PDF filigran",

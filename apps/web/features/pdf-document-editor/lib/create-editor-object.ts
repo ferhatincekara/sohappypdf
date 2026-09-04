@@ -14,18 +14,47 @@ export function createTextObject(input: {
   x: number;
   y: number;
   text?: string;
+  fontSize?: number;
+  width?: number;
+  height?: number;
+  color?: string;
+  fontFamily?: string;
+  source?: EditorTextObject["source"];
+  origin?: EditorTextObject["origin"];
+  id?: string;
 }): EditorTextObject {
+  const fontSize = input.fontSize ?? 16;
+  const width = input.width ?? 180;
+  const height = input.height ?? Math.max(18, fontSize + 4);
+  const text = input.text ?? "Text";
+  const source = input.source ?? "added";
+
   return {
-    id: createEditorId(),
+    id: input.id ?? createEditorId(),
     kind: "text",
     page: input.page,
     x: input.x,
     y: input.y,
-    width: 180,
-    height: 32,
+    width,
+    height,
     rotation: 0,
-    text: input.text ?? "Text",
-    fontSize: 16,
+    text,
+    fontSize,
+    color: input.color,
+    fontFamily: input.fontFamily,
+    source,
+    origin:
+      input.origin ??
+      (source === "original"
+        ? {
+            x: input.x,
+            y: input.y,
+            width,
+            height,
+            text,
+            fontSize,
+          }
+        : undefined),
   };
 }
 

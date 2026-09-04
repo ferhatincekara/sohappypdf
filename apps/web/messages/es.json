@@ -2329,7 +2329,10 @@
             "description": "Obtén un PDF que incluye la firma."
           }
         },
-        "openEditor": "Open editor"
+        "openEditor": "Open editor",
+        "changeSignature": "Cambiar firma",
+        "addSignature": "Añadir firma",
+        "closePad": "Cancelar"
       },
       "fill": {
         "title": "Rellenar este PDF",
@@ -2374,39 +2377,39 @@
         }
       },
       "edit": {
-        "title": "Añadir marcas a este PDF",
-        "hint": "Añade texto, resaltados, formas o una imagen encima del PDF. El texto existente del PDF no se puede editar.",
+        "title": "Editar este PDF",
+        "hint": "Haz clic en el texto existente para cambiarlo. También puedes añadir texto, resaltados o una imagen.",
         "addImage": "Añadir una imagen",
         "uploadingImage": "Guardando tu imagen…",
         "imageFailed": "No pudimos guardar la imagen. Inténtalo de nuevo.",
-        "selectPrompt": "Añade texto, un resaltado o una imagen antes de continuar.",
-        "output": "{count, plural, one {Se añadirá # marca al PDF.} other {Se añadirán # marcas al PDF.}}",
-        "limitation": "Esto añade marcas nuevas encima de las páginas. No cambia el texto original del PDF.",
+        "selectPrompt": "Haz clic en una línea de texto para editarla o añade una marca nueva.",
+        "output": "{count, plural, one {Se escribirá # cambio en el PDF.} other {Se escribirán # cambios en el PDF.}}",
+        "limitation": "Las líneas cambiadas se cubren y se reescriben. Las fuentes incrustadas y el diseño exacto pueden no coincidir. Las páginas escaneadas sin capa de texto no se pueden editar como texto.",
         "previewFailed": "No se pudo previsualizar este PDF.",
         "passwordProtected": "Este PDF está protegido con contraseña. Desbloquéalo primero para editar.",
-        "processing": "Añadiendo tus marcas...",
-        "processingHint": "Escribiendo texto, formas e imágenes en el PDF.",
+        "processing": "Guardando tus ediciones...",
+        "processingHint": "Escribiendo los cambios de texto y las marcas en el PDF.",
         "successTitle": "Tu PDF editado está listo",
-        "successDescription": "Descarga el PDF con tus marcas aplicadas.",
+        "successDescription": "Descarga el PDF con tus ediciones aplicadas.",
         "download": "Descargar PDF",
         "editAnother": "Editar otro PDF",
         "processingFailed": "No pudimos editar este PDF. Inténtalo de nuevo.",
         "invalidFile": "No se pudo abrir este archivo. Prueba con otro PDF.",
         "expiredTitle": "Este archivo ha caducado",
         "expiredDescription": "Los archivos se eliminan automáticamente a las {hours} horas. Edita otro PDF para continuar.",
-        "faqHow": "Sube un PDF, añade texto, resaltados o una imagen en la página y luego guarda. El texto existente del PDF no se puede cambiar. Esta herramienta requiere iniciar sesión.",
+        "faqHow": "Sube un PDF, haz clic en el texto existente para editarlo, añade marcas si quieres y luego guarda. Esta herramienta requiere iniciar sesión.",
         "how": {
           "upload": {
             "title": "Subir",
-            "description": "Suelta el PDF que quieres marcar."
+            "description": "Suelta el PDF que quieres editar."
           },
           "edit": {
-            "title": "Añadir marcas",
-            "description": "Coloca texto, resaltados, formas o una imagen en las páginas."
+            "title": "Editar",
+            "description": "Haz clic en el texto de la página para cambiarlo, o añade texto, resaltados e imágenes."
           },
           "download": {
             "title": "Descargar",
-            "description": "Obtén un PDF con esas marcas escritas en el archivo."
+            "description": "Obtén un PDF con esas ediciones escritas en el archivo."
           }
         },
         "openEditor": "Open editor"
@@ -2429,7 +2432,7 @@
         "nextPage": "Página siguiente",
         "pageOf": "Página {current} de {total}",
         "properties": "Propiedades",
-        "propertiesEmpty": "Selecciona un objeto para editar su posición y tamaño.",
+        "propertiesEmpty": "Haz clic en el texto de la página para editarlo o selecciona una marca.",
         "text": "Texto",
         "fontSize": "Tamaño del texto",
         "style": "Estilo",
@@ -2663,7 +2666,7 @@
       "nextPage": "Página siguiente",
       "pageOf": "Página {current} de {total}",
       "properties": "Propiedades",
-      "propertiesEmpty": "Selecciona un objeto para editar su posición y tamaño.",
+      "propertiesEmpty": "Haz clic en el texto de la página para editarlo o selecciona una marca.",
       "text": "Texto",
       "fontSize": "Tamaño del texto",
       "style": "Estilo",
@@ -2818,7 +2821,7 @@
     "edit-pdf": {
       "name": "Editar PDF",
       "metaTitle": "Editar PDF en línea",
-      "description": "Añade texto, resaltados, formas e imágenes encima de un PDF. El texto existente se queda como está."
+      "description": "Edita el texto existente del PDF y, si hace falta, añade resaltados, formas o imágenes."
     },
     "watermark-pdf": {
       "name": "Marca de agua en PDF",

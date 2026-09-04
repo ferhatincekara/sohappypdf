@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import {
   createImageObject,
   DocumentEditor,
+  type EditorTextObject,
   useDocumentEditor,
 } from "@/features/pdf-document-editor";
+import { extractPdfTextLines } from "@/features/pdf-document-editor/lib/extract-pdf-text-lines";
 import { ToolFileCard } from "@/features/public-tools/components/tool-file-card";
 import { ToolSelectedActions } from "@/features/public-tools/components/tool-selected-actions";
 import { editorObjectsToEditOperations } from "@/features/public-tools/lib/edit-pdf-operations";
@@ -28,11 +30,13 @@ export function EditPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const workspaceRef = useRef(props.workspaceState);
   const imageFileIdRef = useRef(props.workspaceState.editImageFileId);
+  const originalsRef = useRef<readonly EditorTextObject[]>([]);
   workspaceRef.current = props.workspaceState;
   imageFileIdRef.current = props.workspaceState.editImageFileId;
 
   useEffect(() => {
     if (pdf.document === null) {
+      originalsRef.current = [];
       return;
     }
 
@@ -46,20 +50,25 @@ export function EditPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         heights[String(page)] = pdfPage.getViewport({ scale: 1 }).height;
       }
 
+      const lines = await extractPdfTextLines(loaded);
+
       if (!cancelled) {
         setPageHeights(heights);
+        originalsRef.current = lines;
+        editor.dispatch({ type: "loadObjects", objects: lines });
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [pdf.document]);
+  }, [editor.dispatch, pdf.document]);
 
   useEffect(() => {
     const operations = editorObjectsToEditOperations(
       editor.state.objects,
       pageHeights,
+      originalsRef.current,
     );
 
     props.setWorkspaceState({

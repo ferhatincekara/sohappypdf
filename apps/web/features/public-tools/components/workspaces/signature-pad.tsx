@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -65,9 +66,11 @@ export function SignaturePad({
   const t = useTranslations("publicTools.workspaces.sign");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
+  const uploadRef = useRef<HTMLInputElement>(null);
   const [method, setMethod] = useState<SignatureMethod>("draw");
   const [typed, setTyped] = useState("");
   const [hasInk, setHasInk] = useState(false);
+  const [uploadName, setUploadName] = useState<string | null>(null);
 
   useEffect(() => {
     if (method !== "draw") {
@@ -246,19 +249,22 @@ export function SignaturePad({
 
       {method === "upload" ? (
         <div className="flex max-w-lg flex-col gap-3">
-          <Label htmlFor="signature-upload">{t("uploadLabel")}</Label>
-          <Input
+          <input
+            ref={uploadRef}
             id="signature-upload"
             type="file"
             accept="image/png,image/jpeg"
             disabled={disabled}
+            className="sr-only"
             onChange={(event) => {
               const file = event.target.files?.[0];
+              event.target.value = "";
 
               if (file === undefined) {
                 return;
               }
 
+              setUploadName(file.name);
               onAsset({
                 method: "upload",
                 file,
@@ -266,6 +272,25 @@ export function SignaturePad({
               });
             }}
           />
+          <button
+            type="button"
+            disabled={disabled}
+            aria-controls="signature-upload"
+            className="flex min-h-32 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-muted/40 px-4 py-6 text-center outline-none transition-colors hover:bg-muted/70 focus-visible:border-primary disabled:pointer-events-none disabled:opacity-50"
+            onClick={() => {
+              uploadRef.current?.click();
+            }}
+          >
+            <ImageIcon className="size-6 text-foreground/70" />
+            <span className="text-sm font-medium text-foreground">
+              {t("uploadLabel")}
+            </span>
+            {uploadName === null ? null : (
+              <span className="max-w-full truncate text-xs text-muted-foreground">
+                {uploadName}
+              </span>
+            )}
+          </button>
         </div>
       ) : null}
     </section>

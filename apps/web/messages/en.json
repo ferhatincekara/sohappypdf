@@ -2329,7 +2329,10 @@
             "description": "Get a PDF that includes the signature."
           }
         },
-        "openEditor": "Open editor"
+        "openEditor": "Open editor",
+        "changeSignature": "Change signature",
+        "addSignature": "Add signature",
+        "closePad": "Cancel"
       },
       "fill": {
         "title": "Fill this PDF",
@@ -2374,39 +2377,39 @@
         }
       },
       "edit": {
-        "title": "Add marks to this PDF",
-        "hint": "Add text, highlights, shapes, or an image on top of the PDF. Existing PDF text cannot be edited.",
+        "title": "Edit this PDF",
+        "hint": "Click existing text to change it. You can also add new text, highlights, or an image.",
         "addImage": "Add an image",
         "uploadingImage": "Saving your image…",
         "imageFailed": "We couldn't save the image. Please try again.",
-        "selectPrompt": "Add text, a highlight, or an image before continuing.",
-        "output": "{count, plural, one {# mark will be added to the PDF.} other {# marks will be added to the PDF.}}",
-        "limitation": "This adds new marks on top of the pages. It does not change the original text in the PDF.",
+        "selectPrompt": "Click a line of text to edit it, or add a new mark.",
+        "output": "{count, plural, one {# change will be written into the PDF.} other {# changes will be written into the PDF.}}",
+        "limitation": "Changed lines are covered and rewritten. Embedded fonts and exact layout may not match the original. Scanned pages without a text layer cannot be edited as text.",
         "previewFailed": "This PDF couldn't be previewed.",
         "passwordProtected": "This PDF is password protected. Unlock it first to edit.",
-        "processing": "Adding your marks...",
-        "processingHint": "Writing text, shapes, and images into the PDF.",
+        "processing": "Saving your edits...",
+        "processingHint": "Writing text changes and marks into the PDF.",
         "successTitle": "Your edited PDF is ready",
-        "successDescription": "Download the PDF with your marks applied.",
+        "successDescription": "Download the PDF with your edits applied.",
         "download": "Download PDF",
         "editAnother": "Edit another PDF",
         "processingFailed": "We couldn't edit this PDF. Please try again.",
         "invalidFile": "This file couldn't be opened. Please try another PDF.",
         "expiredTitle": "This file has expired",
         "expiredDescription": "Files are automatically deleted after {hours} hours. Edit another PDF to continue.",
-        "faqHow": "Upload a PDF, add text, highlights, or an image on the page, then save. Existing PDF text cannot be changed. Sign in is required for this tool.",
+        "faqHow": "Upload a PDF, click existing text to edit it, add marks if you want, then save. Sign in is required for this tool.",
         "how": {
           "upload": {
             "title": "Upload",
-            "description": "Drop in the PDF you want to mark."
+            "description": "Drop in the PDF you want to edit."
           },
           "edit": {
-            "title": "Add marks",
-            "description": "Place text, highlights, shapes, or one image on the pages."
+            "title": "Edit",
+            "description": "Click page text to change it, or add new text, highlights, and images."
           },
           "download": {
             "title": "Download",
-            "description": "Get a PDF with those marks written into the file."
+            "description": "Get a PDF with those edits written into the file."
           }
         },
         "openEditor": "Open editor"
@@ -2663,7 +2666,7 @@
       "nextPage": "Next page",
       "pageOf": "Page {current} of {total}",
       "properties": "Properties",
-      "propertiesEmpty": "Select an object to edit its position and size.",
+      "propertiesEmpty": "Click text on the page to edit it, or select a mark.",
       "text": "Text",
       "fontSize": "Text size",
       "style": "Style",
@@ -2818,7 +2821,7 @@
     "edit-pdf": {
       "name": "Edit PDF",
       "metaTitle": "Edit PDF online",
-      "description": "Add text, highlights, shapes, and images on top of a PDF. Existing text stays as it is."
+      "description": "Edit existing PDF text, then add highlights, shapes, or images if you need them."
     },
     "watermark-pdf": {
       "name": "Watermark PDF",

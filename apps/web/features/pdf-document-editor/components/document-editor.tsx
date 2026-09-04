@@ -40,6 +40,7 @@ export function DocumentEditor({
   layout = "inline",
   title,
   extra,
+  propertiesExtra,
   rectangleStyle,
   onBack,
   exportLabel,
@@ -56,6 +57,7 @@ export function DocumentEditor({
   layout?: "inline" | "workspace";
   title?: string;
   extra?: ReactNode;
+  propertiesExtra?: ReactNode;
   rectangleStyle?: "fill" | "highlight";
   onBack?: () => void;
   exportLabel?: string;
@@ -311,6 +313,7 @@ export function DocumentEditor({
               <EditorPropertiesPanel
                 object={selected}
                 disabled={disabled}
+                extra={propertiesExtra}
                 onChange={(object: EditorObject) => {
                   dispatch({ type: "updateObject", id: object.id, object });
                 }}
@@ -322,6 +325,7 @@ export function DocumentEditor({
             <EditorPropertiesPanel
               object={selected}
               disabled={disabled}
+              extra={propertiesExtra}
               onChange={(object: EditorObject) => {
                 dispatch({ type: "updateObject", id: object.id, object });
               }}

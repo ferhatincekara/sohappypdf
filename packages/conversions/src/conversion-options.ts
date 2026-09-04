@@ -6,7 +6,7 @@ const MAX_MERGE_ADDITIONAL_FILES = 20;
 const MAX_SCAN_ADDITIONAL_FILES = 49;
 const MAX_IMAGE_ADDITIONAL_FILES = 19;
 const MAX_REDACT_REGIONS = 200;
-const MAX_EDIT_OPERATIONS = 50;
+const MAX_EDIT_OPERATIONS = 400;
 const MAX_FORM_FIELDS = 200;
 const MIN_DPI = 72;
 const MAX_DPI = 600;
@@ -149,8 +149,8 @@ export type PdfToPdfaOptions = {
 };
 
 /**
- * Overlay-only editing. Does not rewrite existing PDF content streams.
- * Supported: text stamps, rectangle/highlight overlays, optional image stamp
+ * Page editing. Existing text is covered then rewritten; new marks are stamped.
+ * Supported: text, erase, rectangle/highlight, optional image stamp
  * (via additionalFileIds[0]).
  */
 export type EditPdfOptions = {
@@ -158,6 +158,17 @@ export type EditPdfOptions = {
   operations: readonly EditPdfOperation[];
   additionalFileIds?: string[];
 };
+
+export const EDIT_PDF_FONTS = [
+  "helvetica",
+  "helveticaBold",
+  "times",
+  "timesBold",
+  "courier",
+  "courierBold",
+] as const;
+
+export type EditPdfFont = (typeof EDIT_PDF_FONTS)[number];
 
 export type EditPdfOperation =
   | {
@@ -167,6 +178,16 @@ export type EditPdfOperation =
       y: number;
       text: string;
       size?: number;
+      color?: string;
+      font?: EditPdfFont;
+    }
+  | {
+      kind: "erase";
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
     }
   | {
       kind: "rectangle";
@@ -463,6 +484,15 @@ function parseEditOperations(value: unknown): EditPdfOperation[] {
       }
 
       const size = assertOptionalPositiveInteger(item.size, 96);
+      const color =
+        typeof item.color === "string" && /^#[0-9a-fA-F]{6}$/.test(item.color)
+          ? item.color.toLowerCase()
+          : undefined;
+      const font =
+        typeof item.font === "string" &&
+        (EDIT_PDF_FONTS as readonly string[]).includes(item.font)
+          ? (item.font as EditPdfFont)
+          : undefined;
       operations.push({
         kind: "text",
         page,
@@ -470,6 +500,20 @@ function parseEditOperations(value: unknown): EditPdfOperation[] {
         y: parseNonNegativeCoordinate(item.y),
         text: item.text.trim().slice(0, 500),
         ...(size === undefined ? {} : { size }),
+        ...(color === undefined ? {} : { color }),
+        ...(font === undefined ? {} : { font }),
+      });
+      continue;
+    }
+
+    if (item.kind === "erase") {
+      operations.push({
+        kind: "erase",
+        page,
+        x: parseNonNegativeCoordinate(item.x),
+        y: parseNonNegativeCoordinate(item.y),
+        width: parsePositiveCoordinate(item.width),
+        height: parsePositiveCoordinate(item.height),
       });
       continue;
     }

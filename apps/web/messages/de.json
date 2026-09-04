@@ -2329,7 +2329,10 @@
             "description": "Holen Sie sich ein PDF, das die Unterschrift enthält."
           }
         },
-        "openEditor": "Open editor"
+        "openEditor": "Open editor",
+        "changeSignature": "Signatur ändern",
+        "addSignature": "Signatur hinzufügen",
+        "closePad": "Abbrechen"
       },
       "fill": {
         "title": "Dieses PDF ausfüllen",
@@ -2374,39 +2377,39 @@
         }
       },
       "edit": {
-        "title": "Markierungen auf dieses PDF setzen",
-        "hint": "Fügen Sie Text, Hervorhebungen, Formen oder ein Bild über dem PDF hinzu. Vorhandener PDF-Text kann nicht bearbeitet werden.",
+        "title": "Dieses PDF bearbeiten",
+        "hint": "Klicken Sie auf vorhandenen Text, um ihn zu ändern. Sie können auch neuen Text, Hervorhebungen oder ein Bild hinzufügen.",
         "addImage": "Ein Bild hinzufügen",
         "uploadingImage": "Ihr Bild wird gespeichert…",
         "imageFailed": "Wir konnten das Bild nicht speichern. Bitte versuchen Sie es erneut.",
-        "selectPrompt": "Fügen Sie Text, eine Hervorhebung oder ein Bild hinzu, bevor Sie fortfahren.",
-        "output": "{count, plural, one {# Markierung wird zum PDF hinzugefügt.} other {# Markierungen werden zum PDF hinzugefügt.}}",
-        "limitation": "Das setzt neue Markierungen auf die Seiten. Der ursprüngliche Text im PDF wird nicht geändert.",
+        "selectPrompt": "Klicken Sie auf eine Textzeile, um sie zu bearbeiten, oder fügen Sie eine neue Markierung hinzu.",
+        "output": "{count, plural, one {# Änderung wird ins PDF geschrieben.} other {# Änderungen werden ins PDF geschrieben.}}",
+        "limitation": "Geänderte Zeilen werden überdeckt und neu geschrieben. Eingebettete Schriften und das genaue Layout können abweichen. Gescannte Seiten ohne Textebene lassen sich nicht als Text bearbeiten.",
         "previewFailed": "Dieses PDF konnte nicht in der Vorschau angezeigt werden.",
         "passwordProtected": "Dieses PDF ist passwortgeschützt. Entsperren Sie es zuerst, um zu bearbeiten.",
-        "processing": "Ihre Markierungen werden hinzugefügt...",
-        "processingHint": "Text, Formen und Bilder werden ins PDF geschrieben.",
+        "processing": "Ihre Änderungen werden gespeichert...",
+        "processingHint": "Textänderungen und Markierungen werden ins PDF geschrieben.",
         "successTitle": "Ihr bearbeitetes PDF ist bereit",
-        "successDescription": "Laden Sie das PDF mit Ihren Markierungen herunter.",
+        "successDescription": "Laden Sie das PDF mit Ihren Änderungen herunter.",
         "download": "PDF herunterladen",
         "editAnother": "Weiteres PDF bearbeiten",
         "processingFailed": "Wir konnten dieses PDF nicht bearbeiten. Bitte versuchen Sie es erneut.",
         "invalidFile": "Diese Datei konnte nicht geöffnet werden. Bitte versuchen Sie ein anderes PDF.",
         "expiredTitle": "Diese Datei ist abgelaufen",
         "expiredDescription": "Dateien werden nach {hours} Stunden automatisch gelöscht. Bearbeiten Sie ein weiteres PDF, um fortzufahren.",
-        "faqHow": "Laden Sie ein PDF hoch, fügen Sie Text, Hervorhebungen oder ein Bild auf der Seite hinzu und speichern Sie. Vorhandener PDF-Text kann nicht geändert werden. Für dieses Tool ist eine Anmeldung nötig.",
+        "faqHow": "Laden Sie ein PDF hoch, klicken Sie auf vorhandenen Text, fügen Sie bei Bedarf Markierungen hinzu und speichern Sie. Für dieses Tool ist eine Anmeldung nötig.",
         "how": {
           "upload": {
             "title": "Hochladen",
-            "description": "Ziehen Sie das PDF hinein, das Sie markieren möchten."
+            "description": "Ziehen Sie das PDF hinein, das Sie bearbeiten möchten."
           },
           "edit": {
-            "title": "Markierungen hinzufügen",
-            "description": "Platzieren Sie Text, Hervorhebungen, Formen oder ein Bild auf den Seiten."
+            "title": "Bearbeiten",
+            "description": "Klicken Sie auf Seitentext, um ihn zu ändern, oder fügen Sie neuen Text, Hervorhebungen und Bilder hinzu."
           },
           "download": {
             "title": "Herunterladen",
-            "description": "Holen Sie sich ein PDF, in dem diese Markierungen in die Datei geschrieben sind."
+            "description": "Holen Sie sich ein PDF, in dem diese Änderungen in die Datei geschrieben sind."
           }
         },
         "openEditor": "Open editor"
@@ -2429,7 +2432,7 @@
         "nextPage": "Nächste Seite",
         "pageOf": "Seite {current} von {total}",
         "properties": "Eigenschaften",
-        "propertiesEmpty": "Wählen Sie ein Objekt, um Position und Größe zu bearbeiten.",
+        "propertiesEmpty": "Klicken Sie auf Seitentext, um ihn zu bearbeiten, oder wählen Sie eine Markierung.",
         "text": "Text",
         "fontSize": "Textgröße",
         "style": "Stil",
@@ -2663,7 +2666,7 @@
       "nextPage": "Nächste Seite",
       "pageOf": "Seite {current} von {total}",
       "properties": "Eigenschaften",
-      "propertiesEmpty": "Wählen Sie ein Objekt, um Position und Größe zu bearbeiten.",
+      "propertiesEmpty": "Klicken Sie auf Seitentext, um ihn zu bearbeiten, oder wählen Sie eine Markierung.",
       "text": "Text",
       "fontSize": "Textgröße",
       "style": "Stil",
@@ -2818,7 +2821,7 @@
     "edit-pdf": {
       "name": "PDF bearbeiten",
       "metaTitle": "PDF online bearbeiten",
-      "description": "Text, Hervorhebungen, Formen und Bilder über einem PDF hinzufügen. Vorhandener Text bleibt unverändert."
+      "description": "Vorhandenen PDF-Text bearbeiten und bei Bedarf Hervorhebungen, Formen oder Bilder hinzufügen."
     },
     "watermark-pdf": {
       "name": "Wasserzeichen auf PDF",

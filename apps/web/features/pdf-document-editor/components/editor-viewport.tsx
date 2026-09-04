@@ -198,6 +198,17 @@ export function EditorViewport({
                   },
                 });
               }}
+              onTextChange={
+                object.kind === "text"
+                  ? (text) => {
+                      dispatch({
+                        type: "updateObject",
+                        id: object.id,
+                        object: { ...object, text },
+                      });
+                    }
+                  : undefined
+              }
             />
           ))}
         </div>

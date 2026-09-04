@@ -2329,7 +2329,10 @@
             "description": "Obtenez un PDF qui inclut la signature."
           }
         },
-        "openEditor": "Open editor"
+        "openEditor": "Open editor",
+        "changeSignature": "Modifier la signature",
+        "addSignature": "Ajouter une signature",
+        "closePad": "Annuler"
       },
       "fill": {
         "title": "Remplir ce PDF",
@@ -2374,39 +2377,39 @@
         }
       },
       "edit": {
-        "title": "Ajouter des annotations à ce PDF",
-        "hint": "Ajoutez du texte, des surlignages, des formes ou une image par-dessus le PDF. Le texte PDF existant ne peut pas être modifié.",
+        "title": "Modifier ce PDF",
+        "hint": "Cliquez sur le texte existant pour le modifier. Vous pouvez aussi ajouter du texte, des surlignages ou une image.",
         "addImage": "Ajouter une image",
         "uploadingImage": "Enregistrement de votre image…",
         "imageFailed": "Nous n'avons pas pu enregistrer l'image. Veuillez réessayer.",
-        "selectPrompt": "Ajoutez du texte, un surlignage ou une image avant de continuer.",
-        "output": "{count, plural, one {# annotation sera ajoutée au PDF.} other {# annotations seront ajoutées au PDF.}}",
-        "limitation": "Cela ajoute de nouvelles annotations par-dessus les pages. Cela ne modifie pas le texte d'origine du PDF.",
+        "selectPrompt": "Cliquez sur une ligne de texte pour la modifier, ou ajoutez une annotation.",
+        "output": "{count, plural, one {# modification sera écrite dans le PDF.} other {# modifications seront écrites dans le PDF.}}",
+        "limitation": "Les lignes modifiées sont recouvertes puis réécrites. Les polices intégrées et la mise en page exacte peuvent différer. Les pages numérisées sans couche de texte ne peuvent pas être éditées comme du texte.",
         "previewFailed": "Ce PDF n'a pas pu être prévisualisé.",
         "passwordProtected": "Ce PDF est protégé par mot de passe. Déverrouillez-le d'abord pour éditer.",
-        "processing": "Ajout de vos annotations...",
-        "processingHint": "Écriture du texte, des formes et des images dans le PDF.",
+        "processing": "Enregistrement de vos modifications...",
+        "processingHint": "Écriture des changements de texte et des annotations dans le PDF.",
         "successTitle": "Votre PDF édité est prêt",
-        "successDescription": "Téléchargez le PDF avec vos annotations appliquées.",
+        "successDescription": "Téléchargez le PDF avec vos modifications appliquées.",
         "download": "Télécharger le PDF",
         "editAnother": "Éditer un autre PDF",
         "processingFailed": "Nous n'avons pas pu éditer ce PDF. Veuillez réessayer.",
         "invalidFile": "Ce fichier n'a pas pu être ouvert. Veuillez essayer un autre PDF.",
         "expiredTitle": "Ce fichier a expiré",
         "expiredDescription": "Les fichiers sont automatiquement supprimés après {hours} heures. Éditez un autre PDF pour continuer.",
-        "faqHow": "Importez un PDF, ajoutez du texte, des surlignages ou une image sur la page, puis enregistrez. Le texte PDF existant ne peut pas être modifié. Une connexion est requise pour cet outil.",
+        "faqHow": "Importez un PDF, cliquez sur le texte existant pour le modifier, ajoutez des annotations si besoin, puis enregistrez. Une connexion est requise pour cet outil.",
         "how": {
           "upload": {
             "title": "Importer",
-            "description": "Déposez le PDF que vous souhaitez annoter."
+            "description": "Déposez le PDF que vous souhaitez modifier."
           },
           "edit": {
-            "title": "Ajouter des annotations",
-            "description": "Placez du texte, des surlignages, des formes ou une image sur les pages."
+            "title": "Modifier",
+            "description": "Cliquez sur le texte de la page pour le changer, ou ajoutez du texte, des surlignages et des images."
           },
           "download": {
             "title": "Télécharger",
-            "description": "Obtenez un PDF avec ces annotations écrites dans le fichier."
+            "description": "Obtenez un PDF avec ces modifications écrites dans le fichier."
           }
         },
         "openEditor": "Open editor"
@@ -2429,7 +2432,7 @@
         "nextPage": "Page suivante",
         "pageOf": "Page {current} sur {total}",
         "properties": "Propriétés",
-        "propertiesEmpty": "Sélectionnez un objet pour modifier sa position et sa taille.",
+        "propertiesEmpty": "Cliquez sur le texte de la page pour le modifier, ou sélectionnez une annotation.",
         "text": "Texte",
         "fontSize": "Taille du texte",
         "style": "Style",
@@ -2663,7 +2666,7 @@
       "nextPage": "Page suivante",
       "pageOf": "Page {current} sur {total}",
       "properties": "Propriétés",
-      "propertiesEmpty": "Sélectionnez un objet pour modifier sa position et sa taille.",
+      "propertiesEmpty": "Cliquez sur le texte de la page pour le modifier, ou sélectionnez une annotation.",
       "text": "Texte",
       "fontSize": "Taille du texte",
       "style": "Style",
@@ -2818,7 +2821,7 @@
     "edit-pdf": {
       "name": "Modifier un PDF",
       "metaTitle": "Modifier un PDF en ligne",
-      "description": "Ajoutez du texte, des surlignages, des formes et des images par-dessus un PDF. Le texte existant reste tel quel."
+      "description": "Modifiez le texte existant d’un PDF, puis ajoutez des surlignages, formes ou images si besoin."
     },
     "watermark-pdf": {
       "name": "Filigrane PDF",

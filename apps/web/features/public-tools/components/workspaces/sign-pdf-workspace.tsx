@@ -2,6 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   createSignatureObject,
   DocumentEditor,
@@ -27,9 +35,13 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const [uploadingAsset, setUploadingAsset] = useState(false);
   const [assetError, setAssetError] = useState(false);
   const [editorOpen, setEditorOpen] = useState(true);
-  const placedRef = useRef(false);
+  const [padOpen, setPadOpen] = useState(false);
   const workspaceRef = useRef(props.workspaceState);
   workspaceRef.current = props.workspaceState;
+
+  const signature = editor.state.objects.find(
+    (object) => object.kind === "signature",
+  );
 
   useEffect(() => {
     if (pdf.document === null) {
@@ -58,11 +70,16 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   }, [pdf.document, editor.state.currentPage, props.setWorkspaceState]);
 
   useEffect(() => {
-    const signature = editor.state.objects.find(
-      (object) => object.kind === "signature",
-    );
-
     if (signature === undefined) {
+      if (workspaceRef.current.signFileId.length === 0) {
+        return;
+      }
+
+      props.setWorkspaceState({
+        ...workspaceRef.current,
+        signFileId: "",
+        signText: "",
+      });
       return;
     }
 
@@ -75,7 +92,7 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
       signHeight: signature.height,
       signText: signature.text ?? workspaceRef.current.signText,
     });
-  }, [editor.state.objects, props.setWorkspaceState]);
+  }, [signature, props.setWorkspaceState]);
 
   if (entry === undefined) {
     return null;
@@ -98,8 +115,11 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         signText: asset.text ?? "",
       });
 
-      if (!placedRef.current) {
-        placedRef.current = true;
+      const current = editor.state.objects.find(
+        (object) => object.kind === "signature",
+      );
+
+      if (current === undefined) {
         editor.dispatch({
           type: "addObject",
           object: createSignatureObject({
@@ -110,7 +130,19 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
             text: asset.text,
           }),
         });
+      } else {
+        editor.dispatch({
+          type: "updateObject",
+          id: current.id,
+          object: {
+            ...current,
+            src: asset.previewUrl,
+            text: asset.text,
+          },
+        });
       }
+
+      setPadOpen(false);
     } catch {
       setAssetError(true);
     } finally {
@@ -118,9 +150,14 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
     }
   }
 
-  const hasSignature =
-    props.workspaceState.signFileId.length > 0 ||
-    props.workspaceState.signText.trim().length > 0;
+  const hasSignature = signature !== undefined;
+
+  const pad = (
+    <SignaturePad
+      disabled={props.disabled || uploadingAsset}
+      onAsset={onAsset}
+    />
+  );
 
   return (
     <div className="flex flex-col gap-6">
@@ -147,12 +184,7 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         </p>
       </div>
 
-      {hasSignature && editorOpen ? null : (
-        <SignaturePad
-          disabled={props.disabled || uploadingAsset}
-          onAsset={onAsset}
-        />
-      )}
+      {hasSignature && editorOpen ? null : pad}
 
       {uploadingAsset ? (
         <p className="text-sm text-muted-foreground">
@@ -174,13 +206,18 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
           disabled={props.disabled}
           layout="workspace"
           title={entry.file.name}
-          extra={
-            <div className="border-b border-border px-4 py-3">
-              <SignaturePad
-                disabled={props.disabled || uploadingAsset}
-                onAsset={onAsset}
-              />
-            </div>
+          propertiesExtra={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={props.disabled || uploadingAsset}
+              onClick={() => {
+                setPadOpen(true);
+              }}
+            >
+              {t("workspaces.sign.changeSignature")}
+            </Button>
           }
           previewFailedMessage={t("workspaces.sign.previewFailed")}
           passwordProtectedMessage={t("workspaces.sign.passwordProtected")}
@@ -202,6 +239,23 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
           {t("workspaces.sign.openEditor")}
         </button>
       ) : null}
+
+      <Dialog open={padOpen} onOpenChange={setPadOpen}>
+        <DialogContent
+          closeLabel={t("workspaces.sign.closePad")}
+          className="max-w-lg"
+        >
+          <DialogHeader>
+            <DialogTitle>
+              {signature === undefined
+                ? t("workspaces.sign.addSignature")
+                : t("workspaces.sign.changeSignature")}
+            </DialogTitle>
+            <DialogDescription>{t("workspaces.sign.hint")}</DialogDescription>
+          </DialogHeader>
+          {pad}
+        </DialogContent>
+      </Dialog>
 
       <p className="text-sm font-medium text-foreground">
         {hasSignature

@@ -27,5 +27,6 @@ export {
 } from "@/features/pdf-document-editor/lib/page-coordinates";
 export type {
   EditorObject,
+  EditorTextObject,
   EditorTool,
 } from "@/features/pdf-document-editor/types/editor-object";

@@ -45,6 +45,7 @@ export type DocumentEditorAction =
   | { type: "setPan"; panX: number; panY: number }
   | { type: "setTool"; tool: EditorTool }
   | { type: "select"; id: string | null }
+  | { type: "loadObjects"; objects: readonly EditorObject[] }
   | { type: "addObject"; object: EditorObject }
   | { type: "updateObject"; id: string; object: EditorObject }
   | { type: "replaceObject"; object: EditorObject }
@@ -106,6 +107,14 @@ export function documentEditorReducer(
       return { ...state, tool: action.tool };
     case "select":
       return { ...state, selectedId: action.id, tool: "select" };
+    case "loadObjects":
+      return {
+        ...state,
+        objects: action.objects,
+        selectedId: null,
+        past: [],
+        future: [],
+      };
     case "addObject":
       return withHistory(state, {
         objects: [...state.objects, action.object],

@@ -46,6 +46,22 @@ describe("documentEditorReducer", () => {
     expect(deleted.selectedId).toBeNull();
   });
 
+  test("loadObjects replaces the canvas and clears history", () => {
+    const added = documentEditorReducer(INITIAL_DOCUMENT_EDITOR_STATE, {
+      type: "addObject",
+      object: sampleText("a"),
+    });
+    const loaded = documentEditorReducer(added, {
+      type: "loadObjects",
+      objects: [sampleText("b")],
+    });
+
+    expect(loaded.objects.map((object) => object.id)).toEqual(["b"]);
+    expect(loaded.selectedId).toBeNull();
+    expect(loaded.past).toEqual([]);
+    expect(loaded.future).toEqual([]);
+  });
+
   test("clamps zoom and page navigation", () => {
     const paged = documentEditorReducer(INITIAL_DOCUMENT_EDITOR_STATE, {
       type: "setPageCount",

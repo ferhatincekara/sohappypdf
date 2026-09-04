@@ -17,10 +17,23 @@ export type EditorObjectBase = {
   rotation: number;
 };
 
+export type EditorTextOrigin = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  text: string;
+  fontSize: number;
+};
+
 export type EditorTextObject = EditorObjectBase & {
   kind: "text";
   text: string;
   fontSize: number;
+  color?: string;
+  fontFamily?: string;
+  source?: "original" | "added";
+  origin?: EditorTextOrigin;
 };
 
 export type EditorImageObject = EditorObjectBase & {

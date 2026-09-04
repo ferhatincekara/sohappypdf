@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { EditorObject } from "@/features/pdf-document-editor/types/editor-object";
@@ -9,10 +10,12 @@ export function EditorPropertiesPanel({
   object,
   disabled,
   onChange,
+  extra,
 }: {
   object: EditorObject | null;
   disabled: boolean;
   onChange: (object: EditorObject) => void;
+  extra?: ReactNode;
 }) {
   const t = useTranslations("publicTools.editor");
 
@@ -47,41 +50,41 @@ export function EditorPropertiesPanel({
       <p className="text-xs text-muted-foreground">
         {t(`objects.${object.kind}`)}
       </p>
-      {object.kind === "text" || object.kind === "signature" ? (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="editor-object-text">{t("text")}</Label>
-          <Input
-            id="editor-object-text"
-            value={object.text ?? ""}
-            disabled={disabled}
-            onChange={(event) => {
-              onChange({ ...object, text: event.target.value });
-            }}
-          />
-        </div>
-      ) : null}
       {object.kind === "text" ? (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="editor-object-font-size">{t("fontSize")}</Label>
-          <Input
-            id="editor-object-font-size"
-            type="number"
-            min={8}
-            max={96}
-            value={object.fontSize}
-            disabled={disabled}
-            onChange={(event) => {
-              const parsed = Number(event.target.value);
-              if (!Number.isFinite(parsed)) {
-                return;
-              }
-              onChange({
-                ...object,
-                fontSize: Math.min(96, Math.max(8, parsed)),
-              });
-            }}
-          />
-        </div>
+        <>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="editor-object-text">{t("text")}</Label>
+            <Input
+              id="editor-object-text"
+              value={object.text}
+              disabled={disabled}
+              onChange={(event) => {
+                onChange({ ...object, text: event.target.value });
+              }}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="editor-object-font-size">{t("fontSize")}</Label>
+            <Input
+              id="editor-object-font-size"
+              type="number"
+              min={8}
+              max={96}
+              value={object.fontSize}
+              disabled={disabled}
+              onChange={(event) => {
+                const parsed = Number(event.target.value);
+                if (!Number.isFinite(parsed)) {
+                  return;
+                }
+                onChange({
+                  ...object,
+                  fontSize: Math.min(96, Math.max(8, parsed)),
+                });
+              }}
+            />
+          </div>
+        </>
       ) : null}
       {object.kind === "rectangle" ? (
         <div className="flex flex-col gap-2">
@@ -120,6 +123,7 @@ export function EditorPropertiesPanel({
           </div>
         ))}
       </div>
+      {extra}
     </aside>
   );
 }

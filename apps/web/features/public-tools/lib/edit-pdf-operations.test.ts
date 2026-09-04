@@ -40,6 +40,7 @@ describe("editorObjectsToEditOperations", () => {
         y: 756,
         text: "Hello",
         size: 14,
+        font: "helvetica",
       },
       {
         kind: "rectangle",
@@ -51,6 +52,50 @@ describe("editorObjectsToEditOperations", () => {
         style: "highlight",
       },
     ]);
+  });
+
+  test("covers and rewrites changed original text", () => {
+    const original = {
+      id: "title",
+      kind: "text" as const,
+      page: 1,
+      x: 200,
+      y: 40,
+      width: 120,
+      height: 24,
+      rotation: 0,
+      text: "Sample PDF",
+      fontSize: 24,
+      fontFamily: "Times New Roman Bold",
+      source: "original" as const,
+      origin: {
+        x: 200,
+        y: 40,
+        width: 120,
+        height: 24,
+        text: "Sample PDF",
+        fontSize: 24,
+      },
+    };
+
+    expect(
+      editorObjectsToEditOperations(
+        [{ ...original, text: "Edited PDF" }],
+        { "1": 792 },
+        [original],
+      ),
+    ).toMatchObject([
+      { kind: "erase", page: 1 },
+      { kind: "text", page: 1, text: "Edited PDF", font: "timesBold" },
+    ]);
+
+    expect(
+      editorObjectsToEditOperations([original], { "1": 792 }, [original]),
+    ).toBeUndefined();
+
+    expect(
+      editorObjectsToEditOperations([], { "1": 792 }, [original]),
+    ).toMatchObject([{ kind: "erase", page: 1 }]);
   });
 
   test("returns undefined when a page height is missing or nothing can be applied", () => {

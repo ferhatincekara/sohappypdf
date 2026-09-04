@@ -172,6 +172,39 @@ describe("conversion options", () => {
     });
 
     expect(
+      parseConversionOptions("edit-pdf", {
+        operations: [
+          { kind: "erase", page: 1, x: 8, y: 700, width: 120, height: 28 },
+          {
+            kind: "text",
+            page: 1,
+            x: 10,
+            y: 720,
+            text: "Edited",
+            size: 24,
+            color: "#1a4db3",
+            font: "timesBold",
+          },
+        ],
+      }),
+    ).toEqual({
+      type: "edit-pdf",
+      operations: [
+        { kind: "erase", page: 1, x: 8, y: 700, width: 120, height: 28 },
+        {
+          kind: "text",
+          page: 1,
+          x: 10,
+          y: 720,
+          text: "Edited",
+          size: 24,
+          color: "#1a4db3",
+          font: "timesBold",
+        },
+      ],
+    });
+
+    expect(
       parseConversionOptions("redact-pdf", {
         regions: [{ page: 1, x: 0, y: 0, width: 10, height: 10 }],
       }),

@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import type { ConversionType } from "@sohappypdf/conversions";
 import { isConversionSupported } from "@sohappypdf/conversions";
-import { degrees, rgb, StandardFonts } from "pdf-lib";
+import { degrees, type PDFFont, type RGB, rgb, StandardFonts } from "pdf-lib";
 import type { ConversionEngine } from "../../engine.js";
 import { outputFilename, outputMimeType } from "../../engine.js";
 import type { ConversionEngineConfig } from "../../engine-config.js";
@@ -17,10 +17,32 @@ const TYPES = [
   "sign-pdf",
 ] as const satisfies readonly ConversionType[];
 
+const EDIT_FONTS = {
+  helvetica: StandardFonts.Helvetica,
+  helveticaBold: StandardFonts.HelveticaBold,
+  times: StandardFonts.TimesRoman,
+  timesBold: StandardFonts.TimesRomanBold,
+  courier: StandardFonts.Courier,
+  courierBold: StandardFonts.CourierBold,
+} as const;
+
+function colorFromHex(value: string | undefined): RGB {
+  if (value === undefined || !/^#[0-9a-fA-F]{6}$/.test(value)) {
+    return rgb(0, 0, 0);
+  }
+
+  const hex = value.slice(1);
+  return rgb(
+    Number.parseInt(hex.slice(0, 2), 16) / 255,
+    Number.parseInt(hex.slice(2, 4), 16) / 255,
+    Number.parseInt(hex.slice(4, 6), 16) / 255,
+  );
+}
+
 /**
- * Overlay editing only:
+ * Page editing:
  * - watermark / page numbers
- * - edit-pdf: text stamps, filled/highlight rectangles, optional image stamp
+ * - edit-pdf: erase original text, rewrite lines, stamps
  * - sign-pdf: visual signature image or text stamp (not cryptographic)
  */
 export function createPdfEditEngine(
@@ -101,6 +123,8 @@ export function createPdfEditEngine(
           }
         }
 
+        const fontCache = new Map<string, PDFFont>([["helvetica", font]]);
+
         for (const operation of input.options.operations) {
           const page = pages[operation.page - 1];
 
@@ -110,13 +134,30 @@ export function createPdfEditEngine(
             );
           }
 
-          if (operation.kind === "text") {
+          if (operation.kind === "erase") {
+            page.drawRectangle({
+              x: operation.x,
+              y: operation.y,
+              width: operation.width,
+              height: operation.height,
+              color: rgb(1, 1, 1),
+              borderWidth: 0,
+            });
+          } else if (operation.kind === "text") {
+            const face = operation.font ?? "helvetica";
+            let textFont = fontCache.get(face);
+
+            if (textFont === undefined) {
+              textFont = await source.embedFont(EDIT_FONTS[face]);
+              fontCache.set(face, textFont);
+            }
+
             page.drawText(operation.text, {
               x: operation.x,
               y: operation.y,
               size: operation.size ?? 12,
-              font,
-              color: rgb(0, 0, 0),
+              font: textFont,
+              color: colorFromHex(operation.color),
             });
           } else if (operation.kind === "rectangle") {
             const highlight = operation.style === "highlight";
