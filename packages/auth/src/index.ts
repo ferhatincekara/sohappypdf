@@ -62,6 +62,7 @@ export {
   createAuthAdapterSchema,
   createAuthDrizzleAdapter,
 } from "./auth-adapter.js";
+export { toAuthHandlerErrorResponse } from "./auth-api-error.js";
 export type { SendAuthEmail, SendAuthEmailInput } from "./auth-email.js";
 export { sendAuthEmailUnimplemented } from "./auth-email.js";
 export { getAdminAuth, getAuth, handleAuthRequest } from "./auth-factory.js";

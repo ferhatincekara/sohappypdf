@@ -13,6 +13,7 @@ import {
 import { findUserAccess } from "./admin-authorization.js";
 import { type Auth, createAuth } from "./auth.js";
 import { createAuthDrizzleAdapter } from "./auth-adapter.js";
+import { toAuthHandlerErrorResponse } from "./auth-api-error.js";
 import { createResendEmailSender } from "./resend-email.js";
 import { createResetPasswordEmailSender } from "./reset-password-email.js";
 
@@ -69,10 +70,18 @@ export function getAdminAuth(): Auth {
   return adminAuth;
 }
 
-export function handleAuthRequest(
-  request: Request,
-): Promise<Response> | Response {
+export async function handleAuthRequest(request: Request): Promise<Response> {
   const auth = isAdminAuthSurface(request.headers) ? getAdminAuth() : getAuth();
 
-  return auth.handler(request);
+  try {
+    return await auth.handler(request);
+  } catch (error) {
+    const response = toAuthHandlerErrorResponse(error);
+
+    if (response !== undefined) {
+      return response;
+    }
+
+    throw error;
+  }
 }

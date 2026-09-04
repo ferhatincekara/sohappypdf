@@ -1,3 +1,4 @@
+import { toAuthHandlerErrorResponse } from "@sohappypdf/auth";
 import { Hono } from "hono";
 import type { AppEnv } from "../app-env.js";
 
@@ -36,6 +37,12 @@ export function createAuthRoutes(handleAuth: HandleAuthRequest) {
         await createAuthFetchRequest(c.req.raw, c.req.url),
       );
     } catch (error) {
+      const authErrorResponse = toAuthHandlerErrorResponse(error);
+
+      if (authErrorResponse !== undefined) {
+        return authErrorResponse;
+      }
+
       c.get("logger")?.error("auth handler failed", {
         message: error instanceof Error ? error.message : "unknown",
       });

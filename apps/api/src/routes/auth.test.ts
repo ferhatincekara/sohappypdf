@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { createAuth } from "@sohappypdf/auth";
+import {
+  ACCOUNT_SUSPENDED_ERROR_CODE,
+  createAccountSuspendedApiError,
+  createAuth,
+} from "@sohappypdf/auth";
 import type { Logger } from "@sohappypdf/logger";
 import { memoryAdapter } from "better-auth/adapters/memory";
 import { createApp } from "../app.js";
@@ -123,6 +127,73 @@ describe("Better Auth HTTP routes", () => {
     expect(response.status).toBe(401);
     expect(await response.json()).toMatchObject({
       code: "INVALID_EMAIL_OR_PASSWORD",
+    });
+  });
+
+  test("returns a dedicated suspended-account error on sign-in", async () => {
+    const suspendedUserIds = new Set<string>();
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "http://localhost:3001",
+        runtimeEnv: "test",
+        useSecureCookies: false,
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+      trustedOrigins: ["http://localhost:3000"],
+      assertSessionUser: async (userId) => {
+        if (suspendedUserIds.has(userId)) {
+          throw createAccountSuspendedApiError();
+        }
+      },
+    });
+    const app = createApp({
+      config: { corsOrigins: ["http://localhost:3000"] },
+      logger: silentLogger,
+      resolveIdentity: async () => ({ kind: "anonymous" }),
+      handleAuth: (request) => auth.handler(request),
+    });
+    const originHeaders = {
+      Origin: "http://localhost:3000",
+      "Content-Type": "application/json",
+    };
+
+    const signedUp = await app.request(
+      "http://localhost:3001/api/auth/sign-up/email",
+      {
+        method: "POST",
+        headers: originHeaders,
+        body: JSON.stringify({
+          name: "Ada Lovelace",
+          email: "ada@example.com",
+          password: TEST_PASSWORD,
+        }),
+      },
+    );
+    const signedUpBody = (await signedUp.json()) as { user: { id: string } };
+    suspendedUserIds.add(signedUpBody.user.id);
+
+    const response = await app.request(
+      "http://localhost:3001/api/auth/sign-in/email",
+      {
+        method: "POST",
+        headers: originHeaders,
+        body: JSON.stringify({
+          email: "ada@example.com",
+          password: TEST_PASSWORD,
+        }),
+      },
+    );
+
+    expect(response.status).toBe(403);
+    expect(await response.json()).toMatchObject({
+      code: ACCOUNT_SUSPENDED_ERROR_CODE,
+      message: "Account is suspended",
     });
   });
 });
