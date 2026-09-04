@@ -184,5 +184,18 @@ describe("tool workspace helpers", () => {
     expect(
       buildToolConversionOptions("edit-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
     ).toBeUndefined();
+
+    expect(
+      buildToolConversionOptions("redact-pdf", {
+        ...DEFAULT_TOOL_WORKSPACE_STATE,
+        redactRegions: [{ page: 1, x: 10, y: 20, width: 80, height: 24 }],
+      }),
+    ).toEqual({
+      regions: [{ page: 1, x: 10, y: 20, width: 80, height: 24 }],
+    });
+
+    expect(
+      buildToolConversionOptions("redact-pdf", DEFAULT_TOOL_WORKSPACE_STATE),
+    ).toBeUndefined();
   });
 });

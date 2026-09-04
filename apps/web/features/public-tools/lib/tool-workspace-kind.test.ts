@@ -21,6 +21,7 @@ describe("resolveToolWorkspaceKind", () => {
     expect(resolveToolWorkspaceKind("crop-pdf")).toBe("crop");
     expect(resolveToolWorkspaceKind("sign-pdf")).toBe("sign");
     expect(resolveToolWorkspaceKind("edit-pdf")).toBe("edit");
+    expect(resolveToolWorkspaceKind("redact-pdf")).toBe("redact");
     expect(resolveToolWorkspaceKind("repair-pdf")).toBe("repair");
     expect(resolveToolWorkspaceKind("ocr-pdf")).toBe("ocr");
   });
@@ -33,6 +34,9 @@ describe("usesCanvasActionSidebar", () => {
     expect(usesCanvasActionSidebar("remove-pages")).toBe(true);
     expect(usesCanvasActionSidebar("rotate-pdf")).toBe(true);
     expect(usesCanvasActionSidebar("organize-pdf")).toBe(true);
+    expect(usesCanvasActionSidebar("edit-pdf")).toBe(true);
+    expect(usesCanvasActionSidebar("sign-pdf")).toBe(true);
+    expect(usesCanvasActionSidebar("redact-pdf")).toBe(true);
     expect(usesCanvasActionSidebar("merge-pdf")).toBe(false);
     expect(usesCanvasActionSidebar("compress-pdf")).toBe(false);
   });

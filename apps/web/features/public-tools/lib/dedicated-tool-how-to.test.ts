@@ -20,5 +20,6 @@ describe("dedicatedHowToForTool", () => {
     expect(dedicatedHowToForTool("crop-pdf")?.workspace).toBe("crop");
     expect(dedicatedHowToForTool("sign-pdf")?.workspace).toBe("sign");
     expect(dedicatedHowToForTool("edit-pdf")?.workspace).toBe("edit");
+    expect(dedicatedHowToForTool("redact-pdf")?.workspace).toBe("redact");
   });
 });

@@ -33,6 +33,7 @@ export const TOOL_WORKSPACE_KINDS = [
   "crop",
   "sign",
   "edit",
+  "redact",
   "repair",
   "ocr",
   "default",
@@ -103,6 +104,10 @@ export function resolveToolWorkspaceKind(toolId: string): ToolWorkspaceKind {
     return "edit";
   }
 
+  if (toolId === "redact-pdf") {
+    return "redact";
+  }
+
   if (toolId === "repair-pdf") {
     return "repair";
   }
@@ -130,6 +135,9 @@ export function usesCanvasActionSidebar(toolId: string): boolean {
     kind === "extract" ||
     kind === "remove" ||
     kind === "rotate" ||
-    kind === "organize"
+    kind === "organize" ||
+    kind === "sign" ||
+    kind === "edit" ||
+    kind === "redact"
   );
 }

@@ -70,6 +70,7 @@ export function createPdfRedactEngine(
         throw invalidInputError("PDF exceeds the redaction page limit");
       }
 
+      const source = await PDFDocument.load(await readFile(input.sourcePath));
       const document = await PDFDocument.create();
 
       for (const [index, entry] of entries.entries()) {
@@ -84,7 +85,11 @@ export function createPdfRedactEngine(
           height: image.height,
         });
 
-        const scale = image.width / 612;
+        const sourcePage = source.getPage(index);
+        const pdfWidth = sourcePage?.getWidth() ?? image.width;
+        const pdfHeight = sourcePage?.getHeight() ?? image.height;
+        const scaleX = pdfWidth > 0 ? image.width / pdfWidth : 1;
+        const scaleY = pdfHeight > 0 ? image.height / pdfHeight : 1;
 
         for (const region of input.options.regions) {
           if (region.page !== pageNumber) {
@@ -92,10 +97,10 @@ export function createPdfRedactEngine(
           }
 
           page.drawRectangle({
-            x: region.x * scale,
-            y: region.y * scale,
-            width: region.width * scale,
-            height: region.height * scale,
+            x: region.x * scaleX,
+            y: region.y * scaleY,
+            width: region.width * scaleX,
+            height: region.height * scaleY,
             color: rgb(0, 0, 0),
             borderWidth: 0,
           });

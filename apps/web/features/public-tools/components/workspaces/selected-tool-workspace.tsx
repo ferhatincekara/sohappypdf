@@ -12,6 +12,7 @@ import { OcrPdfWorkspace } from "@/features/public-tools/components/workspaces/o
 import { OrganizePdfWorkspace } from "@/features/public-tools/components/workspaces/organize-pdf-workspace";
 import { ProtectPdfWorkspace } from "@/features/public-tools/components/workspaces/protect-pdf-workspace";
 import { RemovePagesWorkspace } from "@/features/public-tools/components/workspaces/remove-pages-workspace";
+import { RedactPdfWorkspace } from "@/features/public-tools/components/workspaces/redact-pdf-workspace";
 import { RepairPdfWorkspace } from "@/features/public-tools/components/workspaces/repair-pdf-workspace";
 import { RotatePdfWorkspace } from "@/features/public-tools/components/workspaces/rotate-pdf-workspace";
 import { SignPdfWorkspace } from "@/features/public-tools/components/workspaces/sign-pdf-workspace";
@@ -53,6 +54,8 @@ export function SelectedToolWorkspace(props: ToolSelectedWorkspaceProps) {
       return <SignPdfWorkspace {...props} />;
     case "edit":
       return <EditPdfWorkspace {...props} />;
+    case "redact":
+      return <RedactPdfWorkspace {...props} />;
     case "repair":
       return <RepairPdfWorkspace {...props} />;
     case "ocr":

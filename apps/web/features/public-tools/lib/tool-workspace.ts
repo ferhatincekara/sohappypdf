@@ -38,6 +38,13 @@ export type ToolWorkspaceState = {
   signFileId: string;
   editOperations: ToolEditOperation[];
   editImageFileId: string;
+  redactRegions: Array<{
+    page: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }>;
 };
 
 export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
@@ -71,6 +78,7 @@ export const DEFAULT_TOOL_WORKSPACE_STATE: ToolWorkspaceState = {
   signFileId: "",
   editOperations: [],
   editImageFileId: "",
+  redactRegions: [],
 };
 
 export function additionalFileIdsFromOptions(
@@ -389,6 +397,13 @@ export function buildToolConversionOptions(
         operations: state.editOperations,
         ...(needsImage ? { additionalFileIds: [state.editImageFileId] } : {}),
       };
+    }
+    case "redact-pdf": {
+      if (state.redactRegions.length === 0) {
+        return undefined;
+      }
+
+      return { regions: state.redactRegions };
     }
     default:
       return undefined;

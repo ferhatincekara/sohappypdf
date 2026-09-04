@@ -620,6 +620,24 @@ function dedicatedToolShellCopy({
     };
   }
 
+  if (toolId === "redact-pdf") {
+    return {
+      processingTitle: t("workspaces.redact.processing"),
+      processingHint: t("workspaces.redact.processingHint"),
+      successTitle: t("workspaces.redact.successTitle"),
+      successDescription: t("workspaces.redact.successDescription"),
+      downloadLabel: t("workspaces.redact.download"),
+      resetLabel: t("workspaces.redact.redactAnother"),
+      expiredTitle: t("workspaces.redact.expiredTitle"),
+      expiredDescription: t("workspaces.redact.expiredDescription", { hours }),
+      processHint: t("workspaces.redact.limitation"),
+      errorMessage:
+        errorKey === null
+          ? undefined
+          : resolveRedactErrorMessage(errorKey, t, hours),
+    };
+  }
+
   return {};
 }
 
@@ -942,6 +960,26 @@ function resolveEditErrorMessage(
 
   if (errorKey === "filesExpired") {
     return t("workspaces.edit.expiredDescription", { hours });
+  }
+
+  return undefined;
+}
+
+function resolveRedactErrorMessage(
+  errorKey: PublicToolErrorKey,
+  t: ReturnType<typeof useTranslations>,
+  hours: number,
+): string | undefined {
+  if (errorKey === "processingFailed") {
+    return t("workspaces.redact.processingFailed");
+  }
+
+  if (errorKey === "unsupported") {
+    return t("workspaces.redact.invalidFile");
+  }
+
+  if (errorKey === "filesExpired") {
+    return t("workspaces.redact.expiredDescription", { hours });
   }
 
   return undefined;
