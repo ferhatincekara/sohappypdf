@@ -32,7 +32,7 @@ export function DataTable<T>({
 
   return (
     <div className="overflow-x-auto rounded-md border border-border bg-card">
-      <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+      <table className="w-full min-w-160 border-collapse text-left text-sm">
         <thead className="sticky top-0 z-10 bg-card">
           <tr className="border-b border-border">
             {columns.map((column) => (
