@@ -98,6 +98,41 @@ describe("editorObjectsToEditOperations", () => {
     ).toMatchObject([{ kind: "erase", page: 1 }]);
   });
 
+  test("keeps cover boxes inside the page so the API accepts the job", () => {
+    const original = {
+      id: "edge",
+      kind: "text" as const,
+      page: 1,
+      x: 0,
+      y: 0,
+      width: 40,
+      height: 12,
+      rotation: 0,
+      text: "Hi",
+      fontSize: 12,
+      source: "original" as const,
+      origin: {
+        x: 0,
+        y: 0,
+        width: 40,
+        height: 12,
+        text: "Hi",
+        fontSize: 12,
+      },
+    };
+
+    expect(
+      editorObjectsToEditOperations(
+        [{ ...original, text: "Hey" }],
+        { "1": 792 },
+        [original],
+      ),
+    ).toMatchObject([
+      { kind: "erase", page: 1, x: 0, y: 778 },
+      { kind: "text", page: 1, text: "Hey" },
+    ]);
+  });
+
   test("returns undefined when a page height is missing or nothing can be applied", () => {
     expect(
       editorObjectsToEditOperations(

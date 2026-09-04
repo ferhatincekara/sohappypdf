@@ -8,7 +8,9 @@ import { invalidInputError, PermanentConversionError } from "../../errors.js";
 
 export async function loadPdfDocument(path: string): Promise<PDFDocument> {
   try {
-    return await PDFDocument.load(await readFile(path));
+    return await PDFDocument.load(await readFile(path), {
+      ignoreEncryption: true,
+    });
   } catch {
     throw invalidInputError();
   }

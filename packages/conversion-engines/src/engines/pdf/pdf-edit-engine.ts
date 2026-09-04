@@ -9,6 +9,7 @@ import { invalidInputError, unsupportedConversionError } from "../../errors.js";
 import { validateConversionOutput } from "../../output-validation.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
 import { loadPdfDocument, savePdfDocument } from "./pdf-page-operations.js";
+import { toStandardFontText } from "./pdf-standard-font-text.js";
 
 const TYPES = [
   "watermark-pdf",
@@ -25,6 +26,10 @@ const EDIT_FONTS = {
   courier: StandardFonts.Courier,
   courierBold: StandardFonts.CourierBold,
 } as const;
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
 
 function colorFromHex(value: string | undefined): RGB {
   if (value === undefined || !/^#[0-9a-fA-F]{6}$/.test(value)) {
@@ -134,12 +139,16 @@ export function createPdfEditEngine(
             );
           }
 
+          const { width: pageWidth, height: pageHeight } = page.getSize();
+
           if (operation.kind === "erase") {
+            const x = clamp(operation.x, 0, pageWidth);
+            const y = clamp(operation.y, 0, pageHeight);
             page.drawRectangle({
-              x: operation.x,
-              y: operation.y,
-              width: operation.width,
-              height: operation.height,
+              x,
+              y,
+              width: clamp(operation.width, 1, pageWidth - x),
+              height: clamp(operation.height, 1, pageHeight - y),
               color: rgb(1, 1, 1),
               borderWidth: 0,
             });
@@ -152,20 +161,28 @@ export function createPdfEditEngine(
               fontCache.set(face, textFont);
             }
 
-            page.drawText(operation.text, {
-              x: operation.x,
-              y: operation.y,
+            const text = toStandardFontText(textFont, operation.text);
+
+            if (text.length === 0) {
+              continue;
+            }
+
+            page.drawText(text, {
+              x: clamp(operation.x, 0, pageWidth),
+              y: clamp(operation.y, 0, pageHeight),
               size: operation.size ?? 12,
               font: textFont,
               color: colorFromHex(operation.color),
             });
           } else if (operation.kind === "rectangle") {
             const highlight = operation.style === "highlight";
+            const x = clamp(operation.x, 0, pageWidth);
+            const y = clamp(operation.y, 0, pageHeight);
             page.drawRectangle({
-              x: operation.x,
-              y: operation.y,
-              width: operation.width,
-              height: operation.height,
+              x,
+              y,
+              width: clamp(operation.width, 1, pageWidth - x),
+              height: clamp(operation.height, 1, pageHeight - y),
               color: highlight ? rgb(1, 1, 0) : rgb(0, 0, 0),
               opacity: highlight ? 0.35 : 1,
               borderWidth: 0,

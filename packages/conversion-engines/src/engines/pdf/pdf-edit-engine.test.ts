@@ -54,6 +54,33 @@ describe("pdf edit engine", () => {
       expect((await readFile(numbered.outputPath)).byteLength).toBeGreaterThan(
         0,
       );
+
+      const rewritten = await engine.convert({
+        type: "edit-pdf",
+        sourcePath: source,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: {
+          type: "edit-pdf",
+          operations: [
+            { kind: "erase", page: 1, x: 20, y: 300, width: 120, height: 24 },
+            {
+              kind: "text",
+              page: 1,
+              x: 20,
+              y: 308,
+              text: "Düzenlendi — “şğüı” •",
+              size: 14,
+              font: "timesBold",
+            },
+          ],
+        },
+        additionalSourcePaths: [],
+      });
+      expect((await readFile(rewritten.outputPath)).byteLength).toBeGreaterThan(
+        0,
+      );
     } finally {
       await workspace.cleanup();
     }

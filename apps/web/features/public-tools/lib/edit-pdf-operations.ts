@@ -73,10 +73,10 @@ function roundedBox(box: {
   height: number;
 }): { x: number; y: number; width: number; height: number } {
   return {
-    x: Math.round(box.x),
-    y: Math.round(box.y),
-    width: Math.round(box.width),
-    height: Math.round(box.height),
+    x: Math.max(0, Math.round(box.x)),
+    y: Math.max(0, Math.round(box.y)),
+    width: Math.max(1, Math.round(box.width)),
+    height: Math.max(1, Math.round(box.height)),
   };
 }
 
