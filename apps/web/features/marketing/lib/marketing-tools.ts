@@ -151,11 +151,66 @@ export function visibleMegaMenuTools(
   return [...live.slice(0, liveLimit), ...planned];
 }
 
+const RELATED_TOOL_IDS: Readonly<Record<string, readonly string[]>> = {
+  "merge-pdf": ["split-pdf", "compress-pdf", "organize-pdf", "rotate-pdf"],
+  "split-pdf": ["merge-pdf", "extract-pages", "organize-pdf", "remove-pages"],
+  "extract-pages": ["split-pdf", "remove-pages", "organize-pdf", "merge-pdf"],
+  "organize-pdf": ["rotate-pdf", "remove-pages", "split-pdf", "merge-pdf"],
+  "remove-pages": ["extract-pages", "organize-pdf", "split-pdf", "rotate-pdf"],
+  "reorder-pages": ["organize-pdf", "rotate-pdf", "remove-pages"],
+  "rotate-pdf": ["organize-pdf", "merge-pdf", "compress-pdf"],
+  "crop-pdf": ["organize-pdf", "compress-pdf", "rotate-pdf"],
+  "compress-pdf": ["merge-pdf", "pdf-to-pdfa", "repair-pdf"],
+  "repair-pdf": ["compress-pdf", "unlock-pdf", "ocr-pdf"],
+  "pdf-to-word": [
+    "word-to-pdf",
+    "pdf-to-excel",
+    "pdf-to-powerpoint",
+    "ocr-pdf",
+  ],
+  "pdf-to-word-ocr": ["pdf-to-word", "ocr-pdf", "word-to-pdf"],
+  "pdf-to-excel": ["excel-to-pdf", "pdf-to-word", "pdf-to-powerpoint"],
+  "pdf-to-excel-ocr": ["pdf-to-excel", "ocr-pdf", "excel-to-pdf"],
+  "pdf-to-powerpoint": ["powerpoint-to-pdf", "pdf-to-word", "pdf-to-excel"],
+  "pdf-to-jpg": ["jpg-to-pdf", "pdf-to-png", "compress-pdf"],
+  "pdf-to-png": ["png-to-pdf", "pdf-to-jpg", "compress-pdf"],
+  "word-to-pdf": ["pdf-to-word", "excel-to-pdf", "powerpoint-to-pdf"],
+  "excel-to-pdf": ["pdf-to-excel", "word-to-pdf", "powerpoint-to-pdf"],
+  "powerpoint-to-pdf": ["pdf-to-powerpoint", "word-to-pdf", "excel-to-pdf"],
+  "office-to-pdf": ["word-to-pdf", "excel-to-pdf", "powerpoint-to-pdf"],
+  "jpg-to-pdf": ["pdf-to-jpg", "png-to-pdf", "merge-pdf"],
+  "png-to-pdf": ["pdf-to-png", "jpg-to-pdf", "merge-pdf"],
+  "edit-pdf": ["sign-pdf", "watermark-pdf", "page-numbers-pdf", "redact-pdf"],
+  "watermark-pdf": ["edit-pdf", "page-numbers-pdf", "protect-pdf"],
+  "page-numbers-pdf": ["watermark-pdf", "edit-pdf", "organize-pdf"],
+  "protect-pdf": ["unlock-pdf", "redact-pdf", "sign-pdf"],
+  "unlock-pdf": ["protect-pdf", "repair-pdf", "redact-pdf"],
+  "sign-pdf": ["edit-pdf", "protect-pdf", "watermark-pdf"],
+  "redact-pdf": ["protect-pdf", "unlock-pdf", "sign-pdf", "edit-pdf"],
+  "compare-pdf": ["merge-pdf", "organize-pdf", "pdf-to-word"],
+  "ocr-pdf": ["pdf-to-word", "pdf-to-txt", "scan-to-pdf"],
+  "scan-to-pdf": ["ocr-pdf", "jpg-to-pdf", "png-to-pdf"],
+  "pdf-to-txt": ["ocr-pdf", "pdf-to-word", "pdf-to-markdown"],
+  "pdf-to-markdown": ["pdf-to-txt", "pdf-to-word", "ocr-pdf"],
+  "pdf-extract": ["pdf-to-txt", "ocr-pdf", "pdf-to-markdown"],
+  "pdf-to-pdfa": ["compress-pdf", "repair-pdf", "protect-pdf"],
+};
+
 export function getRelatedMarketingTools(
   tool: ToolDefinition,
   limit = 4,
 ): readonly MarketingToolNavItem[] {
-  return getMarketingToolNavItems()
-    .filter((item) => item.category === tool.category && item.id !== tool.id)
-    .slice(0, limit);
+  const items = getMarketingToolNavItems();
+  const byId = new Map(items.map((item) => [item.id, item]));
+  const preferred = (RELATED_TOOL_IDS[tool.id] ?? [])
+    .map((id) => byId.get(id))
+    .filter((item): item is MarketingToolNavItem => item !== undefined);
+  const fallback = items.filter(
+    (item) =>
+      item.id !== tool.id &&
+      item.category === tool.category &&
+      !preferred.some((preferredItem) => preferredItem.id === item.id),
+  );
+
+  return [...preferred, ...fallback].slice(0, limit);
 }

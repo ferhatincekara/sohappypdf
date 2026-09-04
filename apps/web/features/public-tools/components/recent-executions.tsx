@@ -166,7 +166,13 @@ function RecentExecutionItem({
         tAge,
       )}
       expiresAt={execution.expiresAt}
-      expiresLabel={activityRemainingLabel(remaining, tExpires)}
+      expiresLabel={
+        remaining !== null &&
+        remaining.unit === "minutes" &&
+        remaining.count <= 15
+          ? t("expiresSoon")
+          : activityRemainingLabel(remaining, tExpires)
+      }
       actions={
         <>
           {execution.canDownload && execution.outputFileId !== null ? (

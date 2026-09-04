@@ -15,11 +15,8 @@ import { MarketingToolStatusBadges } from "@/features/marketing/components/marke
 import { MARKETING_NAV_LINKS } from "@/features/marketing/lib/marketing-nav";
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 import { getMarketingToolIcon } from "@/features/marketing/lib/marketing-tool-icon";
-import {
-  type MarketingToolNavGroup,
-  type MarketingToolNavItem,
-  visibleMegaMenuTools,
-} from "@/features/marketing/lib/marketing-tools";
+import type { MarketingToolNavItem } from "@/features/marketing/lib/marketing-tools";
+import type { MegaMenuSection } from "@/features/marketing/lib/mega-menu-sections";
 import { isMobileNavEscapeKey } from "@/features/marketing/lib/mobile-nav-state";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -41,14 +38,16 @@ export function MarketingHeaderBar({
   signInHref,
   startLabel,
   signInLabel,
-  toolGroups,
+  sections,
+  showPremiumBadges = true,
 }: {
   user: AppShellUser | null;
   startHref: string;
   signInHref: string;
   startLabel: string;
   signInLabel: string;
-  toolGroups: readonly MarketingToolNavGroup[];
+  sections: readonly MegaMenuSection[];
+  showPremiumBadges?: boolean;
 }) {
   const t = useTranslations("marketing.nav");
   const tTools = useTranslations("tools");
@@ -293,23 +292,33 @@ export function MarketingHeaderBar({
             >
               <div className="max-h-[calc(100vh-4rem)] overflow-y-auto bg-white md:max-h-[calc(100vh-5rem)]">
                 <div className="mx-auto grid max-w-site grid-cols-[minmax(0,1fr)_--spacing(60)] gap-10 px-5 py-8 md:px-8">
-                  <div className="grid grid-cols-2 gap-x-5 gap-y-14 lg:grid-cols-4">
-                    {toolGroups.map((group) => (
-                      <MegaMenuToolGroup
-                        key={group.category}
-                        group={group}
-                        categoryLabel={t(`categories.${group.category}`)}
-                        soonLabel={t("comingSoon")}
-                        proLabel={t("pro")}
-                        toolName={(id) => tTools(`${id}.name`)}
-                        onNavigate={() => setToolsOpen(false)}
-                      />
-                    ))}
+                  <div>
+                    <Link
+                      href={MARKETING_PATHS.tools}
+                      onClick={() => setToolsOpen(false)}
+                      className="mb-6 inline-flex text-sm font-semibold text-foreground underline-offset-4 hover:underline"
+                    >
+                      {t("allTools")}
+                    </Link>
+                    <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
+                      {sections.map((section) => (
+                        <MegaMenuToolGroup
+                          key={section.id}
+                          section={section}
+                          categoryLabel={t(`mega.${section.id}`)}
+                          soonLabel={t("comingSoon")}
+                          proLabel={t("pro")}
+                          showPremiumBadges={showPremiumBadges}
+                          toolName={(id) => tTools(`${id}.name`)}
+                          onNavigate={() => setToolsOpen(false)}
+                        />
+                      ))}
+                    </div>
                   </div>
                   <div className="flex flex-col gap-3">
                     {MEGA_STORIES.map((story) => {
-                      const tool = toolGroups
-                        .flatMap((group) => group.tools)
+                      const tool = sections
+                        .flatMap((section) => section.tools)
                         .find((item) => item.id === story.toolId);
 
                       if (
@@ -362,17 +371,19 @@ export function MarketingHeaderBar({
 }
 
 function MegaMenuToolGroup({
-  group,
+  section,
   categoryLabel,
   soonLabel,
   proLabel,
+  showPremiumBadges,
   toolName,
   onNavigate,
 }: {
-  group: MarketingToolNavGroup;
+  section: MegaMenuSection;
   categoryLabel: string;
   soonLabel: string;
   proLabel: string;
+  showPremiumBadges: boolean;
   toolName: (id: MarketingToolNavItem["id"]) => string;
   onNavigate: () => void;
 }) {
@@ -380,7 +391,7 @@ function MegaMenuToolGroup({
     <div className="min-w-0 overflow-hidden">
       <p className="mb-2 text-sm font-bold text-foreground">{categoryLabel}</p>
       <ul>
-        {visibleMegaMenuTools(group.tools).map((tool) => {
+        {section.tools.map((tool) => {
           const Icon = getMarketingToolIcon(tool.icon);
           const isAvailable = tool.availability !== "planned";
           const inner = (
@@ -391,7 +402,7 @@ function MegaMenuToolGroup({
               </span>
               <MarketingToolStatusBadges
                 availability={tool.availability}
-                premium={tool.premium}
+                premium={showPremiumBadges && tool.premium}
                 soonLabel={soonLabel}
                 proLabel={proLabel}
                 className="mt-0.5 shrink-0 self-start"

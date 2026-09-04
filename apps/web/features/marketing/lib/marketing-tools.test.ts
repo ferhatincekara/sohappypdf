@@ -120,18 +120,22 @@ describe("marketing tool navigation", () => {
     expect(visible.length).toBeLessThanOrEqual(6);
   });
 
-  test("returns related tools from the same category", () => {
+  test("returns curated related tools from the catalog", () => {
     const merge = listRegisteredTools().find((tool) => tool.id === "merge-pdf");
+    const word = listRegisteredTools().find((tool) => tool.id === "pdf-to-word");
     expect(merge).toBeDefined();
-    if (merge === undefined) {
-      throw new Error("merge-pdf must exist");
+    expect(word).toBeDefined();
+    if (merge === undefined || word === undefined) {
+      throw new Error("catalog tools must exist");
     }
 
     const related = getRelatedMarketingTools(merge, 4);
-    expect(related.every((item) => item.category === merge.category)).toBe(
-      true,
-    );
+    expect(related.map((item) => item.id)).toContain("split-pdf");
+    expect(related.map((item) => item.id)).toContain("compress-pdf");
     expect(related.some((item) => item.id === "merge-pdf")).toBe(false);
+
+    const wordRelated = getRelatedMarketingTools(word, 4);
+    expect(wordRelated.map((item) => item.id)).toContain("word-to-pdf");
   });
 
   test("maps meaningful category landing paths", () => {
