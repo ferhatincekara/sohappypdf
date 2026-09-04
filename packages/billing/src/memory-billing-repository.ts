@@ -247,7 +247,7 @@ export function createMemoryBillingRepository(options?: {
           periodStart: input.periodStart,
           createdAt: input.now,
         });
-        record.webCreditsGranted = input.grantAmount;
+        record.webCreditsGranted += input.grantAmount;
       }
 
       return toBalance(record);

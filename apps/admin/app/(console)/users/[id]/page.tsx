@@ -122,7 +122,7 @@ export default async function UserDetailPage({
               {
                 label: "Web tools",
                 value: detail.credits.web.unlimited
-                  ? "Unlimited on the web app"
+                  ? "Unlimited"
                   : `${detail.credits.web.webCreditsRemaining} left of ${detail.credits.web.webCreditsGranted} this period`,
               },
               {

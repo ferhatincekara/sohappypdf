@@ -1,6 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { Input } from "@/components/ui/input";
 import { revokeApiKeyAction } from "@/server/actions/api-keys";
@@ -85,7 +87,10 @@ export function AdjustCreditsForm({
   userId: string;
   webPlan: "free" | "pro";
 }) {
-  const [source, setSource] = useState<"web" | "api">("api");
+  const router = useRouter();
+  const [source, setSource] = useState<"web" | "api">(
+    webPlan === "pro" ? "api" : "web",
+  );
   const [amount, setAmount] = useState("10");
   const [reason, setReason] = useState("");
   const parsedAmount = Number(amount);
@@ -102,33 +107,34 @@ export function AdjustCreditsForm({
       description={
         <div className="space-y-3 text-foreground">
           <p className="text-muted-foreground">
-            Adds credits to this billing period. API credits apply to developer
-            keys. Web tool credits only apply to Free users.
+            {webPlan === "pro"
+              ? "Pro web usage is unlimited. Only API credits can be added for developer keys."
+              : "Web tool credits are the monthly Free quota for public tools. API credits are a separate meter for developer keys."}
           </p>
-          <select
-            className="admin-field"
-            value={source}
-            onChange={(event) => setSource(event.target.value as "web" | "api")}
-          >
-            <option value="api">API credits</option>
-            <option value="web">Web tool credits</option>
-          </select>
-          {source === "web" && webPlan === "pro" ? (
-            <p className="rounded-md border border-border bg-muted/60 px-3 py-2 text-xs">
-              Pro users do not spend web tool credits. This adjustment is
-              recorded but does not change their web access.
-            </p>
-          ) : null}
+          {webPlan === "pro" ? null : (
+            <select
+              className="admin-field"
+              value={source}
+              onChange={(event) =>
+                setSource(event.target.value as "web" | "api")
+              }
+            >
+              <option value="web">Web tool credits</option>
+              <option value="api">API credits</option>
+            </select>
+          )}
           <Input
             type="number"
             min={1}
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
+            onValueChange={setAmount}
             aria-label="Credit amount"
           />
           <Input
             value={reason}
             onChange={(event) => setReason(event.target.value)}
+            onValueChange={setReason}
             placeholder="Reason, at least 8 characters"
             aria-label="Adjustment reason"
           />
@@ -146,6 +152,10 @@ export function AdjustCreditsForm({
           amount: parsedAmount,
           reason,
         });
+        toast.success(
+          `Added ${parsedAmount} ${source === "web" ? "web tool" : "API"} credits.`,
+        );
+        router.refresh();
       }}
     />
   );

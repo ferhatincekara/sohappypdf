@@ -1294,10 +1294,19 @@ export function createBillingService(
         });
       }
 
+      if (input.source === "api") {
+        await ensureApiCreditBalance(input.userId);
+      } else if (input.source === "ai") {
+        await ensureAiCreditBalance(input.userId);
+      } else {
+        await ensureWebCreditBalance(input.userId);
+      }
+
       const period =
         input.source === "api"
           ? (await resolveApiUsageContext(input.userId)).period
           : (await resolveUsageContext(input.userId)).period;
+
       await options.repository.applyManualCreditAdjustment({
         userId: input.userId,
         source: input.source,

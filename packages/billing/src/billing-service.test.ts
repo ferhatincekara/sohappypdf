@@ -1063,6 +1063,26 @@ describe("createBillingService", () => {
     expect(balance.webCreditsGranted).toBe(before.webCreditsGranted + 25);
   });
 
+  test("keeps a web credit adjustment after the monthly grant is applied", async () => {
+    const billing = createService();
+    await billing.adjustCredits({
+      userId: "user_1",
+      source: "web",
+      amount: 25,
+      reason: "support goodwill credit",
+      actorUserId: "admin_1",
+    });
+
+    const [adjusted, baseline] = await Promise.all([
+      billing.getWebCreditBalance("user_1"),
+      billing.getWebCreditBalance("user_2"),
+    ]);
+    expect(adjusted.webCreditsGranted).toBe(baseline.webCreditsGranted + 25);
+    expect(adjusted.webCreditsRemaining).toBe(
+      baseline.webCreditsRemaining + 25,
+    );
+  });
+
   test("rejects credit adjustments without a reason", async () => {
     const billing = createService();
 

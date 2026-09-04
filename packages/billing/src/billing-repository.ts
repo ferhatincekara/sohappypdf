@@ -567,7 +567,7 @@ export function createBillingRepository(db: Database): BillingRepository {
           await tx
             .update(usagePeriods)
             .set({
-              webCreditsGranted: input.grantAmount,
+              webCreditsGranted: sql`${usagePeriods.webCreditsGranted} + ${input.grantAmount}`,
               updatedAt: input.now,
             })
             .where(

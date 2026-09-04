@@ -6,6 +6,7 @@ import {
   writeAdminAuditEvent,
 } from "@sohappypdf/auth";
 import { getBillingService } from "@sohappypdf/billing";
+import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { createLogger } from "@sohappypdf/logger";
 import { revalidatePath } from "next/cache";
 import { requireAdminAction } from "@/server/auth/require-admin";
@@ -78,7 +79,20 @@ export async function adjustCreditsAction(input: {
   const actor = await requireAdminAction();
 
   try {
-    await getBillingService().adjustCredits({
+    const billing = getBillingService();
+
+    if (input.source === "web") {
+      const entitlements = await billing.getEntitlements(input.userId);
+
+      if (entitlements.plan === "pro") {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Pro users do not use web tool credits",
+        });
+      }
+    }
+
+    await billing.adjustCredits({
       userId: input.userId,
       source: input.source,
       amount: input.amount,
@@ -103,6 +117,7 @@ export async function adjustCreditsAction(input: {
       amount: input.amount,
     });
     revalidatePath(`/users/${input.userId}`);
+    revalidatePath("/users");
     revalidatePath("/audit-logs");
   } catch (error) {
     throw toAdminActionError(error);

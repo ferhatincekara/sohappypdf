@@ -98,7 +98,9 @@ export default async function UsersPage({
               cell: (row) =>
                 row.webPlan === "pro"
                   ? "Unlimited"
-                  : `${formatNumber(row.webCreditsRemaining)} left`,
+                  : row.webCreditsRemaining === null
+                    ? "—"
+                    : `${formatNumber(row.webCreditsRemaining)} left`,
             },
             {
               id: "api-credits",
