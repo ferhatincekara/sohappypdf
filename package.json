@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "turbo run dev --continue --filter=@sohappypdf/web --filter=@sohappypdf/api --filter=@sohappypdf/worker",
+    "dev:admin": "turbo run dev --continue --filter=@sohappypdf/admin --filter=@sohappypdf/api",
     "build": "turbo run build",
     "vercel-build": "bun run --filter=@sohappypdf/api bundle:vercel",
     "lint": "biome check .",

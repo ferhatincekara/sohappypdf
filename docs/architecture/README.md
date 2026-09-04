@@ -17,6 +17,7 @@ SoHappyPDF is a **tool-first** PDF platform.
 | `apps/web` | Next.js customer app (marketing, tools, account) |
 | `apps/api` | Hono public API + Better Auth |
 | `apps/worker` | BullMQ conversion + cleanup worker |
+| `apps/admin` | Internal operations console (administrator-only) |
 
 ## Live packages
 
