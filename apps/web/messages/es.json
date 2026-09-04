@@ -48,11 +48,11 @@
       },
       "mega": {
         "popular": "Popular",
-        "organize": "Organize",
-        "convertFrom": "PDF to file",
-        "convertTo": "File to PDF",
-        "edit": "Edit",
-        "security": "Security"
+        "organize": "Organizar",
+        "convertFrom": "PDF a archivo",
+        "convertTo": "Archivo a PDF",
+        "edit": "Editar",
+        "security": "Seguridad"
       }
     },
     "hero": {

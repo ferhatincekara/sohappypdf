@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon } from "lucide-react";
+import { ArrowRightIcon, ChevronDownIcon } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -292,28 +292,19 @@ export function MarketingHeaderBar({
             >
               <div className="max-h-[calc(100vh-4rem)] overflow-y-auto bg-white md:max-h-[calc(100vh-5rem)]">
                 <div className="mx-auto grid max-w-site grid-cols-[minmax(0,1fr)_--spacing(60)] gap-10 px-5 py-8 md:px-8">
-                  <div>
-                    <Link
-                      href={MARKETING_PATHS.tools}
-                      onClick={() => setToolsOpen(false)}
-                      className="mb-6 inline-flex text-sm font-semibold text-foreground underline-offset-4 hover:underline"
-                    >
-                      {t("allTools")}
-                    </Link>
-                    <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
-                      {sections.map((section) => (
-                        <MegaMenuToolGroup
-                          key={section.id}
-                          section={section}
-                          categoryLabel={t(`mega.${section.id}`)}
-                          soonLabel={t("comingSoon")}
-                          proLabel={t("pro")}
-                          showPremiumBadges={showPremiumBadges}
-                          toolName={(id) => tTools(`${id}.name`)}
-                          onNavigate={() => setToolsOpen(false)}
-                        />
-                      ))}
-                    </div>
+                  <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-3">
+                    {sections.map((section) => (
+                      <MegaMenuToolGroup
+                        key={section.id}
+                        section={section}
+                        categoryLabel={t(`mega.${section.id}`)}
+                        soonLabel={t("comingSoon")}
+                        proLabel={t("pro")}
+                        showPremiumBadges={showPremiumBadges}
+                        toolName={(id) => tTools(`${id}.name`)}
+                        onNavigate={() => setToolsOpen(false)}
+                      />
+                    ))}
                   </div>
                   <div className="flex flex-col gap-3">
                     {MEGA_STORIES.map((story) => {
@@ -359,6 +350,14 @@ export function MarketingHeaderBar({
                         </motion.div>
                       );
                     })}
+                    <Link
+                      href={MARKETING_PATHS.tools}
+                      onClick={() => setToolsOpen(false)}
+                      className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-foreground transition-opacity hover:opacity-60"
+                    >
+                      {t("allTools")}
+                      <ArrowRightIcon className="size-4" />
+                    </Link>
                   </div>
                 </div>
               </div>

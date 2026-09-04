@@ -47,12 +47,12 @@
         "intelligence": "PDFインテリジェンス"
       },
       "mega": {
-        "popular": "Popular",
-        "organize": "Organize",
-        "convertFrom": "PDF to file",
-        "convertTo": "File to PDF",
-        "edit": "Edit",
-        "security": "Security"
+        "popular": "よく使う",
+        "organize": "整理",
+        "convertFrom": "PDFから変換",
+        "convertTo": "PDFへ変換",
+        "edit": "編集",
+        "security": "セキュリティ"
       }
     },
     "hero": {

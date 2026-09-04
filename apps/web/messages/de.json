@@ -47,12 +47,12 @@
         "intelligence": "PDF-Intelligenz"
       },
       "mega": {
-        "popular": "Popular",
-        "organize": "Organize",
-        "convertFrom": "PDF to file",
-        "convertTo": "File to PDF",
-        "edit": "Edit",
-        "security": "Security"
+        "popular": "Beliebt",
+        "organize": "Organisieren",
+        "convertFrom": "PDF in Datei",
+        "convertTo": "Datei in PDF",
+        "edit": "Bearbeiten",
+        "security": "Sicherheit"
       }
     },
     "hero": {
