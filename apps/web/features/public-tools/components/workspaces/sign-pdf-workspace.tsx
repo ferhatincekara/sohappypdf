@@ -26,6 +26,7 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const editor = useDocumentEditor(pdf.pageCount);
   const [uploadingAsset, setUploadingAsset] = useState(false);
   const [assetError, setAssetError] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(true);
   const placedRef = useRef(false);
   const workspaceRef = useRef(props.workspaceState);
   workspaceRef.current = props.workspaceState;
@@ -146,10 +147,12 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         </p>
       </div>
 
-      <SignaturePad
-        disabled={props.disabled || uploadingAsset}
-        onAsset={onAsset}
-      />
+      {hasSignature && editorOpen ? null : (
+        <SignaturePad
+          disabled={props.disabled || uploadingAsset}
+          onAsset={onAsset}
+        />
+      )}
 
       {uploadingAsset ? (
         <p className="text-sm text-muted-foreground">
@@ -162,16 +165,42 @@ export function SignPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         </p>
       ) : null}
 
-      {hasSignature ? (
+      {hasSignature && editorOpen && pdf.status === "ready" ? (
         <DocumentEditor
           pdf={pdf}
           state={editor.state}
           dispatch={editor.dispatch}
           availableTools={["select"]}
           disabled={props.disabled}
+          layout="workspace"
+          title={entry.file.name}
+          extra={
+            <div className="border-b border-border px-4 py-3">
+              <SignaturePad
+                disabled={props.disabled || uploadingAsset}
+                onAsset={onAsset}
+              />
+            </div>
+          }
           previewFailedMessage={t("workspaces.sign.previewFailed")}
           passwordProtectedMessage={t("workspaces.sign.passwordProtected")}
+          exportLabel={props.processLabel}
+          exportDisabled={!props.canProcess}
+          onBack={() => {
+            setEditorOpen(false);
+          }}
+          onExport={props.onProcess}
         />
+      ) : hasSignature ? (
+        <button
+          type="button"
+          className="rounded-lg border border-border px-4 py-3 text-left text-sm font-medium text-foreground"
+          onClick={() => {
+            setEditorOpen(true);
+          }}
+        >
+          {t("workspaces.sign.openEditor")}
+        </button>
       ) : null}
 
       <p className="text-sm font-medium text-foreground">

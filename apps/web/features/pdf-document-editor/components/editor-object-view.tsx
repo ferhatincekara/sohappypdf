@@ -12,6 +12,7 @@ export function EditorObjectView({
   disabled,
   onSelect,
   onMove,
+  onResize,
 }: {
   object: EditorObject;
   selected: boolean;
@@ -19,6 +20,7 @@ export function EditorObjectView({
   disabled: boolean;
   onSelect: () => void;
   onMove: (x: number, y: number) => void;
+  onResize?: (width: number, height: number) => void;
 }) {
   const t = useTranslations("publicTools.editor");
   const dragRef = useRef<{
@@ -27,41 +29,17 @@ export function EditorObjectView({
     originX: number;
     originY: number;
   } | null>(null);
+  const resizeRef = useRef<{
+    startX: number;
+    startY: number;
+    originWidth: number;
+    originHeight: number;
+  } | null>(null);
 
   return (
-    <button
-      type="button"
-      disabled={disabled}
-      aria-pressed={selected}
-      aria-label={t(`objects.${object.kind}`)}
-      onPointerDown={(event) => {
-        event.stopPropagation();
-        event.currentTarget.setPointerCapture(event.pointerId);
-        onSelect();
-        dragRef.current = {
-          startX: event.clientX,
-          startY: event.clientY,
-          originX: object.x,
-          originY: object.y,
-        };
-      }}
-      onPointerMove={(event) => {
-        const drag = dragRef.current;
-
-        if (drag === null) {
-          return;
-        }
-
-        onMove(
-          drag.originX + (event.clientX - drag.startX) / scale,
-          drag.originY + (event.clientY - drag.startY) / scale,
-        );
-      }}
-      onPointerUp={() => {
-        dragRef.current = null;
-      }}
+    <div
       className={cn(
-        "absolute overflow-hidden text-left outline-none",
+        "absolute outline-none",
         selected ? "ring-2 ring-foreground" : "ring-1 ring-transparent",
       )}
       style={{
@@ -74,30 +52,98 @@ export function EditorObjectView({
         transformOrigin: "center center",
       }}
     >
-      {object.kind === "text" ||
-      (object.kind === "signature" && object.src === undefined) ? (
-        <span className="block h-full w-full truncate px-1 text-sm text-foreground">
-          {object.kind === "text"
-            ? object.text
-            : (object.text ?? t("objects.signature"))}
-        </span>
-      ) : null}
-      {object.kind === "rectangle" ? (
-        <span
-          className="block h-full w-full"
-          style={{
-            backgroundColor:
-              object.style === "highlight" ? "rgba(255, 220, 0, 0.35)" : "#111",
+      <button
+        type="button"
+        disabled={disabled}
+        aria-pressed={selected}
+        aria-label={t(`objects.${object.kind}`)}
+        onPointerDown={(event) => {
+          event.stopPropagation();
+          event.currentTarget.setPointerCapture(event.pointerId);
+          onSelect();
+          dragRef.current = {
+            startX: event.clientX,
+            startY: event.clientY,
+            originX: object.x,
+            originY: object.y,
+          };
+        }}
+        onPointerMove={(event) => {
+          const drag = dragRef.current;
+
+          if (drag === null) {
+            return;
+          }
+
+          onMove(
+            drag.originX + (event.clientX - drag.startX) / scale,
+            drag.originY + (event.clientY - drag.startY) / scale,
+          );
+        }}
+        onPointerUp={() => {
+          dragRef.current = null;
+        }}
+        className="block h-full w-full overflow-hidden text-left"
+      >
+        {object.kind === "text" ||
+        (object.kind === "signature" && object.src === undefined) ? (
+          <span className="block h-full w-full truncate px-1 text-sm text-foreground">
+            {object.kind === "text"
+              ? object.text
+              : (object.text ?? t("objects.signature"))}
+          </span>
+        ) : null}
+        {object.kind === "rectangle" ? (
+          <span
+            className="block h-full w-full"
+            style={{
+              backgroundColor:
+                object.style === "highlight"
+                  ? "rgba(255, 220, 0, 0.35)"
+                  : "#111",
+            }}
+          />
+        ) : null}
+        {(object.kind === "image" || object.kind === "signature") &&
+        object.src !== undefined ? (
+          <span
+            className="block h-full w-full bg-contain bg-center bg-no-repeat"
+            style={{ backgroundImage: `url("${object.src}")` }}
+          />
+        ) : null}
+      </button>
+      {selected && onResize !== undefined && !disabled ? (
+        <button
+          type="button"
+          aria-label={t("resize")}
+          className="absolute -right-1.5 -bottom-1.5 size-4 rounded-sm border border-foreground bg-background"
+          onPointerDown={(event) => {
+            event.stopPropagation();
+            event.currentTarget.setPointerCapture(event.pointerId);
+            resizeRef.current = {
+              startX: event.clientX,
+              startY: event.clientY,
+              originWidth: object.width,
+              originHeight: object.height,
+            };
+          }}
+          onPointerMove={(event) => {
+            const resize = resizeRef.current;
+
+            if (resize === null) {
+              return;
+            }
+
+            onResize(
+              resize.originWidth + (event.clientX - resize.startX) / scale,
+              resize.originHeight + (event.clientY - resize.startY) / scale,
+            );
+          }}
+          onPointerUp={() => {
+            resizeRef.current = null;
           }}
         />
       ) : null}
-      {(object.kind === "image" || object.kind === "signature") &&
-      object.src !== undefined ? (
-        <span
-          className="block h-full w-full bg-contain bg-center bg-no-repeat"
-          style={{ backgroundImage: `url("${object.src}")` }}
-        />
-      ) : null}
-    </button>
+    </div>
   );
 }

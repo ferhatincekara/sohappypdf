@@ -24,6 +24,8 @@ export function EditPdfWorkspace(props: ToolSelectedWorkspaceProps) {
   const [pageHeights, setPageHeights] = useState<Record<string, number>>({});
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(true);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const workspaceRef = useRef(props.workspaceState);
   const imageFileIdRef = useRef(props.workspaceState.editImageFileId);
   workspaceRef.current = props.workspaceState;
@@ -131,47 +133,68 @@ export function EditPdfWorkspace(props: ToolSelectedWorkspaceProps) {
         </p>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label
-          className="text-sm font-medium text-foreground"
-          htmlFor="edit-image"
-        >
-          {t("workspaces.edit.addImage")}
-        </label>
-        <input
-          id="edit-image"
-          type="file"
-          accept="image/png,image/jpeg"
-          disabled={props.disabled || uploadingImage}
-          className="max-w-lg text-sm file:mr-3 file:rounded-md file:border file:border-border file:bg-background file:px-3 file:py-1.5"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file !== undefined) {
-              void onAddImage(file);
-            }
-          }}
-        />
-        {uploadingImage ? (
-          <p className="text-sm text-muted-foreground">
-            {t("workspaces.edit.uploadingImage")}
-          </p>
-        ) : null}
-        {imageError ? (
-          <p className="text-sm text-destructive">
-            {t("workspaces.edit.imageFailed")}
-          </p>
-        ) : null}
-      </div>
-
-      <DocumentEditor
-        pdf={pdf}
-        state={editor.state}
-        dispatch={editor.dispatch}
-        availableTools={["select", "text", "shape"]}
-        disabled={props.disabled}
-        previewFailedMessage={t("workspaces.edit.previewFailed")}
-        passwordProtectedMessage={t("workspaces.edit.passwordProtected")}
+      <input
+        ref={imageInputRef}
+        id="edit-image"
+        type="file"
+        accept="image/png,image/jpeg"
+        disabled={props.disabled || uploadingImage}
+        className="sr-only"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (file !== undefined) {
+            void onAddImage(file);
+          }
+          event.target.value = "";
+        }}
       />
+
+      {editorOpen && pdf.status === "ready" ? (
+        <DocumentEditor
+          pdf={pdf}
+          state={editor.state}
+          dispatch={(action) => {
+            if (action.type === "setTool" && action.tool === "image") {
+              imageInputRef.current?.click();
+              return;
+            }
+
+            editor.dispatch(action);
+          }}
+          availableTools={["select", "text", "shape", "image"]}
+          disabled={props.disabled || uploadingImage}
+          layout="workspace"
+          title={entry.file.name}
+          previewFailedMessage={t("workspaces.edit.previewFailed")}
+          passwordProtectedMessage={t("workspaces.edit.passwordProtected")}
+          exportLabel={props.processLabel}
+          exportDisabled={!props.canProcess || operationCount === 0}
+          onBack={() => {
+            setEditorOpen(false);
+          }}
+          onExport={props.onProcess}
+        />
+      ) : (
+        <button
+          type="button"
+          className="rounded-lg border border-border px-4 py-3 text-left text-sm font-medium text-foreground"
+          onClick={() => {
+            setEditorOpen(true);
+          }}
+        >
+          {t("workspaces.edit.openEditor")}
+        </button>
+      )}
+      {uploadingImage ? (
+        <p className="text-sm text-muted-foreground">
+          {t("workspaces.edit.uploadingImage")}
+        </p>
+      ) : null}
+      {imageError ? (
+        <p className="text-sm text-destructive">
+          {t("workspaces.edit.imageFailed")}
+        </p>
+      ) : null}
 
       <p className="text-sm font-medium text-foreground">
         {operationCount === 0

@@ -45,6 +45,14 @@
         "security": "Segurança de PDF",
         "document": "Office e imagens",
         "intelligence": "Inteligência de PDF"
+      },
+      "mega": {
+        "popular": "Popular",
+        "organize": "Organize",
+        "convertFrom": "PDF to file",
+        "convertTo": "File to PDF",
+        "edit": "Edit",
+        "security": "Security"
       }
     },
     "hero": {
@@ -1714,7 +1722,14 @@
             "title": "Baixar",
             "description": "Receba um PDF com as páginas que você escolheu."
           }
-        }
+        },
+        "splitHere": "Split here",
+        "removeSplit": "Remove split",
+        "partsTitle": "Resulting parts",
+        "partLabel": "Part {index}",
+        "partPages": "Pages {pages}",
+        "outputZip": "{count, plural, one {# PDF in a ZIP} other {# PDFs in a ZIP}}",
+        "outputOne": "1 PDF with the current pages"
       },
       "extract": {
         "title": "Escolha as páginas para extrair",
@@ -2313,7 +2328,8 @@
             "title": "Baixar",
             "description": "Receba um PDF que inclui a assinatura."
           }
-        }
+        },
+        "openEditor": "Open editor"
       },
       "fill": {
         "title": "Preencher este PDF",
@@ -2392,7 +2408,8 @@
             "title": "Baixar",
             "description": "Receba um PDF com essas marcas escritas no arquivo."
           }
-        }
+        },
+        "openEditor": "Open editor"
       },
       "editor": {
         "toolbar": "Ferramentas do documento",
@@ -2434,6 +2451,41 @@
       },
       "generic": {
         "title": "Processar este arquivo"
+      },
+      "redact": {
+        "title": "Mark areas to black out",
+        "hint": "Draw boxes over content that should be permanently removed from the downloaded PDF.",
+        "openEditor": "Open editor",
+        "selectPrompt": "Draw at least one blackout area to continue.",
+        "output": "{count, plural, one {# area will be blacked out.} other {# areas will be blacked out.}}",
+        "limitation": "The exported file is rasterized so the covered content is destroyed, not just hidden.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "processing": "Blacking out marked areas...",
+        "processingHint": "Removing the covered content. This may take a moment.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the PDF with the marked areas permanently removed.",
+        "download": "Download PDF",
+        "redactAnother": "Black out another PDF",
+        "processingFailed": "We couldn't process this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Black out another PDF to continue.",
+        "faqHow": "Upload a PDF, draw black boxes over the areas to remove, then download. Underlying content is destroyed by rasterizing the page. Sign in is required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to black out."
+          },
+          "mark": {
+            "title": "Mark areas",
+            "description": "Draw boxes over the content that should be removed."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF with those areas permanently removed."
+          }
+        }
       }
     },
     "phases": {
@@ -2492,7 +2544,8 @@
       "expiresIn": {
         "minutes": "Expira em {count}min",
         "hours": "Expira em {count}h"
-      }
+      },
+      "expiresSoon": "Expires soon"
     },
     "privacy": {
       "title": "Arquivos e retenção",
@@ -2587,6 +2640,48 @@
       "unexpected": "Algo deu errado. Tente de novo.",
       "retryHint": "Você pode tentar esta operação de novo.",
       "startAgainHint": "Comece de novo com um novo arquivo."
+    },
+    "editor": {
+      "back": "Back",
+      "fitWidth": "Fit width",
+      "fitPage": "Fit page",
+      "resize": "Resize",
+      "toolbar": "Ferramentas do documento",
+      "tools": {
+        "image": "Adicionar imagem",
+        "select": "Selecionar",
+        "text": "Adicionar texto",
+        "shape": "Adicionar destaque",
+        "signature": "Adicionar assinatura"
+      },
+      "undo": "Desfazer",
+      "redo": "Refazer",
+      "delete": "Excluir selecionado",
+      "zoomIn": "Aumentar zoom",
+      "zoomOut": "Diminuir zoom",
+      "previousPage": "Página anterior",
+      "nextPage": "Próxima página",
+      "pageOf": "Página {current} de {total}",
+      "properties": "Propriedades",
+      "propertiesEmpty": "Selecione um objeto para editar a posição e o tamanho.",
+      "text": "Texto",
+      "fontSize": "Tamanho do texto",
+      "style": "Estilo",
+      "styles": {
+        "highlight": "Destaque",
+        "fill": "Sólido"
+      },
+      "x": "X",
+      "y": "Y",
+      "width": "Largura",
+      "height": "Altura",
+      "rotation": "Rotação",
+      "objects": {
+        "text": "Texto",
+        "image": "Imagem",
+        "rectangle": "Destaque",
+        "signature": "Assinatura"
+      }
     }
   },
   "tools": {

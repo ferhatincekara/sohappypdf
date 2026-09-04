@@ -18,6 +18,10 @@ export {
   selectedEditorObject,
 } from "@/features/pdf-document-editor/lib/document-editor-state";
 export {
+  zoomToFitPage,
+  zoomToFitWidth,
+} from "@/features/pdf-document-editor/lib/editor-zoom";
+export {
   editorRectToPdf,
   pdfRectToEditor,
 } from "@/features/pdf-document-editor/lib/page-coordinates";

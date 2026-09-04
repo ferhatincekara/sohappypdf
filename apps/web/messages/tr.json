@@ -45,6 +45,14 @@
         "security": "PDF güvenliği",
         "document": "Ofis ve görseller",
         "intelligence": "PDF zekası"
+      },
+      "mega": {
+        "popular": "Popüler",
+        "organize": "Düzenle",
+        "convertFrom": "PDF'den dönüştür",
+        "convertTo": "PDF'ye dönüştür",
+        "edit": "Düzenleme",
+        "security": "Güvenlik"
       }
     },
     "hero": {
@@ -1675,8 +1683,8 @@
     },
     "workspaces": {
       "split": {
-        "title": "Kullanmak istediğiniz sayfaları seçin",
-        "hint": "Dahil edilecek sayfaları seçin. Sayfalar sırasını koruyarak tek bir yeni PDF’de toplanır.",
+        "title": "Nereden böleceğinizi seçin",
+        "hint": "Parça oluşturmak için sayfalar arasında Buradan böl’e dokunun. Gelişmiş aralıklar hâlâ kullanılabilir.",
         "modeTitle": "Bu bölümme nasıl çalışır",
         "modeExtract": "Seçilen sayfaları çıkar",
         "modeExtractHint": "Seçtiğiniz sayfaları içeren tek bir PDF oluşturur.",
@@ -1714,7 +1722,14 @@
             "title": "İndir",
             "description": "Seçtiğiniz sayfaları içeren tek bir PDF alın."
           }
-        }
+        },
+        "splitHere": "Buradan böl",
+        "removeSplit": "Bölmeyi kaldır",
+        "partsTitle": "Oluşan parçalar",
+        "partLabel": "Parça {index}",
+        "partPages": "Sayfalar {pages}",
+        "outputZip": "{count, plural, one {ZIP içinde # PDF} other {ZIP içinde # PDF}}",
+        "outputOne": "Geçerli sayfalarla 1 PDF"
       },
       "extract": {
         "title": "Çıkarılacak sayfaları seçin",
@@ -2313,7 +2328,8 @@
             "title": "İndir",
             "description": "İmzayı içeren bir PDF alın."
           }
-        }
+        },
+        "openEditor": "Editörü aç"
       },
       "fill": {
         "title": "Bu PDF formunu doldur",
@@ -2392,7 +2408,8 @@
             "title": "İndir",
             "description": "Bu işaretlerin dosyaya yazıldığı bir PDF alın."
           }
-        }
+        },
+        "openEditor": "Editörü aç"
       },
       "editor": {
         "toolbar": "Belge araçları",
@@ -2434,6 +2451,41 @@
       },
       "generic": {
         "title": "Bu dosyayı işle"
+      },
+      "redact": {
+        "title": "Karartılacak alanları işaretleyin",
+        "hint": "İndirilen PDF'den kalıcı olarak kaldırılması gereken içeriğin üzerine kutu çizin.",
+        "openEditor": "Editörü aç",
+        "selectPrompt": "Devam etmek için en az bir karartma alanı çizin.",
+        "output": "{count, plural, one {# alan karartılacak.} other {# alan karartılacak.}}",
+        "limitation": "Dışa aktarılan dosya rasterize edilir; kapatılan içerik gizlenmez, yok edilir.",
+        "passwordProtected": "Bu PDF parola korumalı. Sayfaları önizlemek için önce kilidini açın.",
+        "previewFailed": "Bu PDF önizlenemedi.",
+        "processing": "İşaretli alanlar karartılıyor...",
+        "processingHint": "Kapatılan içerik kaldırılıyor. Bu biraz sürebilir.",
+        "successTitle": "PDF'iniz hazır",
+        "successDescription": "İşaretli alanların kalıcı olarak kaldırıldığı PDF'i indirin.",
+        "download": "PDF indir",
+        "redactAnother": "Başka bir PDF karart",
+        "processingFailed": "Bu PDF işlenemedi. Lütfen tekrar deneyin.",
+        "invalidFile": "Bu dosya açılamadı. Lütfen başka bir PDF deneyin.",
+        "expiredTitle": "Bu dosyanın süresi doldu",
+        "expiredDescription": "Dosyalar {hours} saat sonra otomatik silinir. Devam etmek için başka bir PDF karartın.",
+        "faqHow": "Bir PDF yükleyin, kaldırılacak alanların üzerine siyah kutu çizin, sonra indirin. Sayfa rasterize edildiği için alttaki içerik yok edilir. Oturum açmak gerekir.",
+        "how": {
+          "upload": {
+            "title": "Yükle",
+            "description": "Karartmak istediğiniz PDF'i bırakın."
+          },
+          "mark": {
+            "title": "Alanları işaretle",
+            "description": "Kaldırılması gereken içeriğin üzerine kutu çizin."
+          },
+          "download": {
+            "title": "İndir",
+            "description": "Bu alanların kalıcı olarak kaldırıldığı bir PDF alın."
+          }
+        }
       }
     },
     "phases": {
@@ -2492,7 +2544,8 @@
       "expiresIn": {
         "minutes": "{count}dk içinde sona erer",
         "hours": "{count}sa içinde sona erer"
-      }
+      },
+      "expiresSoon": "Yakında sona eriyor"
     },
     "privacy": {
       "title": "Dosyalar ve saklama süresi",
@@ -2587,6 +2640,48 @@
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
       "retryHint": "Bu işlemi tekrar deneyebilirsiniz.",
       "startAgainHint": "Yeni bir dosyayla yeniden başlayın."
+    },
+    "editor": {
+      "back": "Geri",
+      "fitWidth": "Genişliğe sığdır",
+      "fitPage": "Sayfaya sığdır",
+      "resize": "Boyutlandır",
+      "toolbar": "Belge araçları",
+      "tools": {
+        "image": "Görsel ekle",
+        "select": "Seç",
+        "text": "Metin ekle",
+        "shape": "Vurgu ekle",
+        "signature": "İmza ekle"
+      },
+      "undo": "Geri al",
+      "redo": "Yinele",
+      "delete": "Seçileni sil",
+      "zoomIn": "Yakınlaştır",
+      "zoomOut": "Uzaklaştır",
+      "previousPage": "Önceki sayfa",
+      "nextPage": "Sonraki sayfa",
+      "pageOf": "Sayfa {current} / {total}",
+      "properties": "Özellikler",
+      "propertiesEmpty": "Konum ve boyutu düzenlemek için bir nesne seçin.",
+      "text": "Metin",
+      "fontSize": "Metin boyutu",
+      "style": "Stil",
+      "styles": {
+        "highlight": "Vurgu",
+        "fill": "Dolu"
+      },
+      "x": "X",
+      "y": "Y",
+      "width": "Genişlik",
+      "height": "Yükseklik",
+      "rotation": "Döndürme",
+      "objects": {
+        "text": "Metin",
+        "image": "Görsel",
+        "rectangle": "Vurgu",
+        "signature": "İmza"
+      }
     }
   },
   "tools": {

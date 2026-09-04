@@ -45,6 +45,14 @@
         "security": "PDFのセキュリティ",
         "document": "Officeと画像",
         "intelligence": "PDFインテリジェンス"
+      },
+      "mega": {
+        "popular": "Popular",
+        "organize": "Organize",
+        "convertFrom": "PDF to file",
+        "convertTo": "File to PDF",
+        "edit": "Edit",
+        "security": "Security"
       }
     },
     "hero": {
@@ -1714,7 +1722,14 @@
             "title": "ダウンロード",
             "description": "選んだページだけのPDFを1件受け取れます。"
           }
-        }
+        },
+        "splitHere": "Split here",
+        "removeSplit": "Remove split",
+        "partsTitle": "Resulting parts",
+        "partLabel": "Part {index}",
+        "partPages": "Pages {pages}",
+        "outputZip": "{count, plural, one {# PDF in a ZIP} other {# PDFs in a ZIP}}",
+        "outputOne": "1 PDF with the current pages"
       },
       "extract": {
         "title": "抽出するページを選ぶ",
@@ -2313,7 +2328,8 @@
             "title": "ダウンロード",
             "description": "署名が入ったPDFを受け取れます。"
           }
-        }
+        },
+        "openEditor": "Open editor"
       },
       "fill": {
         "title": "このPDFに記入",
@@ -2392,7 +2408,8 @@
             "title": "ダウンロード",
             "description": "それらのマークが書き込まれたPDFを受け取れます。"
           }
-        }
+        },
+        "openEditor": "Open editor"
       },
       "editor": {
         "toolbar": "文書ツール",
@@ -2434,6 +2451,41 @@
       },
       "generic": {
         "title": "このファイルを処理"
+      },
+      "redact": {
+        "title": "Mark areas to black out",
+        "hint": "Draw boxes over content that should be permanently removed from the downloaded PDF.",
+        "openEditor": "Open editor",
+        "selectPrompt": "Draw at least one blackout area to continue.",
+        "output": "{count, plural, one {# area will be blacked out.} other {# areas will be blacked out.}}",
+        "limitation": "The exported file is rasterized so the covered content is destroyed, not just hidden.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "processing": "Blacking out marked areas...",
+        "processingHint": "Removing the covered content. This may take a moment.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the PDF with the marked areas permanently removed.",
+        "download": "Download PDF",
+        "redactAnother": "Black out another PDF",
+        "processingFailed": "We couldn't process this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Black out another PDF to continue.",
+        "faqHow": "Upload a PDF, draw black boxes over the areas to remove, then download. Underlying content is destroyed by rasterizing the page. Sign in is required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to black out."
+          },
+          "mark": {
+            "title": "Mark areas",
+            "description": "Draw boxes over the content that should be removed."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF with those areas permanently removed."
+          }
+        }
       }
     },
     "phases": {
@@ -2492,7 +2544,8 @@
       "expiresIn": {
         "minutes": "残り{count}分で期限切れ",
         "hours": "残り{count}時間で期限切れ"
-      }
+      },
+      "expiresSoon": "Expires soon"
     },
     "privacy": {
       "title": "ファイルと保存",
@@ -2587,6 +2640,48 @@
       "unexpected": "問題が発生しました。もう一度お試しください。",
       "retryHint": "この操作をもう一度試せます。",
       "startAgainHint": "新しいファイルでもう一度はじめてください。"
+    },
+    "editor": {
+      "back": "Back",
+      "fitWidth": "Fit width",
+      "fitPage": "Fit page",
+      "resize": "Resize",
+      "toolbar": "文書ツール",
+      "tools": {
+        "image": "画像を追加",
+        "select": "選択",
+        "text": "テキストを追加",
+        "shape": "ハイライトを追加",
+        "signature": "署名を追加"
+      },
+      "undo": "元に戻す",
+      "redo": "やり直す",
+      "delete": "選択を削除",
+      "zoomIn": "拡大",
+      "zoomOut": "縮小",
+      "previousPage": "前のページ",
+      "nextPage": "次のページ",
+      "pageOf": "{total} ページ中 {current} ページ",
+      "properties": "プロパティ",
+      "propertiesEmpty": "位置とサイズを編集するオブジェクトを選んでください。",
+      "text": "テキスト",
+      "fontSize": "文字サイズ",
+      "style": "スタイル",
+      "styles": {
+        "highlight": "ハイライト",
+        "fill": "塗りつぶし"
+      },
+      "x": "X",
+      "y": "Y",
+      "width": "幅",
+      "height": "高さ",
+      "rotation": "回転",
+      "objects": {
+        "text": "テキスト",
+        "image": "画像",
+        "rectangle": "ハイライト",
+        "signature": "署名"
+      }
     }
   },
   "tools": {

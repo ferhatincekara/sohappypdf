@@ -45,6 +45,14 @@
         "security": "PDF Security",
         "document": "Office & images",
         "intelligence": "PDF Intelligence"
+      },
+      "mega": {
+        "popular": "Popular",
+        "organize": "Organize",
+        "convertFrom": "PDF to file",
+        "convertTo": "File to PDF",
+        "edit": "Edit",
+        "security": "Security"
       }
     },
     "hero": {
@@ -1675,8 +1683,8 @@
     },
     "workspaces": {
       "split": {
-        "title": "Choose the pages you want",
-        "hint": "Select the pages to include. They stay in order in one new PDF.",
+        "title": "Choose where to split",
+        "hint": "Tap Split here between pages to create parts. Advanced ranges stay available.",
         "modeTitle": "How this split works",
         "modeExtract": "Extract selected pages",
         "modeExtractHint": "Create one PDF containing the pages you selected.",
@@ -1693,28 +1701,35 @@
         "processing": "Splitting your PDF...",
         "processingHint": "Extracting the pages you selected. This may take a moment.",
         "successTitle": "Your PDF is ready",
-        "successDescription": "Download the new PDF with the pages you selected.",
+        "successDescription": "Download the new PDF, or a ZIP if you created more than one part.",
         "download": "Download PDF",
         "splitAnother": "Split another PDF",
         "processingFailed": "We couldn't split this PDF. Please try again.",
         "invalidFile": "This file couldn't be opened. Please try another PDF.",
         "expiredTitle": "This file has expired",
         "expiredDescription": "Files are automatically deleted after {hours} hours. Split another PDF to continue.",
-        "faqHow": "Upload a PDF, select the pages you want, then split. You'll get one new PDF with those pages. An account is not required.",
+        "faqHow": "Upload a PDF, tap Split here to create parts, then download. One part stays a PDF. Multiple parts download as a ZIP. An account is not required.",
         "how": {
           "upload": {
             "title": "Upload",
             "description": "Drop in the PDF you want to split."
           },
           "select": {
-            "title": "Select pages",
-            "description": "Tap the pages to include, or select all."
+            "title": "Split pages",
+            "description": "Tap Split here between pages, or enter ranges in Advanced."
           },
           "download": {
             "title": "Download",
             "description": "Get one PDF with the pages you chose."
           }
-        }
+        },
+        "splitHere": "Split here",
+        "removeSplit": "Remove split",
+        "partsTitle": "Resulting parts",
+        "partLabel": "Part {index}",
+        "partPages": "Pages {pages}",
+        "outputZip": "{count, plural, one {# PDF in a ZIP} other {# PDFs in a ZIP}}",
+        "outputOne": "1 PDF with the current pages"
       },
       "extract": {
         "title": "Choose pages to extract",
@@ -2313,7 +2328,8 @@
             "title": "Download",
             "description": "Get a PDF that includes the signature."
           }
-        }
+        },
+        "openEditor": "Open editor"
       },
       "fill": {
         "title": "Fill this PDF",
@@ -2392,7 +2408,8 @@
             "title": "Download",
             "description": "Get a PDF with those marks written into the file."
           }
-        }
+        },
+        "openEditor": "Open editor"
       },
       "editor": {
         "toolbar": "Document tools",
@@ -2434,6 +2451,41 @@
       },
       "generic": {
         "title": "Process this file"
+      },
+      "redact": {
+        "title": "Mark areas to black out",
+        "hint": "Draw boxes over content that should be permanently removed from the downloaded PDF.",
+        "openEditor": "Open editor",
+        "selectPrompt": "Draw at least one blackout area to continue.",
+        "output": "{count, plural, one {# area will be blacked out.} other {# areas will be blacked out.}}",
+        "limitation": "The exported file is rasterized so the covered content is destroyed, not just hidden.",
+        "passwordProtected": "This PDF is password protected. Unlock it first to preview pages.",
+        "previewFailed": "This PDF couldn't be previewed.",
+        "processing": "Blacking out marked areas...",
+        "processingHint": "Removing the covered content. This may take a moment.",
+        "successTitle": "Your PDF is ready",
+        "successDescription": "Download the PDF with the marked areas permanently removed.",
+        "download": "Download PDF",
+        "redactAnother": "Black out another PDF",
+        "processingFailed": "We couldn't process this PDF. Please try again.",
+        "invalidFile": "This file couldn't be opened. Please try another PDF.",
+        "expiredTitle": "This file has expired",
+        "expiredDescription": "Files are automatically deleted after {hours} hours. Black out another PDF to continue.",
+        "faqHow": "Upload a PDF, draw black boxes over the areas to remove, then download. Underlying content is destroyed by rasterizing the page. Sign in is required.",
+        "how": {
+          "upload": {
+            "title": "Upload",
+            "description": "Drop in the PDF you want to black out."
+          },
+          "mark": {
+            "title": "Mark areas",
+            "description": "Draw boxes over the content that should be removed."
+          },
+          "download": {
+            "title": "Download",
+            "description": "Get a PDF with those areas permanently removed."
+          }
+        }
       }
     },
     "phases": {
@@ -2492,7 +2544,8 @@
       "expiresIn": {
         "minutes": "Expires in {count}m",
         "hours": "Expires in {count}h"
-      }
+      },
+      "expiresSoon": "Expires soon"
     },
     "privacy": {
       "title": "Files and retention",
@@ -2587,6 +2640,48 @@
       "unexpected": "Something went wrong. Try again.",
       "retryHint": "You can try this operation again.",
       "startAgainHint": "Start again with a new file."
+    },
+    "editor": {
+      "back": "Back",
+      "fitWidth": "Fit width",
+      "fitPage": "Fit page",
+      "resize": "Resize",
+      "toolbar": "Document tools",
+      "tools": {
+        "image": "Add image",
+        "select": "Select",
+        "text": "Add text",
+        "shape": "Add highlight",
+        "signature": "Add signature"
+      },
+      "undo": "Undo",
+      "redo": "Redo",
+      "delete": "Delete selected",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "pageOf": "Page {current} of {total}",
+      "properties": "Properties",
+      "propertiesEmpty": "Select an object to edit its position and size.",
+      "text": "Text",
+      "fontSize": "Text size",
+      "style": "Style",
+      "styles": {
+        "highlight": "Highlight",
+        "fill": "Solid"
+      },
+      "x": "X",
+      "y": "Y",
+      "width": "Width",
+      "height": "Height",
+      "rotation": "Rotation",
+      "objects": {
+        "text": "Text",
+        "image": "Image",
+        "rectangle": "Highlight",
+        "signature": "Signature"
+      }
     }
   },
   "tools": {
