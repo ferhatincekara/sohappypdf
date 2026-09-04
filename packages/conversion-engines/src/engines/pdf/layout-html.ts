@@ -15,7 +15,7 @@ const ROW_OVERLAP_RATIO = 0.4;
 const COLUMN_TOLERANCE = 24;
 const HEADING_MIN_HEIGHT = 20;
 const LIST_NUMBER_MAX_WIDTH = 24;
-const TABLE_CELL_MAX_WORDS = 3;
+const TABLE_CELL_MAX_WORDS = 6;
 
 function verticalOverlap(left: LayoutBox, right: LayoutBox): number {
   return Math.max(
@@ -275,10 +275,12 @@ function renderSection(section: LayoutSection): string {
         .join("")}</ol>`;
     case "table":
       return `<table>${section.rows
-        .map(
-          (row) =>
-            `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`,
-        )
+        .map((row, rowIndex) => {
+          const cell = rowIndex === 0 ? "th" : "td";
+          return `<tr>${row
+            .map((value) => `<${cell}>${escapeHtml(value)}</${cell}>`)
+            .join("")}</tr>`;
+        })
         .join("")}</table>`;
   }
 }
@@ -359,8 +361,9 @@ export function layoutPagesToHtml(pages: readonly LayoutPage[]): string {
 body { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; }
 h1 { font-size: 22pt; text-align: center; }
 p, li { line-height: 1.4; }
-table { border-collapse: collapse; width: 100%; margin-top: 16pt; }
-td { padding: 6pt 10pt; }
+table { border-collapse: collapse; width: 100%; margin: 16pt 0; }
+td, th { border: 1pt solid #222; padding: 6pt 10pt; vertical-align: top; }
+th { font-weight: bold; }
 </style>
 </head>
 <body>
