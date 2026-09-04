@@ -77,11 +77,16 @@ export function loadApiConfig(source: EnvSource = process.env): ApiConfig {
     getOptionalEnv("APP_URL", source) ??
       getOptionalEnv("NEXT_PUBLIC_APP_URL", source),
   );
+  const adminOrigin = parseOptionalOrigin(
+    getOptionalEnv("ADMIN_URL", source) ??
+      getOptionalEnv("NEXT_PUBLIC_ADMIN_URL", source),
+  );
 
   return {
     corsOrigins: expandHttpsSiteOrigins([
       ...configured,
       ...(appOrigin === undefined ? [] : [appOrigin]),
+      ...(adminOrigin === undefined ? [] : [adminOrigin]),
     ]),
   };
 }

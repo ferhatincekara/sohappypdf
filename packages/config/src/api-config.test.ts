@@ -31,6 +31,19 @@ describe("loadApiConfig", () => {
     });
   });
 
+  test("includes the admin origin when configured", () => {
+    expect(
+      loadApiConfig({
+        ADMIN_URL: "https://admin.sohappypdf.com/",
+      }),
+    ).toEqual({
+      corsOrigins: [
+        "https://admin.sohappypdf.com",
+        "https://www.admin.sohappypdf.com",
+      ],
+    });
+  });
+
   test("rejects a wildcard origin", () => {
     try {
       loadApiConfig({ API_CORS_ORIGINS: "*" });
