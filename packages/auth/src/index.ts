@@ -7,6 +7,12 @@ export type {
   WriteAdminAuditEventInput,
 } from "./admin-audit.js";
 export { writeAdminAuditEvent } from "./admin-audit.js";
+export {
+  ADMIN_AUTH_COOKIE_PREFIX,
+  ADMIN_AUTH_SURFACE,
+  ADMIN_AUTH_SURFACE_HEADER,
+  isAdminAuthSurface,
+} from "./admin-auth-surface.js";
 export type { AdminUserAccess, UserRole } from "./admin-authorization.js";
 export {
   assertUserNotSuspended,
@@ -50,7 +56,7 @@ export {
 } from "./auth-adapter.js";
 export type { SendAuthEmail, SendAuthEmailInput } from "./auth-email.js";
 export { sendAuthEmailUnimplemented } from "./auth-email.js";
-export { getAuth } from "./auth-factory.js";
+export { getAdminAuth, getAuth, handleAuthRequest } from "./auth-factory.js";
 export type {
   ApiKeyAuthIdentity,
   AuthIdentity,

@@ -14,6 +14,8 @@ export type CreateAuthOptions = {
   trustedOrigins?: readonly string[];
   sendVerificationEmail?: SendAuthEmail;
   sendResetPassword?: SendAuthEmail;
+  cookiePrefix?: string;
+  shareCookiesAcrossSubdomains?: boolean;
 };
 
 function uniqueOrigins(origins: readonly string[]): string[] {
@@ -43,7 +45,12 @@ export function createAuth(options: CreateAuthOptions) {
     options.sendVerificationEmail ?? sendAuthEmailUnimplemented;
   const sendResetPassword =
     options.sendResetPassword ?? sendAuthEmailUnimplemented;
-  const cookieDomain = options.config.cookieDomain;
+  const shareCookiesAcrossSubdomains =
+    options.shareCookiesAcrossSubdomains ??
+    options.config.cookieDomain !== undefined;
+  const cookieDomain = shareCookiesAcrossSubdomains
+    ? options.config.cookieDomain
+    : undefined;
   const google = options.config.google;
 
   return betterAuth({
@@ -103,6 +110,7 @@ export function createAuth(options: CreateAuthOptions) {
       },
     },
     advanced: {
+      cookiePrefix: options.cookiePrefix,
       useSecureCookies:
         options.config.useSecureCookies || cookieDomain !== undefined,
       crossSubDomainCookies:

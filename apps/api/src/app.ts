@@ -1,5 +1,8 @@
 import { type ApiKeyService, getApiKeyService } from "@sohappypdf/api-keys";
-import { type AnonymousSessionService, getAuth } from "@sohappypdf/auth";
+import {
+  type AnonymousSessionService,
+  handleAuthRequest,
+} from "@sohappypdf/auth";
 import { type BillingService, getBillingService } from "@sohappypdf/billing";
 import type { AnonymousConfig, ApiConfig } from "@sohappypdf/config";
 import {
@@ -67,8 +70,7 @@ export function createApp(options: CreateAppOptions = {}) {
     });
   const resolveIdentity =
     options.resolveIdentity ?? createDefaultIdentityResolver();
-  const handleAuth =
-    options.handleAuth ?? ((request) => getAuth().handler(request));
+  const handleAuth = options.handleAuth ?? handleAuthRequest;
   const resolveBillingService = () =>
     options.billingService ?? getBillingService();
 

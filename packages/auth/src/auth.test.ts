@@ -75,6 +75,32 @@ describe("createAuth", () => {
     ]);
   });
 
+  test("isolates admin cookies from the public site cookie domain", () => {
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "https://api.sohappypdf.com",
+        runtimeEnv: "production",
+        useSecureCookies: true,
+        cookieDomain: "sohappypdf.com",
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+      cookiePrefix: "sohappypdf-admin",
+      shareCookiesAcrossSubdomains: false,
+    });
+
+    expect(auth.options.advanced?.cookiePrefix).toBe("sohappypdf-admin");
+    expect(auth.options.advanced?.crossSubDomainCookies).toBeUndefined();
+    expect(auth.options.advanced?.defaultCookieAttributes?.sameSite).toBe(
+      "lax",
+    );
+  });
+
   test("sets a parent cookie domain for split web and API hosts", () => {
     const auth = createAuth({
       config: {
@@ -220,6 +246,29 @@ describe("createAuth", () => {
 
     expect(session.user.email).toBe("ada@example.com");
     expect(session.session.userId).toBe(session.user.id);
+
+    const adminAuth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "http://localhost:3000",
+        runtimeEnv: "test",
+        useSecureCookies: false,
+      },
+      database: memoryAdapter({
+        user: [],
+        session: [],
+        account: [],
+        verification: [],
+      }),
+      cookiePrefix: "sohappypdf-admin",
+      shareCookiesAcrossSubdomains: false,
+    });
+
+    expect(
+      await adminAuth.api.getSession({
+        headers: convertSetCookieToCookie(signedIn.headers),
+      }),
+    ).toBeNull();
 
     try {
       await requireAuthSession(auth, new Headers());
