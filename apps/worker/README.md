@@ -29,6 +29,7 @@ The worker image installs only tools used by implemented engines:
 | `soffice` | LibreOffice Writer | PDF → DOCX |
 | `pdftoppm` | Poppler | PDF → JPG/PNG |
 | `pdftotext` | Poppler | PDF → TXT |
+| `pdftohtml` | Poppler | PDF → Word layout (fonts, tables, images) |
 | `gs` | Ghostscript | PDF compress |
 
 ImageMagick is not installed. Image → PDF uses `pdf-lib`.
@@ -58,7 +59,7 @@ Optional:
 | `MAX_OUTPUT_FILE_SIZE` | 150MB | Output limit |
 | `MAX_TEMP_DISK_USAGE` | 512MB | Workspace disk limit |
 
-Do not log these values. Binary names (`LIBREOFFICE_BIN`, `GHOSTSCRIPT_BIN`, `PDFTOPPM_BIN`, `PDFTOTEXT_BIN`) may be overridden with a basename only.
+Do not log these values. Binary names (`LIBREOFFICE_BIN`, `GHOSTSCRIPT_BIN`, `PDFTOPPM_BIN`, `PDFTOTEXT_BIN`, `PDFTOHTML_BIN`) may be overridden with a basename only.
 
 ## Concurrency
 

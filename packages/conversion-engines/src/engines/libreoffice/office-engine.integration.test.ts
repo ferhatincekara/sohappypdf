@@ -9,7 +9,8 @@ import { createOfficeEngine } from "./office-engine.js";
 
 const nativeAvailable =
   isConversionBinaryAvailable("soffice") &&
-  isConversionBinaryAvailable("pdftotext");
+  isConversionBinaryAvailable("pdftotext") &&
+  isConversionBinaryAvailable("pdftohtml");
 
 async function writeSamplePdf(path: string): Promise<void> {
   const document = await PDFDocument.create();
@@ -43,12 +44,14 @@ async function writeSamplePdf(path: string): Promise<void> {
   await writeFile(path, await document.save());
 }
 
-function extractDocxText(docxPath: string): string {
-  const result = spawnSync("unzip", ["-p", docxPath, "word/document.xml"], {
+function extractDocxXml(docxPath: string): string {
+  return spawnSync("unzip", ["-p", docxPath, "word/document.xml"], {
     encoding: "utf8",
-  });
+  }).stdout;
+}
 
-  return result.stdout
+function extractDocxText(docxPath: string): string {
+  return extractDocxXml(docxPath)
     .replace(/<\/w:p>/g, "\n")
     .replace(/<[^>]+>/g, "")
     .replace(/\s+/g, " ")
@@ -86,8 +89,12 @@ describe("office engine native", () => {
         expect(output.subarray(0, 2)).toEqual(Uint8Array.from([80, 75]));
         expect(text).toContain("Recovery Kit");
         expect(text).toContain("Launch the app");
+        expect(text).toContain("alpha");
         expect(text).not.toMatch(/\d{12,}/);
         expect(text).not.toContain("Recovery Kit Recovery Kit");
+        expect(extractDocxXml(result.outputPath)).toMatch(
+          /w:sz[^>]*w:val="5[0-9]"/,
+        );
       } finally {
         await workspace.cleanup();
       }

@@ -8,6 +8,7 @@ const VERSION_FLAGS: Record<string, readonly string[]> = {
   libreoffice: ["--version"],
   pdftoppm: ["-v"],
   pdftotext: ["-v"],
+  pdftohtml: ["-v"],
   gs: ["--version"],
   qpdf: ["--version"],
   ocrmypdf: ["--version"],
@@ -30,6 +31,7 @@ export function requiredConversionBinaries(
     config.libreOfficeBin,
     config.pdftoppmBin,
     config.pdftotextBin,
+    config.pdftohtmlBin,
     config.ghostscriptBin,
   ];
 }

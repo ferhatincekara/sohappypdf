@@ -14,6 +14,7 @@ export type WorkerConfig = {
   ghostscriptBin: string;
   pdftoppmBin: string;
   pdftotextBin: string;
+  pdftohtmlBin: string;
   qpdfBin: string;
   ocrMyPdfBin: string;
 };
@@ -30,6 +31,7 @@ export const DEFAULT_WORKER_CONFIG: WorkerConfig = {
   ghostscriptBin: "gs",
   pdftoppmBin: "pdftoppm",
   pdftotextBin: "pdftotext",
+  pdftohtmlBin: "pdftohtml",
   qpdfBin: "qpdf",
   ocrMyPdfBin: "ocrmypdf",
 };
@@ -129,6 +131,10 @@ export function loadWorkerConfig(
     pdftotextBin: parseBinaryName(
       getOptionalEnv("PDFTOTEXT_BIN", source),
       DEFAULT_WORKER_CONFIG.pdftotextBin,
+    ),
+    pdftohtmlBin: parseBinaryName(
+      getOptionalEnv("PDFTOHTML_BIN", source),
+      DEFAULT_WORKER_CONFIG.pdftohtmlBin,
     ),
     qpdfBin: parseBinaryName(
       getOptionalEnv("QPDF_BIN", source),

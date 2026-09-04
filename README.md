@@ -79,7 +79,7 @@ The worker shells out to native binaries on `PATH`. Without them, jobs fail at p
 | Binary | Typical package | Used for |
 | --- | --- | --- |
 | `soffice` | LibreOffice | Office ↔ PDF |
-| `pdftoppm`, `pdftotext` | Poppler | Rasterize / extract text |
+| `pdftoppm`, `pdftotext`, `pdftohtml` | Poppler | Rasterize / extract text / Word layout |
 | `gs` | Ghostscript | PDF processing |
 | `qpdf` | qpdf | Protect / unlock |
 | `ocrmypdf` | OCRmyPDF (+ Tesseract) | OCR |

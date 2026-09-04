@@ -1,5 +1,5 @@
 # Worker-only image. Native conversion binaries stay here, never in apps/api.
-# Required tools: LibreOffice (soffice), Poppler (pdftoppm, pdftotext), Ghostscript (gs).
+# Required tools: LibreOffice (soffice), Poppler (pdftoppm, pdftotext, pdftohtml), Ghostscript (gs).
 # Optional at runtime: qpdf (PDF security), ocrmypdf + tesseract (OCR conversions).
 # Build from the repository root:
 #   docker build -f apps/worker/Dockerfile -t sohappypdf-worker .
@@ -38,6 +38,7 @@ RUN apt-get update \
   && soffice --version \
   && pdftoppm -v \
   && pdftotext -v \
+  && pdftohtml -v \
   && gs --version \
   && qpdf --version \
   && ocrmypdf --version

@@ -14,13 +14,14 @@ describe("native binary probes", () => {
     expect(versionArgsForBinary("soffice")).toEqual(["--version"]);
     expect(versionArgsForBinary("pdftoppm")).toEqual(["-v"]);
     expect(versionArgsForBinary("pdftotext")).toEqual(["-v"]);
+    expect(versionArgsForBinary("pdftohtml")).toEqual(["-v"]);
     expect(versionArgsForBinary("gs")).toEqual(["--version"]);
   });
 
   test("lists only binaries used by implemented engines", () => {
     expect(
       requiredConversionBinaries(DEFAULT_CONVERSION_ENGINE_CONFIG),
-    ).toEqual(["soffice", "pdftoppm", "pdftotext", "gs"]);
+    ).toEqual(["soffice", "pdftoppm", "pdftotext", "pdftohtml", "gs"]);
   });
 
   test("tracks optional binaries separately from startup requirements", () => {

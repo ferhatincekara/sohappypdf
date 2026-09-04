@@ -5,6 +5,7 @@ export type ConversionEngineConfig = {
   ghostscriptBin: string;
   pdftoppmBin: string;
   pdftotextBin: string;
+  pdftohtmlBin: string;
   qpdfBin: string;
   ocrMyPdfBin: string;
 };
@@ -16,6 +17,7 @@ export const DEFAULT_CONVERSION_ENGINE_CONFIG: ConversionEngineConfig = {
   ghostscriptBin: "gs",
   pdftoppmBin: "pdftoppm",
   pdftotextBin: "pdftotext",
+  pdftohtmlBin: "pdftohtml",
   qpdfBin: "qpdf",
   ocrMyPdfBin: "ocrmypdf",
 };
@@ -25,6 +27,7 @@ export const CONVERSION_NATIVE_BINARIES = [
   "libreoffice",
   "pdftoppm",
   "pdftotext",
+  "pdftohtml",
   "gs",
   "qpdf",
   "ocrmypdf",

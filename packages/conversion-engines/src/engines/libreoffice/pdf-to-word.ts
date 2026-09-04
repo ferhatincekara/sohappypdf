@@ -5,12 +5,14 @@ import type {
 } from "../../engine.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
 import { layoutPagesToHtml } from "../pdf/layout-html.js";
+import { reconstructWordHtml } from "../pdf/word-reconstruction.js";
 import {
   type LibreOfficeRunContext,
   prepareLibreOfficeDirectories,
   readLibreOfficeOutput,
   runLibreOfficeConvert,
 } from "./libreoffice-runner.js";
+import { loadPdfHtmlXml } from "./load-pdf-html-xml.js";
 import { loadPdfLayoutPages } from "./load-pdf-layout.js";
 
 export async function convertPdfToWord(
@@ -48,6 +50,18 @@ async function writeReconstructedHtml(
   sourcePath: string,
   outputDirectory: string,
 ): Promise<string | undefined> {
+  const styled = await loadPdfHtmlXml(ctx, sourcePath, outputDirectory);
+
+  if (styled !== undefined) {
+    const htmlPath = joinJobPath(outputDirectory, "document.html");
+    await writeFile(
+      htmlPath,
+      reconstructWordHtml(styled.pages, styled.allowedImages),
+      "utf8",
+    );
+    return htmlPath;
+  }
+
   const pages = await loadPdfLayoutPages(ctx, sourcePath, outputDirectory);
 
   if (pages === undefined) {

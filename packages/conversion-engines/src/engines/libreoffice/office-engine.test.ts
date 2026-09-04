@@ -5,19 +5,16 @@ import type { RunCommandInput } from "../../process/run-process.js";
 import { createConversionWorkspace } from "../../workspace/temp-workspace.js";
 import { createOfficeEngine } from "./office-engine.js";
 
-const LAYOUT_FIXTURE = `<doc>
-  <page width="612" height="792">
-    <block xMin="214" yMin="158" xMax="401" yMax="189">
-      <line xMin="214" yMin="158" xMax="401" yMax="189">
-        <word xMin="214" yMin="158" xMax="353" yMax="189">Recovery</word>
-        <word xMin="363" yMin="158" xMax="401" yMax="189">Kit</word>
-      </line>
-    </block>
+const HTML_XML_FIXTURE = `<?xml version="1.0" encoding="UTF-8"?>
+<pdf2xml>
+  <page number="1" position="absolute" top="0" left="0" height="792" width="612">
+    <fontspec id="0" size="28" family="Helvetica-Bold" color="#111111"/>
+    <text top="158" left="214" width="187" height="31" font="0"><b>Recovery Kit</b></text>
   </page>
-</doc>`;
+</pdf2xml>`;
 
 describe("office engine", () => {
-  test("rebuilds a flowing document from Poppler layout, then exports DOCX", async () => {
+  test("rebuilds a styled document from Poppler XML, then exports DOCX", async () => {
     const workspace = await createConversionWorkspace(
       "550e8400-e29b-41d4-a716-446655440220",
     );
@@ -30,10 +27,10 @@ describe("office engine", () => {
         async runCommand(input) {
           calls.push(input);
 
-          if (input.command === "pdftotext") {
-            const outputPath = input.args[input.args.length - 1];
-            if (outputPath !== undefined) {
-              await writeFile(outputPath, LAYOUT_FIXTURE);
+          if (input.command === "pdftohtml") {
+            const prefix = input.args[input.args.length - 1];
+            if (prefix !== undefined) {
+              await writeFile(`${prefix}.xml`, HTML_XML_FIXTURE);
             }
             return;
           }
@@ -58,8 +55,8 @@ describe("office engine", () => {
       });
 
       expect(calls).toHaveLength(2);
-      expect(calls[0]?.command).toBe("pdftotext");
-      expect(calls[0]?.args).toContain("-bbox-layout");
+      expect(calls[0]?.command).toBe("pdftohtml");
+      expect(calls[0]?.args).toContain("-xml");
       expect(calls[1]?.command).toBe("soffice");
       expect(calls[1]?.args.some((arg) => arg.endsWith("document.html"))).toBe(
         true,
