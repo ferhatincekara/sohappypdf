@@ -242,8 +242,12 @@ export function mapConversionFailure(
     return "tooManyPages";
   }
 
-  if (haystack.includes("limit")) {
-    return "limitReached";
+  if (
+    haystack.includes("size limit") ||
+    haystack.includes("file exceeds the worker") ||
+    haystack.includes("too large")
+  ) {
+    return "tooLarge";
   }
 
   if (

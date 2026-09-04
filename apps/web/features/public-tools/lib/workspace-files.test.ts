@@ -81,6 +81,33 @@ describe("public tool errors", () => {
     ).toBe("passwordProtected");
   });
 
+  test("does not treat worker size limits as a plan quota", () => {
+    expect(
+      mapConversionFailure({
+        code: "processing_failed",
+        message: "Source file exceeds the worker size limit",
+      }),
+    ).toBe("tooLarge");
+    expect(
+      mapConversionFailure({
+        code: "processing_failed",
+        message: "Output file exceeds the worker size limit",
+      }),
+    ).toBe("tooLarge");
+    expect(
+      mapConversionFailure({
+        code: "processing_failed",
+        message: "File exceeds the 50 page limit",
+      }),
+    ).toBe("tooManyPages");
+    expect(
+      mapConversionFailure({
+        code: "processing_failed",
+        message: "Temporary disk limit exceeded",
+      }),
+    ).toBe("processingFailed");
+  });
+
   test("maps invalid, unsupported, and corrupted processing failures", () => {
     expect(
       mapConversionFailure({

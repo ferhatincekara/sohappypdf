@@ -10,6 +10,7 @@ import {
 import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import type { FileService } from "@sohappypdf/files";
 import type { ConversionJobData } from "@sohappypdf/queue";
+import { toolCombinesSourceFiles } from "@sohappypdf/tools";
 import { Hono } from "hono";
 import type { AppEnv } from "../../app-env.js";
 import { requireAuthenticatedIdentity } from "../../auth/request-identity.js";
@@ -133,7 +134,9 @@ export function createConversionRoutes(options: ConversionRoutesOptions) {
         await billing.assertCanCreateConversion(identity.userId);
         await billing.assertCanUseFileCount({
           userId: identity.userId,
-          fileCount: 1 + (body.additionalFileIds?.length ?? 0),
+          fileCount: toolCombinesSourceFiles(conversionToolId)
+            ? 1 + (body.additionalFileIds?.length ?? 0)
+            : 1,
           toolId: conversionToolId,
         });
       }
