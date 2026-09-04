@@ -2,6 +2,10 @@ import { describe, expect, test } from "bun:test";
 import { isAppError } from "@sohappypdf/core";
 import { memoryAdapter } from "better-auth/adapters/memory";
 import { convertSetCookieToCookie } from "better-auth/test";
+import {
+  ACCOUNT_SUSPENDED_ERROR_CODE,
+  createAccountSuspendedApiError,
+} from "./account-suspended.js";
 import { createAuth } from "./auth.js";
 import { requireAuthSession } from "./auth-session.js";
 
@@ -279,5 +283,53 @@ describe("createAuth", () => {
         expect(error.code).toBe("UNAUTHORIZED");
       }
     }
+  });
+
+  test("rejects sign-in when the account is suspended", async () => {
+    const store: Record<string, Array<Record<string, unknown>>> = {
+      user: [],
+      session: [],
+      account: [],
+      verification: [],
+    };
+    const suspendedUserIds = new Set<string>();
+    const auth = createAuth({
+      config: {
+        secret: "a".repeat(32),
+        baseUrl: "http://localhost:3000",
+        runtimeEnv: "test",
+        useSecureCookies: false,
+      },
+      database: memoryAdapter(store),
+      assertSessionUser: async (userId) => {
+        if (suspendedUserIds.has(userId)) {
+          throw createAccountSuspendedApiError();
+        }
+      },
+    });
+
+    const signedUp = await auth.api.signUpEmail({
+      body: {
+        name: "Ada Lovelace",
+        email: "ada@example.com",
+        password: TEST_PASSWORD,
+      },
+    });
+
+    suspendedUserIds.add(signedUp.user.id);
+
+    const signedIn = await auth.api.signInEmail({
+      body: {
+        email: "ada@example.com",
+        password: TEST_PASSWORD,
+      },
+      asResponse: true,
+    });
+
+    expect(signedIn.status).toBe(403);
+    expect(await signedIn.json()).toMatchObject({
+      code: ACCOUNT_SUSPENDED_ERROR_CODE,
+      message: "Account is suspended",
+    });
   });
 });

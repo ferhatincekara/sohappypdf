@@ -101,6 +101,23 @@ describe("auth actions", () => {
     });
   });
 
+  test("maps a suspended account on sign-in", async () => {
+    const actions = createAuthActions(
+      createMockClient({
+        signIn: async () => failure("ACCOUNT_SUSPENDED"),
+      }),
+    );
+    const result = await actions.signInWithEmail({
+      email: "ada@example.com",
+      password: "password1234",
+    });
+
+    expect(result).toEqual({
+      ok: false,
+      messageKey: AUTH_ERROR_KEYS.accountSuspended,
+    });
+  });
+
   test("signs up with the submitted name", async () => {
     let receivedName = "";
     const actions = createAuthActions(

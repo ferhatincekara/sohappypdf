@@ -8,3 +8,23 @@ export function isAdminAuthSurface(headers: Headers): boolean {
     ADMIN_AUTH_SURFACE
   );
 }
+
+export function isAdminAuthCookieName(name: string): boolean {
+  return name.includes(ADMIN_AUTH_COOKIE_PREFIX);
+}
+
+export function adminCookieHeader(
+  cookies: ReadonlyArray<{ name: string; value: string }>,
+): string | undefined {
+  const adminCookies = cookies.filter((cookie) =>
+    isAdminAuthCookieName(cookie.name),
+  );
+
+  if (adminCookies.length === 0) {
+    return undefined;
+  }
+
+  return adminCookies
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join("; ");
+}

@@ -7,6 +7,7 @@ export const AUTH_ERROR_KEYS = {
   currentPasswordIncorrect: "currentPasswordIncorrect",
   networkFailure: "networkFailure",
   googleFailed: "googleFailed",
+  accountSuspended: "accountSuspended",
   unexpected: "unexpected",
 } as const;
 
@@ -33,6 +34,7 @@ const ERROR_CODE_MAP: Record<string, AuthErrorKey> = {
   PASSWORD_TOO_LONG: AUTH_ERROR_KEYS.weakPassword,
   INVALID_TOKEN: AUTH_ERROR_KEYS.expiredResetToken,
   EXPIRED_TOKEN: AUTH_ERROR_KEYS.expiredResetToken,
+  ACCOUNT_SUSPENDED: AUTH_ERROR_KEYS.accountSuspended,
 };
 
 function isNetworkFailure(error: AuthClientError): boolean {
@@ -75,6 +77,10 @@ export function mapAuthError(error: AuthClientError | null): AuthErrorKey {
     return AUTH_ERROR_KEYS.invalidCredentials;
   }
 
+  if (message.includes("account is suspended")) {
+    return AUTH_ERROR_KEYS.accountSuspended;
+  }
+
   return AUTH_ERROR_KEYS.unexpected;
 }
 
@@ -104,6 +110,10 @@ export function mapOAuthCallbackError(
     normalized === "unable_to_link_account"
   ) {
     return AUTH_ERROR_KEYS.existingAccount;
+  }
+
+  if (normalized === "account_suspended") {
+    return AUTH_ERROR_KEYS.accountSuspended;
   }
 
   return AUTH_ERROR_KEYS.googleFailed;

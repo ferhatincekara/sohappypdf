@@ -1039,6 +1039,7 @@
       "currentPasswordIncorrect": "Mevcut şifre yanlış.",
       "networkFailure": "İstek tamamlanamadı. Tekrar deneyin.",
       "googleFailed": "Google ile giriş tamamlanamadı. Tekrar deneyin.",
+      "accountSuspended": "Bu hesap askıya alındı ve giriş yapılamaz. Bunun bir hata olduğunu düşünüyorsanız destek ile iletişime geçin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
     },
     "shell": {

@@ -1,5 +1,5 @@
 import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
-import { type Database, getDb, user } from "@sohappypdf/db";
+import { type Database, getDb, session, user } from "@sohappypdf/db";
 import { eq } from "drizzle-orm";
 import {
   type AdminUserAccess,
@@ -19,6 +19,13 @@ export async function setUserSuspended(input: {
     throw new AppError({
       code: APP_ERROR_CODES.VALIDATION_ERROR,
       message: "A reason between 8 and 500 characters is required",
+    });
+  }
+
+  if (input.userId.trim().length === 0) {
+    throw new AppError({
+      code: APP_ERROR_CODES.VALIDATION_ERROR,
+      message: "User id is required",
     });
   }
 
@@ -71,6 +78,8 @@ export async function setUserSuspended(input: {
       message: "User not found",
     });
   }
+
+  await database.delete(session).where(eq(session.userId, input.userId));
 
   return {
     userId: row.id,

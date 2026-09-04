@@ -43,6 +43,15 @@ describe("mapAuthError", () => {
     );
   });
 
+  test("maps a suspended account", () => {
+    expect(mapAuthError({ code: "ACCOUNT_SUSPENDED" })).toBe(
+      AUTH_ERROR_KEYS.accountSuspended,
+    );
+    expect(mapAuthError({ message: "Account is suspended" })).toBe(
+      AUTH_ERROR_KEYS.accountSuspended,
+    );
+  });
+
   test("falls back to a generic error", () => {
     expect(mapAuthError({ code: "SOME_INTERNAL_CODE", message: "stack" })).toBe(
       AUTH_ERROR_KEYS.unexpected,
@@ -60,6 +69,15 @@ describe("mapOAuthCallbackError", () => {
   test("maps a failed Google link to an existing account", () => {
     expect(mapOAuthCallbackError("account_not_linked")).toBe(
       AUTH_ERROR_KEYS.existingAccount,
+    );
+  });
+
+  test("maps a suspended Google sign-in", () => {
+    expect(mapOAuthCallbackError("account_suspended")).toBe(
+      AUTH_ERROR_KEYS.accountSuspended,
+    );
+    expect(mapOAuthCallbackError("ACCOUNT_SUSPENDED")).toBe(
+      AUTH_ERROR_KEYS.accountSuspended,
     );
   });
 

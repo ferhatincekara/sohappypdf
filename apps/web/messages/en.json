@@ -1039,6 +1039,7 @@
       "currentPasswordIncorrect": "The current password is incorrect.",
       "networkFailure": "The request could not be completed. Try again.",
       "googleFailed": "Google sign-in could not be completed. Try again.",
+      "accountSuspended": "This account is suspended and cannot sign in. Contact support if you think this is a mistake.",
       "unexpected": "Something went wrong. Try again."
     },
     "shell": {

@@ -5,10 +5,12 @@ import {
 } from "@sohappypdf/config";
 import { getDb } from "@sohappypdf/db";
 import { createLogger } from "@sohappypdf/logger";
+import { createAccountSuspendedApiError } from "./account-suspended.js";
 import {
   ADMIN_AUTH_COOKIE_PREFIX,
   isAdminAuthSurface,
 } from "./admin-auth-surface.js";
+import { findUserAccess } from "./admin-authorization.js";
 import { type Auth, createAuth } from "./auth.js";
 import { createAuthDrizzleAdapter } from "./auth-adapter.js";
 import { createResendEmailSender } from "./resend-email.js";
@@ -16,6 +18,14 @@ import { createResetPasswordEmailSender } from "./reset-password-email.js";
 
 let webAuth: Auth | undefined;
 let adminAuth: Auth | undefined;
+
+async function rejectSuspendedSessionUser(userId: string): Promise<void> {
+  const access = await findUserAccess(userId);
+
+  if (access !== undefined && access.suspendedAt !== null) {
+    throw createAccountSuspendedApiError();
+  }
+}
 
 function createSharedAuthOptions() {
   const email = loadEmailConfig();
@@ -35,6 +45,7 @@ function createSharedAuthOptions() {
             }),
       logger,
     }),
+    assertSessionUser: rejectSuspendedSessionUser,
   };
 }
 

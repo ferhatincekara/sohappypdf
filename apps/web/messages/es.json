@@ -1039,6 +1039,7 @@
       "currentPasswordIncorrect": "La contraseña actual es incorrecta.",
       "networkFailure": "No se pudo completar la solicitud. Inténtalo de nuevo.",
       "googleFailed": "No se pudo completar el inicio de sesión con Google. Inténtalo de nuevo.",
+      "accountSuspended": "Esta cuenta está suspendida y no puede iniciar sesión. Contacta con soporte si crees que se trata de un error.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo."
     },
     "shell": {

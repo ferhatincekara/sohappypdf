@@ -16,6 +16,7 @@ export type CreateAuthOptions = {
   sendResetPassword?: SendAuthEmail;
   cookiePrefix?: string;
   shareCookiesAcrossSubdomains?: boolean;
+  assertSessionUser?: (userId: string) => Promise<void>;
 };
 
 function uniqueOrigins(origins: readonly string[]): string[] {
@@ -52,6 +53,7 @@ export function createAuth(options: CreateAuthOptions) {
     ? options.config.cookieDomain
     : undefined;
   const google = options.config.google;
+  const assertSessionUser = options.assertSessionUser;
 
   return betterAuth({
     database: options.database,
@@ -130,6 +132,19 @@ export function createAuth(options: CreateAuthOptions) {
     onAPIError: {
       throw: true,
     },
+    ...(assertSessionUser === undefined
+      ? {}
+      : {
+          databaseHooks: {
+            session: {
+              create: {
+                before: async (session) => {
+                  await assertSessionUser(session.userId);
+                },
+              },
+            },
+          },
+        }),
   });
 }
 

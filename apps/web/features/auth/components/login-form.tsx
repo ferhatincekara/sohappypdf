@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -9,6 +10,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  AUTH_ERROR_KEYS,
+  mapOAuthCallbackError,
+} from "@/features/auth/api/auth-errors";
 import { GoogleSignInButton } from "@/features/auth/components/google-sign-in-button";
 import { PasswordInput } from "@/features/auth/components/password-input";
 import { useLogin } from "@/features/auth/hooks/use-login";
@@ -25,16 +30,25 @@ export function LoginForm({
 }) {
   const t = useTranslations("auth.login");
   const tFields = useTranslations("auth.fields");
-  const { form, onSubmit, isSubmitting } = useLogin(next);
+  const tErrors = useTranslations("auth.errors");
+  const { form, onSubmit, isSubmitting, isSuspended } = useLogin(next);
   const {
     register,
     formState: { errors },
   } = form;
+  const oauthMessageKey = mapOAuthCallbackError(oauthError);
+  const showSuspendedWarning =
+    isSuspended || oauthMessageKey === AUTH_ERROR_KEYS.accountSuspended;
 
   useOAuthErrorToast(oauthError);
 
   return (
     <div className="flex flex-col gap-5">
+      {showSuspendedWarning ? (
+        <Alert variant="destructive">
+          <AlertDescription>{tErrors("accountSuspended")}</AlertDescription>
+        </Alert>
+      ) : null}
       <GoogleSignInButton
         next={next}
         errorPath={AUTH_PATHS.login}

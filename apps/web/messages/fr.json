@@ -1039,6 +1039,7 @@
       "currentPasswordIncorrect": "Le mot de passe actuel est incorrect.",
       "networkFailure": "La requête n'a pas pu aboutir. Réessayez.",
       "googleFailed": "La connexion Google n'a pas pu aboutir. Réessayez.",
+      "accountSuspended": "Ce compte est suspendu et ne peut pas se connecter. Contactez le support si vous pensez qu'il s'agit d'une erreur.",
       "unexpected": "Une erreur s'est produite. Réessayez."
     },
     "shell": {

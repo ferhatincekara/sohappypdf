@@ -1039,6 +1039,7 @@
       "currentPasswordIncorrect": "Das aktuelle Passwort ist falsch.",
       "networkFailure": "Die Anfrage konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
       "googleFailed": "Die Google-Anmeldung konnte nicht abgeschlossen werden. Versuchen Sie es erneut.",
+      "accountSuspended": "Dieses Konto ist gesperrt und kann sich nicht anmelden. Wenden Sie sich an den Support, wenn Sie das für einen Fehler halten.",
       "unexpected": "Etwas ist schiefgegangen. Versuchen Sie es erneut."
     },
     "shell": {

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { mapAdminSignInError } from "@/features/auth/login-errors";
 import { authClient } from "@/lib/auth/auth-client";
 
 export function LoginForm() {
@@ -24,7 +25,7 @@ export function LoginForm() {
           .email({ email, password })
           .then((result) => {
             if (result.error) {
-              setError("Unable to sign in with those credentials.");
+              setError(mapAdminSignInError(result.error));
               return;
             }
 

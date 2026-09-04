@@ -2,6 +2,12 @@ import { assertServerOnly } from "@sohappypdf/core";
 
 assertServerOnly("@sohappypdf/auth");
 
+export {
+  ACCOUNT_SUSPENDED_ERROR_CODE,
+  ACCOUNT_SUSPENDED_ERROR_MESSAGE,
+  createAccountSuspendedApiError,
+  isAccountSuspendedMessage,
+} from "./account-suspended.js";
 export type {
   AdminAuditEvent,
   WriteAdminAuditEventInput,
@@ -11,6 +17,8 @@ export {
   ADMIN_AUTH_COOKIE_PREFIX,
   ADMIN_AUTH_SURFACE,
   ADMIN_AUTH_SURFACE_HEADER,
+  adminCookieHeader,
+  isAdminAuthCookieName,
   isAdminAuthSurface,
 } from "./admin-auth-surface.js";
 export type { AdminUserAccess, UserRole } from "./admin-authorization.js";
