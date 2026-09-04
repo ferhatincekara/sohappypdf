@@ -11,7 +11,7 @@ import {
   user,
   webCreditLedgerEntries,
 } from "@sohappypdf/db";
-import { and, desc, eq, gte, ilike, lte, or, sql } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, inArray, lte, or, sql } from "drizzle-orm";
 import { parseOptionalDate } from "@/server/query/date-range";
 import { paginated, parsePage, parsePageSize } from "@/server/query/pagination";
 import {
@@ -117,7 +117,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     .from(user)
     .where(where);
 
-  const rows = await db
+  const users = await db
     .select({
       id: user.id,
       email: user.email,
@@ -125,49 +125,6 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
       role: user.role,
       suspendedAt: user.suspendedAt,
       createdAt: user.createdAt,
-      lastActivityAt: sql<Date | null>`(
-        select max(activity_at) from (
-          select max(${session.updatedAt}) as activity_at
-          from ${session}
-          where ${session.userId} = ${QUALIFIED_USER_ID_SQL}
-          union all
-          select max(${conversionUsageEvents.createdAt})
-          from ${conversionUsageEvents}
-          where ${conversionUsageEvents.userId} = ${QUALIFIED_USER_ID_SQL}
-          union all
-          select max(${apiKeys.lastUsedAt})
-          from ${apiKeys}
-          where ${apiKeys.userId} = ${QUALIFIED_USER_ID_SQL}
-        ) activity
-      )`,
-      webPlan: sql<"free" | "pro">`case when exists (
-        select 1 from ${billingSubscriptions}
-        where ${billingSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
-          and ${billingSubscriptions.plan} = 'pro'
-          and ${ACTIVE_SUBSCRIPTION_SQL}
-      ) then 'pro' else 'free' end`,
-      developerPlan: sql<"none" | "starter" | "growth" | "scale">`coalesce((
-        select ${apiSubscriptions.productKey}
-        from ${apiSubscriptions}
-        where ${apiSubscriptions.userId} = ${QUALIFIED_USER_ID_SQL}
-          and ${ACTIVE_SUBSCRIPTION_SQL}
-        order by ${apiSubscriptions.updatedAt} desc
-        limit 1
-      ), 'none')`,
-      webCreditsRemaining: sql<number | null>`(
-        select ${usagePeriods.webCreditsGranted} - ${usagePeriods.webCreditsUsed}
-        from ${usagePeriods}
-        where ${usagePeriods.userId} = ${QUALIFIED_USER_ID_SQL}
-        order by ${usagePeriods.periodStart} desc
-        limit 1
-      )`,
-      apiCreditsRemaining: sql<number | null>`(
-        select ${usagePeriods.apiCreditsGranted} - ${usagePeriods.apiCreditsUsed}
-        from ${usagePeriods}
-        where ${usagePeriods.userId} = ${QUALIFIED_USER_ID_SQL}
-        order by ${usagePeriods.periodStart} desc
-        limit 1
-      )`,
     })
     .from(user)
     .where(where)
@@ -175,7 +132,149 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     .limit(pageSize)
     .offset(offset);
 
+  if (users.length === 0) {
+    return paginated([], countInt(totalRow?.value), page, pageSize);
+  }
+
+  const userIds = users.map((row) => row.id);
+  const [
+    proRows,
+    developerRows,
+    creditRows,
+    sessionActivity,
+    usageActivity,
+    keyActivity,
+  ] = await Promise.all([
+    db
+      .select({ userId: billingSubscriptions.userId })
+      .from(billingSubscriptions)
+      .where(
+        and(
+          inArray(billingSubscriptions.userId, userIds),
+          eq(billingSubscriptions.plan, "pro"),
+          ACTIVE_SUBSCRIPTION_SQL,
+        ),
+      ),
+    db
+      .select({
+        userId: apiSubscriptions.userId,
+        productKey: apiSubscriptions.productKey,
+        updatedAt: apiSubscriptions.updatedAt,
+      })
+      .from(apiSubscriptions)
+      .where(
+        and(inArray(apiSubscriptions.userId, userIds), ACTIVE_SUBSCRIPTION_SQL),
+      ),
+    db
+      .select({
+        userId: usagePeriods.userId,
+        periodStart: usagePeriods.periodStart,
+        webCreditsGranted: usagePeriods.webCreditsGranted,
+        webCreditsUsed: usagePeriods.webCreditsUsed,
+        apiCreditsGranted: usagePeriods.apiCreditsGranted,
+        apiCreditsUsed: usagePeriods.apiCreditsUsed,
+      })
+      .from(usagePeriods)
+      .where(inArray(usagePeriods.userId, userIds)),
+    db
+      .select({
+        userId: session.userId,
+        at: sql<Date | null>`max(${session.updatedAt})`,
+      })
+      .from(session)
+      .where(inArray(session.userId, userIds))
+      .groupBy(session.userId),
+    db
+      .select({
+        userId: conversionUsageEvents.userId,
+        at: sql<Date | null>`max(${conversionUsageEvents.createdAt})`,
+      })
+      .from(conversionUsageEvents)
+      .where(inArray(conversionUsageEvents.userId, userIds))
+      .groupBy(conversionUsageEvents.userId),
+    db
+      .select({
+        userId: apiKeys.userId,
+        at: sql<Date | null>`max(${apiKeys.lastUsedAt})`,
+      })
+      .from(apiKeys)
+      .where(inArray(apiKeys.userId, userIds))
+      .groupBy(apiKeys.userId),
+  ]);
+
+  const proUserIds = new Set(proRows.map((row) => row.userId));
+  const developerByUser = new Map<
+    string,
+    { productKey: "starter" | "growth" | "scale"; updatedAt: Date }
+  >();
+
+  for (const row of developerRows) {
+    const current = developerByUser.get(row.userId);
+    if (current === undefined || row.updatedAt > current.updatedAt) {
+      developerByUser.set(row.userId, {
+        productKey: row.productKey,
+        updatedAt: row.updatedAt,
+      });
+    }
+  }
+
+  const creditsByUser = new Map<
+    string,
+    {
+      periodStart: Date;
+      webCreditsRemaining: number;
+      apiCreditsRemaining: number;
+    }
+  >();
+
+  for (const row of creditRows) {
+    const current = creditsByUser.get(row.userId);
+    if (current === undefined || row.periodStart > current.periodStart) {
+      creditsByUser.set(row.userId, {
+        periodStart: row.periodStart,
+        webCreditsRemaining: row.webCreditsGranted - row.webCreditsUsed,
+        apiCreditsRemaining: row.apiCreditsGranted - row.apiCreditsUsed,
+      });
+    }
+  }
+
+  const lastActivityByUser = new Map<string, Date>();
+
+  for (const row of [...sessionActivity, ...usageActivity, ...keyActivity]) {
+    const at = toDate(row.at);
+    if (at === null) {
+      continue;
+    }
+
+    const current = lastActivityByUser.get(row.userId);
+    if (current === undefined || at > current) {
+      lastActivityByUser.set(row.userId, at);
+    }
+  }
+
+  const rows: AdminUserListRow[] = users.map((row) => {
+    const credits = creditsByUser.get(row.id);
+
+    return {
+      ...row,
+      lastActivityAt: lastActivityByUser.get(row.id) ?? null,
+      webPlan: proUserIds.has(row.id) ? "pro" : "free",
+      developerPlan: developerByUser.get(row.id)?.productKey ?? "none",
+      webCreditsRemaining: credits?.webCreditsRemaining ?? null,
+      apiCreditsRemaining: credits?.apiCreditsRemaining ?? null,
+    };
+  });
+
   return paginated(rows, countInt(totalRow?.value), page, pageSize);
+}
+
+function toDate(value: Date | string | null | undefined): Date | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  const parsed = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
 export async function getAdminUserDetail(userId: string) {
