@@ -1,4 +1,4 @@
-export const MARKETING_SOCIAL_LINK_IDS = ["instagram"] as const;
+export const MARKETING_SOCIAL_LINK_IDS = ["instagram", "linkedin"] as const;
 
 export type MarketingSocialLinkId = (typeof MARKETING_SOCIAL_LINK_IDS)[number];
 
@@ -11,5 +11,9 @@ export const MARKETING_SOCIAL_LINKS: readonly MarketingSocialLink[] = [
   {
     id: "instagram",
     href: "https://www.instagram.com/sohappypdf",
+  },
+  {
+    id: "linkedin",
+    href: "https://www.linkedin.com/company/sohappypdf",
   },
 ];

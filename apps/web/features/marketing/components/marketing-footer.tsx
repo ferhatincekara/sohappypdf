@@ -34,6 +34,7 @@ export async function MarketingFooter() {
                 groupLabel={t("social")}
                 labels={{
                   instagram: t("instagram"),
+                  linkedin: t("linkedin"),
                 }}
               />
             </div>
