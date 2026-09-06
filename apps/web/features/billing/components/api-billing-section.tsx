@@ -189,9 +189,20 @@ export function ApiBillingSection({
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {subscribeProducts.map((product) => {
               const offerPackId = apiProductLabelKey(product);
+              const isSamePack = offerPackId === packId;
+              const isCurrent = isSelectedApiOfferPack(
+                billing.api.product,
+                product,
+              );
               const offer = catalogPriceForCycle(
                 billing.prices[offerPackId],
-                cycle,
+                isCurrent
+                  ? billingHeroInterval({
+                      paid: true,
+                      subscribed: billing.api.interval,
+                      selected: cycle,
+                    })
+                  : cycle,
               );
               const action = apiPackCheckoutAction(
                 billing.api.product,
@@ -199,13 +210,6 @@ export function ApiBillingSection({
                 billing.api.interval,
                 cycle,
               );
-              const isCurrent = isSelectedApiOfferPack(
-                billing.api.product,
-                product,
-                billing.api.interval,
-                cycle,
-              );
-              const isSamePack = offerPackId === packId;
 
               return (
                 <BillingOfferCard

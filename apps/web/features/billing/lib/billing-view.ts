@@ -171,17 +171,8 @@ export function apiPackCheckoutAction(
 export function isSelectedApiOfferPack(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
-  currentInterval: BillingInterval | null,
-  selectedInterval: BillingInterval,
 ): boolean {
-  return (
-    apiPackCheckoutAction(
-      current,
-      product,
-      currentInterval,
-      selectedInterval,
-    ) === "current"
-  );
+  return current !== null && apiProductLabelKey(product) === current;
 }
 
 export function webPlanCheckoutAction(

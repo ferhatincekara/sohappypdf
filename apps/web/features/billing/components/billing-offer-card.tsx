@@ -46,12 +46,12 @@ export function BillingOfferCard({
       </div>
       <Button
         type="button"
-        className={cn("w-full", isCurrent && "disabled:opacity-100")}
+        className={cn("w-full", cta === "current" && "disabled:opacity-100")}
         variant={
           isCurrent ? "white" : cta === "subscribe" ? "default" : "outline"
         }
-        disabled={isPending || isCurrent || cta === "current"}
-        aria-busy={isPending && !isCurrent && cta !== "current"}
+        disabled={isPending || cta === "current"}
+        aria-busy={isPending && cta !== "current"}
         onClick={onClick}
       >
         {actionLabel}
