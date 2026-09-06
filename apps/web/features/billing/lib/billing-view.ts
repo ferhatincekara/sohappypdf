@@ -147,53 +147,32 @@ export function apiProductLabelKey(
   return "starter";
 }
 
-export function isCurrentApiOfferPack(
-  current: PublicBillingStatus["api"]["product"],
-  product: CheckoutProductKey,
-): boolean {
-  return current !== null && apiProductLabelKey(product) === current;
-}
-
 export function apiPackCheckoutAction(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
-  currentInterval: BillingInterval | null = null,
-  selectedInterval: BillingInterval = "monthly",
 ): "current" | "subscribe" | "switch" {
   if (current === null) {
     return "subscribe";
   }
 
   if (apiProductLabelKey(product) === current) {
-    if (currentInterval !== null && currentInterval !== selectedInterval) {
-      return "switch";
-    }
-
     return "current";
   }
 
   return "switch";
 }
 
-export function isCurrentWebPlanInterval(
-  billing: Pick<PublicBillingStatus, "plan" | "interval">,
-  interval: BillingInterval,
+export function isSelectedApiOfferPack(
+  current: PublicBillingStatus["api"]["product"],
+  product: CheckoutProductKey,
+  currentInterval: BillingInterval | null,
+  selectedInterval: BillingInterval,
 ): boolean {
-  if (billing.plan !== "pro") {
+  if (apiPackCheckoutAction(current, product) !== "current") {
     return false;
   }
 
-  return (billing.interval ?? "monthly") === interval;
-}
-
-export function listWebPlanOfferIntervals(
-  billing: Pick<PublicBillingStatus, "prices">,
-): readonly BillingInterval[] {
-  if (billing.prices.pro.yearlyUsd === null) {
-    return ["monthly"];
-  }
-
-  return ["monthly", "yearly"];
+  return currentInterval === null || currentInterval === selectedInterval;
 }
 
 export function webPlanCheckoutAction(

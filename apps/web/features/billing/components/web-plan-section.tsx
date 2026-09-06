@@ -2,7 +2,6 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { BillingOfferCard } from "@/features/billing/components/billing-offer-card";
 import {
   BillingPlanHero,
   BillingSectionCard,
@@ -15,8 +14,6 @@ import {
   canOpenWebPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
-  isCurrentWebPlanInterval,
-  listWebPlanOfferIntervals,
   resolveBillingPlanNotice,
   webPlanCheckoutAction,
   webPlanRenewalDate,
@@ -41,11 +38,10 @@ export function WebPlanSection({
   cycle: BillingInterval;
   isCheckoutPending: boolean;
   isPortalPending: boolean;
-  onUpgrade: (interval: BillingInterval) => void;
+  onUpgrade: () => void;
   onManage: () => void;
 }) {
   const t = useTranslations("billing");
-  const tCycle = useTranslations("billing.cycle");
   const tPlans = useTranslations("billing.plans");
   const tStatus = useTranslations("billing.subscriptionStatus");
   const locale = useLocale();
@@ -79,8 +75,6 @@ export function WebPlanSection({
       selected: cycle,
     }),
   );
-  const offerIntervals = listWebPlanOfferIntervals(billing);
-  const showIntervalOffers = offerIntervals.length > 1;
   const checkoutAction = webPlanCheckoutAction(billing, cycle);
   const checkoutLabel =
     checkoutAction === "upgrade"
@@ -100,17 +94,14 @@ export function WebPlanSection({
         description={description}
         paid={isPro}
         actions={
-          (!showIntervalOffers && checkoutAction !== "current") ||
-          canOpenPolar ? (
+          checkoutAction !== "current" || canOpenPolar ? (
             <>
-              {!showIntervalOffers && checkoutAction !== "current" ? (
+              {checkoutAction !== "current" ? (
                 <Button
                   type="button"
                   disabled={isCheckoutPending}
                   aria-busy={isCheckoutPending}
-                  onClick={() => {
-                    onUpgrade(cycle);
-                  }}
+                  onClick={onUpgrade}
                 >
                   {isCheckoutPending ? checkoutPendingLabel : checkoutLabel}
                 </Button>
@@ -125,48 +116,6 @@ export function WebPlanSection({
           ) : undefined
         }
       />
-
-      {showIntervalOffers ? (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {offerIntervals.map((interval) => {
-            const intervalOffer = catalogPriceForCycle(
-              billing.prices.pro,
-              interval,
-            );
-            const action = webPlanCheckoutAction(billing, interval);
-            const isCurrent = isCurrentWebPlanInterval(billing, interval);
-
-            return (
-              <BillingOfferCard
-                key={interval}
-                title={tCycle(interval)}
-                subtitle={tPlans("pro")}
-                price={formatUsdAmount(intervalOffer.amount)}
-                unit={
-                  intervalOffer.interval === "yearly"
-                    ? t("perYear")
-                    : t("perMonth")
-                }
-                actionLabel={
-                  action === "upgrade"
-                    ? t("upgrade")
-                    : action === "current"
-                      ? t("current")
-                      : interval === "yearly"
-                        ? t("switchToYearly")
-                        : t("switchToMonthly")
-                }
-                isCurrent={isCurrent}
-                isPending={isCheckoutPending}
-                cta={action === "upgrade" ? "subscribe" : action}
-                onClick={() => {
-                  onUpgrade(interval);
-                }}
-              />
-            );
-          })}
-        </div>
-      ) : null}
 
       <BillingSectionCard
         title={t("usage")}

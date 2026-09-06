@@ -24,7 +24,7 @@ import {
   canOpenApiPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
-  isCurrentApiOfferPack,
+  isSelectedApiOfferPack,
   resolveBillingPlanNotice,
 } from "@/features/billing/lib/billing-view";
 import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
@@ -65,6 +65,17 @@ export function ApiBillingSection({
     pendingSwitch === null ? null : apiProductLabelKey(pendingSwitch);
   const packId = billing.api.product;
   const hasPack = packId !== null;
+  const currentCheckoutProduct =
+    packId === null
+      ? null
+      : (subscribeProducts.find(
+          (product) => apiProductLabelKey(product) === packId,
+        ) ?? null);
+  const canSwitchInterval =
+    hasPack &&
+    billing.api.interval !== null &&
+    billing.api.interval !== cycle &&
+    currentCheckoutProduct !== null;
   const packOffer =
     packId === null
       ? null
@@ -105,12 +116,30 @@ export function ApiBillingSection({
           description={description}
           paid
           actions={
-            <PolarPortalActions
-              canManage={canOpenApiPolarPortal(billing.api)}
-              isPortalPending={isPortalPending}
-              onManage={onManage}
-              tone="onDark"
-            />
+            <>
+              {canSwitchInterval && currentCheckoutProduct !== null ? (
+                <Button
+                  type="button"
+                  disabled={isCheckoutPending}
+                  aria-busy={isCheckoutPending}
+                  onClick={() => {
+                    onCheckout(currentCheckoutProduct);
+                  }}
+                >
+                  {isCheckoutPending
+                    ? t("switchingInterval")
+                    : cycle === "yearly"
+                      ? t("switchToYearly")
+                      : t("switchToMonthly")}
+                </Button>
+              ) : null}
+              <PolarPortalActions
+                canManage={canOpenApiPolarPortal(billing.api)}
+                isPortalPending={isPortalPending}
+                onManage={onManage}
+                tone="onDark"
+              />
+            </>
           }
         />
       ) : null}
@@ -167,12 +196,12 @@ export function ApiBillingSection({
               const action = apiPackCheckoutAction(
                 billing.api.product,
                 product,
-                billing.api.interval,
-                cycle,
               );
-              const isCurrent = isCurrentApiOfferPack(
+              const isCurrent = isSelectedApiOfferPack(
                 billing.api.product,
                 product,
+                billing.api.interval,
+                cycle,
               );
 
               return (
@@ -186,13 +215,7 @@ export function ApiBillingSection({
                   unit={
                     offer.interval === "yearly" ? t("perYear") : t("perMonth")
                   }
-                  actionLabel={
-                    isCurrent && action === "switch"
-                      ? cycle === "yearly"
-                        ? t("switchToYearly")
-                        : t("switchToMonthly")
-                      : tApi(action)
-                  }
+                  actionLabel={tApi(action)}
                   isCurrent={isCurrent}
                   isPending={isCheckoutPending}
                   cta={action}

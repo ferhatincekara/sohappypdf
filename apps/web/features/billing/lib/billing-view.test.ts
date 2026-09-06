@@ -11,10 +11,8 @@ import {
   canOpenWebPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
-  isCurrentApiOfferPack,
-  isCurrentWebPlanInterval,
+  isSelectedApiOfferPack,
   listBillingCenterSections,
-  listWebPlanOfferIntervals,
   parseBillingCenterSection,
   resolveBillingCenterFlags,
   resolveBillingCenterSection,
@@ -219,10 +217,14 @@ describe("billing center sections", () => {
     expect(apiPackCheckoutAction(null, "api-starter")).toBe("subscribe");
     expect(apiPackCheckoutAction("starter", "api-starter")).toBe("current");
     expect(
-      apiPackCheckoutAction("starter", "api-starter", "monthly", "yearly"),
-    ).toBe("switch");
-    expect(isCurrentApiOfferPack("starter", "api-starter")).toBe(true);
-    expect(isCurrentApiOfferPack("starter", "api-growth")).toBe(false);
+      isSelectedApiOfferPack("starter", "api-starter", "monthly", "yearly"),
+    ).toBe(false);
+    expect(
+      isSelectedApiOfferPack("starter", "api-starter", "monthly", "monthly"),
+    ).toBe(true);
+    expect(
+      isSelectedApiOfferPack("starter", "api-growth", "monthly", "monthly"),
+    ).toBe(false);
     expect(apiPackCheckoutAction("starter", "api-growth")).toBe("switch");
   });
 
@@ -340,21 +342,6 @@ describe("billing center sections", () => {
     expect(webPlanCheckoutAction(freeBilling, "monthly")).toBe("upgrade");
     expect(webPlanCheckoutAction(proBilling, "monthly")).toBe("current");
     expect(webPlanCheckoutAction(proBilling, "yearly")).toBe("switch");
-    expect(isCurrentWebPlanInterval(proBilling, "monthly")).toBe(true);
-    expect(isCurrentWebPlanInterval(proBilling, "yearly")).toBe(false);
-    expect(isCurrentWebPlanInterval(freeBilling, "yearly")).toBe(false);
-    expect(
-      listWebPlanOfferIntervals(
-        createBilling({
-          prices: {
-            pro: { monthlyUsd: 5, yearlyUsd: 48 },
-            starter: { monthlyUsd: 9, yearlyUsd: 86 },
-            growth: { monthlyUsd: 29, yearlyUsd: 278 },
-            scale: { monthlyUsd: 99, yearlyUsd: 950 },
-          },
-        }),
-      ),
-    ).toEqual(["monthly", "yearly"]);
     expect(subscribedBillingInterval("web", proBilling)).toBe("monthly");
     expect(subscribedBillingInterval("api", apiBilling)).toBe("monthly");
     expect(
