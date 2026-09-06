@@ -108,6 +108,14 @@ describe("isPolarCustomerActionRecoverable", () => {
         ),
       ),
     ).toBe(true);
+    expect(
+      isPolarCustomerActionRecoverable(
+        mapPolarRequestError(
+          { statusCode: 403, message: "no payment method" },
+          "subscription",
+        ),
+      ),
+    ).toBe(true);
   });
 });
 

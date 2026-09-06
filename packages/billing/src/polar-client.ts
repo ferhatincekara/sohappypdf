@@ -25,12 +25,20 @@ function polarStatusCode(error: unknown): number | undefined {
     return undefined;
   }
 
+  if (isAppError(error)) {
+    return polarStatusCode(error.cause);
+  }
+
   if ("statusCode" in error && typeof error.statusCode === "number") {
     return error.statusCode;
   }
 
   if ("status" in error && typeof error.status === "number") {
     return error.status;
+  }
+
+  if ("cause" in error) {
+    return polarStatusCode(error.cause);
   }
 
   return undefined;

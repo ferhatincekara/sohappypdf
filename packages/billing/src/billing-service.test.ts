@@ -7,6 +7,7 @@ import { APP_ERROR_CODES, AppError, isAppError } from "@sohappypdf/core";
 import { createBillingService } from "./billing-service.js";
 import type { PolarClient } from "./billing-types.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
+import { mapPolarRequestError } from "./polar-client.js";
 
 const now = new Date("2026-08-15T12:00:00.000Z");
 
@@ -1133,10 +1134,10 @@ describe("createBillingService", () => {
           ];
         },
         async updateSubscription() {
-          throw new AppError({
-            code: APP_ERROR_CODES.VALIDATION_ERROR,
-            message: "Polar subscription was rejected",
-          });
+          throw mapPolarRequestError(
+            { statusCode: 403, message: "no payment method" },
+            "subscription",
+          );
         },
         async createCheckout(input) {
           checkoutInput = {
