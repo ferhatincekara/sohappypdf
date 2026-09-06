@@ -8,9 +8,11 @@ import type { BillingInterval } from "@/features/billing/types/billing";
 export function BillingCycleToggle({
   value,
   onChange,
+  className,
 }: {
   value: BillingInterval;
   onChange: (interval: BillingInterval) => void;
+  className?: string;
 }) {
   const t = useTranslations("billing.cycle");
 
@@ -18,7 +20,7 @@ export function BillingCycleToggle({
     <PillTabs
       layoutId="billing-cycle"
       aria-label={t("label")}
-      stretch
+      className={className}
       value={value}
       onValueChange={(id) => {
         if (id === "monthly" || id === "yearly") {

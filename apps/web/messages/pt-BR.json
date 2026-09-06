@@ -1457,6 +1457,7 @@
     "portalHint": "Atualize o cartão, baixe faturas ou cancele uma assinatura na Polar.",
     "providerHint": "Checkout, faturas e cartões são gerenciados na Polar.",
     "webPlanHint": "Este é o plano web das ferramentas de PDF. Os pacotes de API são separados.",
+    "webPlans": "Planos web",
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Escolha mensal ou anual na página de checkout da Polar.",
     "checkoutYearlyHint": "O anual custa {price} no checkout da Polar.",

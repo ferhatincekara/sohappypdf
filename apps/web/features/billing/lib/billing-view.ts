@@ -195,6 +195,16 @@ export function webPlanCheckoutAction(
   return "current";
 }
 
+export function webPlanOfferIntervals(
+  offer: CatalogOfferPrice,
+): BillingInterval[] {
+  if (offer.yearlyUsd === null) {
+    return ["monthly"];
+  }
+
+  return ["monthly", "yearly"];
+}
+
 export function subscribedBillingInterval(
   section: BillingCenterSection,
   billing: PublicBillingStatus,
@@ -225,18 +235,13 @@ export function catalogPriceForCycle(
   return { amount: offer.monthlyUsd, interval: "monthly" };
 }
 
-export function shouldShowBillingCycleToggle(input: {
-  section: BillingCenterSection;
-  billing: PublicBillingStatus;
-}): boolean {
-  if (input.section === "web") {
-    return input.billing.prices.pro.yearlyUsd !== null;
-  }
-
+export function shouldShowBillingCycleToggle(
+  billing: Pick<PublicBillingStatus, "prices">,
+): boolean {
   return (
-    input.billing.prices.starter.yearlyUsd !== null ||
-    input.billing.prices.growth.yearlyUsd !== null ||
-    input.billing.prices.scale.yearlyUsd !== null
+    billing.prices.starter.yearlyUsd !== null ||
+    billing.prices.growth.yearlyUsd !== null ||
+    billing.prices.scale.yearlyUsd !== null
   );
 }
 

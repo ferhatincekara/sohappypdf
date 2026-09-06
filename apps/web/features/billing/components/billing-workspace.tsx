@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { PillTabs } from "@/components/ui/pill-tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ApiBillingSection } from "@/features/billing/components/api-billing-section";
-import { BillingCycleToggle } from "@/features/billing/components/billing-cycle-toggle";
 import { WebPlanSection } from "@/features/billing/components/web-plan-section";
 import { useBillingActions } from "@/features/billing/hooks/use-billing-actions";
 import { useBillingStatus } from "@/features/billing/hooks/use-billing-status";
@@ -19,8 +18,6 @@ import {
   listBillingCenterSections,
   parseBillingCenterSection,
   resolveBillingCenterSection,
-  shouldShowBillingCycleToggle,
-  subscribedBillingInterval,
 } from "@/features/billing/lib/billing-view";
 import {
   isCheckoutActivationPending,
@@ -42,9 +39,7 @@ function BillingWorkspaceInner() {
     useState<BillingCenterSection>(() =>
       parseBillingCenterSection(searchParams.get("section")),
     );
-  const [cycle, setCycle] = useState<BillingInterval>("monthly");
   const didAnnounceActivation = useRef(false);
-  const syncedIntervalKey = useRef<string | null>(null);
 
   useEffect(() => {
     if (billing === undefined || didAnnounceActivation.current) {
@@ -63,26 +58,6 @@ function BillingWorkspaceInner() {
     toast.success(t("activated"));
     dismiss();
   }, [billing, dismiss, phase, t]);
-
-  useEffect(() => {
-    if (billing === undefined) {
-      return;
-    }
-
-    const activeSection = parseBillingCenterSection(requestedSection);
-    const subscribed = subscribedBillingInterval(activeSection, billing);
-    const key = `${activeSection}:${subscribed ?? "none"}`;
-
-    if (syncedIntervalKey.current === key) {
-      return;
-    }
-
-    syncedIntervalKey.current = key;
-
-    if (subscribed !== null) {
-      setCycle(subscribed);
-    }
-  }, [billing, requestedSection]);
 
   if (isLoading) {
     return (
@@ -110,7 +85,6 @@ function BillingWorkspaceInner() {
   });
   const sections = listBillingCenterSections();
   const section = resolveBillingCenterSection(requestedSection, sections);
-  const showCycle = shouldShowBillingCycleToggle({ section, billing });
 
   return (
     <div className="flex flex-col gap-6 md:gap-8">
@@ -136,31 +110,25 @@ function BillingWorkspaceInner() {
           </div>
         </Alert>
       ) : null}
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <PillTabs
-          layoutId="billing-section"
-          stretch
-          value={section}
-          onValueChange={(id) => {
-            setRequestedSection(id as BillingCenterSection);
-          }}
-          items={sections.map((item) => ({
-            id: item,
-            label: t(`sections.${item}`),
-          }))}
-        />
-        {showCycle ? (
-          <BillingCycleToggle value={cycle} onChange={setCycle} />
-        ) : null}
-      </div>
+      <PillTabs
+        layoutId="billing-section"
+        stretch
+        value={section}
+        onValueChange={(id) => {
+          setRequestedSection(id as BillingCenterSection);
+        }}
+        items={sections.map((item) => ({
+          id: item,
+          label: t(`sections.${item}`),
+        }))}
+      />
       {section === "web" ? (
         <WebPlanSection
           billing={billing}
-          cycle={cycle}
           isCheckoutPending={isCheckoutPending}
           isPortalPending={isPortalPending}
-          onUpgrade={() => {
-            startCheckout({ product: "pro", interval: cycle });
+          onCheckout={(interval: BillingInterval) => {
+            startCheckout({ product: "pro", interval });
           }}
           onManage={() => {
             openPortal();
@@ -170,11 +138,10 @@ function BillingWorkspaceInner() {
       {section === "api" ? (
         <ApiBillingSection
           billing={billing}
-          cycle={cycle}
           isCheckoutPending={isCheckoutPending}
           isPortalPending={isPortalPending}
-          onCheckout={(product) => {
-            startCheckout({ product, interval: cycle });
+          onCheckout={(product, interval) => {
+            startCheckout({ product, interval });
           }}
           onManage={() => {
             openPortal();

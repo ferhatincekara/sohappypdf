@@ -21,6 +21,7 @@ import {
   subscribedBillingInterval,
   webCreditsResetDate,
   webPlanCheckoutAction,
+  webPlanOfferIntervals,
   webPlanRenewalDate,
 } from "@/features/billing/lib/billing-view";
 import type { PublicBillingStatus } from "@/features/billing/types/billing";
@@ -292,10 +293,16 @@ describe("billing center sections", () => {
     expect(
       catalogPriceForCycle({ monthlyUsd: 5, yearlyUsd: null }, "yearly"),
     ).toEqual({ amount: 5, interval: "monthly" });
+    expect(webPlanOfferIntervals({ monthlyUsd: 5, yearlyUsd: 48 })).toEqual([
+      "monthly",
+      "yearly",
+    ]);
+    expect(webPlanOfferIntervals({ monthlyUsd: 5, yearlyUsd: null })).toEqual([
+      "monthly",
+    ]);
     expect(
-      shouldShowBillingCycleToggle({
-        section: "web",
-        billing: createBilling({
+      shouldShowBillingCycleToggle(
+        createBilling({
           prices: {
             pro: { monthlyUsd: 5, yearlyUsd: 48 },
             starter: { monthlyUsd: 9, yearlyUsd: 86 },
@@ -303,41 +310,23 @@ describe("billing center sections", () => {
             scale: { monthlyUsd: 99, yearlyUsd: 950 },
           },
         }),
-      }),
+      ),
     ).toBe(true);
+    expect(shouldShowBillingCycleToggle(proBilling)).toBe(true);
+    expect(shouldShowBillingCycleToggle(apiBilling)).toBe(true);
+    expect(shouldShowBillingCycleToggle(freeBilling)).toBe(true);
     expect(
-      shouldShowBillingCycleToggle({
-        section: "web",
-        billing: proBilling,
-      }),
+      shouldShowBillingCycleToggle(
+        createBilling({
+          prices: {
+            pro: { monthlyUsd: 5, yearlyUsd: 48 },
+            starter: { monthlyUsd: 9, yearlyUsd: null },
+            growth: { monthlyUsd: 29, yearlyUsd: null },
+            scale: { monthlyUsd: 99, yearlyUsd: null },
+          },
+        }),
+      ),
     ).toBe(false);
-    expect(
-      shouldShowBillingCycleToggle({
-        section: "web",
-        billing: createBilling({
-          plan: "pro",
-          canUpgrade: false,
-          prices: {
-            pro: { monthlyUsd: 5, yearlyUsd: 48 },
-            starter: { monthlyUsd: 9, yearlyUsd: 86 },
-            growth: { monthlyUsd: 29, yearlyUsd: 278 },
-            scale: { monthlyUsd: 99, yearlyUsd: 950 },
-          },
-        }),
-      }),
-    ).toBe(true);
-    expect(
-      shouldShowBillingCycleToggle({
-        section: "api",
-        billing: apiBilling,
-      }),
-    ).toBe(true);
-    expect(
-      shouldShowBillingCycleToggle({
-        section: "api",
-        billing: freeBilling,
-      }),
-    ).toBe(true);
   });
 
   test("keeps Polar portal off the web plan until a web subscription exists", () => {

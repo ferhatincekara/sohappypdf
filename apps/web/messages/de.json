@@ -1457,6 +1457,7 @@
     "portalHint": "Aktualisieren Sie Ihre Karte, laden Sie Rechnungen herunter oder kündigen Sie ein Abo in Polar.",
     "providerHint": "Checkout, Rechnungen und Karten werden in Polar verwaltet.",
     "webPlanHint": "Das ist der Web-Plan für PDF-Tools. API-Pakete sind getrennt.",
+    "webPlans": "Web-Tarife",
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Wählen Sie monatlich oder jährlich auf der Polar-Checkout-Seite.",
     "checkoutYearlyHint": "Jährlich kostet {price} beim Polar-Checkout.",

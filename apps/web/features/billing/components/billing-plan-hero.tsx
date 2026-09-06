@@ -81,17 +81,22 @@ export function BillingSectionCard({
   description,
   meta,
   actions,
+  headerActions,
   children,
 }: {
   title: string;
   description?: string;
   meta?: string;
   actions?: ReactNode;
+  headerActions?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <Card className={billingSectionClassName}>
-      <h2 className="text-lg font-extrabold tracking-tight">{title}</h2>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-lg font-extrabold tracking-tight">{title}</h2>
+        {headerActions}
+      </div>
       {description === undefined ? null : (
         <p className="mt-1 max-w-xl text-lg/7 text-muted-foreground">
           {description}

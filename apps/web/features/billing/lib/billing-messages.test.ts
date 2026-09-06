@@ -56,6 +56,7 @@ describe("billing locales", () => {
     expect(englishKeys).toContain("includedOperations");
     expect(englishKeys).toContain("includedWebCredits");
     expect(englishKeys).toContain("api.packCredits");
+    expect(englishKeys).toContain("webPlans");
     expect(en.billing.api.switchConfirmBody).toContain("{price}{unit}");
     expect(tr.billing.api.switchConfirmBody).toContain("{price}{unit}");
     expect(englishKeys).not.toContain("noSubscription");

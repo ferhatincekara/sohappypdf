@@ -2,11 +2,12 @@
 
 import { DEFAULT_API_CREDIT_PACKS } from "@sohappypdf/billing/plans";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { APP_PATHS } from "@/features/app-shell";
 import { ApiPackSwitchDialog } from "@/features/billing/components/api-pack-switch-dialog";
 import { BillingCreditHistoryList } from "@/features/billing/components/billing-credit-history-list";
+import { BillingCycleToggle } from "@/features/billing/components/billing-cycle-toggle";
 import { BillingOfferCard } from "@/features/billing/components/billing-offer-card";
 import {
   BillingPlanHero,
@@ -26,6 +27,7 @@ import {
   formatUsdAmount,
   isSelectedApiOfferPack,
   resolveBillingPlanNotice,
+  shouldShowBillingCycleToggle,
 } from "@/features/billing/lib/billing-view";
 import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
 import type {
@@ -39,17 +41,15 @@ import { cn } from "@/lib/utils";
 
 export function ApiBillingSection({
   billing,
-  cycle,
   isCheckoutPending,
   isPortalPending,
   onCheckout,
   onManage,
 }: {
   billing: PublicBillingStatus;
-  cycle: BillingInterval;
   isCheckoutPending: boolean;
   isPortalPending: boolean;
-  onCheckout: (product: CheckoutProductKey) => void;
+  onCheckout: (product: CheckoutProductKey, interval: BillingInterval) => void;
   onManage: () => void;
 }) {
   const t = useTranslations("billing");
@@ -58,9 +58,25 @@ export function ApiBillingSection({
   const tStatus = useTranslations("billing.subscriptionStatus");
   const locale = useLocale();
   const subscribeProducts = apiSubscribeProducts(billing.api.availableProducts);
+  const [cycle, setCycle] = useState<BillingInterval>(
+    () => billing.api.interval ?? "monthly",
+  );
+  const syncedInterval = useRef(billing.api.interval);
   const [pendingSwitch, setPendingSwitch] = useState<CheckoutProductKey | null>(
     null,
   );
+
+  useEffect(() => {
+    if (billing.api.interval === syncedInterval.current) {
+      return;
+    }
+
+    syncedInterval.current = billing.api.interval;
+
+    if (billing.api.interval !== null) {
+      setCycle(billing.api.interval);
+    }
+  }, [billing.api.interval]);
   const pendingPackId =
     pendingSwitch === null ? null : apiProductLabelKey(pendingSwitch);
   const pendingOffer =
@@ -69,28 +85,14 @@ export function ApiBillingSection({
       : catalogPriceForCycle(billing.prices[pendingPackId], cycle);
   const packId = billing.api.product;
   const hasPack = packId !== null;
-  const currentCheckoutProduct =
-    packId === null
-      ? null
-      : (subscribeProducts.find(
-          (product) => apiProductLabelKey(product) === packId,
-        ) ?? null);
-  const canSwitchInterval =
-    hasPack &&
-    billing.api.interval !== null &&
-    billing.api.interval !== cycle &&
-    currentCheckoutProduct !== null;
   const packOffer =
     packId === null
       ? null
       : catalogPriceForCycle(
           billing.prices[packId],
-          billingHeroInterval({
-            paid: true,
-            subscribed: billing.api.interval,
-            selected: cycle,
-          }),
+          billing.api.interval ?? "monthly",
         );
+  const showCycle = shouldShowBillingCycleToggle(billing);
   const notice = resolveBillingPlanNotice({
     paid: hasPack,
     cancelAtPeriodEnd: false,
@@ -120,30 +122,12 @@ export function ApiBillingSection({
           description={description}
           paid
           actions={
-            <>
-              {canSwitchInterval && currentCheckoutProduct !== null ? (
-                <Button
-                  type="button"
-                  disabled={isCheckoutPending}
-                  aria-busy={isCheckoutPending}
-                  onClick={() => {
-                    onCheckout(currentCheckoutProduct);
-                  }}
-                >
-                  {isCheckoutPending
-                    ? t("switchingInterval")
-                    : cycle === "yearly"
-                      ? t("switchToYearly")
-                      : t("switchToMonthly")}
-                </Button>
-              ) : null}
-              <PolarPortalActions
-                canManage={canOpenApiPolarPortal(billing.api)}
-                isPortalPending={isPortalPending}
-                onManage={onManage}
-                tone="onDark"
-              />
-            </>
+            <PolarPortalActions
+              canManage={canOpenApiPolarPortal(billing.api)}
+              isPortalPending={isPortalPending}
+              onManage={onManage}
+              tone="onDark"
+            />
           }
         />
       ) : null}
@@ -189,7 +173,18 @@ export function ApiBillingSection({
       </BillingSectionCard>
 
       {subscribeProducts.length > 0 ? (
-        <BillingSectionCard title={tApi("plans")}>
+        <BillingSectionCard
+          title={tApi("plans")}
+          headerActions={
+            showCycle ? (
+              <BillingCycleToggle
+                value={cycle}
+                onChange={setCycle}
+                className="bg-white"
+              />
+            ) : null
+          }
+        >
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {subscribeProducts.map((product) => {
               const offerPackId = apiProductLabelKey(product);
@@ -237,7 +232,7 @@ export function ApiBillingSection({
                       return;
                     }
 
-                    onCheckout(product);
+                    onCheckout(product, cycle);
                   }}
                 />
               );
@@ -263,7 +258,7 @@ export function ApiBillingSection({
 
               const product = pendingSwitch;
               setPendingSwitch(null);
-              onCheckout(product);
+              onCheckout(product, cycle);
             }}
           />
         </BillingSectionCard>

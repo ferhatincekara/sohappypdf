@@ -1457,6 +1457,7 @@
     "portalHint": "Mettez à jour votre carte, téléchargez les factures ou annulez un abonnement dans Polar.",
     "providerHint": "Le paiement, les factures et les cartes sont gérés dans Polar.",
     "webPlanHint": "Il s'agit de l'offre web pour les outils PDF. Les packs API sont distincts.",
+    "webPlans": "Offres web",
     "openApiPack": "API : {pack}",
     "checkoutIntervalHint": "Choisissez mensuel ou annuel sur la page de paiement Polar.",
     "checkoutYearlyHint": "L'annuel est à {price} sur le paiement Polar.",

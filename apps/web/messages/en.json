@@ -1457,6 +1457,7 @@
     "portalHint": "Update your card, download invoices, or cancel a subscription in Polar.",
     "providerHint": "Checkout, invoices, and cards are managed in Polar.",
     "webPlanHint": "This is the web plan for PDF tools. API packs are separate.",
+    "webPlans": "Web plans",
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Choose monthly or yearly on the Polar checkout page.",
     "checkoutYearlyHint": "Yearly is {price} on Polar checkout.",

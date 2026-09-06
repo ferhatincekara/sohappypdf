@@ -1457,6 +1457,7 @@
     "portalHint": "カードの更新、請求書のダウンロード、サブスクリプションの解約はPolarで行います。",
     "providerHint": "決済、請求書、カードはPolarで管理します。",
     "webPlanHint": "これはPDFツールのWebプランです。APIパックは別です。",
+    "webPlans": "Webプラン",
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Polarの決済ページで月額または年額を選べます。",
     "checkoutYearlyHint": "年額はPolarの決済で {price} です。",

@@ -1457,6 +1457,7 @@
     "portalHint": "Kartı güncellemek, fatura indirmek veya aboneliği iptal etmek için Polar’ı kullanın.",
     "providerHint": "Ödeme, fatura ve kart Polar üzerinden yönetilir.",
     "webPlanHint": "Bu web araçları planıdır. API paketleri ayrıdır.",
+    "webPlans": "Web paketleri",
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Polar ödeme ekranında aylık veya yıllık seçebilirsiniz.",
     "checkoutYearlyHint": "Yıllık Polar ödemesi {price}.",
