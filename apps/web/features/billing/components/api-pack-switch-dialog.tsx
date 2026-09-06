@@ -15,14 +15,16 @@ import { formatUsdAmount } from "@/features/billing/lib/billing-view";
 export function ApiPackSwitchDialog({
   open,
   packName,
-  monthlyPrice,
+  price,
+  unit,
   isPending,
   onOpenChange,
   onConfirm,
 }: {
   open: boolean;
   packName: string;
-  monthlyPrice: number;
+  price: number;
+  unit: string;
   isPending: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
@@ -50,7 +52,8 @@ export function ApiPackSwitchDialog({
           <DialogDescription>
             {t("api.switchConfirmBody", {
               pack: packName,
-              price: formatUsdAmount(monthlyPrice),
+              price: formatUsdAmount(price),
+              unit,
             })}
           </DialogDescription>
         </DialogHeader>

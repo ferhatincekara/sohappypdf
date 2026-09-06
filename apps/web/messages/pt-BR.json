@@ -1501,7 +1501,7 @@
       "subscribe": "Assinar",
       "switch": "Trocar",
       "switchTo": "Trocar para {pack}?",
-      "switchConfirmBody": "A Polar vai atualizar sua assinatura atual de API para {pack} e cobrar o cartão cadastrado. O preço listado é {price}/mês; a diferença é proporcional neste período.",
+      "switchConfirmBody": "A Polar vai atualizar sua assinatura atual de API para {pack} e cobrar o cartão cadastrado. O preço listado é {price}{unit}; a diferença é proporcional neste período.",
       "switchConfirm": "Confirmar troca",
       "switchCancel": "Cancelar",
       "switchClose": "Fechar confirmação de troca",

@@ -1501,7 +1501,7 @@
       "subscribe": "Abonnieren",
       "switch": "Wechseln",
       "switchTo": "Zu {pack} wechseln?",
-      "switchConfirmBody": "Polar aktualisiert Ihr aktuelles API-Abo auf {pack} und belastet die hinterlegte Karte. Der Listenpreis ist {price}/Monat; die Differenz wird für diesen Zeitraum anteilig berechnet.",
+      "switchConfirmBody": "Polar aktualisiert Ihr aktuelles API-Abo auf {pack} und belastet die hinterlegte Karte. Der Listenpreis ist {price}{unit}; die Differenz wird für diesen Zeitraum anteilig berechnet.",
       "switchConfirm": "Wechsel bestätigen",
       "switchCancel": "Abbrechen",
       "switchClose": "Wechselbestätigung schließen",

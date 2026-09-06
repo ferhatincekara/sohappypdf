@@ -63,6 +63,10 @@ export function ApiBillingSection({
   );
   const pendingPackId =
     pendingSwitch === null ? null : apiProductLabelKey(pendingSwitch);
+  const pendingOffer =
+    pendingPackId === null
+      ? null
+      : catalogPriceForCycle(billing.prices[pendingPackId], cycle);
   const packId = billing.api.product;
   const hasPack = packId !== null;
   const currentCheckoutProduct =
@@ -242,10 +246,9 @@ export function ApiBillingSection({
           <ApiPackSwitchDialog
             open={pendingSwitch !== null}
             packName={pendingPackId === null ? "" : tApiProducts(pendingPackId)}
-            monthlyPrice={
-              pendingPackId === null
-                ? 0
-                : billing.prices[pendingPackId].monthlyUsd
+            price={pendingOffer?.amount ?? 0}
+            unit={
+              pendingOffer?.interval === "yearly" ? t("perYear") : t("perMonth")
             }
             isPending={isCheckoutPending}
             onOpenChange={(open) => {

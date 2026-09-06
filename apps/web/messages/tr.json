@@ -1501,7 +1501,7 @@
       "subscribe": "Abone ol",
       "switch": "Geç",
       "switchTo": "{pack} paketine geçilsin mi?",
-      "switchConfirmBody": "Polar mevcut API aboneliğini {pack} paketine günceller ve kayıtlı kartınızı çeker. Listelenen fiyat {price}/ay; fark bu dönem için mahsup edilir.",
+      "switchConfirmBody": "Polar mevcut API aboneliğini {pack} paketine günceller ve kayıtlı kartınızı çeker. Listelenen fiyat {price}{unit}; fark bu dönem için mahsup edilir.",
       "switchConfirm": "Geçişi onayla",
       "switchCancel": "Vazgeç",
       "switchClose": "Geçiş onayını kapat",

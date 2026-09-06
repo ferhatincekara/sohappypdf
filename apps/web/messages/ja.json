@@ -1501,7 +1501,7 @@
       "subscribe": "申し込む",
       "switch": "切り替える",
       "switchTo": "{pack} に切り替えますか？",
-      "switchConfirmBody": "Polarは現在のAPIサブスクリプションを {pack} に更新し、登録済みのカードに請求します。表示価格は {price}/月です。差額はこの期間で日割りされます。",
+      "switchConfirmBody": "Polarは現在のAPIサブスクリプションを {pack} に更新し、登録済みのカードに請求します。表示価格は {price}{unit}です。差額はこの期間で日割りされます。",
       "switchConfirm": "切り替えを確定",
       "switchCancel": "キャンセル",
       "switchClose": "切り替え確認を閉じる",
