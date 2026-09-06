@@ -150,23 +150,34 @@ export function apiProductLabelKey(
 export function apiPackCheckoutAction(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
+  currentInterval: BillingInterval | null,
+  cycle: BillingInterval,
 ): "current" | "subscribe" | "switch" {
   if (current === null) {
     return "subscribe";
   }
 
-  if (apiProductLabelKey(product) === current) {
-    return "current";
+  if (apiProductLabelKey(product) !== current) {
+    return "switch";
   }
 
-  return "switch";
+  if (currentInterval !== null && currentInterval !== cycle) {
+    return "switch";
+  }
+
+  return "current";
 }
 
 export function isSelectedApiOfferPack(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
+  currentInterval: BillingInterval | null,
+  cycle: BillingInterval,
 ): boolean {
-  return current !== null && apiProductLabelKey(product) === current;
+  return (
+    apiPackCheckoutAction(current, product, currentInterval, cycle) ===
+    "current"
+  );
 }
 
 export function webPlanCheckoutAction(

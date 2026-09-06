@@ -192,14 +192,24 @@ export function ApiBillingSection({
               const isCurrent = isSelectedApiOfferPack(
                 billing.api.product,
                 product,
+                billing.api.interval,
+                cycle,
               );
               const offer = catalogPriceForCycle(
                 billing.prices[offerPackId],
-                cycle,
+                isCurrent
+                  ? billingHeroInterval({
+                      paid: true,
+                      subscribed: billing.api.interval,
+                      selected: cycle,
+                    })
+                  : cycle,
               );
               const action = apiPackCheckoutAction(
                 billing.api.product,
                 product,
+                billing.api.interval,
+                cycle,
               );
 
               return (

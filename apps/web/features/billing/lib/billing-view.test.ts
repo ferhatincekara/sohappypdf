@@ -214,11 +214,30 @@ describe("billing center sections", () => {
     ]);
     expect(apiSubscribeProducts([])).toEqual([]);
     expect(apiProductLabelKey("api-starter")).toBe("starter");
-    expect(apiPackCheckoutAction(null, "api-starter")).toBe("subscribe");
-    expect(apiPackCheckoutAction("starter", "api-starter")).toBe("current");
-    expect(isSelectedApiOfferPack("starter", "api-starter")).toBe(true);
-    expect(isSelectedApiOfferPack("starter", "api-growth")).toBe(false);
-    expect(apiPackCheckoutAction("starter", "api-growth")).toBe("switch");
+    expect(apiPackCheckoutAction(null, "api-starter", null, "monthly")).toBe(
+      "subscribe",
+    );
+    expect(
+      apiPackCheckoutAction("starter", "api-starter", "monthly", "monthly"),
+    ).toBe("current");
+    expect(
+      isSelectedApiOfferPack("starter", "api-starter", "monthly", "monthly"),
+    ).toBe(true);
+    expect(
+      isSelectedApiOfferPack("starter", "api-growth", "monthly", "monthly"),
+    ).toBe(false);
+    expect(
+      apiPackCheckoutAction("starter", "api-growth", "monthly", "monthly"),
+    ).toBe("switch");
+    expect(
+      apiPackCheckoutAction("starter", "api-starter", "monthly", "yearly"),
+    ).toBe("switch");
+    expect(
+      isSelectedApiOfferPack("starter", "api-starter", "monthly", "yearly"),
+    ).toBe(false);
+    expect(
+      apiPackCheckoutAction("starter", "api-starter", "yearly", "yearly"),
+    ).toBe("current");
   });
 
   test("does not surface AI credits in the billing center", () => {
