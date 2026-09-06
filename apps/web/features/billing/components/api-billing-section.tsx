@@ -196,13 +196,7 @@ export function ApiBillingSection({
               );
               const offer = catalogPriceForCycle(
                 billing.prices[offerPackId],
-                isCurrent
-                  ? billingHeroInterval({
-                      paid: true,
-                      subscribed: billing.api.interval,
-                      selected: cycle,
-                    })
-                  : cycle,
+                cycle,
               );
               const action = apiPackCheckoutAction(
                 billing.api.product,
@@ -222,15 +216,7 @@ export function ApiBillingSection({
                   unit={
                     offer.interval === "yearly" ? t("perYear") : t("perMonth")
                   }
-                  actionLabel={
-                    action === "current"
-                      ? tApi("current")
-                      : isSamePack
-                        ? cycle === "yearly"
-                          ? t("switchToYearly")
-                          : t("switchToMonthly")
-                        : tApi(action)
-                  }
+                  actionLabel={tApi(action)}
                   isCurrent={isCurrent}
                   isPending={isCheckoutPending}
                   cta={action}
