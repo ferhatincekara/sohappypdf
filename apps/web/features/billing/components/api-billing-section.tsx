@@ -196,6 +196,8 @@ export function ApiBillingSection({
               const action = apiPackCheckoutAction(
                 billing.api.product,
                 product,
+                billing.api.interval,
+                cycle,
               );
               const isCurrent = isSelectedApiOfferPack(
                 billing.api.product,
@@ -203,6 +205,7 @@ export function ApiBillingSection({
                 billing.api.interval,
                 cycle,
               );
+              const isSamePack = offerPackId === packId;
 
               return (
                 <BillingOfferCard
@@ -215,12 +218,20 @@ export function ApiBillingSection({
                   unit={
                     offer.interval === "yearly" ? t("perYear") : t("perMonth")
                   }
-                  actionLabel={tApi(action)}
+                  actionLabel={
+                    action === "current"
+                      ? tApi("current")
+                      : isSamePack
+                        ? cycle === "yearly"
+                          ? t("switchToYearly")
+                          : t("switchToMonthly")
+                        : tApi(action)
+                  }
                   isCurrent={isCurrent}
                   isPending={isCheckoutPending}
                   cta={action}
                   onClick={() => {
-                    if (action === "switch") {
+                    if (action === "switch" && !isSamePack) {
                       setPendingSwitch(product);
                       return;
                     }
