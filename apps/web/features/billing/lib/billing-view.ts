@@ -190,6 +190,18 @@ export function subscribedBillingInterval(
   return section === "web" ? billing.interval : billing.api.interval;
 }
 
+export function billingHeroInterval(input: {
+  paid: boolean;
+  subscribed: BillingInterval | null;
+  selected: BillingInterval;
+}): BillingInterval {
+  if (input.paid) {
+    return input.subscribed ?? "monthly";
+  }
+
+  return input.selected;
+}
+
 export function catalogPriceForCycle(
   offer: CatalogOfferPrice,
   interval: BillingInterval,

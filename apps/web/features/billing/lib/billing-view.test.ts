@@ -5,6 +5,7 @@ import {
   apiPackRenewalDate,
   apiProductLabelKey,
   apiSubscribeProducts,
+  billingHeroInterval,
   canOpenApiPolarPortal,
   canOpenBillingDashboard,
   canOpenWebPolarPortal,
@@ -336,5 +337,26 @@ describe("billing center sections", () => {
     expect(webPlanCheckoutAction(proBilling, "yearly")).toBe("switch");
     expect(subscribedBillingInterval("web", proBilling)).toBe("monthly");
     expect(subscribedBillingInterval("api", apiBilling)).toBe("monthly");
+    expect(
+      billingHeroInterval({
+        paid: true,
+        subscribed: "monthly",
+        selected: "yearly",
+      }),
+    ).toBe("monthly");
+    expect(
+      billingHeroInterval({
+        paid: true,
+        subscribed: "yearly",
+        selected: "monthly",
+      }),
+    ).toBe("yearly");
+    expect(
+      billingHeroInterval({
+        paid: false,
+        subscribed: null,
+        selected: "yearly",
+      }),
+    ).toBe("yearly");
   });
 });

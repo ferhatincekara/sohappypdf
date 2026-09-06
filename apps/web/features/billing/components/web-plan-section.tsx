@@ -10,6 +10,7 @@ import {
 import { BillingStat } from "@/features/billing/components/billing-stat";
 import { PolarPortalActions } from "@/features/billing/components/polar-portal-actions";
 import {
+  billingHeroInterval,
   canOpenWebPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
@@ -66,7 +67,14 @@ export function WebPlanSection({
           ? tStatus(notice.status)
           : undefined;
   const canOpenPolar = canOpenWebPolarPortal(billing);
-  const offer = catalogPriceForCycle(billing.prices.pro, cycle);
+  const offer = catalogPriceForCycle(
+    billing.prices.pro,
+    billingHeroInterval({
+      paid: isPro,
+      subscribed: billing.interval,
+      selected: cycle,
+    }),
+  );
   const checkoutAction = webPlanCheckoutAction(billing, cycle);
   const checkoutLabel =
     checkoutAction === "upgrade"

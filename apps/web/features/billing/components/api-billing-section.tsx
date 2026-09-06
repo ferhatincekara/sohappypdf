@@ -20,6 +20,7 @@ import {
   apiPackRenewalDate,
   apiProductLabelKey,
   apiSubscribeProducts,
+  billingHeroInterval,
   canOpenApiPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
@@ -66,7 +67,14 @@ export function ApiBillingSection({
   const packOffer =
     packId === null
       ? null
-      : catalogPriceForCycle(billing.prices[packId], cycle);
+      : catalogPriceForCycle(
+          billing.prices[packId],
+          billingHeroInterval({
+            paid: true,
+            subscribed: billing.api.interval,
+            selected: cycle,
+          }),
+        );
   const notice = resolveBillingPlanNotice({
     paid: hasPack,
     cancelAtPeriodEnd: false,
@@ -92,7 +100,7 @@ export function ApiBillingSection({
         <BillingPlanHero
           title={tApiProducts(packId)}
           value={formatUsdAmount(packOffer.amount)}
-          unit={t("perMonth")}
+          unit={packOffer.interval === "yearly" ? t("perYear") : t("perMonth")}
           description={description}
           paid
           actions={
