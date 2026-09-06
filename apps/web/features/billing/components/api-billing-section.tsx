@@ -66,7 +66,7 @@ export function ApiBillingSection({
   const packOffer =
     packId === null
       ? null
-      : catalogPriceForCycle(billing.prices[packId], "monthly");
+      : catalogPriceForCycle(billing.prices[packId], cycle);
   const notice = resolveBillingPlanNotice({
     paid: hasPack,
     cancelAtPeriodEnd: false,
@@ -158,6 +158,8 @@ export function ApiBillingSection({
               const action = apiPackCheckoutAction(
                 billing.api.product,
                 product,
+                billing.api.interval,
+                cycle,
               );
               const isCurrent = action === "current";
 

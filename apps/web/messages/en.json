@@ -1460,6 +1460,9 @@
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Choose monthly or yearly on the Polar checkout page.",
     "checkoutYearlyHint": "Yearly is {price} on Polar checkout.",
+    "switchToYearly": "Switch to yearly",
+    "switchToMonthly": "Switch to monthly",
+    "switchingInterval": "Updating billing interval…",
     "cycle": {
       "label": "Billing interval",
       "monthly": "Monthly",

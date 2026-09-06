@@ -164,6 +164,46 @@ describe("API credits", () => {
     expect(status.api.creditsLimit).toBe(DEFAULT_API_STARTER_CREDITS);
   });
 
+  test("keeps admin API credits when a starter pack starts mid-month", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    const billing = createService({ repository });
+    await billing.getApiCreditBalance("user_1");
+    await billing.adjustCredits({
+      userId: "user_1",
+      source: "api",
+      amount: 750,
+      reason: "support goodwill credit",
+      actorUserId: "admin_1",
+    });
+
+    const before = await billing.getApiCreditBalance("user_1");
+    expect(before.apiCreditsGranted).toBe(INCLUDED_API_CREDITS_PER_MONTH + 750);
+
+    const current = new Date("2026-08-27T17:00:00.000Z");
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: new Date("2026-08-27T14:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-09-27T14:00:00.000Z"),
+      endedAt: null,
+      updatedAt: current,
+    });
+
+    const after = await createService({
+      repository,
+      now: current,
+    }).getApiCreditBalance("user_1");
+
+    expect(after.apiCreditsGranted).toBe(DEFAULT_API_STARTER_CREDITS + 750);
+    expect(after.apiCreditsRemaining).toBe(DEFAULT_API_STARTER_CREDITS + 750);
+  });
+
   test("does not grant a second pack of credits when leaving the calendar-month bucket", async () => {
     const repository = createMemoryBillingRepository();
     const current = new Date("2026-08-27T17:00:00.000Z");

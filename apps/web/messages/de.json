@@ -1460,6 +1460,9 @@
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Wählen Sie monatlich oder jährlich auf der Polar-Checkout-Seite.",
     "checkoutYearlyHint": "Jährlich kostet {price} beim Polar-Checkout.",
+    "switchToYearly": "Zum Jahresabo wechseln",
+    "switchToMonthly": "Zum Monatsabo wechseln",
+    "switchingInterval": "Abrechnungsintervall wird aktualisiert…",
     "cycle": {
       "label": "Abrechnungsintervall",
       "monthly": "Monatlich",

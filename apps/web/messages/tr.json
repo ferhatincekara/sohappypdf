@@ -1460,6 +1460,9 @@
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Polar ödeme ekranında aylık veya yıllık seçebilirsiniz.",
     "checkoutYearlyHint": "Yıllık Polar ödemesi {price}.",
+    "switchToYearly": "Yıllığa geç",
+    "switchToMonthly": "Aylığa geç",
+    "switchingInterval": "Fatura dönemi güncelleniyor…",
     "cycle": {
       "label": "Faturalama aralığı",
       "monthly": "Aylık",

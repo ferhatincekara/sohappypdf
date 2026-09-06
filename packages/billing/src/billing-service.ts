@@ -49,11 +49,15 @@ import {
 } from "./plan-config.js";
 import type { PlanCatalog, PlanId, UserEntitlements } from "./plan-types.js";
 import { createCatalogPriceLoader } from "./polar-catalog-prices.js";
-import { resolvePolarReturnUrl } from "./polar-client.js";
+import {
+  isPolarCustomerActionRecoverable,
+  resolvePolarReturnUrl,
+} from "./polar-client.js";
 import {
   apiProductKeyFromCheckoutProductKey,
   apiProductKeyFromPolarProductId,
   type BillingInterval,
+  billingIntervalFromPolarProductId,
   isApiCheckoutProductKey,
   isWebProPolarProduct,
   listConfiguredCheckoutProducts,
@@ -344,58 +348,21 @@ export function createBillingService(
       });
     }
     const legacyCalendar = getUtcMonthPeriod(period.start);
-    const shouldCarryLegacy =
-      monthlyCredits > 0 &&
-      legacyCalendar.start.getTime() !== period.start.getTime();
-    let initialGrant = monthlyCredits;
+    const adminExtra = await sumApiAdminAdjustments(userId, [
+      period.start,
+      legacyCalendar.start,
+    ]);
+    const targetGranted = monthlyCredits + Math.max(0, adminExtra);
 
-    if (shouldCarryLegacy) {
-      const legacy = await options.repository.getOrCreateUsagePeriod({
-        userId,
-        periodStart: legacyCalendar.start,
-        periodEnd: legacyCalendar.end,
-      });
-
-      if (legacy.apiCreditsGranted > 0) {
-        initialGrant = 0;
-      }
-    }
-
-    let balance = await options.repository.ensureApiCreditGrant({
+    const balance = await options.repository.ensureApiCreditGrant({
       userId,
       periodStart: period.start,
       periodEnd: period.end,
-      grantAmount: initialGrant,
+      grantAmount: monthlyCredits,
       now: current,
     });
 
-    if (shouldCarryLegacy && balance.apiCreditsGranted === 0) {
-      const legacy = await options.repository.getOrCreateUsagePeriod({
-        userId,
-        periodStart: legacyCalendar.start,
-        periodEnd: legacyCalendar.end,
-      });
-
-      if (legacy.apiCreditsGranted > 0) {
-        await options.repository.grantApiCreditTopUp({
-          userId,
-          periodStart: period.start,
-          periodEnd: period.end,
-          amount: legacy.apiCreditsGranted,
-          providerEventId: `api-period-carry:${userId}:${period.start.toISOString()}`,
-          now: current,
-        });
-        balance = await options.repository.ensureApiCreditGrant({
-          userId,
-          periodStart: period.start,
-          periodEnd: period.end,
-          grantAmount: 0,
-          now: current,
-        });
-      }
-    }
-
-    if (monthlyCredits <= balance.apiCreditsGranted) {
+    if (balance.apiCreditsGranted >= targetGranted) {
       return balance;
     }
 
@@ -403,8 +370,8 @@ export function createBillingService(
       userId,
       periodStart: period.start,
       periodEnd: period.end,
-      amount: monthlyCredits - balance.apiCreditsGranted,
-      providerEventId: `api-pack:${userId}:${period.start.toISOString()}:${String(monthlyCredits)}`,
+      amount: targetGranted - balance.apiCreditsGranted,
+      providerEventId: `api-pack:${userId}:${period.start.toISOString()}:${String(targetGranted)}`,
       now: current,
     });
 
@@ -415,6 +382,31 @@ export function createBillingService(
       grantAmount: monthlyCredits,
       now: current,
     });
+  }
+
+  async function sumApiAdminAdjustments(
+    userId: string,
+    periodStarts: readonly Date[],
+  ): Promise<number> {
+    const seen = new Set<number>();
+    let total = 0;
+
+    for (const periodStart of periodStarts) {
+      const key = periodStart.getTime();
+
+      if (seen.has(key)) {
+        continue;
+      }
+
+      seen.add(key);
+      total += await options.repository.sumManualCreditAdjustments({
+        userId,
+        source: "api",
+        periodStart,
+      });
+    }
+
+    return total;
   }
 
   async function ensurePolarCustomer(userId: string) {
@@ -714,6 +706,74 @@ export function createBillingService(
     return email;
   }
 
+  async function openPolarCheckout(input: {
+    userId: string;
+    productIds: readonly string[];
+    subscriptionId?: string;
+  }): Promise<{ url: string }> {
+    const polarClient = options.polarClient;
+
+    if (polarClient === undefined) {
+      throw new AppError({
+        code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+        message: "Polar checkout is not configured",
+      });
+    }
+
+    await ensurePolarCustomer(input.userId);
+    const customerEmail = await requireUserEmail(input.userId);
+    const returnUrl = resolvePolarReturnUrl(
+      `${options.config.appUrl}${options.config.successPath}`,
+    );
+    const checkout = await polarClient.createCheckout({
+      productIds: input.productIds,
+      externalCustomerId: input.userId,
+      customerEmail,
+      successUrl: checkoutSuccessUrl(options.config),
+      ...(returnUrl === undefined ? {} : { returnUrl }),
+      ...(input.subscriptionId === undefined
+        ? {}
+        : { subscriptionId: input.subscriptionId }),
+    });
+
+    return { url: checkout.url };
+  }
+
+  async function updateSubscriptionOrCheckout(input: {
+    userId: string;
+    productIds: readonly string[];
+    productId: string;
+    subscriptionId: string;
+  }): Promise<{ url: string | null }> {
+    const polarClient = options.polarClient;
+
+    if (polarClient === undefined) {
+      throw new AppError({
+        code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+        message: "Polar checkout is not configured",
+      });
+    }
+
+    try {
+      await polarClient.updateSubscription({
+        subscriptionId: input.subscriptionId,
+        productId: input.productId,
+      });
+      await reconcileFromPolar(input.userId);
+      return { url: null };
+    } catch (error) {
+      if (!isPolarCustomerActionRecoverable(error)) {
+        throw error;
+      }
+
+      return openPolarCheckout({
+        userId: input.userId,
+        productIds: input.productIds,
+        subscriptionId: input.subscriptionId,
+      });
+    }
+  }
+
   return {
     getEntitlements,
 
@@ -780,6 +840,9 @@ export function createBillingService(
               since: dailyPeriod.start,
             });
 
+      const webSubscription =
+        await options.repository.findLatestSubscriptionByUserId(input.userId);
+
       return {
         plan: entitlements.plan,
         subscriptionStatus: entitlements.subscriptionStatus,
@@ -787,6 +850,13 @@ export function createBillingService(
         currentPeriodEnd: entitlements.currentPeriodEnd?.toISOString() ?? null,
         canUpgrade: entitlements.plan === "free",
         canManage: await hasManagedPolarBilling(input.userId),
+        interval:
+          entitlements.plan === "pro" && webSubscription !== undefined
+            ? billingIntervalFromPolarProductId(
+                webSubscription.polarProductId,
+                options.config.polar,
+              )
+            : null,
         usage: {
           webCreditsUsed: balance.webCreditsUsed,
           webCreditsLimit: balance.webCreditsGranted,
@@ -805,6 +875,13 @@ export function createBillingService(
         },
         api: {
           product: apiGrant.subscription?.productKey ?? null,
+          interval:
+            apiGrant.subscription === undefined
+              ? null
+              : billingIntervalFromPolarProductId(
+                  apiGrant.subscription.polarProductId,
+                  options.config.polar,
+                ),
           subscriptionStatus: apiGrant.subscription?.status ?? null,
           creditsUsed: apiBalance.apiCreditsUsed,
           creditsLimit: apiBalance.apiCreditsGranted,
@@ -1116,11 +1193,48 @@ export function createBillingService(
       if (product === "pro") {
         assertPolarCheckoutConfig(options.config.polar);
         const entitlements = await getEntitlements(userId);
+        const webSubscription =
+          await options.repository.findLatestSubscriptionByUserId(userId);
 
-        if (entitlements.plan === "pro") {
-          throw new AppError({
-            code: APP_ERROR_CODES.CONFLICT,
-            message: "The current plan already includes Pro",
+        if (entitlements.plan === "pro" && webSubscription !== undefined) {
+          const currentInterval = billingIntervalFromPolarProductId(
+            webSubscription.polarProductId,
+            options.config.polar,
+          );
+
+          if (currentInterval === interval) {
+            throw new AppError({
+              code: APP_ERROR_CODES.CONFLICT,
+              message: "The current plan already includes Pro",
+            });
+          }
+
+          const productId = polarProductIdForSubscriptionUpdate(
+            product,
+            webSubscription.polarProductId,
+            options.config.polar,
+            interval,
+          );
+
+          if (productId === undefined) {
+            throw new AppError({
+              code: APP_ERROR_CODES.CONFIGURATION_ERROR,
+              message: "Polar checkout is not configured",
+            });
+          }
+
+          if (productId === webSubscription.polarProductId) {
+            throw new AppError({
+              code: APP_ERROR_CODES.CONFLICT,
+              message: "The current plan already includes Pro",
+            });
+          }
+
+          return updateSubscriptionOrCheckout({
+            userId,
+            productIds,
+            productId,
+            subscriptionId: webSubscription.polarSubscriptionId,
           });
         }
       }
@@ -1130,7 +1244,15 @@ export function createBillingService(
         const requestedPack = apiProductKeyFromCheckoutProductKey(product);
 
         if (apiGrant.subscription !== undefined) {
-          if (apiGrant.subscription.productKey === requestedPack) {
+          const currentInterval = billingIntervalFromPolarProductId(
+            apiGrant.subscription.polarProductId,
+            options.config.polar,
+          );
+
+          if (
+            apiGrant.subscription.productKey === requestedPack &&
+            currentInterval === interval
+          ) {
             throw new AppError({
               code: APP_ERROR_CODES.CONFLICT,
               message: "The current plan already includes an API pack",
@@ -1141,6 +1263,7 @@ export function createBillingService(
             product,
             apiGrant.subscription.polarProductId,
             options.config.polar,
+            interval,
           );
 
           if (productId === undefined) {
@@ -1150,30 +1273,26 @@ export function createBillingService(
             });
           }
 
-          await polar.updateSubscription({
-            subscriptionId: apiGrant.subscription.polarSubscriptionId,
-            productId,
-          });
-          await reconcileFromPolar(userId);
+          if (productId === apiGrant.subscription.polarProductId) {
+            throw new AppError({
+              code: APP_ERROR_CODES.CONFLICT,
+              message: "The current plan already includes an API pack",
+            });
+          }
 
-          return { url: null };
+          return updateSubscriptionOrCheckout({
+            userId,
+            productIds,
+            productId,
+            subscriptionId: apiGrant.subscription.polarSubscriptionId,
+          });
         }
       }
 
-      await ensurePolarCustomer(userId);
-      const customerEmail = await requireUserEmail(userId);
-      const returnUrl = resolvePolarReturnUrl(
-        `${options.config.appUrl}${options.config.successPath}`,
-      );
-      const checkout = await polar.createCheckout({
+      return openPolarCheckout({
+        userId,
         productIds,
-        externalCustomerId: userId,
-        customerEmail,
-        successUrl: checkoutSuccessUrl(options.config),
-        ...(returnUrl === undefined ? {} : { returnUrl }),
       });
-
-      return { url: checkout.url };
     },
 
     async createCustomerPortal(userId) {

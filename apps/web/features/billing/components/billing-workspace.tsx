@@ -20,6 +20,7 @@ import {
   parseBillingCenterSection,
   resolveBillingCenterSection,
   shouldShowBillingCycleToggle,
+  subscribedBillingInterval,
 } from "@/features/billing/lib/billing-view";
 import {
   isCheckoutActivationPending,
@@ -43,6 +44,7 @@ function BillingWorkspaceInner() {
     );
   const [cycle, setCycle] = useState<BillingInterval>("monthly");
   const didAnnounceActivation = useRef(false);
+  const syncedIntervalKey = useRef<string | null>(null);
 
   useEffect(() => {
     if (billing === undefined || didAnnounceActivation.current) {
@@ -61,6 +63,26 @@ function BillingWorkspaceInner() {
     toast.success(t("activated"));
     dismiss();
   }, [billing, dismiss, phase, t]);
+
+  useEffect(() => {
+    if (billing === undefined) {
+      return;
+    }
+
+    const activeSection = parseBillingCenterSection(requestedSection);
+    const subscribed = subscribedBillingInterval(activeSection, billing);
+    const key = `${activeSection}:${subscribed ?? "none"}`;
+
+    if (syncedIntervalKey.current === key) {
+      return;
+    }
+
+    syncedIntervalKey.current = key;
+
+    if (subscribed !== null) {
+      setCycle(subscribed);
+    }
+  }, [billing, requestedSection]);
 
   if (isLoading) {
     return (

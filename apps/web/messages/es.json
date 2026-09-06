@@ -1460,6 +1460,9 @@
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Elige mensual o anual en la página de pago de Polar.",
     "checkoutYearlyHint": "El anual es {price} en el pago de Polar.",
+    "switchToYearly": "Cambiar a anual",
+    "switchToMonthly": "Cambiar a mensual",
+    "switchingInterval": "Actualizando el intervalo de facturación…",
     "cycle": {
       "label": "Intervalo de facturación",
       "monthly": "Mensual",

@@ -150,16 +150,44 @@ export function apiProductLabelKey(
 export function apiPackCheckoutAction(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
+  currentInterval: BillingInterval | null = null,
+  selectedInterval: BillingInterval = "monthly",
 ): "current" | "subscribe" | "switch" {
   if (current === null) {
     return "subscribe";
   }
 
   if (apiProductLabelKey(product) === current) {
+    if (currentInterval !== null && currentInterval !== selectedInterval) {
+      return "switch";
+    }
+
     return "current";
   }
 
   return "switch";
+}
+
+export function webPlanCheckoutAction(
+  billing: Pick<PublicBillingStatus, "canUpgrade" | "interval">,
+  cycle: BillingInterval,
+): "upgrade" | "switch" | "current" {
+  if (billing.canUpgrade) {
+    return "upgrade";
+  }
+
+  if (billing.interval !== null && billing.interval !== cycle) {
+    return "switch";
+  }
+
+  return "current";
+}
+
+export function subscribedBillingInterval(
+  section: BillingCenterSection,
+  billing: PublicBillingStatus,
+): BillingInterval | null {
+  return section === "web" ? billing.interval : billing.api.interval;
 }
 
 export function catalogPriceForCycle(
@@ -178,16 +206,13 @@ export function shouldShowBillingCycleToggle(input: {
   billing: PublicBillingStatus;
 }): boolean {
   if (input.section === "web") {
-    return (
-      input.billing.canUpgrade && input.billing.prices.pro.yearlyUsd !== null
-    );
+    return input.billing.prices.pro.yearlyUsd !== null;
   }
 
   return (
-    input.billing.api.product === null &&
-    (input.billing.prices.starter.yearlyUsd !== null ||
-      input.billing.prices.growth.yearlyUsd !== null ||
-      input.billing.prices.scale.yearlyUsd !== null)
+    input.billing.prices.starter.yearlyUsd !== null ||
+    input.billing.prices.growth.yearlyUsd !== null ||
+    input.billing.prices.scale.yearlyUsd !== null
   );
 }
 

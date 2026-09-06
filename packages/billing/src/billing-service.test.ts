@@ -385,6 +385,8 @@ describe("createBillingService", () => {
     expect(status.plan).toBe("free");
     expect(status.canUpgrade).toBe(true);
     expect(status.canManage).toBe(false);
+    expect(status.interval).toBeNull();
+    expect(status.api.interval).toBeNull();
     expect(status.usage.webCreditsLimit).toBe(1_550);
     expect(status.usage.webCreditsUsed).toBe(0);
     expect(status.usage.webCreditsRemaining).toBe(1_550);
@@ -450,6 +452,7 @@ describe("createBillingService", () => {
     expect(status.plan).toBe("pro");
     expect(status.canUpgrade).toBe(false);
     expect(status.canManage).toBe(true);
+    expect(status.interval).toBe("monthly");
     expect(status.subscriptionStatus).toBe("active");
   });
 
@@ -799,10 +802,10 @@ describe("createBillingService", () => {
 
     const checkout = await billing.createCheckout("user_1", "api-starter");
     expect(checkout.url).toBe("https://polar.example/checkout/api");
-    expect(productIds).toEqual(["prod_api_starter"]);
+    expect(productIds).toEqual(["prod_api_starter", "prod_api_starter_yearly"]);
   });
 
-  test("creates yearly checkout with a single Polar product ID", async () => {
+  test("creates yearly checkout with both Polar interval product IDs", async () => {
     let productIds: readonly string[] | undefined;
     const billing = createService({
       env: {
@@ -823,7 +826,132 @@ describe("createBillingService", () => {
       "yearly",
     );
     expect(checkout.url).toBe("https://polar.example/checkout/api-yearly");
-    expect(productIds).toEqual(["prod_api_starter_yearly"]);
+    expect(productIds).toEqual(["prod_api_starter_yearly", "prod_api_starter"]);
+  });
+
+  test("includes monthly and yearly Pro products on Polar checkout", async () => {
+    let productIds: readonly string[] | undefined;
+    const billing = createService({
+      env: {
+        POLAR_PRO_YEARLY_PRODUCT_ID: "prod_pro_yearly",
+      },
+      polarClient: createPolarClientMock({
+        async createCheckout(input) {
+          productIds = input.productIds;
+          return { url: "https://polar.example/checkout/pro" };
+        },
+      }),
+    });
+
+    const checkout = await billing.createCheckout("user_1", "pro", "monthly");
+    expect(checkout.url).toBe("https://polar.example/checkout/pro");
+    expect(productIds).toEqual(["prod_pro", "prod_pro_yearly"]);
+  });
+
+  test("switches an active Pro subscription to yearly without a second checkout", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await seedProSubscription(repository);
+    let updatedProductId: string | undefined;
+    const billing = createService({
+      repository,
+      env: {
+        POLAR_PRO_YEARLY_PRODUCT_ID: "prod_pro_yearly",
+      },
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_polar_1",
+              status: "active",
+              productId: updatedProductId ?? "prod_pro",
+              customerId: "cus_polar_1",
+              externalCustomerId: "user_1",
+            },
+          ];
+        },
+        async createCheckout() {
+          throw new Error("interval switch should not open a new checkout");
+        },
+        async updateSubscription(input) {
+          updatedProductId = input.productId;
+        },
+      }),
+    });
+
+    const checkout = await billing.createCheckout("user_1", "pro", "yearly");
+    expect(checkout.url).toBeNull();
+    expect(updatedProductId).toBe("prod_pro_yearly");
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+    expect(status.plan).toBe("pro");
+    expect(status.interval).toBe("yearly");
+  });
+
+  test("switches an active API pack to yearly without a second checkout", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api_1",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: new Date("2026-08-01T00:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-09-01T00:00:00.000Z"),
+      endedAt: null,
+      updatedAt: now,
+    });
+    let currentProductId = "prod_api_starter";
+    const billing = createService({
+      repository,
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
+        POLAR_API_STARTER_YEARLY_PRODUCT_ID: "prod_api_starter_yearly",
+      },
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_api_1",
+              status: "active",
+              productId: currentProductId,
+              customerId: "cus_polar_1",
+              externalCustomerId: "user_1",
+            },
+          ];
+        },
+        async createCheckout() {
+          throw new Error("interval switch should not open a new checkout");
+        },
+        async updateSubscription(input) {
+          currentProductId = input.productId;
+        },
+      }),
+    });
+
+    const checkout = await billing.createCheckout(
+      "user_1",
+      "api-starter",
+      "yearly",
+    );
+    expect(checkout.url).toBeNull();
+    expect(currentProductId).toBe("prod_api_starter_yearly");
+
+    const status = await billing.getBillingStatus({
+      userId: "user_1",
+      storageUsedBytes: 0,
+      apiKeyCount: 0,
+    });
+    expect(status.api.product).toBe("starter");
+    expect(status.api.interval).toBe("yearly");
   });
 
   test("allows Pro checkout while an API pack is already active", async () => {
@@ -962,6 +1090,70 @@ describe("createBillingService", () => {
     expect(status.api.product).toBe("growth");
     expect(status.api.creditsLimit).toBe(10_000);
     expect(status.api.creditsRemaining).toBe(10_000);
+  });
+
+  test("opens Polar checkout when a pack switch needs a payment method", async () => {
+    const repository = createMemoryBillingRepository({
+      userEmails: { user_1: "user@example.com" },
+    });
+    await repository.upsertApiSubscription({
+      userId: "user_1",
+      polarSubscriptionId: "sub_api_1",
+      polarProductId: "prod_api_starter",
+      productKey: "starter",
+      status: "active",
+      cancelAtPeriodEnd: false,
+      currentPeriodStart: new Date("2026-08-01T00:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-09-01T00:00:00.000Z"),
+      endedAt: null,
+      updatedAt: now,
+    });
+    let checkoutInput:
+      | {
+          productIds: readonly string[];
+          subscriptionId?: string;
+        }
+      | undefined;
+    const billing = createService({
+      repository,
+      env: {
+        POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
+        POLAR_API_GROWTH_PRODUCT_ID: "prod_api_growth",
+      },
+      polarClient: createPolarClientMock({
+        async listSubscriptionsByExternalId() {
+          return [
+            {
+              id: "sub_api_1",
+              status: "active",
+              productId: "prod_api_starter",
+              customerId: "cus_polar_1",
+              externalCustomerId: "user_1",
+            },
+          ];
+        },
+        async updateSubscription() {
+          throw new AppError({
+            code: APP_ERROR_CODES.VALIDATION_ERROR,
+            message: "Polar subscription was rejected",
+          });
+        },
+        async createCheckout(input) {
+          checkoutInput = {
+            productIds: input.productIds,
+            subscriptionId: input.subscriptionId,
+          };
+          return { url: "https://polar.example/checkout/growth-card" };
+        },
+      }),
+    });
+
+    const checkout = await billing.createCheckout("user_1", "api-growth");
+    expect(checkout.url).toBe("https://polar.example/checkout/growth-card");
+    expect(checkoutInput).toEqual({
+      productIds: ["prod_api_growth"],
+      subscriptionId: "sub_api_1",
+    });
   });
 
   test("rejects checkout for the API pack already active", async () => {

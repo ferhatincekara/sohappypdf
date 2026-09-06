@@ -75,6 +75,7 @@ export {
 export type { BillingInterval } from "./polar-products.js";
 export {
   BILLING_INTERVALS,
+  billingIntervalFromPolarProductId,
   CHECKOUT_PRODUCT_KEYS,
   isApiCheckoutProductKey,
   isBillingInterval,

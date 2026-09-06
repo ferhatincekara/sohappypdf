@@ -16,7 +16,9 @@ import {
   resolveBillingCenterSection,
   resolveBillingPlanNotice,
   shouldShowBillingCycleToggle,
+  subscribedBillingInterval,
   webCreditsResetDate,
+  webPlanCheckoutAction,
   webPlanRenewalDate,
 } from "@/features/billing/lib/billing-view";
 import type { PublicBillingStatus } from "@/features/billing/types/billing";
@@ -37,6 +39,7 @@ function createBilling(
     currentPeriodEnd: null,
     canUpgrade: true,
     canManage: false,
+    interval: null,
     ...overrides,
     usage: {
       webCreditsUsed: 12,
@@ -57,6 +60,7 @@ function createBilling(
     },
     api: {
       product: null,
+      interval: null,
       subscriptionStatus: null,
       creditsUsed: 0,
       creditsLimit: 0,
@@ -88,6 +92,7 @@ const proBilling = createBilling({
   currentPeriodEnd: "2026-09-15T12:00:00.000Z",
   canUpgrade: false,
   canManage: true,
+  interval: "monthly",
   usage: {
     webCreditsUsed: 40,
     webCreditsLimit: 2_000,
@@ -102,6 +107,7 @@ const apiBilling = createBilling({
   canManage: true,
   api: {
     product: "starter",
+    interval: "monthly",
     subscriptionStatus: "active",
     creditsUsed: 25,
     creditsLimit: 2_000,
@@ -208,6 +214,9 @@ describe("billing center sections", () => {
     expect(apiProductLabelKey("api-starter")).toBe("starter");
     expect(apiPackCheckoutAction(null, "api-starter")).toBe("subscribe");
     expect(apiPackCheckoutAction("starter", "api-starter")).toBe("current");
+    expect(
+      apiPackCheckoutAction("starter", "api-starter", "monthly", "yearly"),
+    ).toBe("switch");
     expect(apiPackCheckoutAction("starter", "api-growth")).toBe("switch");
   });
 
@@ -284,10 +293,25 @@ describe("billing center sections", () => {
     ).toBe(false);
     expect(
       shouldShowBillingCycleToggle({
+        section: "web",
+        billing: createBilling({
+          plan: "pro",
+          canUpgrade: false,
+          prices: {
+            pro: { monthlyUsd: 5, yearlyUsd: 48 },
+            starter: { monthlyUsd: 9, yearlyUsd: 86 },
+            growth: { monthlyUsd: 29, yearlyUsd: 278 },
+            scale: { monthlyUsd: 99, yearlyUsd: 950 },
+          },
+        }),
+      }),
+    ).toBe(true);
+    expect(
+      shouldShowBillingCycleToggle({
         section: "api",
         billing: apiBilling,
       }),
-    ).toBe(false);
+    ).toBe(true);
     expect(
       shouldShowBillingCycleToggle({
         section: "api",
@@ -307,5 +331,10 @@ describe("billing center sections", () => {
     ).toBe(false);
     expect(canOpenApiPolarPortal(freeBilling.api)).toBe(false);
     expect(canOpenApiPolarPortal(apiBilling.api)).toBe(true);
+    expect(webPlanCheckoutAction(freeBilling, "monthly")).toBe("upgrade");
+    expect(webPlanCheckoutAction(proBilling, "monthly")).toBe("current");
+    expect(webPlanCheckoutAction(proBilling, "yearly")).toBe("switch");
+    expect(subscribedBillingInterval("web", proBilling)).toBe("monthly");
+    expect(subscribedBillingInterval("api", apiBilling)).toBe("monthly");
   });
 });

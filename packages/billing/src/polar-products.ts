@@ -115,6 +115,13 @@ export function isPolarYearlyProductId(
   );
 }
 
+export function billingIntervalFromPolarProductId(
+  polarProductId: string,
+  polar: PolarConfig,
+): BillingInterval {
+  return isPolarYearlyProductId(polarProductId, polar) ? "yearly" : "monthly";
+}
+
 export function monthlyApiCreditsForProduct(
   productKey: ApiProductKey,
   config: ApiCreditConfig = loadApiCreditConfig(),
@@ -161,29 +168,12 @@ export function polarYearlyProductIdForCheckout(
   }
 }
 
-export function polarCheckoutProductIds(
+export function polarProductIdForInterval(
   key: CheckoutProductKey,
-  polar: PolarConfig,
-  interval: BillingInterval = "monthly",
-): string[] {
-  if (interval === "yearly") {
-    const yearly = polarYearlyProductIdForCheckout(key, polar);
-
-    if (yearly !== undefined) {
-      return [yearly];
-    }
-  }
-
-  const monthly = polarProductIdForCheckout(key, polar);
-  return monthly === undefined ? [] : [monthly];
-}
-
-export function polarProductIdForSubscriptionUpdate(
-  key: ApiCheckoutProductKey,
-  currentPolarProductId: string,
+  interval: BillingInterval,
   polar: PolarConfig,
 ): string | undefined {
-  if (isPolarYearlyProductId(currentPolarProductId, polar)) {
+  if (interval === "yearly") {
     return (
       polarYearlyProductIdForCheckout(key, polar) ??
       polarProductIdForCheckout(key, polar)
@@ -191,6 +181,43 @@ export function polarProductIdForSubscriptionUpdate(
   }
 
   return polarProductIdForCheckout(key, polar);
+}
+
+export function polarCheckoutProductIds(
+  key: CheckoutProductKey,
+  polar: PolarConfig,
+  interval: BillingInterval = "monthly",
+): string[] {
+  const selected = polarProductIdForInterval(key, interval, polar);
+  const alternate = polarProductIdForInterval(
+    key,
+    interval === "yearly" ? "monthly" : "yearly",
+    polar,
+  );
+  const ids: string[] = [];
+
+  if (selected !== undefined) {
+    ids.push(selected);
+  }
+
+  if (alternate !== undefined && alternate !== selected) {
+    ids.push(alternate);
+  }
+
+  return ids;
+}
+
+export function polarProductIdForSubscriptionUpdate(
+  key: CheckoutProductKey,
+  currentPolarProductId: string,
+  polar: PolarConfig,
+  interval?: BillingInterval,
+): string | undefined {
+  return polarProductIdForInterval(
+    key,
+    interval ?? billingIntervalFromPolarProductId(currentPolarProductId, polar),
+    polar,
+  );
 }
 
 export function listConfiguredCheckoutProducts(

@@ -64,6 +64,7 @@ export type PublicBillingStatus = {
   currentPeriodEnd: string | null;
   canUpgrade: boolean;
   canManage: boolean;
+  interval: BillingInterval | null;
   usage: {
     webCreditsUsed: number;
     webCreditsLimit: number;
@@ -82,6 +83,7 @@ export type PublicBillingStatus = {
   };
   api: {
     product: ApiProductKey | null;
+    interval: BillingInterval | null;
     subscriptionStatus: BillingSubscriptionStatus | null;
     creditsUsed: number;
     creditsLimit: number;

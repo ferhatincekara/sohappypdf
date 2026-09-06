@@ -293,6 +293,18 @@ export function mapPolarRequestError(error: unknown, action: string): AppError {
   });
 }
 
+export function isPolarCustomerActionRecoverable(error: unknown): boolean {
+  if (isAppError(error) && error.code === APP_ERROR_CODES.VALIDATION_ERROR) {
+    return true;
+  }
+
+  const status =
+    polarStatusCode(error) ??
+    (isAppError(error) ? polarStatusCode(error.cause) : undefined);
+
+  return status === 400 || status === 402 || status === 403 || status === 422;
+}
+
 export function createPolarClient(
   options: CreatePolarClientOptions,
 ): PolarClient {
@@ -360,6 +372,9 @@ export function createPolarClient(
             customer_email: input.customerEmail,
             success_url: input.successUrl,
             ...(returnUrl === undefined ? {} : { return_url: returnUrl }),
+            ...(input.subscriptionId === undefined
+              ? {}
+              : { subscription_id: input.subscriptionId }),
           },
         });
 

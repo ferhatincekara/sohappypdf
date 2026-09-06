@@ -1,7 +1,7 @@
 import type { ApiProductKey } from "@sohappypdf/config";
 import type { BillingCatalogPrices } from "./default-plan-limits.js";
 import type { BillingSubscriptionStatus, PlanId } from "./plan-types.js";
-import type { CheckoutProductKey } from "./polar-products.js";
+import type { BillingInterval, CheckoutProductKey } from "./polar-products.js";
 
 export type {
   BillingCatalogPrices,
@@ -102,6 +102,7 @@ export type PublicBillingStatus = {
   currentPeriodEnd: string | null;
   canUpgrade: boolean;
   canManage: boolean;
+  interval: BillingInterval | null;
   usage: {
     webCreditsUsed: number;
     webCreditsLimit: number;
@@ -120,6 +121,7 @@ export type PublicBillingStatus = {
   };
   api: {
     product: ApiProductKey | null;
+    interval: BillingInterval | null;
     subscriptionStatus: BillingSubscriptionStatus | null;
     creditsUsed: number;
     creditsLimit: number;
@@ -166,6 +168,7 @@ export type PolarClient = {
     customerEmail: string;
     successUrl: string;
     returnUrl?: string;
+    subscriptionId?: string;
   }) => Promise<PolarCheckout>;
   updateSubscription: (input: {
     subscriptionId: string;

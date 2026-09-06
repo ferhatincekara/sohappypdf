@@ -14,6 +14,7 @@ import {
   catalogPriceForCycle,
   formatUsdAmount,
   resolveBillingPlanNotice,
+  webPlanCheckoutAction,
   webPlanRenewalDate,
 } from "@/features/billing/lib/billing-view";
 import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
@@ -65,10 +66,16 @@ export function WebPlanSection({
           ? tStatus(notice.status)
           : undefined;
   const canOpenPolar = canOpenWebPolarPortal(billing);
-  const offer = catalogPriceForCycle(
-    billing.prices.pro,
-    billing.canUpgrade ? cycle : "monthly",
-  );
+  const offer = catalogPriceForCycle(billing.prices.pro, cycle);
+  const checkoutAction = webPlanCheckoutAction(billing, cycle);
+  const checkoutLabel =
+    checkoutAction === "upgrade"
+      ? t("upgrade")
+      : cycle === "yearly"
+        ? t("switchToYearly")
+        : t("switchToMonthly");
+  const checkoutPendingLabel =
+    checkoutAction === "upgrade" ? t("upgrading") : t("switchingInterval");
 
   return (
     <div className="flex flex-col gap-8">
@@ -79,16 +86,16 @@ export function WebPlanSection({
         description={description}
         paid={isPro}
         actions={
-          billing.canUpgrade || canOpenPolar ? (
+          checkoutAction !== "current" || canOpenPolar ? (
             <>
-              {billing.canUpgrade ? (
+              {checkoutAction !== "current" ? (
                 <Button
                   type="button"
                   disabled={isCheckoutPending}
                   aria-busy={isCheckoutPending}
                   onClick={onUpgrade}
                 >
-                  {isCheckoutPending ? t("upgrading") : t("upgrade")}
+                  {isCheckoutPending ? checkoutPendingLabel : checkoutLabel}
                 </Button>
               ) : null}
               <PolarPortalActions

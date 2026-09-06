@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import type { PolarConfig } from "@sohappypdf/config";
 import {
   apiProductKeyFromPolarProductId,
+  billingIntervalFromPolarProductId,
   isApiCheckoutProductKey,
   isCheckoutProductKey,
   isWebProPolarProduct,
@@ -39,10 +40,22 @@ describe("polar products", () => {
     );
     expect(polarCheckoutProductIds("api-starter", polar)).toEqual([
       "prod_starter",
+      "prod_starter_yearly",
     ]);
     expect(polarCheckoutProductIds("api-starter", polar, "yearly")).toEqual([
       "prod_starter_yearly",
+      "prod_starter",
     ]);
+    expect(polarCheckoutProductIds("pro", polar, "yearly")).toEqual([
+      "prod_pro_yearly",
+      "prod_pro",
+    ]);
+    expect(billingIntervalFromPolarProductId("prod_pro_yearly", polar)).toBe(
+      "yearly",
+    );
+    expect(billingIntervalFromPolarProductId("prod_pro", polar)).toBe(
+      "monthly",
+    );
     expect(
       polarProductIdForSubscriptionUpdate(
         "api-growth",
@@ -50,6 +63,17 @@ describe("polar products", () => {
         polar,
       ),
     ).toBe("prod_growth_yearly");
+    expect(
+      polarProductIdForSubscriptionUpdate(
+        "api-starter",
+        "prod_starter",
+        polar,
+        "yearly",
+      ),
+    ).toBe("prod_starter_yearly");
+    expect(
+      polarProductIdForSubscriptionUpdate("pro", "prod_pro", polar, "yearly"),
+    ).toBe("prod_pro_yearly");
     expect(isWebProPolarProduct("prod_pro_yearly", polar)).toBe(true);
     expect(
       polarCheckoutProductIds(

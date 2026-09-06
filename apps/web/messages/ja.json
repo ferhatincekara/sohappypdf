@@ -1460,6 +1460,9 @@
     "openApiPack": "API: {pack}",
     "checkoutIntervalHint": "Polarの決済ページで月額または年額を選べます。",
     "checkoutYearlyHint": "年額はPolarの決済で {price} です。",
+    "switchToYearly": "年額に切り替える",
+    "switchToMonthly": "月額に切り替える",
+    "switchingInterval": "請求間隔を更新しています…",
     "cycle": {
       "label": "請求間隔",
       "monthly": "月額",

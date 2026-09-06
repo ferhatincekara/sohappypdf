@@ -432,7 +432,7 @@ describe("billing API", () => {
     expect(body.checkout.url).toBe(
       "https://polar.example/checkout/starter-yearly",
     );
-    expect(productIds).toEqual(["prod_starter_yearly"]);
+    expect(productIds).toEqual(["prod_starter_yearly", "prod_starter"]);
   });
 
   test("activates Pro after a verified webhook", async () => {

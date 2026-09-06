@@ -38,6 +38,9 @@ describe("billing locales", () => {
     expect(englishKeys).toContain("unconfirmed");
     expect(englishKeys).toContain("refreshStatus");
     expect(englishKeys).toContain("checkoutYearlyHint");
+    expect(englishKeys).toContain("switchToYearly");
+    expect(englishKeys).toContain("switchToMonthly");
+    expect(englishKeys).toContain("switchingInterval");
     expect(englishKeys).toContain("perMonth");
     expect(englishKeys).toContain("perYear");
     expect(englishKeys).toContain("api.includedHint");

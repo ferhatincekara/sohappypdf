@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import {
   createPolarClient,
+  isPolarCustomerActionRecoverable,
   mapPolarRequestError,
   readPolarPortalUrl,
   readPolarValidationSummary,
@@ -82,6 +83,31 @@ describe("readPolarPortalUrl", () => {
         }),
       }),
     ).toBe("https://polar.sh/portal/session");
+  });
+});
+
+describe("isPolarCustomerActionRecoverable", () => {
+  test("recovers Polar payment and validation failures", () => {
+    expect(
+      isPolarCustomerActionRecoverable({ statusCode: 422, message: "no card" }),
+    ).toBe(true);
+    expect(
+      isPolarCustomerActionRecoverable({
+        statusCode: 403,
+        message: "forbidden",
+      }),
+    ).toBe(true);
+    expect(
+      isPolarCustomerActionRecoverable({ statusCode: 401, message: "auth" }),
+    ).toBe(false);
+    expect(
+      isPolarCustomerActionRecoverable(
+        mapPolarRequestError(
+          { statusCode: 422, message: "no card" },
+          "subscription",
+        ),
+      ),
+    ).toBe(true);
   });
 });
 
