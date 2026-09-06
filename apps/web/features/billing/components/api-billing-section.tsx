@@ -189,7 +189,6 @@ export function ApiBillingSection({
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {subscribeProducts.map((product) => {
               const offerPackId = apiProductLabelKey(product);
-              const isSamePack = offerPackId === packId;
               const isCurrent = isSelectedApiOfferPack(
                 billing.api.product,
                 product,
@@ -201,8 +200,6 @@ export function ApiBillingSection({
               const action = apiPackCheckoutAction(
                 billing.api.product,
                 product,
-                billing.api.interval,
-                cycle,
               );
 
               return (
@@ -221,7 +218,7 @@ export function ApiBillingSection({
                   isPending={isCheckoutPending}
                   cta={action}
                   onClick={() => {
-                    if (action === "switch" && !isSamePack) {
+                    if (action === "switch") {
                       setPendingSwitch(product);
                       return;
                     }

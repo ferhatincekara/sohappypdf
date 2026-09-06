@@ -150,22 +150,16 @@ export function apiProductLabelKey(
 export function apiPackCheckoutAction(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
-  currentInterval: BillingInterval | null = null,
-  selectedInterval: BillingInterval = "monthly",
 ): "current" | "subscribe" | "switch" {
   if (current === null) {
     return "subscribe";
   }
 
-  if (apiProductLabelKey(product) !== current) {
-    return "switch";
+  if (apiProductLabelKey(product) === current) {
+    return "current";
   }
 
-  if (currentInterval !== null && currentInterval !== selectedInterval) {
-    return "switch";
-  }
-
-  return "current";
+  return "switch";
 }
 
 export function isSelectedApiOfferPack(

@@ -216,9 +216,6 @@ describe("billing center sections", () => {
     expect(apiProductLabelKey("api-starter")).toBe("starter");
     expect(apiPackCheckoutAction(null, "api-starter")).toBe("subscribe");
     expect(apiPackCheckoutAction("starter", "api-starter")).toBe("current");
-    expect(
-      apiPackCheckoutAction("starter", "api-starter", "monthly", "yearly"),
-    ).toBe("switch");
     expect(isSelectedApiOfferPack("starter", "api-starter")).toBe(true);
     expect(isSelectedApiOfferPack("starter", "api-growth")).toBe(false);
     expect(apiPackCheckoutAction("starter", "api-growth")).toBe("switch");
