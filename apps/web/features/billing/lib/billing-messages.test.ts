@@ -40,6 +40,7 @@ describe("billing locales", () => {
     expect(englishKeys).toContain("checkoutYearlyHint");
     expect(englishKeys).toContain("switchToYearly");
     expect(englishKeys).toContain("switchToMonthly");
+    expect(englishKeys).toContain("current");
     expect(englishKeys).toContain("switchingInterval");
     expect(englishKeys).toContain("perMonth");
     expect(englishKeys).toContain("perYear");

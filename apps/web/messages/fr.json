@@ -1462,6 +1462,7 @@
     "checkoutYearlyHint": "L'annuel est à {price} sur le paiement Polar.",
     "switchToYearly": "Passer à l'annuel",
     "switchToMonthly": "Passer au mensuel",
+    "current": "Offre actuelle",
     "switchingInterval": "Mise à jour de l'intervalle de facturation…",
     "cycle": {
       "label": "Intervalle de facturation",

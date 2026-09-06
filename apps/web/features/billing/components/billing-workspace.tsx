@@ -159,8 +159,8 @@ function BillingWorkspaceInner() {
           cycle={cycle}
           isCheckoutPending={isCheckoutPending}
           isPortalPending={isPortalPending}
-          onUpgrade={() => {
-            startCheckout({ product: "pro", interval: cycle });
+          onUpgrade={(interval) => {
+            startCheckout({ product: "pro", interval });
           }}
           onManage={() => {
             openPortal();

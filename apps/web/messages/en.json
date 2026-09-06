@@ -1462,6 +1462,7 @@
     "checkoutYearlyHint": "Yearly is {price} on Polar checkout.",
     "switchToYearly": "Switch to yearly",
     "switchToMonthly": "Switch to monthly",
+    "current": "Current plan",
     "switchingInterval": "Updating billing interval…",
     "cycle": {
       "label": "Billing interval",

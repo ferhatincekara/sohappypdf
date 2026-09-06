@@ -1462,6 +1462,7 @@
     "checkoutYearlyHint": "O anual custa {price} no checkout da Polar.",
     "switchToYearly": "Mudar para anual",
     "switchToMonthly": "Mudar para mensal",
+    "current": "Plano atual",
     "switchingInterval": "Atualizando o intervalo de cobrança…",
     "cycle": {
       "label": "Intervalo de cobrança",

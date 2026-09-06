@@ -1462,6 +1462,7 @@
     "checkoutYearlyHint": "年額はPolarの決済で {price} です。",
     "switchToYearly": "年額に切り替える",
     "switchToMonthly": "月額に切り替える",
+    "current": "現在のプラン",
     "switchingInterval": "請求間隔を更新しています…",
     "cycle": {
       "label": "請求間隔",

@@ -147,6 +147,13 @@ export function apiProductLabelKey(
   return "starter";
 }
 
+export function isCurrentApiOfferPack(
+  current: PublicBillingStatus["api"]["product"],
+  product: CheckoutProductKey,
+): boolean {
+  return current !== null && apiProductLabelKey(product) === current;
+}
+
 export function apiPackCheckoutAction(
   current: PublicBillingStatus["api"]["product"],
   product: CheckoutProductKey,
@@ -166,6 +173,27 @@ export function apiPackCheckoutAction(
   }
 
   return "switch";
+}
+
+export function isCurrentWebPlanInterval(
+  billing: Pick<PublicBillingStatus, "plan" | "interval">,
+  interval: BillingInterval,
+): boolean {
+  if (billing.plan !== "pro") {
+    return false;
+  }
+
+  return (billing.interval ?? "monthly") === interval;
+}
+
+export function listWebPlanOfferIntervals(
+  billing: Pick<PublicBillingStatus, "prices">,
+): readonly BillingInterval[] {
+  if (billing.prices.pro.yearlyUsd === null) {
+    return ["monthly"];
+  }
+
+  return ["monthly", "yearly"];
 }
 
 export function webPlanCheckoutAction(

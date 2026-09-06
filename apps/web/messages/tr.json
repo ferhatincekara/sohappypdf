@@ -1462,6 +1462,7 @@
     "checkoutYearlyHint": "Yıllık Polar ödemesi {price}.",
     "switchToYearly": "Yıllığa geç",
     "switchToMonthly": "Aylığa geç",
+    "current": "Mevcut plan",
     "switchingInterval": "Fatura dönemi güncelleniyor…",
     "cycle": {
       "label": "Faturalama aralığı",

@@ -24,6 +24,7 @@ import {
   canOpenApiPolarPortal,
   catalogPriceForCycle,
   formatUsdAmount,
+  isCurrentApiOfferPack,
   resolveBillingPlanNotice,
 } from "@/features/billing/lib/billing-view";
 import { formatBillingDisplayDate } from "@/features/billing/lib/format-billing-date";
@@ -169,7 +170,10 @@ export function ApiBillingSection({
                 billing.api.interval,
                 cycle,
               );
-              const isCurrent = action === "current";
+              const isCurrent = isCurrentApiOfferPack(
+                billing.api.product,
+                product,
+              );
 
               return (
                 <BillingOfferCard
@@ -182,7 +186,13 @@ export function ApiBillingSection({
                   unit={
                     offer.interval === "yearly" ? t("perYear") : t("perMonth")
                   }
-                  actionLabel={tApi(action)}
+                  actionLabel={
+                    isCurrent && action === "switch"
+                      ? cycle === "yearly"
+                        ? t("switchToYearly")
+                        : t("switchToMonthly")
+                      : tApi(action)
+                  }
                   isCurrent={isCurrent}
                   isPending={isCheckoutPending}
                   cta={action}
