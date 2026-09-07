@@ -8,7 +8,7 @@ import { getMegaMenuSections } from "@/features/marketing/lib/mega-menu-sections
 export async function MarketingHeader({ user }: { user: AppShellUser | null }) {
   const t = await getTranslations("marketing.nav");
   const isAuthenticated = user !== null;
-  const { startHref, signInHref } = resolveMarketingCtas(isAuthenticated);
+  const { navStartHref, signInHref } = resolveMarketingCtas(isAuthenticated);
   const startLabel = t("getStarted");
   const billing = isAuthenticated ? await getWebToolBilling() : null;
   const sections = getMegaMenuSections();
@@ -16,7 +16,7 @@ export async function MarketingHeader({ user }: { user: AppShellUser | null }) {
   return (
     <MarketingHeaderBar
       user={user}
-      startHref={startHref}
+      startHref={navStartHref}
       signInHref={signInHref}
       startLabel={startLabel}
       signInLabel={t("signIn")}

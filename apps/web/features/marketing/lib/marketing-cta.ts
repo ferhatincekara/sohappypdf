@@ -6,6 +6,10 @@ export function resolveStartHref(isAuthenticated: boolean): string {
   return isAuthenticated ? MARKETING_PATHS.tools : AUTH_PATHS.signup;
 }
 
+export function resolveNavGetStartedHref(): string {
+  return MARKETING_PATHS.tools;
+}
+
 export const BILLING_API_HREF = `${APP_PATHS.billing}?section=api`;
 
 export function resolveProHref(isAuthenticated: boolean): string {
@@ -24,12 +28,14 @@ export function resolveSignInHref(
 
 export function resolveMarketingCtas(isAuthenticated: boolean): {
   startHref: string;
+  navStartHref: string;
   proHref: string;
   apiHref: string;
   signInHref: string;
 } {
   return {
     startHref: resolveStartHref(isAuthenticated),
+    navStartHref: resolveNavGetStartedHref(),
     proHref: resolveProHref(isAuthenticated),
     apiHref: resolveApiBillingHref(isAuthenticated),
     signInHref: resolveSignInHref(isAuthenticated),

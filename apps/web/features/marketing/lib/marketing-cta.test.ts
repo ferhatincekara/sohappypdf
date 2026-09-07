@@ -5,6 +5,7 @@ import {
   BILLING_API_HREF,
   resolveApiBillingHref,
   resolveMarketingCtas,
+  resolveNavGetStartedHref,
   resolveProHref,
   resolveSignInHref,
   resolveStartHref,
@@ -12,9 +13,12 @@ import {
 import { MARKETING_PATHS } from "@/features/marketing/lib/marketing-paths";
 
 describe("marketing CTAs", () => {
-  test("sends guests to signup on Try for free, and signed-in users to tools", () => {
+  test("sends navbar Try for free to tools, and hero Start for free to signup", () => {
+    expect(resolveNavGetStartedHref()).toBe(MARKETING_PATHS.tools);
+    expect(resolveMarketingCtas(false).navStartHref).toBe(MARKETING_PATHS.tools);
     expect(resolveStartHref(false)).toBe(AUTH_PATHS.signup);
     expect(resolveStartHref(true)).toBe(MARKETING_PATHS.tools);
+    expect(resolveMarketingCtas(false).startHref).toBe(AUTH_PATHS.signup);
     expect(resolveSignInHref(false)).toBe(AUTH_PATHS.login);
     expect(resolveSignInHref(true)).toBe(APP_PATHS.settings);
   });
