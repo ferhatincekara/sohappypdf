@@ -96,6 +96,26 @@ export default async function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-WZP8B9ND6D');
+            gtag('config', 'AW-18432308701');
+            gtag('event', 'conversion', {
+              'send_to': 'AW-18432308701/ZMybCO6Z7PIcEN3rmtVE',
+              'value': 1.0,
+              'currency': 'TRY'
+            });
+            window.gtag_report_conversion = function(url) {
+              var callback = function () {
+                if (typeof(url) != 'undefined') {
+                  window.location = url;
+                }
+              };
+              gtag('event', 'conversion', {
+                'send_to': 'AW-18432308701/ZMybCO6Z7PIcEN3rmtVE',
+                'value': 1.0,
+                'currency': 'TRY',
+                'event_callback': callback
+              });
+              return false;
+            };
           `}
         </Script>
         <NextIntlClientProvider locale={locale} messages={messages} now={now}>
