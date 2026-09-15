@@ -43,6 +43,8 @@ export async function renderSearchablePdf(
       command: input.config.ocrMyPdfBin,
       args: [
         forceOcr ? "--force-ocr" : "--skip-text",
+        // E-invoices and other PAdES-signed PDFs otherwise fail before OCR.
+        "--invalidate-digital-signatures",
         "--optimize",
         "0",
         "--output-type",

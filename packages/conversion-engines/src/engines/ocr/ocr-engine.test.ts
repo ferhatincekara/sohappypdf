@@ -9,6 +9,44 @@ import { createOcrEngine } from "./ocr-engine.js";
 const PDF_BYTES = "%PDF-1.4\n%EOF\n";
 
 describe("ocr engine", () => {
+  test("returns an already searchable PDF without OCR", async () => {
+    const workspace = await createConversionWorkspace(
+      "550e8400-e29b-41d4-a716-446655440300",
+    );
+    const calls: RunCommandInput[] = [];
+
+    try {
+      const sourcePath = workspace.join("source.pdf");
+      await writeFile(sourcePath, PDF_BYTES);
+      const engine = createOcrEngine(DEFAULT_CONVERSION_ENGINE_CONFIG, {
+        isBinaryAvailable: () => true,
+        async runCommand(input) {
+          calls.push(input);
+          const outputPath = input.args[input.args.length - 1];
+          if (input.command === "pdftotext" && outputPath !== undefined) {
+            await writeFile(outputPath, "e-Serbest Meslek Makbuzu\n");
+          }
+        },
+      });
+
+      const result = await engine.convert({
+        type: "ocr-pdf",
+        sourcePath,
+        outputDirectory: workspace.directory,
+        sourceFormat: "pdf",
+        targetFormat: "pdf",
+        options: { type: "ocr-pdf", language: "tur", outputMode: "pdf" },
+        additionalSourcePaths: [],
+      });
+
+      expect(calls.some((call) => call.command === "ocrmypdf")).toBe(false);
+      expect(result.filename).toBe("output.pdf");
+      expect(await Bun.file(result.outputPath).text()).toBe(PDF_BYTES);
+    } finally {
+      await workspace.cleanup();
+    }
+  });
+
   test("runs ocrmypdf and returns a searchable PDF", async () => {
     const workspace = await createConversionWorkspace(
       "550e8400-e29b-41d4-a716-446655440301",
@@ -23,9 +61,16 @@ describe("ocr engine", () => {
         async runCommand(input) {
           calls.push(input);
           const outputPath = input.args[input.args.length - 1];
-          if (outputPath !== undefined) {
-            await writeFile(outputPath, PDF_BYTES);
+          if (outputPath === undefined) {
+            return;
           }
+
+          if (input.command === "pdftotext") {
+            await writeFile(outputPath, "\n");
+            return;
+          }
+
+          await writeFile(outputPath, PDF_BYTES);
         },
       });
 
@@ -39,10 +84,11 @@ describe("ocr engine", () => {
         additionalSourcePaths: [],
       });
 
-      expect(calls[0]?.command).toBe("ocrmypdf");
-      expect(calls[0]?.args).toContain("--skip-text");
-      expect(calls[0]?.args).toContain("tur");
-      expect(calls[0]?.acceptExitCodes).toEqual([0, 6]);
+      const ocrCall = calls.find((call) => call.command === "ocrmypdf");
+      expect(ocrCall?.args).toContain("--skip-text");
+      expect(ocrCall?.args).toContain("--invalidate-digital-signatures");
+      expect(ocrCall?.args).toContain("tur");
+      expect(ocrCall?.acceptExitCodes).toEqual([0, 6]);
       expect(result.filename).toBe("output.pdf");
     } finally {
       await workspace.cleanup();
@@ -59,7 +105,11 @@ describe("ocr engine", () => {
       await writeFile(sourcePath, PDF_BYTES);
       const engine = createOcrEngine(DEFAULT_CONVERSION_ENGINE_CONFIG, {
         isBinaryAvailable: () => true,
-        async runCommand() {
+        async runCommand(input) {
+          const outputPath = input.args[input.args.length - 1];
+          if (input.command === "pdftotext" && outputPath !== undefined) {
+            await writeFile(outputPath, "\n");
+          }
           // OCRmyPDF exit 6 does not write an output file.
         },
       });
@@ -94,11 +144,16 @@ describe("ocr engine", () => {
         isBinaryAvailable: () => true,
         async runCommand(input) {
           calls.push(input);
+          const outputPath = input.args[input.args.length - 1];
+          if (input.command === "pdftotext" && outputPath !== undefined) {
+            await writeFile(outputPath, "\n");
+            return;
+          }
+
           if (input.args.includes("--skip-text")) {
             throw new Error("TaggedPDFError");
           }
 
-          const outputPath = input.args[input.args.length - 1];
           if (outputPath !== undefined) {
             await writeFile(outputPath, PDF_BYTES);
           }
@@ -115,9 +170,10 @@ describe("ocr engine", () => {
         additionalSourcePaths: [],
       });
 
-      expect(calls).toHaveLength(2);
-      expect(calls[0]?.args).toContain("--skip-text");
-      expect(calls[1]?.args).toContain("--force-ocr");
+      const ocrCalls = calls.filter((call) => call.command === "ocrmypdf");
+      expect(ocrCalls).toHaveLength(2);
+      expect(ocrCalls[0]?.args).toContain("--skip-text");
+      expect(ocrCalls[1]?.args).toContain("--force-ocr");
       expect(result.filename).toBe("output.pdf");
     } finally {
       await workspace.cleanup();
@@ -145,7 +201,7 @@ describe("ocr engine", () => {
 
           if (input.command === "pdftotext") {
             textPasses += 1;
-            await writeFile(outputPath, textPasses === 1 ? "   \n" : "Hello\n");
+            await writeFile(outputPath, textPasses < 3 ? "   \n" : "Hello\n");
             return;
           }
 

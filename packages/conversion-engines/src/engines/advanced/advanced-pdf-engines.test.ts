@@ -4,48 +4,6 @@ import { PDFDocument, StandardFonts } from "pdf-lib";
 import { DEFAULT_CONVERSION_ENGINE_CONFIG } from "../../engine-config.js";
 import type { RunCommandInput } from "../../process/run-process.js";
 import { createConversionWorkspace } from "../../workspace/temp-workspace.js";
-import { createOcrEngine } from "../ocr/ocr-engine.js";
-
-describe("ocr engine", () => {
-  test("runs ocrmypdf and returns a searchable PDF", async () => {
-    const workspace = await createConversionWorkspace(
-      "550e8400-e29b-41d4-a716-446655440301",
-    );
-    const calls: RunCommandInput[] = [];
-
-    try {
-      const sourcePath = workspace.join("source.pdf");
-      await writeFile(sourcePath, "%PDF-1.4\n");
-      const engine = createOcrEngine(DEFAULT_CONVERSION_ENGINE_CONFIG, {
-        isBinaryAvailable: () => true,
-        async runCommand(input) {
-          calls.push(input);
-          const outputPath = input.args[input.args.length - 1];
-          if (outputPath !== undefined) {
-            await writeFile(outputPath, "%PDF-1.4\n%EOF\n");
-          }
-        },
-      });
-
-      const result = await engine.convert({
-        type: "ocr-pdf",
-        sourcePath,
-        outputDirectory: workspace.directory,
-        sourceFormat: "pdf",
-        targetFormat: "pdf",
-        options: { type: "ocr-pdf", language: "eng", outputMode: "pdf" },
-        additionalSourcePaths: [],
-      });
-
-      expect(calls[0]?.command).toBe("ocrmypdf");
-      expect(calls[0]?.args).toContain("--skip-text");
-      expect(calls[0]?.acceptExitCodes).toEqual([0, 6]);
-      expect(result.filename).toBe("output.pdf");
-    } finally {
-      await workspace.cleanup();
-    }
-  });
-});
 
 describe("pdf edit overlays", () => {
   test("adds text overlays for edit-pdf", async () => {

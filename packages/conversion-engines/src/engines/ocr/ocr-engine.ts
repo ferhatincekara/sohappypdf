@@ -56,6 +56,64 @@ export function createOcrEngine(
         );
       }
 
+      const extractText = async (
+        pdfPath: string,
+        outputPath: string,
+      ): Promise<string> => {
+        await runCommand({
+          command: config.pdftotextBin,
+          args: ["-enc", "UTF-8", pdfPath, outputPath],
+          cwd: input.outputDirectory,
+          timeoutMs: config.conversionTimeoutMs,
+        });
+
+        return readFile(outputPath, "utf8");
+      };
+
+      const wantsText =
+        input.options.outputMode === "txt" || input.targetFormat === "txt";
+      const existingTextPath = joinJobPath(
+        input.outputDirectory,
+        wantsText ? "output.txt" : "existing.txt",
+      );
+
+      let existingText: string | undefined;
+      try {
+        existingText = await extractText(input.sourcePath, existingTextPath);
+      } catch {
+        existingText = undefined;
+      }
+
+      if (existingText !== undefined && existingText.trim().length > 0) {
+        if (wantsText) {
+          await validateConversionOutput({
+            outputPath: existingTextPath,
+            expectedFormat: "txt",
+            maxBytes: config.maxOutputFileSizeBytes,
+          });
+
+          return {
+            outputPath: existingTextPath,
+            mimeType: outputMimeType("txt"),
+            filename: outputFilename("txt"),
+          };
+        }
+
+        const outputPath = joinJobPath(input.outputDirectory, "output.pdf");
+        await copyFile(input.sourcePath, outputPath);
+        await validateConversionOutput({
+          outputPath,
+          expectedFormat: "pdf",
+          maxBytes: config.maxOutputFileSizeBytes,
+        });
+
+        return {
+          outputPath,
+          mimeType: outputMimeType("pdf"),
+          filename: outputFilename("pdf"),
+        };
+      }
+
       const searchablePdfPath = joinJobPath(input.outputDirectory, "ocr.pdf");
       const ocrInput = {
         config,
@@ -67,26 +125,15 @@ export function createOcrEngine(
       };
       const rendered = await renderSearchablePdf(ocrInput);
 
-      if (input.options.outputMode === "txt" || input.targetFormat === "txt") {
+      if (wantsText) {
         const outputPath = joinJobPath(input.outputDirectory, "output.txt");
-        const extractText = async (): Promise<string> => {
-          await runCommand({
-            command: config.pdftotextBin,
-            args: ["-enc", "UTF-8", searchablePdfPath, outputPath],
-            cwd: input.outputDirectory,
-            timeoutMs: config.conversionTimeoutMs,
-          });
-
-          return readFile(outputPath, "utf8");
-        };
-
-        let text = await extractText();
+        let text = await extractText(searchablePdfPath, outputPath);
         if (text.trim().length === 0 && !rendered.forcedOcr) {
           await renderSearchablePdf({
             ...ocrInput,
             forceOcr: true,
           });
-          text = await extractText();
+          text = await extractText(searchablePdfPath, outputPath);
         }
 
         if (text.trim().length === 0) {
