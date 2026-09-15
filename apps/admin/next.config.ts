@@ -47,10 +47,15 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   agentRules: false,
   transpilePackages: workspacePackages,
+  serverExternalPackages: ["bullmq", "ioredis", "@valkey/valkey-glide"],
   webpack: (config) => {
     config.resolve.extensionAlias = {
       ".js": [".ts", ".tsx", ".js"],
       ".mjs": [".mts", ".mjs"],
+    };
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@valkey/valkey-glide": false,
     };
     return config;
   },

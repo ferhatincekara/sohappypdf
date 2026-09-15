@@ -4,6 +4,12 @@ import type { BillingSubscriptionStatus, PlanId } from "./plan-types.js";
 import type { BillingInterval, CheckoutProductKey } from "./polar-products.js";
 import type { PolarRecurringInterval } from "./polar-subscription.js";
 
+export type {
+  BillingCatalogPrices,
+  CatalogOfferPrice,
+} from "./default-plan-limits.js";
+export type { PolarRecurringInterval } from "./polar-subscription.js";
+
 export type BillingCustomerRecord = {
   userId: string;
   polarCustomerId: string;
