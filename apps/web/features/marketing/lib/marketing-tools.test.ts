@@ -25,7 +25,7 @@ describe("marketing tool navigation", () => {
       registered.map((tool) => tool.route),
     );
     expect(items.every((item) => item.availability !== "planned")).toBe(true);
-    expect(items.find((item) => item.id === "ocr-pdf")?.premium).toBe(true);
+    expect(items.find((item) => item.id === "ocr-pdf")?.premium).toBe(false);
     expect(items.find((item) => item.id === "merge-pdf")?.premium).toBe(false);
   });
 
@@ -122,7 +122,9 @@ describe("marketing tool navigation", () => {
 
   test("returns curated related tools from the catalog", () => {
     const merge = listRegisteredTools().find((tool) => tool.id === "merge-pdf");
-    const word = listRegisteredTools().find((tool) => tool.id === "pdf-to-word");
+    const word = listRegisteredTools().find(
+      (tool) => tool.id === "pdf-to-word",
+    );
     expect(merge).toBeDefined();
     expect(word).toBeDefined();
     if (merge === undefined || word === undefined) {

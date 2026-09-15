@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Quelles sont les limites de fichiers ?",
-          "a": "Free permet 5 opérations par jour, 25 Mo par fichier, un fichier à la fois et 50 pages par fichier — avec ou sans compte. L'OCR est réservé à Pro. Pro coûte 5 $ par mois pour des opérations illimitées et une limite de 1 Go par fichier. Les fichiers expirent au bout d'environ deux heures. Les crédits de l'API développeur sont facturés à part."
+          "a": "Free permet 5 opérations par jour, 25 Mo par fichier, un fichier à la fois et 50 pages par fichier — avec ou sans compte. Pro coûte 5 $ par mois pour des opérations illimitées et une limite de 1 Go par fichier. Les fichiers expirent au bout d'environ deux heures. Les crédits de l'API développeur sont facturés à part."
         },
         "account": {
           "q": "Que change la connexion ?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "Que comprend Pro ?",
-          "a": "Pro coûte 5 $ par mois. Il débloque l'OCR, l'édition, la signature électronique et les outils IA, supprime le plafond quotidien d'opérations et relève la limite de taille à 1 Go."
+          "a": "Pro coûte 5 $ par mois. Il supprime le plafond quotidien d'opérations et relève la limite de taille à 1 Go."
         },
         "payment": {
           "q": "Comment fonctionnent le paiement et l'annulation ?",
@@ -390,13 +390,13 @@
       "free": {
         "name": "Free",
         "badge": "Inclus",
-        "summary": "Cinq opérations par jour, un fichier à la fois, avec un plafond de 25 Mo. Mêmes limites avec ou sans compte. L'OCR n'est pas inclus.",
+        "summary": "Cinq opérations par jour, un fichier à la fois, avec un plafond de 25 Mo. Mêmes limites avec ou sans compte.",
         "cta": "Commencer gratuitement"
       },
       "pro": {
         "name": "Pro",
         "badge": "Illimité",
-        "summary": "Opérations navigateur illimitées, fichiers de 1 Go, OCR et outils premium.",
+        "summary": "Opérations navigateur illimitées et fichiers de 1 Go.",
         "cta": "Démarrer Pro"
       },
       "api": {
@@ -460,7 +460,7 @@
         "supportIncluded": "Support par e-mail",
         "retention": "Les fichiers expirent après {hours} heures",
         "premiumTools": "OCR et outils Pro",
-        "standardTools": "Outils PDF standard",
+        "standardTools": "Tous les outils PDF",
         "apiCredits": "{count} crédits API par pack",
         "apiKeys": "{count} clés API",
         "apiRate": "{count} requêtes API par minute",
@@ -1588,7 +1588,7 @@
     "loading": "Chargement…",
     "proRequired": {
       "title": "Cet outil est inclus avec Pro",
-      "description": "L'OCR, l'édition, la signature électronique et les outils IA sont disponibles avec l'offre Pro.",
+      "description": "Tous les outils en ligne sont disponibles avec Free. Pro enlève le plafond quotidien d'opérations et relève les limites de fichiers.",
       "cta": "Passer à Pro"
     },
     "status": "Statut : {status}",

@@ -47,16 +47,8 @@ describe("end-to-end product coverage", () => {
     }
   });
 
-  test("anonymous users cannot start premium or planned tools", () => {
-    const blocked = [
-      "protect-pdf",
-      "unlock-pdf",
-      "ocr-pdf",
-      "sign-pdf",
-      "ai-summarizer",
-      "translate-pdf",
-      "web-to-pdf",
-    ] as const;
+  test("anonymous users cannot start planned tools", () => {
+    const blocked = ["ai-summarizer", "translate-pdf", "web-to-pdf"] as const;
 
     for (const type of blocked) {
       expect(isAnonymousToolAllowed(type)).toBe(false);
@@ -72,13 +64,13 @@ describe("end-to-end product coverage", () => {
     }
 
     const allowed = resolveAnonymousConversionRequest(
-      { sourceFileId: SOURCE_FILE_ID, type: "pdf-to-png" },
+      { sourceFileId: SOURCE_FILE_ID, type: "ocr-pdf" },
       DEFAULT_ANONYMOUS_CONFIG,
     );
-    expect(allowed.type).toBe("pdf-to-png");
+    expect(allowed.type).toBe("ocr-pdf");
   });
 
-  test("Free AI credits stay at zero so Pro-only AI tools cannot run on Free", () => {
+  test("Free keeps a daily operation cap while Pro is unlimited", () => {
     expect(DEFAULT_PLAN_LIMITS.free.monthlyAiCredits).toBe(0);
     expect(DEFAULT_PLAN_LIMITS.pro.monthlyAiCredits).toBeGreaterThan(0);
     expect(DEFAULT_PLAN_LIMITS.pro.operationsPerDay).toBeNull();

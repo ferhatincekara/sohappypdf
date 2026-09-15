@@ -31,7 +31,6 @@ export async function PricingCards({
               t("limits.multiFile"),
               t("limits.noPageCap"),
               t("limits.retention", { hours: 2 }),
-              t("limits.premiumTools"),
               t("limits.supportIncluded"),
             ]
           : [
@@ -47,7 +46,7 @@ export async function PricingCards({
                 count: plan.maxPagesPerFile ?? 0,
               }),
               t("limits.retention", { hours: 2 }),
-              t("limits.noOcr"),
+              t("limits.standardTools"),
               t("limits.noSupport"),
             ];
 

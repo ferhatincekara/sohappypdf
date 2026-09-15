@@ -35,7 +35,7 @@ Tarih bloğu veya ilk sayfada “GİZLİ” de gerekiyorsa o [Edit PDF](/edit-pd
 
 ## Operasyonu vuran limitler
 
-Anonim ve Ücretsiz: günde 5 işlem, 25 MB, aynı anda 1 dosya, 50 sayfa. Sign PDF Pro aracıdır. Stajyer Free’deyse ve paket 80 sayfaysa bunu planla.
+Anonim ve Ücretsiz: günde 5 işlem, 25 MB, aynı anda 1 dosya, 50 sayfa. Free’de 80 sayfalık paket sayfa tavanında durur.
 
 İmzalı dosyayı e-postala, iki saat sonra sekmeye dönüp indirme düğmesinin durmasını bekleme. Önce yere kaydet.
 

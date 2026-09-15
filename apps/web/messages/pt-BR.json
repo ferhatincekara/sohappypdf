@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Quais são os limites de arquivo?",
-          "a": "O Free é 5 operações por dia, 25 MB por arquivo, um arquivo por vez e 50 páginas por arquivo — com ou sem conta. OCR é exclusivo do Pro. O Pro custa US$ 5 por mês para operações ilimitadas e limite de 1 GB por arquivo. Os arquivos expiram depois de cerca de duas horas. Os créditos da API para desenvolvedores são cobrados à parte."
+          "a": "O Free é 5 operações por dia, 25 MB por arquivo, um arquivo por vez e 50 páginas por arquivo — com ou sem conta. O Pro custa US$ 5 por mês para operações ilimitadas e limite de 1 GB por arquivo. Os arquivos expiram depois de cerca de duas horas. Os créditos da API para desenvolvedores são cobrados à parte."
         },
         "account": {
           "q": "O que muda ao entrar?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "O que o Pro inclui?",
-          "a": "O Pro custa US$ 5 por mês. Ele libera OCR, edição, assinatura eletrônica e ferramentas de IA, remove o teto diário de operações e sobe o limite de tamanho para 1 GB."
+          "a": "O Pro custa US$ 5 por mês. Ele remove o teto diário de operações e sobe o limite de tamanho para 1 GB."
         },
         "payment": {
           "q": "Como funcionam o pagamento e o cancelamento?",
@@ -390,13 +390,13 @@
       "free": {
         "name": "Free",
         "badge": "Incluído",
-        "summary": "Cinco operações por dia, um arquivo por vez, com teto de 25 MB. Os mesmos limites com ou sem conta. OCR não está incluído.",
+        "summary": "Cinco operações por dia, um arquivo por vez, com teto de 25 MB. Os mesmos limites com ou sem conta.",
         "cta": "Comece grátis"
       },
       "pro": {
         "name": "Pro",
         "badge": "Ilimitado",
-        "summary": "Operações ilimitadas no navegador, arquivos de 1 GB, OCR e ferramentas premium.",
+        "summary": "Operações ilimitadas no navegador e arquivos de 1 GB.",
         "cta": "Começar o Pro"
       },
       "api": {
@@ -460,7 +460,7 @@
         "supportIncluded": "Suporte por e-mail",
         "retention": "Os arquivos expiram depois de {hours} horas",
         "premiumTools": "OCR e ferramentas Pro",
-        "standardTools": "Ferramentas padrão de PDF",
+        "standardTools": "Todas as ferramentas PDF",
         "apiCredits": "{count} créditos de API por pacote",
         "apiKeys": "{count} chaves de API",
         "apiRate": "{count} requisições de API por minuto",
@@ -1588,7 +1588,7 @@
     "loading": "Carregando…",
     "proRequired": {
       "title": "Esta ferramenta está incluída no Pro",
-      "description": "OCR, edição, assinatura eletrônica e ferramentas de IA estão disponíveis no plano Pro.",
+      "description": "Todas as ferramentas ativas estão no Free. O Pro remove o teto diário de operações e sobe os limites de arquivo.",
       "cta": "Fazer upgrade para o Pro"
     },
     "status": "Status: {status}",

@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Welche Dateilimits gelten?",
-          "a": "Free sind 5 Vorgänge pro Tag, 25 MB pro Datei, eine Datei gleichzeitig und 50 Seiten pro Datei — mit oder ohne Konto. OCR ist nur bei Pro. Pro kostet 5 $ pro Monat für unbegrenzte Vorgänge und ein Dateilimit von 1 GB. Dateien laufen nach etwa zwei Stunden ab. Developer-API-Credits werden getrennt abgerechnet."
+          "a": "Free sind 5 Vorgänge pro Tag, 25 MB pro Datei, eine Datei gleichzeitig und 50 Seiten pro Datei — mit oder ohne Konto. Pro kostet 5 $ pro Monat für unbegrenzte Vorgänge und ein Dateilimit von 1 GB. Dateien laufen nach etwa zwei Stunden ab. Developer-API-Credits werden getrennt abgerechnet."
         },
         "account": {
           "q": "Was ändert sich durch die Anmeldung?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "Was ist in Pro enthalten?",
-          "a": "Pro kostet 5 $ pro Monat. Es schaltet OCR, Bearbeitung, E-Signatur und KI-Tools frei, entfernt die tägliche Vorgangsgrenze und hebt das Dateigrößenlimit auf 1 GB."
+          "a": "Pro kostet 5 $ pro Monat. Es entfernt die tägliche Vorgangsgrenze und hebt das Dateigrößenlimit auf 1 GB."
         },
         "payment": {
           "q": "Wie funktionieren Zahlung und Kündigung?",
@@ -390,13 +390,13 @@
       "free": {
         "name": "Free",
         "badge": "Enthalten",
-        "summary": "Fünf Vorgänge pro Tag, eine Datei gleichzeitig, mit einer Größengrenze von 25 MB. Dieselben Limits mit oder ohne Konto. OCR ist nicht enthalten.",
+        "summary": "Fünf Vorgänge pro Tag, eine Datei gleichzeitig, mit einer Größengrenze von 25 MB. Dieselben Limits mit oder ohne Konto.",
         "cta": "Kostenlos starten"
       },
       "pro": {
         "name": "Pro",
         "badge": "Unbegrenzt",
-        "summary": "Unbegrenzte Browser-Vorgänge, 1-GB-Dateien, OCR und Premium-Tools.",
+        "summary": "Unbegrenzte Browser-Vorgänge und 1-GB-Dateien.",
         "cta": "Pro starten"
       },
       "api": {
@@ -460,7 +460,7 @@
         "supportIncluded": "E-Mail-Support",
         "retention": "Dateien laufen nach {hours} Stunden ab",
         "premiumTools": "OCR und Pro-Tools",
-        "standardTools": "Standard-PDF-Tools",
+        "standardTools": "Alle PDF-Tools",
         "apiCredits": "{count} API-Credits pro Paket",
         "apiKeys": "{count} API-Keys",
         "apiRate": "{count} API-Anfragen pro Minute",
@@ -1588,7 +1588,7 @@
     "loading": "Wird geladen…",
     "proRequired": {
       "title": "Dieses Tool ist in Pro enthalten",
-      "description": "OCR, Bearbeitung, E-Signatur und KI-Tools sind im Pro-Plan verfügbar.",
+      "description": "Jedes live Tool ist im Free-Plan verfügbar. Pro entfernt die tägliche Vorgangsgrenze und hebt Dateilimits an.",
       "cta": "Auf Pro upgraden"
     },
     "status": "Status: {status}",

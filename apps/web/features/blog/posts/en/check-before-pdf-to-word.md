@@ -16,7 +16,7 @@ Converting a contract to Word is usually the right move when you need to edit cl
 
 Open the PDF and try to select a sentence. If the cursor highlights real text, [PDF to Word](/pdf-to-word) can rebuild an editable `.docx`. If you can only draw a box around the page, the file is an image of a document. That path needs OCR.
 
-OCR is a Pro tool: [PDF to Word OCR](/pdf-to-word-ocr). Free and anonymous sessions will be asked to upgrade. Do not run the standard converter on a scan and expect clean paragraphs. You will get a page-shaped picture inside Word.
+Scans need [PDF to Word OCR](/pdf-to-word-ocr). Do not run the standard converter on a scan and expect clean paragraphs. You will get a page-shaped picture inside Word.
 
 ## 2. Unlock the file before you convert
 

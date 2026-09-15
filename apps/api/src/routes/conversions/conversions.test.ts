@@ -1021,7 +1021,7 @@ describe("conversion API", () => {
     });
   });
 
-  test("rejects a Pro-only tool for a Free session user", async () => {
+  test("allows a Free session user to start OCR", async () => {
     const context = createConversionApp({
       identity: sessionIdentity,
     });
@@ -1037,13 +1037,10 @@ describe("conversion API", () => {
       }),
     });
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(201);
     expect(await response.json()).toMatchObject({
-      error: {
-        code: APP_ERROR_CODES.PLAN_LIMIT_REACHED,
-        message: "This tool requires Pro",
-      },
+      conversion: { type: "ocr-pdf", status: "queued" },
     });
-    expect(context.jobs).toHaveLength(0);
+    expect(context.jobs).toHaveLength(1);
   });
 });

@@ -1317,22 +1317,13 @@ describe("createBillingService", () => {
     }
   });
 
-  test("blocks Free users from Pro-only tools and allows Pro", async () => {
+  test("allows Free and Pro users to run OCR", async () => {
     const freeBilling = createService();
 
-    try {
-      await freeBilling.assertCanUseTool({
-        userId: "user_1",
-        toolId: "ocr-pdf",
-      });
-      throw new Error("expected Pro-only tool to be blocked");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-      if (isAppError(error)) {
-        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
-      }
-    }
-
+    await freeBilling.assertCanUseTool({
+      userId: "user_1",
+      toolId: "ocr-pdf",
+    });
     await freeBilling.assertCanUseTool({
       userId: "user_1",
       toolId: "merge-pdf",

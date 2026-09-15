@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Dosya limitleri neler?",
-          "a": "Ücretsiz plan günde 5 işlem, dosya başına 25 MB, aynı anda 1 dosya ve dosya başına 50 sayfa ile sınırlıdır — hesap olsun olmasın. OCR yalnızca Pro’dadır. Pro aylık 5 dolardır; sınırsız işlem ve 1 GB dosya limiti sunar. Dosyalar yaklaşık iki saat sonra süresi dolar. Geliştirici API kredileri ayrı faturalanır."
+          "a": "Ücretsiz plan günde 5 işlem, dosya başına 25 MB, aynı anda 1 dosya ve dosya başına 50 sayfa ile sınırlıdır — hesap olsun olmasın. Pro aylık 5 dolardır; sınırsız işlem ve 1 GB dosya limiti sunar. Dosyalar yaklaşık iki saat sonra süresi dolar. Geliştirici API kredileri ayrı faturalanır."
         },
         "account": {
           "q": "Giriş yapmak neyi değiştirir?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "Pro neleri kapsar?",
-          "a": "Pro aylık 5 dolardır. OCR, düzenleme, e-imza ve yapay zeka araçlarını açar, günlük işlem tavanını kaldırır ve dosya boyutunu 1 GB’a çıkarır."
+          "a": "Pro aylık 5 dolardır. Günlük işlem tavanını kaldırır ve dosya boyutunu 1 GB’a çıkarır."
         },
         "payment": {
           "q": "Ödeme ve iptal nasıl işler?",
@@ -390,13 +390,13 @@
       "free": {
         "name": "Ücretsiz",
         "badge": "Dahil",
-        "summary": "Günde 5 işlem, aynı anda 1 dosya, 25 MB boyut limiti. Hesap olsa da olmasa da aynı limitler. OCR dahil değildir.",
+        "summary": "Günde 5 işlem, aynı anda 1 dosya, 25 MB boyut limiti. Hesap olsa da olmasa da aynı limitler.",
         "cta": "Ücretsiz başla"
       },
       "pro": {
         "name": "Pro",
         "badge": "Sınırsız",
-        "summary": "Sınırsız tarayıcı işlemi, 1 GB dosyalar, OCR ve premium araçlar.",
+        "summary": "Sınırsız tarayıcı işlemi ve 1 GB dosyalar.",
         "cta": "Pro’ya başla"
       },
       "api": {
@@ -460,7 +460,7 @@
         "supportIncluded": "E-posta desteği",
         "retention": "Dosyalar {hours} saat sonra süresi dolar",
         "premiumTools": "OCR ve Pro araçlar",
-        "standardTools": "Standart PDF araçları",
+        "standardTools": "Tüm PDF araçları",
         "apiCredits": "Paket başına {count} API kredisi",
         "apiKeys": "{count} API anahtarı",
         "apiRate": "Dakikada {count} API isteği",
@@ -1588,7 +1588,7 @@
     "loading": "Yükleniyor…",
     "proRequired": {
       "title": "Bu araç Pro plana dahil",
-      "description": "OCR, düzenleme, e-imza ve yapay zeka araçları Pro planda kullanılabilir.",
+      "description": "Canlıdaki her araç Ücretsiz planda kullanılabilir. Pro günlük işlem tavanını kaldırır ve dosya limitlerini yükseltir.",
       "cta": "Pro'ya geç"
     },
     "status": "Durum: {status}",

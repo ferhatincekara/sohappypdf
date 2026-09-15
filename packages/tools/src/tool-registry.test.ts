@@ -183,9 +183,9 @@ describe("tool catalog", () => {
   test("allows anonymous use only for registered anonymous tools", () => {
     expect(isRegisteredToolId("merge-pdf")).toBe(true);
     expect(isAnonymousToolAllowed("merge-pdf")).toBe(true);
-    expect(isAnonymousToolAllowed("protect-pdf")).toBe(false);
-    expect(isAnonymousToolAllowed("unlock-pdf")).toBe(false);
-    expect(isAnonymousToolAllowed("ocr-pdf")).toBe(false);
+    expect(isAnonymousToolAllowed("protect-pdf")).toBe(true);
+    expect(isAnonymousToolAllowed("unlock-pdf")).toBe(true);
+    expect(isAnonymousToolAllowed("ocr-pdf")).toBe(true);
     expect(isAnonymousToolAllowed("unknown-tool")).toBe(false);
     expect(findCatalogTool("web-to-pdf")?.availability).toBe("planned");
     expect(findCatalogTool("translate-pdf")?.availability).toBe("planned");
@@ -204,7 +204,7 @@ describe("tool catalog", () => {
     expect(findCatalogTool("jpg-to-pdf")?.maxInputCount).toBe(20);
   });
 
-  test("keeps premium tools off Free and planned tools off the live registry", () => {
+  test("keeps every executable tool on Free and planned tools off the live registry", () => {
     const merge = findCatalogTool("merge-pdf");
     const ocr = findCatalogTool("ocr-pdf");
     const translate = findCatalogTool("translate-pdf");
@@ -217,21 +217,12 @@ describe("tool catalog", () => {
     }
 
     expect(isPremiumTool(merge)).toBe(false);
-    expect(isPremiumTool(ocr)).toBe(true);
-    expect(isPremiumTool(translate)).toBe(true);
+    expect(isPremiumTool(ocr)).toBe(false);
+    expect(isPremiumTool(translate)).toBe(false);
 
     assertToolAllowedOnPlan("merge-pdf", "free");
+    assertToolAllowedOnPlan("ocr-pdf", "free");
     assertToolAllowedOnPlan("ocr-pdf", "pro");
-
-    try {
-      assertToolAllowedOnPlan("ocr-pdf", "free");
-      throw new Error("expected ocr-pdf to require Pro");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-      if (isAppError(error)) {
-        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
-      }
-    }
 
     try {
       assertToolAllowedOnPlan("translate-pdf", "pro");

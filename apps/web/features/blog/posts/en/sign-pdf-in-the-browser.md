@@ -35,7 +35,7 @@ If you also need a date block or “CONFIDENTIAL” on the first page, that is [
 
 ## Limits that bite operations teams
 
-Anonymous and Free: 5 operations per day, 25 MB, one file at a time, 50 pages. Sign PDF is a Pro tool. Plan for that if the intern is on Free and the packet is 80 pages.
+Anonymous and Free: 5 operations per day, 25 MB, one file at a time, 50 pages. An 80-page packet on Free will stop at the page cap.
 
 Do not email a signed file and then come back to the tab two hours later expecting the download button to still work. Save it locally first.
 

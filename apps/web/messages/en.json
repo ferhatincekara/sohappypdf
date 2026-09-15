@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "What are the file limits?",
-          "a": "Free is 5 operations per day, 25 MB per file, one file at a time, and 50 pages per file — with or without an account. OCR is Pro-only. Pro is $5 per month for unlimited operations and a 1 GB file limit. Files expire after about two hours. Developer API credits are billed separately."
+          "a": "Free is 5 operations per day, 25 MB per file, one file at a time, and 50 pages per file — with or without an account. Pro is $5 per month for unlimited operations and a 1 GB file limit. Files expire after about two hours. Developer API credits are billed separately."
         },
         "account": {
           "q": "What does signing in change?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "What does Pro include?",
-          "a": "Pro is $5 per month. It unlocks OCR, editing, e-sign, and AI tools, removes the daily operation cap, and raises the file size limit to 1 GB."
+          "a": "Pro is $5 per month. It removes the daily operation cap and raises the file size limit to 1 GB."
         },
         "payment": {
           "q": "How do payment and cancellation work?",
@@ -390,13 +390,13 @@
       "free": {
         "name": "Free",
         "badge": "Included",
-        "summary": "Five operations a day, one file at a time, with a 25 MB size cap. Same limits with or without an account. OCR is not included.",
+        "summary": "Five operations a day, one file at a time, with a 25 MB size cap. Same limits with or without an account.",
         "cta": "Start for free"
       },
       "pro": {
         "name": "Pro",
         "badge": "Unlimited",
-        "summary": "Unlimited browser operations, 1 GB files, OCR, and premium tools.",
+        "summary": "Unlimited browser operations and 1 GB files.",
         "cta": "Start Pro"
       },
       "api": {
@@ -460,7 +460,7 @@
         "supportIncluded": "Email support",
         "retention": "Files expire after {hours} hours",
         "premiumTools": "OCR and Pro tools",
-        "standardTools": "Standard PDF tools",
+        "standardTools": "All PDF tools",
         "apiCredits": "{count} API credits per pack",
         "apiKeys": "{count} API keys",
         "apiRate": "{count} API requests per minute",
@@ -1588,7 +1588,7 @@
     "loading": "Loading…",
     "proRequired": {
       "title": "This tool is included with Pro",
-      "description": "OCR, editing, e-sign, and AI tools are available on the Pro plan.",
+      "description": "Every live tool is available on Free. Pro removes the daily operation cap and raises file limits.",
       "cta": "Upgrade to Pro"
     },
     "status": "Status: {status}",

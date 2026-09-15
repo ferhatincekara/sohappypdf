@@ -29,7 +29,7 @@ Metin ağırlıklı sözleşmeler kahramanca sıkıştırma istemez. Görsel ağ
 - **Medium** varsayılandır. E-posta için ilk denemedir.
 - **High** sert tavanlar içindir (birçok portal hâlâ “1 MB altı” der). Sonuçta kanıtla. Göndermeden fotoğraflara ve küçük yazıya zoom yap.
 
-High hâlâ yetmiyorsa genelde taramayla savaşıyorsundur. Aranabilir metin de istiyorsan [OCR PDF](/ocr-pdf) ayrı bir iştir ve Pro’dadır. Sıkıştırma metin katmanı eklemez.
+High hâlâ yetmiyorsa genelde taramayla savaşıyorsundur. Aranabilir metin de istiyorsan [OCR PDF](/ocr-pdf) ayrı bir iştir. Sıkıştırma metin katmanı eklemez.
 
 ## Aynı dosyayı sonsuza kadar döndürme
 

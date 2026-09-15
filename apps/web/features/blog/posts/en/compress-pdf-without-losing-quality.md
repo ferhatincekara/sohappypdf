@@ -29,7 +29,7 @@ Text-heavy contracts rarely need heroic compression. Image-heavy pitch decks do.
 - **Medium** is the default. It is the right first try for email.
 - **High** is for hard caps (many portals still say “under 1 MB”). Proof the result. Zoom into photos and small type before you send it.
 
-If high still misses the cap, you are usually fighting a scan. Run [Compress PDF](/compress-pdf) after [OCR PDF](/ocr-pdf) only when you also need searchable text — OCR is Pro and does a different job. Compression does not add a text layer.
+If high still misses the cap, you are usually fighting a scan. Run [Compress PDF](/compress-pdf) after [OCR PDF](/ocr-pdf) only when you also need searchable text — OCR does a different job. Compression does not add a text layer.
 
 ## Do not loop the same file forever
 

@@ -16,7 +16,7 @@ Bir sözleşmeyi Word’e çevirmek, madde düzenlemek, yorum bırakmak veya red
 
 PDF’i açıp bir cümleyi seçmeyi dene. İmleç gerçek metni vurguluyorsa [PDF to Word](/pdf-to-word) düzenlenebilir bir `.docx` üretebilir. Yalnızca sayfanın etrafında kutu çizebiliyorsan dosya belgenin görüntüsüdür. Bu yol OCR ister.
 
-OCR bir Pro aracıdır: [PDF to Word OCR](/pdf-to-word-ocr). Ücretsiz ve anonim oturumlar yükseltme ister. Taramayı standart dönüştürücüye atıp temiz paragraf bekleme. Word içinde sayfa şeklinde bir resim alırsın.
+Taramalar [PDF to Word OCR](/pdf-to-word-ocr) ister. Taramayı standart dönüştürücüye atıp temiz paragraf bekleme. Word içinde sayfa şeklinde bir resim alırsın.
 
 ## 2. Dönüştürmeden önce kilidi aç
 
