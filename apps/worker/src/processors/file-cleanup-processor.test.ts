@@ -77,7 +77,7 @@ describe("file cleanup processor", () => {
     }
   });
 
-  test("removes purged files after detaching conversions", async () => {
+  test("keeps purged file metadata for execution logs", async () => {
     const hardDeleted: string[] = [];
     const detached: string[] = [];
     const processor = createFileCleanupProcessor({
@@ -91,10 +91,6 @@ describe("file cleanup processor", () => {
           };
         },
         async listPurgedFiles() {
-          if (hardDeleted.length > 0) {
-            return [];
-          }
-
           return [
             {
               id: "550e8400-e29b-41d4-a716-446655440000",
@@ -128,7 +124,7 @@ describe("file cleanup processor", () => {
     });
 
     await processor({ id: "cleanup-1", attemptsMade: 0 });
-    expect(detached).toEqual(["550e8400-e29b-41d4-a716-446655440000"]);
-    expect(hardDeleted).toEqual(["550e8400-e29b-41d4-a716-446655440000"]);
+    expect(detached).toEqual([]);
+    expect(hardDeleted).toEqual([]);
   });
 });

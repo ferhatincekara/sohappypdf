@@ -7,6 +7,7 @@ import { APP_ERROR_CODES, isAppError } from "@sohappypdf/core";
 import { createBillingService } from "./billing-service.js";
 import { INCLUDED_API_CREDITS_PER_MONTH } from "./default-plan-limits.js";
 import { createMemoryBillingRepository } from "./memory-billing-repository.js";
+import { DEFAULT_PLAN_LIMITS } from "./plan-config.js";
 import { getUtcMonthPeriod } from "./usage-period.js";
 
 const now = new Date("2026-08-15T12:00:00.000Z");
@@ -17,6 +18,7 @@ function createService(options?: {
   repository?: ReturnType<typeof createMemoryBillingRepository>;
   env?: Record<string, string | undefined>;
   now?: Date;
+  planCatalog?: Parameters<typeof createBillingService>[0]["planCatalog"];
 }) {
   return createBillingService({
     repository: options?.repository ?? createMemoryBillingRepository(),
@@ -24,6 +26,7 @@ function createService(options?: {
       POLAR_API_STARTER_PRODUCT_ID: "prod_api_starter",
       ...options?.env,
     }),
+    planCatalog: options?.planCatalog,
     now: () => options?.now ?? now,
   });
 }
@@ -289,7 +292,16 @@ describe("API credits", () => {
   test("keeps web and API balances independent", async () => {
     const repository = createMemoryBillingRepository();
     await seedApiSubscription(repository);
-    const billing = createService({ repository });
+    const billing = createService({
+      repository,
+      planCatalog: {
+        free: {
+          ...DEFAULT_PLAN_LIMITS.free,
+          monthlyWebCredits: 10,
+        },
+        pro: DEFAULT_PLAN_LIMITS.pro,
+      },
+    });
 
     await billing.consumeWebCredits({
       userId: "user_1",

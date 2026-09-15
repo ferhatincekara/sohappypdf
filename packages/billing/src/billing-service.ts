@@ -16,6 +16,7 @@ import { shouldRefundAiCredits } from "./ai-credit-refund.js";
 import { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";
 import { resolveApiCreditPeriod } from "./api-credit-period.js";
 import { shouldRefundApiCredits } from "./api-credit-refund.js";
+import { usesMonthlyWebCredits } from "./billed-amount.js";
 import type { BillingRepository } from "./billing-repository.js";
 import type {
   AiCreditBalance,
@@ -252,6 +253,20 @@ export function createBillingService(
   ): Promise<WebCreditBalance> {
     const { entitlements, period } = await resolveUsageContext(userId);
 
+    if (!usesMonthlyWebCredits(entitlements.limits.monthlyWebCredits)) {
+      const usage = await options.repository.getOrCreateUsagePeriod({
+        userId,
+        periodStart: period.start,
+        periodEnd: period.end,
+      });
+
+      return {
+        webCreditsGranted: usage.webCreditsGranted,
+        webCreditsUsed: usage.webCreditsUsed,
+        webCreditsRemaining: usage.webCreditsGranted - usage.webCreditsUsed,
+      };
+    }
+
     return options.repository.ensureWebCreditGrant({
       userId,
       periodStart: period.start,
@@ -477,6 +492,8 @@ export function createBillingService(
         currentPeriodStart: parsed.currentPeriodStart,
         currentPeriodEnd: parsed.currentPeriodEnd,
         endedAt: parsed.endedAt,
+        amountCents: parsed.amountCents,
+        recurringInterval: parsed.recurringInterval,
         updatedAt: now(),
       });
       await revokeLocalApiSubscriptionIfPolarId(
@@ -501,6 +518,8 @@ export function createBillingService(
         currentPeriodStart: parsed.currentPeriodStart,
         currentPeriodEnd: parsed.currentPeriodEnd,
         endedAt: parsed.endedAt,
+        amountCents: parsed.amountCents,
+        recurringInterval: parsed.recurringInterval,
         updatedAt: now(),
       });
       await revokeLocalSubscriptionIfPolarId(
@@ -955,7 +974,10 @@ export function createBillingService(
 
     async assertCanSpendWebCredits(input) {
       const entitlements = await getEntitlements(input.userId);
-      if (entitlements.limits.operationsPerDay === null) {
+      if (
+        entitlements.limits.operationsPerDay === null ||
+        !usesMonthlyWebCredits(entitlements.limits.monthlyWebCredits)
+      ) {
         return;
       }
 
@@ -1027,7 +1049,10 @@ export function createBillingService(
 
     async consumeWebCredits(input) {
       const entitlements = await getEntitlements(input.userId);
-      if (entitlements.limits.operationsPerDay === null) {
+      if (
+        entitlements.limits.operationsPerDay === null ||
+        !usesMonthlyWebCredits(entitlements.limits.monthlyWebCredits)
+      ) {
         return true;
       }
 

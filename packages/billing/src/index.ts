@@ -7,6 +7,11 @@ export { shouldRefundAiCredits } from "./ai-credit-refund.js";
 export { resolveApiCreditCost, usesApiCredits } from "./api-credit-cost.js";
 export { resolveApiCreditPeriod } from "./api-credit-period.js";
 export { shouldRefundApiCredits } from "./api-credit-refund.js";
+export {
+  monthlyCentsFromBilledAmount,
+  monthlyUsdFromBilledAmount,
+  usesMonthlyWebCredits,
+} from "./billed-amount.js";
 export type { BillingRepository } from "./billing-repository.js";
 export { createBillingRepository } from "./billing-repository.js";
 export type {
@@ -83,6 +88,7 @@ export {
 } from "./polar-products.js";
 export {
   isSubscriptionWebhookType,
+  type PolarRecurringInterval,
   parsePolarSubscription,
   planFromPolarProductId,
 } from "./polar-subscription.js";

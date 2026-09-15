@@ -45,7 +45,6 @@ export function createFileCleanupProcessor(
     };
     let conversionsDeleted = 0;
     let anonymousSessionsDeleted = 0;
-    let filesRemoved = 0;
 
     for (let batch = 0; batch < FILE_CLEANUP_MAX_BATCHES_PER_JOB; batch += 1) {
       const expiredConversions =
@@ -62,21 +61,6 @@ export function createFileCleanupProcessor(
       totals.failed += result.failed;
       totals.failureFileIds.push(...result.failureFileIds);
 
-      const purgedFiles = await dependencies.files.listPurgedFiles(
-        dependencies.batchSize,
-      );
-
-      for (const file of purgedFiles) {
-        try {
-          await dependencies.conversions.deleteReferencingFile(file.id);
-          await dependencies.files.hardDeleteFile(file.id);
-          filesRemoved += 1;
-        } catch {
-          totals.failed += 1;
-          totals.failureFileIds.push(file.id);
-        }
-      }
-
       if (dependencies.anonymousSessions !== undefined) {
         const sessions = await dependencies.anonymousSessions.deleteExpired({
           now: now(),
@@ -85,11 +69,7 @@ export function createFileCleanupProcessor(
         anonymousSessionsDeleted += sessions.deleted;
       }
 
-      if (
-        result.scanned === 0 &&
-        expiredConversions.scanned === 0 &&
-        purgedFiles.length === 0
-      ) {
+      if (result.scanned === 0 && expiredConversions.scanned === 0) {
         break;
       }
     }
@@ -99,7 +79,6 @@ export function createFileCleanupProcessor(
       deleted: totals.deleted,
       failed: totals.failed,
       conversionsDeleted,
-      filesRemoved,
       anonymousSessionsDeleted,
       durationMs: Date.now() - startedAt,
     });

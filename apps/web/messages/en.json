@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "What are the file limits?",
-          "a": "Free is 5 operations per day, 25 MB per file, one file at a time, and 50 pages per file — with or without an account. OCR is Pro-only. Pro is $5 per month for unlimited operations and a 1 GB file limit. Files expire after about two hours. Developer API credits are billed separately."
+          "a": "Free is 5 operations per day, 25 MB per file, one file at a time, and 50 pages per file — with or without an account. OCR is Pro-only. Pro is currently complimentary for unlimited operations and a 1 GB file limit. Files expire after about two hours. Developer API credits are billed separately."
         },
         "account": {
           "q": "What does signing in change?",
@@ -253,7 +253,7 @@
         },
         "credits": {
           "q": "How do credits work?",
-          "a": "Web operations on Free are capped daily. Pro is $5 per month for unlimited web use. API credits are billed separately on Developer packs and meter programmatic usage."
+          "a": "Web operations on Free are capped daily. Pro is currently complimentary for unlimited web use. API credits are billed separately on Developer packs and meter programmatic usage."
         },
         "api": {
           "q": "Is there a developer API?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "What does Pro include?",
-          "a": "Pro is $5 per month. It unlocks OCR, editing, e-sign, and AI tools, removes the daily operation cap, and raises the file size limit to 1 GB."
+          "a": "Pro is currently complimentary. It unlocks OCR, editing, e-sign, and AI tools, removes the daily operation cap, and raises the file size limit to 1 GB."
         },
         "payment": {
           "q": "How do payment and cancellation work?",
@@ -380,7 +380,7 @@
       "title": "Free, Pro, and Developer",
       "description": "Web plans cover browser tools. Developer credit packs are billed separately for the public API.",
       "viewPage": "View pricing",
-      "note": "Pro is $5 per month. Upgrades and API credit packs use Polar checkout after you sign in.",
+      "note": "Pro is currently complimentary. Upgrades and API credit packs use Polar checkout after you sign in.",
       "interval": "/month",
       "intervalYear": "/year",
       "web": {

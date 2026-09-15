@@ -308,7 +308,7 @@ describe("billing API", () => {
     const serialized = JSON.stringify(body);
 
     expect(response.status).toBe(200);
-    expect(body.prices.pro.monthlyUsd).toBe(12);
+    expect(body.prices.pro.monthlyUsd).toBe(0);
     expect(body.prices.starter.monthlyUsd).toBe(15);
     expect(serialized).not.toContain("prod_");
     expect(serialized).not.toContain("polar_at_test");
@@ -323,12 +323,12 @@ describe("billing API", () => {
     expect(body.billing.plan).toBe("free");
     expect(body.billing.canUpgrade).toBe(true);
     expect(body.billing.canManage).toBe(false);
-    expect(body.billing.usage.webCreditsLimit).toBe(1_550);
-    expect(body.billing.usage.webCreditsRemaining).toBe(1_550);
+    expect(body.billing.usage.webCreditsLimit).toBe(0);
+    expect(body.billing.usage.webCreditsRemaining).toBe(0);
     expect(body.billing.usage.aiCreditsLimit).toBe(0);
     expect(body.billing.usage.conversionsLimit).toBe(5);
     expect(body.billing.api.creditsLimit).toBe(100);
-    expect(body.billing.prices.pro.monthlyUsd).toBe(5);
+    expect(body.billing.prices.pro.monthlyUsd).toBe(0);
     expect(JSON.stringify(body).includes("polar_at_test")).toBe(false);
   });
 

@@ -33,7 +33,7 @@ describe("public plans", () => {
     }
 
     expect(plans.find((plan) => plan.id === "free")?.monthlyPriceUsd).toBe(0);
-    expect(plans.find((plan) => plan.id === "pro")?.monthlyPriceUsd).toBe(5);
+    expect(plans.find((plan) => plan.id === "pro")?.monthlyPriceUsd).toBe(0);
   });
 
   test("uses Polar catalog amounts when they are available", () => {

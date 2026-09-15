@@ -1,5 +1,10 @@
 import { getBillingService } from "@sohappypdf/billing";
 import {
+  DEFAULT_API_CREDIT_PACKS,
+  FREE_OPERATIONS_PER_DAY,
+  INCLUDED_API_CREDITS_PER_MONTH,
+} from "@sohappypdf/billing/plans";
+import {
   apiKeys,
   apiSubscriptions,
   billingSubscriptions,
@@ -12,7 +17,7 @@ import {
   webCreditLedgerEntries,
 } from "@sohappypdf/db";
 import { and, desc, eq, gte, ilike, inArray, lte, or, sql } from "drizzle-orm";
-import { parseOptionalDate } from "@/server/query/date-range";
+import { parseOptionalDate, startOfUtcDay } from "@/server/query/date-range";
 import { paginated, parsePage, parsePageSize } from "@/server/query/pagination";
 import {
   ACTIVE_SUBSCRIPTION_SQL,
@@ -41,9 +46,30 @@ export type AdminUserListRow = {
   lastActivityAt: Date | null;
   webPlan: "free" | "pro";
   developerPlan: "none" | "starter" | "growth" | "scale";
-  webCreditsRemaining: number | null;
-  apiCreditsRemaining: number | null;
+  dailyOperationsUsed: number;
+  dailyOperationsLimit: number | null;
+  apiCreditsRemaining: number;
 };
+
+function entitledApiCredits(
+  pack: "none" | "starter" | "growth" | "scale",
+): number {
+  if (pack === "none") {
+    return INCLUDED_API_CREDITS_PER_MONTH;
+  }
+
+  return DEFAULT_API_CREDIT_PACKS[pack];
+}
+
+function remainingApiCredits(input: {
+  pack: "none" | "starter" | "growth" | "scale";
+  granted: number | null | undefined;
+  used: number | null | undefined;
+}): number {
+  const entitled = entitledApiCredits(input.pack);
+  const granted = Math.max(input.granted ?? 0, entitled);
+  return Math.max(0, granted - (input.used ?? 0));
+}
 
 export async function listAdminUsers(filters: AdminUserListFilters) {
   const db = getDb();
@@ -139,6 +165,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
   }
 
   const userIds = users.map((row) => row.id);
+  const today = startOfUtcDay(new Date());
   const [
     proRows,
     developerRows,
@@ -146,6 +173,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     sessionActivity,
     usageActivity,
     keyActivity,
+    dailyUsageRows,
   ] = await Promise.all([
     db
       .select({ userId: billingSubscriptions.userId })
@@ -202,6 +230,19 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
       .from(apiKeys)
       .where(inArray(apiKeys.userId, userIds))
       .groupBy(apiKeys.userId),
+    db
+      .select({
+        userId: conversionUsageEvents.userId,
+        value: sql<number>`count(*)::int`,
+      })
+      .from(conversionUsageEvents)
+      .where(
+        and(
+          inArray(conversionUsageEvents.userId, userIds),
+          gte(conversionUsageEvents.createdAt, today),
+        ),
+      )
+      .groupBy(conversionUsageEvents.userId),
   ]);
 
   const proUserIds = new Set(proRows.map((row) => row.userId));
@@ -224,8 +265,8 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     string,
     {
       periodStart: Date;
-      webCreditsRemaining: number;
-      apiCreditsRemaining: number;
+      apiCreditsGranted: number;
+      apiCreditsUsed: number;
     }
   >();
 
@@ -234,10 +275,16 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     if (current === undefined || row.periodStart > current.periodStart) {
       creditsByUser.set(row.userId, {
         periodStart: row.periodStart,
-        webCreditsRemaining: row.webCreditsGranted - row.webCreditsUsed,
-        apiCreditsRemaining: row.apiCreditsGranted - row.apiCreditsUsed,
+        apiCreditsGranted: row.apiCreditsGranted,
+        apiCreditsUsed: row.apiCreditsUsed,
       });
     }
+  }
+
+  const dailyUsedByUser = new Map<string, number>();
+
+  for (const row of dailyUsageRows) {
+    dailyUsedByUser.set(row.userId, countInt(row.value));
   }
 
   const lastActivityByUser = new Map<string, Date>();
@@ -256,14 +303,21 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
 
   const rows: AdminUserListRow[] = users.map((row) => {
     const credits = creditsByUser.get(row.id);
+    const webPlan = proUserIds.has(row.id) ? "pro" : "free";
+    const developerPlan = developerByUser.get(row.id)?.productKey ?? "none";
 
     return {
       ...row,
       lastActivityAt: lastActivityByUser.get(row.id) ?? null,
-      webPlan: proUserIds.has(row.id) ? "pro" : "free",
-      developerPlan: developerByUser.get(row.id)?.productKey ?? "none",
-      webCreditsRemaining: credits?.webCreditsRemaining ?? null,
-      apiCreditsRemaining: credits?.apiCreditsRemaining ?? null,
+      webPlan,
+      developerPlan,
+      dailyOperationsUsed: dailyUsedByUser.get(row.id) ?? 0,
+      dailyOperationsLimit: webPlan === "pro" ? null : FREE_OPERATIONS_PER_DAY,
+      apiCreditsRemaining: remainingApiCredits({
+        pack: developerPlan,
+        granted: credits?.apiCreditsGranted,
+        used: credits?.apiCreditsUsed,
+      }),
     };
   });
 
@@ -307,12 +361,12 @@ export async function getAdminUserDetail(userId: string) {
     entitlements,
     webSubscription,
     apiSubscription,
-    webBalance,
     apiBalance,
     keys,
     recentExecutions,
     recentLedger,
     recentSessions,
+    dailyUsedRow,
   ] = await Promise.all([
     billing.getEntitlements(userId),
     db
@@ -340,7 +394,6 @@ export async function getAdminUserDetail(userId: string) {
       .orderBy(desc(apiSubscriptions.updatedAt))
       .limit(1)
       .then((rows) => rows[0] ?? null),
-    billing.getWebCreditBalance(userId),
     billing.getApiCreditBalance(userId),
     db
       .select({
@@ -399,6 +452,18 @@ export async function getAdminUserDetail(userId: string) {
       .where(eq(session.userId, userId))
       .orderBy(desc(session.updatedAt))
       .limit(5),
+    db
+      .select({
+        value: sql<number>`count(*)::int`,
+      })
+      .from(conversionUsageEvents)
+      .where(
+        and(
+          eq(conversionUsageEvents.userId, userId),
+          gte(conversionUsageEvents.createdAt, startOfUtcDay(new Date())),
+        ),
+      )
+      .then((rows) => rows[0] ?? { value: 0 }),
   ]);
 
   return {
@@ -409,14 +474,33 @@ export async function getAdminUserDetail(userId: string) {
     credits: {
       web: {
         unlimited: entitlements.plan === "pro",
-        webCreditsGranted: webBalance.webCreditsGranted,
-        webCreditsUsed: webBalance.webCreditsUsed,
-        webCreditsRemaining: webBalance.webCreditsRemaining,
+        dailyUsed: countInt(dailyUsedRow.value),
+        dailyLimit: entitlements.limits.operationsPerDay,
       },
       api: {
-        apiCreditsGranted: apiBalance.apiCreditsGranted,
+        apiCreditsGranted: Math.max(
+          apiBalance.apiCreditsGranted,
+          entitledApiCredits(
+            apiSubscription !== null &&
+              (apiSubscription.status === "active" ||
+                apiSubscription.status === "trialing" ||
+                apiSubscription.status === "past_due")
+              ? apiSubscription.productKey
+              : "none",
+          ),
+        ),
         apiCreditsUsed: apiBalance.apiCreditsUsed,
-        apiCreditsRemaining: apiBalance.apiCreditsRemaining,
+        apiCreditsRemaining: remainingApiCredits({
+          pack:
+            apiSubscription !== null &&
+            (apiSubscription.status === "active" ||
+              apiSubscription.status === "trialing" ||
+              apiSubscription.status === "past_due")
+              ? apiSubscription.productKey
+              : "none",
+          granted: apiBalance.apiCreditsGranted,
+          used: apiBalance.apiCreditsUsed,
+        }),
       },
     },
     apiKeys: keys,

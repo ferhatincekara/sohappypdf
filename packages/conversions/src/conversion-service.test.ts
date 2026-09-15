@@ -815,7 +815,7 @@ describe("conversion service", () => {
     const cleaned = await service.cleanupExpiredConversions();
 
     expect(listed.conversions).toEqual([]);
-    expect(cleaned).toEqual({ scanned: 1, deleted: 1 });
+    expect(cleaned).toEqual({ scanned: 0, deleted: 0 });
   });
 
   test("returns expired owned conversions for history metadata", async () => {
@@ -840,7 +840,7 @@ describe("conversion service", () => {
     expect(loaded.expiresAt?.toISOString()).toBe("2026-08-23T18:00:00.000Z");
   });
 
-  test("deletes expired conversions idempotently", async () => {
+  test("keeps expired conversions for audit history", async () => {
     const service = createConversionService({
       repository: createMemoryRepository(),
       files: createFileLookup([sourceFile]),
@@ -855,19 +855,14 @@ describe("conversion service", () => {
 
     const first = await service.cleanupExpiredConversions();
     const second = await service.cleanupExpiredConversions();
+    const loaded = await service.getOwnedConversion(
+      created.id,
+      sourceFile.ownerId,
+    );
 
-    expect(first).toEqual({ scanned: 1, deleted: 1 });
+    expect(first).toEqual({ scanned: 0, deleted: 0 });
     expect(second).toEqual({ scanned: 0, deleted: 0 });
-
-    try {
-      await service.getOwnedConversion(created.id, sourceFile.ownerId);
-      throw new Error("expected missing conversion");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-      if (isAppError(error)) {
-        expect(error.code).toBe("NOT_FOUND");
-      }
-    }
+    expect(loaded.id).toBe(created.id);
   });
 
   test("detaches conversions that reference a file before hard delete", async () => {

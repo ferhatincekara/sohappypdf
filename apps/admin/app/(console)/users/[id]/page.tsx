@@ -11,7 +11,12 @@ import {
   SuspendUserButton,
   UserActionBar,
 } from "@/features/users/user-actions";
-import { formatDateTime, maskApiKeyPrefix, shortId } from "@/lib/format";
+import {
+  formatDateTime,
+  formatNumber,
+  maskApiKeyPrefix,
+  shortId,
+} from "@/lib/format";
 import { getAdminUserDetail } from "@/server/query/users";
 
 export default async function UserDetailPage({
@@ -123,7 +128,7 @@ export default async function UserDetailPage({
                 label: "Web tools",
                 value: detail.credits.web.unlimited
                   ? "Unlimited"
-                  : `${detail.credits.web.webCreditsRemaining} left of ${detail.credits.web.webCreditsGranted} this period`,
+                  : `${formatNumber(detail.credits.web.dailyUsed)} of ${formatNumber(detail.credits.web.dailyLimit)} today`,
               },
               {
                 label: "API credits",

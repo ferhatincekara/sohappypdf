@@ -58,9 +58,9 @@ describe("default plan limits", () => {
     });
   });
 
-  test("publishes the Pro web list price as five US dollars per month", () => {
+  test("publishes the Pro web list price as complimentary", () => {
     expect(WEB_PLAN_MONTHLY_PRICE_USD.free).toBe(0);
-    expect(WEB_PLAN_MONTHLY_PRICE_USD.pro).toBe(5);
+    expect(WEB_PLAN_MONTHLY_PRICE_USD.pro).toBe(0);
   });
 
   test("publishes Developer API pack list prices with a yearly discount", () => {

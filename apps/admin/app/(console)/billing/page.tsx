@@ -33,7 +33,7 @@ export default async function BillingPage() {
         <MetricCard
           label="Estimated MRR"
           value={`$${formatNumber(billing.estimatedMrrUsd)}`}
-          hint="Catalog list prices × active subscriptions"
+          hint="Polar billed amounts on active subscriptions. 100% coupons count as $0."
         />
         <MetricCard
           label="API Starter"
@@ -48,7 +48,7 @@ export default async function BillingPage() {
       <div className="grid gap-4 xl:grid-cols-2">
         <ChartCard
           title="Active subscriptions"
-          description="Current paid web and API packs."
+          description="Current web and API packs. Complimentary Polar coupons do not add MRR."
         >
           <BarChart
             items={[

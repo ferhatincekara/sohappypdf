@@ -2,11 +2,7 @@ import type { ApiProductKey } from "@sohappypdf/config";
 import type { BillingCatalogPrices } from "./default-plan-limits.js";
 import type { BillingSubscriptionStatus, PlanId } from "./plan-types.js";
 import type { BillingInterval, CheckoutProductKey } from "./polar-products.js";
-
-export type {
-  BillingCatalogPrices,
-  CatalogOfferPrice,
-} from "./default-plan-limits.js";
+import type { PolarRecurringInterval } from "./polar-subscription.js";
 
 export type BillingCustomerRecord = {
   userId: string;
@@ -26,6 +22,8 @@ export type BillingSubscriptionRecord = {
   currentPeriodStart: Date | null;
   currentPeriodEnd: Date | null;
   endedAt: Date | null;
+  amountCents?: number | null;
+  recurringInterval?: PolarRecurringInterval | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -91,6 +89,8 @@ export type ApiSubscriptionRecord = {
   currentPeriodStart: Date | null;
   currentPeriodEnd: Date | null;
   endedAt: Date | null;
+  amountCents?: number | null;
+  recurringInterval?: PolarRecurringInterval | null;
   createdAt: Date;
   updatedAt: Date;
 };

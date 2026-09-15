@@ -388,9 +388,9 @@ describe("createBillingService", () => {
     expect(status.canManage).toBe(false);
     expect(status.interval).toBeNull();
     expect(status.api.interval).toBeNull();
-    expect(status.usage.webCreditsLimit).toBe(1_550);
+    expect(status.usage.webCreditsLimit).toBe(0);
     expect(status.usage.webCreditsUsed).toBe(0);
-    expect(status.usage.webCreditsRemaining).toBe(1_550);
+    expect(status.usage.webCreditsRemaining).toBe(0);
     expect(status.usage.aiCreditsLimit).toBe(0);
     expect(status.usage.aiCreditsUsed).toBe(0);
     expect(status.usage.aiCreditsRemaining).toBe(0);
@@ -402,7 +402,7 @@ describe("createBillingService", () => {
     expect(status.api.creditsLimit).toBe(100);
     expect(status.api.creditsRemaining).toBe(100);
     expect(status.api.product).toBeNull();
-    expect(status.prices.pro.monthlyUsd).toBe(5);
+    expect(status.prices.pro.monthlyUsd).toBe(0);
     expect(status.prices.starter.monthlyUsd).toBe(9);
     expect(JSON.stringify(status).includes("polar_at_test")).toBe(false);
   });
@@ -1413,7 +1413,7 @@ describe("createBillingService", () => {
     });
     const serialized = JSON.stringify(status);
 
-    expect(status.prices.pro.monthlyUsd).toBe(12);
+    expect(status.prices.pro.monthlyUsd).toBe(0);
     expect(status.prices.starter.monthlyUsd).toBe(15);
     expect(status.prices.starter.yearlyUsd).toBe(144);
     expect(status.prices.growth.monthlyUsd).toBe(29);

@@ -17,6 +17,8 @@ export const SUBSCRIPTION_WEBHOOK_TYPES = [
 export type SubscriptionWebhookType =
   (typeof SUBSCRIPTION_WEBHOOK_TYPES)[number];
 
+export type PolarRecurringInterval = "month" | "year" | "week" | "day";
+
 export type ParsedPolarSubscription = {
   polarSubscriptionId: string;
   polarCustomerId: string | null;
@@ -27,6 +29,8 @@ export type ParsedPolarSubscription = {
   currentPeriodStart: Date | null;
   currentPeriodEnd: Date | null;
   endedAt: Date | null;
+  amountCents: number | null;
+  recurringInterval: PolarRecurringInterval | null;
 };
 
 export function isSubscriptionWebhookType(
@@ -114,6 +118,60 @@ function readNestedId(
   return undefined;
 }
 
+function readNonNegativeInteger(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isInteger(value) && value >= 0) {
+    return value;
+  }
+
+  return undefined;
+}
+
+function readRecurringInterval(value: unknown): PolarRecurringInterval | null {
+  if (value === "month" || value === "monthly") {
+    return "month";
+  }
+
+  if (value === "year" || value === "yearly") {
+    return "year";
+  }
+
+  if (value === "week" || value === "weekly") {
+    return "week";
+  }
+
+  if (value === "day" || value === "daily") {
+    return "day";
+  }
+
+  return null;
+}
+
+function billedAmountFromPolar(record: Record<string, unknown>): {
+  amountCents: number | null;
+  recurringInterval: PolarRecurringInterval | null;
+} {
+  const discount = asRecord(record.discount);
+  const discountType = readString(discount?.type);
+  const duration = readString(discount?.duration);
+  const basisPoints = readNonNegativeInteger(
+    discount?.basisPoints ?? discount?.basis_points,
+  );
+  const percentage =
+    discountType === "percentage" && basisPoints !== undefined
+      ? basisPoints / 100
+      : readNonNegativeInteger(discount?.percentage);
+  const foreverDiscount =
+    discount !== undefined && duration !== "once" && percentage === 100;
+  const amount = readNonNegativeInteger(record.amount);
+
+  return {
+    amountCents: foreverDiscount ? 0 : (amount ?? null),
+    recurringInterval: readRecurringInterval(
+      record.recurringInterval ?? record.recurring_interval,
+    ),
+  };
+}
+
 export function parsePolarSubscription(
   data: unknown,
 ): ParsedPolarSubscription | undefined {
@@ -152,6 +210,8 @@ export function parsePolarSubscription(
     readString(customer?.external_id) ??
     null;
 
+  const billed = billedAmountFromPolar(record);
+
   return {
     polarSubscriptionId,
     polarCustomerId,
@@ -171,5 +231,7 @@ export function parsePolarSubscription(
     endedAt: readDate(
       record.endedAt ?? record.ended_at ?? record.endsAt ?? record.ends_at,
     ),
+    amountCents: billed.amountCents,
+    recurringInterval: billed.recurringInterval,
   };
 }

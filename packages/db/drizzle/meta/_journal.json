@@ -120,6 +120,13 @@
       "when": 1787575000000,
       "tag": "0016_admin_authorization",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1787580000000,
+      "tag": "0017_subscription_billed_amount",
+      "breakpoints": true
     }
   ]
 }

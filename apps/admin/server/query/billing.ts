@@ -1,5 +1,6 @@
 import {
   API_PACK_MONTHLY_PRICE_USD,
+  monthlyUsdFromBilledAmount,
   WEB_PLAN_MONTHLY_PRICE_USD,
 } from "@sohappypdf/billing";
 import {
@@ -13,6 +14,30 @@ import { desc, eq, sql } from "drizzle-orm";
 import { startOfUtcDay } from "@/server/query/date-range";
 import { ACTIVE_SUBSCRIPTION_SQL, countInt } from "@/server/query/sql";
 
+export async function getEstimatedMrrUsd(db = getDb()) {
+  const [webRows, apiRows] = await Promise.all([
+    db
+      .select({
+        amountCents: billingSubscriptions.amountCents,
+        recurringInterval: billingSubscriptions.recurringInterval,
+      })
+      .from(billingSubscriptions)
+      .where(ACTIVE_SUBSCRIPTION_SQL),
+    db
+      .select({
+        amountCents: apiSubscriptions.amountCents,
+        recurringInterval: apiSubscriptions.recurringInterval,
+      })
+      .from(apiSubscriptions)
+      .where(ACTIVE_SUBSCRIPTION_SQL),
+  ]);
+
+  return [...webRows, ...apiRows].reduce(
+    (total, row) => total + monthlyUsdFromBilledAmount(row),
+    0,
+  );
+}
+
 export async function getAdminBillingOverview() {
   const db = getDb();
   const today = startOfUtcDay(new Date());
@@ -25,6 +50,7 @@ export async function getAdminBillingOverview() {
     recentWebhooks,
     recentWebSubscriptions,
     recentApiSubscriptions,
+    estimatedMrrUsd,
   ] = await Promise.all([
     db
       .select({ value: sql<number>`count(*)::int` })
@@ -91,6 +117,7 @@ export async function getAdminBillingOverview() {
       .leftJoin(user, eq(user.id, apiSubscriptions.userId))
       .orderBy(desc(apiSubscriptions.updatedAt))
       .limit(15),
+    getEstimatedMrrUsd(db),
   ]);
 
   const apiCounts = {
@@ -114,12 +141,8 @@ export async function getAdminBillingOverview() {
       ...apiCounts,
       listPricesUsd: API_PACK_MONTHLY_PRICE_USD,
     },
-    estimatedMrrUsd:
-      countInt(activePro?.value) * WEB_PLAN_MONTHLY_PRICE_USD.pro +
-      apiCounts.starter * API_PACK_MONTHLY_PRICE_USD.starter +
-      apiCounts.growth * API_PACK_MONTHLY_PRICE_USD.growth +
-      apiCounts.scale * API_PACK_MONTHLY_PRICE_USD.scale,
-    estimatedMrrSource: "derived" as const,
+    estimatedMrrUsd,
+    estimatedMrrSource: "billed" as const,
     recentWebhooks,
     recentWebSubscriptions,
     recentApiSubscriptions,

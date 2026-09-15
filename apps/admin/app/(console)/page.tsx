@@ -147,7 +147,7 @@ export default async function DashboardPage() {
           <MetricCard
             label="Estimated MRR"
             value={`$${formatNumber(metrics.revenue.estimatedMrrUsd)}`}
-            hint="Derived from catalog list prices × active subscriptions"
+            hint="Polar billed amounts on active subscriptions. 100% coupons count as $0."
           />
           <MetricCard
             label="Active API subscriptions"

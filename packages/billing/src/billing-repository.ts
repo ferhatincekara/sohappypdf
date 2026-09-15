@@ -20,6 +20,7 @@ import type {
   ApiSubscriptionRecord,
   BillingCustomerRecord,
   BillingSubscriptionRecord,
+  PolarRecurringInterval,
   WebCreditBalance,
 } from "./billing-types.js";
 
@@ -201,6 +202,34 @@ export type BillingRepository = {
   }): Promise<boolean>;
 };
 
+function parseStoredRecurringInterval(
+  value: string | null,
+): PolarRecurringInterval | null {
+  if (
+    value === "month" ||
+    value === "year" ||
+    value === "week" ||
+    value === "day"
+  ) {
+    return value;
+  }
+
+  return null;
+}
+
+function billedAmountFields(record: {
+  amountCents?: number | null;
+  recurringInterval?: PolarRecurringInterval | null;
+}): {
+  amountCents: number | null;
+  recurringInterval: PolarRecurringInterval | null;
+} {
+  return {
+    amountCents: record.amountCents ?? null,
+    recurringInterval: record.recurringInterval ?? null,
+  };
+}
+
 function toCustomer(
   row: typeof billingCustomers.$inferSelect,
 ): BillingCustomerRecord {
@@ -226,6 +255,8 @@ function toSubscription(
     currentPeriodStart: row.currentPeriodStart,
     currentPeriodEnd: row.currentPeriodEnd,
     endedAt: row.endedAt,
+    amountCents: row.amountCents ?? null,
+    recurringInterval: parseStoredRecurringInterval(row.recurringInterval),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -278,6 +309,8 @@ function toApiSubscription(
     currentPeriodStart: row.currentPeriodStart,
     currentPeriodEnd: row.currentPeriodEnd,
     endedAt: row.endedAt,
+    amountCents: row.amountCents ?? null,
+    recurringInterval: parseStoredRecurringInterval(row.recurringInterval),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -370,6 +403,7 @@ export function createBillingRepository(db: Database): BillingRepository {
           currentPeriodStart: record.currentPeriodStart,
           currentPeriodEnd: record.currentPeriodEnd,
           endedAt: record.endedAt,
+          ...billedAmountFields(record),
           createdAt: record.createdAt ?? record.updatedAt,
           updatedAt: record.updatedAt,
         })
@@ -384,6 +418,7 @@ export function createBillingRepository(db: Database): BillingRepository {
             currentPeriodStart: record.currentPeriodStart,
             currentPeriodEnd: record.currentPeriodEnd,
             endedAt: record.endedAt,
+            ...billedAmountFields(record),
             updatedAt: record.updatedAt,
           },
         })
@@ -434,6 +469,7 @@ export function createBillingRepository(db: Database): BillingRepository {
           currentPeriodStart: record.currentPeriodStart,
           currentPeriodEnd: record.currentPeriodEnd,
           endedAt: record.endedAt,
+          ...billedAmountFields(record),
           createdAt: record.createdAt ?? record.updatedAt,
           updatedAt: record.updatedAt,
         })
@@ -448,6 +484,7 @@ export function createBillingRepository(db: Database): BillingRepository {
             currentPeriodStart: record.currentPeriodStart,
             currentPeriodEnd: record.currentPeriodEnd,
             endedAt: record.endedAt,
+            ...billedAmountFields(record),
             updatedAt: record.updatedAt,
           },
         })
@@ -1342,6 +1379,7 @@ export function createBillingRepository(db: Database): BillingRepository {
               currentPeriodStart: input.subscription.currentPeriodStart,
               currentPeriodEnd: input.subscription.currentPeriodEnd,
               endedAt: input.subscription.endedAt,
+              ...billedAmountFields(input.subscription),
               createdAt:
                 input.subscription.createdAt ?? input.subscription.updatedAt,
               updatedAt: input.subscription.updatedAt,
@@ -1357,6 +1395,7 @@ export function createBillingRepository(db: Database): BillingRepository {
                 currentPeriodStart: input.subscription.currentPeriodStart,
                 currentPeriodEnd: input.subscription.currentPeriodEnd,
                 endedAt: input.subscription.endedAt,
+                ...billedAmountFields(input.subscription),
                 updatedAt: input.subscription.updatedAt,
               },
             });
@@ -1378,6 +1417,7 @@ export function createBillingRepository(db: Database): BillingRepository {
               currentPeriodStart: input.apiSubscription.currentPeriodStart,
               currentPeriodEnd: input.apiSubscription.currentPeriodEnd,
               endedAt: input.apiSubscription.endedAt,
+              ...billedAmountFields(input.apiSubscription),
               createdAt:
                 input.apiSubscription.createdAt ??
                 input.apiSubscription.updatedAt,
@@ -1394,6 +1434,7 @@ export function createBillingRepository(db: Database): BillingRepository {
                 currentPeriodStart: input.apiSubscription.currentPeriodStart,
                 currentPeriodEnd: input.apiSubscription.currentPeriodEnd,
                 endedAt: input.apiSubscription.endedAt,
+                ...billedAmountFields(input.apiSubscription),
                 updatedAt: input.apiSubscription.updatedAt,
               },
             });

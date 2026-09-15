@@ -31,15 +31,15 @@ function createService(options?: {
 }
 
 describe("web tool credits", () => {
-  test("grants free monthly web credits once per UTC period", async () => {
+  test("does not grant monthly web credits when free usage is daily-only", async () => {
     const billing = createService();
     const first = await billing.getWebCreditBalance("user_1");
     const second = await billing.getWebCreditBalance("user_1");
 
-    expect(first.webCreditsGranted).toBe(1_550);
+    expect(first.webCreditsGranted).toBe(0);
     expect(first.webCreditsUsed).toBe(0);
-    expect(first.webCreditsRemaining).toBe(1_550);
-    expect(second.webCreditsGranted).toBe(1_550);
+    expect(first.webCreditsRemaining).toBe(0);
+    expect(second.webCreditsGranted).toBe(0);
   });
 
   test("grants pro monthly web credits for the subscription period", async () => {
@@ -194,23 +194,15 @@ describe("web tool credits", () => {
     }
   });
 
-  test("assertCanSpendWebCredits blocks before execution", async () => {
+  test("assertCanSpendWebCredits skips the monthly meter when credits are unused", async () => {
     const billing = createService({
       planCatalog: createCatalog({ monthlyWebCredits: 0 }),
     });
 
-    try {
-      await billing.assertCanSpendWebCredits({
-        userId: "user_1",
-        toolId: "pdf-to-jpg",
-      });
-      throw new Error("expected limit");
-    } catch (error) {
-      expect(isAppError(error)).toBe(true);
-      if (isAppError(error)) {
-        expect(error.code).toBe(APP_ERROR_CODES.PLAN_LIMIT_REACHED);
-      }
-    }
+    await billing.assertCanSpendWebCredits({
+      userId: "user_1",
+      toolId: "pdf-to-jpg",
+    });
   });
 
   test("handles concurrent consumption safely", async () => {

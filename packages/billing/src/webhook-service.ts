@@ -103,6 +103,8 @@ export async function handlePolarWebhook(
           currentPeriodStart: parsed.currentPeriodStart,
           currentPeriodEnd: parsed.currentPeriodEnd,
           endedAt: parsed.endedAt,
+          amountCents: parsed.amountCents,
+          recurringInterval: parsed.recurringInterval,
           updatedAt: processedAt,
         }
       : undefined,
@@ -119,6 +121,8 @@ export async function handlePolarWebhook(
             currentPeriodStart: parsed.currentPeriodStart,
             currentPeriodEnd: parsed.currentPeriodEnd,
             endedAt: parsed.endedAt,
+            amountCents: parsed.amountCents,
+            recurringInterval: parsed.recurringInterval,
             updatedAt: processedAt,
           },
   });

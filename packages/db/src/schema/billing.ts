@@ -73,6 +73,8 @@ export const billingSubscriptions = pgTable(
       mode: "date",
     }),
     endedAt: timestamp("ended_at", { withTimezone: true, mode: "date" }),
+    amountCents: integer("amount_cents"),
+    recurringInterval: text("recurring_interval"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
       .notNull()
       .defaultNow(),
@@ -85,6 +87,10 @@ export const billingSubscriptions = pgTable(
       table.polarSubscriptionId,
     ),
     index("billing_subscriptions_user_id_idx").on(table.userId),
+    check(
+      "billing_subscriptions_amount_cents_non_negative",
+      sql`${table.amountCents} is null or ${table.amountCents} >= 0`,
+    ),
   ],
 );
 
@@ -115,6 +121,8 @@ export const apiSubscriptions = pgTable(
       mode: "date",
     }),
     endedAt: timestamp("ended_at", { withTimezone: true, mode: "date" }),
+    amountCents: integer("amount_cents"),
+    recurringInterval: text("recurring_interval"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
       .notNull()
       .defaultNow(),
@@ -127,6 +135,10 @@ export const apiSubscriptions = pgTable(
       table.polarSubscriptionId,
     ),
     index("api_subscriptions_user_id_idx").on(table.userId),
+    check(
+      "api_subscriptions_amount_cents_non_negative",
+      sql`${table.amountCents} is null or ${table.amountCents} >= 0`,
+    ),
   ],
 );
 

@@ -182,6 +182,9 @@ export function createMemoryBillingRepository(options?: {
         currentPeriodStart: record.currentPeriodStart,
         currentPeriodEnd: record.currentPeriodEnd,
         endedAt: record.endedAt,
+        amountCents: record.amountCents ?? existing?.amountCents ?? null,
+        recurringInterval:
+          record.recurringInterval ?? existing?.recurringInterval ?? null,
         updatedAt: record.updatedAt,
       };
       subscriptions.set(stored.polarSubscriptionId, stored);
@@ -223,6 +226,9 @@ export function createMemoryBillingRepository(options?: {
         currentPeriodStart: record.currentPeriodStart,
         currentPeriodEnd: record.currentPeriodEnd,
         endedAt: record.endedAt,
+        amountCents: record.amountCents ?? existing?.amountCents ?? null,
+        recurringInterval:
+          record.recurringInterval ?? existing?.recurringInterval ?? null,
         updatedAt: record.updatedAt,
       };
       apiSubscriptions.set(stored.polarSubscriptionId, stored);

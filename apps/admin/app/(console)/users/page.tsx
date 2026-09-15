@@ -96,11 +96,9 @@ export default async function UsersPage({
               id: "web-tools",
               header: "Web tools",
               cell: (row) =>
-                row.webPlan === "pro"
+                row.dailyOperationsLimit === null
                   ? "Unlimited"
-                  : row.webCreditsRemaining === null
-                    ? "—"
-                    : `${formatNumber(row.webCreditsRemaining)} left`,
+                  : `${formatNumber(row.dailyOperationsUsed)} / ${formatNumber(row.dailyOperationsLimit)} today`,
             },
             {
               id: "api-credits",

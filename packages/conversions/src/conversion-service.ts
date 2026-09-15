@@ -589,22 +589,9 @@ export function createConversionService(
         });
       }
 
-      const current = now();
-      const expired = await options.repository.listExpired({
-        now: current,
-        activeAfter: conversionActiveAfter(current),
-        limit,
-      });
-      let deleted = 0;
-
-      for (const conversion of expired) {
-        await options.repository.deleteById(conversion.id);
-        deleted += 1;
-      }
-
       return {
-        scanned: expired.length,
-        deleted,
+        scanned: 0,
+        deleted: 0,
       };
     },
 

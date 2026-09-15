@@ -1,8 +1,4 @@
 import {
-  API_PACK_MONTHLY_PRICE_USD,
-  WEB_PLAN_MONTHLY_PRICE_USD,
-} from "@sohappypdf/billing";
-import {
   anonymousSessions,
   apiSubscriptions,
   billingSubscriptions,
@@ -14,6 +10,7 @@ import {
   webCreditLedgerEntries,
 } from "@sohappypdf/db";
 import { and, eq, gte, isNotNull, isNull, sql } from "drizzle-orm";
+import { getEstimatedMrrUsd } from "@/server/query/billing";
 import { startOfUtcDay } from "@/server/query/date-range";
 import {
   ACTIVE_SUBSCRIPTION_SQL,
@@ -50,7 +47,7 @@ export type DashboardMetrics = {
     activeProSubscriptions: number;
     activeApiSubscriptions: number;
     estimatedMrrUsd: number;
-    estimatedMrrSource: "derived";
+    estimatedMrrSource: "billed";
     recentSubscriptionEvents: number;
   };
   api: {
@@ -89,7 +86,7 @@ export async function getDashboardMetrics(
     [apiExecutionsToday],
     [apiErrorsToday],
     [apiCreditsToday],
-    apiByProduct,
+    estimatedMrrUsd,
   ] = await Promise.all([
     db.select({ value: sql<number>`count(*)::int` }).from(user),
     db
@@ -241,23 +238,12 @@ export async function getDashboardMetrics(
           gte(webCreditLedgerEntries.createdAt, today),
         ),
       ),
-    db
-      .select({
-        productKey: apiSubscriptions.productKey,
-        value: sql<number>`count(*)::int`,
-      })
-      .from(apiSubscriptions)
-      .where(ACTIVE_SUBSCRIPTION_SQL)
-      .groupBy(apiSubscriptions.productKey),
+    getEstimatedMrrUsd(db),
   ]);
 
   const activeProSubscriptions = countInt(activePro?.value);
   const activeApiSubscriptions = countInt(activeApi?.value);
   const apiCreditsConsumedToday = countInt(apiCreditsToday?.value);
-  const apiMrr = apiByProduct.reduce((total, row) => {
-    const price = API_PACK_MONTHLY_PRICE_USD[row.productKey];
-    return total + countInt(row.value) * price;
-  }, 0);
 
   return {
     generatedAt: now.toISOString(),
@@ -287,9 +273,8 @@ export async function getDashboardMetrics(
     revenue: {
       activeProSubscriptions,
       activeApiSubscriptions,
-      estimatedMrrUsd:
-        activeProSubscriptions * WEB_PLAN_MONTHLY_PRICE_USD.pro + apiMrr,
-      estimatedMrrSource: "derived",
+      estimatedMrrUsd,
+      estimatedMrrSource: "billed",
       recentSubscriptionEvents: countInt(recentBillingEvents?.value),
     },
     api: {

@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Welche Dateilimits gelten?",
-          "a": "Free sind 5 Vorgänge pro Tag, 25 MB pro Datei, eine Datei gleichzeitig und 50 Seiten pro Datei — mit oder ohne Konto. OCR ist nur bei Pro. Pro kostet 5 $ pro Monat für unbegrenzte Vorgänge und ein Dateilimit von 1 GB. Dateien laufen nach etwa zwei Stunden ab. Developer-API-Credits werden getrennt abgerechnet."
+          "a": "Free sind 5 Vorgänge pro Tag, 25 MB pro Datei, eine Datei gleichzeitig und 50 Seiten pro Datei — mit oder ohne Konto. OCR ist nur bei Pro. Pro ist derzeit kostenlos für unbegrenzte Vorgänge und ein Dateilimit von 1 GB. Dateien laufen nach etwa zwei Stunden ab. Developer-API-Credits werden getrennt abgerechnet."
         },
         "account": {
           "q": "Was ändert sich durch die Anmeldung?",
@@ -253,7 +253,7 @@
         },
         "credits": {
           "q": "Wie funktionieren Credits?",
-          "a": "Web-Vorgänge bei Free sind täglich begrenzt. Pro kostet 5 $ pro Monat für unbegrenzte Web-Nutzung. API-Credits werden getrennt über Developer-Pakete abgerechnet und messen die programmatische Nutzung."
+          "a": "Web-Vorgänge bei Free sind täglich begrenzt. Pro ist derzeit kostenlos für unbegrenzte Web-Nutzung. API-Credits werden getrennt über Developer-Pakete abgerechnet und messen die programmatische Nutzung."
         },
         "api": {
           "q": "Gibt es eine Entwickler-API?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "Was ist in Pro enthalten?",
-          "a": "Pro kostet 5 $ pro Monat. Es schaltet OCR, Bearbeitung, E-Signatur und KI-Tools frei, entfernt die tägliche Vorgangsgrenze und hebt das Dateigrößenlimit auf 1 GB."
+          "a": "Pro ist derzeit kostenlos. Es schaltet OCR, Bearbeitung, E-Signatur und KI-Tools frei, entfernt die tägliche Vorgangsgrenze und hebt das Dateigrößenlimit auf 1 GB."
         },
         "payment": {
           "q": "Wie funktionieren Zahlung und Kündigung?",
@@ -380,7 +380,7 @@
       "title": "Free, Pro und Developer",
       "description": "Web-Pläne decken Browser-Tools ab. Developer-Credit-Pakete werden getrennt für die öffentliche API abgerechnet.",
       "viewPage": "Preise ansehen",
-      "note": "Pro kostet 5 $ pro Monat. Upgrades und API-Credit-Pakete nutzen Polar-Checkout nach der Anmeldung.",
+      "note": "Pro ist derzeit kostenlos. Upgrades und API-Credit-Pakete nutzen Polar-Checkout nach der Anmeldung.",
       "interval": "/Monat",
       "intervalYear": "/Jahr",
       "web": {
