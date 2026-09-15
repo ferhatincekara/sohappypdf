@@ -24,11 +24,11 @@ export default async function SystemPage() {
             <p className="mt-2 text-sm text-muted-foreground">
               {service.detail}
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {service.latencyMs === null
-                ? "Latency unavailable"
-                : `${service.latencyMs} ms`}
-            </p>
+            {service.latencyMs !== null ? (
+              <p className="mt-1 text-xs text-muted-foreground">
+                {service.latencyMs} ms
+              </p>
+            ) : null}
           </section>
         ))}
       </div>
