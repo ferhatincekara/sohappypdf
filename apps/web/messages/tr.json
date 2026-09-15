@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Dosya limitleri neler?",
-          "a": "Ücretsiz plan günde 5 işlem, dosya başına 25 MB, aynı anda 1 dosya ve dosya başına 50 sayfa ile sınırlıdır — hesap olsun olmasın. OCR yalnızca Pro’dadır. Pro şu anda ücretsizdir; sınırsız işlem ve 1 GB dosya limiti sunar. Dosyalar yaklaşık iki saat sonra süresi dolar. Geliştirici API kredileri ayrı faturalanır."
+          "a": "Ücretsiz plan günde 5 işlem, dosya başına 25 MB, aynı anda 1 dosya ve dosya başına 50 sayfa ile sınırlıdır — hesap olsun olmasın. OCR yalnızca Pro’dadır. Pro aylık 5 dolardır; sınırsız işlem ve 1 GB dosya limiti sunar. Dosyalar yaklaşık iki saat sonra süresi dolar. Geliştirici API kredileri ayrı faturalanır."
         },
         "account": {
           "q": "Giriş yapmak neyi değiştirir?",
@@ -253,7 +253,7 @@
         },
         "credits": {
           "q": "Krediler nasıl işler?",
-          "a": "Ücretsiz web kullanımı günlük işlem tavanıyla ölçülür. Pro şu anda ücretsizdir ve web kullanımı sınırsızdır. API kredileri geliştirici paketlerinde ayrı faturalanır ve programatik kullanımı ölçer."
+          "a": "Ücretsiz web kullanımı günlük işlem tavanıyla ölçülür. Pro aylık 5 dolardır ve web kullanımı sınırsızdır. API kredileri geliştirici paketlerinde ayrı faturalanır ve programatik kullanımı ölçer."
         },
         "api": {
           "q": "Geliştirici API’si var mı?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "Pro neleri kapsar?",
-          "a": "Pro şu anda ücretsizdir. OCR, düzenleme, e-imza ve yapay zeka araçlarını açar, günlük işlem tavanını kaldırır ve dosya boyutunu 1 GB’a çıkarır."
+          "a": "Pro aylık 5 dolardır. OCR, düzenleme, e-imza ve yapay zeka araçlarını açar, günlük işlem tavanını kaldırır ve dosya boyutunu 1 GB’a çıkarır."
         },
         "payment": {
           "q": "Ödeme ve iptal nasıl işler?",
@@ -380,7 +380,7 @@
       "title": "Ücretsiz, Pro ve Geliştiriciler",
       "description": "Web planları tarayıcı araçlarını kapsar. Geliştirici kredi paketleri genel API için ayrı faturalanır.",
       "viewPage": "Fiyatlandırmayı gör",
-      "note": "Pro şu anda ücretsizdir. Yükseltmeler ve API kredi paketleri girişten sonra Polar ödeme akışını kullanır.",
+      "note": "Pro aylık 5 dolardır. Yükseltmeler ve API kredi paketleri girişten sonra Polar ödeme akışını kullanır.",
       "interval": "/ay",
       "intervalYear": "/yıl",
       "web": {

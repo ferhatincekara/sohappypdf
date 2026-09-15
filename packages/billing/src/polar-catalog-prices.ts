@@ -78,21 +78,13 @@ export function usdFromPolarProduct(
 
     const amountType = price.amountType ?? price.amount_type;
 
-    if (amountType === "free") {
-      if (priceMatchesInterval(price, interval)) {
-        return 0;
-      }
-
-      continue;
-    }
-
     if (amountType !== "fixed") {
       continue;
     }
 
     const cents = price.priceAmount ?? price.price_amount;
 
-    if (typeof cents !== "number" || !Number.isFinite(cents) || cents < 0) {
+    if (typeof cents !== "number" || !Number.isFinite(cents) || cents <= 0) {
       continue;
     }
 
@@ -127,6 +119,8 @@ export function collectPolarPriceTargets(
     }
   }
 
+  add("pro", "monthly", polar.proProductId);
+  add("pro", "yearly", polar.proYearlyProductId);
   add("starter", "monthly", polar.apiStarterProductId);
   add("starter", "yearly", polar.apiStarterYearlyProductId);
   add("growth", "monthly", polar.apiGrowthProductId);
@@ -154,10 +148,6 @@ export function mergePolarCatalogPrices(
   const yearlyFromPolar = new Set<CatalogOfferId>();
 
   for (const item of fetched) {
-    if (item.offer === "pro") {
-      continue;
-    }
-
     if (item.usd === undefined) {
       continue;
     }

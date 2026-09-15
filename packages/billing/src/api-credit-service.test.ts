@@ -81,7 +81,7 @@ describe("API credits", () => {
     const web = await billing.getWebCreditBalance("user_1");
     const api = await billing.getApiCreditBalance("user_1");
 
-    expect(web.webCreditsGranted).toBeGreaterThan(0);
+    expect(web.webCreditsGranted).toBe(0);
     expect(api.apiCreditsGranted).toBe(INCLUDED_API_CREDITS_PER_MONTH);
     expect(api.apiCreditsRemaining).toBe(INCLUDED_API_CREDITS_PER_MONTH);
   });

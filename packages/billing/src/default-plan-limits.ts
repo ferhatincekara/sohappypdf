@@ -28,7 +28,7 @@ export const DEFAULT_PLAN_LIMITS = {
   pro: {
     monthlyConversions: null,
     operationsPerDay: null,
-    monthlyWebCredits: 2_000,
+    monthlyWebCredits: 0,
     monthlyAiCredits: 200,
     storageBytes: 10 * GIB,
     maxFileSizeBytes: PRO_MAX_FILE_SIZE_BYTES,
@@ -46,7 +46,7 @@ export const PLAN_IDS = ["free", "pro"] as const;
 
 export const WEB_PLAN_MONTHLY_PRICE_USD = {
   free: 0,
-  pro: 0,
+  pro: 5,
 } as const;
 
 export const API_PACK_YEARLY_DISCOUNT_PERCENT = 20;

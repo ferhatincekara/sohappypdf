@@ -81,9 +81,8 @@ describe("end-to-end product coverage", () => {
   test("Free AI credits stay at zero so Pro-only AI tools cannot run on Free", () => {
     expect(DEFAULT_PLAN_LIMITS.free.monthlyAiCredits).toBe(0);
     expect(DEFAULT_PLAN_LIMITS.pro.monthlyAiCredits).toBeGreaterThan(0);
-    expect(DEFAULT_PLAN_LIMITS.pro.monthlyWebCredits).toBeGreaterThan(
-      DEFAULT_PLAN_LIMITS.free.monthlyWebCredits,
-    );
+    expect(DEFAULT_PLAN_LIMITS.pro.operationsPerDay).toBeNull();
+    expect(DEFAULT_PLAN_LIMITS.free.operationsPerDay).toBeGreaterThan(0);
     expect(DEFAULT_PLAN_LIMITS.pro.maxFileSizeBytes).toBeGreaterThan(
       DEFAULT_PLAN_LIMITS.free.maxFileSizeBytes,
     );

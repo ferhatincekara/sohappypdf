@@ -254,16 +254,24 @@ export function createBillingService(
     const { entitlements, period } = await resolveUsageContext(userId);
 
     if (!usesMonthlyWebCredits(entitlements.limits.monthlyWebCredits)) {
-      const usage = await options.repository.getOrCreateUsagePeriod({
+      await options.repository.getOrCreateUsagePeriod({
         userId,
         periodStart: period.start,
         periodEnd: period.end,
       });
+      const granted = Math.max(
+        0,
+        await options.repository.sumManualCreditAdjustments({
+          userId,
+          source: "web",
+          periodStart: period.start,
+        }),
+      );
 
       return {
-        webCreditsGranted: usage.webCreditsGranted,
-        webCreditsUsed: usage.webCreditsUsed,
-        webCreditsRemaining: usage.webCreditsGranted - usage.webCreditsUsed,
+        webCreditsGranted: granted,
+        webCreditsUsed: 0,
+        webCreditsRemaining: granted,
       };
     }
 
@@ -1420,14 +1428,17 @@ export function createBillingService(
         });
       }
 
-      if (
-        input.source !== "web" &&
-        input.source !== "api" &&
-        input.source !== "ai"
-      ) {
+      if (input.source === "web") {
         throw new AppError({
           code: APP_ERROR_CODES.VALIDATION_ERROR,
-          message: "Credit source must be web, API, or AI",
+          message: "Web tools are not credit-metered",
+        });
+      }
+
+      if (input.source !== "api" && input.source !== "ai") {
+        throw new AppError({
+          code: APP_ERROR_CODES.VALIDATION_ERROR,
+          message: "Credit source must be API or AI",
         });
       }
 
@@ -1449,10 +1460,8 @@ export function createBillingService(
 
       if (input.source === "api") {
         await ensureApiCreditBalance(input.userId);
-      } else if (input.source === "ai") {
-        await ensureAiCreditBalance(input.userId);
       } else {
-        await ensureWebCreditBalance(input.userId);
+        await ensureAiCreditBalance(input.userId);
       }
 
       const period =

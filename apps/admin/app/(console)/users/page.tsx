@@ -93,8 +93,8 @@ export default async function UsersPage({
                 row.developerPlan === "none" ? "Included" : row.developerPlan,
             },
             {
-              id: "web-tools",
-              header: "Web tools",
+              id: "ops",
+              header: "Operations today",
               cell: (row) =>
                 row.dailyOperationsLimit === null
                   ? "Unlimited"

@@ -42,7 +42,23 @@ describe("web tool credits", () => {
     expect(second.webCreditsGranted).toBe(0);
   });
 
-  test("grants pro monthly web credits for the subscription period", async () => {
+  test("ignores leftover monthly web grants when usage is daily-only", async () => {
+    const repository = createMemoryBillingRepository();
+    await repository.ensureWebCreditGrant({
+      userId: "user_1",
+      periodStart: new Date("2026-08-01T00:00:00.000Z"),
+      periodEnd: new Date("2026-09-01T00:00:00.000Z"),
+      grantAmount: 1_550,
+      now,
+    });
+    const billing = createService({ repository });
+    const balance = await billing.getWebCreditBalance("user_1");
+
+    expect(balance.webCreditsGranted).toBe(0);
+    expect(balance.webCreditsRemaining).toBe(0);
+  });
+
+  test("does not meter monthly web credits on Pro", async () => {
     const repository = createMemoryBillingRepository();
     await repository.upsertSubscription({
       userId: "user_1",
@@ -64,7 +80,8 @@ describe("web tool credits", () => {
       apiKeyCount: 0,
     });
 
-    expect(balance.webCreditsGranted).toBe(2_000);
+    expect(balance.webCreditsGranted).toBe(0);
+    expect(status.usage.webCreditsLimit).toBe(0);
     expect(status.usage.periodStart).toBe("2026-08-01T00:00:00.000Z");
     expect(status.usage.periodEnd).toBe("2026-09-01T00:00:00.000Z");
   });

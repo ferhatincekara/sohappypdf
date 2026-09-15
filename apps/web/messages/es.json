@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "¿Cuáles son los límites de archivo?",
-          "a": "Free son 5 operaciones al día, 25 MB por archivo, un archivo a la vez y 50 páginas por archivo — con o sin cuenta. El OCR es solo de Pro. Pro es actualmente gratuito para operaciones ilimitadas y un límite de 1 GB por archivo. Los archivos caducan a las dos horas aproximadamente. Los créditos de la API para desarrolladores se facturan por separado."
+          "a": "Free son 5 operaciones al día, 25 MB por archivo, un archivo a la vez y 50 páginas por archivo — con o sin cuenta. El OCR es solo de Pro. Pro cuesta 5 $ al mes por operaciones ilimitadas y un límite de 1 GB por archivo. Los archivos caducan a las dos horas aproximadamente. Los créditos de la API para desarrolladores se facturan por separado."
         },
         "account": {
           "q": "¿Qué cambia al iniciar sesión?",
@@ -253,7 +253,7 @@
         },
         "credits": {
           "q": "¿Cómo funcionan los créditos?",
-          "a": "Las operaciones web en Free tienen un tope diario. Pro es actualmente gratuito para uso web ilimitado. Los créditos de API se facturan por separado en los paquetes Developer y miden el uso programático."
+          "a": "Las operaciones web en Free tienen un tope diario. Pro cuesta 5 $ al mes por uso web ilimitado. Los créditos de API se facturan por separado en los paquetes Developer y miden el uso programático."
         },
         "api": {
           "q": "¿Hay una API para desarrolladores?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "¿Qué incluye Pro?",
-          "a": "Pro es actualmente gratuito. Desbloquea OCR, edición, firma electrónica y herramientas de IA, quita el tope diario de operaciones y sube el límite de tamaño a 1 GB."
+          "a": "Pro cuesta 5 $ al mes. Desbloquea OCR, edición, firma electrónica y herramientas de IA, quita el tope diario de operaciones y sube el límite de tamaño a 1 GB."
         },
         "payment": {
           "q": "¿Cómo funcionan el pago y la cancelación?",
@@ -380,7 +380,7 @@
       "title": "Free, Pro y Developer",
       "description": "Los planes web cubren las herramientas del navegador. Los paquetes de créditos Developer se facturan por separado para la API pública.",
       "viewPage": "Ver precios",
-      "note": "Pro es actualmente gratuito. Las mejoras y los paquetes de créditos de API usan el pago de Polar después de iniciar sesión.",
+      "note": "Pro cuesta 5 $ al mes. Las mejoras y los paquetes de créditos de API usan el pago de Polar después de iniciar sesión.",
       "interval": "/mes",
       "intervalYear": "/año",
       "web": {

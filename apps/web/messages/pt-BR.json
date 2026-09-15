@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Quais são os limites de arquivo?",
-          "a": "O Free é 5 operações por dia, 25 MB por arquivo, um arquivo por vez e 50 páginas por arquivo — com ou sem conta. OCR é exclusivo do Pro. O Pro é atualmente gratuito para operações ilimitadas e limite de 1 GB por arquivo. Os arquivos expiram depois de cerca de duas horas. Os créditos da API para desenvolvedores são cobrados à parte."
+          "a": "O Free é 5 operações por dia, 25 MB por arquivo, um arquivo por vez e 50 páginas por arquivo — com ou sem conta. OCR é exclusivo do Pro. O Pro custa US$ 5 por mês para operações ilimitadas e limite de 1 GB por arquivo. Os arquivos expiram depois de cerca de duas horas. Os créditos da API para desenvolvedores são cobrados à parte."
         },
         "account": {
           "q": "O que muda ao entrar?",
@@ -253,7 +253,7 @@
         },
         "credits": {
           "q": "Como funcionam os créditos?",
-          "a": "As operações web no Free têm teto diário. O Pro é atualmente gratuito para uso web ilimitado. Os créditos de API são cobrados à parte nos pacotes Developer e medem o uso programático."
+          "a": "As operações web no Free têm teto diário. O Pro custa US$ 5 por mês para uso web ilimitado. Os créditos de API são cobrados à parte nos pacotes Developer e medem o uso programático."
         },
         "api": {
           "q": "Existe uma API para desenvolvedores?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "O que o Pro inclui?",
-          "a": "O Pro é atualmente gratuito. Ele libera OCR, edição, assinatura eletrônica e ferramentas de IA, remove o teto diário de operações e sobe o limite de tamanho para 1 GB."
+          "a": "O Pro custa US$ 5 por mês. Ele libera OCR, edição, assinatura eletrônica e ferramentas de IA, remove o teto diário de operações e sobe o limite de tamanho para 1 GB."
         },
         "payment": {
           "q": "Como funcionam o pagamento e o cancelamento?",
@@ -380,7 +380,7 @@
       "title": "Free, Pro e Developer",
       "description": "Os planos web cobrem as ferramentas no navegador. Os pacotes de créditos Developer são cobrados à parte para a API pública.",
       "viewPage": "Ver preços",
-      "note": "O Pro é atualmente gratuito. Upgrades e pacotes de créditos de API usam o checkout da Polar depois que você entra.",
+      "note": "O Pro custa US$ 5 por mês. Upgrades e pacotes de créditos de API usam o checkout da Polar depois que você entra.",
       "interval": "/mês",
       "intervalYear": "/ano",
       "web": {

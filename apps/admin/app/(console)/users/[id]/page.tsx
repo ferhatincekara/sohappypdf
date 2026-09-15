@@ -59,7 +59,7 @@ export default async function UserDetailPage({
                 email={detail.user.email}
               />
             )}
-            <AdjustCreditsForm userId={detail.user.id} webPlan={webPlan} />
+            <AdjustCreditsForm userId={detail.user.id} />
           </UserActionBar>
         }
       />
@@ -107,6 +107,13 @@ export default async function UserDetailPage({
                 value: formatDateTime(detail.webSubscription?.currentPeriodEnd),
               },
               {
+                label: "Operations today",
+                value:
+                  webPlan === "pro"
+                    ? "Unlimited"
+                    : `${formatNumber(detail.credits.web.dailyUsed)} / ${formatNumber(detail.credits.web.dailyLimit ?? 0)}`,
+              },
+              {
                 label: "Developer plan",
                 value: apiSub?.productKey ?? "none",
               },
@@ -121,18 +128,12 @@ export default async function UserDetailPage({
             ]}
           />
         </DetailSection>
-        <DetailSection title="Credits">
+        <DetailSection title="API credits">
           <DetailGrid
             items={[
               {
-                label: "Web tools",
-                value: detail.credits.web.unlimited
-                  ? "Unlimited"
-                  : `${formatNumber(detail.credits.web.dailyUsed)} of ${formatNumber(detail.credits.web.dailyLimit)} today`,
-              },
-              {
-                label: "API credits",
-                value: `${detail.credits.api.apiCreditsRemaining} left of ${detail.credits.api.apiCreditsGranted} this period`,
+                label: "Remaining",
+                value: `${formatNumber(detail.credits.api.apiCreditsRemaining)} left of ${formatNumber(detail.credits.api.apiCreditsGranted)} this period`,
               },
             ]}
           />
@@ -178,7 +179,7 @@ export default async function UserDetailPage({
             ))}
           </ul>
         </DetailSection>
-        <DetailSection title="Credit ledger">
+        <DetailSection title="API credit ledger">
           <ul className="space-y-1 text-sm">
             {detail.recentLedger.map((entry) => (
               <li key={entry.id}>
@@ -194,11 +195,9 @@ export default async function UserDetailPage({
 
 function formatLedgerEntry(entry: {
   type: string;
-  source: string;
   amount: number;
   reason: string;
 }): string {
-  const pool = entry.source === "api" ? "API credits" : "Web tool credits";
   const verb =
     entry.type === "consume"
       ? "used"
@@ -209,5 +208,5 @@ function formatLedgerEntry(entry: {
           : "added";
   const reason = entry.reason.replace(/^admin:[^:]+:\s*/, "");
 
-  return `${verb} ${entry.amount} ${pool}${reason.length > 0 ? ` · ${reason}` : ""}`;
+  return `${verb} ${entry.amount} API credits${reason.length > 0 ? ` · ${reason}` : ""}`;
 }

@@ -2,7 +2,7 @@ import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { type EnvSource, getOptionalEnv } from "./env.js";
 
 export const DEFAULT_FREE_WEB_TOOL_CREDITS = 0;
-export const DEFAULT_PRO_WEB_TOOL_CREDITS = 2_000;
+export const DEFAULT_PRO_WEB_TOOL_CREDITS = 0;
 
 export type WebCreditConfig = {
   freeMonthlyCredits: number;

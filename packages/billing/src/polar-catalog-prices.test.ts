@@ -86,10 +86,9 @@ describe("polar catalog prices", () => {
   });
 
   test("collects configured Polar product IDs without exposing missing packs", () => {
-    expect(
-      collectPolarPriceTargets(polar).map((target) => target.offer),
-    ).not.toContain("pro");
     expect(collectPolarPriceTargets(polar)).toEqual([
+      { offer: "pro", interval: "monthly", productId: "prod_pro" },
+      { offer: "pro", interval: "yearly", productId: "prod_pro_yearly" },
       { offer: "starter", interval: "monthly", productId: "prod_starter" },
       {
         offer: "starter",
@@ -106,7 +105,7 @@ describe("polar catalog prices", () => {
 
     expect(merged.starter.monthlyUsd).toBe(12);
     expect(merged.starter.yearlyUsd).toBe(115);
-    expect(merged.pro.monthlyUsd).toBe(0);
+    expect(merged.pro.monthlyUsd).toBe(5);
   });
 
   test("keeps Polar yearly amounts when a yearly product is configured", () => {
@@ -125,7 +124,7 @@ describe("polar catalog prices", () => {
       polar,
     );
 
-    expect(prices.pro.yearlyUsd).toBe(0);
+    expect(prices.pro.yearlyUsd).toBe(48);
     expect(
       applyConfiguredProYearlyPrice(fallbackCatalogPrices(), {
         ...polar,

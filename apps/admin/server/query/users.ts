@@ -166,6 +166,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
 
   const userIds = users.map((row) => row.id);
   const today = startOfUtcDay(new Date());
+  const billing = getBillingService();
   const [
     proRows,
     developerRows,
@@ -174,6 +175,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     usageActivity,
     keyActivity,
     dailyUsageRows,
+    apiBalances,
   ] = await Promise.all([
     db
       .select({ userId: billingSubscriptions.userId })
@@ -199,8 +201,6 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
       .select({
         userId: usagePeriods.userId,
         periodStart: usagePeriods.periodStart,
-        webCreditsGranted: usagePeriods.webCreditsGranted,
-        webCreditsUsed: usagePeriods.webCreditsUsed,
         apiCreditsGranted: usagePeriods.apiCreditsGranted,
         apiCreditsUsed: usagePeriods.apiCreditsUsed,
       })
@@ -243,6 +243,16 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
         ),
       )
       .groupBy(conversionUsageEvents.userId),
+    Promise.all(
+      userIds.map(async (userId) => {
+        try {
+          const balance = await billing.getApiCreditBalance(userId);
+          return { userId, balance };
+        } catch {
+          return { userId, balance: null };
+        }
+      }),
+    ),
   ]);
 
   const proUserIds = new Set(proRows.map((row) => row.userId));
@@ -281,6 +291,9 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
     }
   }
 
+  const apiBalanceByUser = new Map(
+    apiBalances.map((row) => [row.userId, row.balance]),
+  );
   const dailyUsedByUser = new Map<string, number>();
 
   for (const row of dailyUsageRows) {
@@ -303,6 +316,7 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
 
   const rows: AdminUserListRow[] = users.map((row) => {
     const credits = creditsByUser.get(row.id);
+    const apiBalance = apiBalanceByUser.get(row.id);
     const webPlan = proUserIds.has(row.id) ? "pro" : "free";
     const developerPlan = developerByUser.get(row.id)?.productKey ?? "none";
 
@@ -315,8 +329,8 @@ export async function listAdminUsers(filters: AdminUserListFilters) {
       dailyOperationsLimit: webPlan === "pro" ? null : FREE_OPERATIONS_PER_DAY,
       apiCreditsRemaining: remainingApiCredits({
         pack: developerPlan,
-        granted: credits?.apiCreditsGranted,
-        used: credits?.apiCreditsUsed,
+        granted: apiBalance?.apiCreditsGranted ?? credits?.apiCreditsGranted,
+        used: apiBalance?.apiCreditsUsed ?? credits?.apiCreditsUsed,
       }),
     };
   });
@@ -436,7 +450,7 @@ export async function getAdminUserDetail(userId: string) {
       .where(
         and(
           eq(webCreditLedgerEntries.userId, userId),
-          sql`${webCreditLedgerEntries.source} <> 'ai'`,
+          eq(webCreditLedgerEntries.source, "api"),
         ),
       )
       .orderBy(desc(webCreditLedgerEntries.createdAt))

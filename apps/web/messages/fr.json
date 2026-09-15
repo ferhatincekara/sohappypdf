@@ -245,7 +245,7 @@
         },
         "limits": {
           "q": "Quelles sont les limites de fichiers ?",
-          "a": "Free permet 5 opérations par jour, 25 Mo par fichier, un fichier à la fois et 50 pages par fichier — avec ou sans compte. L'OCR est réservé à Pro. Pro est actuellement gratuit pour des opérations illimitées et une limite de 1 Go par fichier. Les fichiers expirent au bout d'environ deux heures. Les crédits de l'API développeur sont facturés à part."
+          "a": "Free permet 5 opérations par jour, 25 Mo par fichier, un fichier à la fois et 50 pages par fichier — avec ou sans compte. L'OCR est réservé à Pro. Pro coûte 5 $ par mois pour des opérations illimitées et une limite de 1 Go par fichier. Les fichiers expirent au bout d'environ deux heures. Les crédits de l'API développeur sont facturés à part."
         },
         "account": {
           "q": "Que change la connexion ?",
@@ -253,7 +253,7 @@
         },
         "credits": {
           "q": "Comment fonctionnent les crédits ?",
-          "a": "Les opérations web sur Free sont plafonnées chaque jour. Pro est actuellement gratuit pour un usage web illimité. Les crédits API sont facturés à part via les packs Developer et mesurent l'usage programmatique."
+          "a": "Les opérations web sur Free sont plafonnées chaque jour. Pro coûte 5 $ par mois pour un usage web illimité. Les crédits API sont facturés à part via les packs Developer et mesurent l'usage programmatique."
         },
         "api": {
           "q": "Y a-t-il une API développeur ?",
@@ -265,7 +265,7 @@
         },
         "pro": {
           "q": "Que comprend Pro ?",
-          "a": "Pro est actuellement gratuit. Il débloque l'OCR, l'édition, la signature électronique et les outils IA, supprime le plafond quotidien d'opérations et relève la limite de taille à 1 Go."
+          "a": "Pro coûte 5 $ par mois. Il débloque l'OCR, l'édition, la signature électronique et les outils IA, supprime le plafond quotidien d'opérations et relève la limite de taille à 1 Go."
         },
         "payment": {
           "q": "Comment fonctionnent le paiement et l'annulation ?",
@@ -380,7 +380,7 @@
       "title": "Free, Pro et Developer",
       "description": "Les offres web couvrent les outils du navigateur. Les packs de crédits Developer sont facturés à part pour l'API publique.",
       "viewPage": "Voir les tarifs",
-      "note": "Pro est actuellement gratuit. Les mises à niveau et les packs de crédits API passent par Polar après connexion.",
+      "note": "Pro coûte 5 $ par mois. Les mises à niveau et les packs de crédits API passent par Polar après connexion.",
       "interval": "/mois",
       "intervalYear": "/an",
       "web": {

@@ -6,7 +6,6 @@ import {
   writeAdminAuditEvent,
 } from "@sohappypdf/auth";
 import { getBillingService } from "@sohappypdf/billing";
-import { APP_ERROR_CODES, AppError } from "@sohappypdf/core";
 import { createLogger } from "@sohappypdf/logger";
 import { revalidatePath } from "next/cache";
 import { requireAdminAction } from "@/server/auth/require-admin";
@@ -72,7 +71,6 @@ export async function restoreUserAction(input: {
 
 export async function adjustCreditsAction(input: {
   userId: string;
-  source: "web" | "api";
   amount: number;
   reason: string;
 }): Promise<void> {
@@ -81,20 +79,9 @@ export async function adjustCreditsAction(input: {
   try {
     const billing = getBillingService();
 
-    if (input.source === "web") {
-      const entitlements = await billing.getEntitlements(input.userId);
-
-      if (entitlements.plan === "pro") {
-        throw new AppError({
-          code: APP_ERROR_CODES.VALIDATION_ERROR,
-          message: "Pro users do not use web tool credits",
-        });
-      }
-    }
-
     await billing.adjustCredits({
       userId: input.userId,
-      source: input.source,
+      source: "api",
       amount: input.amount,
       reason: input.reason,
       actorUserId: actor.userId,
@@ -106,14 +93,14 @@ export async function adjustCreditsAction(input: {
       targetId: input.userId,
       reason: input.reason,
       metadata: {
-        source: input.source,
+        source: "api",
         amount: input.amount,
       },
     });
     logger.info("admin.credits.adjusted", {
       actorUserId: actor.userId,
       userId: input.userId,
-      source: input.source,
+      source: "api",
       amount: input.amount,
     });
     revalidatePath(`/users/${input.userId}`);

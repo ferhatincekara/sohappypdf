@@ -402,7 +402,7 @@ describe("createBillingService", () => {
     expect(status.api.creditsLimit).toBe(100);
     expect(status.api.creditsRemaining).toBe(100);
     expect(status.api.product).toBeNull();
-    expect(status.prices.pro.monthlyUsd).toBe(0);
+    expect(status.prices.pro.monthlyUsd).toBe(5);
     expect(status.prices.starter.monthlyUsd).toBe(9);
     expect(JSON.stringify(status).includes("polar_at_test")).toBe(false);
   });
@@ -1241,49 +1241,39 @@ describe("createBillingService", () => {
     expect(status.canUpgrade).toBe(true);
   });
 
-  test("records an auditable credit adjustment with a required reason", async () => {
+  test("records an auditable API credit adjustment with a required reason", async () => {
     const billing = createService();
-    const before = await billing.getWebCreditBalance("user_1");
+    const before = await billing.getApiCreditBalance("user_1");
     await billing.adjustCredits({
       userId: "user_1",
-      source: "web",
+      source: "api",
       amount: 25,
       reason: "support goodwill credit",
       actorUserId: "admin_1",
     });
 
-    const balance = await billing.getWebCreditBalance("user_1");
-    expect(balance.webCreditsGranted).toBe(before.webCreditsGranted + 25);
-
-    const status = await billing.getBillingStatus({
-      userId: "user_1",
-      storageUsedBytes: 0,
-      apiKeyCount: 0,
-    });
-    expect(status.usage.webCreditsLimit).toBe(before.webCreditsGranted + 25);
-    expect(status.usage.webCreditsRemaining).toBe(
-      before.webCreditsRemaining + 25,
-    );
+    const balance = await billing.getApiCreditBalance("user_1");
+    expect(balance.apiCreditsGranted).toBe(before.apiCreditsGranted + 25);
   });
 
-  test("keeps a web credit adjustment after the monthly grant is applied", async () => {
+  test("rejects web credit adjustments", async () => {
     const billing = createService();
-    await billing.adjustCredits({
-      userId: "user_1",
-      source: "web",
-      amount: 25,
-      reason: "support goodwill credit",
-      actorUserId: "admin_1",
-    });
 
-    const [adjusted, baseline] = await Promise.all([
-      billing.getWebCreditBalance("user_1"),
-      billing.getWebCreditBalance("user_2"),
-    ]);
-    expect(adjusted.webCreditsGranted).toBe(baseline.webCreditsGranted + 25);
-    expect(adjusted.webCreditsRemaining).toBe(
-      baseline.webCreditsRemaining + 25,
-    );
+    try {
+      await billing.adjustCredits({
+        userId: "user_1",
+        source: "web",
+        amount: 25,
+        reason: "support goodwill credit",
+        actorUserId: "admin_1",
+      });
+      throw new Error("expected validation error");
+    } catch (error) {
+      expect(isAppError(error)).toBe(true);
+      if (isAppError(error)) {
+        expect(error.code).toBe(APP_ERROR_CODES.VALIDATION_ERROR);
+      }
+    }
   });
 
   test("includes admin API credit top-ups in the public included balance", async () => {
@@ -1313,7 +1303,7 @@ describe("createBillingService", () => {
     try {
       await billing.adjustCredits({
         userId: "user_1",
-        source: "web",
+        source: "api",
         amount: 10,
         reason: "short",
         actorUserId: "admin_1",
@@ -1413,7 +1403,7 @@ describe("createBillingService", () => {
     });
     const serialized = JSON.stringify(status);
 
-    expect(status.prices.pro.monthlyUsd).toBe(0);
+    expect(status.prices.pro.monthlyUsd).toBe(12);
     expect(status.prices.starter.monthlyUsd).toBe(15);
     expect(status.prices.starter.yearlyUsd).toBe(144);
     expect(status.prices.growth.monthlyUsd).toBe(29);

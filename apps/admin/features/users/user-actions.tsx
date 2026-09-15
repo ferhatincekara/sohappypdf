@@ -80,17 +80,8 @@ export function RestoreUserButton({
   );
 }
 
-export function AdjustCreditsForm({
-  userId,
-  webPlan,
-}: {
-  userId: string;
-  webPlan: "free" | "pro";
-}) {
+export function AdjustCreditsForm({ userId }: { userId: string }) {
   const router = useRouter();
-  const [source, setSource] = useState<"web" | "api">(
-    webPlan === "pro" ? "api" : "web",
-  );
   const [amount, setAmount] = useState("10");
   const [reason, setReason] = useState("");
   const parsedAmount = Number(amount);
@@ -99,37 +90,23 @@ export function AdjustCreditsForm({
 
   return (
     <ConfirmDialog
-      title="Add credits"
-      triggerLabel="Add credits"
-      confirmLabel="Add credits"
+      title="Add API credits"
+      triggerLabel="Add API credits"
+      confirmLabel="Add API credits"
       pendingLabel="Adding…"
       confirmDisabled={!reasonReady || !amountReady}
       description={
         <div className="space-y-3 text-foreground">
           <p className="text-muted-foreground">
-            {webPlan === "pro"
-              ? "Pro web usage is unlimited. Only API credits can be added for developer keys."
-              : "Web tool credits are the monthly Free quota for public tools. API credits are a separate meter for developer keys."}
+            API credits meter developer keys. Web tools are not credit-metered.
           </p>
-          {webPlan === "pro" ? null : (
-            <select
-              className="admin-field"
-              value={source}
-              onChange={(event) =>
-                setSource(event.target.value as "web" | "api")
-              }
-            >
-              <option value="web">Web tool credits</option>
-              <option value="api">API credits</option>
-            </select>
-          )}
           <Input
             type="number"
             min={1}
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
             onValueChange={setAmount}
-            aria-label="Credit amount"
+            aria-label="API credit amount"
           />
           <Input
             value={reason}
@@ -148,13 +125,10 @@ export function AdjustCreditsForm({
       onConfirm={async () => {
         await adjustCreditsAction({
           userId,
-          source,
           amount: parsedAmount,
           reason,
         });
-        toast.success(
-          `Added ${parsedAmount} ${source === "web" ? "web tool" : "API"} credits.`,
-        );
+        toast.success(`Added ${parsedAmount} API credits.`);
         router.refresh();
       }}
     />
