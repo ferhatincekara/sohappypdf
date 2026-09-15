@@ -14,6 +14,7 @@ import {
   runAllowedCommand,
 } from "../../process/run-process.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
+import { renderSearchablePdf } from "./render-searchable-pdf.js";
 
 const TYPES = ["ocr-pdf"] as const satisfies readonly ConversionType[];
 
@@ -56,35 +57,38 @@ export function createOcrEngine(
       }
 
       const searchablePdfPath = joinJobPath(input.outputDirectory, "ocr.pdf");
-
-      await runCommand({
-        command: config.ocrMyPdfBin,
-        args: [
-          // Skip pages that already have a text layer; OCR only image/scanned pages.
-          "--skip-text",
-          "--optimize",
-          "0",
-          "--output-type",
-          "pdf",
-          "-l",
-          input.options.language,
-          input.sourcePath,
-          searchablePdfPath,
-        ],
-        cwd: input.outputDirectory,
-        timeoutMs: config.conversionTimeoutMs,
-      });
+      const ocrInput = {
+        config,
+        runCommand,
+        sourcePath: input.sourcePath,
+        outputDirectory: input.outputDirectory,
+        outputPath: searchablePdfPath,
+        language: input.options.language,
+      };
+      const rendered = await renderSearchablePdf(ocrInput);
 
       if (input.options.outputMode === "txt" || input.targetFormat === "txt") {
         const outputPath = joinJobPath(input.outputDirectory, "output.txt");
-        await runCommand({
-          command: config.pdftotextBin,
-          args: ["-enc", "UTF-8", searchablePdfPath, outputPath],
-          cwd: input.outputDirectory,
-          timeoutMs: config.conversionTimeoutMs,
-        });
+        const extractText = async (): Promise<string> => {
+          await runCommand({
+            command: config.pdftotextBin,
+            args: ["-enc", "UTF-8", searchablePdfPath, outputPath],
+            cwd: input.outputDirectory,
+            timeoutMs: config.conversionTimeoutMs,
+          });
 
-        const text = await readFile(outputPath, "utf8");
+          return readFile(outputPath, "utf8");
+        };
+
+        let text = await extractText();
+        if (text.trim().length === 0 && !rendered.forcedOcr) {
+          await renderSearchablePdf({
+            ...ocrInput,
+            forceOcr: true,
+          });
+          text = await extractText();
+        }
+
         if (text.trim().length === 0) {
           throw invalidInputError();
         }

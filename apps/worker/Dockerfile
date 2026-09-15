@@ -33,7 +33,11 @@ RUN apt-get update \
     poppler-utils \
     qpdf \
     tesseract-ocr \
+    tesseract-ocr-deu \
     tesseract-ocr-eng \
+    tesseract-ocr-fra \
+    tesseract-ocr-spa \
+    tesseract-ocr-tur \
   && rm -rf /var/lib/apt/lists/* \
   && soffice --version \
   && pdftoppm -v \

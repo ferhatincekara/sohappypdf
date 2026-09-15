@@ -39,6 +39,7 @@ describe("ocr engine", () => {
 
       expect(calls[0]?.command).toBe("ocrmypdf");
       expect(calls[0]?.args).toContain("--skip-text");
+      expect(calls[0]?.acceptExitCodes).toEqual([0, 6]);
       expect(result.filename).toBe("output.pdf");
     } finally {
       await workspace.cleanup();

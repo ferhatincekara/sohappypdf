@@ -11,6 +11,7 @@ import {
   runAllowedCommand,
 } from "../../process/run-process.js";
 import { joinJobPath } from "../../workspace/temp-workspace.js";
+import { renderSearchablePdf } from "../ocr/render-searchable-pdf.js";
 import type { LibreOfficeRunContext } from "./libreoffice-runner.js";
 import { convertPdfToSpreadsheet } from "./pdf-to-spreadsheet.js";
 import { convertPdfToWord } from "./pdf-to-word.js";
@@ -68,21 +69,13 @@ export function createOfficeOcrEngine(
           : "eng";
 
       const ocrPdfPath = joinJobPath(input.outputDirectory, "ocr.pdf");
-      await runCommand({
-        command: config.ocrMyPdfBin,
-        args: [
-          "--skip-text",
-          "--optimize",
-          "0",
-          "--output-type",
-          "pdf",
-          "-l",
-          language,
-          input.sourcePath,
-          ocrPdfPath,
-        ],
-        cwd: input.outputDirectory,
-        timeoutMs: config.conversionTimeoutMs,
+      await renderSearchablePdf({
+        config,
+        runCommand,
+        sourcePath: input.sourcePath,
+        outputDirectory: input.outputDirectory,
+        outputPath: ocrPdfPath,
+        language,
       });
 
       const ocrInput = {
